@@ -7,12 +7,21 @@ import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.item.minecart.ChestMinecartEntity;
+import net.minecraft.entity.item.minecart.FurnaceMinecartEntity;
+import net.minecraft.entity.item.minecart.HopperMinecartEntity;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.BrewingStandTileEntity;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.DispenserTileEntity;
 import net.minecraft.tileentity.EnderChestTileEntity;
 import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.tileentity.ShulkerBoxTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
@@ -23,8 +32,14 @@ public class ChestESP extends Module{
 			new SettingToggle(true, "EndChests"),
 			new SettingToggle(true, "Furnaces"),
 			new SettingToggle(true, "Dispensers"),
+			new SettingToggle(true, "Hoppers"),
 			new SettingToggle(true, "Shulkers"),
-			new SettingToggle(true, "BrewStands"));
+			new SettingToggle(true, "BrewStands"),
+			new SettingToggle(true, "ChestCarts"),
+			new SettingToggle(true, "FurnaceCarts"),
+			new SettingToggle(true, "HopperCarts"),
+			new SettingToggle(true, "ItemFrames"),
+			new SettingToggle(true, "ArmorStands"));
 	
 	public ChestESP() {
 		super("ChestESP", 0, Category.RENDER, "Draws a box around storage containers.", settings);
@@ -41,10 +56,34 @@ public class ChestESP extends Module{
 					RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.5F, 0.5F, 0.7F);}
 				if(e instanceof DispenserTileEntity && getSettings().get(3).toSettingToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.55F, 0.55F, 0.7F, 0.7F);}
-				if(e instanceof ShulkerBoxTileEntity && getSettings().get(4).toSettingToggle().state) {
+				if(e instanceof HopperTileEntity && getSettings().get(4).toSettingToggle().state) {
+					RenderUtils.drawFilledBox(e.getPos(), 0.45F, 0.45F, 0.6F, 0.7F);}
+				if(e instanceof ShulkerBoxTileEntity && getSettings().get(5).toSettingToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.2F, 1F, 0.7F);}
-				if(e instanceof BrewingStandTileEntity && getSettings().get(5).toSettingToggle().state) {
+				if(e instanceof BrewingStandTileEntity && getSettings().get(6).toSettingToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.4F, 0.2F, 0.7F);}
+			}
+			
+			for(Entity e: EntityUtils.getLoadedEntities()) {
+				if(e instanceof ChestMinecartEntity && getSettings().get(7).toSettingToggle().state){
+					RenderUtils.drawFilledBox(e.getBoundingBox(), 1.9F, 1.5F, 0.3F, 0.7F);}
+				if(e instanceof FurnaceMinecartEntity && getSettings().get(8).toSettingToggle().state){
+					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.5F, 0.5F, 0.5F, 0.7F);}
+				if(e instanceof HopperMinecartEntity && getSettings().get(9).toSettingToggle().state){
+					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.45F, 0.6F, 0.7F);}
+				
+				if(e instanceof ItemFrameEntity && getSettings().get(10).toSettingToggle().state){
+					if(((ItemFrameEntity) e).getDisplayedItem().getItem() == Items.AIR) {
+						RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.1F, 0.1F, 0.7F);
+					}else if(((ItemFrameEntity) e).getDisplayedItem().getItem() == Items.FILLED_MAP){
+						RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.1F, 0.5F, 0.7F);
+					}else {
+						RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.45F, 0.1F, 0.7F);
+					}
+				}
+				
+				if(e instanceof ArmorStandEntity && getSettings().get(11).toSettingToggle().state){
+					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.5F, 0.4F, 0.1F, 0.7F);}
 			}
 		}
 	}

@@ -6,8 +6,8 @@ import net.minecraft.util.text.StringTextComponent;
 
 public class ClickGuiScreen extends ClickGuiParts {
 
-	private int posX = 30;
-	private int posY = 25;
+	private int posX = 35;
+	private int posY = 30;
 	
 	public ClickGuiScreen(ITextComponent titleIn) {
 		super(new StringTextComponent("ClickGui"));
@@ -20,6 +20,8 @@ public class ClickGuiScreen extends ClickGuiParts {
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		this.renderBackground();
+		mc.fontRenderer.drawString("BleachHack-1.14-B1", 3, 3, 0x305090);
+		mc.fontRenderer.drawString("BleachHack-1.14-B1", 2, 2, 0x6090d0);
 		drawWindow(ModuleManager.getModules(), "Modules", posX, posY);
 		
 		mX = p_render_1_;
