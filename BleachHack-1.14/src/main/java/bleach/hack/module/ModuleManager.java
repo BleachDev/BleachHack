@@ -8,6 +8,7 @@ import bleach.hack.module.mods.*;
 public class ModuleManager {
 
 	private static List<Module> mods = Arrays.asList( // new ArrayList<Module>();
+			new ChestESP(),
 			new ClickGui(),
 			new Fullbright(),
 			new Nofall(),

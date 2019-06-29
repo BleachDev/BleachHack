@@ -2,10 +2,10 @@ package bleach.hack;
 
 import bleach.hack.module.ModuleManager;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 @Mod("bleachhack")
@@ -21,7 +21,7 @@ public class BleachHack {
     }
     
     @SubscribeEvent
-    public void onRender(RenderTickEvent event) {
+    public void onRender(RenderWorldLastEvent event) {
     	ModuleManager.onRender();
     }
     
