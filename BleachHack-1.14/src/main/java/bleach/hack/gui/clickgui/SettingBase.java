@@ -19,4 +19,13 @@ public class SettingBase {
 			return new SettingToggle(false, "PARSING ERROR");
 		}
 	}
+	
+	public SettingSlider toSettingSlider() {
+		try {
+			return (SettingSlider) this;
+		}catch(Exception e){
+			System.out.println("Unable To Parse Setting");
+			return new SettingSlider(0, 1, 0, 0, "PARSING ERROR");
+		}
+	}
 }

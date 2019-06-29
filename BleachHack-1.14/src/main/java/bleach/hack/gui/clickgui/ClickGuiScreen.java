@@ -6,8 +6,8 @@ import net.minecraft.util.text.StringTextComponent;
 
 public class ClickGuiScreen extends ClickGuiParts {
 
-	private int posX = 20;
-	private int posY = 20;
+	private int posX = 30;
+	private int posY = 25;
 	
 	public ClickGuiScreen(ITextComponent titleIn) {
 		super(new StringTextComponent("ClickGui"));
@@ -26,6 +26,10 @@ public class ClickGuiScreen extends ClickGuiParts {
 		mY = p_render_2_;
 		lMousePressed = false;
 		rMousePressed = false;
+		len = (int) Math.round(ModuleManager.getModuleByName("ClickGui")
+				.getSettings().get(0).toSettingSlider().getValue());
+		setLen = (int) Math.round(ModuleManager.getModuleByName("ClickGui")
+				.getSettings().get(1).toSettingSlider().getValue());
 	}
 	
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
@@ -37,5 +41,4 @@ public class ClickGuiScreen extends ClickGuiParts {
 		
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
-
 }
