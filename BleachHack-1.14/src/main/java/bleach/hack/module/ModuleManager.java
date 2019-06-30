@@ -10,6 +10,7 @@ public class ModuleManager {
 	private static List<Module> mods = Arrays.asList( // new ArrayList<Module>();
 			new ChestESP(),
 			new ClickGui(),
+			new ESP(),
 			new Fullbright(),
 			new Nofall(),
 			new Sprint(),

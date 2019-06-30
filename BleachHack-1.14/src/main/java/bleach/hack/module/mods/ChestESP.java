@@ -48,31 +48,31 @@ public class ChestESP extends Module{
 	public void onRender() {
 		if(this.isToggled()) {
 			for(TileEntity e: mc.world.loadedTileEntityList) {
-				if(e instanceof ChestTileEntity && getSettings().get(0).toSettingToggle().state) {
+				if(e instanceof ChestTileEntity && getSettings().get(0).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 1.9F, 1.5F, 0.3F, 0.7F);}
-				if(e instanceof EnderChestTileEntity && getSettings().get(1).toSettingToggle().state) {
+				if(e instanceof EnderChestTileEntity && getSettings().get(1).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 1F, 0.05F, 1F, 0.7F);}
-				if(e instanceof FurnaceTileEntity && getSettings().get(2).toSettingToggle().state) {
+				if(e instanceof FurnaceTileEntity && getSettings().get(2).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.5F, 0.5F, 0.7F);}
-				if(e instanceof DispenserTileEntity && getSettings().get(3).toSettingToggle().state) {
+				if(e instanceof DispenserTileEntity && getSettings().get(3).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.55F, 0.55F, 0.7F, 0.7F);}
-				if(e instanceof HopperTileEntity && getSettings().get(4).toSettingToggle().state) {
+				if(e instanceof HopperTileEntity && getSettings().get(4).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.45F, 0.45F, 0.6F, 0.7F);}
-				if(e instanceof ShulkerBoxTileEntity && getSettings().get(5).toSettingToggle().state) {
+				if(e instanceof ShulkerBoxTileEntity && getSettings().get(5).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.2F, 1F, 0.7F);}
-				if(e instanceof BrewingStandTileEntity && getSettings().get(6).toSettingToggle().state) {
+				if(e instanceof BrewingStandTileEntity && getSettings().get(6).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.4F, 0.2F, 0.7F);}
 			}
 			
 			for(Entity e: EntityUtils.getLoadedEntities()) {
-				if(e instanceof ChestMinecartEntity && getSettings().get(7).toSettingToggle().state){
+				if(e instanceof ChestMinecartEntity && getSettings().get(7).toToggle().state){
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 1.9F, 1.5F, 0.3F, 0.7F);}
-				if(e instanceof FurnaceMinecartEntity && getSettings().get(8).toSettingToggle().state){
+				if(e instanceof FurnaceMinecartEntity && getSettings().get(8).toToggle().state){
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.5F, 0.5F, 0.5F, 0.7F);}
-				if(e instanceof HopperMinecartEntity && getSettings().get(9).toSettingToggle().state){
+				if(e instanceof HopperMinecartEntity && getSettings().get(9).toToggle().state){
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.45F, 0.6F, 0.7F);}
 				
-				if(e instanceof ItemFrameEntity && getSettings().get(10).toSettingToggle().state){
+				if(e instanceof ItemFrameEntity && getSettings().get(10).toToggle().state){
 					if(((ItemFrameEntity) e).getDisplayedItem().getItem() == Items.AIR) {
 						RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.1F, 0.1F, 0.7F);
 					}else if(((ItemFrameEntity) e).getDisplayedItem().getItem() == Items.FILLED_MAP){
@@ -82,7 +82,7 @@ public class ChestESP extends Module{
 					}
 				}
 				
-				if(e instanceof ArmorStandEntity && getSettings().get(11).toSettingToggle().state){
+				if(e instanceof ArmorStandEntity && getSettings().get(11).toToggle().state){
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.5F, 0.4F, 0.1F, 0.7F);}
 			}
 		}

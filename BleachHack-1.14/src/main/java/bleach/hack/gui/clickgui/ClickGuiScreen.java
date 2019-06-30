@@ -29,9 +29,9 @@ public class ClickGuiScreen extends ClickGuiParts {
 		lMousePressed = false;
 		rMousePressed = false;
 		len = (int) Math.round(ModuleManager.getModuleByName("ClickGui")
-				.getSettings().get(0).toSettingSlider().getValue());
+				.getSettings().get(0).toSlider().getValue());
 		setLen = (int) Math.round(ModuleManager.getModuleByName("ClickGui")
-				.getSettings().get(1).toSettingSlider().getValue());
+				.getSettings().get(1).toSlider().getValue());
 	}
 	
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {

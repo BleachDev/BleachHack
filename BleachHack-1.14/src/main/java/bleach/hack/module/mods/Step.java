@@ -21,9 +21,9 @@ public class Step extends Module{
 	
 	public void onUpdate() {
 		if(this.isToggled()) {
-			if(getSettings().get(0).toSettingMode().mode == 0) {
+			if(getSettings().get(0).toMode().mode == 0) {
 				mc.player.stepHeight = 1.065F;
-			}else if(getSettings().get(0).toSettingMode().mode == 1) {
+			}else if(getSettings().get(0).toMode().mode == 1) {
 				
 				if(mc.player.collidedHorizontally) {
 					if(tickCount<1) {

@@ -28,9 +28,9 @@ public class Fullbright extends Module{
 	
 	public void onUpdate() {
 		if(this.isToggled()) {
-			if(getSettings().get(0).toSettingMode().mode == 0) {
+			if(getSettings().get(0).toMode().mode == 0) {
 				if(mc.gameSettings.gamma < 16) mc.gameSettings.gamma += 1.2;
-			}else if(getSettings().get(0).toSettingMode().mode == 1) {
+			}else if(getSettings().get(0).toMode().mode == 1) {
 				mc.player.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 0, 100));
 			}
 		}
