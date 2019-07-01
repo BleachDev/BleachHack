@@ -14,7 +14,8 @@ public class ModuleManager {
 			new Fullbright(),
 			new Nofall(),
 			new Sprint(),
-			new Step());
+			new Step(),
+			new Tracers());
 	
 	public static List<Module> getModules() {
 		return mods;

@@ -59,6 +59,22 @@ public class RenderUtils {
         gl11Cleanup();
     }
 	
+	public static void drawLine(double x1,double y1,double z1,double x2,double y2,double z2, float r, float g, float b, float t) {
+		gl11Setup();
+		GL11.glLineWidth(t);
+        GL11.glColor4f(r, g, b, 1f);
+        
+        GL11.glBegin(GL11.GL_LINES);
+        {
+            GL11.glVertex3d(x1, y1, z1);
+            GL11.glVertex3d(x2, y2, z2);
+        }
+
+		GL11.glEnd();
+		gl11Cleanup();
+        
+	}
+	
 	public static double[] getRenderPos() {
 		double x = 0, y = 0, z = 0;
 		try { x = (double) FieldUtils.readField(mc.getRenderManager(), "renderPosX", true);
