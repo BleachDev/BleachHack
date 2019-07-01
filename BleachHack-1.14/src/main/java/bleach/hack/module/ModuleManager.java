@@ -12,6 +12,7 @@ public class ModuleManager {
 			new ClickGui(),
 			new ESP(),
 			new Fullbright(),
+			new Jesus(),
 			new Nofall(),
 			new Sprint(),
 			new Step(),
