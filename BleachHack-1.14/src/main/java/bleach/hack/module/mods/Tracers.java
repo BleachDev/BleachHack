@@ -28,7 +28,7 @@ public class Tracers extends Module{
 			new SettingSlider(0.1, 5, 1.5, 1, "Thick: "));
 	
 	public Tracers() {
-		super("Tracers", 0, Category.RENDER, "Shows lines to entities you select.", settings);
+		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.", settings);
 	}
 	
 	public void onEnable() { 

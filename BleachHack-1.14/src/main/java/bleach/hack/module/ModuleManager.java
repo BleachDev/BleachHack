@@ -11,6 +11,7 @@ public class ModuleManager {
 			new ChestESP(),
 			new ClickGui(),
 			new ESP(),
+			new Flight(),
 			new Fullbright(),
 			new Jesus(),
 			new Nofall(),

@@ -14,7 +14,7 @@ public class Step extends Module{
 			new SettingMode(new String[] {"Simple", "??? idk"}, "Mode: "));
 	
 	public Step() {
-		super("Step", 0, Category.MOVEMENT, "Allows you to Run up blocks like stairs.", settings);
+		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.", settings);
 	}
 	
 	private int tickCount;

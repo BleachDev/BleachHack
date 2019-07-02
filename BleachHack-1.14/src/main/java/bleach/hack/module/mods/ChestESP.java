@@ -45,7 +45,7 @@ public class ChestESP extends Module{
 			new SettingToggle(true, "ArmorStands"));
 	
 	public ChestESP() {
-		super("ChestESP", 0, Category.RENDER, "Draws a box around storage containers.", settings);
+		super("ChestESP", -1, Category.RENDER, "Draws a box around storage containers.", settings);
 	}
 	
 	public void onRender() {

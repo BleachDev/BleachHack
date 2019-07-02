@@ -25,7 +25,7 @@ public class ESP extends Module {
 			new SettingToggle(true, "Crystals"));
 	
 	public ESP() {
-		super("ESP", 0, Category.RENDER, "Allows you to see entities though walls.", settings);
+		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.", settings);
 	}
 	
 	public void onRender() {
