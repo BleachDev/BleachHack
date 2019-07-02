@@ -25,13 +25,13 @@ public class BleachHack {
     
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
-    	ModuleManager.onRender();
+    	try { ModuleManager.onRender();
+    	}catch(Exception e){ /* World Not Loaded */ }
     }
     
     @SubscribeEvent
     public void onKeyPress(KeyInputEvent event) {
-    	try { ModuleManager.onKeyPressed(event.getKey());
-    	}catch(Exception e){ /* World Not Loaded */ }
+    	ModuleManager.onKeyPressed(event.getKey());
     }
     
     @SubscribeEvent
