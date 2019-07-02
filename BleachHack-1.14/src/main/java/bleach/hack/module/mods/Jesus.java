@@ -1,5 +1,8 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.module.Category;
@@ -20,22 +23,26 @@ public class Jesus extends Module {
 		if(this.isToggled()) {
 			Entity e = mc.player.getRidingEntity() != null ? mc.player.getRidingEntity() : mc.player;
 			
-			if(e.isSneaking() || e.fallDistance > 3f) return;
-			
-			if(isWater(e.getPositionVec().add(0,0.3,0))) {
+			if(e.isSneaking() || e.fallDistance > 3f || e.collidedHorizontally) return;
+
+			if(isFluid(e.getPositionVec().add(0,0.3,0))) {
 				e.setMotion(e.getMotion().x, 0.1, e.getMotion().z);
-			}else if(isWater(e.getPositionVec().add(0,0.1,0))) {
+			}else if(isFluid(e.getPositionVec().add(0,0.1,0))) {
 				e.setMotion(e.getMotion().x, 0.04, e.getMotion().z);
-			}else if(isWater(e.getPositionVec())) {
+			}else if(isFluid(e.getPositionVec())) {
 				e.setMotion(e.getMotion().x, -0.005, e.getMotion().z);
 				e.onGround = true;
 			}
 		}
 	}
 	
-	private boolean isWater(Vec3d vec) {
+	private boolean isFluid(Vec3d vec) {
 		BlockPos p = new BlockPos(vec.x, vec.y, vec.z);
-		if(mc.world.getBlockState(p).getMaterial() == Material.WATER) return true;
+		
+		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA,
+				Material.SEA_GRASS, Material.CORAL);
+
+		if(fluids.contains(mc.world.getBlockState(p).getMaterial())) return true;
 		
 		return false;
 	}

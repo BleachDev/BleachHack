@@ -1,5 +1,6 @@
 package bleach.hack.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -7,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AmbientEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.WaterMobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
@@ -20,6 +22,12 @@ public class EntityUtils {
 						Minecraft.getInstance().player.posZ - 128,
 						Minecraft.getInstance().player.posX + 128, 256,
 						Minecraft.getInstance().player.posZ + 128));
+	}
+	
+	public static List<PlayerEntity> getPlayerEntites() {
+		List<PlayerEntity> entities = new ArrayList<>();
+		for(Entity e: getLoadedEntities()) if(e instanceof PlayerEntity) entities.add((PlayerEntity)e);
+		return entities;
 	}
 	
 	public static boolean isAnimal(Entity e) {

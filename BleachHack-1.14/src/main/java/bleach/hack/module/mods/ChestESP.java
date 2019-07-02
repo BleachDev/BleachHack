@@ -16,6 +16,8 @@ import net.minecraft.entity.item.minecart.ChestMinecartEntity;
 import net.minecraft.entity.item.minecart.FurnaceMinecartEntity;
 import net.minecraft.entity.item.minecart.HopperMinecartEntity;
 import net.minecraft.item.Items;
+import net.minecraft.tileentity.BarrelTileEntity;
+import net.minecraft.tileentity.BlastFurnaceTileEntity;
 import net.minecraft.tileentity.BrewingStandTileEntity;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.DispenserTileEntity;
@@ -23,6 +25,7 @@ import net.minecraft.tileentity.EnderChestTileEntity;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.tileentity.ShulkerBoxTileEntity;
+import net.minecraft.tileentity.SmokerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class ChestESP extends Module{
@@ -48,11 +51,13 @@ public class ChestESP extends Module{
 	public void onRender() {
 		if(this.isToggled()) {
 			for(TileEntity e: mc.world.loadedTileEntityList) {
-				if(e instanceof ChestTileEntity && getSettings().get(0).toToggle().state) {
+				if((e instanceof ChestTileEntity || e instanceof BarrelTileEntity)
+						&& getSettings().get(0).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 1.9F, 1.5F, 0.3F, 0.7F);}
 				if(e instanceof EnderChestTileEntity && getSettings().get(1).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 1F, 0.05F, 1F, 0.7F);}
-				if(e instanceof FurnaceTileEntity && getSettings().get(2).toToggle().state) {
+				if((e instanceof FurnaceTileEntity || e instanceof SmokerTileEntity ||
+						e instanceof BlastFurnaceTileEntity) && getSettings().get(2).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.5F, 0.5F, 0.7F);}
 				if(e instanceof DispenserTileEntity && getSettings().get(3).toToggle().state) {
 					RenderUtils.drawFilledBox(e.getPos(), 0.55F, 0.55F, 0.7F, 0.7F);}

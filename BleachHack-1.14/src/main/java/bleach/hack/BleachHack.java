@@ -1,6 +1,8 @@
 package bleach.hack;
 
+import bleach.hack.command.CommandManager;
 import bleach.hack.module.ModuleManager;
+import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,9 +17,10 @@ public class BleachHack {
         MinecraftForge.EVENT_BUS.register(this);
     }
     
-    @SubscribeEvent
+	@SubscribeEvent
     public void onTick(WorldTickEvent event) {
-    	ModuleManager.onUpdate();
+    	try { ModuleManager.onUpdate();
+    	}catch(Exception e){ /* World Not Loaded */ }
     }
     
     @SubscribeEvent
@@ -27,6 +30,16 @@ public class BleachHack {
     
     @SubscribeEvent
     public void onKeyPress(KeyInputEvent event) {
-    	ModuleManager.onKeyPressed(event.getKey());
+    	try { ModuleManager.onKeyPressed(event.getKey());
+    	}catch(Exception e){ /* World Not Loaded */ }
+    }
+    
+    @SubscribeEvent
+    public void onChatMsg(ClientChatEvent event) {
+    	if(event.getMessage().startsWith(".")) {
+    		CommandManager cmd = new CommandManager();
+    		cmd.callCommand(event.getMessage().substring(1));
+    		event.setCanceled(true);
+    	}
     }
 }
