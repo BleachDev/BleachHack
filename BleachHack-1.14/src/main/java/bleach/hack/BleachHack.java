@@ -8,7 +8,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @Mod("bleachhack")
 public class BleachHack {
@@ -18,7 +18,7 @@ public class BleachHack {
     }
     
 	@SubscribeEvent
-    public void onTick(WorldTickEvent event) {
+    public void onTick(TickEvent event) {
     	try { ModuleManager.onUpdate();
     	}catch(Exception e){ /* World Not Loaded */ }
     }
