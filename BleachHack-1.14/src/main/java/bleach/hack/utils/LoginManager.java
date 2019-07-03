@@ -6,6 +6,7 @@ import java.net.Proxy;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.mojang.authlib.Agent;
+import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
@@ -25,6 +26,7 @@ public final class LoginManager {
 		
 		try
 		{
+			auth.logIn();
 			Field session = Minecraft.getInstance().getClass().getDeclaredField("session");
 			
 			Session newsession = new Session(auth.getSelectedProfile().getName(),
@@ -38,13 +40,19 @@ public final class LoginManager {
 		{
 			return "§cInternal Error (" + e.toString() + ")";
 			
+		}catch(AuthenticationException e)
+		{
+			e.printStackTrace();
+			if(e.getMessage().contains("Invalid username or password.")
+				|| e.getMessage().toLowerCase().contains("account migrated"))
+				return "§4Wrong password!";
+			else
+				return "§cCannot contact authentication server!";
+			
 		}catch(NullPointerException e)
 		{
 			return "§4Wrong password!";
 			
-		}catch(Exception e)
-		{
-			return "§ci don't even know anymore";
 		}
 	}
 }
