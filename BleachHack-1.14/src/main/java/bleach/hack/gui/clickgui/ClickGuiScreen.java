@@ -1,5 +1,6 @@
 package bleach.hack.gui.clickgui;
 
+import bleach.hack.BleachHack;
 import bleach.hack.module.ModuleManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -20,8 +21,8 @@ public class ClickGuiScreen extends ClickGuiParts {
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		this.renderBackground();
-		mc.fontRenderer.drawString("BleachHack-1.14-B1", 3, 3, 0x305090);
-		mc.fontRenderer.drawString("BleachHack-1.14-B1", 2, 2, 0x6090d0);
+		mc.fontRenderer.drawString("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
+		mc.fontRenderer.drawString("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		drawWindow(ModuleManager.getModules(), "Modules", posX, posY);
 		
 		mX = p_render_1_;

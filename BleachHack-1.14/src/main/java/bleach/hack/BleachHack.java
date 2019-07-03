@@ -1,7 +1,10 @@
 package bleach.hack;
 
 import bleach.hack.command.CommandManager;
+import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.ModuleManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -13,12 +16,18 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 @Mod("bleachhack")
 public class BleachHack {
 	
+	public static String VERSION = "B1";
+	
     public BleachHack() {
         MinecraftForge.EVENT_BUS.register(this);
     }
     
 	@SubscribeEvent
     public void onTick(TickEvent event) {
+		if(Minecraft.getInstance().currentScreen instanceof MainMenuScreen) {
+			Minecraft.getInstance().displayGuiScreen(new BleachMainMenu(null));
+		}
+		
     	try { ModuleManager.onUpdate();
     	}catch(Exception e){ /* World Not Loaded */ }
     }

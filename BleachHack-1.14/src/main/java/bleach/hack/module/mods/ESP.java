@@ -28,7 +28,7 @@ public class ESP extends Module {
 		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.", settings);
 	}
 	
-	public void onRender() {
+	public void onUpdate() {
 		if(this.isToggled()) {
 			for(Entity e: EntityUtils.getLoadedEntities()) {
 				if(e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {

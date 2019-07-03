@@ -14,7 +14,6 @@ public class Nofall extends Module{
 		if(this.isToggled()) {
 			if(mc.player.fallDistance > 2f) {
 				mc.player.connection.sendPacket(new CPlayerPacket(true));
-				mc.player.fallDistance = 0;
 			}
 		}
 	}

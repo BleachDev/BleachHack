@@ -35,11 +35,10 @@ public class Flight extends Module {
 			mc.player.abilities.isFlying = true;
 			
 			if(getSettings().get(1).toToggle().state) {
-				if(timer == 16) mc.player.setMotion(mc.player.getMotion().x, -0.155, mc.player.getMotion().z);
-				if(timer == 20) mc.player.setMotion(mc.player.getMotion().x, 0.1, mc.player.getMotion().z);
+				if(timer < 10) mc.player.setPosition(mc.player.posX, mc.player.posY-0.01, mc.player.posZ);
+				if(timer > 11) mc.player.setPosition(mc.player.posX, mc.player.posY+0.01, mc.player.posZ);
 			}
 
-			
 			if(timer <= 20) {timer++;}else {timer=0;}
 		}
 	}
