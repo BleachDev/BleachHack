@@ -15,6 +15,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class BleachMainMenu extends Screen {
 	
+	ParticleManager particleMang = new ParticleManager();
+	
 	public BleachMainMenu(ITextComponent titleIn) {
 		super(new TranslationTextComponent("narrator.screen.title"));
 	}
@@ -39,11 +41,15 @@ public class BleachMainMenu extends Screen {
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		this.renderBackground();
-		
 		fill(0, 0, width, height, 0xff000000);
 		
+		try {
+			particleMang.addParticle(p_render_1_, p_render_2_);
+			particleMang.renderParticles();
+		}catch(Exception e) {e.printStackTrace();}
+		
 		GL11.glScaled(3, 3, 3);
-		drawString(this.font, "BleachHack", (width/2 - 80)/3, (height/4 - 15)/3, 0xffc0e0);
+		drawString(this.font, "BleachHack", (width/2 - 81)/3, (height/4 - 15)/3, 0xffc0e0);
 		GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 		
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
