@@ -11,10 +11,13 @@ import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
 public class EntityUtils {
 
+	private static Minecraft mc = Minecraft.getInstance();
+	
 	public static List<Entity> getLoadedEntities() {
 		return Minecraft.getInstance().world.getEntitiesWithinAABBExcludingEntity(
 				null, new AxisAlignedBB(
@@ -36,7 +39,6 @@ public class EntityUtils {
 	}
 
 	public static void setGlowing(Entity entity, TextFormatting color, String teamName) {
-		Minecraft mc = Minecraft.getInstance();
 		ScorePlayerTeam team = mc.world.getScoreboard().getTeamNames().contains(teamName) ?
 				mc.world.getScoreboard().getTeam(teamName) :
 				mc.world.getScoreboard().createTeam(teamName);
@@ -45,6 +47,20 @@ public class EntityUtils {
 		mc.world.getScoreboard().getTeam(teamName).setColor(color);
 		
 		entity.setGlowing(true);
+	}
+	
+	public static void facePos(double x, double y, double z) {
+		double diffX = x - mc.player.posX;
+		double diffY = y - (mc.player.posY + mc.player.getEyeHeight());
+		double diffZ = z - mc.player.posZ;
+			
+		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+			
+		float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
+		float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
+			
+		mc.player.rotationYaw += MathHelper.wrapDegrees(yaw - mc.player.rotationYaw);
+		mc.player.rotationPitch += MathHelper.wrapDegrees(pitch - mc.player.rotationPitch);
 	}
 	
 }

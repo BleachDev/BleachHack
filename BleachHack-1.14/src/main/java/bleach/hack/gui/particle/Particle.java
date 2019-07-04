@@ -12,6 +12,7 @@ public class Particle {
 	private int y;
 	private int lifespan;
 	private boolean dead = false;
+	private long lastTick;
 	
 	private List<int[]> particles = new ArrayList<>();
 	
@@ -19,7 +20,8 @@ public class Particle {
 		this.x = x;
 		this.y = y;
 		genParticles();
-		lifespan = rand.nextInt(25);
+		lastTick = System.currentTimeMillis();
+		lifespan = rand.nextInt(20);
 	}
 	
 	public void genParticles() {
@@ -29,6 +31,10 @@ public class Particle {
 	}
 	
 	public void updateParticles() {
+		/* This is here to make it only trigger if a "tick" has passed */
+		if(System.currentTimeMillis() < lastTick + 16) return;
+		lastTick = System.currentTimeMillis();
+		
 		tick++;
 		
 		if(tick > lifespan) {

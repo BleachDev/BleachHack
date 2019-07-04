@@ -3,6 +3,8 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import org.lwjgl.glfw.GLFW;
+
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -18,7 +20,7 @@ public class Flight extends Module {
 	private int timer = 0;
 	
 	public Flight() {
-		super("Flight", -1, Category.MOVEMENT, "Allows you to fly", settings);
+		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly", settings);
 	}
 	
 	public void onDisable() {
@@ -36,7 +38,7 @@ public class Flight extends Module {
 			
 			if(getSettings().get(1).toToggle().state) {
 				if(timer < 10) mc.player.setPosition(mc.player.posX, mc.player.posY-0.01, mc.player.posZ);
-				if(timer > 11) mc.player.setPosition(mc.player.posX, mc.player.posY+0.01, mc.player.posZ);
+				if(timer > 20) mc.player.setPosition(mc.player.posX, mc.player.posY+0.01, mc.player.posZ);
 			}
 
 			if(timer <= 20) {timer++;}else {timer=0;}

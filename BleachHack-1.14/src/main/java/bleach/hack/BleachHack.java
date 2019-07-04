@@ -12,23 +12,26 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 @Mod("bleachhack")
 public class BleachHack {
 	
-	public static String VERSION = "B1";
+	public static String VERSION = "B1-DEMO";
 	
     public BleachHack() {
         MinecraftForge.EVENT_BUS.register(this);
     }
     
 	@SubscribeEvent
-    public void onTick(TickEvent event) {
+    public void onTick(TickEvent.ClientTickEvent event) {
+		if(!(event.phase == Phase.END)) return;
+		
 		if(Minecraft.getInstance().currentScreen instanceof MainMenuScreen) {
 			Minecraft.getInstance().displayGuiScreen(new BleachMainMenu(null));
 		}
 		
-    	try { ModuleManager.onUpdate();
+    	try {ModuleManager.onUpdate();
     	}catch(Exception e){ /* World Not Loaded */ }
     }
     

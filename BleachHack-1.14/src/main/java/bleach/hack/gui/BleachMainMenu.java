@@ -14,6 +14,7 @@ import net.minecraft.util.SharedConstants;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.versions.forge.ForgeVersion;
 
 public class BleachMainMenu extends Screen {
 	
@@ -24,19 +25,22 @@ public class BleachMainMenu extends Screen {
 	}
 	
 	public void init() {
-		this.addButton(new Button(width / 2 - 100, height / 4 + 48, 200, 20, I18n.format("menu.singleplayer"), (p_213089_1_) -> {
+		this.addButton(new Button(width / 2 - 100, height / 4 + 48, 200, 20, I18n.format("menu.singleplayer"), button -> {
 			this.minecraft.displayGuiScreen(new WorldSelectionScreen(this));
 	    }));
-		this.addButton(new Button(width / 2 - 100, height / 4 + 72, 200, 20, I18n.format("menu.multiplayer"), (p_213086_1_) -> {
+		this.addButton(new Button(width / 2 - 100, height / 4 + 72, 200, 20, I18n.format("menu.multiplayer"), button -> {
 	        this.minecraft.displayGuiScreen(new MultiplayerScreen(this));
 	    }));
-		this.addButton(new Button(width / 2 - 100, height / 4 + 96, 200, 20, "Login Manager", (button) -> {
+		this.addButton(new Button(this.width / 2 - 100, height / 4 + 96, 98, 20, I18n.format("fml.menu.mods"), button -> {
+            this.minecraft.displayGuiScreen(new net.minecraftforge.fml.client.gui.GuiModList(this));
+        }));
+		this.addButton(new Button(width / 2 + 2, height / 4 + 96, 98, 20, "Login Manager", button -> {
 	        this.minecraft.displayGuiScreen(new LoginGui(new StringTextComponent("LoginManager")));
 	    }));
-		this.addButton(new Button(this.width / 2 - 100, height / 4 + 129, 98, 20, I18n.format("menu.options"), (p_213096_1_) -> {
+		this.addButton(new Button(width / 2 - 100, height / 4 + 129, 98, 20, I18n.format("menu.options"), button -> {
 	        this.minecraft.displayGuiScreen(new OptionsScreen(this, this.minecraft.gameSettings));
 	    }));
-	    this.addButton(new Button(this.width / 2 + 2, height / 4 + 129, 98, 20, I18n.format("menu.quit"), (p_213094_1_) -> {
+	    this.addButton(new Button(width / 2 + 2, height / 4 + 129, 98, 20, I18n.format("menu.quit"), button -> {
 	    	this.minecraft.shutdown();
 	    }));
 	}
@@ -53,12 +57,13 @@ public class BleachMainMenu extends Screen {
 		GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 		
 		GL11.glScaled(1.5, 1.5, 1.5);
-		drawString(this.font, BleachHack.VERSION, (int)((width/2 - 10)/1.5), (int)((height/4 + 8)/1.5), 0xffc050);
+		drawCenteredString(this.font, BleachHack.VERSION, (int)((width/2)/1.5), (int)((height/4 + 8)/1.5), 0xffc050);
 		GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
 		
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		
 		drawString(this.font, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
+		drawString(this.font, "Forge: " + ForgeVersion.getVersion(), 4, height - 30, -1);
 		drawString(this.font, "Minecraft " + SharedConstants.getVersion().getName(), 4, height - 20, -1);
 		drawString(this.font, "Logged in as: §a" + this.minecraft.getSession().getUsername(), 4, height - 10, -1);
 		

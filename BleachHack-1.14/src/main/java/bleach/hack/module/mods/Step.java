@@ -11,7 +11,7 @@ import bleach.hack.module.Module;
 public class Step extends Module{
 	
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Simple", "??? idk"}, "Mode: "));
+			new SettingMode(new String[] {"Simple", "Spider"}, "Mode: "));
 	
 	public Step() {
 		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.", settings);
@@ -26,17 +26,19 @@ public class Step extends Module{
 			}else if(getSettings().get(0).toMode().mode == 1) {
 				
 				if(mc.player.collidedHorizontally) {
-					if(tickCount<1) {
-						mc.player.posY = mc.player.posY + 1.065;
-						mc.player.jump();
-						tickCount++;
-					}
+					tickCount = 0;
+				}
+				
+				tickCount++;
+				
+				if(tickCount < 2) {
+					mc.player.setMotion(mc.player.getMotion().x, 1, mc.player.getMotion().z);
+					mc.player.jump();
+				}
 					
-					if(tickCount==1) {
-						mc.player.posY = mc.player.posY - 0.5;
-						mc.player.setSprinting(true);
-						tickCount = 0;
-					}
+				if(tickCount == 2) {
+					mc.player.setMotion(mc.player.getMotion().x, 0, mc.player.getMotion().z);
+					mc.player.setSprinting(true);
 				}
 			}
 		}

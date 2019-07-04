@@ -14,6 +14,7 @@ public class ModuleManager {
 			new Flight(),
 			new Fullbright(),
 			new Jesus(),
+			new Killaura(),
 			new Nofall(),
 			new Sprint(),
 			new Step(),

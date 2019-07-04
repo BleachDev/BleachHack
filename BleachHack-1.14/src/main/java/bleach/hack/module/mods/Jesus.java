@@ -26,7 +26,7 @@ public class Jesus extends Module {
 			if(e.isSneaking() || e.fallDistance > 3f || e.collidedHorizontally) return;
 
 			if(isFluid(e.getPositionVec().add(0,0.3,0))) {
-				e.setMotion(e.getMotion().x, 0.1, e.getMotion().z);
+				e.setMotion(e.getMotion().x, 0.08, e.getMotion().z);
 			}else if(isFluid(e.getPositionVec().add(0,0.1,0))) {
 				e.setMotion(e.getMotion().x, 0.04, e.getMotion().z);
 			}else if(isFluid(e.getPositionVec())) {
