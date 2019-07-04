@@ -2,6 +2,8 @@ package bleach.hack.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import bleach.hack.BleachHack;
+import bleach.hack.gui.particle.ParticleManager;
 import net.minecraft.client.gui.screen.MultiplayerScreen;
 import net.minecraft.client.gui.screen.OptionsScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -43,14 +45,16 @@ public class BleachMainMenu extends Screen {
 		this.renderBackground();
 		fill(0, 0, width, height, 0xff000000);
 		
-		try {
-			particleMang.addParticle(p_render_1_, p_render_2_);
-			particleMang.renderParticles();
-		}catch(Exception e) {e.printStackTrace();}
+		particleMang.addParticle(p_render_1_, p_render_2_);
+		particleMang.renderParticles();
 		
 		GL11.glScaled(3, 3, 3);
 		drawString(this.font, "BleachHack", (width/2 - 81)/3, (height/4 - 15)/3, 0xffc0e0);
 		GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
+		
+		GL11.glScaled(1.5, 1.5, 1.5);
+		drawString(this.font, BleachHack.VERSION, (int)((width/2 - 10)/1.5), (int)((height/4 + 8)/1.5), 0xffc050);
+		GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
 		
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		

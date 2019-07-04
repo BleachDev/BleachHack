@@ -1,5 +1,6 @@
 package bleach.hack.gui;
 
+import bleach.hack.gui.particle.ParticleManager;
 import bleach.hack.utils.LoginManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -8,6 +9,8 @@ import net.minecraft.util.text.ITextComponent;
 
 public class LoginGui extends Screen {
 
+	ParticleManager particleMang = new ParticleManager();
+	
 	private TextFieldWidget userField;
 	private TextFieldWidget passField;
 	
@@ -43,6 +46,10 @@ public class LoginGui extends Screen {
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		this.renderBackground();
+		fill(0, 0, width, height, 0xff000000);
+		
+		particleMang.addParticle(p_render_1_, p_render_2_);
+		particleMang.renderParticles();
 		
 		this.drawString(this.font, "Email: ", this.width / 2 - 130, this.height / 4 + 15, 0xffffff);
 		this.drawString(this.font, "Password: ", this.width / 2 - 154, this.height / 4 + 45, 0xffffff);

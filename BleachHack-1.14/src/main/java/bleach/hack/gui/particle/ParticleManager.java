@@ -1,4 +1,4 @@
-package bleach.hack.gui;
+package bleach.hack.gui.particle;
 
 import java.util.ArrayList;
 import java.util.List;
