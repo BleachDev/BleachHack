@@ -1,9 +1,11 @@
 package bleach.hack.utils;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -14,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 public class RenderUtils {
 
 	private static Minecraft mc = Minecraft.getInstance();
+	private static ActiveRenderInfo rend;
 	
 	public static void drawFilledBox(BlockPos blockPos, float r, float g, float b, float a) {
 		drawFilledBox(new AxisAlignedBB(
@@ -22,21 +25,23 @@ public class RenderUtils {
 	}
 	
 	public static void drawFilledBox(AxisAlignedBB box, float r, float g, float b, float a) {
-		double x = box.minX - getRenderPos()[0];
-		double y = box.minY - getRenderPos()[1];
-	    double z = box.minZ - getRenderPos()[2];
-        
-        gl11Setup();
-        
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(5, DefaultVertexFormats.POSITION_COLOR);
-        WorldRenderer.addChainedFilledBoxVertices(bufferbuilder,
-        		x, y, z, x+box.getXSize(), y+box.getYSize(), z+box.getZSize(), r, g, b, a/2f);
-        tessellator.draw();
+		gl11Setup();
+		
+		double x = rend.getProjectedView().x;
+        double y = rend.getProjectedView().y;
+        double z = rend.getProjectedView().z;
 
+        /* Fill */
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(5, DefaultVertexFormats.POSITION_COLOR);
+        WorldRenderer.addChainedFilledBoxVertices(buffer,
+        		box.minX - x, box.minY - y, box.minZ - z, box.maxX - x, box.maxY - y, box.maxZ - z, r, g, b, a/2f);
+        tessellator.draw();
+        
+        /* Outline */
         WorldRenderer.drawSelectionBoundingBox(new AxisAlignedBB(
-        		x, y, z, x+box.getXSize(), y+box.getYSize(), z+box.getZSize()), r, g, b, a);
+        		box.minX - x, box.minY - y, box.minZ - z, box.maxX - x, box.maxY - y, box.maxZ - z), r, g, b, a);
 
         gl11Cleanup();
     }
@@ -48,55 +53,55 @@ public class RenderUtils {
 	}
 	
 	public static void drawSelectionBox(AxisAlignedBB box, float r, float g, float b, float a) {
-		double x = box.minX - getRenderPos()[0];
-		double y = box.minY - getRenderPos()[1];
-		double z = box.minZ - getRenderPos()[2];
+		gl11Setup();
+		
+		double x = rend.getProjectedView().x;
+        double y = rend.getProjectedView().y;
+        double z = rend.getProjectedView().z;
         
-        gl11Setup();
         WorldRenderer.drawSelectionBoundingBox(new AxisAlignedBB(
-        		x, y, z, x+box.getXSize(), y+box.getYSize(), z+box.getZSize()), r, g, b, a);
+        		box.minX - x, box.minY - y, box.minZ - z, box.maxX - x, box.maxY - y, box.maxZ - z), r, g, b, a);
 
         gl11Cleanup();
     }
 	
 	public static void drawLine(double x1,double y1,double z1,double x2,double y2,double z2, float r, float g, float b, float t) {
 		gl11Setup();
-		GL11.glLineWidth(t);
-        GL11.glColor4f(r, g, b, 1f);
+		
+		double x = rend.getProjectedView().x;
+        double y = rend.getProjectedView().y;
+        double z = rend.getProjectedView().z;
         
-        GL11.glBegin(GL11.GL_LINES);
-        {
-            GL11.glVertex3d(x1, y1, z1);
-            GL11.glVertex3d(x2, y2, z2);
-        }
-
-		GL11.glEnd();
+		GL11.glLineWidth(t);
+        
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        buffer.pos(x1 - x, y1 - y, z1 - z).color(r, g, b, 0.0F).endVertex();
+        buffer.pos(x1 - x, y1 - y, z1 - z).color(r, g, b, 1.0F).endVertex();
+        buffer.pos(x2 - x, y2 - y, z2 - z).color(r, g, b, 1.0F).endVertex();
+        tessellator.draw();
+        
 		gl11Cleanup();
         
 	}
 	
-	public static double[] getRenderPos() {
-		double x = 0, y = 0, z = 0;
-		try { x = (double) FieldUtils.readField(mc.getRenderManager(), "renderPosX", true);
-			y = (double) FieldUtils.readField(mc.getRenderManager(), "renderPosY", true);
-	        z = (double) FieldUtils.readField(mc.getRenderManager(), "renderPosZ", true);
-		} catch (Exception e) {}
-		return new double[] {x,y,z};
-	}
-	
 	public static void gl11Setup() {
-		GL11.glBlendFunc(770, 771);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(false);
-        GL11.glLineWidth(2.0F);
+		rend = mc.gameRenderer.getActiveRenderInfo();
+		GlStateManager.enableBlend();
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.lineWidth(2.5F);
+        GlStateManager.disableTexture();
+        GlStateManager.disableDepthTest();
+        GlStateManager.matrixMode(5889);
+        GlStateManager.pushMatrix();
 	}
 	
 	public static void gl11Cleanup() {
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(true);
-        GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.popMatrix();
+        GlStateManager.matrixMode(5888);
+        GlStateManager.enableDepthTest();
+        GlStateManager.enableTexture();
+        GlStateManager.disableBlend();
 	}
 }

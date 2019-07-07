@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 @Mod("bleachhack")
 public class BleachHack {
 	
-	public static String VERSION = "B1-DEMO";
+	public static String VERSION = "B1-DEMO-2";
 	
     public BleachHack() {
         MinecraftForge.EVENT_BUS.register(this);
