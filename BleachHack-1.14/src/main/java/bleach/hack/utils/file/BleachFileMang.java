@@ -19,10 +19,13 @@ public class BleachFileMang {
 		if(!dir.toFile().exists()) dir.toFile().mkdirs();
 	}
 	
+	/** Gets the bleach directory in your minecraft folder. **/
 	public Path getDir() {
 		return dir;
 	}
 	
+	
+	/** Reads a file and returns one string. **/
 	public String readFile(String file) {
 		try { return new String(Files.readAllBytes(Paths.get(dir.toString(), file)));
 		} catch (IOException e) { System.out.println("Error Reading File"); } 
@@ -30,6 +33,7 @@ public class BleachFileMang {
 		return "";
 	}
 	
+	/** Reads a file and returns a list of the lines. **/
 	public List<String> readFileLines(String file) {
 		try { return Files.readAllLines(Paths.get(dir.toString(), file));
 		} catch (IOException e) { System.out.println("Error Reading File"); } 
@@ -37,6 +41,7 @@ public class BleachFileMang {
 		return new ArrayList<String>();
 	}
 	
+	/** Creates a file, dosen't do anything if the file already exists. **/
 	public void createFile(String file, String content) {
 		try { 
 			if(Paths.get(dir.toString(), file).toFile().exists()) return;
@@ -47,6 +52,7 @@ public class BleachFileMang {
 		} catch (IOException e) { System.out.println("Error Writing File"); } 
 	}
 	
+	/** Clears a file and writes a string to it. **/
 	public void rewriteFile(String file, String content) {
 		try {
 			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file).toFile(), false);
@@ -55,6 +61,7 @@ public class BleachFileMang {
 		} catch (IOException e) { System.out.println("Error Writing File"); } 
 	}
 	
+	/** Adds a line to a file. **/
 	public void appendFile(String file, String content) {
 		try {
 			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file).toFile(), true);

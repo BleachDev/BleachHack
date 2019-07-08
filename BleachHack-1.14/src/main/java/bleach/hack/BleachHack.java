@@ -21,7 +21,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod("bleachhack")
 public class BleachHack {
 	
-	public static String VERSION = "B1-DEMO-2";
+	public static String VERSION = "B1";
 	public static long tickCount = 0;
 	
 	private BleachFileReader fileReader = new BleachFileReader();
