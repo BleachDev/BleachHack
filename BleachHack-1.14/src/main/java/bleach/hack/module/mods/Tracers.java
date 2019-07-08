@@ -21,10 +21,10 @@ public class Tracers extends Module{
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Players"),
-			new SettingToggle(true, "Mobs"),
+			new SettingToggle(false, "Mobs"),
 			new SettingToggle(false, "Animals"),
-			new SettingToggle(true, "Items"),
-			new SettingToggle(true, "Crystals"),
+			new SettingToggle(false, "Items"),
+			new SettingToggle(false, "Crystals"),
 			new SettingToggle(false, "Force Bob"),
 			new SettingSlider(0.1, 5, 1.5, 1, "Thick: "));
 	

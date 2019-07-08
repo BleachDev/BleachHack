@@ -3,6 +3,8 @@ package bleach.hack;
 import bleach.hack.command.CommandManager;
 import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.utils.file.BleachFileReader;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraftforge.client.event.ClientChatEvent;
@@ -13,19 +15,36 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod("bleachhack")
 public class BleachHack {
 	
 	public static String VERSION = "B1-DEMO-2";
+	public static long tickCount = 0;
+	
+	private BleachFileReader fileReader = new BleachFileReader();
 	
     public BleachHack() {
+    	FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
         MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    public void init(FMLCommonSetupEvent event) {
+    	fileReader.readModules();
+    	fileReader.readSettings();
     }
     
 	@SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
 		if(!(event.phase == Phase.END)) return;
+		tickCount++;
+		
+		if(tickCount % 100 == 0) {
+			fileReader.saveModules();
+			fileReader.saveSettings();
+		}
 		
 		if(Minecraft.getInstance().currentScreen instanceof MainMenuScreen) {
 			Minecraft.getInstance().displayGuiScreen(new BleachMainMenu(null));

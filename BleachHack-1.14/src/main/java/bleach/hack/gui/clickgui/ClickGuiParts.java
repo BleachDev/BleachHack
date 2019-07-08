@@ -61,7 +61,7 @@ public class ClickGuiParts extends Screen {
 			
 			if(!m.getSettings().isEmpty()) fill(x+len-1, y+(count*10), x+len, y+10+(count*10), 0x5fffffff);
 			
-			if(doesHoverOver(x, y+(count*10), x+52, y+10+(count*10))) {
+			if(doesHoverOver(x, y+(count*10), x+len, y+10+(count*10))) {
 				if(lMousePressed) m.toggle();
 				if(rMousePressed) selectedMod = m.getName();
 			}
