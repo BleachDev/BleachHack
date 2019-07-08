@@ -41,7 +41,7 @@ public class ClickGuiParts extends Screen {
 		for(Module m: mods) {
 			fill(x, y+(count*10), x+len, y+10+(count*10),
 					doesHoverOver(x, y+(count*10), x+len, y+10+(count*10)) ? 0x70303070 : 0x70000000);
-			drawString(mc.fontRenderer, m.getName(), x+2, y+1+(count*10), m.isToggled() ? 0x6060ff : 0xffffff);
+			drawString(mc.fontRenderer, cutText(m.getName(), len), x+2, y+1+(count*10), m.isToggled() ? 0x6060ff : 0xffffff);
 			
 			int count1 = 0;
 			if(selectedMod == m.getName()) {
@@ -110,6 +110,15 @@ public class ClickGuiParts extends Screen {
 				s.value = s.round(percent*((s.max - s.min) / 100) + s.min, s.round);
 			}
 		}
+	}
+	
+	public String cutText(String text, int leng) {
+		String text1 = text;
+		for(int i = 0; i < text.length(); i++) {
+			if(mc.fontRenderer.getStringWidth(text1) < len-2) return text1;
+			text1 = text1.replaceAll(".$", "");
+		}
+		return "";
 	}
 
 }

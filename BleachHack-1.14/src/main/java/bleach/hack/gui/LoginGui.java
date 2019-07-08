@@ -14,9 +14,6 @@ public class LoginGui extends Screen {
 	private TextFieldWidget userField;
 	private TextFieldWidget passField;
 	
-	private String savedUser;
-	private String savedPass;
-	
 	private String loginResult = "";
 	
 	public LoginGui(ITextComponent titleIn) {
@@ -27,14 +24,8 @@ public class LoginGui extends Screen {
 		this.addButton(new Button(width / 2 - 100, height / 3 + 84, 200, 20, "Done", (button) -> {
 			minecraft.displayGuiScreen(new BleachMainMenu(null));
 	    }));
-		this.addButton(new Button(width / 2 - 100, height / 3 + 62, 96, 20, "Login", (button) -> {
+		this.addButton(new Button(width / 2 - 100, height / 3 + 62, 200, 20, "Login", (button) -> {
 			loginResult = LoginManager.login(userField.getText(), passField.getText());
-			savedUser = userField.getText();
-			savedPass = passField.getText();
-			System.out.println(userField.getText() + " " + passField.getText());
-	    }));
-		this.addButton(new Button(width / 2, height / 3 + 62, 100, 20, "Refresh Session", (button) -> {
-			loginResult = LoginManager.login(savedUser, savedPass);
 	    }));
 		
 		this.userField = new TextFieldWidget(this.font, width / 2 - 98, height / 4 + 10, 196, 18, "");

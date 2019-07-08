@@ -41,16 +41,17 @@ public class BleachHack {
 		if(!(event.phase == Phase.END)) return;
 		tickCount++;
 		
-		if(tickCount % 100 == 0) {
-			fileReader.saveModules();
-			fileReader.saveSettings();
-		}
-		
 		if(Minecraft.getInstance().currentScreen instanceof MainMenuScreen) {
 			Minecraft.getInstance().displayGuiScreen(new BleachMainMenu(null));
 		}
 		
-    	try {ModuleManager.onUpdate();
+    	try {
+    		ModuleManager.onUpdate();
+    		
+    		if(tickCount % 100 == 0 && Minecraft.getInstance().player != null) {
+    			fileReader.saveModules();
+    			fileReader.saveSettings();
+    		}
     	}catch(Exception e){ /* World Not Loaded */ }
     }
     

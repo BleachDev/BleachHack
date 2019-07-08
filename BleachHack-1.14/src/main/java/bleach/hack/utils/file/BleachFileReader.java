@@ -33,7 +33,7 @@ public class BleachFileReader {
 				String[] line = s.split(":");
 				try {
 					if(line[0].contains(m.getName()) && line[1].contains("true")) {
-						m.setToggled(true);
+						m.toggle();
 						break;
 					}
 				}catch(Exception e) {}

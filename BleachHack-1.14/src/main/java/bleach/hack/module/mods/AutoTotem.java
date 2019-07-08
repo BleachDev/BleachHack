@@ -12,13 +12,12 @@ import net.minecraft.util.math.BlockPos;
 public class AutoTotem extends Module {
 
 	public AutoTotem() {
-		super("AutoTotem", 0, Category.COMBAT, "Automatically equips totems.", null);
+		super("AutoTotem", -1, Category.COMBAT, "Automatically equips totems.", null);
 	}
 	
 	public void onUpdate() {
 		if(this.isToggled()) {
 			if(mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) return;
-			System.out.println(mc.gameDir.getAbsolutePath());
 			
 			/*Inventory*/
 			for(int i = 9; i < 44; i++) {

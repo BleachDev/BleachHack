@@ -8,15 +8,19 @@ import bleach.hack.module.mods.*;
 public class ModuleManager {
 
 	private static List<Module> mods = Arrays.asList( // new ArrayList<Module>();
+			new Arraylist(),
 			new AutoTotem(),
 			new ChestESP(),
 			new ClickGui(),
+			new CrystalAura(),
+			new EntitySpeed(),
 			new ESP(),
 			new Flight(),
 			new Fullbright(),
 			new Jesus(),
 			new Killaura(),
 			new Nofall(),
+			new SpeedMine(),
 			new Sprint(),
 			new Step(),
 			new Tracers());
