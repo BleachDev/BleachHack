@@ -54,13 +54,13 @@ public class BleachHack {
     			fileReader.saveModules();
     			fileReader.saveSettings();
     		}
-    	}catch(Exception e){ /* World Not Loaded */ }
+    	}catch(Exception e){ /* World Not Loaded. */ }
     }
     
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
     	try { ModuleManager.onRender();
-    	}catch(Exception e){ /* World Not Loaded */ }
+    	}catch(Exception e){ /* World Not Loaded. */ }
     }
     
     @SubscribeEvent
