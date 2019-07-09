@@ -21,6 +21,7 @@ public class ModuleManager {
 			new Jesus(),
 			new Killaura(),
 			new Nofall(),
+			new PacketFly(),
 			new SpeedMine(),
 			new Sprint(),
 			new Step(),

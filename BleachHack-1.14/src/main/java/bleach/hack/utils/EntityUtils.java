@@ -63,4 +63,18 @@ public class EntityUtils {
 		mc.player.rotationPitch += MathHelper.wrapDegrees(pitch - mc.player.rotationPitch);
 	}
 	
+	public static int getDirectionFacing(Entity e) {
+		int yaw = (int)e.rotationYaw;
+		
+		if(yaw > 180) while(yaw > 180) yaw -= 360; 
+		else if(yaw < -180) while(yaw < -180) yaw += 360;
+		
+		if(yaw >= 135 || yaw <= -135) return 0;
+		if(yaw <= -45 && yaw >= -135) return 1;
+		if(yaw <= 45 && yaw >= -45) return 2;
+		if(yaw <= 135 && yaw >= 45) return 3;
+		
+		return 0;
+	}
+	
 }
