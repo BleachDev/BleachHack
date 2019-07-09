@@ -1,9 +1,13 @@
 package bleach.hack.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.BleachHack;
 import bleach.hack.gui.particle.ParticleManager;
+import bleach.hack.utils.file.BleachGithubReader;
 import net.minecraft.client.gui.screen.MultiplayerScreen;
 import net.minecraft.client.gui.screen.OptionsScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,6 +23,9 @@ import net.minecraftforge.versions.forge.ForgeVersion;
 public class BleachMainMenu extends Screen {
 	
 	ParticleManager particleMang = new ParticleManager();
+	BleachGithubReader github = new BleachGithubReader();
+	
+	private List<String> versions = new ArrayList<>();
 	
 	public BleachMainMenu(ITextComponent titleIn) {
 		super(new TranslationTextComponent("narrator.screen.title"));
@@ -43,6 +50,9 @@ public class BleachMainMenu extends Screen {
 	    this.addButton(new Button(width / 2 + 2, height / 4 + 129, 98, 20, I18n.format("menu.quit"), button -> {
 	    	this.minecraft.shutdown();
 	    }));
+	    
+	    versions.clear();
+	    versions.addAll(github.readFileLines("latestversion.txt"));
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
@@ -66,6 +76,13 @@ public class BleachMainMenu extends Screen {
 		drawString(this.font, "Forge: " + ForgeVersion.getVersion(), 4, height - 30, -1);
 		drawString(this.font, "Minecraft " + SharedConstants.getVersion().getName(), 4, height - 20, -1);
 		drawString(this.font, "Logged in as: §a" + this.minecraft.getSession().getUsername(), 4, height - 10, -1);
+		
+		try {
+			if(Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
+				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
+				drawCenteredString(this.font,"§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
+			}
+		}catch(Exception e) {}
 		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
 	}
