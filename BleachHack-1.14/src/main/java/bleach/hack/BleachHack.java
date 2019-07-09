@@ -3,6 +3,7 @@ package bleach.hack;
 import bleach.hack.command.CommandManager;
 import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.file.BleachFileReader;
 
 import net.minecraft.client.Minecraft;
@@ -34,6 +35,7 @@ public class BleachHack {
     public void init(FMLCommonSetupEvent event) {
     	fileReader.readModules();
     	fileReader.readSettings();
+    	ClickGui.clickGui.initWindows();
     }
     
 	@SubscribeEvent

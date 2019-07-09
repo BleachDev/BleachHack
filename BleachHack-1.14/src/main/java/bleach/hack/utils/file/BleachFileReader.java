@@ -17,10 +17,12 @@ public class BleachFileReader {
 	}
 	
 	public void saveModules() {
+		fileMang.getDir().toFile().mkdirs();
 		fileMang.createFile("modules.txt", "");
 		fileMang.rewriteFile("modules.txt", "");
 		
 		for(Module m: ModuleManager.getModules()) {
+			if(m.getName() == "ClickGui") continue;
 			fileMang.appendFile("modules.txt", m.getName() + ":" + Boolean.toString(m.isToggled()));
 		}
 	}
@@ -42,6 +44,7 @@ public class BleachFileReader {
 	}
 	
 	public void saveSettings() {
+		fileMang.getDir().toFile().mkdirs();
 		fileMang.createFile("settings.txt", "");
 		fileMang.rewriteFile("settings.txt", "");
 		

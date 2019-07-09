@@ -40,7 +40,7 @@ public class Arraylist extends Module {
 		for(String s: lines) {
 			IngameGui.fill(0, 1+(count*10), mc.fontRenderer.getStringWidth(s)+3, 11+(count*10), 0x70000000);
 			mc.fontRenderer.drawStringWithShadow(s, 2, 2+(count*10), color);
-			color -= 255/ModuleManager.getModules().size();
+			color -= 200/lines.size();
 			count++;
 		}
 	}

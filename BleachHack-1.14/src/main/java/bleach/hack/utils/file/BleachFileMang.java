@@ -15,7 +15,7 @@ public class BleachFileMang {
 	private Path dir;
 	
 	public BleachFileMang() {
-		this.dir = Paths.get(Minecraft.getInstance().gameDir.getAbsolutePath().replaceAll(".$", ""), "bleach/");
+		this.dir = Paths.get(Minecraft.getInstance().gameDir.getAbsolutePath(), "bleach/");
 		if(!dir.toFile().exists()) dir.toFile().mkdirs();
 	}
 	

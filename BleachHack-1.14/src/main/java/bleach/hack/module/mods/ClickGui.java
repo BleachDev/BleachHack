@@ -17,12 +17,14 @@ public class ClickGui extends Module{
 			new SettingSlider(30, 70, 50, 0, "Length: "),
 			new SettingSlider(50, 90, 70, 0, "Length2: "));
 	
+	public static ClickGuiScreen clickGui = new ClickGuiScreen(null);
+	
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui", settings);
 	}
 	
 	public void onEnable() {
-		mc.displayGuiScreen(new ClickGuiScreen(null));
+		mc.displayGuiScreen(clickGui);
 	}
 
 }

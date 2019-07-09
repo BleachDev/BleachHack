@@ -1,5 +1,6 @@
 package bleach.hack.module;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,11 +32,17 @@ public class ModuleManager {
 	
 	public static Module getModuleByName(String name) {
 	    for (Module m: mods) {
-	        if (name.equals(m.getName())) {
-	            return m;
-	        }
+	        if (name.equals(m.getName())) return m;
 	    }
 	    return null;
+	}
+	
+	public static List<Module> getModulesInCat(Category cat) {
+		List<Module> mds = new ArrayList<>();
+	    for (Module m: mods) {
+	        if (m.getCategory().equals(cat)) mds.add(m);
+	    }
+	    return mds;
 	}
 	
 	public static void onUpdate() {
