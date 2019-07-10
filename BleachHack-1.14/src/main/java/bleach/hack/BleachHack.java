@@ -24,8 +24,6 @@ public class BleachHack {
 	
 	public static String VERSION = "B2";
 	public static int INTVERSION = 2;
-
-	private long tickCount = 0;
 	
 	private BleachFileReader fileReader = new BleachFileReader();
 	
@@ -43,7 +41,6 @@ public class BleachHack {
 	@SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
 		if(!(event.phase == Phase.END)) return;
-		tickCount++;
 		
 		if(Minecraft.getInstance().currentScreen instanceof MainMenuScreen) {
 			Minecraft.getInstance().displayGuiScreen(new BleachMainMenu(null));
@@ -52,7 +49,7 @@ public class BleachHack {
     	try {
     		ModuleManager.onUpdate();
     		
-    		if(tickCount % 100 == 0 && Minecraft.getInstance().player != null) {
+    		if(Minecraft.getInstance().player.ticksExisted % 100 == 0) {
     			fileReader.saveModules();
     			fileReader.saveSettings();
     		}

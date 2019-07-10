@@ -10,6 +10,7 @@ public class CommandManager {
 
 	private List<Command> commands = Arrays.asList(
 			new CmdGamemode(),
+			new CmdGuiReset(),
 			new CmdToggle());
 	
 	public List<Command> getCommands(){

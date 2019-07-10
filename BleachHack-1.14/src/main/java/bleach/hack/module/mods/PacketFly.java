@@ -20,7 +20,7 @@ public class PacketFly extends Module {
 			new SettingMode(new String[] {"Phase", "Packet"},  "Mode: "),
 			new SettingSlider(0.05, 2, 0.5, 2, "HSpeed: "),
 			new SettingSlider(0.05, 2, 0.5, 2, "VSpeed: "),
-			new SettingSlider(0, 40, 20, 0, "Fall Delay: "));
+			new SettingSlider(0, 40, 20, 0, "Fall: "));
 	
 	public PacketFly() {
 		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.", settings);
@@ -43,6 +43,7 @@ public class PacketFly extends Module {
 			if(!mc.player.isAlive()) return;
 			timer++;
 			mc.player.setVelocity(0, 0, 0);
+			mc.player.setMotion(0, 0, 0);
 			
 			if(getSettings().get(0).toMode().mode == 0) {
 				if(mc.gameSettings.keyBindJump.isKeyDown()) posY += vspeed;
@@ -74,20 +75,20 @@ public class PacketFly extends Module {
 				
 			}else if(getSettings().get(0).toMode().mode == 1) {
 				double mX = 0; double mY = 0; double mZ = 0;
-				if(mc.player.rotationYawHead != mc.player.rotationYaw) {
+				/*if(mc.player.rotationYawHead != mc.player.rotationYaw) {
 					mc.player.connection.sendPacket(new CPlayerPacket.RotationPacket(
 							mc.player.rotationYawHead, mc.player.rotationPitch, mc.player.onGround));
 					return;
-				}
+				}*/
 				
 				if(mc.gameSettings.keyBindJump.isKeyDown()) mY = 0.062;
 				if(mc.gameSettings.keyBindSneak.isKeyDown()) mY = -0.062;
 				
 				if(mc.gameSettings.keyBindForward.isKeyDown()) {
-					if(EntityUtils.getDirectionFacing(mc.player) == 0) mZ = -0.275;
-					if(EntityUtils.getDirectionFacing(mc.player) == 1) mX = 0.275;
-					if(EntityUtils.getDirectionFacing(mc.player) == 2) mZ = 0.275;
-					if(EntityUtils.getDirectionFacing(mc.player) == 3) mX = -0.275;
+					if(EntityUtils.getDirectionFacing(mc.player) == 0) mZ = -0.0275;
+					if(EntityUtils.getDirectionFacing(mc.player) == 1) mX = 0.0275;
+					if(EntityUtils.getDirectionFacing(mc.player) == 2) mZ = 0.0275;
+					if(EntityUtils.getDirectionFacing(mc.player) == 3) mX = -0.0275;
 				}
 				
 				if(timer > getSettings().get(3).toSlider().getValue()) {

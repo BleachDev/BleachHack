@@ -27,8 +27,8 @@ public class Jesus extends Module {
 
 			if(isFluid(e.getPositionVec().add(0,0.3,0))) {
 				e.setMotion(e.getMotion().x, 0.08, e.getMotion().z);
-			}else if(isFluid(e.getPositionVec().add(0,0.1,0))) {
-				e.setMotion(e.getMotion().x, 0.04, e.getMotion().z);
+			}else if(isFluid(e.getPositionVec().add(0,0.07,0))) {
+				e.setMotion(e.getMotion().x, 0.01, e.getMotion().z);
 			}else if(isFluid(e.getPositionVec())) {
 				e.setMotion(e.getMotion().x, -0.005, e.getMotion().z);
 				e.onGround = true;

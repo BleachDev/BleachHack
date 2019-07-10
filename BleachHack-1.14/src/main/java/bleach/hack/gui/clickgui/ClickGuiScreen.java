@@ -39,6 +39,7 @@ public class ClickGuiScreen extends Screen {
 		this.renderBackground();
 		font.drawString("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.drawString("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
+		font.drawStringWithShadow("Binds are changed in the control settings" , 2, height-10, 0xff9999);
 		modsExp.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
 		modsWrd.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
 		modsCmb.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
@@ -65,5 +66,14 @@ public class ClickGuiScreen extends Screen {
 	public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
 		if(p_mouseDragged_5_ == 0) dragging = true;
 		return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
+	}
+	
+	public void resetGui() {
+		modsExp.setPos(30, 35);
+		modsWrd.setPos(100, 35);
+		modsCmb.setPos(170, 35);
+		modsPly.setPos(240, 35);
+		modsMvm.setPos(310, 35);
+		modsRen.setPos(380, 35);
 	}
 }
