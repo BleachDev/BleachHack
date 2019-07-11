@@ -24,15 +24,6 @@ public class BleachFileMang {
 		return dir;
 	}
 	
-	
-	/** Reads a file and returns one string. **/
-	public String readFile(String file) {
-		try { return new String(Files.readAllBytes(Paths.get(dir.toString(), file)));
-		} catch (IOException e) { System.out.println("Error Reading File"); } 
-		
-		return "";
-	}
-	
 	/** Reads a file and returns a list of the lines. **/
 	public List<String> readFileLines(String file) {
 		try { return Files.readAllLines(Paths.get(dir.toString(), file));
@@ -41,10 +32,11 @@ public class BleachFileMang {
 		return new ArrayList<String>();
 	}
 	
-	/** Creates a file, dosen't do anything if the file already exists. **/
+	/** Creates a file, doesn't do anything if the file already exists. **/
 	public void createFile(String file, String content) {
 		try { 
 			if(Paths.get(dir.toString(), file).toFile().exists()) return;
+			dir.toFile().mkdirs();
 			Files.createFile(Paths.get(dir.toString(), file));
 			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file).toFile());
 			writer.write(content);
@@ -52,11 +44,15 @@ public class BleachFileMang {
 		} catch (IOException e) { System.out.println("Error Writing File"); } 
 	}
 	
-	/** Clears a file and writes a string to it. **/
-	public void rewriteFile(String file, String content) {
-		try {
-			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file).toFile(), false);
-			writer.write(content);
+	/** Creates a file, clears it if it already exists **/
+	public void createEmptyFile(String file) {
+		try { 
+			dir.toFile().mkdirs();
+			if(!Paths.get(dir.toString(), file).toFile().exists()) {
+				Files.createFile(Paths.get(dir.toString(), file));
+			}
+			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file).toFile());
+			writer.write("");
 			writer.close();
 		} catch (IOException e) { System.out.println("Error Writing File"); } 
 	}

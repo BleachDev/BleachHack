@@ -17,9 +17,7 @@ public class BleachFileReader {
 	}
 	
 	public void saveModules() {
-		fileMang.getDir().toFile().mkdirs();
-		fileMang.createFile("modules.txt", "");
-		fileMang.rewriteFile("modules.txt", "");
+		fileMang.createEmptyFile("modules.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			if(m.getName() == "ClickGui") continue;
@@ -44,9 +42,7 @@ public class BleachFileReader {
 	}
 	
 	public void saveSettings() {
-		fileMang.getDir().toFile().mkdirs();
-		fileMang.createFile("settings.txt", "");
-		fileMang.rewriteFile("settings.txt", "");
+		fileMang.createEmptyFile("settings.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			String line = m.getName();

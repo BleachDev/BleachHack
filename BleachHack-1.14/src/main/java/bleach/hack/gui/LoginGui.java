@@ -42,10 +42,10 @@ public class LoginGui extends Screen {
 		particleMang.addParticle(p_render_1_, p_render_2_);
 		particleMang.renderParticles();
 		
-		this.drawString(this.font, "Email: ", this.width / 2 - 130, this.height / 4 + 15, 0xffffff);
-		this.drawString(this.font, "Password: ", this.width / 2 - 154, this.height / 4 + 45, 0xffffff);
+		drawString(this.font, "Email: ", this.width / 2 - 130, this.height / 4 + 15, 0xffffff);
+		drawString(this.font, "Password: ", this.width / 2 - 154, this.height / 4 + 45, 0xffffff);
 		
-		this.drawString(this.font, loginResult, this.width / 2 - 40, this.height / 4 + 63, 0xffffff);
+		drawCenteredString(this.font, loginResult, this.width / 2, this.height / 4 + 63, 0xffffff);
 		
 		drawString(this.font, "Logged in as: §a" + this.minecraft.getSession().getUsername(), 4, height - 10, -1);
 		

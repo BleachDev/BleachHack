@@ -17,7 +17,8 @@ public class UI extends Module {
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Arraylist"),
 			new SettingToggle(false, "FPS"),
-			new SettingToggle(false, "Ping"));
+			new SettingToggle(false, "Ping"),
+			new SettingToggle(false, "Coords"));
 	
 	private IngameOverlay gui = new IngameOverlay();
 	
@@ -37,6 +38,10 @@ public class UI extends Module {
 	public void drawOverlay(RenderGameOverlayEvent.Text event) {
 		gui.bottomLeftList.clear();
 		if(getSettings().get(0).toToggle().state) gui.drawArrayList();
+		if(getSettings().get(3).toToggle().state) {
+			gui.addNetherCoords();
+			gui.addCoords();
+		}
 		if(getSettings().get(1).toToggle().state) gui.addFPS();
 		try{ if(getSettings().get(2).toToggle().state) gui.addPing(); }catch(Exception e) {}
 		gui.drawBottomLeft();
