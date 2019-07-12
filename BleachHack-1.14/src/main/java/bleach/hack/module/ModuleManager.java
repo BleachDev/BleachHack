@@ -59,7 +59,7 @@ public class ModuleManager {
 		}
 	}
 	
-	public static void onKeyPressed(int k) {
+	public static void updateKeys() {
 		for(Module m: mods) {
 			if(m.getKey().isPressed()) {
 				m.toggle();

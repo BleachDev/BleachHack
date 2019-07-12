@@ -19,12 +19,12 @@ public class EntityUtils {
 	private static Minecraft mc = Minecraft.getInstance();
 	
 	public static List<Entity> getLoadedEntities() {
-		return Minecraft.getInstance().world.getEntitiesWithinAABBExcludingEntity(
+		return mc.world.getEntitiesWithinAABBExcludingEntity(
 				null, new AxisAlignedBB(
-						Minecraft.getInstance().player.posX - 128, 0,
-						Minecraft.getInstance().player.posZ - 128,
-						Minecraft.getInstance().player.posX + 128, 256,
-						Minecraft.getInstance().player.posZ + 128));
+						mc.player.posX - 128, 0,
+						mc.player.posZ - 128,
+						mc.player.posX + 128, 256,
+						mc.player.posZ + 128));
 	}
 	
 	public static List<PlayerEntity> getPlayerEntites() {

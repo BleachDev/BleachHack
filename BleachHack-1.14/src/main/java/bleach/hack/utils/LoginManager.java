@@ -1,9 +1,6 @@
 package bleach.hack.utils;
 
-import java.lang.reflect.Field;
 import java.net.Proxy;
-
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;
@@ -12,6 +9,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public final class LoginManager {
 
@@ -27,16 +25,16 @@ public final class LoginManager {
 		try
 		{
 			auth.logIn();
-			Field session = Minecraft.getInstance().getClass().getDeclaredField("session");
 			
 			Session newsession = new Session(auth.getSelectedProfile().getName(),
 					auth.getSelectedProfile().getId().toString(),
 					auth.getAuthenticatedToken(), "mojang");
 			
-			FieldUtils.writeField(session, Minecraft.getInstance(), newsession, true);
+			ObfuscationReflectionHelper.findField(Minecraft.getInstance().getClass(), "field_71449_j")
+				.set(Minecraft.getInstance(), newsession);
 			return "§aLogin Successful";
 		
-		}catch (IllegalAccessException | NoSuchFieldException | SecurityException e) 
+		}catch (IllegalAccessException | SecurityException e) 
 		{
 			return "§cInternal Error (" + e.toString() + ")";
 			

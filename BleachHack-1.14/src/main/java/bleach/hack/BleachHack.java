@@ -9,7 +9,6 @@ import bleach.hack.utils.file.BleachFileReader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraftforge.client.event.ClientChatEvent;
-import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -48,6 +47,7 @@ public class BleachHack {
 		
     	try {
     		ModuleManager.onUpdate();
+    		ModuleManager.updateKeys();
     		
     		if(Minecraft.getInstance().player.ticksExisted % 100 == 0) {
     			fileReader.saveModules();
@@ -60,11 +60,6 @@ public class BleachHack {
     public void onRender(RenderWorldLastEvent event) {
     	try { ModuleManager.onRender();
     	}catch(Exception e){ /* World Not Loaded. */ }
-    }
-    
-    @SubscribeEvent
-    public void onKeyPress(KeyInputEvent event) {
-    	ModuleManager.onKeyPressed(event.getKey());
     }
     
     @SubscribeEvent
