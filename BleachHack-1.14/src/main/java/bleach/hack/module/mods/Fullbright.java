@@ -12,7 +12,7 @@ import bleach.hack.module.Module;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 
-public class Fullbright extends Module{
+public class Fullbright extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingMode(new String[]{"Gamma", "Potion"}, "Mode: "));

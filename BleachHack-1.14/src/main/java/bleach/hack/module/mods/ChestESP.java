@@ -28,7 +28,7 @@ import net.minecraft.tileentity.ShulkerBoxTileEntity;
 import net.minecraft.tileentity.SmokerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class ChestESP extends Module{
+public class ChestESP extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Chests"),

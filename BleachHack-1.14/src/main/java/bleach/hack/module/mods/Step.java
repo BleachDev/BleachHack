@@ -8,7 +8,7 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 
-public class Step extends Module{
+public class Step extends Module {
 	
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingMode(new String[] {"Simple", "Spider"}, "Mode: "));

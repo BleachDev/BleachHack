@@ -11,7 +11,7 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 
-public class ClickGui extends Module{
+public class ClickGui extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingSlider(50, 80, 64, 0, "Length: "),

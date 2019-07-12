@@ -10,7 +10,7 @@ import bleach.hack.module.Module;
 import net.minecraft.block.Blocks;
 import net.minecraft.network.play.client.CPlayerPacket;
 
-public class Nofall extends Module{
+public class Nofall extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingMode(new String[] {"Simple", "Packet"}, "Mode: "));
@@ -26,10 +26,12 @@ public class Nofall extends Module{
 			}
 			
 			if(mc.player.fallDistance > 2f && getSettings().get(0).toMode().mode == 1 &&
-					mc.world.getBlockState(mc.player.getPosition().add(0,-1.5,0)).getBlock() != Blocks.AIR) {
+					mc.world.getBlockState(mc.player.getPosition().add(
+							0,-1.5+(mc.player.getMotion().y*0.1),0)).getBlock() != Blocks.AIR) {
 				mc.player.connection.sendPacket(new CPlayerPacket(false));
 				mc.player.connection.sendPacket(new CPlayerPacket.PositionPacket(
 						mc.player.posX, mc.player.posY - 420.69, mc.player.posZ, true));
+				mc.player.fallDistance = 0;
 			}
 		}
 	}

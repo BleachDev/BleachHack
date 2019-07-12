@@ -17,7 +17,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
-public class Tracers extends Module{
+public class Tracers extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Players"),

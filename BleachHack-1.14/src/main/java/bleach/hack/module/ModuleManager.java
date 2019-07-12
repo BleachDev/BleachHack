@@ -19,6 +19,7 @@ public class ModuleManager {
 			new Fullbright(),
 			new Jesus(),
 			new Killaura(),
+			new Nametags(),
 			new Nofall(),
 			new PacketFly(),
 			new SpeedMine(),
