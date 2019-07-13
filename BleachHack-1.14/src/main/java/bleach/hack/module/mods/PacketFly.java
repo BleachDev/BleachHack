@@ -64,7 +64,7 @@ public class PacketFly extends Module {
 				}
 				
 				if(timer > getSettings().get(3).toSlider().getValue()) {
-					posZ -= 0.2;
+					posY -= 0.2;
 					timer = 0;
 				}
 				
