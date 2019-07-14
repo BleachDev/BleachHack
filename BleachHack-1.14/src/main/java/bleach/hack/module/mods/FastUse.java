@@ -10,6 +10,7 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class FastUse extends Module {
@@ -26,12 +27,12 @@ public class FastUse extends Module {
 		if(this.isToggled()) {
 			try {
 				/* set rightClickDelay to 0 */
-				ObfuscationReflectionHelper.findField(mc.getClass(), "field_71467_ac").setInt(mc, 0);
+				ObfuscationReflectionHelper.findField(Minecraft.class, "field_71467_ac").setInt(mc, 0);
 				
 				/* call rightClickMouse */
 				if(getSettings().get(0).toMode().mode == 1 && mc.gameSettings.keyBindUseItem.isKeyDown()) {
 					for(int i = 0; i < (int) getSettings().get(1).toSlider().getValue(); i++) {
-						ObfuscationReflectionHelper.findMethod(mc.getClass(), "func_147121_ag").invoke(mc);
+						ObfuscationReflectionHelper.findMethod(Minecraft.class, "func_147121_ag").invoke(mc);
 					}
 				}
 			} catch (Exception e) {}

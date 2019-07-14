@@ -30,7 +30,7 @@ public final class LoginManager {
 					auth.getSelectedProfile().getId().toString(),
 					auth.getAuthenticatedToken(), "mojang");
 			
-			ObfuscationReflectionHelper.findField(Minecraft.getInstance().getClass(), "field_71449_j")
+			ObfuscationReflectionHelper.findField(Minecraft.class, "field_71449_j")
 				.set(Minecraft.getInstance(), newsession);
 			return "§aLogin Successful";
 		
