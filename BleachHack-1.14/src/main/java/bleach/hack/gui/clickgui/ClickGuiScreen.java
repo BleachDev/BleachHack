@@ -15,7 +15,7 @@ public class ClickGuiScreen extends Screen {
 	private boolean rMousePressed = false;
 	private boolean dragging = false;
 	
-	ModuleWindow modsExp, modsWrd, modsCmb, modsPly, modsMvm, modsRen;
+	ModuleWindow modsExp, modsMsc, modsCmb, modsPly, modsMvm, modsRen;
 	
 	public ClickGuiScreen(ITextComponent titleIn) {
 		super(new StringTextComponent("ClickGui"));
@@ -23,7 +23,7 @@ public class ClickGuiScreen extends Screen {
 	
 	public void initWindows() {
 		modsExp = new ModuleWindow(this, ModuleManager.getModulesInCat(Category.EXPLOITS), "Exploits", len, setLen, 30, 35);
-		modsWrd = new ModuleWindow(this, ModuleManager.getModulesInCat(Category.WORLD), "World", len, setLen, 100, 35);
+		modsMsc = new ModuleWindow(this, ModuleManager.getModulesInCat(Category.MISC), "Misc", len, setLen, 100, 35);
 		modsCmb = new ModuleWindow(this, ModuleManager.getModulesInCat(Category.COMBAT), "Combat", len, setLen, 170, 35);
 		modsPly = new ModuleWindow(this, ModuleManager.getModulesInCat(Category.PLAYER), "Player", len, setLen, 240, 35);
 		modsMvm = new ModuleWindow(this, ModuleManager.getModulesInCat(Category.MOVEMENT), "Movement", len, setLen, 310, 35);
@@ -40,8 +40,9 @@ public class ClickGuiScreen extends Screen {
 		font.drawString("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.drawString("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		font.drawStringWithShadow("Binds are changed in the control settings" , 2, height-10, 0xff9999);
+		font.drawStringWithShadow("Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
 		modsExp.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
-		modsWrd.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
+		modsMsc.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
 		modsCmb.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
 		modsPly.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
 		modsMvm.draw(p_render_1_, p_render_2_, lMousePressed, rMousePressed, len, setLen, dragging);
@@ -70,7 +71,7 @@ public class ClickGuiScreen extends Screen {
 	
 	public void resetGui() {
 		modsExp.setPos(30, 35);
-		modsWrd.setPos(100, 35);
+		modsMsc.setPos(100, 35);
 		modsCmb.setPos(170, 35);
 		modsPly.setPos(240, 35);
 		modsMvm.setPos(310, 35);

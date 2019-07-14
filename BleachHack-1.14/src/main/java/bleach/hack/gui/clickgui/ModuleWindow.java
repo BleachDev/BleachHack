@@ -98,6 +98,7 @@ public class ModuleWindow {
 			
 			/* Set which module settings show on */
 			if(mouseOver(posX, posY+(count*10), posX+len, posY+10+(count*10))) {
+				Screen.fill(0, screen.height-13, font.getStringWidth(m.getDesc())+5, screen.height, 0xe0dd99ff);
 				Screen.fill(0, screen.height-12, font.getStringWidth(m.getDesc())+4, screen.height, 0xe0000000);
 				screen.drawString(font, m.getDesc(), 2, screen.height-10, 0xffc3ff);
 				if(lDown) m.toggle();

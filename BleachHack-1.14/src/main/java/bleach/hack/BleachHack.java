@@ -21,8 +21,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod("bleachhack")
 public class BleachHack {
 	
-	public static String VERSION = "B2";
-	public static int INTVERSION = 2;
+	public static String VERSION = "B3";
+	public static int INTVERSION = 3;
 	
 	private BleachFileReader fileReader = new BleachFileReader();
 	
@@ -53,13 +53,13 @@ public class BleachHack {
     			fileReader.saveModules();
     			fileReader.saveSettings();
     		}
-    	}catch(Exception e){ /* World Not Loaded. */ }
+    	}catch(Exception e){ System.out.println(e.toString()); }
     }
     
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
     	try { ModuleManager.onRender();
-    	}catch(Exception e){ /* World Not Loaded. */ }
+    	}catch(Exception e){ System.out.println(e.toString()); }
     }
     
     @SubscribeEvent
