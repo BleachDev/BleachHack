@@ -15,7 +15,7 @@ public class ClickGuiScreen extends Screen {
 	private boolean rMousePressed = false;
 	private boolean dragging = false;
 	
-	ModuleWindow modsExp, modsMsc, modsCmb, modsPly, modsMvm, modsRen;
+	public ModuleWindow modsExp, modsMsc, modsCmb, modsPly, modsMvm, modsRen;
 	
 	public ClickGuiScreen(ITextComponent titleIn) {
 		super(new StringTextComponent("ClickGui"));

@@ -35,6 +35,7 @@ public class BleachHack {
     	fileReader.readModules();
     	fileReader.readSettings();
     	ClickGui.clickGui.initWindows();
+    	fileReader.readClickGui();
     }
     
 	@SubscribeEvent
@@ -52,14 +53,15 @@ public class BleachHack {
     		if(Minecraft.getInstance().player.ticksExisted % 100 == 0) {
     			fileReader.saveModules();
     			fileReader.saveSettings();
+    			fileReader.saveClickGui();
     		}
-    	}catch(Exception e){ System.out.println(e.toString()); }
+    	}catch(Exception e){}
     }
     
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
     	try { ModuleManager.onRender();
-    	}catch(Exception e){ System.out.println(e.toString()); }
+    	}catch(Exception e){}
     }
     
     @SubscribeEvent

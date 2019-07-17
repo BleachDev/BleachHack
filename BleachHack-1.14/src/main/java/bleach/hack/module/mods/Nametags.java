@@ -56,18 +56,13 @@ public class Nametags extends Module {
 	}
 	
 	@SubscribeEvent
-	public void renderTag(RenderLivingEvent.Specials.Pre<?, ?> event) {
-		double x = mc.gameRenderer.getActiveRenderInfo().getProjectedView().x;
-	    double y = mc.gameRenderer.getActiveRenderInfo().getProjectedView().y;
-	    double z = mc.gameRenderer.getActiveRenderInfo().getProjectedView().z;
-			
-		LivingEntity e = event.getEntity();
+	public void renderTag(RenderLivingEvent.Specials.Pre<?, ?> event) {LivingEntity e = event.getEntity();
 		
 		/* Color before name */
 		String color = e instanceof IMob ? "§5" : EntityUtils.isAnimal(e)
 				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 		
-		if(e == mc.player || color == "§f" || 
+		if(e == mc.player || e == mc.player.getRidingEntity() || color == "§f" || 
 				((color == "§c" || color == "§6") && !getSettings().get(4).toToggle().state) ||
 				((color == "§5" || color == "§a") && !getSettings().get(5).toToggle().state)) return;
 		
@@ -87,10 +82,10 @@ public class Nametags extends Module {
 		/* Drawing Nametags */
 		if(getSettings().get(1).toMode().mode == 0) {
 			drawNameplate(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
-					e.posX - x,e.posY - y + e.getHeight() + (0.5f * scale), e.posZ - z, scale);
+					e.posX,e.posY + e.getHeight() + (0.5f * scale), e.posZ, scale);
 		}else if(getSettings().get(1).toMode().mode == 1) {
-			drawNameplate(color + e.getName().getString(), e.posX - x, e.posY - y + e.getHeight() + (0.5f * scale), e.posZ - z, scale);
-			drawNameplate(health, e.posX - x, e.posY - y + e.getHeight() + (0.75f * scale), e.posZ - z, scale);
+			drawNameplate(color + e.getName().getString(), e.posX, e.posY + e.getHeight() + (0.5f * scale), e.posZ, scale);
+			drawNameplate(health, e.posX, e.posY + e.getHeight() + (0.75f * scale), e.posZ, scale);
 		}
 		
 		/* Drawing Items */
@@ -98,20 +93,20 @@ public class Nametags extends Module {
 		double higher = getSettings().get(1).toMode().mode == 1 ? 0.25 : 0;
 		
 		if(getSettings().get(0).toMode().mode == 1) {
-			drawItem(e.posX - x, e.posY - y + e.getHeight() + ((0.75 + higher) * scale), e.posZ - z, -1.25, 0, scale, e.getHeldItemMainhand());
-			drawItem(e.posX - x, e.posY - y + e.getHeight() + ((0.75 + higher) * scale), e.posZ - z, 1.25, 0, scale, e.getHeldItemOffhand());
+			drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, -1.25, 0, scale, e.getHeldItemMainhand());
+			drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, 1.25, 0, scale, e.getHeldItemOffhand());
 			
 			for(ItemStack i: e.getArmorInventoryList()) {
 				if(i.getCount() < 1) continue;
-				drawItem(e.posX - x, e.posY - y + e.getHeight() + ((0.75 + higher) * scale), e.posZ - z, 0, c, scale, i);
+				drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, 0, c, scale, i);
 				c++;
 			}
 		}else if(getSettings().get(0).toMode().mode == 2) {
-			drawItem(e.posX - x, e.posY - y + e.getHeight() + ((0.75 + higher) * scale), e.posZ - z, -2.5, 0, scale, e.getHeldItemMainhand());
-			drawItem(e.posX - x, e.posY - y + e.getHeight() + ((0.75 + higher) * scale), e.posZ - z, 2.5, 0, scale, e.getHeldItemOffhand());
+			drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, -2.5, 0, scale, e.getHeldItemMainhand());
+			drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, 2.5, 0, scale, e.getHeldItemOffhand());
 			
 			for(ItemStack i: e.getArmorInventoryList()) {
-				drawItem(e.posX - x, e.posY - y + e.getHeight() + ((0.75 + higher) * scale), e.posZ - z, c+1.5, 0, scale, i);
+				drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, c+1.5, 0, scale, i);
 				c--;
 			}
 		}
@@ -121,7 +116,9 @@ public class Nametags extends Module {
 	
 	public void drawNameplate(String str, double x, double y, double z, double scale) {
 	      GlStateManager.pushMatrix();
-	      GlStateManager.translated(x, y, z);
+	      GlStateManager.translated(x - mc.gameRenderer.getActiveRenderInfo().getProjectedView().x,
+		    		y - mc.gameRenderer.getActiveRenderInfo().getProjectedView().y,
+		    		z - mc.gameRenderer.getActiveRenderInfo().getProjectedView().z);
 	      GlStateManager.normal3f(0.0F, 1.0F, 0.0F);
 	      GlStateManager.rotatef(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 	      GlStateManager.rotatef(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
@@ -156,7 +153,9 @@ public class Nametags extends Module {
 	
 	public void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
 		GlStateManager.pushMatrix();
-	    GlStateManager.translated(x, y, z);
+	    GlStateManager.translated(x - mc.gameRenderer.getActiveRenderInfo().getProjectedView().x,
+	    		y - mc.gameRenderer.getActiveRenderInfo().getProjectedView().y,
+	    		z - mc.gameRenderer.getActiveRenderInfo().getProjectedView().z);
 	    GlStateManager.normal3f(0.0F, 1.0F, 0.0F);
 	    GlStateManager.rotatef(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 	    GlStateManager.rotatef(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);

@@ -5,8 +5,10 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.AmbientEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -34,8 +36,8 @@ public class EntityUtils {
 	}
 	
 	public static boolean isAnimal(Entity e) {
-		return e instanceof AnimalEntity || e instanceof AmbientEntity
-		|| e instanceof WaterMobEntity;
+		return e instanceof AnimalEntity || e instanceof AmbientEntity || e instanceof WaterMobEntity ||
+				e instanceof GolemEntity || e instanceof VillagerEntity;
 	}
 
 	public static void setGlowing(Entity entity, TextFormatting color, String teamName) {

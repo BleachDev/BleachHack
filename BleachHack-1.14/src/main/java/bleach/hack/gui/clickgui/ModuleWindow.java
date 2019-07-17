@@ -113,6 +113,10 @@ public class ModuleWindow {
 		this.posY = y;
 	}
 	
+	public int[] getPos() {
+		return new int[] {posX, posY};
+	}
+	
 	private void drawModeSetting(SettingMode s, int x, int y) {
 		Screen.fill(x, y, x+len2, y+10, 0x70000000);
 		screen.drawString(font, "| " + s.text + s.modes[s.mode],x+2, y+1,
