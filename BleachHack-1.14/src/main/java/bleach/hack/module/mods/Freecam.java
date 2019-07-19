@@ -7,7 +7,6 @@ import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
@@ -19,8 +18,7 @@ import net.minecraft.util.text.TextFormatting;
 public class Freecam extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingSlider(0, 2, 0.5, 2, "Speed: "),
-			new SettingToggle(false, "Visible"));
+			new SettingSlider(0, 2, 0.5, 2, "Speed: "));
 	
 	private BoatEntity camera; /* Invisible boat used as the camera */
 	private ArmorStandEntity dummy; /* Armorstand used as a dummy for the player */
