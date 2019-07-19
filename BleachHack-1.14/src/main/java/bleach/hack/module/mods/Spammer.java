@@ -24,7 +24,7 @@ public class Spammer extends Module {
 	private int lineCount = 0;
 	
 	public Spammer() {
-		super("Spammer", -1, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt, editor coming next update)", settings);
+		super("Spammer", -1, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)", settings);
 	}
 	
 	public void onEnable() {

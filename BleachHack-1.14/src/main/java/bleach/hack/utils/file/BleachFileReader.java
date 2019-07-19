@@ -22,7 +22,7 @@ public class BleachFileReader {
 		fileMang.createEmptyFile("modules.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
-			if(m.getName() == "ClickGui") continue;
+			if(m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
 			fileMang.appendFile("modules.txt", m.getName() + ":" + Boolean.toString(m.isToggled()));
 		}
 	}

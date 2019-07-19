@@ -85,7 +85,7 @@ public class RenderUtils {
 	
 	public static Vec3d renderPos() {
 		ActiveRenderInfo ren = mc.gameRenderer.getActiveRenderInfo();
-		return new Vec3d(ren.getProjectedView().x, ren.getProjectedView().y, ren.getProjectedView().z);
+		return ren.getProjectedView();
 	}
 	
 	public static void gl11Setup() {

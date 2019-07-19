@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod("bleachhack")
@@ -31,7 +31,7 @@ public class BleachHack {
         MinecraftForge.EVENT_BUS.register(this);
     }
     
-    public void init(FMLCommonSetupEvent event) {
+    public void init(FMLClientSetupEvent event) {
     	fileReader.readModules();
     	fileReader.readSettings();
     	ClickGui.clickGui.initWindows();

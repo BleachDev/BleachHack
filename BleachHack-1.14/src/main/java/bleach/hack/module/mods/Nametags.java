@@ -42,7 +42,8 @@ public class Nametags extends Module {
 	}
 	
 	@SubscribeEvent
-	public void renderTag(RenderLivingEvent.Specials.Pre<?, ?> event) {LivingEntity e = event.getEntity();
+	public void renderTag(RenderLivingEvent.Specials.Pre<?, ?> event) {
+		LivingEntity e = event.getEntity();
 		
 		/* Color before name */
 		String color = e.isInvisible() ? "§e" : e instanceof IMob ? "§5" : EntityUtils.isAnimal(e)
@@ -59,9 +60,13 @@ public class Nametags extends Module {
 		
 		/* Health bar */
 		String health = "";
+		/* - Add Green Normal Health */
 		for(int i = 0; i < e.getHealth(); i++) health += "§a|";
+		/* - Add Red Empty Health (Remove Based on absorption amount) */
 		for(int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaxHealth() - e.getHealth()); i++) health += "§e|";
+		/* Add Yellow Absorption Health */
 		for(int i = 0; i < e.getMaxHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
+		/* Add "+??" to the end if the entity has extra hearts */
 		if(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
 			health +=  " §e+" + (int)(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
 		}
