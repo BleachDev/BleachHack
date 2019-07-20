@@ -11,8 +11,10 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.EnderCrystalEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
@@ -25,6 +27,7 @@ public class Tracers extends Module {
 			new SettingToggle(false, "Animals"),
 			new SettingToggle(false, "Items"),
 			new SettingToggle(false, "Crystals"),
+			new SettingToggle(false, "Vehicles"),
 			new SettingToggle(false, "Force Bob"),
 			new SettingSlider(0.1, 5, 1.5, 1, "Thick: "));
 	
@@ -33,7 +36,7 @@ public class Tracers extends Module {
 	}
 	
 	public void onEnable() { 
-		if(!getSettings().get(5).toToggle().state) mc.gameSettings.viewBobbing = false;
+		if(!getSettings().get(6).toToggle().state) mc.gameSettings.viewBobbing = false;
 	}
 	
 	public void onDisable() { mc.gameSettings.viewBobbing = true; }
@@ -41,7 +44,7 @@ public class Tracers extends Module {
 	//TODO: fix bobbing, sneaking and pausing while moving
 	public void onRender(){
 		if(this.isToggled()) {
-			final float thick = (float) getSettings().get(6).toSlider().getValue();
+			final float thick = (float) getSettings().get(7).toSlider().getValue();
 			
 			for(Entity e: EntityUtils.getLoadedEntities()) {
 				Vec3d vec = e.getPositionVec();
@@ -66,6 +69,10 @@ public class Tracers extends Module {
 				if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
 					RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f, 0f, 1f,thick);
 					RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f, 0f, 1f,thick);
+				}
+				if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+					RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0.5f, 0.5f, 0.5f,thick);
+					RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0.5f, 0.5f, 0.5f,thick);
 				}
 			}
 		}

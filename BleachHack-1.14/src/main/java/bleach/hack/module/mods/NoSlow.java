@@ -7,16 +7,18 @@ import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class NoSlow extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Slowness"),
-			new SettingToggle(true, "Soul Sand"));
+			new SettingToggle(true, "Soul Sand"),
+			new SettingToggle(true, "Slime Blocks"),
+			new SettingToggle(true, "Webs"));
 	
 	private Vec3d addMotion = Vec3d.ZERO;
 	
@@ -26,6 +28,7 @@ public class NoSlow extends Module {
 	
 	public void onUpdate() {
 		if(this.isToggled()) {
+			
 			/* Slowness */
 			if(getSettings().get(0).toToggle().state && (mc.player.getActivePotionEffect(Effects.SLOWNESS) != null || mc.player.getActivePotionEffect(Effects.BLINDNESS) != null)) {
 				if(mc.gameSettings.keyBindForward.isKeyDown() 
@@ -37,10 +40,35 @@ public class NoSlow extends Module {
 			}
 			
 			/* Soul Sand */
-			if(getSettings().get(1).toToggle().state && mc.world.getBlockState(new BlockPos(mc.player.getPositionVec())).getBlock() == Blocks.SOUL_SAND) {
-				mc.player.setMotion(mc.player.getMotion().mul(3, 1, 3));
+			if(getSettings().get(1).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.SOUL_SAND)) {
+				Vec3d m = new Vec3d(0, 0, 0.125).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
+				if(!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
+					mc.player.setMotion(mc.player.getMotion().add(m));
+				}
+			}
+			
+			/* Slime Block */
+			if(getSettings().get(2).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox().offset(0,-0.02,0), Blocks.SLIME_BLOCK)) {
+				Vec3d m1 = new Vec3d(0, 0, 0.1).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
+				if(!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
+					mc.player.setMotion(mc.player.getMotion().add(m1));
+				}
+			}
+			
+			/* Web */
+			if(getSettings().get(3).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
+				Vec3d m2 = new Vec3d(0, 0, 0.9).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
+				if(!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
+					mc.player.setMotion(mc.player.getMotion().add(m2));
+				}
 			}
 		}
+	}
+	
+	public void onRender() {
+	}
+	
+	public void onDisable() {
 	}
 
 }

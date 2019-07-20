@@ -53,7 +53,6 @@ public class Freecam extends Module {
 			mc.player.setMotion(0, 0, 0);
 			dummy.rotationYaw = camera.rotationYaw = mc.player.rotationYaw;
 			dummy.rotationPitch = camera.rotationPitch = mc.player.rotationPitch;
-			if(!getSettings().get(1).toToggle().state) camera.setInvisible(true);
 			
 			double speed = getSettings().get(0).toSlider().getValue();
 			Vec3d forward = new Vec3d(0, 0, speed * 2.5).rotateYaw(-(float) Math.toRadians(camera.rotationYaw));

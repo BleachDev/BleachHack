@@ -9,8 +9,10 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.EnderCrystalEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.TextFormatting;
@@ -19,10 +21,11 @@ public class ESP extends Module {
 	
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Players"),
-			new SettingToggle(true, "Mobs"),
+			new SettingToggle(false, "Mobs"),
 			new SettingToggle(false, "Animals"),
 			new SettingToggle(true, "Items"),
-			new SettingToggle(true, "Crystals"));
+			new SettingToggle(true, "Crystals"),
+			new SettingToggle(false, "Vehicles"));
 	
 	public ESP() {
 		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.", settings);
@@ -49,6 +52,9 @@ public class ESP extends Module {
 				
 				if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
 					EntityUtils.setGlowing(e, TextFormatting.LIGHT_PURPLE, "crystals");
+				}
+				if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+					EntityUtils.setGlowing(e, TextFormatting.GRAY, "vehicles");
 				}
 			}
 		}
