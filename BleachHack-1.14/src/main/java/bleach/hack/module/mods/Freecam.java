@@ -22,12 +22,15 @@ public class Freecam extends Module {
 	
 	private BoatEntity camera; /* Invisible boat used as the camera */
 	private ArmorStandEntity dummy; /* Armorstand used as a dummy for the player */
+	double[] playerPos;
 	
 	public Freecam() {
 		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does", settings);
 	}
 	
 	public void onEnable() {
+		playerPos = new double[]{mc.player.posX,mc.player.posY,mc.player.posZ};
+		
 		camera = new BoatEntity(mc.world, mc.player.posX, mc.player.posY, mc.player.posZ);
 		camera.copyLocationAndAnglesFrom(mc.player);
 		camera.entityCollisionReduction = 1;
@@ -51,6 +54,8 @@ public class Freecam extends Module {
 	public void onUpdate() {
 		if(this.isToggled()) {
 			mc.player.setMotion(0, 0, 0);
+			mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
+			
 			dummy.rotationYaw = camera.rotationYaw = mc.player.rotationYaw;
 			dummy.rotationPitch = camera.rotationPitch = mc.player.rotationPitch;
 			

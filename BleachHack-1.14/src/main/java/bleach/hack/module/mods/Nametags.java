@@ -46,13 +46,13 @@ public class Nametags extends Module {
 		LivingEntity e = event.getEntity();
 		
 		/* Color before name */
-		String color = e.isInvisible() ? "§e" : e instanceof IMob ? "§5" : EntityUtils.isAnimal(e)
+		String color = e instanceof IMob ? "§5" : EntityUtils.isAnimal(e)
 				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 		
 		if(e == mc.player || e == mc.player.getRidingEntity() || color == "§f" || 
 				((color == "§c" || color == "§6") && !getSettings().get(4).toToggle().state) ||
 				((color == "§5" || color == "§a") && !getSettings().get(5).toToggle().state)) return;
-		
+		if(e.isInvisible()) color = "§e";
 		
 		double scale = (e instanceof PlayerEntity) ?
 				Math.max(getSettings().get(2).toSlider().getValue() * (mc.player.getDistance(e) / 20), 1):

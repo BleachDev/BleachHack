@@ -57,18 +57,11 @@ public class NoSlow extends Module {
 			
 			/* Web */
 			if(getSettings().get(3).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
-				Vec3d m2 = new Vec3d(0, 0, 0.9).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
+				Vec3d m2 = new Vec3d(0, -1, 0.9).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
 				if(!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
 					mc.player.setMotion(mc.player.getMotion().add(m2));
 				}
 			}
 		}
 	}
-	
-	public void onRender() {
-	}
-	
-	public void onDisable() {
-	}
-
 }

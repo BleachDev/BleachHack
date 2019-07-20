@@ -48,7 +48,9 @@ public class Tracers extends Module {
 			
 			for(Entity e: EntityUtils.getLoadedEntities()) {
 				Vec3d vec = e.getPositionVec();
-				Vec3d vec2 = mc.player.getEyePosition(mc.getRenderPartialTicks());
+				Vec3d vec2 = new Vec3d(0, 0, 0.05).rotatePitch(-(float) Math.toRadians(mc.player.rotationPitch))
+						.rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw))
+						.add(mc.player.getEyePosition(mc.getRenderPartialTicks()));
 				
 				if(e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
 					RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0f,0f,thick);
