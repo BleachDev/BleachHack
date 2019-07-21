@@ -61,7 +61,7 @@ public class IngameOverlay extends AbstractGui {
 		boolean nether = Minecraft.getInstance().player.dimension == DimensionType.THE_NETHER;
 		BlockPos pos = Minecraft.getInstance().player.getPosition();
 				
-		bottomLeftList.add((nether ? "§4" : "§b") + "XYZ: " + pos.getX() + " " + pos.getY() + " " + pos.getZ());
+		bottomLeftList.add("XYZ: " + (nether ? "§4" : "§b") + pos.getX() + " " + pos.getY() + " " + pos.getZ());
 	}
 	
 	public void addNetherCoords() {
@@ -70,7 +70,7 @@ public class IngameOverlay extends AbstractGui {
 		BlockPos pos = new BlockPos(vec.getX()/8, vec.getY(), vec.getZ()/8);
 		if(nether) pos = new BlockPos(vec.getX()*8, vec.getY(), vec.getZ()*8);
 				
-		bottomLeftList.add((nether ? "§b" : "§4") + "XYZ: " + pos.getX() + " " + pos.getY() + " " + pos.getZ());
+		bottomLeftList.add("XYZ: " + (nether ? "§b" : "§4") + pos.getX() + " " + pos.getY() + " " + pos.getZ());
 	}
 	
 	public void drawBottomLeft() {
@@ -78,9 +78,7 @@ public class IngameOverlay extends AbstractGui {
 		
 		int count = 0;
 		for(String s: bottomLeftList) {
-			fill(0, window.getScaledHeight()-10-(count*10),
-					font.getStringWidth(s)+3, window.getScaledHeight()-(count*10), 0x50000000);
-			font.drawStringWithShadow(s, 2, window.getScaledHeight()-9-(count*10), -1);
+			font.drawStringWithShadow(s, 2, window.getScaledHeight()-9-(count*10), 0xa0a0a0);
 			count++;
 		}
 	}

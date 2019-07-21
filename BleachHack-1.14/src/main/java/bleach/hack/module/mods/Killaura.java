@@ -2,6 +2,7 @@ package bleach.hack.module.mods;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -12,6 +13,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
@@ -22,6 +24,7 @@ public class Killaura extends Module {
 			new SettingToggle(true, "Players"),
 			new SettingToggle(true, "Mobs"),
 			new SettingToggle(false, "Animals"),
+			new SettingToggle(false, "Armor Stands"),
 			new SettingToggle(true, "Aimbot"),
 			new SettingToggle(false, "Thru Walls"),
 			new SettingToggle(false, "1.9 Delay"),
@@ -37,26 +40,28 @@ public class Killaura extends Module {
 	public void onUpdate() {
 		if(this.isToggled()) {
 			delay++;
-			int reqDelay = (int) Math.round(20/getSettings().get(7).toSlider().getValue());
-			if(getSettings().get(5).toToggle().state) reqDelay = 10;
+			int reqDelay = (int) Math.round(20/getSettings().get(8).toSlider().getValue());
+			if(getSettings().get(6).toToggle().state) reqDelay = 10;
 			
-			for(Entity e: EntityUtils.getLoadedEntities()) {
-				if(e == null ||
-						(e instanceof PlayerEntity && !getSettings().get(0).toToggle().state) ||
-						(e instanceof IMob && !getSettings().get(1).toToggle().state) ||
-						(EntityUtils.isAnimal(e) && !getSettings().get(2).toToggle().state)) continue;
+			List<Entity> targets = EntityUtils.getLoadedEntities().stream()
+					.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).toToggle().state)
+							|| (e instanceof IMob && getSettings().get(1).toToggle().state)
+							|| (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state)
+							|| (e instanceof ArmorStandEntity && getSettings().get(3).toToggle().state))
+					.collect(Collectors.toList());
+			
+			for(Entity e: targets) {
+				if(mc.player.getDistance(e) > getSettings().get(7).toSlider().getValue()
+						|| !e.isAlive()
+						|| e==mc.player
+						|| (!mc.player.canEntityBeSeen(e) && !getSettings().get(5).toToggle().state)) continue;
 				
-				if(e instanceof PlayerEntity || EntityUtils.isAnimal(e) || e instanceof IMob) {
-					if(mc.player.getDistance(e) < getSettings().get(6).toSlider().getValue() && e.isAlive() && !(e==mc.player)) {
-						if(!mc.player.canEntityBeSeen(e) && !getSettings().get(4).toToggle().state) continue;
-						if(getSettings().get(3).toToggle().state) EntityUtils.facePos(e.posX, e.posY+e.getHeight()/2, e.posZ);
-						
-						if(delay > reqDelay || reqDelay == 0) {
-							mc.playerController.attackEntity(mc.player, e);
-							mc.player.swingArm(Hand.MAIN_HAND);
-							delay=0;
-						}
-					}
+				if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.posX, e.posY+e.getHeight()/2, e.posZ);
+					
+				if(delay > reqDelay || reqDelay == 0) {
+					mc.playerController.attackEntity(mc.player, e);
+					mc.player.swingArm(Hand.MAIN_HAND);
+					delay=0;
 				}
 			}
 		}

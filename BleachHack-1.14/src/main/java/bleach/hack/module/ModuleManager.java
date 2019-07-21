@@ -25,6 +25,7 @@ public class ModuleManager {
 			new Nofall(),
 			new NoSlow(),
 			new PacketFly(),
+			new Scaffold(),
 			new Spammer(),
 			new SpeedMine(),
 			new Sprint(),

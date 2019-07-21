@@ -13,6 +13,7 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import net.minecraft.network.play.client.CConfirmTeleportPacket;
 import net.minecraft.network.play.client.CPlayerPacket;
+import net.minecraft.util.math.Vec3d;
 
 public class PacketFly extends Module {
 
@@ -49,19 +50,12 @@ public class PacketFly extends Module {
 				if(mc.gameSettings.keyBindJump.isKeyDown()) posY += vspeed;
 				if(mc.gameSettings.keyBindSneak.isKeyDown()) posY -= vspeed;
 				
-				if(mc.gameSettings.keyBindForward.isKeyDown()) {
-					if(EntityUtils.getDirectionFacing(mc.player) == 0) posZ -= hspeed;
-					if(EntityUtils.getDirectionFacing(mc.player) == 1) posX += hspeed;
-					if(EntityUtils.getDirectionFacing(mc.player) == 2) posZ += hspeed;
-					if(EntityUtils.getDirectionFacing(mc.player) == 3) posX -= hspeed;
-				}
-				
-				if(mc.gameSettings.keyBindBack.isKeyDown()) {
-					if(EntityUtils.getDirectionFacing(mc.player) == 0) posZ += hspeed;
-					if(EntityUtils.getDirectionFacing(mc.player) == 1) posX -= hspeed;
-					if(EntityUtils.getDirectionFacing(mc.player) == 2) posZ -= hspeed;
-					if(EntityUtils.getDirectionFacing(mc.player) == 3) posX += hspeed;
-				}
+				Vec3d forward = new Vec3d(0,0,hspeed).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
+				Vec3d strafe = forward.rotateYaw((float) Math.toRadians(90));
+				if(mc.gameSettings.keyBindForward.isKeyDown()) { posX += forward.x; posZ += forward.z; }
+				if(mc.gameSettings.keyBindBack.isKeyDown()) { posX -= forward.x; posZ -= forward.z; }
+				if(mc.gameSettings.keyBindLeft.isKeyDown()) { posX += strafe.x; posZ += strafe.z; }
+				if(mc.gameSettings.keyBindRight.isKeyDown()) { posX -= strafe.x; posZ -= strafe.z; }
 				
 				if(timer > getSettings().get(3).toSlider().getValue()) {
 					posY -= 0.2;
