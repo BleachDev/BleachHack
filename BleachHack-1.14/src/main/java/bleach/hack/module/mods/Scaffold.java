@@ -1,7 +1,9 @@
 package bleach.hack.module.mods;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -11,6 +13,8 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.item.BlockItem;
+import net.minecraft.network.play.client.CEntityActionPacket;
+import net.minecraft.network.play.client.CEntityActionPacket.Action;
 import net.minecraft.network.play.client.CPlayerTryUseItemOnBlockPacket;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -25,17 +29,26 @@ public class Scaffold extends Module {
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingSlider(0, 1.5, 0.3, 1, "Range: "));
 	
+	private HashMap<BlockPos, Integer> lastPlaced = new HashMap<>();
+	
 	public Scaffold() {
 		super("Scaffold", GLFW.GLFW_KEY_N, Category.PLAYER, "Places blocks under you", settings);
 	}
 	
 	public void onUpdate() {
 		if(this.isToggled()) {
+			HashMap<BlockPos, Integer> tempMap = new HashMap<>();
+			for(Entry<BlockPos, Integer> e: lastPlaced.entrySet()) {
+				if(e.getValue() > 0) tempMap.put(e.getKey(), e.getValue() - 1);
+			}
+			lastPlaced.clear();
+			lastPlaced.putAll(tempMap);
+			
 			if(!(mc.player.inventory.getCurrentItem().getItem() instanceof BlockItem)) return;
 			
 			double range = getSettings().get(0).toSlider().getValue();
 			for(int r = 0; r < 5; r++) {
-				Vec3d r1 = new Vec3d(0,-1,0);
+				Vec3d r1 = new Vec3d(0,-0.85,0);
 				if(r == 1) r1 = r1.add(range, 0, 0);
 				if(r == 2) r1 = r1.add(-range, 0, 0);
 				if(r == 3) r1 = r1.add(0, 0, range);
@@ -51,13 +64,18 @@ public class Scaffold extends Module {
 	}
 	
 	public void placeBlockAuto(BlockPos block) {
+		if(lastPlaced.containsKey(block)) return;
 		for(Direction d: Direction.values()) {
 			if(!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
+				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
+					mc.player.connection.sendPacket(new CEntityActionPacket(mc.player, Action.START_SNEAKING));}
 				mc.player.connection.sendPacket(new CPlayerTryUseItemOnBlockPacket(Hand.MAIN_HAND,
 						new BlockRayTraceResult(new Vec3d(block), d.getOpposite(), block.offset(d), false)));
-				
 				mc.player.swingArm(Hand.MAIN_HAND);
 				mc.world.playSound(block, SoundEvents.BLOCK_NOTE_BLOCK_HAT, SoundCategory.BLOCKS, 1f, 1f, false);
+				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
+					mc.player.connection.sendPacket(new CEntityActionPacket(mc.player, Action.STOP_SNEAKING));}
+				lastPlaced.put(block, 5);
 				return;
 			}
 		}
