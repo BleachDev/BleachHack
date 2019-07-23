@@ -55,8 +55,8 @@ public class Nametags extends Module {
 		if(e.isInvisible()) color = "§e";
 		
 		double scale = (e instanceof PlayerEntity) ?
-				Math.max(getSettings().get(2).toSlider().getValue() * (mc.player.getDistance(e) / 20), 1):
-				Math.max(getSettings().get(3).toSlider().getValue() * (mc.player.getDistance(e) / 20), 1);
+				Math.max(getSettings().get(2).toSlider().getValue() * (mc.getRenderViewEntity().getDistance(e) / 20), 1):
+				Math.max(getSettings().get(3).toSlider().getValue() * (mc.getRenderViewEntity().getDistance(e) / 20), 1);
 		
 		/* Health bar */
 		String health = "";

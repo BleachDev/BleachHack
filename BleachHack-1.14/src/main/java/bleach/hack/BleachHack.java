@@ -21,8 +21,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod("bleachhack")
 public class BleachHack {
 	
-	public static String VERSION = "B4-Pre";
-	public static int INTVERSION = 4;
+	public static String VERSION = "B4";
+	public static int INTVERSION = 5;
 	
 	private BleachFileReader fileReader = new BleachFileReader();
 	
@@ -47,7 +47,6 @@ public class BleachHack {
 		}
 		
     	try {
-    		//System.out.println(Minecraft.getInstance().currentScreen.getClass().getName());
     		ModuleManager.onUpdate();
     		ModuleManager.updateKeys();
     		
