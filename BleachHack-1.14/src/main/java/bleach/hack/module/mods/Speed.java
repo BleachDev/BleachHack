@@ -1,0 +1,71 @@
+package bleach.hack.module.mods;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.lwjgl.glfw.GLFW;
+
+import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingMode;
+import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.module.Category;
+import bleach.hack.module.Module;
+
+public class Speed extends Module {
+
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingMode(new String[] {"OnGround", "Bhop", "LowHop"}, "Mode: "),
+			new SettingSlider(0.1, 5, 1, 1, "Speed: "));
+	
+	private boolean jumping;
+	private double prevY;
+	
+	public Speed() {
+		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, idk what do you expect?", settings);
+	}
+	
+	public void onUpdate() {
+		if(this.isToggled()) {
+			double speeds = getSettings().get(1).toSlider().getValue();
+			
+			if(getSettings().get(0).toMode().mode == 0) {
+				if(mc.gameSettings.keyBindJump.isKeyDown()) return;
+				if (jumping && mc.player.posY >= prevY + 0.399994D) {
+					mc.player.setMotion(mc.player.getMotion().x, -0.9, mc.player.getMotion().z);
+					mc.player.posY = this.prevY;
+					jumping = false;
+				}
+				
+				if (mc.player.moveForward != 0.0F && !mc.player.collidedHorizontally) {
+					if (mc.player.collidedVertically) {
+						mc.player.setMotion(mc.player.getMotion().x * (1 + (speeds / 30)), mc.player.getMotion().y, mc.player.getMotion().z * (1 + (speeds / 30)));
+						jumping = true;
+						prevY = mc.player.posY;
+						mc.player.jump();
+						// 1.0379
+					}
+					
+					if (jumping && mc.player.posY >= this.prevY + 0.399994D) {
+						mc.player.setMotion(mc.player.getMotion().x, -100, mc.player.getMotion().z);
+						mc.player.posY = prevY;
+						jumping = false;
+					}
+	
+				}
+			}else if(getSettings().get(0).toMode().mode == 1) {
+				if (mc.player.moveForward > 0 && mc.player.onGround) {
+					mc.player.jump();
+					mc.player.setMotion(mc.player.getMotion().x, 0.420 - (speeds / 50), mc.player.getMotion().z);
+				}
+			}else if(getSettings().get(0).toMode().mode == 2) {
+				if (mc.player.moveForward > 0 && mc.player.onGround) {
+					mc.player.jump();
+					mc.player.setMotion(mc.player.getMotion().x * 0.68934, 0.255556, mc.player.getMotion().z * 0.67934);
+					mc.player.moveStrafing += 3.0F;
+					mc.player.jump();
+					mc.player.setSprinting(true);
+				}
+			}
+		}
+	}
+}

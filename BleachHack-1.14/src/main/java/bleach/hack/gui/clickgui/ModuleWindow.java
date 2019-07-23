@@ -7,6 +7,7 @@ import bleach.hack.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.math.MathHelper;
 
 public class ModuleWindow {
 
@@ -138,7 +139,7 @@ public class ModuleWindow {
 	}
 	
 	public void drawSliderSetting(SettingSlider s, int x, int y) {
-		int pixels = (int) Math.round(len2*((s.getValue() - s.min) / (s.max - s.min)));
+		int pixels = (int) Math.round(MathHelper.clamp(len2*((s.getValue() - s.min) / (s.max - s.min)), 0, len2));
 		Screen.fill(x, y, x+len2, y+10, 0x70000000);
 		Screen.fill(x, y, x+pixels, y+10, 0xf03080a0);
 		

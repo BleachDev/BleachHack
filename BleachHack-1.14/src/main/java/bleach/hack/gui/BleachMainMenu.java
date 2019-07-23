@@ -22,8 +22,8 @@ import net.minecraftforge.versions.forge.ForgeVersion;
 
 public class BleachMainMenu extends Screen {
 	
-	ParticleManager particleMang = new ParticleManager();
-	BleachGithubReader github = new BleachGithubReader();
+	private ParticleManager particleMang = new ParticleManager();
+	private BleachGithubReader github = new BleachGithubReader();
 
 	private List<String> versions = new ArrayList<>();
 	

@@ -47,6 +47,7 @@ public class BleachHack {
 		}
 		
     	try {
+    		//System.out.println(Minecraft.getInstance().currentScreen.getClass().getName());
     		ModuleManager.onUpdate();
     		ModuleManager.updateKeys();
     		
