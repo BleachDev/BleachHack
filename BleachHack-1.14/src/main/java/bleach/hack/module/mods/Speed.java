@@ -15,7 +15,7 @@ public class Speed extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingMode(new String[] {"OnGround", "MiniHop", "Bhop"}, "Mode: "),
-			new SettingSlider(0.1, 5, 1, 1, "Speed: "));
+			new SettingSlider(0.1, 10, 2, 1, "Speed: "));
 	
 	private boolean jumping;
 	
@@ -29,6 +29,7 @@ public class Speed extends Module {
 			
 			if(getSettings().get(0).toMode().mode == 0) {
 				if(mc.gameSettings.keyBindJump.isKeyDown()) return;
+				
 				if (jumping && mc.player.posY >= mc.player.prevPosY + 0.399994D) {
 					mc.player.setMotion(mc.player.getMotion().x, -0.9, mc.player.getMotion().z);
 					mc.player.posY = mc.player.prevPosY;
@@ -37,7 +38,7 @@ public class Speed extends Module {
 				
 				if (mc.player.moveForward != 0.0F && !mc.player.collidedHorizontally) {
 					if (mc.player.collidedVertically) {
-						mc.player.setMotion(mc.player.getMotion().x * (1 + (speeds / 30)), mc.player.getMotion().y, mc.player.getMotion().z * (1 + (speeds / 30)));
+						mc.player.setMotion(mc.player.getMotion().x * (0.9 + (speeds / 30)), mc.player.getMotion().y, mc.player.getMotion().z * (0.9 + (speeds / 30)));
 						jumping = true;
 						mc.player.jump();
 						// 1.0379
@@ -59,7 +60,7 @@ public class Speed extends Module {
 			}else if(getSettings().get(0).toMode().mode == 2) {
 				if (mc.player.moveForward > 0 && mc.player.onGround) {
 					mc.player.jump();
-					mc.player.setMotion(mc.player.getMotion().x * 0.68934, 0.255556, mc.player.getMotion().z * 0.67934);
+					mc.player.setMotion(mc.player.getMotion().x * (0.65 + (speeds / 30)), 0.255556, mc.player.getMotion().z * (0.65 + (speeds / 30)));
 					mc.player.moveStrafing += 3.0F;
 					mc.player.jump();
 					mc.player.setSprinting(true);

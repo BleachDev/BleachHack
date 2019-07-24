@@ -11,6 +11,7 @@ public class CommandManager {
 	private List<Command> commands = Arrays.asList(
 			new CmdGamemode(),
 			new CmdGuiReset(),
+			new CmdHelp(),
 			new CmdToggle());
 	
 	public List<Command> getCommands(){
@@ -24,7 +25,7 @@ public class CommandManager {
 		for(Command c: getCommands()) {
 			if(c.getAlias().equalsIgnoreCase(command)) {
 				try {
-					c.onCommand(args, args.split(" "));
+					c.onCommand(command, args.split(" "));
 				}catch(Exception e) {
 					e.printStackTrace();
 					BleachLogger.errorMessage("Invalid command usage!");
@@ -33,6 +34,6 @@ public class CommandManager {
 				return;
 			}
 		}
-		BleachLogger.errorMessage("Command Not Found!");
+		BleachLogger.errorMessage("Command Not Found, Maybe Try .Help");
 	}
 }

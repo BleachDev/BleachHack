@@ -19,4 +19,9 @@ public class BleachLogger {
 		Minecraft.getInstance().ingameGUI.getChatGUI()
 			.printChatMessage(new StringTextComponent("§5[BleachHack] §c§lERROR: §c" + s));
 	}
+	
+	public static void noPrefixMessage(String s) {
+		Minecraft.getInstance().ingameGUI.getChatGUI()
+			.printChatMessage(new StringTextComponent(s));
+	}
 }
