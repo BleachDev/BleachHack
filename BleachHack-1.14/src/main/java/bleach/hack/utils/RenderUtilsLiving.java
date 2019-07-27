@@ -56,20 +56,20 @@ public class RenderUtilsLiving {
 	    if(item.getItem() instanceof BlockItem) GlStateManager.rotatef(-180F, -1F, -180F, -10F);
 	    GlStateManager.disableLighting();
 	    
-	    GlStateManager.scalef(-0.03F, -0.03F, 0);
+	    GlStateManager.scalef(-0.05F, -0.05F, 0);
 	    
 	    if(item.getCount() > 0) {
 		    int w = mc.fontRenderer.getStringWidth("x" + item.getCount()) / 2;
-		    mc.fontRenderer.drawStringWithShadow("x" + item.getCount(), 10 - w, 7, 0xffffff);
+		    mc.fontRenderer.drawStringWithShadow("x" + item.getCount(), 7 - w, 5, 0xffffff);
 	    }
 	    
-	    GlStateManager.scalef(0.8F, 0.8F, 0.8F);
+	    GlStateManager.scalef(0.85F, 0.85F, 0.85F);
 	    
 	    int c = 0;
 	    for(Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
 	    	int w1 = mc.fontRenderer.getStringWidth(I18n.format(m.getKey().getName()).substring(0, 2) + m.getValue()) / 2;
 	    	mc.fontRenderer.drawStringWithShadow(
-	    			I18n.format(m.getKey().getName()).substring(0, 2) + m.getValue(), -10 - w1, c*10+11,
+	    			I18n.format(m.getKey().getName()).substring(0, 2) + m.getValue(), -4 - w1, c*10-1,
 	    			m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
 	    			? 0xff5050 : 0xffb0e0);
 	    	c--;

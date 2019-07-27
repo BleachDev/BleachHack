@@ -2,6 +2,8 @@ package bleach.hack.gui.clickgui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import bleach.hack.module.Module;
 import net.minecraft.client.Minecraft;
@@ -99,9 +101,19 @@ public class ModuleWindow {
 			
 			/* Set which module settings show on */
 			if(mouseOver(posX, posY+(count*10), posX+len, posY+10+(count*10))) {
-				Screen.fill(0, screen.height-13, font.getStringWidth(m.getDesc())+5, screen.height, 0xe0dd99ff);
-				Screen.fill(0, screen.height-12, font.getStringWidth(m.getDesc())+4, screen.height, 0xe0000000);
-				screen.drawString(font, m.getDesc(), 2, screen.height-10, 0xffc3ff);
+				/* Match lines to end of words */
+		        Matcher mat = Pattern.compile("\\b.{1,22}\\b\\W?").matcher(m.getDesc());
+
+		        int c2 = 0, c3 = 0;
+		        while(mat.find()) { c2++; } mat.reset();
+		        
+		        while(mat.find()) {
+		        	Screen.fill(posX+len+3, posY-1+(count*10)-(c2 * 10)+(c3 * 10),
+							posX+len+6+font.getStringWidth(mat.group()), posY+(count*10)-(c2 * 10)+(c3 * 10)+9,
+							0x90000000);
+					screen.drawString(font, mat.group(), posX+len+5, posY+(count*10)-(c2 * 10)+(c3 * 10), -1);
+					c3++;
+				}
 				if(lDown) m.toggle();
 				if(rDown) selected = m.getName();
 			}

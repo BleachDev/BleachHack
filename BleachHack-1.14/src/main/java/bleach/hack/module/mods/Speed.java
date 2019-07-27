@@ -25,8 +25,9 @@ public class Speed extends Module {
 	
 	public void onUpdate() {
 		if(this.isToggled()) {
-			double speeds = getSettings().get(1).toSlider().getValue();
+			double speeds = getSettings().get(1).toSlider().getValue() / 30;
 			
+			/* OnGround */
 			if(getSettings().get(0).toMode().mode == 0) {
 				if(mc.gameSettings.keyBindJump.isKeyDown()) return;
 				
@@ -38,7 +39,7 @@ public class Speed extends Module {
 				
 				if (mc.player.moveForward != 0.0F && !mc.player.collidedHorizontally) {
 					if (mc.player.collidedVertically) {
-						mc.player.setMotion(mc.player.getMotion().x * (0.9 + (speeds / 30)), mc.player.getMotion().y, mc.player.getMotion().z * (0.9 + (speeds / 30)));
+						mc.player.setMotion(mc.player.getMotion().x * (0.9 + speeds), mc.player.getMotion().y, mc.player.getMotion().z * (0.9 + speeds));
 						jumping = true;
 						mc.player.jump();
 						// 1.0379
@@ -50,17 +51,19 @@ public class Speed extends Module {
 					}
 	
 				}
+			/* MiniHop */
 			}else if(getSettings().get(0).toMode().mode == 1) {
 				if(mc.player.collidedHorizontally || mc.gameSettings.keyBindJump.isKeyDown() || mc.player.moveForward == 0) return;
 				if (mc.player.onGround) mc.player.jump();
 				else if(mc.player.getMotion().y > 0){
-					mc.player.setMotion(mc.player.getMotion().x * (0.9 + (speeds / 30)), -1, mc.player.getMotion().z * (0.9 + (speeds / 30)));
+					mc.player.setMotion(mc.player.getMotion().x * (0.9 + speeds), -1, mc.player.getMotion().z * (0.9 + speeds));
 					mc.player.moveStrafing += 1.5F;
 				}
+			/* Bhop */
 			}else if(getSettings().get(0).toMode().mode == 2) {
 				if (mc.player.moveForward > 0 && mc.player.onGround) {
 					mc.player.jump();
-					mc.player.setMotion(mc.player.getMotion().x * (0.65 + (speeds / 30)), 0.255556, mc.player.getMotion().z * (0.65 + (speeds / 30)));
+					mc.player.setMotion(mc.player.getMotion().x * (0.65 + speeds), 0.255556, mc.player.getMotion().z * (0.65 + speeds));
 					mc.player.moveStrafing += 3.0F;
 					mc.player.jump();
 					mc.player.setSprinting(true);
