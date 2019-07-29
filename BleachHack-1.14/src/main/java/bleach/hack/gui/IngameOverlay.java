@@ -35,7 +35,7 @@ public class IngameOverlay extends AbstractGui {
 		int count = 0;
 		int color = 0x40bbff;
 		for(String s: lines) {
-			fill(0, 1+(count*10),font.getStringWidth(s)+3, 11+(count*10), 0x70000000);
+			fill(0, 1+(count*10),font.getStringWidth(s)+3, 11+(count*10), 0x50000000);
 			font.drawStringWithShadow(s, 2, 2+(count*10), color);
 			color -= 200/lines.size();
 			count++;

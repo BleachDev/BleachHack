@@ -4,6 +4,7 @@ import bleach.hack.command.CommandManager;
 import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.utils.BleachQueue;
 import bleach.hack.utils.file.BleachFileReader;
 
 import net.minecraft.client.Minecraft;
@@ -55,6 +56,9 @@ public class BleachHack {
     			fileReader.saveSettings();
     			fileReader.saveClickGui();
     		}
+    		
+    		BleachQueue.nextQueue();
+    		//System.out.println(Minecraft.getInstance().currentScreen.getClass().getName());
     	}catch(Exception e){}
     }
     

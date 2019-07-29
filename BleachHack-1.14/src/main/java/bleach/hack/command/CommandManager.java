@@ -12,6 +12,7 @@ public class CommandManager {
 			new CmdGamemode(),
 			new CmdGuiReset(),
 			new CmdHelp(),
+			new CmdPeek(),
 			new CmdToggle());
 	
 	public List<Command> getCommands(){
