@@ -2,6 +2,7 @@ package bleach.hack;
 
 import bleach.hack.command.CommandManager;
 import bleach.hack.gui.BleachMainMenu;
+import bleach.hack.gui.ServerScreenInject;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.BleachQueue;
@@ -30,6 +31,7 @@ public class BleachHack {
     public BleachHack() {
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new ServerScreenInject());
     }
     
     public void init(FMLClientSetupEvent event) {
@@ -58,7 +60,6 @@ public class BleachHack {
     		}
     		
     		BleachQueue.nextQueue();
-    		//System.out.println(Minecraft.getInstance().currentScreen.getClass().getName());
     	}catch(Exception e){}
     }
     

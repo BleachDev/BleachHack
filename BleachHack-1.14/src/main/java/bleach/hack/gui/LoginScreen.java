@@ -7,7 +7,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
 
-public class LoginGui extends Screen {
+public class LoginScreen extends Screen {
 
 	ParticleManager particleMang = new ParticleManager();
 	
@@ -16,7 +16,7 @@ public class LoginGui extends Screen {
 	
 	private String loginResult = "";
 	
-	public LoginGui(ITextComponent titleIn) {
+	public LoginScreen(ITextComponent titleIn) {
 		super(titleIn);
 	}
 	

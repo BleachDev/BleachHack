@@ -1,0 +1,145 @@
+package bleach.hack.gui;
+
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import net.minecraft.client.gui.screen.MultiplayerScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
+import net.minecraft.client.network.ServerPinger;
+import net.minecraft.util.text.StringTextComponent;
+
+public class ServerScraperScreen extends Screen {
+
+	private TextFieldWidget ipField;
+	private MultiplayerScreen serverScreen;
+	
+	private int checked;
+	private int working;
+	private List<BleachServerPinger> pingers = new ArrayList<>();
+	private String result = "§7Idle...";
+	
+	public ServerScraperScreen(MultiplayerScreen serverScreen) {
+		super(new StringTextComponent("Server Scraper"));
+		this.serverScreen = serverScreen;
+	}
+	
+	public void init() {
+		addButton(new Button(width / 2 - 100, height / 3 + 82, 200, 20, "Scrape", button -> {
+			try {
+				if(ipField.getText().split(":")[0].trim().isEmpty()) throw new Exception();
+				System.out.println("Starting scraper...");
+				InetAddress ip = InetAddress.getByName(ipField.getText().split(":")[0].trim());
+				checked = 0;
+				working = 0;
+				scrapeIp(ip);
+			} catch (Exception e) {
+				result = "§cFailed Scraping!";
+				e.printStackTrace();
+				return;
+			}
+		}));
+		addButton(new Button(width / 2 - 100, height / 3 + 104, 200, 20, "Done", button -> {
+			minecraft.displayGuiScreen(serverScreen);
+		}));
+		
+		ipField = new TextFieldWidget(font, width / 2 - 98, height / 4 + 30, 196, 18, "");
+		ipField.setFocused2(true);
+	}
+	
+	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
+		renderBackground();
+		drawCenteredString(font, "§7IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
+		drawCenteredString(font, "§7" + checked + " / 1792 [§a" + working + "§7]", this.width / 2, this.height / 4 + 58, -1);
+		drawCenteredString(font, result, this.width / 2, this.height / 4 + 70, -1);
+		ipField.render(p_render_1_, p_render_2_, p_render_3_);
+		
+		super.render(p_render_1_, p_render_2_, p_render_3_);
+	}
+	
+	public void onClose() {
+		minecraft.displayGuiScreen(serverScreen);
+	}
+	
+	public void scrapeIp(InetAddress ip) {
+		result = "§eScraping...";
+		new Thread(() -> {
+			for(int change : new int[] {0, 1, -1, 2, -2, 3, -3}) {
+				for(int i = 0; i <= 255; i++) {
+					String newIp = (ip.getAddress()[0] & 255) + "." + (ip.getAddress()[1] & 255)
+							+ "." + (ip.getAddress()[2] + change & 255) + "." + i;
+							
+					BleachServerPinger ping = new BleachServerPinger();
+					ping.ping(newIp, 25565);
+					pingers.add(ping);
+			
+				while(pingers.size() >= 128) updatePingers();
+				}
+			}
+			
+			while(pingers.size() > 0) updatePingers();
+			result = "§aDone!";
+		}).start();
+	}
+	
+	public void updatePingers() {
+		for(BleachServerPinger ping: new ArrayList<>(pingers)) {
+			if(ping.done) {
+				checked++;
+				if(!ping.failed) {
+					working++;
+					try {
+						ServerList list = (ServerList) FieldUtils.getField(MultiplayerScreen.class, "savedServerList", true).get(serverScreen);
+						list.addServerData(ping.server);
+						list.saveServerList();
+					} catch (Exception e) {}
+				}
+				pingers.remove(ping);
+			}
+		}
+	}
+	
+	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
+		if(ipField.isFocused()) ipField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
+	}
+	
+	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
+		if(ipField.isFocused()) ipField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+	}
+	
+	public void tick() {
+		ipField.tick();
+		super.tick();
+	}
+}
+
+class BleachServerPinger {
+	
+	public ServerData server;
+	public boolean done = false;
+	public boolean failed = false;
+	
+	public void ping(String ip, int port) {
+		server = new ServerData(ip, ip + ":" + port, false);
+		System.out.println("Starting Ping " + ip + ":" + port);
+		new Thread(() -> {
+			ServerPinger pinger = new ServerPinger();
+			try {
+				pinger.ping(server);
+			}catch(Exception e) {
+				failed = true;
+			}
+			pinger.clearPendingNetworks();
+			done = true;
+			System.out.println("Finished Ping " + ip + ":" + port + " > " + failed);
+		}).start();
+	}
+}

@@ -32,6 +32,7 @@ public class ModuleManager {
 			new Speed(),
 			new SpeedMine(),
 			new Sprint(),
+			new StarGithubPls(),
 			new Step(),
 			new Tracers(),
 			new UI());

@@ -42,7 +42,7 @@ public class BleachMainMenu extends Screen {
             this.minecraft.displayGuiScreen(new net.minecraftforge.fml.client.gui.GuiModList(this));
         }));
 		this.addButton(new Button(width / 2 + 2, height / 4 + 96, 98, 20, "Login Manager", button -> {
-	        this.minecraft.displayGuiScreen(new LoginGui(new StringTextComponent("LoginManager")));
+	        this.minecraft.displayGuiScreen(new LoginScreen(new StringTextComponent("LoginManager")));
 	    }));
 		this.addButton(new Button(width / 2 - 100, height / 4 + 129, 98, 20, I18n.format("menu.options"), button -> {
 	        this.minecraft.displayGuiScreen(new OptionsScreen(this, this.minecraft.gameSettings));
