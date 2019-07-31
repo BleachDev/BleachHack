@@ -53,8 +53,7 @@ public class CleanUpScreen extends Screen {
 				if((cleanNoHost && s.serverMOTD.equals(TextFormatting.DARK_RED + "Can\'t resolve hostname")) ||
 						(cleanVersion && s.version <= 404) ||
 						(cleanNoPing && s.pingToServer != -2L && s.pingToServer < 0L) || cleanAll) {
-					//servers.remove(s);
-					System.out.println(s.version);
+					servers.remove(s);
 				}
 			}
 		}));
