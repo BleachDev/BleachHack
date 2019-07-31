@@ -4,8 +4,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
+import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.gui.screen.MultiplayerScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -14,14 +13,17 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.ServerPinger;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class ServerScraperScreen extends Screen {
 
 	private TextFieldWidget ipField;
 	private MultiplayerScreen serverScreen;
+	private Thread scrapeThread;
 	
 	private int checked;
 	private int working;
+	private boolean abort = false;
 	private List<BleachServerPinger> pingers = new ArrayList<>();
 	private String result = "§7Idle...";
 	
@@ -46,7 +48,10 @@ public class ServerScraperScreen extends Screen {
 			}
 		}));
 		addButton(new Button(width / 2 - 100, height / 3 + 104, 200, 20, "Done", button -> {
-			minecraft.displayGuiScreen(serverScreen);
+			if(!abort) {
+				abort = true;
+				//minecraft.displayGuiScreen(new MultiplayerScreen(new MainMenuScreen()));
+			}
 		}));
 		
 		ipField = new TextFieldWidget(font, width / 2 - 98, height / 4 + 30, 196, 18, "");
@@ -60,16 +65,21 @@ public class ServerScraperScreen extends Screen {
 		drawCenteredString(font, result, this.width / 2, this.height / 4 + 70, -1);
 		ipField.render(p_render_1_, p_render_2_, p_render_3_);
 		
+		if(abort) {
+			result = "§7Aborting.. [" + pingers.size() + "] Left";
+			if(pingers.size() == 0) minecraft.displayGuiScreen(new MultiplayerScreen(new MainMenuScreen()));
+		}
+		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
 	}
 	
 	public void onClose() {
-		minecraft.displayGuiScreen(serverScreen);
+		abort = true;
 	}
 	
 	public void scrapeIp(InetAddress ip) {
 		result = "§eScraping...";
-		new Thread(() -> {
+		scrapeThread = new Thread(() -> {
 			for(int change : new int[] {0, 1, -1, 2, -2, 3, -3}) {
 				for(int i = 0; i <= 255; i++) {
 					String newIp = (ip.getAddress()[0] & 255) + "." + (ip.getAddress()[1] & 255)
@@ -78,24 +88,25 @@ public class ServerScraperScreen extends Screen {
 					BleachServerPinger ping = new BleachServerPinger();
 					ping.ping(newIp, 25565);
 					pingers.add(ping);
-			
-					while(pingers.size() >= 128) updatePingers();
+					
+					while(pingers.size() >= 128 && !abort) updatePingers();
 				}
 			}
 			
 			while(pingers.size() > 0) updatePingers();
 			result = "§aDone!";
-		}).start();
+		});
+		scrapeThread.start();
 	}
 	
 	public void updatePingers() {
 		for(BleachServerPinger ping: new ArrayList<>(pingers)) {
 			if(ping.done) {
 				checked++;
-				if(!ping.failed) {
+				if(!ping.failed && !abort) {
 					working++;
 					try {
-						ServerList list = (ServerList) FieldUtils.getField(MultiplayerScreen.class, "savedServerList", true).get(serverScreen);
+						ServerList list = (ServerList) ObfuscationReflectionHelper.findField(MultiplayerScreen.class, "field_146804_i").get(serverScreen);
 						list.addServerData(ping.server);
 						list.saveServerList();
 					} catch (Exception e) {}

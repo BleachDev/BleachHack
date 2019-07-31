@@ -23,8 +23,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod("bleachhack")
 public class BleachHack {
 	
-	public static String VERSION = "B5";
-	public static int INTVERSION = 6;
+	public static String VERSION = "B5.01";
+	public static int INTVERSION = 7;
 	
 	private BleachFileReader fileReader = new BleachFileReader();
 	
