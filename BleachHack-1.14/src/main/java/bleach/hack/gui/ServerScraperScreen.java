@@ -79,7 +79,7 @@ public class ServerScraperScreen extends Screen {
 					ping.ping(newIp, 25565);
 					pingers.add(ping);
 			
-				while(pingers.size() >= 128) updatePingers();
+					while(pingers.size() >= 128) updatePingers();
 				}
 			}
 			

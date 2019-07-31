@@ -48,7 +48,7 @@ public class Tracers extends Module {
 			
 			for(Entity e: EntityUtils.getLoadedEntities()) {
 				Vec3d vec = e.getPositionVec();
-				Vec3d vec2 = new Vec3d(0, 0, 0.05).rotatePitch(-(float) Math.toRadians(mc.player.rotationPitch))
+				Vec3d vec2 = new Vec3d(0, 0, 0.25).rotatePitch(-(float) Math.toRadians(mc.player.rotationPitch))
 						.rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw))
 						.add(mc.player.getEyePosition(mc.getRenderPartialTicks()));
 				

@@ -49,6 +49,7 @@ public class Killaura extends Module {
 							|| (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state)
 							|| (e instanceof ArmorStandEntity && getSettings().get(3).toToggle().state))
 					.collect(Collectors.toList());
+			targets.sort((a,b) -> Float.compare(a.getDistance(mc.player), b.getDistance(mc.player)));
 			
 			for(Entity e: targets) {
 				if(mc.player.getDistance(e) > getSettings().get(7).toSlider().getValue()

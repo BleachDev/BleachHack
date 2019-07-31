@@ -11,10 +11,12 @@ public class ServerScreenInject {
 	@SubscribeEvent
 	public void initGui(InitGuiEvent.Post event) {
 		if(!(Minecraft.getInstance().currentScreen instanceof MultiplayerScreen)) return;
-			
-		System.out.println(event.getWidgetList());
+		
 		event.addWidget(new Button(5, 7, 50, 18, "Scraper", button -> {
 			Minecraft.getInstance().displayGuiScreen(new ServerScraperScreen((MultiplayerScreen) event.getGui()));
+		}));
+		event.addWidget(new Button(58, 7, 50, 18, "Cleanup", button -> {
+			Minecraft.getInstance().displayGuiScreen(new CleanUpScreen((MultiplayerScreen) event.getGui()));
 		}));
 	}
 }
