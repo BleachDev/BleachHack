@@ -18,7 +18,8 @@ public class UI extends Module {
 			new SettingToggle(true, "Arraylist"),
 			new SettingToggle(false, "FPS"),
 			new SettingToggle(false, "Ping"),
-			new SettingToggle(false, "Coords"));
+			new SettingToggle(false, "Coords"),
+			new SettingToggle(false, "Server"));
 	
 	private IngameOverlay gui = new IngameOverlay();
 	
@@ -44,6 +45,7 @@ public class UI extends Module {
 		}
 		if(getSettings().get(1).toToggle().state) gui.addFPS();
 		try{ if(getSettings().get(2).toToggle().state) gui.addPing(); }catch(Exception e) {}
+		try{ if(getSettings().get(4).toToggle().state) gui.drawServerInfo(); }catch(Exception e) {}
 		gui.drawBottomLeft();
 	}
 

@@ -1,9 +1,8 @@
 package bleach.hack.module.mods;
 
-import java.awt.Desktop;
-import java.net.URI;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.util.Util;
 
 public class StarGithubPls extends Module {
 
@@ -13,7 +12,7 @@ public class StarGithubPls extends Module {
 	
 	public void onEnable() {
 		try {
-			Desktop.getDesktop().browse(new URI("https://github.com/BleachDrinker420/bleachhack-1.14"));
+			Util.getOSType().openURI("https://github.com/BleachDrinker420/bleachhack-1.14");
 		} catch (Exception e) {e.printStackTrace();}
 		
 		this.setToggled(false);

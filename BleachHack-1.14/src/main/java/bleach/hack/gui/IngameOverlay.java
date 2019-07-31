@@ -84,6 +84,16 @@ public class IngameOverlay extends AbstractGui {
 	}
 	/*-------------------------------------------------------------------------------*/
 	
+	
+	
+	/*-------------------------------Top Right---------------------------------------*/
+	public void drawServerInfo() {
+		String server = Minecraft.getInstance().isSingleplayer() ? "" : Minecraft.getInstance().getCurrentServerData().serverIP;
+		fill(window.getScaledWidth() - font.getStringWidth(server) - 3, 3, window.getScaledWidth() - 4, 12, 0xa0000000);
+		font.drawStringWithShadow(server, window.getScaledWidth() - font.getStringWidth(server) - 3, 3, 0xb0b0b0);
+	}
+	/*-------------------------------------------------------------------------------*/
+	
 	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {
 		if(!rev ? value > best : value < best) return "§2";
 		else if(!rev ? value > good : value < good) return "§a";

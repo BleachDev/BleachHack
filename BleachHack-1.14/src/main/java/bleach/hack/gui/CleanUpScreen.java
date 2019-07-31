@@ -18,6 +18,7 @@ public class CleanUpScreen extends Screen {
 	private MultiplayerScreen serverScreen;
 	private ServerList serverList;
 	private List<ServerData> servers;
+	private String result = "";
 	
 	private boolean cleanNoHost = true;
 	private boolean cleanVersion = true;
@@ -36,16 +37,16 @@ public class CleanUpScreen extends Screen {
 			servers = (List<ServerData>) FieldUtils.getField(ServerList.class, "servers", true).get(serverList);
 		} catch (Exception e) {}
 		
-		addButton(new Button(width / 2 - 100, height / 3 - 22, 200, 20, "Unknown Host", button -> {
+		addButton(new Button(width / 2 - 100, height / 3 - 32, 200, 20, "Unknown Host", button -> {
 			cleanNoHost = !cleanNoHost;
 		}));
-		addButton(new Button(width / 2 - 100, height / 3, 200, 20, "Wrong Version", button -> {
+		addButton(new Button(width / 2 - 100, height / 3 - 10, 200, 20, "Wrong Version", button -> {
 			cleanVersion = !cleanVersion;
 		}));
-		addButton(new Button(width / 2 - 100, height / 3 + 22, 200, 20, "Failed Ping", button -> {
+		addButton(new Button(width / 2 - 100, height / 3 + 12, 200, 20, "Failed Ping", button -> {
 			cleanNoPing = !cleanNoPing;
 		}));
-		addButton(new Button(width / 2 - 100, height / 3 + 44, 200, 20, "Clear All", button -> {
+		addButton(new Button(width / 2 - 100, height / 3 + 34, 200, 20, "Clear All", button -> {
 			cleanAll = !cleanAll;
 		}));
 		addButton(new Button(width / 2 - 100, height / 3 + 82, 200, 20, "Clean", button -> {
@@ -53,9 +54,11 @@ public class CleanUpScreen extends Screen {
 				if((cleanNoHost && s.serverMOTD.equals(TextFormatting.DARK_RED + "Can\'t resolve hostname")) ||
 						(cleanVersion && s.version <= 404) ||
 						(cleanNoPing && s.pingToServer != -2L && s.pingToServer < 0L) || cleanAll) {
-					servers.remove(s);
+					serverList.func_217506_a(s);
+					serverList.saveServerList();
 				}
 			}
+			result = "§aFinished";
 		}));
 		addButton(new Button(width / 2 - 100, height / 3 + 104, 200, 20, "Done", button -> {
 			minecraft.displayGuiScreen(serverScreen);
@@ -69,6 +72,7 @@ public class CleanUpScreen extends Screen {
 		buttons.get(1).setMessage((cleanVersion ? "§a" : "§c") + "Wrong Version");
 		buttons.get(2).setMessage((cleanNoPing ? "§a" : "§c") + "Failed Ping");
 		buttons.get(3).setMessage((cleanAll ? "§a" : "§c") + "Clear All");
+		drawCenteredString(font, result, width / 2, height / 3 + 58, -1);
 		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
 	}
