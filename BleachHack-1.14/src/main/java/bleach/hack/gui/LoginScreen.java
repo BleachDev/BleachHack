@@ -22,7 +22,7 @@ public class LoginScreen extends Screen {
 	
 	public void init() {
 		this.addButton(new Button(width / 2 - 100, height / 3 + 84, 200, 20, "Done", (button) -> {
-			minecraft.displayGuiScreen(new BleachMainMenu(null));
+			minecraft.displayGuiScreen(new BleachMainMenu());
 	    }));
 		this.addButton(new Button(width / 2 - 100, height / 3 + 62, 200, 20, "Login", (button) -> {
 			loginResult = LoginManager.login(userField.getText(), passField.getText());
@@ -32,7 +32,6 @@ public class LoginScreen extends Screen {
 		this.passField = new TextFieldWidget(this.font, width / 2 - 98, height / 4 + 40, 196, 18, "");
 		
 		super.init();
-		
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {

@@ -1,15 +1,13 @@
 package bleach.hack;
 
 import bleach.hack.command.CommandManager;
-import bleach.hack.gui.BleachMainMenu;
-import bleach.hack.gui.ServerScreenInject;
+import bleach.hack.gui.ScreenInjector;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.BleachQueue;
 import bleach.hack.utils.file.BleachFileReader;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,9 +29,8 @@ public class BleachHack {
     public BleachHack() {
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new ServerScreenInject());
+        MinecraftForge.EVENT_BUS.register(new ScreenInjector());
     }
-    
     public void init(FMLClientSetupEvent event) {
     	fileReader.readModules();
     	fileReader.readSettings();
@@ -45,11 +42,9 @@ public class BleachHack {
     public void onTick(TickEvent.ClientTickEvent event) {
 		if(!(event.phase == Phase.END)) return;
 		
-		if(Minecraft.getInstance().currentScreen instanceof MainMenuScreen) {
-			Minecraft.getInstance().displayGuiScreen(new BleachMainMenu(null));
-		}
-		
-    	try {
+		try {
+    		if(!Minecraft.getInstance().world.isAreaLoaded(Minecraft.getInstance().player.getPosition(), 1)) return;
+    		
     		ModuleManager.onUpdate();
     		ModuleManager.updateKeys();
     		

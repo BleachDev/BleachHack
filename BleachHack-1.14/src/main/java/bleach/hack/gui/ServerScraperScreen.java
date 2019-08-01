@@ -35,6 +35,7 @@ public class ServerScraperScreen extends Screen {
 	public void init() {
 		addButton(new Button(width / 2 - 100, height / 3 + 82, 200, 20, "Scrape", button -> {
 			try {
+				if(pingers.size() > 0) return;
 				if(ipField.getText().split(":")[0].trim().isEmpty()) throw new Exception();
 				System.out.println("Starting scraper...");
 				InetAddress ip = InetAddress.getByName(ipField.getText().split(":")[0].trim());

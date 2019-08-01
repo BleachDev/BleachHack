@@ -14,8 +14,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.WorldSelectionScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedConstants;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.versions.forge.ForgeVersion;
@@ -24,10 +24,12 @@ public class BleachMainMenu extends Screen {
 	
 	private ParticleManager particleMang = new ParticleManager();
 	private BleachGithubReader github = new BleachGithubReader();
+	private long time = 0;
+	private boolean CREEPERAWWMAN;
 
 	private List<String> versions = new ArrayList<>();
 	
-	public BleachMainMenu(ITextComponent titleIn) {
+	public BleachMainMenu() {
 		super(new TranslationTextComponent("narrator.screen.title"));
 	}
 	
@@ -53,11 +55,27 @@ public class BleachMainMenu extends Screen {
 	    
 	    versions.clear();
 	    versions.addAll(github.readFileLines("latestversion.txt"));
+	    time = System.currentTimeMillis();
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		this.renderBackground();
-		fill(0, 0, width, height, 0xff000000);
+		
+		if(CREEPERAWWMAN) {
+			if(System.currentTimeMillis() - 40000 > time) creeperAwMan("creeper9.jpg", "I couldn't care to do all of these");
+			else if(System.currentTimeMillis() - 32000 > time) creeperAwMan("creeper9.jpg", "Total shock fills your body, Oh no, it's you again");
+			else if(System.currentTimeMillis() - 28000 > time) creeperAwMan("creeper8.jpg", "Heads up, You hear a sound, turn around and look up");
+			else if(System.currentTimeMillis() - 22000 > time) creeperAwMan("creeper7.jpg", "Hope to find some diamonds tonight, night, night, Diamonds tonight");
+			else if(System.currentTimeMillis() - 18000 > time) creeperAwMan("creeper6.jpg", "This task, a grueling one");
+			else if(System.currentTimeMillis() - 14000 > time) creeperAwMan("creeper5.jpg", "Side-side to side");
+			else if(System.currentTimeMillis() - 11000 > time) creeperAwMan("creeper4.jpg", "So we back in the mine got our pickaxe swinging from side to side");
+			else if(System.currentTimeMillis() - 8000 > time) creeperAwMan("creeper3.jpg", "AWW MAN");
+			else if(System.currentTimeMillis() - 3000 > time) creeperAwMan("creeper2.jpg", "CREEPER!");
+			else {creeperAwMan("creeper1.jpg", ""); }
+			drawRightAlignedString(font, "§cMusic removed because of copyright stuff", width, 2, -1);
+		}else{
+			fill(0, 0, width, height, 0xff000000);
+		}
 		
 		particleMang.addParticle(p_render_1_, p_render_2_);
 		particleMang.renderParticles();
@@ -72,6 +90,7 @@ public class BleachMainMenu extends Screen {
 		
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		
+		drawString(this.font, CREEPERAWWMAN ? "§aAW MAN!" : "§aCreeper?", 2, 2, -1);
 		drawString(this.font, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
 		drawString(this.font, "Forge: " + ForgeVersion.getVersion(), 4, height - 30, -1);
 		drawString(this.font, "Minecraft " + SharedConstants.getVersion().getName(), 4, height - 20, -1);
@@ -85,5 +104,16 @@ public class BleachMainMenu extends Screen {
 		}catch(Exception e) {}
 		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
+	}
+	
+	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+		if(p_mouseClicked_1_ < 60 && p_mouseClicked_3_ < 15) { CREEPERAWWMAN = !CREEPERAWWMAN; init(); }
+		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+	}
+	
+	public void creeperAwMan(String path, String text) {
+		minecraft.textureManager.bindTexture(new ResourceLocation("bleachhack", path));
+		blit(0, 0, 0, 0, width, height, width, height);
+		drawCenteredString(this.font, text, width/2, height/4 + 25, 0x50b050);
 	}
 }

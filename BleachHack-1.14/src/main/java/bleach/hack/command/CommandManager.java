@@ -9,6 +9,7 @@ import bleach.hack.utils.BleachLogger;
 public class CommandManager {
 
 	private List<Command> commands = Arrays.asList(
+			new CmdDupe(),
 			new CmdGamemode(),
 			new CmdGuiReset(),
 			new CmdHelp(),

@@ -1,13 +1,21 @@
 package bleach.hack.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.gui.screen.MultiplayerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class ServerScreenInject {
+public class ScreenInjector {
 
+	@SubscribeEvent
+	public void initGui(InitGuiEvent.Pre event) {
+		if(!(Minecraft.getInstance().currentScreen instanceof MainMenuScreen)) return;
+		
+		Minecraft.getInstance().displayGuiScreen(new BleachMainMenu());
+	}
+	
 	@SubscribeEvent
 	public void initGui(InitGuiEvent.Post event) {
 		if(!(Minecraft.getInstance().currentScreen instanceof MultiplayerScreen)) return;

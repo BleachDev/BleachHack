@@ -89,7 +89,7 @@ public class IngameOverlay extends AbstractGui {
 	/*-------------------------------Top Right---------------------------------------*/
 	public void drawServerInfo() {
 		String server = Minecraft.getInstance().isSingleplayer() ? "" : Minecraft.getInstance().getCurrentServerData().serverIP;
-		fill(window.getScaledWidth() - font.getStringWidth(server) - 3, 3, window.getScaledWidth() - 4, 12, 0xa0000000);
+		fill(window.getScaledWidth() - font.getStringWidth(server) - 4, 2, window.getScaledWidth() - 3, 12, 0xa0000000);
 		font.drawStringWithShadow(server, window.getScaledWidth() - font.getStringWidth(server) - 3, 3, 0xb0b0b0);
 	}
 	/*-------------------------------------------------------------------------------*/
