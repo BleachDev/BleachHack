@@ -13,6 +13,7 @@ public class ModuleManager {
 			new ChestESP(),
 			new ClickGui(),
 			new CrystalAura(),
+			new ElytraFly(),
 			new EntitySpeed(),
 			new ESP(),
 			new FastUse(),

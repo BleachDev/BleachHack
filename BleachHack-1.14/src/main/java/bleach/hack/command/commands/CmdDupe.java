@@ -1,7 +1,6 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import net.minecraft.client.Minecraft;
 
 public class CmdDupe extends Command {
 
@@ -22,8 +21,8 @@ public class CmdDupe extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		Minecraft.getInstance().player.dropItem(true);
-		Minecraft.getInstance().playerController.attackEntity(Minecraft.getInstance().player, Minecraft.getInstance().player);
+		mc.player.dropItem(true);
+		mc.playerController.attackEntity(mc.player, mc.player);
 	}
 
 }

@@ -2,7 +2,6 @@ package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.GameType;
 
 public class CmdGamemode extends Command {
@@ -34,16 +33,16 @@ public class CmdGamemode extends Command {
 		}
 		
 		if(gm == 0) {
-			Minecraft.getInstance().playerController.setGameType(GameType.SURVIVAL);
+			mc.playerController.setGameType(GameType.SURVIVAL);
 			BleachLogger.infoMessage("Set gamemode to survival.");
 		}else if(gm == 1) {
-			Minecraft.getInstance().playerController.setGameType(GameType.CREATIVE);
+			mc.playerController.setGameType(GameType.CREATIVE);
 			BleachLogger.infoMessage("Set gamemode to creative.");
 		}else if(gm == 2) {
-			Minecraft.getInstance().playerController.setGameType(GameType.ADVENTURE);
+			mc.playerController.setGameType(GameType.ADVENTURE);
 			BleachLogger.infoMessage("Set gamemode to adventure.");
 		}else if(gm == 3) {
-			Minecraft.getInstance().playerController.setGameType(GameType.SPECTATOR);
+			mc.playerController.setGameType(GameType.SPECTATOR);
 			BleachLogger.infoMessage("Set gamemode to spectator.");
 		}else {
 			BleachLogger.warningMessage("Unknown Gamemode Number.");

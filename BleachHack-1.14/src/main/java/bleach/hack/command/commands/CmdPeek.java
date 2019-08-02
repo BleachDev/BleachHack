@@ -4,7 +4,6 @@ import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.BleachQueue;
 import net.minecraft.block.ContainerBlock;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ShulkerBoxScreen;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -34,7 +33,7 @@ public class CmdPeek extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		ItemStack item = Minecraft.getInstance().player.inventory.getCurrentItem();
+		ItemStack item = mc.player.inventory.getCurrentItem();
 		
 		if(!(item.getItem() instanceof BlockItem)) {
 			BleachLogger.errorMessage("Must be holding a containter to peek.");
@@ -57,9 +56,9 @@ public class CmdPeek extends Command {
 		Inventory inv = new Inventory(items.toArray(new ItemStack[27]));
 		
 		BleachQueue.queue.add(() -> {
-			Minecraft.getInstance().displayGuiScreen(new ShulkerBoxScreen(
-					new ShulkerBoxContainer(420, Minecraft.getInstance().player.inventory, inv),
-					Minecraft.getInstance().player.inventory,
+			mc.displayGuiScreen(new ShulkerBoxScreen(
+					new ShulkerBoxContainer(420, mc.player.inventory, inv),
+					mc.player.inventory,
 					item.getDisplayName()));
 		});
 	}

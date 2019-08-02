@@ -43,7 +43,7 @@ public class BleachHack {
 		if(!(event.phase == Phase.END)) return;
 		
 		try {
-    		if(!Minecraft.getInstance().world.isAreaLoaded(Minecraft.getInstance().player.getPosition(), 1)) return;
+    		//if(!Minecraft.getInstance().world.isAreaLoaded(Minecraft.getInstance().player.getPosition(), 1)) return;
     		
     		ModuleManager.onUpdate();
     		ModuleManager.updateKeys();

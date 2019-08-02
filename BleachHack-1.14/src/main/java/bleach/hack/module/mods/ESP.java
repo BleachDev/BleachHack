@@ -62,7 +62,7 @@ public class ESP extends Module {
 	
 	public void onDisable() {
 		for(Entity e: EntityUtils.getLoadedEntities()) {
-			if(e instanceof Entity && e != mc.player) {
+			if(e != mc.player) {
 				if(e.isGlowing()) e.setGlowing(false);
 			}
 		}

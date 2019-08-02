@@ -10,10 +10,13 @@ public class CommandManager {
 
 	private List<Command> commands = Arrays.asList(
 			new CmdDupe(),
+			new CmdEnchant(),
 			new CmdGamemode(),
+			new CmdGive(),
 			new CmdGuiReset(),
 			new CmdHelp(),
 			new CmdPeek(),
+			new CmdRename(),
 			new CmdToggle());
 	
 	public List<Command> getCommands(){
