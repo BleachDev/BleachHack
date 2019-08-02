@@ -21,8 +21,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod("bleachhack")
 public class BleachHack {
 	
-	public static String VERSION = "B5.01";
-	public static int INTVERSION = 7;
+	public static String VERSION = "B5.1";
+	public static int INTVERSION = 8;
 	
 	private BleachFileReader fileReader = new BleachFileReader();
 	
@@ -43,9 +43,7 @@ public class BleachHack {
 		if(!(event.phase == Phase.END)) return;
 		
 		try {
-    		//if(!Minecraft.getInstance().world.isAreaLoaded(Minecraft.getInstance().player.getPosition(), 1)) return;
-    		
-    		ModuleManager.onUpdate();
+			ModuleManager.onUpdate();
     		ModuleManager.updateKeys();
     		
     		if(Minecraft.getInstance().player.ticksExisted % 100 == 0) {
