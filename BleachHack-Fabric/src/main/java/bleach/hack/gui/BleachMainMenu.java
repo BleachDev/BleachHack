@@ -54,7 +54,6 @@ public class BleachMainMenu extends Screen {
 	    
 	    versions.clear();
 	    versions.addAll(github.readFileLines("latestversion.txt"));
-	    //time = System.currentTimeMillis();
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
@@ -70,7 +69,7 @@ public class BleachMainMenu extends Screen {
 			else if(System.currentTimeMillis() - 11000 > time) creeperAwMan("creeper4.jpg", "So we back in the mine got our pickaxe swinging from side to side");
 			else if(System.currentTimeMillis() - 8000 > time) creeperAwMan("creeper3.jpg", "AWW MAN");
 			else if(System.currentTimeMillis() - 3000 > time) creeperAwMan("creeper2.jpg", "CREEPER!");
-			else {creeperAwMan("icon.png", ""); }
+			else {creeperAwMan("creeper1.jpg", ""); }
 			drawRightAlignedString(font, "§cMusic removed because of copyright stuff", width, 2, -1);
 		}else{
 			fill(0, 0, width, height, 0xff000000);
