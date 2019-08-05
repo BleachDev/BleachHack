@@ -1,0 +1,92 @@
+package bleach.hack.gui;
+
+import bleach.hack.gui.particle.ParticleManager;
+import bleach.hack.utils.LoginManager;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.LiteralText;
+
+public class LoginScreen extends Screen {
+
+	ParticleManager particleMang = new ParticleManager();
+	
+	private TextFieldWidget userField;
+	private TextFieldWidget passField;
+	
+	private String loginResult = "";
+	
+	public LoginScreen() {
+		super(new LiteralText("Login Screen"));
+	}
+	
+	public void init() {
+		this.addButton(new ButtonWidget(width / 2 - 100, height / 3 + 84, 200, 20, "Done", (button) -> {
+			minecraft.openScreen(new BleachMainMenu());
+	    }));
+		this.addButton(new ButtonWidget(width / 2 - 100, height / 3 + 62, 200, 20, "Login", (button) -> {
+			loginResult = LoginManager.login(userField.getText(), passField.getText());
+	    }));
+		
+		this.userField = new TextFieldWidget(this.font, width / 2 - 98, height / 4 + 10, 196, 18, "");
+		this.passField = new TextFieldWidget(this.font, width / 2 - 98, height / 4 + 40, 196, 18, "");
+		
+		super.init();
+	}
+	
+	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
+		this.renderBackground();
+		fill(0, 0, width, height, 0xff000000);
+		
+		particleMang.addParticle(p_render_1_, p_render_2_);
+		particleMang.renderParticles();
+		
+		drawString(this.font, "Email: ", this.width / 2 - 130, this.height / 4 + 15, 0xffffff);
+		drawString(this.font, "Password: ", this.width / 2 - 154, this.height / 4 + 45, 0xffffff);
+		
+		drawCenteredString(this.font, loginResult, this.width / 2, this.height / 4 + 63, 0xffffff);
+		
+		drawString(this.font, "Logged in as: §a" + this.minecraft.getSession().getUsername(), 4, height - 10, -1);
+		
+		userField.render(p_render_1_, p_render_2_, p_render_3_);
+		passField.render(p_render_1_, p_render_2_, p_render_3_);
+		
+		super.render(p_render_1_, p_render_2_, p_render_3_);
+	}
+	
+	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
+		if(userField.isFocused()) userField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if(passField.isFocused()) passField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		
+		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
+	}
+	
+	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+		double mX = p_mouseClicked_1_, mY = p_mouseClicked_3_;
+		
+		if(mX>userField.x && mX<userField.x+userField.getWidth() && mY>userField.y && mY<userField.y+20) {
+			userField.changeFocus(true);
+			if(passField.isFocused()) passField.changeFocus(true);
+		}
+		
+		if(mX>passField.x && mX<passField.x+passField.getWidth() && mY>passField.y && mY<passField.y+20) {
+			passField.changeFocus(true);
+			if(userField.isFocused()) userField.changeFocus(true);
+		}
+		
+		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+	}
+	
+	public void tick() {
+		userField.tick();
+		passField.tick();
+	}
+	
+	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
+		if(userField.isFocused()) userField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if(passField.isFocused()) passField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		
+		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+	}
+
+}
