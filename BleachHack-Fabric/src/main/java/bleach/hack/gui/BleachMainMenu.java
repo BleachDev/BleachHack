@@ -70,7 +70,7 @@ public class BleachMainMenu extends Screen {
 			else if(System.currentTimeMillis() - 8000 > time) creeperAwMan("creeper3.jpg", "AWW MAN");
 			else if(System.currentTimeMillis() - 3000 > time) creeperAwMan("creeper2.jpg", "CREEPER!");
 			else {creeperAwMan("creeper1.jpg", ""); }
-			drawRightAlignedString(font, "§cMusic removed because of copyright stuff", width, 2, -1);
+			drawRightAlignedString(font, "Â§cMusic removed because of copyright stuff", width, 2, -1);
 		}else{
 			fill(0, 0, width, height, 0xff000000);
 		}
@@ -91,12 +91,12 @@ public class BleachMainMenu extends Screen {
 		drawString(this.font, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
 		drawString(this.font, "Fabric: " + "???", 4, height - 30, -1);
 		drawString(this.font, "Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
-		drawString(this.font, "Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
+		drawString(this.font, "Logged in as: Â§a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
 		
 		try {
 			if(Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
-				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
-				drawCenteredString(this.font,"§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
+				drawCenteredString(this.font, "Â§cOutdated BleachHack Version!", width/2, 2, -1);
+				drawCenteredString(this.font,"Â§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
 			}
 		}catch(Exception e) {}
 		

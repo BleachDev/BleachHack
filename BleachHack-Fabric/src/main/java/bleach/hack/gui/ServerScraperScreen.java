@@ -24,7 +24,7 @@ public class ServerScraperScreen extends Screen {
 	private int working;
 	private boolean abort = false;
 	private List<BleachServerPinger> pingers = new ArrayList<>();
-	private String result = "§7Idle...";
+	private String result = "Â§7Idle...";
 	
 	public ServerScraperScreen(MultiplayerScreen serverScreen) {
 		super(new LiteralText("Server Scraper"));
@@ -42,7 +42,7 @@ public class ServerScraperScreen extends Screen {
 				working = 0;
 				scrapeIp(ip);
 			} catch (Exception e) {
-				result = "§cFailed Scraping!";
+				result = "Â§cFailed Scraping!";
 				e.printStackTrace();
 				return;
 			}
@@ -59,13 +59,13 @@ public class ServerScraperScreen extends Screen {
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		renderBackground();
-		drawCenteredString(font, "§7IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
-		drawCenteredString(font, "§7" + checked + " / 1792 [§a" + working + "§7]", this.width / 2, this.height / 4 + 58, -1);
+		drawCenteredString(font, "Â§7IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
+		drawCenteredString(font, "Â§7" + checked + " / 1792 [Â§a" + working + "Â§7]", this.width / 2, this.height / 4 + 58, -1);
 		drawCenteredString(font, result, this.width / 2, this.height / 4 + 70, -1);
 		ipField.render(p_render_1_, p_render_2_, p_render_3_);
 		
 		if(abort) {
-			result = "§7Aborting.. [" + pingers.size() + "] Left";
+			result = "Â§7Aborting.. [" + pingers.size() + "] Left";
 			if(pingers.size() == 0) minecraft.openScreen(new MultiplayerScreen(new TitleScreen()));
 		}
 		
@@ -77,7 +77,7 @@ public class ServerScraperScreen extends Screen {
 	}
 	
 	public void scrapeIp(InetAddress ip) {
-		result = "§eScraping...";
+		result = "Â§eScraping...";
 		scrapeThread = new Thread(() -> {
 			for(int change : new int[] {0, 1, -1, 2, -2, 3, -3}) {
 				for(int i = 0; i <= 255; i++) {
@@ -93,7 +93,7 @@ public class ServerScraperScreen extends Screen {
 			}
 			
 			while(pingers.size() > 0) updatePingers();
-			result = "§aDone!";
+			result = "Â§aDone!";
 		});
 		scrapeThread.start();
 	}

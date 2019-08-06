@@ -33,13 +33,13 @@ public class Nametags extends Module {
 	
 	public void drawNametags(LivingEntity e) {
 		/* Color before name */
-		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
-				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
+		String color = e instanceof Monster ? "Â§5" : EntityUtils.isAnimal(e)
+				? "Â§a" : e.isSneaking() ? "Â§6" : e instanceof PlayerEntity ? "Â§c" : "Â§f";
 		
-		if(e == mc.player || e == mc.player.getVehicle() || color == "§f" || 
-				((color == "§c" || color == "§6") && !getSettings().get(4).toToggle().state) ||
-				((color == "§5" || color == "§a") && !getSettings().get(5).toToggle().state)) return;
-		if(e.isInvisible()) color = "§e";
+		if(e == mc.player || e == mc.player.getVehicle() || color == "Â§f" || 
+				((color == "Â§c" || color == "Â§6") && !getSettings().get(4).toToggle().state) ||
+				((color == "Â§5" || color == "Â§a") && !getSettings().get(5).toToggle().state)) return;
+		if(e.isInvisible()) color = "Â§e";
 		
 		double scale = (e instanceof PlayerEntity) ?
 				Math.max(getSettings().get(2).toSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
@@ -48,14 +48,14 @@ public class Nametags extends Module {
 		/* Health bar */
 		String health = "";
 		/* - Add Green Normal Health */
-		for(int i = 0; i < e.getHealth(); i++) health += "§a|";
+		for(int i = 0; i < e.getHealth(); i++) health += "Â§a|";
 		/* - Add Red Empty Health (Remove Based on absorption amount) */
-		for(int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getHealthMaximum() - e.getHealth()); i++) health += "§e|";
+		for(int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getHealthMaximum() - e.getHealth()); i++) health += "Â§e|";
 		/* Add Yellow Absorption Health */
-		for(int i = 0; i < e.getHealthMaximum() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
+		for(int i = 0; i < e.getHealthMaximum() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "Â§c|";
 		/* Add "+??" to the end if the entity has extra hearts */
 		if(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()) > 0) {
-			health +=  " §e+" + (int)(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()));
+			health +=  " Â§e+" + (int)(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()));
 		}
 		
 		/* Drawing Nametags */

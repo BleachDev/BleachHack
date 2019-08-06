@@ -65,9 +65,9 @@ public class ModuleWindow {
 		
 		// Draw Modules
 		if(hiding) {
-			font.drawWithShadow("ซ", posX+len-8, posY-9, 0xffaaff);
+			font.drawWithShadow("-", posX+len-8, posY-9, 0xffaaff);
 			return;
-		}else font.drawWithShadow("ป", posX+len-8, posY-9, 0xffaaff);
+		}else font.drawWithShadow("+", posX+len-8, posY-9, 0xffaaff);
 			
 		int count = 0;
 		for(Module m: mods) {
@@ -141,8 +141,8 @@ public class ModuleWindow {
 	public void drawToggleSetting(SettingToggle s, int x, int y) {
 		String color;
 		
-		if(s.state) { if(mouseOver(x, y, x+len2, y+10)) color = "ง2"; else color = "งa";
-		}else{ if(mouseOver(x, y, x+len2, y+10)) color = "ง4"; else color = "งc"; }
+		if(s.state) { if(mouseOver(x, y, x+len2, y+10)) color = "ยง2"; else color = "ยงa";
+		}else{ if(mouseOver(x, y, x+len2, y+10)) color = "ยง4"; else color = "ยงc"; }
 		
 		Screen.fill(x, y, x+len2, y+10, 0x70000000);
 		font.drawWithShadow("| " + color + s.text, x+2, y+1, mouseOver(x, y, x+len2, y+10) ? 0xffc3ff : 0xffe0ff);

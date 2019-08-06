@@ -30,24 +30,24 @@ public final class LoginManager {
 					auth.getAuthenticatedToken(), "mojang");
 			
 			FabricReflect.writeField(MinecraftClient.getInstance(), newsession, "field_1726", "session");
-			return "§aLogin Successful";
+			return "Â§aLogin Successful";
 		
 		}catch (SecurityException e) 
 		{
-			return "§cReflection Error";
+			return "Â§cReflection Error";
 			
 		}catch(AuthenticationException e)
 		{
 			e.printStackTrace();
 			if(e.getMessage().contains("Invalid username or password.")
 				|| e.getMessage().toLowerCase().contains("account migrated"))
-				return "§4Wrong password!";
+				return "Â§4Wrong password!";
 			else
-				return "§cCannot contact authentication server!";
+				return "Â§cCannot contact authentication server!";
 			
 		}catch(NullPointerException e)
 		{
-			return "§4Wrong password!";
+			return "Â§4Wrong password!";
 			
 		}
 	}

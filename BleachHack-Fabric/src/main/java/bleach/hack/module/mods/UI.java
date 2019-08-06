@@ -53,7 +53,7 @@ public class UI extends Module {
 		for(Module m: ModuleManager.getModules()) if(m.isToggled()) lines.add(m.getName());
 		
 		lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
-		if(getSettings().get(1).toToggle().state) lines.add(0, "งa> BleachHack " + BleachHack.VERSION);
+		if(getSettings().get(1).toToggle().state) lines.add(0, "ยงa> BleachHack " + BleachHack.VERSION);
 		
 		int count = 0;
 		int color = 0xff40bbff;
@@ -91,7 +91,7 @@ public class UI extends Module {
 		boolean nether = mc.player.dimension == DimensionType.THE_NETHER;
 		BlockPos pos = mc.player.getBlockPos();
 				
-		bottomLeftList.add("XYZ: " + (nether ? "ง4" : "งb") + pos.getX() + " " + pos.getY() + " " + pos.getZ());
+		bottomLeftList.add("XYZ: " + (nether ? "ยง4" : "ยงb") + pos.getX() + " " + pos.getY() + " " + pos.getZ());
 	}
 	
 	public void addNetherCoords() {
@@ -100,7 +100,7 @@ public class UI extends Module {
 		BlockPos pos = new BlockPos(vec.getX()/8, vec.getY(), vec.getZ()/8);
 		if(nether) pos = new BlockPos(vec.getX()*8, vec.getY(), vec.getZ()*8);
 				
-		bottomLeftList.add("XYZ: " + (nether ? "งb" : "ง4") + pos.getX() + " " + pos.getY() + " " + pos.getZ());
+		bottomLeftList.add("XYZ: " + (nether ? "ยงb" : "ยง4") + pos.getX() + " " + pos.getY() + " " + pos.getZ());
 	}
 	
 	public void drawBottomLeft() {
@@ -125,12 +125,12 @@ public class UI extends Module {
 	/*-------------------------------------------------------------------------------*/
 	
 	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {
-		if(!rev ? value > best : value < best) return "ง2";
-		else if(!rev ? value > good : value < good) return "งa";
-		else if(!rev ? value > mid : value < mid) return "งe";
-		else if(!rev ? value > bad : value < bad) return "ง6";
-		else if(!rev ? value > worst : value < worst) return "งc";
-		else return "ง4";
+		if(!rev ? value > best : value < best) return "ยง2";
+		else if(!rev ? value > good : value < good) return "ยงa";
+		else if(!rev ? value > mid : value < mid) return "ยงe";
+		else if(!rev ? value > bad : value < bad) return "ยง6";
+		else if(!rev ? value > worst : value < worst) return "ยงc";
+		else return "ยง4";
 	}
 
 }

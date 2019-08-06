@@ -26,6 +26,7 @@ public class CommandManager {
 	
 	public void callCommand(String input) {
 		String[] split = input.split(" ");
+		System.out.println(Arrays.asList(split));
 		String command = split[0];
 		String args = input.substring(command.length()).trim();
 		for(Command c: getCommands()) {

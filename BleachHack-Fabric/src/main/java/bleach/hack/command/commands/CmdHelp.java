@@ -28,7 +28,7 @@ public class CmdHelp extends Command {
 		
 		for(Command c: new CommandManager().getCommands()) {
 			if(!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
-			BleachLogger.noPrefixMessage("ง5." + c.getAlias() + " | ง6" + c.getDescription() + " | งe" + c.getSyntax());
+			BleachLogger.noPrefixMessage("ยง5." + c.getAlias() + " | ยง6" + c.getDescription() + " | ยงe" + c.getSyntax());
 		}
 	}
 

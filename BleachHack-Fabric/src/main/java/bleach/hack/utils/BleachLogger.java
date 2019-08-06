@@ -7,17 +7,17 @@ public class BleachLogger {
 
 	public static void infoMessage(String s) {
 		MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText("§5[BleachHack] §9§lINFO: §9" + s));
+			.addMessage(new LiteralText("Â§5[BleachHack] Â§9Â§lINFO: Â§9" + s));
 	}
 	
 	public static void warningMessage(String s) {
 		MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText("§5[BleachHack] §e§lWARNING: §e" + s));
+			.addMessage(new LiteralText("Â§5[BleachHack] Â§eÂ§lWARNING: Â§e" + s));
 	}
 	
 	public static void errorMessage(String s) {
 		MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText("§5[BleachHack] §c§lERROR: §c" + s));
+			.addMessage(new LiteralText("Â§5[BleachHack] Â§cÂ§lERROR: Â§c" + s));
 	}
 	
 	public static void noPrefixMessage(String s) {

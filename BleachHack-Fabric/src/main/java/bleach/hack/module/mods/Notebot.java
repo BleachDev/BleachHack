@@ -46,11 +46,12 @@ public class Notebot extends Module {
 	
 	public void onEnable() {
 		blockTunes.clear();
-		if(filePath.isEmpty()) {
+		/*if(filePath.isEmpty()) {
 			BleachLogger.errorMessage("No File Loaded!, Use .notebot load [File]");
 			setToggled(false);
 			return;
-		}else readFile(filePath);
+		}else readFile(filePath);*/
+		readFile("blue.txt");
 		timer = -10;
 		
 		/* I think my brain died while making this work */
@@ -134,7 +135,10 @@ public class Notebot extends Module {
 		
 		int c = 0;
 		for(Entry<Property<?>, Comparable<?>> e: mc.world.getBlockState(pos).getEntries().entrySet()) {
-			if(c == 1) return (int) e.getValue();
+			if(c == 1) {
+				System.out.println(Integer.parseInt(e.getValue().toString()));
+				return Integer.parseInt(e.getValue().toString());
+			}
 			c++;
 		}
 		return 0;
@@ -173,7 +177,7 @@ public class Notebot extends Module {
 		/* Parse tuner info into "memory" */
 		for(List<String> s: tunes3) {
 			try { tunes.add(Arrays.asList(Integer.parseInt(s.get(0)), Integer.parseInt(s.get(1))));
-			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: §o" + s); }
+			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: Â§o" + s); }
 		}
 		
 		/* Parse note info into "memory" */
@@ -181,7 +185,7 @@ public class Notebot extends Module {
 		for(String s: lines) {
 			String[] s1 = s.split(":");
 			try { notes.add(Arrays.asList(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
-			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Note: §o" + s); }
+			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Note: Â§o" + s); }
 		}
 		
 		/* Generate tuners if it doesn't exist */
@@ -195,7 +199,7 @@ public class Notebot extends Module {
 			}
 			for(List<String> s: neededTunes) {
 				try { tunes.add(Arrays.asList(Integer.parseInt(s.get(0)), Integer.parseInt(s.get(1))));
-				}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: §o" + s); }
+				}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: Â§o" + s); }
 			}
 		}
 	}

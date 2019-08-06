@@ -29,14 +29,14 @@ public class CmdEnchant extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if(args[0].equalsIgnoreCase("list")) {
-			BleachLogger.infoMessage("งd[Aqua_Affinity/Aqua] ง5[Arthropods] งd[Blast/Blast_Prot] "
-					+ "ง5[Channeling] งd[Curse_Binding/Binding] ง5[Curse_Vanish/Vanish] งd[Depth_Strider/Strider] "
-					+ "ง5[Efficiency/Eff] งd[Feather_Falling/Fall] ง5[Fire_Aspect] งd[Fire_Prot] "
-					+ "ง5[Flame] งd[Fortune] ง5[Frost_Walker/Frost] งd[Impaling] ง5[Infinity] งd[Knockback/Knock] "
-					+ "ง5[Looting/Loot] งd[Loyalty] ง5[Luck_Of_The_Sea/Luck] งd[Lure] ง5[Mending/Mend] งd[Multishot] "
-					+ "ง5[Piercing] งd[Power] ง5[Projectile_Prot/Proj_Prot] งd[Protection/Prot] "
-					+ "ง5[Punch] งd[Quick_Charge/Charge] ง5[Respiration/Resp] งd[Riptide] "
-					+ "ง5[Sharpness/Sharp] งd[Silk_Touch/Silk] ง5[Smite] งd[Sweeping_Edge/Sweep] ง5[Thorns] งd[Unbreaking]");
+			BleachLogger.infoMessage("ยงd[Aqua_Affinity/Aqua] ยง5[Arthropods] ยงd[Blast/Blast_Prot] "
+					+ "ยง5[Channeling] ยงd[Curse_Binding/Binding] ยง5[Curse_Vanish/Vanish] ยงd[Depth_Strider/Strider] "
+					+ "ยง5[Efficiency/Eff] ยงd[Feather_Falling/Fall] ยง5[Fire_Aspect] ยงd[Fire_Prot] "
+					+ "ยง5[Flame] ยงd[Fortune] ยง5[Frost_Walker/Frost] ยงd[Impaling] ยง5[Infinity] ยงd[Knockback/Knock] "
+					+ "ยง5[Looting/Loot] ยงd[Loyalty] ยง5[Luck_Of_The_Sea/Luck] ยงd[Lure] ยง5[Mending/Mend] ยงd[Multishot] "
+					+ "ยง5[Piercing] ยงd[Power] ยง5[Projectile_Prot/Proj_Prot] ยงd[Protection/Prot] "
+					+ "ยง5[Punch] ยงd[Quick_Charge/Charge] ยง5[Respiration/Resp] ยงd[Riptide] "
+					+ "ยง5[Sharpness/Sharp] ยงd[Silk_Touch/Silk] ยง5[Smite] ยงd[Sweeping_Edge/Sweep] ยง5[Thorns] ยงd[Unbreaking]");
 			return;
 		}
 		

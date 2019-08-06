@@ -34,7 +34,7 @@ public class CmdRename extends Command {
 		String name = "";
 		for(int j = 0; j < args.length; j++) name += args[j] += " ";
 		
-		i.setCustomName(new LiteralText(name.replace("&", "§").replace("§§", "&")));
+		i.setCustomName(new LiteralText(name.replace("&", "Â§").replace("Â§Â§", "&")));
 		BleachLogger.infoMessage("Renamed Item");
 	}
 

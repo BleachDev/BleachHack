@@ -46,7 +46,7 @@ public class LoginScreen extends Screen {
 		
 		drawCenteredString(this.font, loginResult, this.width / 2, this.height / 4 + 63, 0xffffff);
 		
-		drawString(this.font, "Logged in as: §a" + this.minecraft.getSession().getUsername(), 4, height - 10, -1);
+		drawString(this.font, "Logged in as: Â§a" + this.minecraft.getSession().getUsername(), 4, height - 10, -1);
 		
 		userField.render(p_render_1_, p_render_2_, p_render_3_);
 		passField.render(p_render_1_, p_render_2_, p_render_3_);

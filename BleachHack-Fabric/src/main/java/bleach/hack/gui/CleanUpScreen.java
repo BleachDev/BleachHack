@@ -60,7 +60,7 @@ public class CleanUpScreen extends Screen {
 					}
 				}catch(Exception e) {e.printStackTrace();}
 			}
-			result = "§aFinished";
+			result = "Â§aFinished";
 		}));
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, "Done", button -> {
 			minecraft.openScreen(new MultiplayerScreen(new TitleScreen(false)));
@@ -70,10 +70,10 @@ public class CleanUpScreen extends Screen {
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		renderBackground();
-		buttons.get(0).setMessage((cleanNoHost ? "§a" : "§c") + "Unknown Host");
-		buttons.get(1).setMessage((cleanVersion ? "§a" : "§c") + "Wrong Version");
-		buttons.get(2).setMessage((cleanNoPing ? "§a" : "§c") + "Failed Ping");
-		buttons.get(3).setMessage((cleanAll ? "§a" : "§c") + "Clear All");
+		buttons.get(0).setMessage((cleanNoHost ? "Â§a" : "Â§c") + "Unknown Host");
+		buttons.get(1).setMessage((cleanVersion ? "Â§a" : "Â§c") + "Wrong Version");
+		buttons.get(2).setMessage((cleanNoPing ? "Â§a" : "Â§c") + "Failed Ping");
+		buttons.get(3).setMessage((cleanAll ? "Â§a" : "Â§c") + "Clear All");
 		drawCenteredString(font, result, width / 2, height / 3 + 58, -1);
 		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
