@@ -31,8 +31,6 @@ public class CrystalAura extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		delay++;
 		int reqDelay = (int) Math.round(20/getSettings().get(3).toSlider().getValue());
 		

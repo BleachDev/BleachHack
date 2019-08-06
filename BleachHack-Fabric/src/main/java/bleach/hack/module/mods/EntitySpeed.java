@@ -29,8 +29,6 @@ public class EntitySpeed extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		if (mc.player.getVehicle() == null) return;
 		
 		Entity e = mc.player.getVehicle();

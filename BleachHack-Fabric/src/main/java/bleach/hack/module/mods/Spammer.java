@@ -34,8 +34,6 @@ public class Spammer extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		if(lines.isEmpty()) return;
 		
 		if(mc.player.age % (int) (getSettings().get(1).toSlider().getValue() * 20) == 0) {

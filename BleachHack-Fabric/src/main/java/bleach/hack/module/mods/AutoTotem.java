@@ -16,8 +16,6 @@ public class AutoTotem extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		if(mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING) return;
 		
 		/*Inventory*/

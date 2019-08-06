@@ -23,8 +23,6 @@ public class FastUse extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		/* set rightClickDelay to 0 */
 		FabricReflect.writeField(mc, 0, "field_1752", "itemUseCooldown");
 		

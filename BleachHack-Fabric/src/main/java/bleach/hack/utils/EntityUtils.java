@@ -7,6 +7,7 @@ import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
@@ -25,7 +26,8 @@ public class EntityUtils {
 				mc.world.getScoreboard().getTeam(teamName) :
 				mc.world.getScoreboard().addTeam(teamName);
         
-		mc.world.getScoreboard().addPlayerToTeam(entity.getUuidAsString(), team);
+		mc.world.getScoreboard().addPlayerToTeam(
+				entity instanceof PlayerEntity ? entity.getEntityName() : entity.getUuidAsString(), team);
 		mc.world.getScoreboard().getTeam(teamName).setColor(color);
 		
 		entity.setGlowing(true);

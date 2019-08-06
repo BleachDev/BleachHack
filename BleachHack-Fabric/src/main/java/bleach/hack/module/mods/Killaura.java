@@ -41,8 +41,6 @@ public class Killaura extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		delay++;
 		int reqDelay = (int) Math.round(20/getSettings().get(8).toSlider().getValue());
 		if(getSettings().get(6).toToggle().state) reqDelay = 10;

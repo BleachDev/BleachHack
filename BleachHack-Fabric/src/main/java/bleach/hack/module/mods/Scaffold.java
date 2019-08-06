@@ -36,8 +36,6 @@ public class Scaffold extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		HashMap<BlockPos, Integer> tempMap = new HashMap<>();
 		for(Entry<BlockPos, Integer> e: lastPlaced.entrySet()) {
 			if(e.getValue() > 0) tempMap.put(e.getKey(), e.getValue() - 1);

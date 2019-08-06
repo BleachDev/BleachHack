@@ -28,22 +28,18 @@ public class Tracers extends Module {
 			new SettingToggle(false, "Items"),
 			new SettingToggle(false, "Crystals"),
 			new SettingToggle(false, "Vehicles"),
-			new SettingToggle(false, "Force Bob"),
 			new SettingSlider(0.1, 5, 1.5, 1, "Thick: "));
 	
 	public Tracers() {
 		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.", settings);
 	}
 	
-	public void onEnable() { 
-	}
+	public void onEnable() {}
 	
 	public void onDisable() {}
 	
 	public void onRender(){
-		if(!isToggled()) return;
-		
-		final float thick = (float) getSettings().get(7).toSlider().getValue();
+		final float thick = (float) getSettings().get(6).toSlider().getValue();
 		
 		for(Entity e: mc.world.getEntities()) {
 			Vec3d vec = e.getPos();

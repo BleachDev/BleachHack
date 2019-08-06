@@ -20,9 +20,8 @@ public class Nofall extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		if(mc.player.fallDistance > 2f && getSettings().get(0).toMode().mode == 0) {
+			if(mc.player.isFallFlying()) return;
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
 		}
 		

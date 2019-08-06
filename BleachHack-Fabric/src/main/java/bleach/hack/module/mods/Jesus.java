@@ -19,8 +19,6 @@ public class Jesus extends Module {
 	}
 
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		Entity e = mc.player.isRiding() ? mc.player.getVehicle() : mc.player;
 		
 		if(e.isSneaking() || e.fallDistance > 3f || e.horizontalCollision) return;

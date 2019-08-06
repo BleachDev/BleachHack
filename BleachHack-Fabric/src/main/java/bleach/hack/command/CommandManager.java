@@ -15,6 +15,7 @@ public class CommandManager {
 			new CmdGive(),
 			new CmdGuiReset(),
 			new CmdHelp(),
+			new CmdNotebot(),
 			new CmdPeek(),
 			new CmdRename(),
 			new CmdToggle());

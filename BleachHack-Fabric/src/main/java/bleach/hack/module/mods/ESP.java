@@ -32,8 +32,6 @@ public class ESP extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		for(Entity e: mc.world.getEntities()) {
 			if(e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.RED, "players");

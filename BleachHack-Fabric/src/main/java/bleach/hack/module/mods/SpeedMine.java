@@ -20,8 +20,6 @@ public class SpeedMine extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		mc.player.addPotionEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, getSettings().get(0).toMode().mode));
 	}
 	

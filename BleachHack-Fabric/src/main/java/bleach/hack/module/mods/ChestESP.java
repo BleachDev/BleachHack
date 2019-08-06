@@ -48,8 +48,6 @@ public class ChestESP extends Module {
 	}
 	
 	public void onRender() {
-		if(!isToggled()) return;
-		
 		for(BlockEntity e: mc.world.blockEntities) {
 			if((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity)
 					&& getSettings().get(0).toToggle().state) {

@@ -27,8 +27,6 @@ public class OffhandCrash extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		for(int i = 0; i < getSettings().get(0).toSlider().getValue(); i++) {
 			mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_HELD_ITEMS, BlockPos.ORIGIN, Direction.UP));
 			if(getSettings().get(1).toToggle().state) mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));

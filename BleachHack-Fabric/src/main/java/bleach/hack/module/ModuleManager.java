@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.module.mods.*;
+import net.minecraft.client.MinecraftClient;
 
 public class ModuleManager {
 
@@ -25,6 +26,7 @@ public class ModuleManager {
 			new Nametags(),
 			new Nofall(),
 			new NoSlow(),
+			new Notebot(),
 			new OffhandCrash(),
 			new PacketFly(),
 			new Peek(),
@@ -59,19 +61,19 @@ public class ModuleManager {
 	
 	public static void onUpdate() {
 		for(Module m: mods) {
-			m.onUpdate();
+			if(m.isToggled()) m.onUpdate();
 		}
 	}
 	
 	public static void onRender() {
 		for(Module m: mods) {
-			m.onRender();
+			if(m.isToggled()) m.onRender();
 		}
 	}
 	
 	public static void updateKeys() {
 		for(Module m: mods) {
-			if(m.getKey().wasPressed()) {
+			if(m.getKey().wasPressed() && MinecraftClient.getInstance().currentScreen == null) {
 				m.toggle();
 			}
 		}

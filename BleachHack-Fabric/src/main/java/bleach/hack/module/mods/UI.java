@@ -58,14 +58,14 @@ public class UI extends Module {
 		int count = 0;
 		int color = 0xff40bbff;
 		for(String s: lines) {
-			InGameHud.fill(0, 1+(count*10), mc.textRenderer.getStringWidth(s)+4, 11+(count*10), 0x70003030);
-			InGameHud.fill(0, 1+(count*10), 1, 11+(count*10), color);
-			InGameHud.fill(mc.textRenderer.getStringWidth(s)+4, 1+(count*10), mc.textRenderer.getStringWidth(s)+5, 11+(count*10), color);
+			InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(s)+4, 10+(count*10), 0x70003030);
+			InGameHud.fill(0, (count*10), 1, 10+(count*10), color);
+			InGameHud.fill(mc.textRenderer.getStringWidth(s)+4, (count*10), mc.textRenderer.getStringWidth(s)+5, 10+(count*10), color);
 			if(count + 1 < lines.size()) {
-				InGameHud.fill(mc.textRenderer.getStringWidth(lines.get(count + 1))+5, 11+(count*10),
-						mc.textRenderer.getStringWidth(s)+5, 12+(count*10), color);
+				InGameHud.fill(mc.textRenderer.getStringWidth(lines.get(count + 1))+5, 10+(count*10),
+						mc.textRenderer.getStringWidth(s)+5, 11+(count*10), color);
 			}
-			mc.textRenderer.drawWithShadow(s, 3, 2+(count*10), color);
+			mc.textRenderer.drawWithShadow(s, 3, 1+(count*10), color);
 			color -= 200/lines.size();
 			count++;
 		}

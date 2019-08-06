@@ -28,8 +28,6 @@ public class Flight extends Module {
 	}
 
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		float speed = (float) getSettings().get(1).toSlider().getValue();
 		
 		if(getSettings().get(0).toMode().mode == 0) {

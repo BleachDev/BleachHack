@@ -53,8 +53,6 @@ public class Freecam extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		mc.player.setVelocity(0, 0, 0);
 		mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
 		

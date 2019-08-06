@@ -37,8 +37,6 @@ public class PacketFly extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		double hspeed = getSettings().get(1).toSlider().getValue();
 		double vspeed = getSettings().get(2).toSlider().getValue();
 		

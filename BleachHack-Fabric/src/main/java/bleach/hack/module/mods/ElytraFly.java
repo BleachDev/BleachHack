@@ -19,8 +19,6 @@ public class ElytraFly extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		if (mc.player.isFallFlying()) {
 			Vec3d vec3d = new Vec3d(0,0,getSettings().get(0).toSlider().getValue())
 					.rotateX(-(float) Math.toRadians(mc.player.pitch))

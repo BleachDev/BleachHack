@@ -24,8 +24,6 @@ public class Speed extends Module {
 	}
 	
 	public void onUpdate() {
-		if(!isToggled()) return;
-		
 		double speeds = getSettings().get(1).toSlider().getValue() / 30;
 		
 		/* OnGround */
@@ -39,8 +37,8 @@ public class Speed extends Module {
 			}
 			
 			if (mc.player.forwardSpeed != 0.0F && !mc.player.horizontalCollision) {
-				if (mc.player.horizontalCollision) {
-					mc.player.setVelocity(mc.player.getVelocity().x * (0.9 + speeds), mc.player.getVelocity().y, mc.player.getVelocity().z * (0.9 + speeds));
+				if (mc.player.verticalCollision) {
+					mc.player.setVelocity(mc.player.getVelocity().x * (0.85 + speeds), mc.player.getVelocity().y, mc.player.getVelocity().z * (0.85 + speeds));
 					jumping = true;
 					mc.player.jump();
 					// 1.0379
@@ -52,6 +50,7 @@ public class Speed extends Module {
 				}
 
 			}
+			
 		/* MiniHop */
 		}else if(getSettings().get(0).toMode().mode == 1) {
 			if(mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0) return;
@@ -60,6 +59,7 @@ public class Speed extends Module {
 				mc.player.setVelocity(mc.player.getVelocity().x * (0.9 + speeds), -1, mc.player.getVelocity().z * (0.9 + speeds));
 				mc.player.input.movementSideways += 1.5F;
 			}
+			
 		/* Bhop */
 		}else if(getSettings().get(0).toMode().mode == 2) {
 			if (mc.player.forwardSpeed > 0 && mc.player.onGround) {
