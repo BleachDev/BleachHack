@@ -55,9 +55,9 @@ public class Notebot extends Module {
 		
 		/* I think my brain died while making this work */
 		for(List<Integer> i: tunes) {
-			loop: for(int x = -4; x < 4; x++) {
-				for(int y = -4; y < 4; y++) {
-					for(int z = -4; z < 4; z++) {
+			loop: for(int x = -4; x <= 4; x++) {
+				for(int y = -4; y <= 4; y++) {
+					for(int z = -4; z <= 4; z++) {
 						BlockPos pos = mc.player.getBlockPos().add(x, y, z);
 						if(!isNoteblock(pos) || i.get(1) != getInstrument(pos).ordinal()
 								|| (i.get(1) == getInstrument(pos).ordinal() && blockTunes.get(pos) != null)) continue;
