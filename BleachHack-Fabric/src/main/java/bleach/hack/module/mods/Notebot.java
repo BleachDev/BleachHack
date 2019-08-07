@@ -46,12 +46,11 @@ public class Notebot extends Module {
 	
 	public void onEnable() {
 		blockTunes.clear();
-		/*if(filePath.isEmpty()) {
+		if(filePath.isEmpty()) {
 			BleachLogger.errorMessage("No File Loaded!, Use .notebot load [File]");
 			setToggled(false);
 			return;
-		}else readFile(filePath);*/
-		readFile("blue.txt");
+		}else readFile(filePath);
 		timer = -10;
 		
 		/* I think my brain died while making this work */

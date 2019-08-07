@@ -9,7 +9,7 @@ import net.minecraft.client.MinecraftClient;
 
 public class ModuleManager {
 
-	private static List<Module> mods = Arrays.asList( // new ArrayList<Module>();
+	private static List<Module> mods = Arrays.asList(
 			new AutoTotem(),
 			new ChestESP(),
 			new ClickGui(),

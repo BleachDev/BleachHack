@@ -34,10 +34,6 @@ public class Tracers extends Module {
 		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.", settings);
 	}
 	
-	public void onEnable() {}
-	
-	public void onDisable() {}
-	
 	public void onRender(){
 		final float thick = (float) getSettings().get(6).toSlider().getValue();
 		
