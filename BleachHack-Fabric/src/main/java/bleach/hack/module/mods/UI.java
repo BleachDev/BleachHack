@@ -20,6 +20,7 @@ public class UI extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Arraylist"),
+			new SettingToggle(true, "Extra Line"),
 			new SettingToggle(true, "Watermark"),
 			new SettingToggle(false, "FPS"),
 			new SettingToggle(false, "Ping"),
@@ -35,13 +36,13 @@ public class UI extends Module {
 	public void onOverlay() {
 		bottomLeftList.clear();
 		if(getSettings().get(0).toToggle().state) drawArrayList();
-		if(getSettings().get(4).toToggle().state) {
+		if(getSettings().get(5).toToggle().state) {
 			addNetherCoords();
 			addCoords();
 		}
-		if(getSettings().get(2).toToggle().state) addFPS();
-		try{ if(getSettings().get(3).toToggle().state) addPing(); }catch(Exception e) {}
-		try{ if(getSettings().get(5).toToggle().state) drawServerInfo(); }catch(Exception e) {}
+		if(getSettings().get(3).toToggle().state) addFPS();
+		try{ if(getSettings().get(4).toToggle().state) addPing(); }catch(Exception e) {}
+		try{ if(getSettings().get(6).toToggle().state) drawServerInfo(); }catch(Exception e) {}
 		drawBottomLeft();
 	}
 	
@@ -53,23 +54,24 @@ public class UI extends Module {
 		for(Module m: ModuleManager.getModules()) if(m.isToggled()) lines.add(m.getName());
 		
 		lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
-		if(getSettings().get(1).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
+		if(getSettings().get(2).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 		
 		int count = 0;
 		int color = 0xff40bbff;
+		int extra = getSettings().get(1).toToggle().state ? 1 : 0;
 		for(String s: lines) {
-			InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(s)+4, 10+(count*10), 0x70003030);
-			InGameHud.fill(0, (count*10), 1, 10+(count*10), color);
-			InGameHud.fill(mc.textRenderer.getStringWidth(s)+4, (count*10), mc.textRenderer.getStringWidth(s)+5, 10+(count*10), color);
+			InGameHud.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
+			InGameHud.fill(0, count*10, extra, 10+(count*10), color);
+			InGameHud.fill(mc.textRenderer.getStringWidth(s)+3+extra, (count*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(count*10), color);
 			if(count + 1 < lines.size()) {
-				InGameHud.fill(mc.textRenderer.getStringWidth(lines.get(count + 1))+5, 10+(count*10),
-						mc.textRenderer.getStringWidth(s)+5, 11+(count*10), color);
+				InGameHud.fill(mc.textRenderer.getStringWidth(lines.get(count + 1))+4+extra, 10+(count*10),
+						mc.textRenderer.getStringWidth(s)+4+extra, 11+(count*10), color);
 			}
-			mc.textRenderer.drawWithShadow(s, 3, 1+(count*10), color);
+			mc.textRenderer.drawWithShadow(s, 2+extra, 1+(count*10), color);
 			color -= 200/lines.size();
 			count++;
 		}
-		InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+5, 1+(count*10), color);
+		InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
 	}
 	/*-------------------------------------------------------------------------------*/
 	

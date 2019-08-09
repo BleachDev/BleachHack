@@ -1,9 +1,11 @@
 package bleach.hack.command.commands;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
 import bleach.hack.command.Command;
-import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.Notebot;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
@@ -26,7 +28,7 @@ public class CmdNotebot extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".notebot load [file] | .notebot play | .notebot download";
+		return ".notebot load [file] | .notebot list | .notebot download";
 	}
 
 	@Override
@@ -34,9 +36,11 @@ public class CmdNotebot extends Command {
 		if(args[0].equalsIgnoreCase("load")) {
 			Notebot.filePath = args[1];
 			BleachLogger.infoMessage("Set file to: " + args[1]);
-		}else if(args[0].equalsIgnoreCase("play")) {
-			ModuleManager.getModuleByName("Notebot").setToggled(false);
-			ModuleManager.getModuleByName("Notebot").setToggled(true);
+		}else if(args[0].equalsIgnoreCase("list")) {
+			Stream<Path> paths = Files.walk(fileMang.getDir().resolve("notebot"));
+			BleachLogger.infoMessage("Files:");
+			paths.forEach(p -> BleachLogger.infoMessage(p.getFileName().toString()));
+			paths.close();
 		}else if(args[0].equalsIgnoreCase("download")) {
 			// TODO: not do this, its temporary i swear
 			BleachLogger.infoMessage("Downloaded Songs.. Screen might lag");

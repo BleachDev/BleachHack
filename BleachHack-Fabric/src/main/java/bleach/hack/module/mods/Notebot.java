@@ -46,7 +46,11 @@ public class Notebot extends Module {
 	
 	public void onEnable() {
 		blockTunes.clear();
-		if(filePath.isEmpty()) {
+		if(mc.player.abilities.creativeMode) {
+			BleachLogger.errorMessage("Not In Survival Mode!");
+			setToggled(false);
+			return;
+		}else if(filePath.isEmpty()) {
 			BleachLogger.errorMessage("No File Loaded!, Use .notebot load [File]");
 			setToggled(false);
 			return;
@@ -134,10 +138,7 @@ public class Notebot extends Module {
 		
 		int c = 0;
 		for(Entry<Property<?>, Comparable<?>> e: mc.world.getBlockState(pos).getEntries().entrySet()) {
-			if(c == 1) {
-				System.out.println(Integer.parseInt(e.getValue().toString()));
-				return Integer.parseInt(e.getValue().toString());
-			}
+			if(c == 1) return Integer.parseInt(e.getValue().toString());
 			c++;
 		}
 		return 0;
@@ -164,42 +165,27 @@ public class Notebot extends Module {
 		/* Read the file */
 		fileMang.createFile("notebot/" + fileName, "");
 		List<String> lines = fileMang.readFileLines("notebot/" + fileName)
-				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//"))).collect(Collectors.toList());
+				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 		for(String s: lines) s = s.replaceAll(" ", " ");
-		
-		/* Find tuner Info */
-		List<String> tunes1 = lines.stream().filter(s -> s.startsWith(";")).collect(Collectors.toList());
-		String[] tunes2 = tunes1.isEmpty() ? new String[] {} : tunes1.get(0).replace(";", "").split(":");
-		List<List<String>> tunes3 = new ArrayList<>();
-		for(String s: tunes2) tunes3.add(Arrays.asList(s.split("-")));
-		
-		/* Parse tuner info into "memory" */
-		for(List<String> s: tunes3) {
-			try { tunes.add(Arrays.asList(Integer.parseInt(s.get(0)), Integer.parseInt(s.get(1))));
-			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: §o" + s); }
-		}
-		
+
 		/* Parse note info into "memory" */
-		lines = lines.stream().filter(s -> !(s.startsWith(";"))).collect(Collectors.toList());
 		for(String s: lines) {
 			String[] s1 = s.split(":");
 			try { notes.add(Arrays.asList(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
 			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Note: §o" + s); }
 		}
 		
-		/* Generate tuners if it doesn't exist */
-		if(tunes.isEmpty()) {
-			List<List<String>> neededTunes = new ArrayList<>();
-			for(String s: lines) {
-				List<String> strings = Arrays.asList(s.split(":"));
-				if(!neededTunes.contains(Arrays.asList(strings.get(1), strings.get(2)))) {
-					neededTunes.add(Arrays.asList(strings.get(1), strings.get(2)));
-				}
+		/* Generate tuners */
+		List<List<String>> neededTunes = new ArrayList<>();
+		for(String s: lines) {
+			List<String> strings = Arrays.asList(s.split(":"));
+			if(!neededTunes.contains(Arrays.asList(strings.get(1), strings.get(2)))) {
+				neededTunes.add(Arrays.asList(strings.get(1), strings.get(2)));
 			}
-			for(List<String> s: neededTunes) {
-				try { tunes.add(Arrays.asList(Integer.parseInt(s.get(0)), Integer.parseInt(s.get(1))));
-				}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: §o" + s); }
-			}
+		}
+		for(List<String> s: neededTunes) {
+			try { tunes.add(Arrays.asList(Integer.parseInt(s.get(0)), Integer.parseInt(s.get(1))));
+			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: §o" + s); }
 		}
 	}
 

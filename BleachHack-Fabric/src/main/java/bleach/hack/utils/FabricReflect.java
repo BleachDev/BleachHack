@@ -31,6 +31,30 @@ public class FabricReflect {
         return field;
 	}
 	
+	public static Object getFieldValue(final Object target, String obfName, String deobfName) {
+		if(target == null) return null;
+        
+		Class<?> cls = target.getClass();
+		Field field = null;
+        for (Class<?> cls1 = cls; cls1 != null; cls1 = cls1.getSuperclass()) {
+            try { field = cls1.getDeclaredField(obfName); } catch (Exception e) {}
+			try { field = cls1.getDeclaredField(deobfName); } catch (Exception e) {}
+			
+			if(field == null) continue;
+			
+			if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
+			try { return field.get(target); } catch (Exception e) {}
+        }
+        
+        for (final Class<?> class1 : ClassUtils.getAllInterfaces(cls)) {
+            try { field = class1.getField(obfName); } catch (Exception e) {}
+			try { field = class1.getField(deobfName); } catch (Exception e) {}
+			
+			if(field != null) break;
+        }
+        try { return field.get(target); } catch (Exception e) { return null; }
+	}
+	
 	public static void writeField(final Object target, final Object value, String obfName, String deobfName) {
 		if(target == null) return;
 		

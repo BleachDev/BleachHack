@@ -16,7 +16,7 @@ public class MixinIngameHud {
 	public void render(float float_1, CallbackInfo info) {
 		try {
 			for(Module m: ModuleManager.getModules()) {
-				m.onOverlay();
+				if(m.isToggled()) m.onOverlay();
 			}
 		}catch(Exception e) {}
 	}

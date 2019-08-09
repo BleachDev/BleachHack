@@ -27,6 +27,7 @@ public class ModuleManager {
 			new Nofall(),
 			new NoSlow(),
 			new Notebot(),
+			new NotebotStealer(),
 			new OffhandCrash(),
 			new PacketFly(),
 			new Peek(),
@@ -38,6 +39,7 @@ public class ModuleManager {
 			new StarGithubPls(),
 			new Step(),
 			new Tracers(),
+			new Trail(),
 			new UI());
 	
 	public static List<Module> getModules() {
@@ -61,7 +63,7 @@ public class ModuleManager {
 	
 	public static void onUpdate() {
 		for(Module m: mods) {
-			if(m.isToggled()) m.onUpdate();
+			try{ if(m.isToggled()) m.onUpdate(); }catch(Exception e) { e.printStackTrace(); }
 		}
 	}
 	

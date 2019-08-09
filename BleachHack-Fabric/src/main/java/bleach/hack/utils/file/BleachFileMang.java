@@ -66,4 +66,10 @@ public class BleachFileMang {
 		} catch (IOException e) { System.out.println("Error Writing File"); } 
 	}
 	
+	/** Returns true if a file exists, returns false otherwise **/
+	public boolean fileExists(String file) {
+		try { return Paths.get(dir.toString(), file).toFile().exists();
+		} catch (Exception e) { return false; }
+	}
+	
 }
