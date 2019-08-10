@@ -32,6 +32,7 @@ public class EntitySpeed extends Module {
 		if (mc.player.getVehicle() == null) return;
 		
 		Entity e = mc.player.getVehicle();
+		e.yaw = mc.player.yaw;
 		double speed = getSettings().get(0).toSlider().getValue();
 		
 		if (e instanceof LlamaEntity) {

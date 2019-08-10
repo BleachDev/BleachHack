@@ -69,7 +69,7 @@ public class ModuleManager {
 	
 	public static void onRender() {
 		for(Module m: mods) {
-			if(m.isToggled()) m.onRender();
+			try{ if(m.isToggled()) m.onRender(); }catch(Exception e) { e.printStackTrace(); }
 		}
 	}
 	
