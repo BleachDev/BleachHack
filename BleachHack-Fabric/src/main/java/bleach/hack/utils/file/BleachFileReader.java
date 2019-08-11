@@ -1,5 +1,6 @@
 package bleach.hack.utils.file;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
@@ -16,16 +17,16 @@ public class BleachFileReader {
 	private static BleachFileMang fileMang = new BleachFileMang();
 	
 	public static void saveModules() {
-		fileMang.createEmptyFile("modules.txt");
+		fileMang.createEmptyFile(Paths.get("modules.txt"));
 		
 		for(Module m: ModuleManager.getModules()) {
 			if(m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
-			fileMang.appendFile("modules.txt", m.getName() + ":" + Boolean.toString(m.isToggled()));
+			fileMang.appendFile(Paths.get("modules.txt"), m.getName() + ":" + Boolean.toString(m.isToggled()));
 		}
 	}
 	
 	public static void readModules() {
-		List<String> lines = fileMang.readFileLines("modules.txt");
+		List<String> lines = fileMang.readFileLines(Paths.get("modules.txt"));
 		
 		for(Module m: ModuleManager.getModules()) {
 			for(String s: lines) {
@@ -41,7 +42,7 @@ public class BleachFileReader {
 	}
 	
 	public static void saveSettings() {
-		fileMang.createEmptyFile("settings.txt");
+		fileMang.createEmptyFile(Paths.get("settings.txt"));
 		
 		for(Module m: ModuleManager.getModules()) {
 			String line = m.getName();
@@ -54,12 +55,12 @@ public class BleachFileReader {
 				count++;
 			}
 			
-			fileMang.appendFile("settings.txt", line);
+			fileMang.appendFile(Paths.get("settings.txt"), line);
 		}
 	}
 	
 	public static void readSettings() {
-		List<String> lines = fileMang.readFileLines("settings.txt");
+		List<String> lines = fileMang.readFileLines(Paths.get("settings.txt"));
 		
 		for(Module m: ModuleManager.getModules()) {
 			for(String s: lines) {
@@ -84,20 +85,20 @@ public class BleachFileReader {
 	}
 	
 	public static void saveClickGui() {
-		fileMang.createEmptyFile("clickgui.txt");
+		fileMang.createEmptyFile(Paths.get("clickgui.txt"));
 		
 		ClickGuiScreen gui = ClickGui.clickGui;
 		
-		fileMang.appendFile("clickgui.txt", gui.modsCmb.getPos()[0] + ":" + gui.modsCmb.getPos()[1]);
-		fileMang.appendFile("clickgui.txt", gui.modsExp.getPos()[0] + ":" + gui.modsExp.getPos()[1]);
-		fileMang.appendFile("clickgui.txt", gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1]);
-		fileMang.appendFile("clickgui.txt", gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1]);
-		fileMang.appendFile("clickgui.txt", gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1]);
-		fileMang.appendFile("clickgui.txt", gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1]);
+		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsCmb.getPos()[0] + ":" + gui.modsCmb.getPos()[1]);
+		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsExp.getPos()[0] + ":" + gui.modsExp.getPos()[1]);
+		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1]);
+		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1]);
+		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1]);
+		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1]);
 	}
 	
 	public static void readClickGui() {
-		List<String> lines = fileMang.readFileLines("clickgui.txt");
+		List<String> lines = fileMang.readFileLines(Paths.get("clickgui.txt"));
 		
 		ClickGuiScreen gui = ClickGui.clickGui;
 		

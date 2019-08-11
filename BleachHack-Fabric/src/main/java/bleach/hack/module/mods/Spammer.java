@@ -1,5 +1,6 @@
 package bleach.hack.module.mods;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +29,8 @@ public class Spammer extends Module {
 	}
 	
 	public void onEnable() {
-		fileMang.createFile("spammer.txt", "");
-		lines = fileMang.readFileLines("spammer.txt");
+		fileMang.createFile(Paths.get("spammer.txt"), "");
+		lines = fileMang.readFileLines(Paths.get("spammer.txt"));
 		lineCount = 0;
 	}
 	
