@@ -24,8 +24,8 @@ public abstract class MixinEntityRenderer<T extends LivingEntity, M extends Enti
 
 	@Inject(at = @At("HEAD"), method = "method_4041(Lnet/minecraft/entity/LivingEntity;DDD)V")
 	public void render(T livingEntity_1, double double_1, double double_2, double double_3, CallbackInfo info) {
-		if(ModuleManager.getModuleByName("Nametags").isToggled()) {
-			((Nametags) ModuleManager.getModuleByName("Nametags")).drawNametags(livingEntity_1);
+		if(ModuleManager.getModule(Nametags.class).isToggled()) {
+			((Nametags) ModuleManager.getModule(Nametags.class)).drawNametags(livingEntity_1);
 		}
 	}
 }

@@ -24,8 +24,8 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 
 	@Inject(at = @At("RETURN"), method = "render(IIF)V")
 	public void render(int int_1, int int_2, float float_1, CallbackInfo info) {
-		if(ModuleManager.getModuleByName("Peek").isToggled()) {
-			((Peek)ModuleManager.getModuleByName("Peek")).drawTooltip(int_1, int_2);
+		if(ModuleManager.getModule(Peek.class).isToggled()) {
+			((Peek) ModuleManager.getModule(Peek.class)).drawTooltip(int_1, int_2);
 		}
 	}
 }

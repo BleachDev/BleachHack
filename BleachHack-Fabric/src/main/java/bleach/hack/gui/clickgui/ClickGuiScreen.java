@@ -3,6 +3,7 @@ package bleach.hack.gui.clickgui;
 import bleach.hack.BleachHack;
 import bleach.hack.module.Category;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ClickGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
 
@@ -29,7 +30,7 @@ public class ClickGuiScreen extends Screen {
 	}
 	
 	public void onClose() {
-		ModuleManager.getModuleByName("ClickGui").setToggled(false);
+		ModuleManager.getModule(ClickGui.class).setToggled(false);
 		this.minecraft.openScreen(null);
 	}
 	
@@ -49,8 +50,10 @@ public class ClickGuiScreen extends Screen {
 		lMousePressed = false;
 		rMousePressed = false;
 		dragging = false;
-		len = (int) Math.round(ModuleManager.getModuleByName("ClickGui")
+		len = (int) Math.round(ModuleManager.getModule(ClickGui.class)
 				.getSettings().get(0).toSlider().getValue());
+		setLen = (int) Math.round(ModuleManager.getModule(ClickGui.class)
+				.getSettings().get(1).toSlider().getValue());
 		super.render(int_1, int_2, float_1);
 	}
 	

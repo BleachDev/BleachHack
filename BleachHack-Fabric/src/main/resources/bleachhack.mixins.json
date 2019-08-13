@@ -13,7 +13,8 @@
     "MixinPlayerEntity",
     "MixinServerScreen",
     "MixinTitleScreen",
-    "MixinKeyboard"
+    "MixinKeyboard",
+    "MixinClientConnection"
   ],
   "injectors": {
     "defaultRequire": 1
