@@ -2,16 +2,11 @@ package bleach.hack.module.mods;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.gui.clickgui.SettingBase;
-import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.network.packet.EntityVelocityUpdateS2CPacket;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author sl

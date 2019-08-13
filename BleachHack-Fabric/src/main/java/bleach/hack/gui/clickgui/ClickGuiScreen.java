@@ -52,8 +52,6 @@ public class ClickGuiScreen extends Screen {
 		dragging = false;
 		len = (int) Math.round(ModuleManager.getModule(ClickGui.class)
 				.getSettings().get(0).toSlider().getValue());
-		setLen = (int) Math.round(ModuleManager.getModule(ClickGui.class)
-				.getSettings().get(1).toSlider().getValue());
 		super.render(int_1, int_2, float_1);
 	}
 	
