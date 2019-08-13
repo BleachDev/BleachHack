@@ -9,8 +9,7 @@ Works on fabric 1.14
 
 Download [fabric for minecraft 1.14](https://fabricmc.net/use/)  
 Download the lastest compiled version of bleachhack from the releases section  
-Put the jar in your forge mods foler  
-Add [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api/files) to your mods folder  
+Put the jar in your mods foler  
 ???  
 Profit
 

@@ -8,7 +8,6 @@ import net.minecraft.text.LiteralText;
 
 public class ClickGuiScreen extends Screen {
 	private int len;
-	private int setLen;
 	
 	private boolean lMousePressed = false;
 	private boolean rMousePressed = false;
@@ -21,12 +20,12 @@ public class ClickGuiScreen extends Screen {
 	}
 	
 	public void initWindows() {
-		modsExp = new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS), "Exploits", len, setLen, 30, 35);
-		modsMsc = new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC), "Misc", len, setLen, 100, 35);
-		modsCmb = new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT), "Combat", len, setLen, 170, 35);
-		modsPly = new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER), "Player", len, setLen, 240, 35);
-		modsMvm = new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT), "Movement", len, setLen, 310, 35);
-		modsRen = new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER), "Render", len, setLen, 380, 35);
+		modsExp = new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS), "Exploits", len, 30, 35);
+		modsMsc = new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC), "Misc", len, 100, 35);
+		modsCmb = new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT), "Combat", len, 170, 35);
+		modsPly = new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER), "Player", len, 240, 35);
+		modsMvm = new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT), "Movement", len, 310, 35);
+		modsRen = new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER), "Render", len, 380, 35);
 	}
 	
 	public void onClose() {
@@ -40,20 +39,18 @@ public class ClickGuiScreen extends Screen {
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		font.drawWithShadow("Binds are changed in the control settings" , 2, height-10, 0xff9999);
 		font.drawWithShadow("Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
-		modsExp.draw(int_1, int_2, lMousePressed, rMousePressed, len, setLen, dragging);
-		modsMsc.draw(int_1, int_2, lMousePressed, rMousePressed, len, setLen, dragging);
-		modsCmb.draw(int_1, int_2, lMousePressed, rMousePressed, len, setLen, dragging);
-		modsPly.draw(int_1, int_2, lMousePressed, rMousePressed, len, setLen, dragging);
-		modsMvm.draw(int_1, int_2, lMousePressed, rMousePressed, len, setLen, dragging);
-		modsRen.draw(int_1, int_2, lMousePressed, rMousePressed, len, setLen, dragging);
+		modsExp.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
+		modsMsc.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
+		modsCmb.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
+		modsPly.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
+		modsMvm.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
+		modsRen.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
 		
 		lMousePressed = false;
 		rMousePressed = false;
 		dragging = false;
 		len = (int) Math.round(ModuleManager.getModuleByName("ClickGui")
 				.getSettings().get(0).toSlider().getValue());
-		setLen = (int) Math.round(ModuleManager.getModuleByName("ClickGui")
-				.getSettings().get(1).toSlider().getValue());
 		super.render(int_1, int_2, float_1);
 	}
 	
