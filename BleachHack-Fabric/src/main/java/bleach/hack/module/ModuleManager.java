@@ -44,7 +44,17 @@ public class ModuleManager {
 	public static List<Module> getModules() {
 		return mods;
 	}
-	
+
+	public static Module getModule(Class<?extends Module> clazz) {
+		for(Module module : mods) {
+			if(module.getClass().equals(clazz)) {
+				return module;
+			}
+		}
+
+		return null;
+	}
+
 	public static Module getModuleByName(String name) {
 	    for (Module m: mods) {
 	        if (name.equals(m.getName())) return m;
