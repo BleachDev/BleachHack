@@ -12,7 +12,8 @@
     "MixinIngameHud",
     "MixinPlayerEntity",
     "MixinServerScreen",
-    "MixinTitleScreen"
+    "MixinTitleScreen",
+    "MixinKeyboard"
   ],
   "injectors": {
     "defaultRequire": 1

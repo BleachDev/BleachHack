@@ -38,7 +38,6 @@ public class Jesus extends Module {
 		
 		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.SEAGRASS);
 
-		if(fluids.contains(mc.world.getBlockState(p).getMaterial())) return true;
-		return false;
-	}
+        return fluids.contains(mc.world.getBlockState(p).getMaterial());
+    }
 }

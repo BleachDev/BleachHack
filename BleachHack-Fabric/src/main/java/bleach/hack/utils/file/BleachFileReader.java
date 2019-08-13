@@ -21,7 +21,7 @@ public class BleachFileReader {
 		
 		for(Module m: ModuleManager.getModules()) {
 			if(m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
-			fileMang.appendFile(Paths.get("modules.txt"), m.getName() + ":" + Boolean.toString(m.isToggled()));
+			fileMang.appendFile(Paths.get("modules.txt"), m.getName() + ":" + m.isToggled());
 		}
 	}
 	

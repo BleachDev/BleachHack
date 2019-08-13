@@ -166,9 +166,8 @@ public class ModuleWindow {
 	}
 	
 	private boolean mouseOver(int minX, int minY, int maxX, int maxY) {
-		if(mouseX > minX && mouseX < maxX && mouseY > minY && mouseY < maxY) return true;
-		return false;
-	}
+        return mouseX > minX && mouseX < maxX && mouseY > minY && mouseY < maxY;
+    }
 	
 	private String cutText(String text, int leng) {
 		String text1 = text;

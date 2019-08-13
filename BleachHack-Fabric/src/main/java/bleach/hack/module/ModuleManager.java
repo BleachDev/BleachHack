@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.module.mods.*;
-import net.minecraft.client.MinecraftClient;
 
 public class ModuleManager {
 
@@ -72,11 +71,15 @@ public class ModuleManager {
 			try{ if(m.isToggled()) m.onRender(); }catch(Exception e) { e.printStackTrace(); }
 		}
 	}
-	
-	public static void updateKeys() {
-		for(Module m: mods) {
-			if(m.getKey().wasPressed() && MinecraftClient.getInstance().currentScreen == null) {
-				m.toggle();
+
+	public static void handleKeyPress(int key) {
+		for (Module m : mods) {
+			try {
+				if (m.getKey() == key) {
+					m.toggle();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
