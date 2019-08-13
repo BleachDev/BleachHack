@@ -14,8 +14,7 @@ import bleach.hack.module.Module;
 public class ClickGui extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingSlider(50, 80, 64, 0, "Length: "),
-			new SettingSlider(50, 90, 70, 0, "Length2: "));
+			new SettingSlider(50, 80, 68, 0, "Length: "));
 	
 	public static ClickGuiScreen clickGui = new ClickGuiScreen();
 	
