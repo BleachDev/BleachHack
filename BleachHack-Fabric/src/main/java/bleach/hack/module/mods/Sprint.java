@@ -11,9 +11,7 @@ public class Sprint extends Module {
 	
 	public void onUpdate() {
 		if(!isToggled()) return;
-		if(mc.player.input.movementSideways != 0 || mc.player.input.movementSideways != 0) {
-			mc.player.setSprinting(true);
-		}
+		mc.player.setSprinting(mc.player.input.movementForward > 0 && mc.player.input.movementSideways != 0 ||
+				mc.player.input.movementForward > 0 && !mc.player.isSneaking());
 	}
-
 }

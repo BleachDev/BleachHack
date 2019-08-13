@@ -19,8 +19,7 @@ public class MixinPlayerEntity {
 	public void tick(CallbackInfo info) {
 		try {
 			ModuleManager.onUpdate();
-			ModuleManager.updateKeys();
-			
+
 			if(MinecraftClient.getInstance().player.age % 100 == 0) {
 				BleachFileReader.saveModules();
 				BleachFileReader.saveSettings();

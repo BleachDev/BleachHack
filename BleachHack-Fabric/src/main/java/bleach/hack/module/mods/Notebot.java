@@ -148,7 +148,7 @@ public class Notebot extends Module {
 	public boolean isNoteblock(BlockPos pos) {
 		/* Checks if this block is a noteblock and the noteblock can be played */
 		if(mc.world.getBlockState(pos).getBlock() instanceof NoteBlock) {
-			if(mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR) return true;
+            return mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
 		}
 		return false;
 	}

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.minecraft.server.network.packet.ClientCommandC2SPacket;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
@@ -49,10 +50,8 @@ public class Killaura extends Module {
 				.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).toToggle().state)
 						|| (e instanceof Monster && getSettings().get(1).toToggle().state)
 						|| (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state)
-						|| (e instanceof ArmorStandEntity && getSettings().get(3).toToggle().state))
-				.collect(Collectors.toList());
-		targets.sort((a,b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player)));
-		
+						|| (e instanceof ArmorStandEntity && getSettings().get(3).toToggle().state)).sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
+
 		for(Entity e: targets) {
 			if(mc.player.distanceTo(e) > getSettings().get(7).toSlider().getValue()
 					|| !e.isAlive()
@@ -62,9 +61,20 @@ public class Killaura extends Module {
 			if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
 				
 			if(delay > reqDelay || reqDelay == 0) {
+				boolean wasSprinting = mc.player.isSprinting();
+
+				if(wasSprinting){
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
+				}
+
 				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e));
 				mc.player.attack(e);
 				mc.player.swingHand(Hand.MAIN_HAND);
+
+				if(wasSprinting){
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+				}
+
 				delay=0;
 			}
 		}

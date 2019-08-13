@@ -4,17 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bleach.hack.gui.clickgui.SettingBase;
-import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
-import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
 
 public class Module {
 
 	protected MinecraftClient mc = MinecraftClient.getInstance();
 	private String name;
-	private FabricKeyBinding key;
+	private int key;
 	private boolean toggled;
 	private Category category;
 	private String desc;
@@ -22,7 +18,7 @@ public class Module {
 	
 	public Module(String nm, int k, Category c, String d, List<SettingBase> s) {
 		name = nm;
-		registerBind(nm, k);
+		setKey(k);
 		category = c;
 		desc = d;
 		if(s != null) settings = s;
@@ -61,7 +57,7 @@ public class Module {
 		this.name = name;
 	}
 
-	public FabricKeyBinding getKey() {
+	public int getKey() {
 		return key;
 	}
 	
@@ -69,7 +65,7 @@ public class Module {
 		return settings;
 	}
 
-	public void setKey(FabricKeyBinding key) {
+	public void setKey(int key) {
 		this.key = key;
 	}
 
@@ -79,12 +75,6 @@ public class Module {
 
 	public void setToggled(boolean toggled) {
 		this.toggled = toggled;
-	}
-	
-	public void registerBind(String name, int keycode) {
-		this.key = FabricKeyBinding.Builder.create(
-				new Identifier("bleachhack", name.toLowerCase()), InputUtil.Type.KEYSYM, keycode, "BleachHack").build();
-		KeyBindingRegistry.INSTANCE.register(key);
 	}
 	
 }
