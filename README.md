@@ -19,23 +19,20 @@ Profit
 
 Download the project  
 Start A Command Prompt in the BleachHack-Fabric folder  
-Generate the configuration for your IDE
+Generate the needed files for your preferred IDE.
+
 Windows Users
 
-Eclipse
 > gradlew genEclipseRuns eclipse
-
-Idea
+OR
 > gradlew genSources idea
 
 Linux
+
 Mark gradlew as executable
 > chmod +x ./gradlew
-
-Eclipse  
 > ./gradlew genEclipseRuns eclipse
-
-Idea
+OR
 > ./gradlew genSources idea
 
 Start a new workspace in eclipse  
