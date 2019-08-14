@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -14,6 +16,7 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.file.BleachFileMang;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 
@@ -28,25 +31,30 @@ public class NotebotStealer extends Module {
 	public NotebotStealer() {
 		super("NotebotStealer", -1, Category.MISC, "Steals noteblock songs", null);
 	}
-	
+
+	@Override
 	public void onEnable() {
+		BleachHack.getEventBus().register(this);
 		notes.clear();
 		prevSoundMap.clear();
 		ticks = 0;
 	}
-	
+
+	@Override
 	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
 		int i = 0;
 		String s = "";
-		
+
 		while(fileMang.fileExists(Paths.get(fileMang.getDir().toString(), "notebot", "notebot" + i + ".txt"))) i++;
 		for(List<Integer> i1: notes) s+= i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
 		fileMang.appendFile(Paths.get(fileMang.getDir().toString(), "notebot", "notebot" + i + ".txt"), s);
 		BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public void onUpdate() {
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		Multimap<SoundCategory, SoundInstance> soundMap = (Multimap<SoundCategory, SoundInstance>) FabricReflect.getFieldValue(
 					FabricReflect.getFieldValue(mc.getSoundManager(), "a", "soundSystem"), "a", "sounds");
 		

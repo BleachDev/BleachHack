@@ -3,6 +3,9 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingBase;
@@ -20,8 +23,15 @@ public class Fullbright extends Module {
 	public Fullbright() {
 		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.", settings);
 	}
-	
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
 	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
 		mc.options.gamma = 1;
 		mc.player.removePotionEffect(StatusEffects.NIGHT_VISION);
 		//Vanilla code to remap light level table.
@@ -30,8 +40,9 @@ public class Fullbright extends Module {
 			mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) / (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F;
 		}
 	}
-	
-	public void onUpdate() {
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		if(getSettings().get(0).toMode().mode == 0) {
 			if(mc.options.gamma < 16) mc.options.gamma += 1.2;
 		} else if(getSettings().get(0).toMode().mode == 1) {

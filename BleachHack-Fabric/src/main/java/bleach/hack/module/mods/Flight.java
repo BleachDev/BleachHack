@@ -3,6 +3,9 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingBase;
@@ -21,13 +24,21 @@ public class Flight extends Module {
 	public Flight() {
 		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly", settings);
 	}
-	
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
 	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
 		if(!mc.player.abilities.creativeMode) mc.player.abilities.allowFlying = false;
 		mc.player.abilities.flying = false;
 	}
 
-	public void onUpdate() {
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		float speed = (float) getSettings().get(1).toSlider().getValue();
 		
 		if(getSettings().get(0).toMode().mode == 0) {

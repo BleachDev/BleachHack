@@ -3,6 +3,9 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingBase;
@@ -22,8 +25,19 @@ public class Speed extends Module {
 	public Speed() {
 		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, idk what do you expect?", settings);
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		double speeds = getSettings().get(1).toSlider().getValue() / 30;
 		
 		/* OnGround */

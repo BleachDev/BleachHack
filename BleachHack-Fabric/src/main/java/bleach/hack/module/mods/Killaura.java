@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket;
 import org.lwjgl.glfw.GLFW;
 
@@ -40,8 +43,19 @@ public class Killaura extends Module {
 	public Killaura() {
 		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities", settings);
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		delay++;
 		int reqDelay = (int) Math.round(20/getSettings().get(8).toSlider().getValue());
 		if(getSettings().get(6).toToggle().state) reqDelay = 10;
@@ -79,5 +93,4 @@ public class Killaura extends Module {
 			}
 		}
 	}
-
 }

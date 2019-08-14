@@ -1,7 +1,10 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.packet.PlayerActionC2SPacket;
@@ -14,8 +17,19 @@ public class AutoTotem extends Module {
 	public AutoTotem() {
 		super("AutoTotem", -1, Category.COMBAT, "Automatically equips totems.", null);
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		if(mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING) return;
 		
 		/*Inventory*/

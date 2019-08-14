@@ -3,11 +3,14 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.WorldUtils;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.Vec3d;
@@ -25,8 +28,19 @@ public class NoSlow extends Module {
 	public NoSlow() {
 		super("NoSlow", -1, Category.MOVEMENT, "Disables Stuff From Slowing You Down", settings);
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		if(!isToggled()) return;
 			
 		/* Slowness */

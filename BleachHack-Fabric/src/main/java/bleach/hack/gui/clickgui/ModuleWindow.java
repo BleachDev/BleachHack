@@ -66,6 +66,8 @@ public class ModuleWindow {
 			
 		int count = 0;
 		for(Entry<Module, Boolean> m: new LinkedHashMap<>(mods).entrySet()) {
+			if(m.getKey().getName().equals("ClickGui")) continue;
+
 			Screen.fill(posX, posY+(count*12), posX+len, posY+12+(count*12),
 					mouseOver(posX, posY+(count*12), posX+len, posY+10+(count*12)) ? 0x70303070 : 0x70000000);
 			font.drawWithShadow(cutText(m.getKey().getName(), len),

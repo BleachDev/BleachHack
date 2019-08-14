@@ -3,6 +3,9 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingBase;
@@ -27,32 +30,37 @@ public class Freecam extends Module {
 	public Freecam() {
 		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does", settings);
 	}
-	
+
+	@Override
 	public void onEnable() {
+		BleachHack.getEventBus().register(this);
 		playerPos = new double[]{mc.player.x, mc.player.y, mc.player.z};
-		
+
 		camera = new BoatEntity(mc.world, mc.player.z, mc.player.y, mc.player.z);
 		camera.copyPositionAndRotation(mc.player);
 		camera.horizontalCollision = false;
 		camera.verticalCollision = false;
-		
+
 		dummy = new ArmorStandEntity(mc.world, mc.player.x, mc.player.y, mc.player.z);
 		dummy.copyPositionAndRotation(mc.player);
 		dummy.setBoundingBox(dummy.getBoundingBox().expand(0.1));
 		EntityUtils.setGlowing(dummy, Formatting.RED, "starmygithubpls");
-		
+
 		mc.world.addEntity(camera.getEntityId(), camera);
 		mc.world.addEntity(dummy.getEntityId(), dummy);
 		mc.cameraEntity = camera;
 	}
-	
+
+	@Override
 	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
 		mc.cameraEntity = mc.player;
 		camera.remove();
 		dummy.remove();
 	}
-	
-	public void onUpdate() {
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		mc.player.setVelocity(0, 0, 0);
 		mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
 		

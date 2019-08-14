@@ -3,11 +3,14 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EnderCrystalEntity;
@@ -30,8 +33,24 @@ public class ESP extends Module {
 	public ESP() {
 		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.", settings);
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+		for(Entity e: mc.world.getEntities()) {
+			if(e != mc.player) {
+				if(e.isGlowing()) e.setGlowing(false);
+			}
+		}
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		for(Entity e: mc.world.getEntities()) {
 			if(e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.RED, "players");
@@ -57,13 +76,4 @@ public class ESP extends Module {
 			}
 		}
 	}
-	
-	public void onDisable() {
-		for(Entity e: mc.world.getEntities()) {
-			if(e != mc.player) {
-				if(e.isGlowing()) e.setGlowing(false);
-			}
-		}
-	}
-
 }

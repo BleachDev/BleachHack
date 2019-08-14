@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -16,6 +19,7 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.file.BleachFileMang;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.block.enums.Instrument;
@@ -44,8 +48,9 @@ public class Notebot extends Module {
 	public Notebot() {
 		super("Notebot", -1, Category.MISC, "Plays those noteblocks nicely", settings);
 	}
-	
+	@Override
 	public void onEnable() {
+		BleachHack.getEventBus().register(this);
 		blockTunes.clear();
 		if(mc.player.abilities.creativeMode) {
 			BleachLogger.errorMessage("Not In Survival Mode!");
@@ -57,7 +62,7 @@ public class Notebot extends Module {
 			return;
 		}else readFile(filePath);
 		timer = -10;
-		
+
 		/* I think my brain died while making this work */
 		for(List<Integer> i: tunes) {
 			loop: for(int x = -4; x <= 4; x++) {
@@ -76,8 +81,14 @@ public class Notebot extends Module {
 			BleachLogger.warningMessage("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
 		}
 	}
-	
-	public void onRender() {
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onRender(Event3DRender event3DRender) {
 		for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 			if(getNote(e.getKey()) != e.getValue()) {
 				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);
@@ -86,8 +97,9 @@ public class Notebot extends Module {
 			}
 		}
 	}
-	
-	public void onUpdate() {
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		/* Tune Noteblocks */
 		if(getSettings().get(0).toToggle().state) {
 			for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {

@@ -3,11 +3,14 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.WorldUtils;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
 public class Step extends Module {
@@ -21,8 +24,20 @@ public class Step extends Module {
 	
 	private boolean flag;
 	private double pos;
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+		mc.player.stepHeight = 0.5F;
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		if(!WorldUtils.NONSOLID_BLOCKS.contains(
 				mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight()+1, 0)).getBlock())) return;
 		
@@ -55,9 +70,4 @@ public class Step extends Module {
 			}
 		}
 	}
-	
-	public void onDisable() {
-		mc.player.stepHeight = 0.5F;
-	}
-
 }

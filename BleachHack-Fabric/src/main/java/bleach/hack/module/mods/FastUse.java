@@ -3,6 +3,9 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingBase;
@@ -21,8 +24,19 @@ public class FastUse extends Module {
 	public FastUse() {
 		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster", settings);
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		/* set rightClickDelay to 0 */
 		FabricReflect.writeField(mc, 0, "field_1752", "itemUseCooldown");
 		
@@ -33,5 +47,4 @@ public class FastUse extends Module {
 			}
 		}
 	}
-
 }

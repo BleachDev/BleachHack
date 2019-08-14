@@ -3,10 +3,13 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
 
 public class ElytraFly extends Module {
@@ -17,8 +20,19 @@ public class ElytraFly extends Module {
 	public ElytraFly() {
 		super("ElytraFly", -1, Category.MOVEMENT, "Improves the elytra", settings);
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onEnable() {
+		BleachHack.getEventBus().register(this);
+	}
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		if (mc.player.isFallFlying()) {
 			Vec3d vec3d = new Vec3d(0,0,getSettings().get(0).toSlider().getValue())
 					.rotateX(-(float) Math.toRadians(mc.player.pitch))
@@ -30,5 +44,4 @@ public class ElytraFly extends Module {
 					mc.player.getVelocity().z + vec3d.z + (vec3d.z - mc.player.getVelocity().z));
 		}
 	}
-
 }
