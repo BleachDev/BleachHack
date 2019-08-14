@@ -1,10 +1,12 @@
 package bleach.hack.module;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.SettingBase;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 
 public class Module {
@@ -36,8 +38,26 @@ public class Module {
 		}
 	}
 	
-	public void onEnable() {}
-	public void onDisable() {}
+	public void onEnable() {
+		Method[] methods = this.getClass().getMethods();
+		for(Method method : methods) {
+			if (method.isAnnotationPresent(Subscribe.class)) {
+				BleachHack.getEventBus().register(this);
+				break;
+			}
+		}
+	}
+
+	public void onDisable() {
+		Method[] methods = this.getClass().getMethods();
+		for(Method method : methods) {
+			if (method.isAnnotationPresent(Subscribe.class)) {
+				BleachHack.getEventBus().unregister(this);
+				break;
+			}
+		}
+	}
+
 	public void onOverlay() {}
 
 	public String getName() {

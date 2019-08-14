@@ -19,11 +19,26 @@ Profit
 
 Download the project  
 Start A Command Prompt in the BleachHack-Fabric folder  
-If you are on windows, run the command:
+Generate the needed files for your preferred IDE.
+
+Windows Users
+
 > gradlew genEclipseRuns eclipse
 
-Or if you are on linux:  
-> bash ./gradlew genEclipseRuns eclipse
+OR
+
+> gradlew genSources idea
+
+Linux
+
+Mark gradlew as executable
+> chmod +x ./gradlew
+
+> ./gradlew genEclipseRuns eclipse
+
+OR
+
+> ./gradlew genSources idea
 
 Start a new workspace in eclipse  
 Click File > Import... > Gradle > Gradle Project  

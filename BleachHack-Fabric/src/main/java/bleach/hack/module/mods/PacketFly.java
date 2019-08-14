@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -35,15 +34,10 @@ public class PacketFly extends Module {
 
 	@Override
 	public void onEnable() {
+		super.onEnable();
 		posX = mc.player.x;
 		posY = mc.player.y;
 		posZ = mc.player.z;
-		BleachHack.getEventBus().register(this);
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe

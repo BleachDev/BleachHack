@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -19,16 +18,6 @@ public class Jesus extends Module {
 
 	public Jesus() {
 		super("Jesus", GLFW.GLFW_KEY_J, Category.PLAYER, "Allows you to walk on water", null);
-	}
-
-	@Override
-	public void onEnable() {
-		BleachHack.getEventBus().register(this);
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe

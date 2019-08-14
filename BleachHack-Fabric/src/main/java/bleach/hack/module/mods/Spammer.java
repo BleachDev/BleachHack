@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
@@ -33,15 +32,10 @@ public class Spammer extends Module {
 
 	@Override
 	public void onEnable() {
-		BleachHack.getEventBus().register(this);
+		super.onEnable();
 		fileMang.createFile(Paths.get("spammer.txt"), "");
 		lines = fileMang.readFileLines(Paths.get("spammer.txt"));
 		lineCount = 0;
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe
