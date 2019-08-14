@@ -3,11 +3,13 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.event.events.Event3DRender;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.RenderUtils;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.entity.BarrelBlockEntity;
 import net.minecraft.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -46,8 +48,9 @@ public class ChestESP extends Module {
 	public ChestESP() {
 		super("ChestESP", -1, Category.RENDER, "Draws a box around storage containers.", settings);
 	}
-	
-	public void onRender() {
+
+	@Subscribe
+	public void onRender(Event3DRender event3DRender) {
 		for(BlockEntity e: mc.world.blockEntities) {
 			if((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity)
 					&& getSettings().get(0).toToggle().state) {

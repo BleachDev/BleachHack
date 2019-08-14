@@ -1,5 +1,7 @@
 package bleach.hack.mixin;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 
@@ -17,9 +19,8 @@ public class MixinPlayerEntity {
 	
 	@Inject(at = @At("RETURN"), method = "tick()V")
 	public void tick(CallbackInfo info) {
+		BleachHack.getEventBus().post(new EventTick());
 		try {
-			ModuleManager.onUpdate();
-
 			if(MinecraftClient.getInstance().player.age % 100 == 0) {
 				BleachFileReader.saveModules();
 				BleachFileReader.saveSettings();

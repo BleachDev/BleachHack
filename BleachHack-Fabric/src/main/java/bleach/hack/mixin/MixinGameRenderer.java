@@ -1,5 +1,7 @@
 package bleach.hack.mixin;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.Event3DRender;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 
@@ -15,8 +17,6 @@ public class MixinGameRenderer {
 	
 	@Inject(at = @At("HEAD"), method = "renderHand(Lnet/minecraft/client/render/Camera;F)V")
 	private void renderHand(Camera camera_1, float float_1, CallbackInfo info) {
-		try { 
-			ModuleManager.onRender();
-    	}catch(Exception e) {}
+		BleachHack.getEventBus().post(new Event3DRender());
 	}
 }

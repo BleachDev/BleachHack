@@ -18,10 +18,12 @@ public class NoVelocity extends Module {
         super("NoVelocity", -1, Category.PLAYER, "If you take some damage, you don't move. Maybe.", null);
     }
 
+    @Override
     public void onEnable() {
         BleachHack.getEventBus().register(this);
     }
 
+    @Override
     public void onDisable() {
         BleachHack.getEventBus().unregister(this);
     }

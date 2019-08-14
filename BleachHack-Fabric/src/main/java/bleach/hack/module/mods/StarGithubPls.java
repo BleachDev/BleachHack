@@ -16,5 +16,4 @@ public class StarGithubPls extends Module {
 		
 		this.setToggled(false);
 	}
-
 }

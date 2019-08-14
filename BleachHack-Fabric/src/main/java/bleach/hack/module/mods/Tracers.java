@@ -3,6 +3,7 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.event.events.Event3DRender;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -10,6 +11,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EnderCrystalEntity;
@@ -33,8 +35,9 @@ public class Tracers extends Module {
 	public Tracers() {
 		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.", settings);
 	}
-	
-	public void onRender(){
+
+	@Subscribe
+	public void onRender(Event3DRender event3DRender) {
 		final float thick = (float) getSettings().get(6).toSlider().getValue();
 		
 		for(Entity e: mc.world.getEntities()) {

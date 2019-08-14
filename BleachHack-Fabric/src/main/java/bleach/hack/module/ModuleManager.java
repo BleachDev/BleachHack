@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
+import com.google.common.eventbus.Subscribe;
 
 public class ModuleManager {
 
@@ -70,27 +72,12 @@ public class ModuleManager {
 	    }
 	    return mds;
 	}
-	
-	public static void onUpdate() {
-		for(Module m: mods) {
-			try{ if(m.isToggled()) m.onUpdate(); }catch(Exception e) { e.printStackTrace(); }
-		}
-	}
-	
-	public static void onRender() {
-		for(Module m: mods) {
-			try{ if(m.isToggled()) m.onRender(); }catch(Exception e) { e.printStackTrace(); }
-		}
-	}
 
-	public static void handleKeyPress(int key) {
+	@Subscribe
+	public static void handleKeyPress(EventKeyPress eventKeyPress) {
 		for (Module m : mods) {
-			try {
-				if (m.getKey() == key) {
-					m.toggle();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (m.getKey() == eventKeyPress.getKey()) {
+				m.toggle();
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package bleach.hack.module;
 import java.util.ArrayList;
 import java.util.List;
 
+import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.SettingBase;
 import net.minecraft.client.MinecraftClient;
 
@@ -37,8 +38,6 @@ public class Module {
 	
 	public void onEnable() {}
 	public void onDisable() {}
-	public void onUpdate() {}
-	public void onRender() {}
 	public void onOverlay() {}
 
 	public String getName() {

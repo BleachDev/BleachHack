@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventTick;
 import com.google.common.collect.Iterables;
 
 import bleach.hack.gui.clickgui.SettingBase;
@@ -13,6 +17,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.RenderUtils;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
 
 public class Trail extends Module {
@@ -28,12 +33,20 @@ public class Trail extends Module {
 	public Trail() {
 		super("Trail", -1, Category.RENDER, "Shows a trail where you go", settings);
 	}
-	
+
+	@Override
 	public void onEnable() {
+		BleachHack.getEventBus().register(this);
 		if(!getSettings().get(1).toToggle().state) trails.clear();
 	}
-	
-	public void onUpdate() {
+
+	@Override
+	public void onDisable() {
+		BleachHack.getEventBus().unregister(this);
+	}
+
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		if(!getSettings().get(0).toToggle().state) return;
 		
 		if(trails.isEmpty()) trails.add(Arrays.asList(mc.player.getPos().add(0, 0.1, 0), mc.player.getPos()));
@@ -41,8 +54,9 @@ public class Trail extends Module {
 			trails.add(Arrays.asList(Iterables.getLast(trails).get(1), mc.player.getPos().add(0, 0.1, 0)));
 		}
 	}
-	
-	public void onRender() {
+
+	@Subscribe
+	public void onRender(Event3DRender event3DRender) {
 		Color clr = new Color(0, 0, 0);
 		if(getSettings().get(2).toMode().mode == 0) clr = new Color(200, 50, 50);
 		else if(getSettings().get(2).toMode().mode == 1) clr = new Color(50, 200, 50);
