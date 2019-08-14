@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -25,13 +24,8 @@ public class Fullbright extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		BleachHack.getEventBus().register(this);
-	}
-
-	@Override
 	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
+		super.onDisable();
 		mc.options.gamma = 1;
 		mc.player.removePotionEffect(StatusEffects.NIGHT_VISION);
 		//Vanilla code to remap light level table.

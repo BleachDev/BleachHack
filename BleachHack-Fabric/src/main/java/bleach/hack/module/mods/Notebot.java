@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.Event3DRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
@@ -48,9 +47,10 @@ public class Notebot extends Module {
 	public Notebot() {
 		super("Notebot", -1, Category.MISC, "Plays those noteblocks nicely", settings);
 	}
+
 	@Override
 	public void onEnable() {
-		BleachHack.getEventBus().register(this);
+		super.onEnable();
 		blockTunes.clear();
 		if(mc.player.abilities.creativeMode) {
 			BleachLogger.errorMessage("Not In Survival Mode!");
@@ -80,11 +80,6 @@ public class Notebot extends Module {
 		if(tunes.size() > blockTunes.size()) {
 			BleachLogger.warningMessage("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
 		}
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe

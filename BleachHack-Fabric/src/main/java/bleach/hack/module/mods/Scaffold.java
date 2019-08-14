@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -36,16 +35,6 @@ public class Scaffold extends Module {
 	
 	public Scaffold() {
 		super("Scaffold", GLFW.GLFW_KEY_N, Category.PLAYER, "Places blocks under you", settings);
-	}
-
-	@Override
-	public void onEnable() {
-		BleachHack.getEventBus().register(this);
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe

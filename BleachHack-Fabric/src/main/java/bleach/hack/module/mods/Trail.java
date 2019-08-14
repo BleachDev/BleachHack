@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.Event3DRender;
 import bleach.hack.event.events.EventTick;
 import com.google.common.collect.Iterables;
@@ -36,13 +35,8 @@ public class Trail extends Module {
 
 	@Override
 	public void onEnable() {
-		BleachHack.getEventBus().register(this);
+		super.onEnable();
 		if(!getSettings().get(1).toToggle().state) trails.clear();
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe

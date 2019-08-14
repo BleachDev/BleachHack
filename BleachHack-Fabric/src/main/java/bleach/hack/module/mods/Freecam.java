@@ -33,7 +33,7 @@ public class Freecam extends Module {
 
 	@Override
 	public void onEnable() {
-		BleachHack.getEventBus().register(this);
+		super.onEnable();
 		playerPos = new double[]{mc.player.x, mc.player.y, mc.player.z};
 
 		camera = new BoatEntity(mc.world, mc.player.z, mc.player.y, mc.player.z);
@@ -53,6 +53,7 @@ public class Freecam extends Module {
 
 	@Override
 	public void onDisable() {
+		super.onDisable();
 		BleachHack.getEventBus().unregister(this);
 		mc.cameraEntity = mc.player;
 		camera.remove();

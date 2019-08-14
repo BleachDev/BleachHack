@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -34,7 +33,7 @@ public class NotebotStealer extends Module {
 
 	@Override
 	public void onEnable() {
-		BleachHack.getEventBus().register(this);
+		super.onEnable();
 		notes.clear();
 		prevSoundMap.clear();
 		ticks = 0;
@@ -42,7 +41,7 @@ public class NotebotStealer extends Module {
 
 	@Override
 	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
+		super.onDisable();
 		int i = 0;
 		String s = "";
 

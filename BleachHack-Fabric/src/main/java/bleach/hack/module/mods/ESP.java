@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -35,13 +34,8 @@ public class ESP extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		BleachHack.getEventBus().register(this);
-	}
-
-	@Override
 	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
+		super.onDisable();
 		for(Entity e: mc.world.getEntities()) {
 			if(e != mc.player) {
 				if(e.isGlowing()) e.setGlowing(false);

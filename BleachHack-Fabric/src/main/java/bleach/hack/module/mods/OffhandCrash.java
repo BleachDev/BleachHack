@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -27,16 +26,6 @@ public class OffhandCrash extends Module {
 	
 	public OffhandCrash() {
 		super("OffhandCrash", GLFW.GLFW_KEY_P, Category.EXPLOITS, "Lags people using the snowball exploit", settings);
-	}
-
-	@Override
-	public void onEnable() {
-		BleachHack.getEventBus().register(this);
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe

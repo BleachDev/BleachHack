@@ -1,6 +1,5 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -16,16 +15,6 @@ import net.minecraft.client.network.packet.EntityVelocityUpdateS2CPacket;
 public class NoVelocity extends Module {
     public NoVelocity() {
         super("NoVelocity", -1, Category.PLAYER, "If you take some damage, you don't move. Maybe.", null);
-    }
-
-    @Override
-    public void onEnable() {
-        BleachHack.getEventBus().register(this);
-    }
-
-    @Override
-    public void onDisable() {
-        BleachHack.getEventBus().unregister(this);
     }
 
     //The name of the method doesn't matter nor does it need to be consistent between modules, what matters is the argument.

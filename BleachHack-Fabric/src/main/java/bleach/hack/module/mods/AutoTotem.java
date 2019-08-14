@@ -1,6 +1,5 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -16,16 +15,6 @@ public class AutoTotem extends Module {
 
 	public AutoTotem() {
 		super("AutoTotem", -1, Category.COMBAT, "Automatically equips totems.", null);
-	}
-
-	@Override
-	public void onEnable() {
-		BleachHack.getEventBus().register(this);
-	}
-
-	@Override
-	public void onDisable() {
-		BleachHack.getEventBus().unregister(this);
 	}
 
 	@Subscribe
