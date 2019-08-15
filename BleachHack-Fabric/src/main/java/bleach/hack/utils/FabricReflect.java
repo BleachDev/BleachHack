@@ -73,11 +73,11 @@ public class FabricReflect {
         
 	}
 	
-	public static Object invokeMethod(Object target, String obfName, String deobfName, Object[] args, Class<?>[] paramTypes) {
+	public static Object invokeMethod(Object target, String obfName, String deobfName, Object[] args) {
 		/* i just gave up here */
 		Object o = null;
-        try { o = MethodUtils.invokeMethod(target, true, obfName, args); }catch(Exception e) {}
-        try { o = MethodUtils.invokeMethod(target, true, deobfName, args); }catch(Exception e) {}
+        try { o = MethodUtils.invokeMethod(target, true, obfName, args); }catch(Exception e) {
+        	try { o = MethodUtils.invokeMethod(target, true, deobfName, args); }catch(Exception e1) {}}
         return o;
     }
 }

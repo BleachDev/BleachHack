@@ -11,6 +11,7 @@ import com.google.common.eventbus.Subscribe;
 public class ModuleManager {
 
 	private static List<Module> mods = Arrays.asList(
+			new Ambience(),
 			new AutoTotem(),
 			new ChestESP(),
 			new ClickGui(),

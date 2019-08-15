@@ -55,7 +55,7 @@ public class NotebotStealer extends Module {
 	@Subscribe
 	public void onTick(EventTick eventTick) {
 		Multimap<SoundCategory, SoundInstance> soundMap = (Multimap<SoundCategory, SoundInstance>) FabricReflect.getFieldValue(
-					FabricReflect.getFieldValue(mc.getSoundManager(), "a", "soundSystem"), "a", "sounds");
+					FabricReflect.getFieldValue(mc.getSoundManager(), "field_5590", "soundSystem"), "field_18951", "sounds");
 		
 		for(Entry<SoundCategory, SoundInstance> e: HashMultimap.create(soundMap).entries()) {
 			if(prevSoundMap.containsEntry(e.getKey(), e.getValue())) soundMap.remove(e.getKey(), e.getValue());

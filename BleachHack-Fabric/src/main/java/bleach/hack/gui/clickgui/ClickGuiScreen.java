@@ -29,6 +29,10 @@ public class ClickGuiScreen extends Screen {
 		modsRen = new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER), "Render", len, 380, 35);
 	}
 	
+	public boolean isPauseScreen() {
+	      return false;
+	}
+	
 	public void onClose() {
 		ModuleManager.getModule(ClickGui.class).setToggled(false);
 		this.minecraft.openScreen(null);
