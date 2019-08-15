@@ -17,9 +17,6 @@ import bleach.hack.utils.WorldUtils;
 import net.minecraft.item.BlockItem;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
-import net.minecraft.server.network.packet.PlayerInteractBlockC2SPacket;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -48,6 +45,19 @@ public class Scaffold extends Module {
 		
 		if(!(mc.player.inventory.getMainHandStack().getItem() instanceof BlockItem)) return;
 		
+		int slot = -1;
+		int prevSlot = mc.player.inventory.selectedSlot;
+		if(mc.player.inventory.getMainHandStack().getItem() instanceof BlockItem) {
+			slot = mc.player.inventory.selectedSlot;
+		}else for(int i = 0; i < 9; i++) {
+			if(mc.player.inventory.getInvStack(i).getItem() instanceof BlockItem) {
+				slot = i;
+				break;
+			}
+		}
+		if(slot == -1) return;
+		
+		mc.player.inventory.selectedSlot = slot;
 		double range = getSettings().get(0).toSlider().getValue();
 		for(int r = 0; r < 5; r++) {
 			Vec3d r1 = new Vec3d(0,-0.85,0);
@@ -62,6 +72,7 @@ public class Scaffold extends Module {
 				return;
 			}
 		}
+		mc.player.inventory.selectedSlot = prevSlot;
 	}
 	
 	public void placeBlockAuto(BlockPos block) {
@@ -70,10 +81,9 @@ public class Scaffold extends Module {
 			if(!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
 				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));}
-				mc.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND,
-						new BlockHitResult(new Vec3d(block), d.getOpposite(), block.offset(d), false)));
+				mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, 
+						new BlockHitResult(new Vec3d(block), d.getOpposite(), block.offset(d), false));
 				mc.player.swingHand(Hand.MAIN_HAND);
-				mc.world.playSound(block, SoundEvents.BLOCK_NOTE_BLOCK_HAT, SoundCategory.BLOCKS, 1f, 1f, false);
 				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));}
 				lastPlaced.put(block, 5);

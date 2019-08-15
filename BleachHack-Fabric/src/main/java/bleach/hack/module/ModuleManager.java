@@ -29,6 +29,7 @@ public class ModuleManager {
 			new NoSlow(),
 			new Notebot(),
 			new NotebotStealer(),
+			new NoVelocity(),
 			new OffhandCrash(),
 			new PacketFly(),
 			new Peek(),
@@ -41,8 +42,7 @@ public class ModuleManager {
 			new Step(),
 			new Tracers(),
 			new Trail(),
-			new UI(),
-			new NoVelocity());
+			new UI());
 	
 	public static List<Module> getModules() {
 		return mods;

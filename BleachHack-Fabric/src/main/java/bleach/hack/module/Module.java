@@ -31,11 +31,8 @@ public class Module {
 	
 	public void toggle() {
 		toggled = !toggled;
-		if(toggled) {
-			onEnable();
-		}else {
-			onDisable();
-		}
+		if(toggled) onEnable();
+		else onDisable();
 	}
 	
 	public void onEnable() {
@@ -94,6 +91,8 @@ public class Module {
 
 	public void setToggled(boolean toggled) {
 		this.toggled = toggled;
+		if(toggled) onEnable();
+		else onDisable();
 	}
 	
 }

@@ -3,7 +3,7 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventPreTick;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -54,15 +54,18 @@ public class Freecam extends Module {
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		BleachHack.getEventBus().unregister(this);
 		mc.cameraEntity = mc.player;
 		camera.remove();
 		dummy.remove();
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onPreTick(EventPreTick eventPreTick) {
 		mc.player.setVelocity(0, 0, 0);
+	}
+	
+	@Subscribe
+	public void onTick(EventTick eventTick) {
 		mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
 		
 		dummy.yaw = camera.yaw = mc.player.yaw;

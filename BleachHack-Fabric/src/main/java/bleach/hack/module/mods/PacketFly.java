@@ -3,6 +3,7 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.event.events.EventPreTick;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -41,13 +42,17 @@ public class PacketFly extends Module {
 	}
 
 	@Subscribe
+	public void onPreTick(EventPreTick eventTick) {
+		mc.player.setVelocity(0, 0, 0);
+	}
+	
+	@Subscribe
 	public void onTick(EventTick eventTick) {
 		double hspeed = getSettings().get(1).toSlider().getValue();
 		double vspeed = getSettings().get(2).toSlider().getValue();
 		
 		if(!mc.player.isAlive()) return;
 		timer++;
-		mc.player.setVelocity(0, 0, 0);
 		
 		if(getSettings().get(0).toMode().mode == 0) {
 			if(mc.options.keyJump.isPressed()) posY += vspeed;
@@ -66,8 +71,10 @@ public class PacketFly extends Module {
 			}
 			
 			mc.player.noClip = true;
-			mc.player.setPosition(posX, posY, posZ);
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket());
+			mc.player.setPositionAnglesAndUpdate(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
+			
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
+			//mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY - 420, posZ, true));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket());
 			
 		}else if(getSettings().get(0).toMode().mode == 1) {

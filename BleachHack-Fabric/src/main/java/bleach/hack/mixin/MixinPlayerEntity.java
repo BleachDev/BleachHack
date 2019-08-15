@@ -1,6 +1,7 @@
 package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventPreTick;
 import bleach.hack.event.events.EventTick;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -10,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachQueue;
 import bleach.hack.utils.file.BleachFileReader;
 
@@ -29,5 +29,10 @@ public class MixinPlayerEntity {
 			
 			BleachQueue.nextQueue();
 		}catch(Exception e) {}
+	}
+	
+	@Inject(at = @At("HEAD"), method = "tick()V")
+	public void tick2(CallbackInfo info) {
+		BleachHack.getEventBus().post(new EventPreTick());
 	}
 }

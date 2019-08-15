@@ -2,7 +2,6 @@ package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventKeyPress;
-import bleach.hack.module.ModuleManager;
 import net.minecraft.client.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
