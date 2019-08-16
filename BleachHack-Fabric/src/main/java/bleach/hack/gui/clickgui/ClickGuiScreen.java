@@ -13,6 +13,7 @@ public class ClickGuiScreen extends Screen {
 	private boolean lMousePressed = false;
 	private boolean rMousePressed = false;
 	private boolean dragging = false;
+	private int key;
 	
 	public ModuleWindow modsExp, modsMsc, modsCmb, modsPly, modsMvm, modsRen;
 	
@@ -42,18 +43,19 @@ public class ClickGuiScreen extends Screen {
 		this.renderBackground();
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
-		font.drawWithShadow("Binds are changed in the control settings" , 2, height-10, 0xff9999);
+		font.drawWithShadow("Hover over a bind setting and press a key to change a bind" , 2, height-10, 0xff9999);
 		font.drawWithShadow("Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
-		modsExp.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
-		modsMsc.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
-		modsCmb.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
-		modsPly.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
-		modsMvm.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
-		modsRen.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging);
+		modsExp.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
+		modsMsc.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
+		modsCmb.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
+		modsPly.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
+		modsMvm.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
+		modsRen.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
 		
 		lMousePressed = false;
 		rMousePressed = false;
 		dragging = false;
+		key = -1;
 		len = (int) Math.round(ModuleManager.getModule(ClickGui.class)
 				.getSettings().get(0).toSlider().getValue());
 		super.render(int_1, int_2, float_1);
@@ -69,6 +71,12 @@ public class ClickGuiScreen extends Screen {
 	public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
 		if(p_mouseDragged_5_ == 0) dragging = true;
 		return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
+	}
+	
+	public boolean keyPressed(int int_1, int int_2, int int_3) {
+		System.out.println(int_1 + " | " + int_2 + " | " + int_3);
+		key = int_1;
+	    return super.keyPressed(int_1, int_2, int_3);
 	}
 	
 	public void resetGui() {

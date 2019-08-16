@@ -70,11 +70,10 @@ public class PacketFly extends Module {
 				timer = 0;
 			}
 			
+			
 			mc.player.noClip = true;
 			mc.player.setPositionAnglesAndUpdate(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
-			
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
-			//mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY - 420, posZ, true));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket());
 			
 		}else if(getSettings().get(0).toMode().mode == 1) {
@@ -106,6 +105,7 @@ public class PacketFly extends Module {
 					mc.player.x + mX, mc.player.y + mY, mc.player.z + mZ, false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
 					mc.player.x + mX, mc.player.y - 420.69, mc.player.z + mZ, true));
+			
 		}
 	}
 

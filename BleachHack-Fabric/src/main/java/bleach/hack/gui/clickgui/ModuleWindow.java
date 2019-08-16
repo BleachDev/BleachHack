@@ -10,6 +10,7 @@ import bleach.hack.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.math.MathHelper;
 
 public class ModuleWindow {
@@ -38,7 +39,7 @@ public class ModuleWindow {
 		this.posY = posY;
 	}
 	
-	public void draw(int mX, int mY, boolean lDown, boolean rDown, int leng, boolean dragging) {
+	public void draw(int mX, int mY, boolean lDown, boolean rDown, int leng, boolean dragging, int keyDown) {
 		mouseX = mX; mouseY = mY; lmDown = lDown; len = leng;
 		font = MinecraftClient.getInstance().textRenderer;
 		
@@ -73,11 +74,8 @@ public class ModuleWindow {
 			font.drawWithShadow(cutText(m.getKey().getName(), len),
 					posX+2, posY+2+(count*12), m.getKey().isToggled() ? 0x6060ff : 0xffffff);
 			
-			// draw setting indicator 
-			if(!m.getKey().getSettings().isEmpty()) {
-				Screen.fill(m.getValue() ? posX+len-2 : posX+len-1, posY+(count*12), 
-						posX+len, posY+12+(count*12), m.getValue() ? 0x9fffffff : 0x5fffffff);
-			}
+			Screen.fill(m.getValue() ? posX+len-2 : posX+len-1, posY+(count*12), 
+					posX+len, posY+12+(count*12), m.getValue() ? 0x9fffffff : 0x5fffffff);
 			
 			// Set which module settings show on 
 			if(mouseOver(posX, posY+(count*12), posX+len, posY+10+(count*12))) {
@@ -107,6 +105,9 @@ public class ModuleWindow {
 					if(s instanceof SettingSlider) drawSliderSetting(s.toSlider(), posX, posY+(count*12));
 					Screen.fill(posX+len-1, posY+(count*12), posX+len, posY+12+(count*12), 0x9fffffff);
 				}
+				count++;
+				drawBindSetting(m.getKey(), keyDown, posX, posY+(count*12));
+				Screen.fill(posX+len-1, posY+(count*12), posX+len, posY+12+(count*12), 0x9fffffff);
 			}
 			count++;
 		}
@@ -119,6 +120,15 @@ public class ModuleWindow {
 	
 	public int[] getPos() {
 		return new int[] {posX, posY};
+	}
+	
+	private void drawBindSetting(Module m, int key, int x, int y) {
+		Screen.fill(x, y, x+len, y+12, 0x70000000);
+		
+		if(key != -1 && mouseOver(x, y, x+len, y+12)) m.setKey(key != 261 ? key : -1);
+		
+		font.drawWithShadow("Bind: " + InputUtil.getKeycodeName(m.getKey()) + (mouseOver(x, y, x+len, y+12) ? "..." : ""), x+2, y+2,
+				mouseOver(x, y, x+len, y+12) ? 0xffc3ff : 0xffe0ff);
 	}
 	
 	private void drawModeSetting(SettingMode s, int x, int y) {
