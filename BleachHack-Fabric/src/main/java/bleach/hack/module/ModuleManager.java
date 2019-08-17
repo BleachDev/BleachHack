@@ -15,6 +15,7 @@ public class ModuleManager {
 			new AutoTotem(),
 			new ChestESP(),
 			new ClickGui(),
+			new Criticals(),
 			new CrystalAura(),
 			new ElytraFly(),
 			new EntitySpeed(),
