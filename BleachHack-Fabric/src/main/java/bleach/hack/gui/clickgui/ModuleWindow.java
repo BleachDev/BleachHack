@@ -161,7 +161,7 @@ public class ModuleWindow {
 		Screen.fill(x, y, x+len, y+height, 0x70000000);
 		Screen.fill(x, y, x+pixels, y+height, 0xf03080a0);
 		
-		font.drawWithShadow(s.text + (s.round == 0  && s .value > 1000 ? Integer.toString((int)s.value) : s.value),
+		font.drawWithShadow(s.text + (s.round == 0  && s .value > 100 ? Integer.toString((int)s.value) : s.value),
 				x+2, y+(height>10?2:1), mouseOver(x, y, x+len, y+height) ? 0xffc3ff : 0xffe0ff);
 		
 		if(mouseOver(x, y, x+len, y+height) && lmDown) {
