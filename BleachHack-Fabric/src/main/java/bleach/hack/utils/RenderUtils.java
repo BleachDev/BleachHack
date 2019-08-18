@@ -95,10 +95,12 @@ public class RenderUtils {
         GlStateManager.disableTexture();
         GlStateManager.disableDepthTest();
         GlStateManager.matrixMode(5889);
-        GlStateManager.pushMatrix();
+		GL11.glEnable(GL11.GL_LINE_SMOOTH);
+		GlStateManager.pushMatrix();
 	}
 	
 	public static void gl11Cleanup() {
+		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 		GlStateManager.popMatrix();
         GlStateManager.matrixMode(5888);
         GlStateManager.enableDepthTest();
