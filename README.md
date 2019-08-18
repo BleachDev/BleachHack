@@ -23,7 +23,7 @@ Generate the needed files for your preferred IDE.
 
 Windows Users
 
-> gradlew genEclipseRuns eclipse
+> gradlew genSources eclipse
 
 OR
 
@@ -34,7 +34,7 @@ Linux
 Mark gradlew as executable
 > chmod +x ./gradlew
 
-> ./gradlew genEclipseRuns eclipse
+> ./gradlew genSources eclipse
 
 OR
 

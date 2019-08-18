@@ -75,6 +75,9 @@ public class PacketFly extends Module {
 			mc.player.setPositionAnglesAndUpdate(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket());
+			//mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x+1.5, mc.player.y, mc.player.z, false));
+			//mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y - 0.1, mc.player.z, true));
+			//mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true)); 
 			
 		}else if(getSettings().get(0).toMode().mode == 1) {
 			double mX = 0; double mY = 0; double mZ = 0;

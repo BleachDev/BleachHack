@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
 import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -14,6 +15,7 @@ import bleach.hack.module.Module;
 public class ClickGui extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
+			new SettingMode(new String [] {"Normal", "Compact"}, "View: "),
 			new SettingSlider(50, 80, 68, 0, "Length: "));
 	
 	public static ClickGuiScreen clickGui = new ClickGuiScreen();

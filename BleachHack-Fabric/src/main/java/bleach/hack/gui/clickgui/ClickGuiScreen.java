@@ -57,7 +57,7 @@ public class ClickGuiScreen extends Screen {
 		dragging = false;
 		key = -1;
 		len = (int) Math.round(ModuleManager.getModule(ClickGui.class)
-				.getSettings().get(0).toSlider().getValue());
+				.getSettings().get(1).toSlider().getValue());
 		super.render(int_1, int_2, float_1);
 	}
 	
@@ -74,7 +74,6 @@ public class ClickGuiScreen extends Screen {
 	}
 	
 	public boolean keyPressed(int int_1, int int_2, int int_3) {
-		System.out.println(int_1 + " | " + int_2 + " | " + int_3);
 		key = int_1;
 	    return super.keyPressed(int_1, int_2, int_3);
 	}

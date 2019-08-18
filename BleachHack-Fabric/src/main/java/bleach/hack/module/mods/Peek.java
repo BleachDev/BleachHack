@@ -1,6 +1,7 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
@@ -59,16 +59,16 @@ public class Peek extends Module {
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 		
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock ? 18 : 0;
+		String s = "                                     ";
+		if(block instanceof HopperBlock) mc.currentScreen.renderTooltip(Arrays.asList("                    "), mX, mY - 19);
+		else if(block instanceof DispenserBlock) mc.currentScreen.renderTooltip(Arrays.asList(s), mX, mY - 19);
+		else mc.currentScreen.renderTooltip(Arrays.asList(s,s,s,s,s), mX, mY - 58);
 		for(ItemStack i: items) {
 			if(count > 26) break;
 			int x = mX + 8 + (17 * (count % 9));
-			int y = mY - 68 + (17 * (count / 9));
+			int y = mY - 70 + (17 * (count / 9));
 			
-			if(i.getItem() != Items.AIR) {
-				Screen.fill(x, y, x+17, y+17, 0xa0002020);
-			}
-			
-		    mc.getItemRenderer().renderGuiItem(i, x, y);
+			mc.getItemRenderer().renderGuiItem(i, x, y);
 		    mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, i, x, y, i.getCount() > 1 ? i.getCount() + "" : "");
 			count++;
 		}
