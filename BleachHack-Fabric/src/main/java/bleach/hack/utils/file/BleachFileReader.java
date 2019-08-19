@@ -54,6 +54,7 @@ public class BleachFileReader {
 				if(set instanceof SettingToggle) line += ":" + m.getSettings().get(count).toToggle().state;
 				count++;
 			}
+			line += ":" + m.getKey();
 			
 			fileMang.appendFile(Paths.get("settings.txt"), line);
 		}
@@ -80,6 +81,7 @@ public class BleachFileReader {
 					}catch(Exception e) {}
 					count++;
 				}
+				try { m.setKey(Integer.parseInt(line[line.length-1]));}catch(Exception e) {}
 			}
 		}
 	}

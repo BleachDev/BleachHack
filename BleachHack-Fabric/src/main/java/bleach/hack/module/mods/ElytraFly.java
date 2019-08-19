@@ -48,9 +48,6 @@ public class ElytraFly extends Module {
 				else if(mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
 				else if(!mc.options.keyForward.isPressed()) vec3d = Vec3d.ZERO;
 				mc.player.setVelocity(vec3d);
-			}else if(getSettings().get(0).toMode().mode == 2) {
-				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
 			}
 		}else if(getSettings().get(0).toMode().mode == 2 && !mc.player.onGround 
 				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA && mc.player.fallDistance > 0.5) {
