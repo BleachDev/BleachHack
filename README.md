@@ -1,5 +1,5 @@
 # BleachHack-1.14
-Very cool client pls download  
+Very cool client.  
 
 Works on fabric 1.14  
 (also works on forge but that isn't supported anymore)
