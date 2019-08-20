@@ -19,7 +19,6 @@ public class MixinPlayerEntity {
 	
 	@Inject(at = @At("RETURN"), method = "tick()V")
 	public void tick(CallbackInfo info) {
-		BleachHack.getEventBus().post(new EventTick());
 		try {
 			if(MinecraftClient.getInstance().player.age % 100 == 0) {
 				BleachFileReader.saveModules();
@@ -29,6 +28,7 @@ public class MixinPlayerEntity {
 			
 			BleachQueue.nextQueue();
 		}catch(Exception e) {}
+		BleachHack.getEventBus().post(new EventTick());
 	}
 	
 	@Inject(at = @At("HEAD"), method = "tick()V")
