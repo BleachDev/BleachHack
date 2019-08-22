@@ -10,7 +10,6 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.module.ModuleManager;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -37,7 +36,6 @@ public class ElytraFly extends Module {
 				.rotateX(getSettings().get(1).toToggle().state ? 0 : -(float) Math.toRadians(mc.player.pitch))
 				.rotateY(-(float) Math.toRadians(mc.player.yaw));
 		
-		for(Module m: ModuleManager.getModules()) System.out.println(m.getKey());
 		if(mc.player.isFallFlying()) {
 			if(getSettings().get(0).toMode().mode == 0) {
 				mc.player.setVelocity(

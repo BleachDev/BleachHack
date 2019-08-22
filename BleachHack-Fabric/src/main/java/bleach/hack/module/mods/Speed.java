@@ -27,6 +27,7 @@ public class Speed extends Module {
 
 	@Subscribe
 	public void onTick(EventTick eventTick) {
+		if(mc.options.keySneak.isPressed()) return;
 		double speeds = getSettings().get(1).toSlider().getValue() / 30;
 		
 		/* OnGround */

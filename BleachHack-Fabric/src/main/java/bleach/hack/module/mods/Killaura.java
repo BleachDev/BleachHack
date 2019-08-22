@@ -47,7 +47,6 @@ public class Killaura extends Module {
 	public void onTick(EventTick eventTick) {
 		delay++;
 		int reqDelay = (int) Math.round(20/getSettings().get(8).toSlider().getValue());
-		if(getSettings().get(6).toToggle().state) reqDelay = 10;
 		
 		List<Entity> targets = Streams.stream(mc.world.getEntities())
 				.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).toToggle().state)
@@ -63,10 +62,11 @@ public class Killaura extends Module {
 			
 			if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
 				
-			if(delay > reqDelay || reqDelay == 0) {
+			if(((delay > reqDelay || reqDelay == 0) && !getSettings().get(6).toToggle().state) || 
+					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSettings().get(6).toToggle().state)) {
 				boolean wasSprinting = mc.player.isSprinting();
 
-				if(wasSprinting){
+				if(wasSprinting) {
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
 				}
 
@@ -74,7 +74,7 @@ public class Killaura extends Module {
 				mc.player.attack(e);
 				mc.player.swingHand(Hand.MAIN_HAND);
 
-				if(wasSprinting){
+				if(wasSprinting) {
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
 				}
 

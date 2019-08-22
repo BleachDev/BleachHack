@@ -13,6 +13,7 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.server.network.packet.TeleportConfirmC2SPacket;
 import net.minecraft.util.math.Direction;
@@ -54,6 +55,7 @@ public class PacketFly extends Module {
 		if(!mc.player.isAlive()) return;
 		timer++;
 		
+		Entity target = mc.player.getVehicle() == null ? mc.player : mc.player.getVehicle();
 		if(getSettings().get(0).toMode().mode == 0) {
 			if(mc.options.keyJump.isPressed()) posY += vspeed;
 			if(mc.options.keySneak.isPressed()) posY -= vspeed;
@@ -71,8 +73,8 @@ public class PacketFly extends Module {
 			}
 			
 			
-			mc.player.noClip = true;
-			mc.player.setPositionAnglesAndUpdate(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
+			target.noClip = true;
+			target.setPositionAnglesAndUpdate(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket());
 			

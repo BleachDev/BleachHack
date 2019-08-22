@@ -3,6 +3,7 @@ package bleach.hack.module.mods;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.SettingBase;
@@ -12,6 +13,7 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
@@ -25,9 +27,11 @@ public class UI extends Module {
 			new SettingToggle(false, "FPS"),
 			new SettingToggle(false, "Ping"),
 			new SettingToggle(false, "Coords"),
-			new SettingToggle(false, "Server"));
+			new SettingToggle(false, "Server"),
+			new SettingToggle(false, "Players"));
 	
 	public List<String> bottomLeftList = new ArrayList<>();
+	private int count = 0;
 	
 	public UI() {
 		super("UI", -1, Category.RENDER, "Shows stuff onscreen.", settings);
@@ -36,6 +40,7 @@ public class UI extends Module {
 	public void onOverlay() {
 		bottomLeftList.clear();
 		if(getSettings().get(0).toToggle().state) drawArrayList();
+		if(getSettings().get(7).toToggle().state) drawPlayerList();
 		if(getSettings().get(5).toToggle().state) {
 			addNetherCoords();
 			addCoords();
@@ -56,8 +61,8 @@ public class UI extends Module {
 		lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
 		if(getSettings().get(2).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 		
-		int count = 0;
 		int color = 0xff40bbff;
+		count = 0;
 		int extra = getSettings().get(1).toToggle().state ? 1 : 0;
 		for(String s: lines) {
 			InGameHud.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
@@ -72,6 +77,31 @@ public class UI extends Module {
 			count++;
 		}
 		InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
+	}
+	/*-------------------------------------------------------------------------------*/
+	
+	
+	
+	/*--------------------------------- Player List ---------------------------------*/
+	public void drawPlayerList() {
+		InGameHud.fill(0, 3+(count*10), mc.textRenderer.getStringWidth("Players:")+4, 13+(count*10), 0x40000000);
+		mc.textRenderer.drawWithShadow("Players:", 2, 4+count*10, 0xff0000);
+		count++;
+		
+		for(Entity e: mc.world.getPlayers().stream().sorted(
+				(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
+				.collect(Collectors.toList())) {
+			if(e == mc.player) continue;
+			
+			String text = e.getDisplayName().asFormattedString() + " | " + 
+					e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
+					+ " (" + Math.round(mc.player.getPos().distanceTo(e.getPos())) + "m)";
+			
+			InGameHud.fill(0, 3+(count*10), mc.textRenderer.getStringWidth(text)+4, 13+(count*10), 0x40000000);
+			mc.textRenderer.drawWithShadow(text, 2, 4+count*10,
+					0xf00000 + (int) Math.min(mc.player.getPos().distanceTo(e.getPos()) * 3, 255));
+			count++;
+		}
 	}
 	/*-------------------------------------------------------------------------------*/
 	
