@@ -55,8 +55,6 @@ public class Module {
 		}
 	}
 
-	public void onOverlay() {}
-
 	public String getName() {
 		return name;
 	}

@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -37,7 +40,8 @@ public class UI extends Module {
 		super("UI", -1, Category.RENDER, "Shows stuff onscreen.", settings);
 	}
 	
-	public void onOverlay() {
+	@Subscribe
+	public void onDrawOverlay(EventDrawOverlay overlayEvent) {
 		bottomLeftList.clear();
 		if(getSettings().get(0).toToggle().state) drawArrayList();
 		if(getSettings().get(7).toToggle().state) drawPlayerList();
@@ -84,6 +88,8 @@ public class UI extends Module {
 	
 	/*--------------------------------- Player List ---------------------------------*/
 	public void drawPlayerList() {
+		if(mc.options.debugEnabled) return;
+		
 		InGameHud.fill(0, 3+(count*10), mc.textRenderer.getStringWidth("Players:")+4, 13+(count*10), 0x40000000);
 		mc.textRenderer.drawWithShadow("Players:", 2, 4+count*10, 0xff0000);
 		count++;

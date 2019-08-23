@@ -12,13 +12,15 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class Flight extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingMode(new String[] {"Normal","Static","Jetpack"}, "Mode: "),
-			new SettingSlider(0, 5, 1, 1, "Speed: "));
+			new SettingSlider(0, 5, 1, 1, "Speed: "),
+			new SettingMode(new String[] {"Off","Fall","Bob","Packet"}, "AntiKick: "));
 	
 	public Flight() {
 		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly", settings);
@@ -35,12 +37,19 @@ public class Flight extends Module {
 	public void onTick(EventTick eventTick) {
 		float speed = (float) getSettings().get(1).toSlider().getValue();
 		
+		if(mc.player.age % 20 == 0 && getSettings().get(2).toMode().mode == 3 && !(getSettings().get(0).toMode().mode == 2)) {
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y - 0.06, mc.player.z, false));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y + 0.06, mc.player.z, true));
+		}
+		
 		if(getSettings().get(0).toMode().mode == 0) {
 			mc.player.abilities.setFlySpeed(speed / 10);
 			mc.player.abilities.allowFlying = true;
 			mc.player.abilities.flying = true;
 		}else if(getSettings().get(0).toMode().mode == 1) {
-			mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.06 : 0, 0);
+			if(getSettings().get(2).toMode().mode == 0 || getSettings().get(2).toMode().mode == 3) mc.player.setVelocity(0, 0, 0);
+			else if(getSettings().get(2).toMode().mode == 1) mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
+			else if(getSettings().get(2).toMode().mode == 2) mc.player.setVelocity(0, mc.player.age % 40 == 0 ? 0.15 : mc.player.age % 20 == 0 ? -0.15 : 0, 0);
 			Vec3d forward = new Vec3d(0, 0, speed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 			

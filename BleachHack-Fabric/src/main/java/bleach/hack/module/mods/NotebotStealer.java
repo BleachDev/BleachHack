@@ -67,7 +67,8 @@ public class NotebotStealer extends Module {
 				int note = 0;
 				
 				for(int n = 0; n < 25; n++) {
-					if((float) Math.pow(2.0D, (n - 12) / 12.0D) == e.getValue().getPitch()) {note = n; break;}
+					if((float) Math.pow(2.0D, (n - 12) / 12.0D) - 0.01 < e.getValue().getPitch() &&
+							(float) Math.pow(2.0D, (n - 12) / 12.0D) + 0.01 > e.getValue().getPitch()) {note = n; break;}
 				}
 				
 				if(e.getValue().getId().getPath().contains("basedrum")) type = 1;

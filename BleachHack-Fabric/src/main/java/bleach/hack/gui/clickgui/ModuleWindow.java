@@ -80,7 +80,7 @@ public class ModuleWindow {
 					posX+len, posY+height+(count*height), m.getValue() ? 0x9fffffff : 0x5fffffff);
 			
 			// Set which module settings show on 
-			if(mouseOver(posX, posY+(count*height), posX+len, posY+10+(count*height))) {
+			if(mouseOver(posX, posY+(count*height), posX+len, posY+height+(count*height))) {
 				// Match lines to end of words 
 		        Matcher mat = Pattern.compile("\\b.{1,22}\\b\\W?").matcher(m.getKey().getDesc());
 
@@ -89,7 +89,7 @@ public class ModuleWindow {
 		        
 		        while(mat.find()) {
 		        	Screen.fill(posX+len+3, posY-1+(count*height)-(c2 * 10)+(c3 * 10),
-							posX+len+6+font.getStringWidth(mat.group()), posY+(count*height)-(c2 * 10)+(c3 * 10)+9,
+							posX+len+6+font.getStringWidth(mat.group().trim()), posY+(count*height)-(c2 * 10)+(c3 * 10)+9,
 							0x90000000);
 		        	font.drawWithShadow(mat.group(), posX+len+5, posY+(count*height)-(c2 * 10)+(c3 * 10), -1);
 					c3++;

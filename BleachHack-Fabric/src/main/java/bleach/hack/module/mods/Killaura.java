@@ -56,8 +56,7 @@ public class Killaura extends Module {
 
 		for(Entity e: targets) {
 			if(mc.player.distanceTo(e) > getSettings().get(7).toSlider().getValue()
-					|| !e.isAlive()
-					|| e == mc.player || e == mc.player.getVehicle() || e == mc.cameraEntity
+					|| !e.isAlive() || e == mc.player || e == mc.player.getVehicle() || e == mc.cameraEntity
 					|| (!mc.player.canSee(e) && !getSettings().get(5).toToggle().state)) continue;
 			
 			if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
