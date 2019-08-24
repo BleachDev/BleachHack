@@ -30,9 +30,7 @@ public class MixinClientConnection {
             try {
                 EventReadPacket event = new EventReadPacket(packet_1);
                 BleachHack.getEventBus().post(event);
-                if (event.isCancelled()) {
-                    callback.cancel();
-                }
+                if (event.isCancelled()) callback.cancel();
             } catch (Exception exception) {}
         }
     }
@@ -42,8 +40,7 @@ public class MixinClientConnection {
         EventSendPacket event = new EventSendPacket(packet_1);
         BleachHack.getEventBus().post(event);
 
-        if (event.isCancelled())
-            return;
+        if (event.isCancelled()) return;
 
         sendImmediately(event.getPacket(), genericFutureListener_1);
     }

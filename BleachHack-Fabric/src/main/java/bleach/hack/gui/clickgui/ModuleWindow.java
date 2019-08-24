@@ -12,7 +12,9 @@ import bleach.hack.module.mods.ClickGui;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
 public class ModuleWindow {
@@ -96,6 +98,7 @@ public class ModuleWindow {
 				}
 				if(lDown) m.getKey().toggle();
 				if(rDown) mods.replace(m.getKey(), !m.getValue());
+				if(lDown || rDown) MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
 			
 			// draw settings

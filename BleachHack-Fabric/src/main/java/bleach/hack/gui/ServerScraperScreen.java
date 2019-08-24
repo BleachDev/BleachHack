@@ -3,7 +3,6 @@ package bleach.hack.gui;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -79,7 +78,7 @@ public class ServerScraperScreen extends Screen {
 	public void scrapeIp(InetAddress ip) {
 		result = "§eScraping...";
 		scrapeThread = new Thread(() -> {
-			for(int change : new int[] {0, 1, -1, 2, -2, 3, -3}) {
+			for(int change : new int[] {0, -1, 1, -2, 2, -3, 3}) {
 				for(int i = 0; i <= 255; i++) {
 					String newIp = (ip.getAddress()[0] & 255) + "." + (ip.getAddress()[1] & 255)
 							+ "." + (ip.getAddress()[2] + change & 255) + "." + i;

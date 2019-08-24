@@ -13,8 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 	
-	@Inject(at = @At("HEAD"), method = "renderHand(Lnet/minecraft/client/render/Camera;F)V")
+	@Inject(at = @At("HEAD"), method = "renderHand(Lnet/minecraft/client/render/Camera;F)V", cancellable = true)
 	private void renderHand(Camera camera_1, float float_1, CallbackInfo info) {
-		BleachHack.getEventBus().post(new Event3DRender());
+		Event3DRender event = new Event3DRender();
+		BleachHack.getEventBus().post(event);
+		if (event.isCancelled()) info.cancel();
 	}
 }

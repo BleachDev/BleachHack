@@ -8,8 +8,8 @@ import net.fabricmc.api.ClientModInitializer;
 
 public class BleachHack implements ClientModInitializer {
 	
-	public static String VERSION = "B7.01";
-	public static int INTVERSION = 10;
+	public static String VERSION = "B7.1";
+	public static int INTVERSION = 11;
 	private static EventBus eventBus;
 
 	@Override

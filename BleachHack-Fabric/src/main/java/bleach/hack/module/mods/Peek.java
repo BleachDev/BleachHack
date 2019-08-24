@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import org.lwjgl.opengl.GL11;
 
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -55,7 +55,7 @@ public class Peek extends Module {
 			}
 		}
 		
-		GlStateManager.translatef(0.0F, 0.0F, 500.0F);
+		GL11.glTranslatef(0.0F, 0.0F, 500.0F);
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 		
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock ? 18 : 0;

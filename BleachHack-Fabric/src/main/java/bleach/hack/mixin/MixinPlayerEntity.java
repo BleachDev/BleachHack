@@ -29,11 +29,15 @@ public class MixinPlayerEntity {
 			
 			BleachQueue.nextQueue();
 		}catch(Exception e) {}
-		BleachHack.getEventBus().post(new EventTick());
+		EventTick event = new EventTick();
+		BleachHack.getEventBus().post(event);
+		if (event.isCancelled()) info.cancel();
 	}
 	
 	@Inject(at = @At("HEAD"), method = "tick()V")
 	public void tick2(CallbackInfo info) {
+		EventPreTick event = new EventPreTick();
 		BleachHack.getEventBus().post(new EventPreTick());
+		if (event.isCancelled()) info.cancel();
 	}
 }

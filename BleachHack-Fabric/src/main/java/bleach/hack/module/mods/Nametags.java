@@ -2,6 +2,10 @@ package bleach.hack.module.mods;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.eventbus.Subscribe;
+
+import bleach.hack.event.events.EventLivingRender;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -20,7 +24,7 @@ import net.minecraft.util.math.MathHelper;
 public class Nametags extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Simple", "Armor V", "Armor H"}, "Mode: "),
+			new SettingMode(new String[] {"H", "V", "None"}, "Armor: "),
 			new SettingMode(new String[] {"Number", "Bar"}, "Health: "),
 			new SettingSlider(0.5, 5, 2, 1, "Size Players: "),
 			new SettingSlider(0.5, 5, 1, 1, "Size Mobs: "),
@@ -31,7 +35,10 @@ public class Nametags extends Module {
 		super("Nametags", -1, Category.RENDER, "Shows bigger/cooler nametags above entities.", settings);
 	}
 	
-	public void drawNametags(LivingEntity e) {
+	@Subscribe
+	public void onLivingRender(EventLivingRender livingRenderEvent) {
+		LivingEntity e = livingRenderEvent.getEntity();
+		
 		/* Color before name */
 		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
 				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
@@ -71,7 +78,15 @@ public class Nametags extends Module {
 		double c = 0;
 		double higher = getSettings().get(1).toMode().mode == 1 ? 0.25 : 0;
 		
-		if(getSettings().get(0).toMode().mode == 1) {
+		if(getSettings().get(0).toMode().mode == 0) {
+			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+			
+			for(ItemStack i: e.getArmorItems()) {
+				RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
+				c--;
+			}
+		}else if(getSettings().get(0).toMode().mode == 1) {
 			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
 			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 			
@@ -80,14 +95,8 @@ public class Nametags extends Module {
 				RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 0, c, scale, i);
 				c++;
 			}
-		}else if(getSettings().get(0).toMode().mode == 2) {
-			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
-			
-			for(ItemStack i: e.getArmorItems()) {
-				RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
-				c--;
-			}
 		}
+		
+		livingRenderEvent.setCancelled(true);
 	}
 }

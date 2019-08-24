@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.Nametags;
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventLivingRender;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class MixinEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
@@ -22,10 +22,10 @@ public abstract class MixinEntityRenderer<T extends LivingEntity, M extends Enti
 		super(entityRenderDispatcher_1);
 	}
 
-	@Inject(at = @At("HEAD"), method = "method_4041(Lnet/minecraft/entity/LivingEntity;DDD)V")
+	@Inject(at = @At("HEAD"), method = "method_4041(Lnet/minecraft/entity/LivingEntity;DDD)V", cancellable = true)
 	public void render(T livingEntity_1, double double_1, double double_2, double double_3, CallbackInfo info) {
-		if(ModuleManager.getModule(Nametags.class).isToggled()) {
-			((Nametags) ModuleManager.getModule(Nametags.class)).drawNametags(livingEntity_1);
-		}
+		EventLivingRender event = new EventLivingRender(livingEntity_1);
+		BleachHack.getEventBus().post(event);
+		if (event.isCancelled()) info.cancel();
 	}
 }
