@@ -1,6 +1,5 @@
 package bleach.hack.module.mods;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -171,8 +170,8 @@ public class Notebot extends Module {
 		notes.clear();
 		
 		/* Read the file */
-		fileMang.createFile(Paths.get("notebot", fileName), "");
-		List<String> lines = fileMang.readFileLines(Paths.get("notebot", fileName))
+		fileMang.createFile("notebot", fileName);
+		List<String> lines = fileMang.readFileLines("notebot", fileName)
 				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 		for(String s: lines) s = s.replaceAll(" ", " ");
 

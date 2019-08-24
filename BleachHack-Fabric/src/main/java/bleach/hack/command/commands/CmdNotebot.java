@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -60,8 +59,8 @@ public class CmdNotebot extends Command {
 		}else if(args[0].equalsIgnoreCase("req")) {
 			List<List<Integer>> n = new ArrayList<>();
 			List<List<Integer>> t = new ArrayList<>();
-			fileMang.createFile(Paths.get("notebot", args[1]), "");
-			List<String> lines = fileMang.readFileLines(Paths.get("notebot", args[1]))
+			fileMang.createFile("notebot", args[1]);
+			List<String> lines = fileMang.readFileLines("notebot", args[1])
 					.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 			for(String s: lines) s = s.replaceAll(" ", " ");
 

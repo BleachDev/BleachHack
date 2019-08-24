@@ -25,51 +25,52 @@ public class BleachFileMang {
 	}
 	
 	/** Reads a file and returns a list of the lines. **/
-	public List<String> readFileLines(Path file) {
-		try { return Files.readAllLines(Paths.get(dir.toString(), file.toFile().getPath()));
-		} catch (IOException e) { System.out.println("Error Reading File: " + file); e.printStackTrace(); } 
+	public List<String> readFileLines(String... file) {
+		try { return Files.readAllLines(stringsToPath(file));
+		} catch (IOException e) { System.out.println("Error Reading File: " + stringsToPath(file)); e.printStackTrace(); } 
 		
 		return new ArrayList<String>();
 	}
 	
 	/** Creates a file, doesn't do anything if the file already exists. **/
-	public void createFile(Path file, String content) {
+	public void createFile(String... file) {
 		try { 
 			if(fileExists(file)) return;
 			dir.toFile().mkdirs();
-			Files.createFile(Paths.get(dir.toString(), file.toFile().getPath()));
-			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file.toFile().getPath()).toFile());
-			writer.write(content);
-			writer.close();
+			Files.createFile(stringsToPath(file));
 		} catch (IOException e) { System.out.println("Error Creating File: " + file); e.printStackTrace(); } 
 	}
 	
 	/** Creates a file, clears it if it already exists **/
-	public void createEmptyFile(Path file) {
+	public void createEmptyFile(String... file) {
 		try { 
 			dir.toFile().mkdirs();
-			if(!fileExists(file)) {
-				Files.createFile(Paths.get(dir.toString(), file.toFile().getPath()));
-			}
-			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file.toFile().getPath()).toFile());
+			if(!fileExists(file)) Files.createFile(stringsToPath(file));
+			FileWriter writer = new FileWriter(stringsToPath(file).toFile());
 			writer.write("");
 			writer.close();
 		} catch (IOException e) { System.out.println("Error Clearing/Creating File: " + file); e.printStackTrace(); } 
 	}
 	
 	/** Adds a line to a file. **/
-	public void appendFile(Path file, String content) {
+	public void appendFile(String content, String... file) {
 		try {
-			FileWriter writer = new FileWriter(Paths.get(dir.toString(), file.toFile().getPath()).toFile(), true);
+			FileWriter writer = new FileWriter(stringsToPath(file).toFile(), true);
 			writer.write(content + "\n");
 			writer.close();
 		} catch (IOException e) { System.out.println("Error Appending File: " + file); e.printStackTrace(); } 
 	}
 	
 	/** Returns true if a file exists, returns false otherwise **/
-	public boolean fileExists(Path file) {
-		try { return Paths.get(dir.toString(), file.toFile().getPath()).toFile().exists();
+	public boolean fileExists(String... file) {
+		try { return stringsToPath(file).toFile().exists();
 		} catch (Exception e) { return false; }
+	}
+	
+	public Path stringsToPath(String... strings) {
+		Path path = dir;
+		for(String s: strings) path = path.resolve(s);
+		return path;
 	}
 	
 }

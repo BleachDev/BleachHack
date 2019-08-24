@@ -17,6 +17,7 @@ public class BleachHack implements ClientModInitializer {
 		eventBus = new EventBus();
 		BleachFileReader.readModules();
     	BleachFileReader.readSettings();
+    	BleachFileReader.readBinds();
     	ClickGui.clickGui.initWindows();
     	BleachFileReader.readClickGui();
 

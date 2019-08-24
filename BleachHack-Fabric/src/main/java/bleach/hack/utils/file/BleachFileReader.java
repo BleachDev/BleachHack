@@ -1,6 +1,5 @@
 package bleach.hack.utils.file;
 
-import java.nio.file.Paths;
 import java.util.List;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
@@ -17,16 +16,16 @@ public class BleachFileReader {
 	private static BleachFileMang fileMang = new BleachFileMang();
 	
 	public static void saveModules() {
-		fileMang.createEmptyFile(Paths.get("modules.txt"));
+		fileMang.createEmptyFile("modules.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			if(m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
-			fileMang.appendFile(Paths.get("modules.txt"), m.getName() + ":" + m.isToggled());
+			fileMang.appendFile(m.getName() + ":" + m.isToggled(), "modules.txt");
 		}
 	}
 	
 	public static void readModules() {
-		List<String> lines = fileMang.readFileLines(Paths.get("modules.txt"));
+		List<String> lines = fileMang.readFileLines("modules.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			for(String s: lines) {
@@ -42,7 +41,7 @@ public class BleachFileReader {
 	}
 	
 	public static void saveSettings() {
-		fileMang.createEmptyFile(Paths.get("settings.txt"));
+		fileMang.createEmptyFile("settings.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			String line = m.getName();
@@ -54,14 +53,13 @@ public class BleachFileReader {
 				if(set instanceof SettingToggle) line += ":" + m.getSettings().get(count).toToggle().state;
 				count++;
 			}
-			line += ":" + m.getKey();
 			
-			fileMang.appendFile(Paths.get("settings.txt"), line);
+			fileMang.appendFile(line, "settings.txt");
 		}
 	}
 	
 	public static void readSettings() {
-		List<String> lines = fileMang.readFileLines(Paths.get("settings.txt"));
+		List<String> lines = fileMang.readFileLines("settings.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			for(String s: lines) {
@@ -80,26 +78,45 @@ public class BleachFileReader {
 					}catch(Exception e) {}
 					count++;
 				}
+			}
+		}
+	}
+	
+	public static void saveBinds() {
+		fileMang.createEmptyFile("binds.txt");
+		
+		for(Module m: ModuleManager.getModules()) {
+			fileMang.appendFile(m.getName() + ":" + m.getKey(), "binds.txt");
+		}
+	}
+	
+	public static void readBinds() {
+		List<String> lines = fileMang.readFileLines("binds.txt");
+		
+		for(Module m: ModuleManager.getModules()) {
+			for(String s: lines) {
+				String[] line = s.split(":");
+				if(!line[0].startsWith(m.getName())) continue;
 				try { m.setKey(Integer.parseInt(line[line.length - 1])); }catch(Exception e) {}
 			}
 		}
 	}
 	
 	public static void saveClickGui() {
-		fileMang.createEmptyFile(Paths.get("clickgui.txt"));
+		fileMang.createEmptyFile("clickgui.txt");
 		
 		ClickGuiScreen gui = ClickGui.clickGui;
 		
-		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsCmb.getPos()[0] + ":" + gui.modsCmb.getPos()[1]);
-		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsExp.getPos()[0] + ":" + gui.modsExp.getPos()[1]);
-		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1]);
-		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1]);
-		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1]);
-		fileMang.appendFile(Paths.get("clickgui.txt"), gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1]);
+		fileMang.appendFile(gui.modsCmb.getPos()[0] + ":" + gui.modsCmb.getPos()[1], "clickgui.txt");
+		fileMang.appendFile(gui.modsExp.getPos()[0] + ":" + gui.modsExp.getPos()[1], "clickgui.txt");
+		fileMang.appendFile(gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1], "clickgui.txt");
+		fileMang.appendFile(gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1], "clickgui.txt");
+		fileMang.appendFile(gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1], "clickgui.txt");
+		fileMang.appendFile(gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1], "clickgui.txt");
 	}
 	
 	public static void readClickGui() {
-		List<String> lines = fileMang.readFileLines(Paths.get("clickgui.txt"));
+		List<String> lines = fileMang.readFileLines("clickgui.txt");
 		
 		ClickGuiScreen gui = ClickGui.clickGui;
 		

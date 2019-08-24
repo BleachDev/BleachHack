@@ -23,6 +23,7 @@ public class MixinPlayerEntity {
 			if(MinecraftClient.getInstance().player.age % 100 == 0) {
 				BleachFileReader.saveModules();
 				BleachFileReader.saveSettings();
+				BleachFileReader.saveBinds();
 				BleachFileReader.saveClickGui();
 			}
 			
