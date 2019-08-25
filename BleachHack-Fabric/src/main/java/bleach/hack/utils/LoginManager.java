@@ -23,7 +23,14 @@ public final class LoginManager {
 		
 		try
 		{
-			auth.logIn();
+			if(email.isEmpty()) return "§cNo Username/Email!";
+			
+			if(password.isEmpty()) {
+				FabricReflect.writeField(MinecraftClient.getInstance().getSession(), email, "a", "username");
+				return "§6Logged in as an unverified account"; /* Idk this sound weird */
+			}
+			
+			if(!email.isEmpty() && !password.isEmpty()) auth.logIn();
 			
 			Session newsession = new Session(auth.getSelectedProfile().getName(),
 					auth.getSelectedProfile().getId().toString(),

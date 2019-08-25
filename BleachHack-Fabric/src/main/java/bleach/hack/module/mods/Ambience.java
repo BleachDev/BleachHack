@@ -6,12 +6,14 @@ import java.util.List;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventPreTick;
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
 
 public class Ambience extends Module {
 
@@ -33,7 +35,15 @@ public class Ambience extends Module {
 			else mc.world.setRainGradient((float) getSettings().get(3).toSlider().getValue());
 		}
 		if(getSettings().get(1).toToggle().state) {
+			mc.world.setTime((long) getSettings().get(4).toSlider().getValue());
 			mc.world.setTimeOfDay((long) getSettings().get(4).toSlider().getValue());
+		}
+	}
+	
+	@Subscribe
+	public void readPacket(EventReadPacket eventReadPacket) {
+		if(eventReadPacket.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+			eventReadPacket.setCancelled(true);
 		}
 	}
 

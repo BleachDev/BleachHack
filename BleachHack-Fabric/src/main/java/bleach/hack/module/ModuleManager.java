@@ -12,6 +12,7 @@ public class ModuleManager {
 
 	private static List<Module> mods = Arrays.asList(
 			new Ambience(),
+			new ArrowJuke(),
 			new AutoTotem(),
 			new ChestESP(),
 			new ClickGui(),

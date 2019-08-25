@@ -9,6 +9,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -16,8 +17,10 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
 
@@ -25,16 +28,19 @@ public class UI extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Arraylist"),
-			new SettingToggle(true, "Extra Line"),
+			new SettingToggle(false, "Extra Line"),
 			new SettingToggle(true, "Watermark"),
 			new SettingToggle(false, "FPS"),
 			new SettingToggle(false, "Ping"),
 			new SettingToggle(false, "Coords"),
+			new SettingToggle(false, "TPS"),
 			new SettingToggle(false, "Server"),
 			new SettingToggle(false, "Players"));
 	
 	public List<String> bottomLeftList = new ArrayList<>();
 	private int count = 0;
+	private long prevTime = 0;
+	private double tps = 20;
 	
 	public UI() {
 		super("UI", -1, Category.RENDER, "Shows stuff onscreen.", settings);
@@ -44,15 +50,27 @@ public class UI extends Module {
 	public void onDrawOverlay(EventDrawOverlay overlayEvent) {
 		bottomLeftList.clear();
 		if(getSettings().get(0).toToggle().state) drawArrayList();
-		if(getSettings().get(7).toToggle().state) drawPlayerList();
+		if(getSettings().get(8).toToggle().state) drawPlayerList();
 		if(getSettings().get(5).toToggle().state) {
 			addNetherCoords();
 			addCoords();
 		}
 		if(getSettings().get(3).toToggle().state) addFPS();
 		try{ if(getSettings().get(4).toToggle().state) addPing(); }catch(Exception e) {}
-		try{ if(getSettings().get(6).toToggle().state) drawServerInfo(); }catch(Exception e) {}
+		if(getSettings().get(6).toToggle().state) addTPS();
+		try{ if(getSettings().get(7).toToggle().state) drawServerInfo(); }catch(Exception e) {}
 		drawBottomLeft();
+	}
+	
+	@Subscribe
+	public void readPacket(EventReadPacket eventReadPacket) {
+		if(eventReadPacket.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+			long time = System.currentTimeMillis();
+			long timeOffset = Math.abs(1000 - (time - prevTime)) + 1000;
+			//System.out.println((double) timeOffset / 1000);
+			tps = Math.round(MathHelper.clamp(20 / ((double) timeOffset / 1000), 0, 20) * 100d) / 100d;
+			prevTime = time;
+		}
 	}
 	
 	/*--------------------------------- Array List ---------------------------------*/
@@ -117,6 +135,10 @@ public class UI extends Module {
 	public void addFPS() {
 		int fps = MinecraftClient.getCurrentFps();
 		bottomLeftList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
+	}
+	
+	public void addTPS() {
+		bottomLeftList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps);
 	}
 	
 	public void addPing() {

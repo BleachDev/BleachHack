@@ -30,6 +30,8 @@ public class LoginScreen extends Screen {
 		
 		this.userField = new TextFieldWidget(this.font, width / 2 - 98, height / 4 + 10, 196, 18, "");
 		this.passField = new TextFieldWidget(this.font, width / 2 - 98, height / 4 + 40, 196, 18, "");
+		userField.setMaxLength(32767);
+		passField.setMaxLength(32767);
 		
 		super.init();
 	}
