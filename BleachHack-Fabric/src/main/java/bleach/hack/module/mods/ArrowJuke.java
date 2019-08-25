@@ -22,9 +22,9 @@ public class ArrowJuke extends Module {
 		for(Entity e: mc.world.getEntities()) {
 			if(!(e instanceof ArrowEntity) || e.age > 50) continue;
 			
-			Box pBox = mc.player.getBoundingBox().expand(0.25);
+			Box pBox = mc.player.getBoundingBox().expand(0.4);
 			
-			for(int i = 0; i < 50; i++) {
+			for(int i = 0; i < 150; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i/5));
 				Box nextBox = new Box(
 						nextPos.subtract(e.getBoundingBox().getXSize()/2, 0, e.getBoundingBox().getZSize()/2), 
@@ -32,12 +32,12 @@ public class ArrowJuke extends Module {
 				
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x+0.5, mc.player.y, mc.player.z, true));
 				if(pBox.intersects(nextBox)) {
-					if(!moveBox(pBox, 0.5, 0, 0).intersects(nextBox)) mc.player.addVelocity(0.5, 0, 0);
-					else if(!moveBox(pBox, -0.5, 0, 0).intersects(nextBox)) mc.player.addVelocity(-0.5, 0, 0);
-					else if(!moveBox(pBox, 0, 0, 0.5).intersects(nextBox)) mc.player.addVelocity(0, 0, 0.5);
+					if(!moveBox(pBox, 0.7, 0, 0).intersects(nextBox)) mc.player.addVelocity(0.7, 0, 0);
+					else if(!moveBox(pBox, -0.7, 0, 0).intersects(nextBox)) mc.player.addVelocity(-0.7, 0, 0);
+					else if(!moveBox(pBox, 0, 0, 0.7).intersects(nextBox)) mc.player.addVelocity(0, 0, 0.7);
 					//else if(!moveBox(pBox, 0, 0, -0.5).intersects(nextBox)) mc.player.addVelocity(0, 0, -0.5);
-					else mc.player.addVelocity(0, 0, -0.5);
-					break;
+					else mc.player.addVelocity(0, 0, -0.7);
+					//break;
 				}
 			}
 		}

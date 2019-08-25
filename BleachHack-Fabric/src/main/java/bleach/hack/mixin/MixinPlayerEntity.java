@@ -5,7 +5,6 @@ import bleach.hack.event.events.EventPreTick;
 import bleach.hack.event.events.EventTick;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +16,7 @@ import bleach.hack.utils.file.BleachFileReader;
 @Mixin(ClientPlayerEntity.class)
 public class MixinPlayerEntity {
 	
-	@Inject(at = @At("RETURN"), method = "tick()V")
+	@Inject(at = @At("RETURN"), method = "tick()V", cancellable = true)
 	public void tick(CallbackInfo info) {
 		try {
 			if(MinecraftClient.getInstance().player.age % 100 == 0) {
@@ -34,7 +33,7 @@ public class MixinPlayerEntity {
 		if (event.isCancelled()) info.cancel();
 	}
 	
-	@Inject(at = @At("HEAD"), method = "tick()V")
+	@Inject(at = @At("HEAD"), method = "tick()V", cancellable = true)
 	public void tick2(CallbackInfo info) {
 		EventPreTick event = new EventPreTick();
 		BleachHack.getEventBus().post(new EventPreTick());
