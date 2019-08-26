@@ -18,10 +18,13 @@ public class BleachFileReader {
 	public static void saveModules() {
 		fileMang.createEmptyFile("modules.txt");
 		
+		String lines = "";
 		for(Module m: ModuleManager.getModules()) {
 			if(m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
-			fileMang.appendFile(m.getName() + ":" + m.isToggled(), "modules.txt");
+			lines += m.getName() + ":" + m.isToggled() + "\n";
 		}
+		
+		fileMang.appendFile(lines, "modules.txt");
 	}
 	
 	public static void readModules() {
@@ -43,6 +46,7 @@ public class BleachFileReader {
 	public static void saveSettings() {
 		fileMang.createEmptyFile("settings.txt");
 		
+		String lines = "";
 		for(Module m: ModuleManager.getModules()) {
 			String line = m.getName();
 			int count = 0;
@@ -53,9 +57,10 @@ public class BleachFileReader {
 				if(set instanceof SettingToggle) line += ":" + m.getSettings().get(count).toToggle().state;
 				count++;
 			}
-			
-			fileMang.appendFile(line, "settings.txt");
+			lines += line + "\n";
 		}
+		
+		fileMang.appendFile(lines, "settings.txt");
 	}
 	
 	public static void readSettings() {
@@ -85,9 +90,12 @@ public class BleachFileReader {
 	public static void saveBinds() {
 		fileMang.createEmptyFile("binds.txt");
 		
+		String lines = "";
 		for(Module m: ModuleManager.getModules()) {
-			fileMang.appendFile(m.getName() + ":" + m.getKey(), "binds.txt");
+			lines += m.getName() + ":" + m.getKey() + "\n";
 		}
+		
+		fileMang.appendFile(lines, "binds.txt");
 	}
 	
 	public static void readBinds() {
@@ -107,12 +115,12 @@ public class BleachFileReader {
 		
 		ClickGuiScreen gui = ClickGui.clickGui;
 		
-		fileMang.appendFile(gui.modsCmb.getPos()[0] + ":" + gui.modsCmb.getPos()[1], "clickgui.txt");
-		fileMang.appendFile(gui.modsExp.getPos()[0] + ":" + gui.modsExp.getPos()[1], "clickgui.txt");
-		fileMang.appendFile(gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1], "clickgui.txt");
-		fileMang.appendFile(gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1], "clickgui.txt");
-		fileMang.appendFile(gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1], "clickgui.txt");
-		fileMang.appendFile(gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1], "clickgui.txt");
+		fileMang.appendFile(gui.modsCmb.getPos()[0] + ":" + gui.modsCmb.getPos()[1] + "\n" +
+				gui.modsExp.getPos()[0] + ":" + gui.modsExp.getPos()[1] + "\n" +
+				gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1] + "\n" +
+				gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1] + "\n" +
+				gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1] + "\n" +
+				gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1], "clickgui.txt");
 	}
 	
 	public static void readClickGui() {
