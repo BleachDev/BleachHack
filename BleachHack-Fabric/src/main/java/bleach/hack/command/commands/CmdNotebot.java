@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,6 +25,7 @@ import bleach.hack.module.mods.Notebot;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
+import net.minecraft.util.SystemUtil;
 
 public class CmdNotebot extends Command {
 
@@ -36,12 +38,12 @@ public class CmdNotebot extends Command {
 
 	@Override
 	public String getDescription() {
-		return "Notebot Stuff, load loads a file, list lists files, req show required noteblocks for a file, download download songs";
+		return "Notebot Stuff, load loads a file, list lists files, req show required noteblocks for a file, download download songs and tutorial opens the tutorial";
 	}
 
 	@Override
 	public String getSyntax() {
-		return ".notebot load [file] | .notebot list | .notebot req [file] | .notebot download";
+		return ".notebot load [file] | .notebot list | .notebot req [file] | .notebot download | .notebot tutorial";
 	}
 
 	@Override
@@ -114,6 +116,8 @@ public class CmdNotebot extends Command {
 			Files.deleteIfExists(fileMang.getDir().resolve("notebot").resolve("songs.zip"));
 			
 			BleachLogger.infoMessage("Downloaded " + count + " Songs");
+		}else if(args[0].equalsIgnoreCase("tutorial")) {
+			SystemUtil.getOperatingSystem().open(new URI("https://youtu.be/7gxKnCtW2_4"));
 		}else {
 			BleachLogger.errorMessage("Invalid command usage!");
 			BleachLogger.infoMessage(getSyntax());
