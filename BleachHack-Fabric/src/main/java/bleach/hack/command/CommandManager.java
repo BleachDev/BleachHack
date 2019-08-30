@@ -17,6 +17,7 @@ public class CommandManager {
 			new CmdHelp(),
 			new CmdNotebot(),
 			new CmdPeek(),
+			new CmdRbook(),
 			new CmdRename(),
 			new CmdToggle());
 	
@@ -35,7 +36,7 @@ public class CommandManager {
 					c.onCommand(command, args.split(" "));
 				}catch(Exception e) {
 					e.printStackTrace();
-					BleachLogger.errorMessage("Invalid command usage!");
+					BleachLogger.errorMessage("Invalid Syntax!");
 					BleachLogger.infoMessage(c.getSyntax());
 				}
 				return;
