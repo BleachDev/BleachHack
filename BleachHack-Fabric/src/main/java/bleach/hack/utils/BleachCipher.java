@@ -1,13 +1,9 @@
 package bleach.hack.utils;
 
-
-// Don't mind this
-
-/*import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import bleach.hack.utils.file.BleachFileMang;
 import oshi.SystemInfo;
 
 public class BleachCipher {
@@ -21,7 +17,7 @@ public class BleachCipher {
 		String output = "";
 		
 		for(Character c: string.toCharArray()) {
-			int count = rand.nextInt(5);
+			int count = rand.nextInt(new Random().nextInt(50)+50);
 			salt.add(count);
 			
 			for(int i = 0; i < count; i++) {
@@ -41,16 +37,21 @@ public class BleachCipher {
 		int size = (int) string.charAt(string.length() - 1) - range.min;
 		List<Integer> salt = new ArrayList<>();
 		
-		for(int i = 0; i < size; i++) salt.add((int) string.charAt(string.length() - 1 - size + i) - range.min);
-		
+		/* Anti-salt */
 		String newString = string;
 		for(int i = 0; i < size; i++) {
-			System.out.println(i + " | " + salt.get(i) + " | " + newString);
+			salt.add((int) string.charAt(string.length() - 1 - size + i) - range.min);
 			newString = newString.replace(newString.substring(i, i+salt.get(i)), "");
 		}
-		newString = newString.substring(0, string.length() - 1 - size);
+		newString = newString.substring(0, newString.length() - 1 - size);
 		
-		return newString;
+		/* Recreate string from the remaining chars */
+		String finalString = "";
+		for(Character c: newString.toCharArray()) {
+			finalString += intToString((int)c - range.min);
+		}
+		
+		return finalString;
 	}
 	
 	private String intToString(int i) { return String.copyValueOf(Character.toChars(i)); }
@@ -75,4 +76,4 @@ class Range {
 		this.max = max;
 		for(int i = min; i < max; i++) ints.add(i);
 	}
-}*/
+}
