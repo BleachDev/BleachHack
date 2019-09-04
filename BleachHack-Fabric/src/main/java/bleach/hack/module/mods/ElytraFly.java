@@ -46,12 +46,14 @@ public class ElytraFly extends Module {
 				if(mc.options.keyBack.isPressed()) vec3d = vec3d.multiply(-1);
 				else if(mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
 				else if(mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
+				else if(mc.options.keyJump.isPressed()) vec3d = new Vec3d(0, getSettings().get(2).toSlider().getValue(), 0);
+				else if(mc.options.keySneak.isPressed()) vec3d = new Vec3d(0, -getSettings().get(2).toSlider().getValue(), 0);
 				else if(!mc.options.keyForward.isPressed()) vec3d = Vec3d.ZERO;
 				mc.player.setVelocity(vec3d);
 			}
 		}else if(getSettings().get(0).toMode().mode == 2 && !mc.player.onGround 
 				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA && mc.player.fallDistance > 0.5) {
-			/* I tried packet mode and got whatever the fuck this is */
+			/* I tried packet mode and got whatever the fuck **i mean frick** this is */
 			if(mc.options.keySneak.isPressed()) return;
 			mc.player.setVelocity(vec3d);
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));

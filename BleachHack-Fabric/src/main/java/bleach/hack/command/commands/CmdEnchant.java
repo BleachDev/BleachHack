@@ -50,6 +50,7 @@ public class CmdEnchant extends Command {
 		
 		if(args[0].equalsIgnoreCase("all")) {
 			for(Enchantment e: Registry.ENCHANTMENT) {
+				if(e == Enchantments.THORNS) continue;
 				enchant(item, e, level);
 			}
 		}

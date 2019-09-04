@@ -23,6 +23,7 @@ public class BleachMainMenu extends Screen {
 	
 	private ParticleManager particleMang = new ParticleManager();
 	private BleachGithubReader github = new BleachGithubReader();
+	public LoginScreen loginScreen = new LoginScreen();
 	public static boolean customTitleScreen = true;
 
 	private List<String> versions = new ArrayList<>();
@@ -43,7 +44,7 @@ public class BleachMainMenu extends Screen {
 			minecraft.openScreen(new TitleScreen(false));
         }));
 		this.addButton(new ButtonWidget(width / 2 + 2, height / 4 + 96, 98, 20, "Login Manager", button -> {
-	        this.minecraft.openScreen(new LoginScreen());
+	        this.minecraft.openScreen(loginScreen);
 	    }));
 		this.addButton(new ButtonWidget(width / 2 - 100, height / 4 + 129, 98, 20, I18n.translate("menu.options"), button -> {
 	        this.minecraft.openScreen(new SettingsScreen(this, this.minecraft.options));

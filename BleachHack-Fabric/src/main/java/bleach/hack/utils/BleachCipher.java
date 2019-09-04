@@ -12,46 +12,50 @@ public class BleachCipher {
 	private Random rand = new Random(6942013376969L);
 	
 	public String encrypt(String string) {
-		List<Integer> salt = new ArrayList<>();
-		
-		String output = "";
-		
-		for(Character c: string.toCharArray()) {
-			int count = rand.nextInt(new Random().nextInt(50)+50);
-			salt.add(count);
+		try {
+			List<Integer> salt = new ArrayList<>();
 			
-			for(int i = 0; i < count; i++) {
-				output += intToString(range.ints.get(new Random().nextInt(range.ints.size())));
+			String output = "";
+			
+			for(Character c: string.toCharArray()) {
+				int count = rand.nextInt(new Random().nextInt(50)+50);
+				salt.add(count);
+				
+				for(int i = 0; i < count; i++) {
+					output += intToString(range.ints.get(new Random().nextInt(range.ints.size())));
+				}
+				
+				output += intToString(range.min + (int)c);
 			}
 			
-			output += intToString(range.min + (int)c);
-		}
-		
-		for(Integer i: salt) output += intToString(range.min + i);
-		output += intToString(range.min + salt.size());
-		
-		return output;
+			for(Integer i: salt) output += intToString(range.min + i);
+			output += intToString(range.min + salt.size());
+			
+			return output;
+		}catch(Exception e) {return string;}
 	}
 	
 	public String decrypt(String string) {
-		int size = (int) string.charAt(string.length() - 1) - range.min;
-		List<Integer> salt = new ArrayList<>();
-		
-		/* Anti-salt */
-		String newString = string;
-		for(int i = 0; i < size; i++) {
-			salt.add((int) string.charAt(string.length() - 1 - size + i) - range.min);
-			newString = newString.replace(newString.substring(i, i+salt.get(i)), "");
-		}
-		newString = newString.substring(0, newString.length() - 1 - size);
-		
-		/* Recreate string from the remaining chars */
-		String finalString = "";
-		for(Character c: newString.toCharArray()) {
-			finalString += intToString((int)c - range.min);
-		}
-		
-		return finalString;
+		try {
+			int size = (int) string.charAt(string.length() - 1) - range.min;
+			List<Integer> salt = new ArrayList<>();
+			
+			/* Anti-salt */
+			String newString = string;
+			for(int i = 0; i < size; i++) {
+				salt.add((int) string.charAt(string.length() - 1 - size + i) - range.min);
+				newString = newString.replace(newString.substring(i, i+salt.get(i)), "");
+			}
+			newString = newString.substring(0, newString.length() - 1 - size);
+			
+			/* Recreate string from the remaining chars */
+			String finalString = "";
+			for(Character c: newString.toCharArray()) {
+				finalString += intToString((int)c - range.min);
+			}
+			
+			return finalString;
+		}catch(Exception e) {return string;}
 	}
 	
 	private String intToString(int i) { return String.copyValueOf(Character.toChars(i)); }
