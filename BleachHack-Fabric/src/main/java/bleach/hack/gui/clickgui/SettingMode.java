@@ -6,7 +6,7 @@ public class SettingMode extends SettingBase {
 	public int mode;
 	public String text;
 	
-	public SettingMode(String[] modes, String text) {
+	public SettingMode(String text, String... modes) {
 		this.modes = modes;
 		this.text = text;
 	}

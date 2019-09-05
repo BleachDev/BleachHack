@@ -15,7 +15,7 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 public class Nofall extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Simple", "Packet"}, "Mode: "));
+			new SettingMode("Mode: ", "Simple", "Packet"));
 			
 	public Nofall() {
 		super("Nofall", -1, Category.PLAYER, "Prevents you from taking fall damage.", settings);

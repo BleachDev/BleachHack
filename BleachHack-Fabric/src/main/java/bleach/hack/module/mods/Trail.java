@@ -24,7 +24,7 @@ public class Trail extends Module {
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Trail"),
 			new SettingToggle(false, "Keep Trail"),
-			new SettingMode(new String[] {"Red","Green","Blue","B2G","R2B"}, "Color: "),
+			new SettingMode("Color: ", "Red", "Green", "Blue", "B2G", "R2B"),
 			new SettingSlider(0.1, 10, 3, 1, "Thick: "));
 	
 	private List<List<Vec3d>> trails = new ArrayList<>();

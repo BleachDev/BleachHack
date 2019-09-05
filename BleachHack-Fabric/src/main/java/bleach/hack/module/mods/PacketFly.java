@@ -22,7 +22,7 @@ import net.minecraft.util.math.Vec3d;
 public class PacketFly extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Phase", "Packet"},  "Mode: "),
+			new SettingMode("Mode: ", "Phase", "Packet"),
 			new SettingSlider(0.05, 2, 0.5, 2, "HSpeed: "),
 			new SettingSlider(0.05, 2, 0.5, 2, "VSpeed: "),
 			new SettingSlider(0, 40, 20, 0, "Fall: "));

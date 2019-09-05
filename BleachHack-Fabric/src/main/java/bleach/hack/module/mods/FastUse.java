@@ -17,7 +17,7 @@ import bleach.hack.utils.FabricReflect;
 public class FastUse extends Module {
 	
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Single", "Multi"}, "Mode: "),
+			new SettingMode("Mode: ", "Single", "Multi"),
 			new SettingSlider(1, 100, 20, 0, "Multi: "));
 	
 	public FastUse() {

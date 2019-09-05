@@ -31,7 +31,7 @@ public class Notebot extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Tune"),
-			new SettingMode(new String[] {"Normal", "Wait-1", "Wait-2", "Batch-5", "Batch-All"}, "Tune: "),
+			new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
 			new SettingToggle(false, "Loop"));
 			
 	private BleachFileMang fileMang = new BleachFileMang();

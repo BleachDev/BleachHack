@@ -15,7 +15,7 @@ import net.minecraft.entity.effect.StatusEffects;
 public class SpeedMine extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"1", "2", "3"}, "Haste: "));
+			new SettingMode("Haste: ", "1", "2", "3"));
 	
 	public SpeedMine() {
 		super("SpeedMine", -1, Category.EXPLOITS, "Allows you to mine at sanic speeds", settings);

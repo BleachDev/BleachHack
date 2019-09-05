@@ -38,7 +38,7 @@ public class UI extends Module {
 			new SettingToggle(false, "Lag-Meter"),
 			new SettingToggle(false, "Server"),
 			new SettingToggle(false, "Players"),
-			new SettingMode(new String[] {"Down Left", "Top Right", "Down Right"}, "Info: "));
+			new SettingMode("Info: ", "Down Left", "Top Right", "Down Right"));
 	
 	public List<String> infoList = new ArrayList<>();
 	private int count = 0;

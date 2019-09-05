@@ -20,7 +20,7 @@ public class Ambience extends Module {
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Weather"),
 			new SettingToggle(false, "Time"),
-			new SettingMode(new String[] {"Clear", "Rain"}, "Weather: "),
+			new SettingMode("Weather: ", "Clear", "Rain"),
 			new SettingSlider(0, 2, 0, 2, "Rain:"),
 			new SettingSlider(0, 24000, 12500, 0, "Time: "));
 	

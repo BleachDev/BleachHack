@@ -17,7 +17,7 @@ import com.google.common.eventbus.Subscribe;
 public class Spammer extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Random", "Order"}, "Read: "),
+			new SettingMode("Read: ", "Random", "Order"),
 			new SettingSlider(1, 120, 20, 0, "Delay: "));
 	
 	private BleachFileMang fileMang = new BleachFileMang();

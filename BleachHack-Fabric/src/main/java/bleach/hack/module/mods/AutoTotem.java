@@ -21,7 +21,7 @@ public class AutoTotem extends Module {
 	public void onTick(EventTick eventTick) {
 		if(mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING) return;
 		
-		/*Inventory*/
+		/* Inventory */
 		for(int i = 9; i < 44; i++) {
 			if(mc.player.inventory.getInvStack(i).getItem() == Items.TOTEM_OF_UNDYING) {
 				mc.interactionManager.method_2906(0, 0, i, SlotActionType.PICKUP, mc.player);
@@ -30,7 +30,7 @@ public class AutoTotem extends Module {
 			}
 		}
 		
-		/*Hotbar*/
+		/* Hotbar */
 		for(int i = 0; i < 8; i++) {
 			if(mc.player.inventory.getInvStack(i).getItem() == Items.TOTEM_OF_UNDYING) {
 				//int oldSlot = mc.player.inventory.currentItem;

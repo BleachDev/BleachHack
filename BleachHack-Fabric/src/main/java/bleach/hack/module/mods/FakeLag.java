@@ -19,14 +19,13 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 public class FakeLag extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Always", "Pulse"}, "Mode: "),
+			new SettingMode("Mode: ", "Always", "Pulse"),
 			new SettingToggle(false, "Limit"),
 			new SettingSlider(0, 15, 5, 1, "Limit: "),
 			new SettingSlider(0, 5, 1, 1, "Pulse: "));
 	
 	public List<PlayerMoveC2SPacket> queue = new ArrayList<>();
 	public long startTime = 0;
-	public boolean catchup = false;
 	
 	public FakeLag() {
 		super("FakeLag", -1, Category.MOVEMENT, "Stores up movement packets", settings);
@@ -50,7 +49,7 @@ public class FakeLag extends Module {
 		if(!(eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket
 				|| eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket.PositionOnly
 				|| eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket.LookOnly
-				|| eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket.PositionOnly)) return;
+				|| eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket.Both)) return;
 		queue.add((PlayerMoveC2SPacket) eventSendPacket.getPacket());
 		eventSendPacket.setCancelled(true);
 	}

@@ -33,7 +33,7 @@ public class Peek extends Module {
 		AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) mc.currentScreen;
 		
 		Slot slot = null;
-		try { slot = (Slot) FabricReflect.getField(AbstractContainerScreen.class, "field_2787", "focusedSlot").get(screen); } catch (Exception e) {}
+		try { slot = (Slot) FabricReflect.getFieldValue(screen, "field_2787", "focusedSlot"); } catch (Exception e) {}
 		
 		if(slot == null) return;
 		if(!(slot.getStack().getItem() instanceof BlockItem)) return;
@@ -65,7 +65,7 @@ public class Peek extends Module {
 		else mc.currentScreen.renderTooltip(Arrays.asList(s,s,s,s,s), mX, mY - 58);
 		for(ItemStack i: items) {
 			if(count > 26) break;
-			int x = mX + 8 + (17 * (count % 9));
+			int x = mX + 10 + (17 * (count % 9));
 			int y = mY - 70 + (17 * (count / 9));
 			
 			mc.getItemRenderer().renderGuiItem(i, x, y);

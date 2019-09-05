@@ -17,7 +17,7 @@ import net.minecraft.entity.effect.StatusEffects;
 public class Fullbright extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[]{"Gamma", "Potion", "Table"}, "Mode: "));
+			new SettingMode("Mode: ", "Gamma", "Potion", "Table"));
 			
 	public Fullbright() {
 		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.", settings);

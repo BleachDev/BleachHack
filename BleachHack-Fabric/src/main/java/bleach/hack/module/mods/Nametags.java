@@ -24,8 +24,8 @@ import net.minecraft.util.math.MathHelper;
 public class Nametags extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"H", "V", "None"}, "Armor: "),
-			new SettingMode(new String[] {"Number", "Bar"}, "Health: "),
+			new SettingMode("Armor: ", "H", "V", "None"),
+			new SettingMode("Health: ", "Number", "Bar"),
 			new SettingSlider(0.5, 5, 2, 1, "Size Players: "),
 			new SettingSlider(0.5, 5, 1, 1, "Size Mobs: "),
 			new SettingToggle(true, "Players"),

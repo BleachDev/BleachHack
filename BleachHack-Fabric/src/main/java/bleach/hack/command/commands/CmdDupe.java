@@ -1,6 +1,7 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
+import net.minecraft.text.LiteralText;
 
 public class CmdDupe extends Command {
 
@@ -22,7 +23,7 @@ public class CmdDupe extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		mc.player.dropSelectedItem(true);
-		mc.player.attack(mc.player);
+		mc.player.networkHandler.getConnection().disconnect(new LiteralText("Duping..."));
 	}
 
 }

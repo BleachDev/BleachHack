@@ -26,6 +26,7 @@ public class ModuleManager {
 			new Flight(),
 			new Freecam(),
 			new Fullbright(),
+			new Ghosthand(),
 			new Jesus(),
 			new Killaura(),
 			new Nametags(),

@@ -18,9 +18,9 @@ import net.minecraft.util.math.Vec3d;
 public class Flight extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Normal","Static","Jetpack"}, "Mode: "),
+			new SettingMode("Mode: ", "Normal","Static","Jetpack"),
 			new SettingSlider(0, 5, 1, 1, "Speed: "),
-			new SettingMode(new String[] {"Off","Fall","Bob","Packet"}, "AntiKick: "));
+			new SettingMode("AntiKick: ", "Off","Fall","Bob","Packet"));
 	
 	public Flight() {
 		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly", settings);

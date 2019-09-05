@@ -16,7 +16,7 @@ import bleach.hack.module.Module;
 public class Speed extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"OnGround", "MiniHop", "Bhop"}, "Mode: "),
+			new SettingMode("Mode: ", "OnGround", "MiniHop", "Bhop"),
 			new SettingSlider(0.1, 10, 2, 1, "Speed: "));
 	
 	private boolean jumping;

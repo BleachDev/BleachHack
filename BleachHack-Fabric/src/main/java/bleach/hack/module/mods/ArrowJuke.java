@@ -1,11 +1,14 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
+import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import net.minecraft.entity.Entity;
@@ -16,8 +19,11 @@ import net.minecraft.util.math.Vec3d;
 
 public class ArrowJuke extends Module {
 
+	private final static List<SettingBase> settings = Arrays.asList(
+			new SettingMode("Move: ", "Client", "Packet"));
+	
 	public ArrowJuke() {
-		super("ArrowJuke", -1, Category.COMBAT, "Tries to dodge arrows coming at you", null);
+		super("ArrowJuke", -1, Category.COMBAT, "Tries to dodge arrows coming at you", settings);
 	}
 	
 	@Subscribe
@@ -41,18 +47,21 @@ public class ArrowJuke extends Module {
 						nextPos.subtract(e.getBoundingBox().getXSize()/2, 0, e.getBoundingBox().getZSize()/2), 
 						nextPos.add(e.getBoundingBox().getXSize()/2, e.getBoundingBox().getYSize(), e.getBoundingBox().getZSize()/2));
 				
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x+0.5, mc.player.y, mc.player.z, true));
 				if(pBox.intersects(nextBox)) {
-					boolean contains = false;
-					for(Box b : boxes) if(b.intersects(moveBox(pBox, 1, 0, 0))) contains = true;
-					if(!contains) mc.player.addVelocity(0.5, 0, 0);
-					contains = false;
-					for(Box b : boxes) if(b.intersects(moveBox(pBox, -1, 0, 0))) contains = true;
-					if(!contains) mc.player.addVelocity(-0.5, 0, 0);
-					contains = false;
-					for(Box b : boxes) if(b.intersects(moveBox(pBox, 0, 0, 1))) contains = true;
-					if(!contains) mc.player.addVelocity(0, 0, 0.5);
-					else mc.player.addVelocity(0, 0, -0.5);
+					for(Vec3d vel: new Vec3d[] {new Vec3d(0.5,0,0), new Vec3d(-0.5,0,0), new Vec3d(0,0,0.5), new Vec3d(0,0,-0.5)}) {
+						boolean contains = false;
+						for(Box b : boxes) if(b.intersects(moveBox(pBox, vel.x*2, vel.y, vel.z*2))) contains = true;
+						if(!contains) {
+							int mode = getSettings().get(0).toMode().mode;
+							if(mode == 0) mc.player.addVelocity(vel.x, vel.y, vel.z);
+							else if(mode == 1) {
+								Vec3d vel2 = mc.player.getPos().add(vel.multiply(1.5));
+								mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y, vel2.z, false));
+								mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y-0.01, vel2.z, true));
+							}
+							
+						}
+					}
 					break;
 				}
 			}

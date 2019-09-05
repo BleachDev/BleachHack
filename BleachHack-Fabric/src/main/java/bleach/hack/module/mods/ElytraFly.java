@@ -22,7 +22,7 @@ import net.minecraft.util.math.Vec3d;
 public class ElytraFly extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode(new String[] {"Normal", "Control", "Bruh Momentum"}, "Mode: "),
+			new SettingMode("Mode: ", "Normal", "Control", "Bruh Momentum"),
 			new SettingToggle(false, "FlatFly"),
 			new SettingSlider(0, 5, 0.8, 2, "Speed: "));
 			
