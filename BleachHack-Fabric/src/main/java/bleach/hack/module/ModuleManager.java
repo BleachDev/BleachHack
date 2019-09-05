@@ -21,6 +21,7 @@ public class ModuleManager {
 			new ElytraFly(),
 			new EntitySpeed(),
 			new ESP(),
+			new FakeLag(),
 			new FastUse(),
 			new Flight(),
 			new Freecam(),

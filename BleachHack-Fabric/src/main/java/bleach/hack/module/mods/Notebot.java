@@ -31,7 +31,7 @@ public class Notebot extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Tune"),
-			new SettingMode(new String[] {"Normal", "Wait-1", "Wait-2"}, "Tune: "),
+			new SettingMode(new String[] {"Normal", "Wait-1", "Wait-2", "Batch-5", "Batch-All"}, "Tune: "),
 			new SettingToggle(false, "Loop"));
 			
 	private BleachFileMang fileMang = new BleachFileMang();
@@ -40,6 +40,7 @@ public class Notebot extends Module {
 	private HashMap<BlockPos, Integer> blockTunes = new HashMap<>();
 	private List<List<Integer>> notes = new ArrayList<>();
 	private int timer = -10;
+	private int tuneDelay = 0;
 	
 	public static String filePath = "";
 	
@@ -98,12 +99,32 @@ public class Notebot extends Module {
 		if(getSettings().get(0).toToggle().state) {
 			for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 				if(getNote(e.getKey()) != e.getValue()) {
-					if(getSettings().get(1).toMode().mode >= 1) {
-						if(mc.player.age % 2 == 0 ||
-								(mc.player.age % 3 == 0 && getSettings().get(1).toMode().mode == 2)) return;
+					if(getSettings().get(1).toMode().mode <= 2) {
+						if(getSettings().get(1).toMode().mode >= 1) {
+							if(mc.player.age % 2 == 0 ||
+									(mc.player.age % 3 == 0 && getSettings().get(1).toMode().mode == 2)) return;
+						}
+						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
+								new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
+					}else if(getSettings().get(1).toMode().mode >= 3) {
+						if(tuneDelay < (getSettings().get(1).toMode().mode == 3 ? 3 : 5)) {
+							tuneDelay++;
+							return;
+						}
+						
+						int tunes = getNote(e.getKey());
+						int reqTunes = 0;
+						for(int i = 0; i < (getSettings().get(1).toMode().mode == 3 ? 5 : 25); i++) {
+							if(tunes == 25) tunes = 0;
+							if(tunes == e.getValue()) break;
+							tunes++;
+							reqTunes++;
+						}
+						
+						for(int i = 0; i < reqTunes; i++) mc.interactionManager.interactBlock(mc.player, mc.world, 
+								Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
+						tuneDelay = 0;
 					}
-					mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
-							new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
 					return;
 				}
 			}

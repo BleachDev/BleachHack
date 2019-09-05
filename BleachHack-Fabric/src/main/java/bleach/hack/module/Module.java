@@ -75,7 +75,7 @@ public class Module {
 		return key;
 	}
 	
-	public List<? extends SettingBase> getSettings() {
+	public List<SettingBase> getSettings() {
 		return settings;
 	}
 
