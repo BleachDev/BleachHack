@@ -41,6 +41,8 @@ public class ArrowJuke extends Module {
 						nextPos.add(e.getBoundingBox().getXSize()/2, e.getBoundingBox().getYSize(), e.getBoundingBox().getZSize()/2)));
 			}
 			
+			int mode = getSettings().get(0).toMode().mode;
+			
 			for(int i = 0; i < 75; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i/5));
 				Box nextBox = new Box(
@@ -48,21 +50,25 @@ public class ArrowJuke extends Module {
 						nextPos.add(e.getBoundingBox().getXSize()/2, e.getBoundingBox().getYSize(), e.getBoundingBox().getZSize()/2));
 				
 				if(pBox.intersects(nextBox)) {
-					for(Vec3d vel: new Vec3d[] {new Vec3d(0.5,0,0), new Vec3d(-0.5,0,0), new Vec3d(0,0,0.5), new Vec3d(0,0,-0.5)}) {
+					for(Vec3d vel: new Vec3d[] {new Vec3d(1,0,0), new Vec3d(-1,0,0), new Vec3d(0,0,1)}) {
 						boolean contains = false;
-						for(Box b : boxes) if(b.intersects(moveBox(pBox, vel.x*2, vel.y, vel.z*2))) contains = true;
+						for(Box b : boxes) if(b.intersects(moveBox(pBox, vel.x, vel.y, vel.z))) contains = true;
 						if(!contains) {
-							int mode = getSettings().get(0).toMode().mode;
 							if(mode == 0) mc.player.addVelocity(vel.x, vel.y, vel.z);
 							else if(mode == 1) {
 								Vec3d vel2 = mc.player.getPos().add(vel.multiply(1.5));
 								mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y, vel2.z, false));
 								mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y-0.01, vel2.z, true));
 							}
-							
+							return;
 						}
 					}
-					break;
+					if(mode == 0) mc.player.addVelocity(0, 0, -0.5);
+					else if(mode == 1) {
+						Vec3d vel2 = mc.player.getPos().add(new Vec3d(0,0,-0.75));
+						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y, vel2.z, false));
+						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y-0.01, vel2.z, true));
+					}
 				}
 			}
 		}

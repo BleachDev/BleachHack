@@ -44,8 +44,6 @@ public class AltManagerScreen extends Screen {
 		
 		int c = 0;
 		for(List<String> e: entries) {
-			if(entries.size() == 1) break;
-			if(e.size() <= 1) continue;
 			String text = "§a" + e.get(0) + ":***";
 			int lenght = minecraft.textRenderer.getStringWidth(text);
 			
@@ -66,24 +64,26 @@ public class AltManagerScreen extends Screen {
 		
 		int c = 0;
 		for(List<String> e: new ArrayList<>(entries)) {
-			if(entries.size() == 1) break;
-			if(e.size() <= 1) continue;
 			String text = "§a" + e.get(0) + ":***";
 			int lenght = minecraft.textRenderer.getStringWidth(text);
 			
 			if(mX>width/2-lenght/2-1 && mX<width/2+lenght/2+1 && mY>height/4+c*14-2 && mY<height/4+c*14+11) {
-				loginScreen.userField.setText(e.get(0));
-				loginScreen.passField.setText(e.get(1));
+				try{ loginScreen.userField.setText(e.get(0)); }catch(Exception e1) {}
+				try{ loginScreen.passField.setText(e.get(1)); }catch(Exception e1) {}
 				onClose();
 			}
 			if(mX>width/2+lenght/2+4 && mX<width/2+lenght/2+14 && mY>height/4+c*14-2 && mY<height/4+c*14+11) {
-				entries.remove(c);
-				String fileText = "";
-				for(List<String> e1: new ArrayList<>(entries)) {
-					fileText += cipher.encrypt(e1.get(0) + ":" + e1.get(1)) + "\n";
+				int c1 = 0;
+				String lines = "";
+				for(String l: fileMang.readFileLines("logins.txt")) {
+					if(l.trim().replace("\r", "").replace("\n", "") == "") continue;
+					if (c1 != c) lines += l + "\r\n";
+					c1++;
 				}
 				fileMang.createEmptyFile("logins.txt");
-				fileMang.appendFile(fileText, "logins.txt");
+				fileMang.appendFile(lines, "logins.txt");
+				minecraft.openScreen(new AltManagerScreen(loginScreen));
+				break;
 			}
 			c++;
 		}

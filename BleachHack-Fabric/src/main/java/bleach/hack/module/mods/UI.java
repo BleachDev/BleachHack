@@ -158,6 +158,7 @@ public class UI extends Module {
 		lastPacket = System.currentTimeMillis();
 		if(eventReadPacket.getPacket() instanceof WorldTimeUpdateS2CPacket) {
 			long time = System.currentTimeMillis();
+			if(time < 500) return;
 			long timeOffset = Math.abs(1000 - (time - prevTime)) + 1000;
 			tps = Math.round(MathHelper.clamp(20 / ((double) timeOffset / 1000), 0, 20) * 100d) / 100d;
 			prevTime = time;

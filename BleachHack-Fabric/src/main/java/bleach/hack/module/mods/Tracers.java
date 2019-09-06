@@ -43,13 +43,11 @@ public class Tracers extends Module {
 		for(Entity e: mc.world.getEntities()) {
 			Vec3d vec = e.getPos();
 			
-			/* I have literally no idea why making this number bigger works but it does */
 			Vec3d vec2 = new Vec3d(0, 0, 75).rotateX(-(float) Math.toRadians(mc.cameraEntity.pitch))
 					.rotateY(-(float) Math.toRadians(mc.cameraEntity.yaw))
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
-			/* actually i do and its really scuffed */
 			
-			if(e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
+			if(e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f,0f,0f,thick);
 			}
