@@ -15,7 +15,7 @@ public class ClickGuiScreen extends Screen {
 	private boolean dragging = false;
 	private int key;
 	
-	public ModuleWindow modsExp, modsMsc, modsCmb, modsPly, modsMvm, modsRen;
+	public ModuleWindow modsExp, modsMsc, modsCmb, modsPly, modsMvm, modsRen, modsWrd;
 	
 	public ClickGuiScreen() {
 		super(new LiteralText("ClickGui"));
@@ -28,6 +28,7 @@ public class ClickGuiScreen extends Screen {
 		modsPly = new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER), "Player", len, 240, 35);
 		modsMvm = new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT), "Movement", len, 310, 35);
 		modsRen = new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER), "Render", len, 380, 35);
+		modsWrd = new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD), "World", len, 450, 35);
 	}
 	
 	public boolean isPauseScreen() {
@@ -51,13 +52,13 @@ public class ClickGuiScreen extends Screen {
 		modsPly.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
 		modsMvm.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
 		modsRen.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
+		modsWrd.draw(int_1, int_2, lMousePressed, rMousePressed, len, dragging, key);
 		
 		lMousePressed = false;
 		rMousePressed = false;
 		dragging = false;
 		key = -1;
-		len = (int) Math.round(ModuleManager.getModule(ClickGui.class)
-				.getSettings().get(1).toSlider().getValue());
+		len = (int) Math.round(ModuleManager.getModule(ClickGui.class).getSettings().get(1).toSlider().getValue());
 		super.render(int_1, int_2, float_1);
 	}
 	
@@ -85,5 +86,6 @@ public class ClickGuiScreen extends Screen {
 		modsPly.setPos(240, 35);
 		modsMvm.setPos(310, 35);
 		modsRen.setPos(380, 35);
+		modsWrd.setPos(450, 35);
 	}
 }

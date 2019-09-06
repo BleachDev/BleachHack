@@ -35,6 +35,7 @@ public class ModuleManager {
 			new Notebot(),
 			new NotebotStealer(),
 			new NoVelocity(),
+			new Nuker(),
 			new OffhandCrash(),
 			new PacketFly(),
 			new Peek(),

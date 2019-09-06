@@ -25,7 +25,7 @@ public class Ambience extends Module {
 			new SettingSlider(0, 24000, 12500, 0, "Time: "));
 	
 	public Ambience() {
-		super("Ambience", -1, Category.MISC, "Changes The World Time/Weather", settings);
+		super("Ambience", -1, Category.WORLD, "Changes The World Time/Weather", settings);
 	}
 	
 	@Subscribe

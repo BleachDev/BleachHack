@@ -120,7 +120,8 @@ public class BleachFileReader {
 				gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1] + "\n" +
 				gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1] + "\n" +
 				gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1] + "\n" +
-				gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1], "clickgui.txt");
+				gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1] + "\n" +
+				gui.modsWrd.getPos()[0] + ":" + gui.modsWrd.getPos()[1] + "\n", "clickgui.txt");
 	}
 	
 	public static void readClickGui() {
@@ -135,6 +136,7 @@ public class BleachFileReader {
 			gui.modsMvm.setPos(Integer.parseInt(lines.get(3).split(":")[0]), Integer.parseInt(lines.get(3).split(":")[1]));
 			gui.modsPly.setPos(Integer.parseInt(lines.get(4).split(":")[0]), Integer.parseInt(lines.get(4).split(":")[1]));
 			gui.modsRen.setPos(Integer.parseInt(lines.get(5).split(":")[0]), Integer.parseInt(lines.get(5).split(":")[1]));
+			gui.modsWrd.setPos(Integer.parseInt(lines.get(6).split(":")[0]), Integer.parseInt(lines.get(6).split(":")[1]));
 		}catch(Exception e) {}
 	}
 }

@@ -33,7 +33,7 @@ public class Freecam extends Module {
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		playerPos = new double[]{mc.player.x, mc.player.y, mc.player.z};
+		playerPos = new double[] {mc.player.x, mc.player.y, mc.player.z};
 
 		camera = new PlayerCopyEntity();
 		camera.copyPositionAndRotation(mc.player);

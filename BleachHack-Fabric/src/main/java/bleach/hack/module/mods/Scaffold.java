@@ -31,7 +31,7 @@ public class Scaffold extends Module {
 	private HashMap<BlockPos, Integer> lastPlaced = new HashMap<>();
 	
 	public Scaffold() {
-		super("Scaffold", GLFW.GLFW_KEY_N, Category.PLAYER, "Places blocks under you", settings);
+		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you", settings);
 	}
 
 	@Subscribe

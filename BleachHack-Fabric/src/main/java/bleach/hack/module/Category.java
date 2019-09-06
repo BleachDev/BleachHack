@@ -6,5 +6,6 @@ public enum Category {
 	COMBAT,
 	MOVEMENT,
 	EXPLOITS,
-	MISC
+	MISC,
+	WORLD
 }
