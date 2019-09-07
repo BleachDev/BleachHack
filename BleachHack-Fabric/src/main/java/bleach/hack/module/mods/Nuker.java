@@ -46,6 +46,17 @@ public class Nuker extends Module {
 					
 					if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
 					
+					Direction dir = null;
+					for(Direction d: Direction.values()) {
+						if(mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5)) > range
+								|| mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR) continue;
+						dir = d;
+						break;
+					}
+					
+					System.out.println(dir);
+					if(dir == null) continue;
+					
 					if(canSeeBlock(pos) && mc.world.getBlockState(pos).getBlock() != Blocks.AIR) {
 						if(getSettings().get(3).toToggle().state) {
 							float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
@@ -56,8 +67,8 @@ public class Nuker extends Module {
 							mc.player.pitch = prevRot[1];
 						}
 						
-						if(getSettings().get(0).toMode().mode == 0) mc.interactionManager.method_2902(pos, Direction.UP);
-						else mc.interactionManager.attackBlock(pos, Direction.UP);
+						if(getSettings().get(0).toMode().mode == 0) mc.interactionManager.method_2902(pos, dir);
+						else mc.interactionManager.attackBlock(pos, dir);
 						
 						mc.player.swingHand(Hand.MAIN_HAND);
 						if(getSettings().get(0).toMode().mode != 2) return;

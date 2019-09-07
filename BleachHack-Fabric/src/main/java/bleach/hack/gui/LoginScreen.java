@@ -38,10 +38,10 @@ public class LoginScreen extends Screen {
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 84, 200, 20, "Done", (button) -> {
 			minecraft.openScreen(new BleachMainMenu());
 	    }));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 62, 99, 20, "Accounts", (button) -> {
+		/*addButton(new ButtonWidget(width / 2 - 100, height / 3 + 62, 99, 20, "Accounts", (button) -> {
 			minecraft.openScreen(new AltManagerScreen(this));
-		}));
-		addButton(new ButtonWidget(width / 2 + 1, height / 3 + 62, 99, 20, "Login", (button) -> {
+		}));*/
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 62, 200, 20, "Login", (button) -> {
 			loginResult = LoginManager.login(userField.getText(), passField.getText());
 			String text = userField.getText() + ":" + passField.getText();
 			if(checkBox.checked && loginResult == "§aLogin Successful" 
@@ -75,13 +75,14 @@ public class LoginScreen extends Screen {
 		drawString(font, "Email: ", width / 2 - 130, height / 4 + 15, 0xC0C0C0);
 		drawString(font, "Password: ", width / 2 - 154, height / 4 + 45, 0xC0C0C0);
 		
-		drawString(font, loginResult == "" ? "" : "|  " + loginResult, width / 2 - 24, height / 4 + 65, 0xC0C0C0);
+		//drawString(font, loginResult == "" ? "" : "|  " + loginResult, width / 2 - 24, height / 4 + 65, 0xC0C0C0);
+		drawCenteredString(font, loginResult, width / 2, height / 4 + 65, -1);
 		
 		drawString(font, "Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
 		
 		userField.render(p_render_1_, p_render_2_, p_render_3_);
 		passField.render(p_render_1_, p_render_2_, p_render_3_);
-		checkBox.render(p_render_1_, p_render_2_, p_render_3_);
+		//checkBox.render(p_render_1_, p_render_2_, p_render_3_);
 		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
 	}
@@ -106,9 +107,9 @@ public class LoginScreen extends Screen {
 			if(userField.isFocused()) userField.changeFocus(true);
 		}
 		
-		if(mX>checkBox.x && mX<checkBox.x+10 && mY>checkBox.y && mY<checkBox.y+10) {
+		/*if(mX>checkBox.x && mX<checkBox.x+10 && mY>checkBox.y && mY<checkBox.y+10) {
 			checkBox.checked = !checkBox.checked;
-		}
+		}*/
 		
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
