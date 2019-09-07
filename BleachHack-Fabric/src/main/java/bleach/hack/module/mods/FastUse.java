@@ -32,7 +32,7 @@ public class FastUse extends Module {
 		/* call rightClickMouse */
 		if(getSettings().get(0).toMode().mode == 1 && mc.options.keyUse.isPressed()) {
 			for(int i = 0; i < (int) getSettings().get(1).toSlider().getValue(); i++) {
-				FabricReflect.invokeMethod(mc, "method_1583", "doItemUse", null);
+				FabricReflect.invokeMethod(mc, "method_1583", "doItemUse");
 			}
 		}
 	}

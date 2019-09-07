@@ -15,7 +15,7 @@ public class MixinIngameHud {
 	@Inject(at = @At(value = "RETURN"), method = "render(F)V", cancellable = true)
 	public void render(float float_1, CallbackInfo info) {
 		EventDrawOverlay event = new EventDrawOverlay();
-		BleachHack.getEventBus().post(event);
+		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}
 }

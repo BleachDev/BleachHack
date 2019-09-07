@@ -25,7 +25,7 @@ public abstract class MixinEntityRenderer<T extends LivingEntity, M extends Enti
 	@Inject(at = @At("HEAD"), method = "method_4041(Lnet/minecraft/entity/LivingEntity;DDD)V", cancellable = true)
 	public void render(T livingEntity_1, double double_1, double double_2, double double_3, CallbackInfo info) {
 		EventLivingRender event = new EventLivingRender(livingEntity_1);
-		BleachHack.getEventBus().post(event);
+		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}
 }

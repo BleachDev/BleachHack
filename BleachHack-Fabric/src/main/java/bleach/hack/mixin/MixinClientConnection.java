@@ -29,7 +29,7 @@ public class MixinClientConnection {
         if (this.channel.isOpen()) {
             try {
                 EventReadPacket event = new EventReadPacket(packet_1);
-                BleachHack.getEventBus().post(event);
+                BleachHack.eventBus.post(event);
                 if (event.isCancelled()) callback.cancel();
             } catch (Exception exception) {}
         }
@@ -38,7 +38,7 @@ public class MixinClientConnection {
     @Redirect(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At(value = "INVOKE", target = "net/minecraft/network/ClientConnection.sendImmediately(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V"))
     private void sendPacket(ClientConnection clientConnection_1, Packet<?> packet_1, final GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1) {
         EventSendPacket event = new EventSendPacket(packet_1);
-        BleachHack.getEventBus().post(event);
+        BleachHack.eventBus.post(event);
 
         if (event.isCancelled()) return;
 

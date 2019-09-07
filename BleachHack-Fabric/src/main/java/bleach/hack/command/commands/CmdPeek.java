@@ -1,12 +1,11 @@
 package bleach.hack.command.commands;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.BleachQueue;
+import bleach.hack.utils.ItemContentUtils;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HopperBlock;
@@ -16,9 +15,6 @@ import net.minecraft.container.ShulkerBoxContainer;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 
 public class CmdPeek extends Command {
 
@@ -54,19 +50,7 @@ public class CmdPeek extends Command {
 			return;
 		}
 		
-		
-		List<ItemStack> items = new ArrayList<>(Collections.nCopies(27, new ItemStack(Items.AIR)));
-		CompoundTag nbt = item.getTag();
-		
-		if(nbt != null && nbt.containsKey("BlockEntityTag")) {
-			CompoundTag nbt2 = nbt.getCompound("BlockEntityTag");
-			if(nbt2.containsKey("Items")) {
-				ListTag nbt3 = (ListTag) nbt2.getTag("Items");
-				for(int i = 0; i < nbt3.size(); i++) {
-					items.set(nbt3.getCompoundTag(i).getByte("Slot"), ItemStack.fromTag(nbt3.getCompoundTag(i)));
-				}
-			}
-		}
+		List<ItemStack> items = ItemContentUtils.getItemsInContainer(item);
 		
 		BasicInventory inv = new BasicInventory(items.toArray(new ItemStack[27]));
 		

@@ -1,5 +1,6 @@
 package bleach.hack.module.mods;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +29,8 @@ public class Nuker extends Module {
 			new SettingMode("Mode: ", "Survival", "Creative", "Multi"),
 			new SettingSlider(1, 6, 4.2, 1, "Range: "),
 			new SettingToggle(false, "Flatten"),
-			new SettingToggle(false, "Rotate"));
+			new SettingToggle(false, "Rotate"),
+			new SettingMode("Sort: ", "Normal", "Hardness"));
 	
 	public Nuker() {
 		super("Nuker", -1, Category.WORLD, "Breaks blocks around you", settings);
@@ -37,43 +39,50 @@ public class Nuker extends Module {
 	@Subscribe
 	public void onTick(EventTick eventTick) {
 		double range = getSettings().get(1).toSlider().getValue();
+		List<BlockPos> blocks = new ArrayList<>();
 		
-		for(int x = (int) -range; x <= (int) range; x++) {
-			for(int y = getSettings().get(2).toToggle().state ? 0 : (int) -range; y <= (int) range; y++) {
-				for(int z = (int) -range; z <= (int) range; z++) {
-					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y, z));
-					Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
-					
-					if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
-					
-					Direction dir = null;
-					for(Direction d: Direction.values()) {
-						if(mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5)) > range
-								|| mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR) continue;
-						dir = d;
-						break;
-					}
-					
-					System.out.println(dir);
-					if(dir == null) continue;
-					
-					if(canSeeBlock(pos) && mc.world.getBlockState(pos).getBlock() != Blocks.AIR) {
-						if(getSettings().get(3).toToggle().state) {
-							float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
-							EntityUtils.facePos(vec.x, vec.y, vec.z);
-							mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
-									mc.player.yaw, mc.player.pitch, mc.player.onGround));
-							mc.player.yaw = prevRot[0];
-							mc.player.pitch = prevRot[1];
-						}
-						
-						if(getSettings().get(0).toMode().mode == 0) mc.interactionManager.method_2902(pos, dir);
-						else mc.interactionManager.attackBlock(pos, dir);
-						
-						mc.player.swingHand(Hand.MAIN_HAND);
-						if(getSettings().get(0).toMode().mode != 2) return;
-					}
+		/* Add blocks around player */
+		for(int x = (int) range; x >= (int) -range; x--) {
+			for(int y = (int) range; y >= (getSettings().get(2).toToggle().state ? 0 : (int) -range); y--) {
+				for(int z = (int) range; z >= (int) -range; z--) {
+					blocks.add(new BlockPos(mc.player.getPos().add(x, y + 0.1, z)));
 				}
+			}
+		}
+		
+		if(getSettings().get(4).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
+				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
+		
+		for(BlockPos pos: blocks) {
+			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
+			
+			if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
+			
+			Direction dir = null;
+			for(Direction d: Direction.values()) {
+				if(mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5)) > range
+						|| mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR) continue;
+				dir = d;
+				break;
+			}
+			
+			if(dir == null) continue;
+			
+			if(canSeeBlock(pos) && mc.world.getBlockState(pos).getBlock() != Blocks.AIR) {
+				if(getSettings().get(3).toToggle().state) {
+					float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
+					EntityUtils.facePos(vec.x, vec.y, vec.z);
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
+							mc.player.yaw, mc.player.pitch, mc.player.onGround));
+					mc.player.yaw = prevRot[0];
+					mc.player.pitch = prevRot[1];
+				}
+				
+				if(getSettings().get(0).toMode().mode == 0) mc.interactionManager.method_2902(pos, dir);
+				else mc.interactionManager.attackBlock(pos, dir);
+				
+				mc.player.swingHand(Hand.MAIN_HAND);
+				if(getSettings().get(0).toMode().mode != 2) return;
 			}
 		}
 	}

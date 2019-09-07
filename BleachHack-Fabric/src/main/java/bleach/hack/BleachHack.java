@@ -2,6 +2,7 @@ package bleach.hack;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.module.mods.Speed;
 import bleach.hack.utils.file.BleachFileReader;
 import com.google.common.eventbus.EventBus;
 import net.fabricmc.api.ClientModInitializer;
@@ -10,7 +11,7 @@ public class BleachHack implements ClientModInitializer {
 	
 	public static String VERSION = "B8";
 	public static int INTVERSION = 12;
-	private static EventBus eventBus;
+	public static EventBus eventBus;
 
 	@Override
 	public void onInitializeClient() {
@@ -23,10 +24,8 @@ public class BleachHack implements ClientModInitializer {
 
     	//v This makes a scat fetishist look like housekeeping.
     	eventBus.register(new ModuleManager());
-	}
-
-	//TODO: Move this? I wish this was a bit more OO because I'm so used to accessing everything from one class.
-	public static EventBus getEventBus() {
-		return eventBus;
+    	
+    	// i have no idea why it enabled speed and resets it everytime you restart but its annoying as fuck
+    	ModuleManager.getModule(Speed.class).setToggled(false);
 	}
 }

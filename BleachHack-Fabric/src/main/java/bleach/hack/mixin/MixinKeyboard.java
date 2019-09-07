@@ -13,7 +13,7 @@ public class MixinKeyboard {
     @Inject(method = "onKey", at = @At(value = "INVOKE", target = "net/minecraft/client/util/InputUtil.isKeyPressed(JI)Z", ordinal = 5), cancellable = true)
     private void onKeyEvent(long windowPointer, int key, int scanCode, int action, int modifiers, CallbackInfo callbackInfo) {
         EventKeyPress event = new EventKeyPress(key);
-    	BleachHack.getEventBus().post(event);
+    	BleachHack.eventBus.post(event);
     	if (event.isCancelled()) callbackInfo.cancel();
     }
 }

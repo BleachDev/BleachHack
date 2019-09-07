@@ -1,5 +1,6 @@
 package bleach.hack.module.mods;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,7 +63,9 @@ public class UI extends Module {
 			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
 			if(getSettings().get(2).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 			
-			int color = 0xff40bbff;
+			int age = mc.player.age % 510;
+			Color clr = new Color(255, (age > 255 ? 510 - age : age), 255 - (age > 255 ? 510 - age : age));
+			int color = clr.getRGB();
 			count = 0;
 			int extra = getSettings().get(1).toToggle().state ? 1 : 0;
 			for(String s: lines) {
@@ -74,7 +77,8 @@ public class UI extends Module {
 							mc.textRenderer.getStringWidth(s)+4+extra, 11+(count*10), color);
 				}
 				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(count*10), color);
-				color -= 200/lines.size();
+				clr = new Color(clr.getRed() - 250/lines.size(), Math.min(255, clr.getGreen() + 255/lines.size()), clr.getBlue());
+				color = clr.getRGB();
 				count++;
 			}
 			InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);

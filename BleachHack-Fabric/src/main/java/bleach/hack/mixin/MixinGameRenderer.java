@@ -16,7 +16,7 @@ public class MixinGameRenderer {
 	@Inject(at = @At("HEAD"), method = "renderHand(Lnet/minecraft/client/render/Camera;F)V", cancellable = true)
 	private void renderHand(Camera camera_1, float float_1, CallbackInfo info) {
 		Event3DRender event = new Event3DRender();
-		BleachHack.getEventBus().post(event);
+		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}
 }

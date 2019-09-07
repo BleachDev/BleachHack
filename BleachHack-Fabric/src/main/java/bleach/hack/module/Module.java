@@ -39,7 +39,7 @@ public class Module {
 		Method[] methods = this.getClass().getMethods();
 		for(Method method : methods) {
 			if (method.isAnnotationPresent(Subscribe.class)) {
-				BleachHack.getEventBus().register(this);
+				BleachHack.eventBus.register(this);
 				break;
 			}
 		}
@@ -49,7 +49,7 @@ public class Module {
 		Method[] methods = this.getClass().getMethods();
 		for(Method method : methods) {
 			if (method.isAnnotationPresent(Subscribe.class)) {
-				BleachHack.getEventBus().unregister(this);
+				BleachHack.eventBus.unregister(this);
 				break;
 			}
 		}
