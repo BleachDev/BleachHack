@@ -5,10 +5,14 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import bleach.hack.BleachHack;
 import bleach.hack.gui.particle.ParticleManager;
 import bleach.hack.utils.file.BleachGithubReader;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.gui.CubeMapRenderer;
+import net.minecraft.client.gui.RotatingCubeMapRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -18,8 +22,13 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 public class BleachMainMenu extends Screen {
+	
+	public static final CubeMapRenderer PANORAMA_CUBE_MAP = new CubeMapRenderer(new Identifier("textures/gui/title/background/panorama"));
+	private static final Identifier PANORAMA_OVERLAY = new Identifier("textures/gui/title/background/panorama_overlay.png");
+	private final RotatingCubeMapRenderer backgroundRenderer;
 	
 	private ParticleManager particleMang = new ParticleManager();
 	private BleachGithubReader github = new BleachGithubReader();
@@ -30,6 +39,7 @@ public class BleachMainMenu extends Screen {
 	
 	public BleachMainMenu() {
 		super(new TranslatableText("narrator.screen.title"));
+		backgroundRenderer = new RotatingCubeMapRenderer(PANORAMA_CUBE_MAP);
 	}
 	
 	public void init() {
@@ -60,7 +70,14 @@ public class BleachMainMenu extends Screen {
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		this.renderBackground();
 		
-		fill(0, 0, width, height, 0xff000000);
+		backgroundRenderer.render(p_render_3_, MathHelper.clamp(1.0F, 0.0F, 1.0F));
+		minecraft.getTextureManager().bindTexture(PANORAMA_OVERLAY);
+	    GlStateManager.enableBlend();
+	    GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+	    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+	    blit(0, 0, this.width, this.height, 0.0F, 0.0F, 16, 128, 16, 128);
+		
+		//fill(0, 0, width, height, 0xff000000);
 		
 		particleMang.addParticle(p_render_1_, p_render_2_);
 		particleMang.renderParticles();
@@ -69,16 +86,20 @@ public class BleachMainMenu extends Screen {
 		drawString(this.font, "BleachHack", (width/2 - 81)/3, (height/4 - 15)/3, 0xffc0e0);
 		GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 		
+		GL11.glScaled(1/1.5, 1/1.5, 1/1.5);
+		drawCenteredString(this.font, "Now with 100%        more title screen", (int)((width/2+5)*1.5), (int)((height/4 + 8)*1.5), 0xcf6060);
 		GL11.glScaled(1.5, 1.5, 1.5);
-		drawCenteredString(this.font, BleachHack.VERSION, (int)((width/2)/1.5), (int)((height/4 + 8)/1.5), 0xffc050);
+		
+		GL11.glScaled(1.5, 1.5, 1.5);
+		drawCenteredString(this.font, BleachHack.VERSION, (int)((width/2)/1.5), (int)((height/4 + 6)/1.5), 0xffc050);
 		GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
 		
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		
-		drawString(this.font, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
-		drawString(this.font, "Fabric: " + "???", 4, height - 30, -1);
-		drawString(this.font, "Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
-		drawString(this.font, "Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
+		font.drawWithShadow("Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
+		font.drawWithShadow("Fabric: " + "???", 4, height - 30, -1);
+		font.drawWithShadow("Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
+		font.drawWithShadow("Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
 		
 		try {
 			if(Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {

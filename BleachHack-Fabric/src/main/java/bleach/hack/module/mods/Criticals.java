@@ -3,7 +3,13 @@ package bleach.hack.module.mods;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+
+import java.util.Random;
+
 import com.google.common.eventbus.Subscribe;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
@@ -21,20 +27,26 @@ public class Criticals extends Module {
         if (eventSendPacket.getPacket() instanceof PlayerInteractEntityC2SPacket) {
             PlayerInteractEntityC2SPacket packet = (PlayerInteractEntityC2SPacket) eventSendPacket.getPacket();
             if (packet.getType() == PlayerInteractEntityC2SPacket.InteractionType.ATTACK) {
-                this.doCritical();
+            	this.doCritical();
+            	
+            	/* Lets fake some extra paricles to make the player feel good */
+            	Entity e = packet.getEntity(mc.world);
+            	Random r = new Random();
+                for(int i = 0; i < 10; i++) {
+                	mc.particleManager.addParticle(ParticleTypes.CRIT, e.x, e.y + e.getHeight() / 2, e.z,
+                			r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5);
+                }
             }
         }
     }
 
     private void doCritical() {
-        if(!this.mc.player.onGround) return;
-        if(this.mc.player.isInLava() || this.mc.player.isInWater()) return;
-        double posX = this.mc.player.x;
-        double posY = this.mc.player.y;
-        double posZ = this.mc.player.z;
-        this.mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY + 0.0625D, posZ, true));
-        this.mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
-        this.mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY + 1.1E-5D, posZ, false));
-        this.mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
+        if(!mc.player.onGround) return;
+        if(mc.player.isInLava() || mc.player.isInWater()) return;
+        double posX = mc.player.x;
+        double posY = mc.player.y;
+        double posZ = mc.player.z;
+        mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY + 0.0625, posZ, true));
+        mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
     }
 }

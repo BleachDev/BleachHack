@@ -1,6 +1,6 @@
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -25,6 +25,10 @@ import net.minecraft.item.Items;
 
 public class Peek extends Module {
 
+	private int[] slotPos;
+	private int pageCount = 0;
+	private boolean shown = false;
+	
 	public Peek() {
 		super("Peek", -1, Category.MISC, "Shows whats inside containers", null);
 	}
@@ -35,6 +39,9 @@ public class Peek extends Module {
 		Slot slot = null;
 		try { slot = (Slot) FabricReflect.getFieldValue(screen, "field_2787", "focusedSlot"); } catch (Exception e) {}
 		if(slot == null) return;
+		
+		if(!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) pageCount = 0;
+		slotPos = new int[] {slot.xPosition, slot.yPosition};
 		
 		drawShulkerToolTip(slot, mX, mY);
 		drawBookToolTip(slot, mX, mY);
@@ -69,29 +76,26 @@ public class Peek extends Module {
 	public void drawBookToolTip(Slot slot, int mX, int mY) {
 		if(slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK) return;
 		
-		List<String> pages = ItemContentUtils.getTextInBook(slot.getStack());
+		List<List<String>> pages = ItemContentUtils.getTextInBook(slot.getStack());
 		if(pages.isEmpty()) return;
 		
-		List<String> page = new ArrayList<>();
+		/* Cycle through pages */
+		if(mc.player.age % 80 == 0 && !shown) {
+			shown = true;
+			if(pageCount == pages.size() - 1) pageCount = 0;
+			else pageCount++;
+		}else if(mc.player.age % 80 != 0) shown = false;
 		
-		String buffer = "";
-		for(char c: pages.get(0).toCharArray()) {
-			if(mc.textRenderer.getStringWidth(buffer) > 114 || buffer.endsWith("\n")) {
-				page.add(buffer.replace("\n", ""));
-				buffer = "";
-			}
-			
-			buffer += c;
-		}
-		page.add(buffer);
+		int lenght = mc.textRenderer.getStringWidth("Page: " + (pageCount + 1) + "/" + pages.size());
 		
-		renderTooltipBox(mX, mY - page.size() * 10 - 6, page.size() * 10 - 2, 120);
-		mc.textRenderer.drawWithShadow("Page: " + 1 + "/" + pages.size(),
-				mX + 68 - mc.textRenderer.getStringWidth("Page: " + 1 + "/" + pages.size()) / 2, mY - page.size() * 10 - 32, -1);
+		renderTooltipBox(mX + 56 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, lenght);
+		renderTooltipBox(mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120);
+		mc.textRenderer.drawWithShadow("Page: " + (pageCount + 1) + "/" + pages.size(),
+				mX + 68 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
 		
 		int count = 0;
-		for(String s: page) {
-			mc.textRenderer.drawWithShadow(s, mX + 12, mY - 18 - page.size() * 10 + count * 10, 0x00c0c0);
+		for(String s: pages.get(pageCount)) {
+			mc.textRenderer.drawWithShadow(s, mX + 12, mY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
 			count++;
 		}
 		

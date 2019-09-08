@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +29,7 @@ public class ItemContentUtils {
 		return items;
 	}
 	
-	public static List<String> getTextInBook(ItemStack item) {
+	public static List<List<String>> getTextInBook(ItemStack item) {
 		List<String> pages = new ArrayList<>();
 		CompoundTag nbt = item.getTag();
 		
@@ -37,6 +38,24 @@ public class ItemContentUtils {
 			for(int i = 0; i < nbt2.size(); i++) pages.add(nbt2.getString(i));
 		}
 		
-		return pages;
+		List<List<String>> finalPages = new ArrayList<>();
+		
+		for(String s: pages) {
+			String buffer = "";
+			List<String> pageBuffer = new ArrayList<>();
+			
+			for(char c: s.toCharArray()) {
+				if(MinecraftClient.getInstance().textRenderer.getStringWidth(buffer) > 114 || buffer.endsWith("\n")) {
+					pageBuffer.add(buffer.replace("\n", ""));
+					buffer = "";
+				}
+				
+				buffer += c;
+			}
+			pageBuffer.add(buffer);
+			finalPages.add(pageBuffer);
+		}
+		
+		return finalPages;
 	}
 }

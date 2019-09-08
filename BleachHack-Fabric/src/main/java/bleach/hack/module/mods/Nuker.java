@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
