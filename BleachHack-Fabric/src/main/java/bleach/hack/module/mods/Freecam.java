@@ -69,7 +69,8 @@ public class Freecam extends Module {
 	
 	@Subscribe
 	public void onPreTick(EventPreTick eventPreTick) {
-		//mc.player.setVelocity(0, 0, 0);
+		mc.player.setVelocity(0, 0, 0);
+		camera.setVelocity(0, 0, 0);
 		mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
 		
 		camera.yaw = mc.player.yaw;
