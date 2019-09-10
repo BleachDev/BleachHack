@@ -22,13 +22,15 @@ public class Jesus extends Module {
 
 	@Subscribe
 	public void onTick(EventTick eventTick) {
-		Entity e = mc.player.isRiding() ? mc.player.getVehicle() : mc.player;
+		Entity e = mc.player.getVehicle() != null ? mc.player.getVehicle() : mc.player;
 		
-		if(e.isSneaking() || e.fallDistance > 3f || e.horizontalCollision) return;
-
+		if(e.isSneaking() || e.fallDistance > 3f) return;
+		
 		if(isFluid(e.getPos().add(0,0.3,0))) {
 			e.setVelocity(e.getVelocity().x, 0.08, e.getVelocity().z);
-		}else if(isFluid(e.getPos().add(0,0.07,0))) {
+		}else if(isFluid(e.getPos().add(0,0.1,0))) {
+			e.setVelocity(e.getVelocity().x, 0.05, e.getVelocity().z);
+		}else if(isFluid(e.getPos().add(0,0.05,0))) {
 			e.setVelocity(e.getVelocity().x, 0.01, e.getVelocity().z);
 		}else if(isFluid(e.getPos())) {
 			e.setVelocity(e.getVelocity().x, -0.005, e.getVelocity().z);

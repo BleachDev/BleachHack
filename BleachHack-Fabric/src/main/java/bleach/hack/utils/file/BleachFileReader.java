@@ -2,7 +2,7 @@ package bleach.hack.utils.file;
 
 import java.util.List;
 
-import bleach.hack.gui.clickgui.ClickGuiScreen;
+import bleach.hack.gui.clickgui.ModuleWindow;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -113,30 +113,21 @@ public class BleachFileReader {
 	public static void saveClickGui() {
 		fileMang.createEmptyFile("clickgui.txt");
 		
-		ClickGuiScreen gui = ClickGui.clickGui;
+		String text = "";
+		for(ModuleWindow w: ClickGui.clickGui.tabs) text += w.getPos()[0] + ":" + w.getPos()[1] + "\n";
 		
-		fileMang.appendFile(gui.modsCmb.getPos()[0] + ":" + gui.modsCmb.getPos()[1] + "\n" +
-				gui.modsExp.getPos()[0] + ":" + gui.modsExp.getPos()[1] + "\n" +
-				gui.modsMsc.getPos()[0] + ":" + gui.modsMsc.getPos()[1] + "\n" +
-				gui.modsMvm.getPos()[0] + ":" + gui.modsMvm.getPos()[1] + "\n" +
-				gui.modsPly.getPos()[0] + ":" + gui.modsPly.getPos()[1] + "\n" +
-				gui.modsRen.getPos()[0] + ":" + gui.modsRen.getPos()[1] + "\n" +
-				gui.modsWrd.getPos()[0] + ":" + gui.modsWrd.getPos()[1] + "\n", "clickgui.txt");
+		fileMang.appendFile(text, "clickgui.txt");
 	}
 	
 	public static void readClickGui() {
 		List<String> lines = fileMang.readFileLines("clickgui.txt");
 		
-		ClickGuiScreen gui = ClickGui.clickGui;
-		
 		try {
-			gui.modsCmb.setPos(Integer.parseInt(lines.get(0).split(":")[0]), Integer.parseInt(lines.get(0).split(":")[1]));
-			gui.modsExp.setPos(Integer.parseInt(lines.get(1).split(":")[0]), Integer.parseInt(lines.get(1).split(":")[1]));
-			gui.modsMsc.setPos(Integer.parseInt(lines.get(2).split(":")[0]), Integer.parseInt(lines.get(2).split(":")[1]));
-			gui.modsMvm.setPos(Integer.parseInt(lines.get(3).split(":")[0]), Integer.parseInt(lines.get(3).split(":")[1]));
-			gui.modsPly.setPos(Integer.parseInt(lines.get(4).split(":")[0]), Integer.parseInt(lines.get(4).split(":")[1]));
-			gui.modsRen.setPos(Integer.parseInt(lines.get(5).split(":")[0]), Integer.parseInt(lines.get(5).split(":")[1]));
-			gui.modsWrd.setPos(Integer.parseInt(lines.get(6).split(":")[0]), Integer.parseInt(lines.get(6).split(":")[1]));
+			int c = 0;
+			for(ModuleWindow w: ClickGui.clickGui.tabs) {
+				w.setPos(Integer.parseInt(lines.get(c).split(":")[0]), Integer.parseInt(lines.get(c).split(":")[1]));
+				c++;
+			}
 		}catch(Exception e) {}
 	}
 }

@@ -32,9 +32,13 @@ public class ModuleWindow {
 	private int mouseY;
 	private int prevmX;
 	private int prevmY;
-	private boolean lmDown;
-	private boolean continueDrag;
 	private boolean hiding;
+	
+	private int keyDown;
+	private boolean lmDown;
+	private boolean rmDown;
+	private boolean lmHeld;
+	private boolean dragging;
 	
 	public ModuleWindow(List<Module> mods, String name, int len, int posX, int posY) {
 		for(Module m: mods) this.mods.put(m, false);
@@ -44,8 +48,8 @@ public class ModuleWindow {
 		this.posY = posY;
 	}
 	
-	public void draw(int mX, int mY, boolean lDown, boolean rDown, int leng, boolean dragging, int keyDown) {
-		mouseX = mX; mouseY = mY; lmDown = lDown; len = leng;
+	public void draw(int mX, int mY, int leng) {
+		mouseX = mX; mouseY = mY; len = leng;
 		height = ModuleManager.getModule(ClickGui.class).getSettings().get(0).toMode().mode == 0 ? 12 : 10;
 		font = MinecraftClient.getInstance().textRenderer;
 		
@@ -55,13 +59,16 @@ public class ModuleWindow {
 		
 		// window dragging
 		if(mouseOver(posX, posY-10, posX+len, posY)) {
-			if(rDown) hiding = !hiding;
-			if(dragging || continueDrag) {
-				continueDrag = true;
-				posX = mouseX-(prevmX - posX);
-				posY = mouseY-(prevmY - posY);
-			}continueDrag = false;
+			if(rmDown) hiding = !hiding;
+			if(lmDown) dragging = true;
 		}
+		
+		if(!lmHeld) dragging = false;
+		if(dragging) {
+			posX = mouseX-(prevmX - posX);
+			posY = mouseY-(prevmY - posY);
+		}
+		
 		prevmX = mouseX;
 		prevmY = mouseY;
 		
@@ -96,9 +103,9 @@ public class ModuleWindow {
 		        	font.drawWithShadow(mat.group(), posX+len+5, posY+(count*height)-(c2 * 10)+(c3 * 10), -1);
 					c3++;
 				}
-				if(lDown) m.getKey().toggle();
-				if(rDown) mods.replace(m.getKey(), !m.getValue());
-				if(lDown || rDown) MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				if(lmDown) m.getKey().toggle();
+				if(rmDown) mods.replace(m.getKey(), !m.getValue());
+				if(lmDown || rmDown) MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
 			
 			// draw settings
@@ -116,6 +123,10 @@ public class ModuleWindow {
 			}
 			count++;
 		}
+		
+		lmDown = false;
+		rmDown = false;
+		keyDown = -1;
 	}
 	
 	public void setPos(int x, int y) {
@@ -127,10 +138,18 @@ public class ModuleWindow {
 		return new int[] {posX, posY};
 	}
 	
+	public void onLmPressed() { lmDown = true; lmHeld = true; }
+	
+	public void onLmReleased() { lmHeld = false; }
+	
+	public void onRmPressed() { rmDown = true; }
+	
+	public void onKeyPressed(int key) { keyDown = key; }
+	
 	private void drawBindSetting(Module m, int key, int x, int y) {
 		Screen.fill(x, y, x+len, y+height, 0x70000000);
 		
-		if(key != -1 && mouseOver(x, y, x+len, y+height)) m.setKey(key != 261 ? key : -1);
+		if(key != -1 && mouseOver(x, y, x+len, y+height)) m.setKey((key != 261 && key != 256) ? key : -1);
 		String name = InputUtil.getKeycodeName(m.getKey());
 		if(name == null) name = "KEY" + m.getKey();
 		if(name.isEmpty()) name = "NONE";

@@ -5,16 +5,16 @@
   "mixins": [
   ],
   "client": [
-  	"MixinClientPlayHandler",
+  	"MixinClientConnection",
     "MixinContainerScreen",
   	"MixinEntityRenderer",
     "MixinGameRenderer",
     "MixinIngameHud",
+    "MixinMinecraftClient",
     "MixinPlayerEntity",
     "MixinServerScreen",
     "MixinTitleScreen",
-    "MixinKeyboard",
-    "MixinClientConnection"
+    "MixinKeyboard"
   ],
   "injectors": {
     "defaultRequire": 1

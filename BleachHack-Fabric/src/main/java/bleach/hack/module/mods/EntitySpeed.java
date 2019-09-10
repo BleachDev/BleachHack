@@ -39,7 +39,6 @@ public class EntitySpeed extends Module {
 		double speed = getSettings().get(0).toSlider().getValue();
 		
 		if (e instanceof LlamaEntity) {
-			e.yaw = mc.player.yaw;
 			((LlamaEntity) e).headYaw = mc.player.headYaw;
 		}
 		double forward = mc.player.forwardSpeed;
@@ -66,10 +65,9 @@ public class EntitySpeed extends Module {
 			if(getSettings().get(1).toToggle().state) if(mc.options.keyJump.isPressed()) e.setVelocity(e.getVelocity().x, 0.3, e.getVelocity().z);
 			
 			if(getSettings().get(2).toToggle().state) {
-				BlockPos p = e.getBlockPos().add(0, 0.5, 0);
-				if(mc.world.getBlockState(p.down()).getBlock() == Blocks.AIR &&
-					mc.world.getBlockState(p.down(2)).getBlock() != Blocks.AIR &&
-					!(mc.world.getBlockState(p.down(2)).getMaterial() == Material.WATER) &&
+				BlockPos p = new BlockPos(e.getPos());
+				if(mc.world.getBlockState(p.down()).getBlock() != Blocks.AIR &&
+					mc.world.getBlockState(p.down()).getMaterial() != Material.WATER &&
 					e.fallDistance > 0.01) e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}

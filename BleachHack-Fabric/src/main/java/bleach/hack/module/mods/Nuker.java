@@ -58,11 +58,12 @@ public class Nuker extends Module {
 			if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
 			
 			Direction dir = null;
+			double dist = 6.9;
 			for(Direction d: Direction.values()) {
-				if(mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5)) > range
-						|| mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR) continue;
+				double dist2 = mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
+				if(dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
+				dist = dist2;
 				dir = d;
-				break;
 			}
 			
 			if(dir == null) continue;
