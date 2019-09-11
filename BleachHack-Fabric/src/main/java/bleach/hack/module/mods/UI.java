@@ -52,7 +52,7 @@ public class UI extends Module {
 	}
 	
 	@Subscribe
-	public void onDrawOverlay(EventDrawOverlay overlayEvent) {
+	public void onDrawOverlay(EventDrawOverlay event) {
 		infoList.clear();
 		
 		if(getSettings().get(0).toToggle().state && !mc.options.debugEnabled) {
@@ -158,9 +158,9 @@ public class UI extends Module {
 	}
 	
 	@Subscribe
-	public void readPacket(EventReadPacket eventReadPacket) {
+	public void readPacket(EventReadPacket event) {
 		lastPacket = System.currentTimeMillis();
-		if(eventReadPacket.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+		if(event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
 			long time = System.currentTimeMillis();
 			if(time < 500) return;
 			long timeOffset = Math.abs(1000 - (time - prevTime)) + 1000;

@@ -36,7 +36,7 @@ public class Fullbright extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(getSettings().get(0).toMode().mode == 0) {
 			if(mc.options.gamma < 16) mc.options.gamma += 1.2;
 		} else if(getSettings().get(0).toMode().mode == 1) {

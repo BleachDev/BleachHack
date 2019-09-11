@@ -50,7 +50,7 @@ public class ChestESP extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event3DRender) {
+	public void onRender(Event3DRender event) {
 		for(BlockEntity e: mc.world.blockEntities) {
 			if((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity)
 					&& getSettings().get(0).toToggle().state) {

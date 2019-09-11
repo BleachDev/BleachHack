@@ -31,7 +31,7 @@ public class EntitySpeed extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if (mc.player.getVehicle() == null) return;
 		
 		Entity e = mc.player.getVehicle();

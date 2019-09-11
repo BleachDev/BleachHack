@@ -19,9 +19,9 @@ public class NoVelocity extends Module {
 
     //The name of the method doesn't matter nor does it need to be consistent between modules, what matters is the argument.
     @Subscribe
-    public void readPacket(EventReadPacket eventReadPacket) {
-        if(eventReadPacket.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
-            EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) eventReadPacket.getPacket();
+    public void readPacket(EventReadPacket event) {
+        if(event.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
+            EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) event.getPacket();
             if(packet.getId() == mc.player.getEntityId()) {
                 FabricReflect.writeField(packet, 0,"field_12563", "velocityX");
                 FabricReflect.writeField(packet, 0, "field_12562","velocityY");

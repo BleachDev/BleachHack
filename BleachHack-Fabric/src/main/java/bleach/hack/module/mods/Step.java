@@ -31,7 +31,7 @@ public class Step extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(!WorldUtils.NONSOLID_BLOCKS.contains(
 				mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight()+1, 0)).getBlock())) return;
 		

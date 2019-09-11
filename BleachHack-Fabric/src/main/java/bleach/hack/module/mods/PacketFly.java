@@ -43,12 +43,12 @@ public class PacketFly extends Module {
 	}
 
 	@Subscribe
-	public void onPreTick(EventPreTick eventTick) {
+	public void onPreTick(EventPreTick event) {
 		mc.player.setVelocity(0, 0, 0);
 	}
 	
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		double hspeed = getSettings().get(1).toSlider().getValue();
 		double vspeed = getSettings().get(2).toSlider().getValue();
 		

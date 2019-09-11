@@ -25,7 +25,7 @@ public class FastUse extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		/* set rightClickDelay to 0 */
 		FabricReflect.writeField(mc, 0, "field_1752", "itemUseCooldown");
 		

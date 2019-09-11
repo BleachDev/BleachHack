@@ -21,7 +21,6 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.block.enums.Instrument;
-import net.minecraft.state.property.Property;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -63,7 +62,6 @@ public class Notebot extends Module {
 		}else readFile(filePath);
 		timer = -10;
 
-		/* I think my brain died while making this work */
 		for(List<Integer> i: tunes) {
 			loop: for(int x = -4; x <= 4; x++) {
 				for(int y = -4; y <= 4; y++) {
@@ -83,7 +81,7 @@ public class Notebot extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event3DRender) {
+	public void onRender(Event3DRender event) {
 		for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 			if(getNote(e.getKey()) != e.getValue()) {
 				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);
@@ -94,7 +92,7 @@ public class Notebot extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		/* Tune Noteblocks */
 		if(getSettings().get(0).toToggle().state) {
 			for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
@@ -129,6 +127,7 @@ public class Notebot extends Module {
 				}
 			}
 		}
+		
 		/* Loop */
 		loop: {
 			for(List<Integer> n: notes) if(timer < n.get(0) || !getSettings().get(2).toToggle().state) break loop;
@@ -155,21 +154,13 @@ public class Notebot extends Module {
 	public Instrument getInstrument(BlockPos pos) {
 		if(!isNoteblock(pos)) return Instrument.HARP;
 		
-		for(Entry<Property<?>, Comparable<?>> e: mc.world.getBlockState(pos).getEntries().entrySet()) {
-			return (Instrument) e.getValue();
-		}
-		return Instrument.HARP;
+		return mc.world.getBlockState(pos).get(NoteBlock.INSTRUMENT);
 	}
 	
 	public int getNote(BlockPos pos) {
 		if(!isNoteblock(pos)) return 0;
 		
-		int c = 0;
-		for(Entry<Property<?>, Comparable<?>> e: mc.world.getBlockState(pos).getEntries().entrySet()) {
-			if(c == 1) return Integer.parseInt(e.getValue().toString());
-			c++;
-		}
-		return 0;
+		return mc.world.getBlockState(pos).get(NoteBlock.NOTE);
 	}
 	
 	public boolean isNoteblock(BlockPos pos) {

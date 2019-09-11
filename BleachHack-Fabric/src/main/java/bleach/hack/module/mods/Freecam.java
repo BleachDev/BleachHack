@@ -58,17 +58,17 @@ public class Freecam extends Module {
 	}
 
 	@Subscribe
-    public void sendPacket(EventSendPacket eventSendPacket) {
-        if (eventSendPacket.getPacket() instanceof ClientCommandC2SPacket) {
-        	ClientCommandC2SPacket packet = (ClientCommandC2SPacket) eventSendPacket.getPacket();
+    public void sendPacket(EventSendPacket event) {
+        if (event.getPacket() instanceof ClientCommandC2SPacket) {
+        	ClientCommandC2SPacket packet = (ClientCommandC2SPacket) event.getPacket();
             if (packet.getMode() == Mode.START_SNEAKING || packet.getMode() == Mode.STOP_SNEAKING) {
-            	eventSendPacket.setCancelled(true);
+            	event.setCancelled(true);
             }
         }
     }
 	
 	@Subscribe
-	public void onPreTick(EventPreTick eventPreTick) {
+	public void onPreTick(EventPreTick event) {
 		mc.player.setVelocity(0, 0, 0);
 		camera.setVelocity(0, 0, 0);
 		mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);

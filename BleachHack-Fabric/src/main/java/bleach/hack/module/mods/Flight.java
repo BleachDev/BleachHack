@@ -34,7 +34,7 @@ public class Flight extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		float speed = (float) getSettings().get(1).toSlider().getValue();
 		
 		if(mc.player.age % 20 == 0 && getSettings().get(2).toMode().mode == 3 && !(getSettings().get(0).toMode().mode == 2)) {

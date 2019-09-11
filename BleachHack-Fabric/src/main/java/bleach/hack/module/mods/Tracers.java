@@ -37,7 +37,7 @@ public class Tracers extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event3DRender) {
+	public void onRender(Event3DRender event) {
 		final float thick = (float) getSettings().get(6).toSlider().getValue();
 		
 		for(Entity e: mc.world.getEntities()) {

@@ -22,7 +22,7 @@ public class Ghosthand extends Module {
 	}
 	
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(!mc.options.keyUse.isPressed() || mc.player.isSneaking()) return;
 		
 		for(BlockEntity b: mc.world.blockEntities) {

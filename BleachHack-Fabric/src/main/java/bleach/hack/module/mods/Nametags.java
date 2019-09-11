@@ -36,8 +36,8 @@ public class Nametags extends Module {
 	}
 	
 	@Subscribe
-	public void onLivingRender(EventLivingRender livingRenderEvent) {
-		LivingEntity e = livingRenderEvent.getEntity();
+	public void onLivingRender(EventLivingRender event) {
+		LivingEntity e = event.getEntity();
 		
 		/* Color before name */
 		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
@@ -97,6 +97,6 @@ public class Nametags extends Module {
 			}
 		}
 		
-		livingRenderEvent.setCancelled(true);
+		event.setCancelled(true);
 	}
 }

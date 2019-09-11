@@ -52,7 +52,7 @@ public class NotebotStealer extends Module {
 
 	@SuppressWarnings("unchecked")
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		Multimap<SoundCategory, SoundInstance> soundMap = (Multimap<SoundCategory, SoundInstance>) FabricReflect.getFieldValue(
 					FabricReflect.getFieldValue(mc.getSoundManager(), "field_5590", "soundSystem"), "field_18951", "sounds");
 		

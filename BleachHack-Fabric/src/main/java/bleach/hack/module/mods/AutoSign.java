@@ -14,7 +14,7 @@ import net.minecraft.text.LiteralText;
 
 public class AutoSign extends Module {
 
-	private String[] text;
+	private String[] text = new String[] {};
 	
 	public AutoSign() {
 		super("AutoSign", -1, Category.PLAYER, "Automatically writes on signs", null);
@@ -25,23 +25,23 @@ public class AutoSign extends Module {
 	}
 	
 	@Subscribe
-	public void sendPacket(EventSendPacket eventSendPacket) {
-		if(eventSendPacket.getPacket() instanceof UpdateSignC2SPacket && text.length < 3) {
-			text = ((UpdateSignC2SPacket) eventSendPacket.getPacket()).getText();
+	public void sendPacket(EventSendPacket event) {
+		if(event.getPacket() instanceof UpdateSignC2SPacket && text.length < 3) {
+			text = ((UpdateSignC2SPacket) event.getPacket()).getText();
 		}
 	}
 	
 	@Subscribe
-	public void onOpenScreen(EventOpenScreen eventOpenScreen) {
+	public void onOpenScreen(EventOpenScreen event) {
 		if(text == null) return;
 		
-		if(eventOpenScreen.getScreen() instanceof SignEditScreen) {
-			SignEditScreen screen = (SignEditScreen) eventOpenScreen.getScreen();
+		if(event.getScreen() instanceof SignEditScreen) {
+			SignEditScreen screen = (SignEditScreen) event.getScreen();
 			SignBlockEntity sign = (SignBlockEntity) FabricReflect.getFieldValue(screen, "field_3031", "sign");
 			
 			mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(sign.getPos(), 
 					new LiteralText(text[0]), new LiteralText(text[1]), new LiteralText(text[2]), new LiteralText(text[3])));
-			eventOpenScreen.setCancelled(true);
+			event.setCancelled(true);
 		}
 	}
 }

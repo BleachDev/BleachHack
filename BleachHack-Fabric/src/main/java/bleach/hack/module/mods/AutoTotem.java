@@ -18,7 +18,7 @@ public class AutoTotem extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING) return;
 		
 		/* Inventory */

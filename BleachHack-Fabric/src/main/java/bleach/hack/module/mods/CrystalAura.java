@@ -33,7 +33,7 @@ public class CrystalAura extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		delay++;
 		int reqDelay = (int) Math.round(20/getSettings().get(3).toSlider().getValue());
 		

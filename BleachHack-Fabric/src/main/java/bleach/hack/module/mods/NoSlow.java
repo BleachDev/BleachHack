@@ -29,7 +29,7 @@ public class NoSlow extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(!isToggled()) return;
 			
 		/* Slowness */

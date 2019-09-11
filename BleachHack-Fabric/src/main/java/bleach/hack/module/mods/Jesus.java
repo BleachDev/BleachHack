@@ -21,7 +21,7 @@ public class Jesus extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		Entity e = mc.player.getVehicle() != null ? mc.player.getVehicle() : mc.player;
 		
 		if(e.isSneaking() || e.fallDistance > 3f) return;

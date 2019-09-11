@@ -38,7 +38,7 @@ public class Spammer extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(lines.isEmpty()) return;
 		
 		if(mc.player.age % (int) (getSettings().get(1).toSlider().getValue() * 20) == 0) {

@@ -45,17 +45,17 @@ public class FakeLag extends Module {
 	}
 	
 	@Subscribe
-    public void sendPacket(EventSendPacket eventSendPacket) {
-		if(!(eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket
-				|| eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket.PositionOnly
-				|| eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket.LookOnly
-				|| eventSendPacket.getPacket() instanceof PlayerMoveC2SPacket.Both)) return;
-		queue.add((PlayerMoveC2SPacket) eventSendPacket.getPacket());
-		eventSendPacket.setCancelled(true);
+    public void sendPacket(EventSendPacket event) {
+		if(!(event.getPacket() instanceof PlayerMoveC2SPacket
+				|| event.getPacket() instanceof PlayerMoveC2SPacket.PositionOnly
+				|| event.getPacket() instanceof PlayerMoveC2SPacket.LookOnly
+				|| event.getPacket() instanceof PlayerMoveC2SPacket.Both)) return;
+		queue.add((PlayerMoveC2SPacket) event.getPacket());
+		event.setCancelled(true);
 	}
 	
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(getSettings().get(0).toMode().mode == 0) {
 			if(getSettings().get(1).toToggle().state &&
 					System.currentTimeMillis() - startTime > getSettings().get(2).toSlider().getValue() * 1000) setToggled(false);

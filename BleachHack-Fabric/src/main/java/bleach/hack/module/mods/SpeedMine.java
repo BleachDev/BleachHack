@@ -28,7 +28,7 @@ public class SpeedMine extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		mc.player.addPotionEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, getSettings().get(0).toMode().mode));
 	}
 }

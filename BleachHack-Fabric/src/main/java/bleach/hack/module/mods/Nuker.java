@@ -36,7 +36,7 @@ public class Nuker extends Module {
 	}
 	
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		double range = getSettings().get(1).toSlider().getValue();
 		List<BlockPos> blocks = new ArrayList<>();
 		

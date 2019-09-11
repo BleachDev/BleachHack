@@ -35,7 +35,7 @@ public class Scaffold extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		HashMap<BlockPos, Integer> tempMap = new HashMap<>();
 		for(Entry<BlockPos, Integer> e: lastPlaced.entrySet()) {
 			if(e.getValue() > 0) tempMap.put(e.getKey(), e.getValue() - 1);

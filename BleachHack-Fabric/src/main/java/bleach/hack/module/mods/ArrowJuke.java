@@ -27,7 +27,7 @@ public class ArrowJuke extends Module {
 	}
 	
 	@Subscribe
-	public void onTick(EventTick enventTick) {
+	public void onTick(EventTick envent) {
 		for(Entity e: mc.world.getEntities()) {
 			if(!(e instanceof ArrowEntity) || e.age > 50) continue;
 			

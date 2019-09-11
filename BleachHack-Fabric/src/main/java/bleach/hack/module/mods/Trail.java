@@ -40,7 +40,7 @@ public class Trail extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		if(!getSettings().get(0).toToggle().state) return;
 		
 		if(trails.isEmpty()) trails.add(Arrays.asList(mc.player.getPos().add(0, 0.1, 0), mc.player.getPos()));
@@ -50,7 +50,7 @@ public class Trail extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event3DRender) {
+	public void onRender(Event3DRender event) {
 		Color clr = new Color(0, 0, 0);
 		if(getSettings().get(2).toMode().mode == 0) clr = new Color(200, 50, 50);
 		else if(getSettings().get(2).toMode().mode == 1) clr = new Color(50, 200, 50);

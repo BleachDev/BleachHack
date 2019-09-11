@@ -31,7 +31,7 @@ public class ElytraFly extends Module {
 	}
 
 	@Subscribe
-	public void onTick(EventTick eventTick) {
+	public void onTick(EventTick event) {
 		Vec3d vec3d = new Vec3d(0,0,getSettings().get(2).toSlider().getValue())
 				.rotateX(getSettings().get(1).toToggle().state ? 0 : -(float) Math.toRadians(mc.player.pitch))
 				.rotateY(-(float) Math.toRadians(mc.player.yaw));

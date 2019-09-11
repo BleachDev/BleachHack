@@ -23,9 +23,9 @@ public class Criticals extends Module {
     }
 
     @Subscribe
-    public void sendPacket(EventSendPacket eventSendPacket) {
-        if (eventSendPacket.getPacket() instanceof PlayerInteractEntityC2SPacket) {
-            PlayerInteractEntityC2SPacket packet = (PlayerInteractEntityC2SPacket) eventSendPacket.getPacket();
+    public void sendPacket(EventSendPacket event) {
+        if (event.getPacket() instanceof PlayerInteractEntityC2SPacket) {
+            PlayerInteractEntityC2SPacket packet = (PlayerInteractEntityC2SPacket) event.getPacket();
             if (packet.getType() == PlayerInteractEntityC2SPacket.InteractionType.ATTACK) {
             	this.doCritical();
             	
