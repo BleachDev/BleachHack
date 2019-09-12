@@ -11,12 +11,10 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 
-public class BleachFileReader {
+public class BleachFileHelper {
 
-	private static BleachFileMang fileMang = new BleachFileMang();
-	
 	public static void saveModules() {
-		fileMang.createEmptyFile("modules.txt");
+		BleachFileMang.createEmptyFile("modules.txt");
 		
 		String lines = "";
 		for(Module m: ModuleManager.getModules()) {
@@ -24,11 +22,11 @@ public class BleachFileReader {
 			lines += m.getName() + ":" + m.isToggled() + "\n";
 		}
 		
-		fileMang.appendFile(lines, "modules.txt");
+		BleachFileMang.appendFile(lines, "modules.txt");
 	}
 	
 	public static void readModules() {
-		List<String> lines = fileMang.readFileLines("modules.txt");
+		List<String> lines = BleachFileMang.readFileLines("modules.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			for(String s: lines) {
@@ -44,7 +42,7 @@ public class BleachFileReader {
 	}
 	
 	public static void saveSettings() {
-		fileMang.createEmptyFile("settings.txt");
+		BleachFileMang.createEmptyFile("settings.txt");
 		
 		String lines = "";
 		for(Module m: ModuleManager.getModules()) {
@@ -60,11 +58,11 @@ public class BleachFileReader {
 			lines += line + "\n";
 		}
 		
-		fileMang.appendFile(lines, "settings.txt");
+		BleachFileMang.appendFile(lines, "settings.txt");
 	}
 	
 	public static void readSettings() {
-		List<String> lines = fileMang.readFileLines("settings.txt");
+		List<String> lines = BleachFileMang.readFileLines("settings.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			for(String s: lines) {
@@ -88,18 +86,18 @@ public class BleachFileReader {
 	}
 	
 	public static void saveBinds() {
-		fileMang.createEmptyFile("binds.txt");
+		BleachFileMang.createEmptyFile("binds.txt");
 		
 		String lines = "";
 		for(Module m: ModuleManager.getModules()) {
 			lines += m.getName() + ":" + m.getKey() + "\n";
 		}
 		
-		fileMang.appendFile(lines, "binds.txt");
+		BleachFileMang.appendFile(lines, "binds.txt");
 	}
 	
 	public static void readBinds() {
-		List<String> lines = fileMang.readFileLines("binds.txt");
+		List<String> lines = BleachFileMang.readFileLines("binds.txt");
 		
 		for(Module m: ModuleManager.getModules()) {
 			for(String s: lines) {
@@ -111,16 +109,16 @@ public class BleachFileReader {
 	}
 	
 	public static void saveClickGui() {
-		fileMang.createEmptyFile("clickgui.txt");
+		BleachFileMang.createEmptyFile("clickgui.txt");
 		
 		String text = "";
 		for(ModuleWindow w: ClickGui.clickGui.tabs) text += w.getPos()[0] + ":" + w.getPos()[1] + "\n";
 		
-		fileMang.appendFile(text, "clickgui.txt");
+		BleachFileMang.appendFile(text, "clickgui.txt");
 	}
 	
 	public static void readClickGui() {
-		List<String> lines = fileMang.readFileLines("clickgui.txt");
+		List<String> lines = BleachFileMang.readFileLines("clickgui.txt");
 		
 		try {
 			int c = 0;

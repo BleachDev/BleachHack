@@ -13,7 +13,6 @@ import net.minecraft.text.LiteralText;
 public class AltManagerScreen extends Screen {
 
 	private ParticleManager particleMang = new ParticleManager();
-	private BleachFileMang fileMang = new BleachFileMang();
 	private BleachCipher cipher = new BleachCipher();
 	
 	private LoginScreen loginScreen;
@@ -26,9 +25,9 @@ public class AltManagerScreen extends Screen {
 	}
 	
 	public void init() {
-		fileMang.createFile("logins.txt");
+		BleachFileMang.createFile("logins.txt");
 		entries.clear();
-		for(String s: fileMang.readFileLines("logins.txt")) entries.add(new ArrayList<>(Arrays.asList(cipher.decrypt(s).split(":"))));
+		for(String s: BleachFileMang.readFileLines("logins.txt")) entries.add(new ArrayList<>(Arrays.asList(cipher.decrypt(s).split(":"))));
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
@@ -75,13 +74,13 @@ public class AltManagerScreen extends Screen {
 			if(mX>width/2+lenght/2+4 && mX<width/2+lenght/2+14 && mY>height/4+c*14-2 && mY<height/4+c*14+11) {
 				int c1 = 0;
 				String lines = "";
-				for(String l: fileMang.readFileLines("logins.txt")) {
+				for(String l: BleachFileMang.readFileLines("logins.txt")) {
 					if(l.trim().replace("\r", "").replace("\n", "") == "") continue;
 					if (c1 != c) lines += l + "\r\n";
 					c1++;
 				}
-				fileMang.createEmptyFile("logins.txt");
-				fileMang.appendFile(lines, "logins.txt");
+				BleachFileMang.createEmptyFile("logins.txt");
+				BleachFileMang.appendFile(lines, "logins.txt");
 				minecraft.openScreen(new AltManagerScreen(loginScreen));
 				break;
 			}

@@ -17,7 +17,6 @@ import net.minecraft.text.LiteralText;
 public class LoginScreen extends Screen {
 
 	private ParticleManager particleMang = new ParticleManager();
-	private BleachFileMang fileMang = new BleachFileMang();
 	private BleachCipher cipher = new BleachCipher();
 	
 	public TextFieldWidget userField;
@@ -32,8 +31,8 @@ public class LoginScreen extends Screen {
 	
 	public void init() {
 		List<List<String>> entries = new ArrayList<>();
-		fileMang.createFile("logins.txt");
-		for(String s: fileMang.readFileLines("logins.txt")) entries.add(new ArrayList<>(Arrays.asList(cipher.decrypt(s).split(":"))));
+		BleachFileMang.createFile("logins.txt");
+		for(String s: BleachFileMang.readFileLines("logins.txt")) entries.add(new ArrayList<>(Arrays.asList(cipher.decrypt(s).split(":"))));
 		
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 84, 200, 20, "Done", (button) -> {
 			minecraft.openScreen(new BleachMainMenu());
@@ -47,8 +46,8 @@ public class LoginScreen extends Screen {
 			if(checkBox.checked && loginResult == "§aLogin Successful" 
 					&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
 				entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
-				fileMang.createFile("logins.txt");
-				fileMang.appendFile(cipher.encrypt(text), "logins.txt");
+				BleachFileMang.createFile("logins.txt");
+				BleachFileMang.appendFile(cipher.encrypt(text), "logins.txt");
 			}
 	    }));
 		

@@ -8,7 +8,10 @@ import bleach.hack.utils.BleachLogger;
 
 public class CommandManager {
 
+	public static String prefix = ".";
+	
 	private List<Command> commands = Arrays.asList(
+			new CmdBind(),
 			new CmdDupe(),
 			new CmdEnchant(),
 			new CmdGamemode(),
@@ -17,6 +20,7 @@ public class CommandManager {
 			new CmdHelp(),
 			new CmdNotebot(),
 			new CmdPeek(),
+			new CmdPrefix(),
 			new CmdRbook(),
 			new CmdRename(),
 			new CmdSkull(),

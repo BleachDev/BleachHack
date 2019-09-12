@@ -12,20 +12,20 @@ import net.minecraft.client.MinecraftClient;
 
 public class BleachFileMang {
 
-	private Path dir;
+	private static Path dir;
 	
-	public BleachFileMang() {
-		this.dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/");
+	public static void init() {
+		dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/");
 		if(!dir.toFile().exists()) dir.toFile().mkdirs();
 	}
 	
 	/** Gets the bleach directory in your minecraft folder. **/
-	public Path getDir() {
+	public static Path getDir() {
 		return dir;
 	}
 	
 	/** Reads a file and returns a list of the lines. **/
-	public List<String> readFileLines(String... file) {
+	public static List<String> readFileLines(String... file) {
 		try { return Files.readAllLines(stringsToPath(file));
 		} catch (IOException e) { System.out.println("Error Reading File: " + stringsToPath(file)); e.printStackTrace(); } 
 		
@@ -33,7 +33,7 @@ public class BleachFileMang {
 	}
 	
 	/** Creates a file, doesn't do anything if the file already exists. **/
-	public void createFile(String... file) {
+	public static void createFile(String... file) {
 		try { 
 			if(fileExists(file)) return;
 			dir.toFile().mkdirs();
@@ -42,7 +42,7 @@ public class BleachFileMang {
 	}
 	
 	/** Creates a file, clears it if it already exists **/
-	public void createEmptyFile(String... file) {
+	public static void createEmptyFile(String... file) {
 		try { 
 			dir.toFile().mkdirs();
 			if(!fileExists(file)) Files.createFile(stringsToPath(file));
@@ -53,7 +53,7 @@ public class BleachFileMang {
 	}
 	
 	/** Adds a line to a file. **/
-	public void appendFile(String content, String... file) {
+	public static void appendFile(String content, String... file) {
 		try {
 			FileWriter writer = new FileWriter(stringsToPath(file).toFile(), true);
 			writer.write(content + "\n");
@@ -62,12 +62,12 @@ public class BleachFileMang {
 	}
 	
 	/** Returns true if a file exists, returns false otherwise **/
-	public boolean fileExists(String... file) {
+	public static boolean fileExists(String... file) {
 		try { return stringsToPath(file).toFile().exists();
 		} catch (Exception e) { return false; }
 	}
 	
-	public Path stringsToPath(String... strings) {
+	public static Path stringsToPath(String... strings) {
 		Path path = dir;
 		for(String s: strings) path = path.resolve(s);
 		return path;

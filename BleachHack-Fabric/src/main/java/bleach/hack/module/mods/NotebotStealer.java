@@ -19,8 +19,6 @@ import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 
 public class NotebotStealer extends Module {
-
-	private BleachFileMang fileMang = new BleachFileMang();
 	
 	private List<List<Integer>> notes = new ArrayList<>();
 	private Multimap<SoundCategory, SoundInstance> prevSoundMap = HashMultimap.create();
@@ -44,9 +42,9 @@ public class NotebotStealer extends Module {
 		int i = 0;
 		String s = "";
 
-		while(fileMang.fileExists("notebot", "notebot" + i + ".txt")) i++;
+		while(BleachFileMang.fileExists("notebot", "notebot" + i + ".txt")) i++;
 		for(List<Integer> i1: notes) s+= i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
-		fileMang.appendFile(s, "notebot", "notebot" + i + ".txt");
+		BleachFileMang.appendFile(s, "notebot", "notebot" + i + ".txt");
 		BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
 	}
 

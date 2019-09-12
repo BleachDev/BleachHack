@@ -28,8 +28,6 @@ import net.minecraft.block.enums.Instrument;
 import net.minecraft.util.SystemUtil;
 
 public class CmdNotebot extends Command {
-
-	private BleachFileMang fileMang = new BleachFileMang();
 	
 	@Override
 	public String getAlias() {
@@ -53,7 +51,7 @@ public class CmdNotebot extends Command {
 			BleachLogger.infoMessage("Set file to: " + args[1]);
 			
 		}else if(args[0].equalsIgnoreCase("list")) {
-			Stream<Path> paths = Files.walk(fileMang.getDir().resolve("notebot"));
+			Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
 			BleachLogger.infoMessage("Files:");
 			paths.forEach(p -> BleachLogger.infoMessage(p.getFileName().toString()));
 			paths.close();
@@ -61,8 +59,8 @@ public class CmdNotebot extends Command {
 		}else if(args[0].equalsIgnoreCase("req")) {
 			List<List<Integer>> n = new ArrayList<>();
 			List<List<Integer>> t = new ArrayList<>();
-			fileMang.createFile("notebot", args[1]);
-			List<String> lines = fileMang.readFileLines("notebot", args[1])
+			BleachFileMang.createFile("notebot", args[1]);
+			List<String> lines = BleachFileMang.readFileLines("notebot", args[1])
 					.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 			for(String s: lines) s = s.replaceAll(" ", " ");
 
@@ -93,15 +91,15 @@ public class CmdNotebot extends Command {
 			
 			FileUtils.copyURLToFile(
 					  new URL("https://github.com/BleachDrinker420/bleachhack-1.14/raw/master/online/notebot/songs.zip"), 
-					  fileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
+					  BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
 			
-			ZipFile zip = new ZipFile(fileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
+			ZipFile zip = new ZipFile(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
 			Enumeration<? extends ZipEntry> files = zip.entries();
 			int count = 0;
 			while (files.hasMoreElements()) {
 				count++;
 				ZipEntry file = files.nextElement();
-				File outFile = fileMang.getDir().resolve("notebot").resolve(file.getName()).toFile();
+				File outFile = BleachFileMang.getDir().resolve("notebot").resolve(file.getName()).toFile();
 				if (file.isDirectory()) outFile.mkdirs();
 			    else {
 			        outFile.getParentFile().mkdirs();
@@ -113,7 +111,7 @@ public class CmdNotebot extends Command {
 			    }
 			}
 			zip.close();
-			Files.deleteIfExists(fileMang.getDir().resolve("notebot").resolve("songs.zip"));
+			Files.deleteIfExists(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip"));
 			
 			BleachLogger.infoMessage("Downloaded " + count + " Songs");
 		}else if(args[0].equalsIgnoreCase("tutorial")) {

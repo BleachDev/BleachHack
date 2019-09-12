@@ -30,7 +30,7 @@ public class MixinClientConnection {
     @Inject(method = "method_10770", at = @At("HEAD"), cancellable = true)
     public void IchannelRead0(ChannelHandlerContext channelHandlerContext_1, Packet<?> packet_1, CallbackInfo callback) {
         if (this.channel.isOpen()) {
-            try {
+        	try {
                 EventReadPacket event = new EventReadPacket(packet_1);
                 BleachHack.eventBus.post(event);
                 if (event.isCancelled()) callback.cancel();
@@ -42,9 +42,9 @@ public class MixinClientConnection {
     public void send(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1, CallbackInfo callback) {
     	if(packet_1 instanceof ChatMessageC2SPacket) {
 			ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet_1;
-			if(pack.getChatMessage().startsWith(".")) {
+			if(pack.getChatMessage().startsWith(CommandManager.prefix)) {
 				CommandManager cmd = new CommandManager();
-	    		cmd.callCommand(pack.getChatMessage().substring(1));
+	    		cmd.callCommand(pack.getChatMessage().substring(CommandManager.prefix.length()));
 	    		callback.cancel();
 			}
 		}
@@ -55,6 +55,7 @@ public class MixinClientConnection {
         if (event.isCancelled()) callback.cancel();
     }
     
+    /* Blocks Packet kicks, probably shoudn't do this but idc */
     @Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
     public void exceptionCaught(ChannelHandlerContext channelHandlerContext_1, Throwable throwable_1, CallbackInfo callback) {
     	BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);

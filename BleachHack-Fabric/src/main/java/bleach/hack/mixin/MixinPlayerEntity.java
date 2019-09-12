@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.utils.BleachQueue;
-import bleach.hack.utils.file.BleachFileReader;
+import bleach.hack.utils.file.BleachFileHelper;
 
 @Mixin(ClientPlayerEntity.class)
 public class MixinPlayerEntity {
@@ -20,10 +20,10 @@ public class MixinPlayerEntity {
 	public void tick(CallbackInfo info) {
 		try {
 			if(MinecraftClient.getInstance().player.age % 100 == 0) {
-				BleachFileReader.saveModules();
-				BleachFileReader.saveSettings();
-				BleachFileReader.saveBinds();
-				BleachFileReader.saveClickGui();
+				BleachFileHelper.saveModules();
+				BleachFileHelper.saveSettings();
+				BleachFileHelper.saveBinds();
+				BleachFileHelper.saveClickGui();
 			}
 			
 			BleachQueue.nextQueue();

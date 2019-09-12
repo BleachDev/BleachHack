@@ -32,8 +32,6 @@ public class Notebot extends Module {
 			new SettingToggle(true, "Tune"),
 			new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
 			new SettingToggle(false, "Loop"));
-			
-	private BleachFileMang fileMang = new BleachFileMang();
 	
 	private List<List<Integer>> tunes = new ArrayList<>();
 	private HashMap<BlockPos, Integer> blockTunes = new HashMap<>();
@@ -182,8 +180,8 @@ public class Notebot extends Module {
 		notes.clear();
 		
 		/* Read the file */
-		fileMang.createFile("notebot", fileName);
-		List<String> lines = fileMang.readFileLines("notebot", fileName)
+		BleachFileMang.createFile("notebot", fileName);
+		List<String> lines = BleachFileMang.readFileLines("notebot", fileName)
 				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 		for(String s: lines) s = s.replaceAll(" ", " ");
 

@@ -20,7 +20,6 @@ public class Spammer extends Module {
 			new SettingMode("Read: ", "Random", "Order"),
 			new SettingSlider(1, 120, 20, 0, "Delay: "));
 	
-	private BleachFileMang fileMang = new BleachFileMang();
 	private Random rand = new Random();
 	private List<String> lines = new ArrayList<>();
 	private int lineCount = 0;
@@ -32,8 +31,8 @@ public class Spammer extends Module {
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		fileMang.createFile("spammer.txt");
-		lines = fileMang.readFileLines("spammer.txt");
+		BleachFileMang.createFile("spammer.txt");
+		lines = BleachFileMang.readFileLines("spammer.txt");
 		lineCount = 0;
 	}
 
