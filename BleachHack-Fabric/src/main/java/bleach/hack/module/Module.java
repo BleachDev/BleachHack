@@ -36,23 +36,27 @@ public class Module {
 	}
 	
 	public void onEnable() {
-		Method[] methods = this.getClass().getMethods();
-		for(Method method : methods) {
-			if (method.isAnnotationPresent(Subscribe.class)) {
-				BleachHack.eventBus.register(this);
-				break;
+		try {
+			Method[] methods = this.getClass().getMethods();
+			for(Method method : methods) {
+				if (method.isAnnotationPresent(Subscribe.class)) {
+					BleachHack.eventBus.register(this);
+					break;
+				}
 			}
-		}
+		}catch(Exception hmmmmm_weird_but_ok) { hmmmmm_weird_but_ok.printStackTrace(); } 
 	}
 
 	public void onDisable() {
-		Method[] methods = this.getClass().getMethods();
-		for(Method method : methods) {
-			if (method.isAnnotationPresent(Subscribe.class)) {
-				BleachHack.eventBus.unregister(this);
-				break;
+		try{
+			Method[] methods = this.getClass().getMethods();
+			for(Method method : methods) {
+				if (method.isAnnotationPresent(Subscribe.class)) {
+					BleachHack.eventBus.unregister(this);
+					break;
+				}
 			}
-		}
+		}catch(Exception hmmmmm_weird_but_ok) { hmmmmm_weird_but_ok.printStackTrace(); } 
 	}
 
 	public String getName() {

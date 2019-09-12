@@ -4,6 +4,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.command.CommandManager;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
+import bleach.hack.utils.BleachLogger;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
@@ -52,5 +53,11 @@ public class MixinClientConnection {
         BleachHack.eventBus.post(event);
 
         if (event.isCancelled()) callback.cancel();
-    } 
+    }
+    
+    @Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
+    public void exceptionCaught(ChannelHandlerContext channelHandlerContext_1, Throwable throwable_1, CallbackInfo callback) {
+    	BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);
+    	callback.cancel();
+    }
 }

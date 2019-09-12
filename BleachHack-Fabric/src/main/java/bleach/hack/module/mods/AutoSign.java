@@ -52,7 +52,7 @@ public class AutoSign extends Module {
 			
 			if(getSettings().get(0).toToggle().state) {
 				IntStream chars = new Random().ints(0, 0x10FFFF);
-				text = chars.limit(100).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining()).split("(?<=\\G.{25})");
+				text = chars.limit(60).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining()).split("(?<=\\G.{15})");
 			}
 			
 			SignEditScreen screen = (SignEditScreen) event.getScreen();
