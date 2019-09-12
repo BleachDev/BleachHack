@@ -13,6 +13,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
+import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
@@ -44,7 +45,9 @@ public class Nuker extends Module {
 		for(int x = (int) range; x >= (int) -range; x--) {
 			for(int y = (int) range; y >= (getSettings().get(2).toToggle().state ? 0 : (int) -range); y--) {
 				for(int z = (int) range; z >= (int) -range; z--) {
-					blocks.add(new BlockPos(mc.player.getPos().add(x, y + 0.1, z)));
+					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
+					if(!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos)) continue;
+					blocks.add(pos);
 				}
 			}
 		}
@@ -68,22 +71,20 @@ public class Nuker extends Module {
 			
 			if(dir == null) continue;
 			
-			if(canSeeBlock(pos) && mc.world.getBlockState(pos).getBlock() != Blocks.AIR) {
-				if(getSettings().get(3).toToggle().state) {
-					float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
-					EntityUtils.facePos(vec.x, vec.y, vec.z);
-					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
-							mc.player.yaw, mc.player.pitch, mc.player.onGround));
-					mc.player.yaw = prevRot[0];
-					mc.player.pitch = prevRot[1];
-				}
-				
-				if(getSettings().get(0).toMode().mode == 0) mc.interactionManager.method_2902(pos, dir);
-				else mc.interactionManager.attackBlock(pos, dir);
-				
-				mc.player.swingHand(Hand.MAIN_HAND);
-				if(getSettings().get(0).toMode().mode != 2) return;
+			if(getSettings().get(3).toToggle().state) {
+				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
+				EntityUtils.facePos(vec.x, vec.y, vec.z);
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
+						mc.player.yaw, mc.player.pitch, mc.player.onGround));
+				mc.player.yaw = prevRot[0];
+				mc.player.pitch = prevRot[1];
 			}
+			
+			if(getSettings().get(0).toMode().mode == 0) mc.interactionManager.method_2902(pos, dir);
+			else mc.interactionManager.attackBlock(pos, dir);
+			
+			mc.player.swingHand(Hand.MAIN_HAND);
+			if(getSettings().get(0).toMode().mode != 2) return;
 		}
 	}
 	

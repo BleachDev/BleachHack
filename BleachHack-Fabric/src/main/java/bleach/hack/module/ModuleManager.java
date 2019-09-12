@@ -16,6 +16,7 @@ public class ModuleManager {
 			new AutoSign(),
 			new AutoTotem(),
 			new ChestESP(),
+			new ChunkSize(),
 			new ClickGui(),
 			new Criticals(),
 			new CrystalAura(),

@@ -25,6 +25,7 @@ import net.minecraft.item.Items;
 
 public class Peek extends Module {
 
+	private List<List<String>> pages;
 	private int[] slotPos;
 	private int pageCount = 0;
 	private boolean shown = false;
@@ -40,7 +41,10 @@ public class Peek extends Module {
 		try { slot = (Slot) FabricReflect.getFieldValue(screen, "field_2787", "focusedSlot"); } catch (Exception e) {}
 		if(slot == null) return;
 		
-		if(!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) pageCount = 0;
+		if(!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) {
+			pageCount = 0;
+			pages = null;
+		}
 		slotPos = new int[] {slot.xPosition, slot.yPosition};
 		
 		drawShulkerToolTip(slot, mX, mY);
@@ -76,7 +80,7 @@ public class Peek extends Module {
 	public void drawBookToolTip(Slot slot, int mX, int mY) {
 		if(slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK) return;
 		
-		List<List<String>> pages = ItemContentUtils.getTextInBook(slot.getStack());
+		if(pages == null) pages = ItemContentUtils.getTextInBook(slot.getStack());
 		if(pages.isEmpty()) return;
 		
 		/* Cycle through pages */

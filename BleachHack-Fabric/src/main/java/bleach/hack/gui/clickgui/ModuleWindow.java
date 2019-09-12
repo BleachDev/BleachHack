@@ -186,7 +186,7 @@ public class ModuleWindow {
 		font.drawWithShadow(s.text + (s.round == 0  && s .value > 100 ? Integer.toString((int)s.value) : s.value),
 				x+2, y+(height>10?2:1), mouseOver(x, y, x+len, y+height) ? 0xffc3ff : 0xffe0ff);
 		
-		if(mouseOver(x, y, x+len, y+height) && lmDown) {
+		if(mouseOver(x, y, x+len, y+height) && lmHeld) {
 			int percent = ((mouseX - x) * 100) / len;
 				
 			s.value = s.round(percent*((s.max - s.min) / 100) + s.min, s.round);

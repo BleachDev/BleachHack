@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -40,6 +41,12 @@ public class WorldUtils {
 			Blocks.ACACIA_BUTTON, Blocks.DARK_OAK_BUTTON, Blocks.JUNGLE_BUTTON,
 			Blocks.SPRUCE_BUTTON, Blocks.BARREL, Blocks.BLAST_FURNACE);
 		
+	public static boolean isFluid(BlockPos pos) {
+		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.SEAGRASS);
+
+        return fluids.contains(MinecraftClient.getInstance().world.getBlockState(pos).getMaterial());
+    }
+	
 	public static boolean doesAABBTouchBlock(Box aabb, Block block) {
 		for(int x = (int) Math.floor(aabb.minX); x < Math.ceil(aabb.maxX); x++) {
 			for(int y = (int) Math.floor(aabb.minY); y < Math.ceil(aabb.maxY); y++) {
