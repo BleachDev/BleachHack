@@ -1,20 +1,30 @@
 package bleach.hack.gui;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.module.mods.Notebot;
+import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.gui.screen.Screen;
@@ -58,6 +68,7 @@ public class NotebotScreen extends Screen {
 		for(int i = y + 20; i < y + h - 17; i += 10) pageEntries++;
 		
 		drawCenteredString(font, "<  Page " + (page + 1) + "  >", x + 55, y + 5, 0xc0c0ff);
+		drawCenteredString(font, "Download Songs..", x + w / 2, y + 5, 0xc0dfdf);
 		
 		int c = 0, c1 = -1;
 		for(String s: files) {
@@ -121,6 +132,36 @@ public class NotebotScreen extends Screen {
 		
 		if(double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15) if(page > 0) page--;
 		if(double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15) page++;
+		if(double_1 > x + w / 2 - 42 && double_1 < x + w / 2 + 48 && double_2 > y + 5 && double_2 < y + 15) {
+			try {
+				FileUtils.copyURLToFile(
+						  new URL("https://github.com/BleachDrinker420/bleachhack-1.14/raw/master/online/notebot/songs.zip"), 
+						  BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
+				ZipFile zip = new ZipFile(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
+				Enumeration<? extends ZipEntry> files = zip.entries();
+				int count = 0;
+				while (files.hasMoreElements()) {
+					count++;
+					ZipEntry file = files.nextElement();
+					File outFile = BleachFileMang.getDir().resolve("notebot").resolve(file.getName()).toFile();
+					if (file.isDirectory()) outFile.mkdirs();
+				    else {
+				        outFile.getParentFile().mkdirs();
+				        InputStream in = zip.getInputStream(file);
+				        FileOutputStream out = new FileOutputStream(outFile);
+				        IOUtils.copy(in, out);
+				        IOUtils.closeQuietly(in);
+				        out.close();
+				    }
+				}
+				zip.close();
+				Files.deleteIfExists(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip"));
+	
+				BleachLogger.infoMessage("Downloaded " + count + " Songs");
+				minecraft.openScreen(this);
+			} catch (Exception e) { BleachLogger.warningMessage("Looks like i did an oopsie");}
+
+		}
 		
 		if(entry != null) {
 			if(double_1 > x + w - w / 2 + 10 && double_1 < x + w - w / 4 && double_2 > y + h - 15 && double_2 < y + h - 5) {
