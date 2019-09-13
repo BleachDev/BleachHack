@@ -67,6 +67,13 @@ public class BleachFileMang {
 		} catch (Exception e) { return false; }
 	}
 	
+	/** Deletes a file if it exists. **/
+	public static void deleteFile(String... file) {
+		try {
+			Files.deleteIfExists(stringsToPath(file));
+		} catch (Exception e) { System.out.println("Error Deleting File: " + file); e.printStackTrace(); } 
+	}
+	
 	public static Path stringsToPath(String... strings) {
 		Path path = dir;
 		for(String s: strings) path = path.resolve(s);

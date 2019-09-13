@@ -11,6 +11,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketEncoderException;
 import net.minecraft.server.network.packet.ChatMessageC2SPacket;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,6 +59,8 @@ public class MixinClientConnection {
     /* Blocks Packet kicks, probably shoudn't do this but idc */
     @Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
     public void exceptionCaught(ChannelHandlerContext channelHandlerContext_1, Throwable throwable_1, CallbackInfo callback) {
+    	if(throwable_1 instanceof PacketEncoderException) return;
+    	
     	BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);
     	callback.cancel();
     }

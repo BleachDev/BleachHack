@@ -2,6 +2,7 @@ package bleach.hack.utils.file;
 
 import java.util.List;
 
+import bleach.hack.command.CommandManager;
 import bleach.hack.gui.clickgui.ModuleWindow;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
@@ -128,4 +129,9 @@ public class BleachFileHelper {
 			}
 		}catch(Exception e) {}
 	}
+	
+	public static void readPrefix() {
+		try{ CommandManager.prefix = BleachFileMang.readFileLines("prefix.txt").get(0); }catch(Exception e) {}
+	}
+	
 }
