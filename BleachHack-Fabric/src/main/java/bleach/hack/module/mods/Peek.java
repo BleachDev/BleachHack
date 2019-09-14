@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
@@ -22,6 +20,8 @@ import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import org.lwjgl.opengl.GL12;
+
 
 public class Peek extends Module {
 
@@ -105,35 +105,35 @@ public class Peek extends Module {
 		
 		
 	}
-	
+
 	public void renderTooltipBox(int x1, int y1, int x2, int y2) {
-         GlStateManager.disableRescaleNormal();
-         GuiLighting.disable();
-         GlStateManager.disableLighting();
-         GlStateManager.disableDepthTest();
-         GL11.glTranslatef(0.0F, 0.0F, 300.0F);
+		GL12.glDisable(GL12.GL_RESCALE_NORMAL);
+		GuiLighting.disable();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDepthMask(false);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
 
-         int int_5 = x1 + 12;
-         int int_6 = y1 - 12;
+		int int_5 = x1 + 12;
+		int int_6 = y1 - 12;
+		if (int_5 + y2 > mc.currentScreen.width) int_5 -= 28 + y2;
+		if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
 
-         if (int_5 + y2 > mc.currentScreen.width) int_5 -= 28 + y2;
-         if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
+		/* why the fork is this private? */
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 + x2 + 3, int_5 + y2 + 3, int_6 + x2 + 4, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 + x2 + 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 4, int_6 - 3, int_5 - 3, int_6 + x2 + 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 + y2 + 3, int_6 - 3, int_5 + y2 + 4, int_6 + x2 + 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3 + 1, int_5 - 3 + 1, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 1347420415, 1347420415);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 1344798847, 1344798847);
 
-         /* why the fork is this private? */
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, -267386864, -267386864);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 + x2 + 3, int_5 + y2 + 3, int_6 + x2 + 4, -267386864, -267386864);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 + x2 + 3, -267386864, -267386864);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 4, int_6 - 3, int_5 - 3, int_6 + x2 + 3, -267386864, -267386864);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 + y2 + 3, int_6 - 3, int_5 + y2 + 4, int_6 + x2 + 3, -267386864, -267386864);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3 + 1, int_5 - 3 + 1, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 1347420415, 1347420415);
-         FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 1344798847, 1344798847);
-         
-         GlStateManager.enableLighting();
-         GlStateManager.enableDepthTest();
-         GuiLighting.enable();
-         GlStateManager.enableRescaleNormal();
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDepthMask(true);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GuiLighting.enable();
+		GL12.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
-
 }
