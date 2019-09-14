@@ -4,7 +4,6 @@ import com.google.common.eventbus.EventBus;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
-import bleach.hack.module.mods.Speed;
 import bleach.hack.utils.file.BleachFileHelper;
 import bleach.hack.utils.file.BleachFileMang;
 import net.fabricmc.api.ClientModInitializer;
@@ -34,6 +33,6 @@ public class BleachHack implements ClientModInitializer {
 		// Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
     	
     	// i have no idea why it enabled speed and resets it everytime you restart but its annoying as fuck
-    	ModuleManager.getModule(Speed.class).setToggled(false);
+    	//ModuleManager.getModule(Speed.class).setToggled(false);
 	}
 }

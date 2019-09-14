@@ -3,6 +3,8 @@ package bleach.hack.module.mods;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
@@ -13,6 +15,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
+import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
@@ -30,6 +33,7 @@ public class Nuker extends Module {
 			new SettingSlider(1, 6, 4.2, 1, "Range: "),
 			new SettingToggle(false, "Flatten"),
 			new SettingToggle(false, "Rotate"),
+			new SettingToggle(false, "NoParticles"),
 			new SettingMode("Sort: ", "Normal", "Hardness"));
 	
 	public Nuker() {
@@ -52,7 +56,10 @@ public class Nuker extends Module {
 			}
 		}
 		
-		if(getSettings().get(4).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
+		if(!blocks.isEmpty() && getSettings().get(4).toToggle().state) FabricReflect.writeField(
+				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
+		
+		if(getSettings().get(5).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 		
 		for(BlockPos pos: blocks) {

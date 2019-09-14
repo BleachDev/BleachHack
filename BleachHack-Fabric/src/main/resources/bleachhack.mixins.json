@@ -6,6 +6,7 @@
   ],
   "client": [
   	"MixinClientConnection",
+  	"MixinClientPlayerInteractionManager",
     "MixinContainerScreen",
   	"MixinEntityRenderer",
     "MixinGameRenderer",
@@ -15,8 +16,7 @@
     "MixinServerScreen",
     "MixinTitleScreen",
     "MixinKeyboard",
-    "MixinPlayerInventory",
-    "MixinClientPlayerInteractionManager"
+    "MixinPlayerInventory"
   ],
   "injectors": {
     "defaultRequire": 1
