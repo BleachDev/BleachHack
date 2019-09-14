@@ -4,6 +4,8 @@ Very cool client.
 Works on fabric 1.14  
 (also works on forge but that isn't supported anymore)
 
+> Join The Discord: https://discord.gg/b5Wc4nQ
+
 ## Installation:
 **For Normal People:**
 

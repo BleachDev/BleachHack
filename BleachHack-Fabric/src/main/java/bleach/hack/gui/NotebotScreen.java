@@ -138,7 +138,7 @@ public class NotebotScreen extends Screen {
 		
 		if(double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15) if(page > 0) page--;
 		if(double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15) page++;
-		if(double_1 > x + w - 22 && double_1 < x + w && double_2 > y - 12 && double_2 < y) {
+		if(double_1 > x + w - 44 && double_1 < x + w && double_2 > y - 12 && double_2 < y) {
 			try { SystemUtil.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=clT_aNvQedk")); }catch(Exception e) {}
 		}
 		if(double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
