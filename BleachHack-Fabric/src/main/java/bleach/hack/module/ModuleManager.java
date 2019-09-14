@@ -13,6 +13,7 @@ public class ModuleManager {
 	private static List<Module> mods = Arrays.asList(
 			new Ambience(),
 			new ArrowJuke(),
+			new AutoReconnect(),
 			new AutoSign(),
 			new AutoTotem(),
 			new ChestESP(),

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,6 +33,7 @@ import net.minecraft.client.render.GuiLighting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.SystemUtil;
 
 public class NotebotScreen extends Screen {
 
@@ -63,12 +65,16 @@ public class NotebotScreen extends Screen {
 		fill(x, y, x + w, y + h, 0xd0505059);
 		fill(x + 1, y + 1, x + w - 2, y + 2, 0xff303030);
 		fill(x + 1, y + h - 2, x + w - 2, y + h - 1, 0xff303030);
+		drawCenteredString(font, "Notebot Gui", x + w / 2, y - 10, 0x909090);
+		drawCenteredString(font, "Tutorial..", x + w - 22, y - 10, 0x9090c0);
 		
 		int pageEntries = 0;
-		for(int i = y + 20; i < y + h - 17; i += 10) pageEntries++;
+		for(int i = y + 20; i < y + h - 27; i += 10) pageEntries++;
 		
 		drawCenteredString(font, "<  Page " + (page + 1) + "  >", x + 55, y + 5, 0xc0c0ff);
-		drawCenteredString(font, "Download Songs..", x + w / 2, y + 5, 0xc0dfdf);
+		
+		fill(x + 10, y + h - 13, x + 99, y + h - 3, 0xff353535);
+		drawCenteredString(font, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 		
 		int c = 0, c1 = -1;
 		for(String s: files) {
@@ -132,7 +138,10 @@ public class NotebotScreen extends Screen {
 		
 		if(double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15) if(page > 0) page--;
 		if(double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15) page++;
-		if(double_1 > x + w / 2 - 42 && double_1 < x + w / 2 + 48 && double_2 > y + 5 && double_2 < y + 15) {
+		if(double_1 > x + w - 22 && double_1 < x + w && double_2 > y - 12 && double_2 < y) {
+			try { SystemUtil.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=clT_aNvQedk")); }catch(Exception e) {}
+		}
+		if(double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
 			try {
 				FileUtils.copyURLToFile(
 						  new URL("https://github.com/BleachDrinker420/bleachhack-1.14/raw/master/online/notebot/songs.zip"), 
@@ -174,7 +183,7 @@ public class NotebotScreen extends Screen {
 		}
 		
 		int pageEntries = 0;
-		for(int i = y + 20; i < y + h - 17; i += 10) pageEntries++;
+		for(int i = y + 20; i < y + h - 27; i += 10) pageEntries++;
 		
 		int c = 0, c1 = -1;
 		for(String s: files) {
