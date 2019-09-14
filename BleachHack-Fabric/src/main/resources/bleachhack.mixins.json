@@ -14,7 +14,9 @@
     "MixinPlayerEntity",
     "MixinServerScreen",
     "MixinTitleScreen",
-    "MixinKeyboard"
+    "MixinKeyboard",
+    "MixinPlayerInventory",
+    "MixinClientPlayerInteractionManager"
   ],
   "injectors": {
     "defaultRequire": 1
