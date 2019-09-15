@@ -229,16 +229,15 @@ public class NotebotScreen extends Screen {
 			
 			/* Requirements */
 			List<List<Integer>> t = new ArrayList<>();
-			List<List<String>> neededTunes = new ArrayList<>();
 			
 			for(String s: lines) {
-				List<String> strings = Arrays.asList(s.split(":"));
-				if(!neededTunes.contains(Arrays.asList(strings.get(1), strings.get(2)))) {
-					neededTunes.add(Arrays.asList(strings.get(1), strings.get(2)));
-				}
+				try{
+					List<String> strings = Arrays.asList(s.split(":"));
+					if(!t.contains(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))))) {
+						t.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
+					}
+				}catch(Exception e) {}
 			}
-			
-			for(List<String> s: neededTunes) t.add(Arrays.asList(Integer.parseInt(s.get(0)), Integer.parseInt(s.get(1))));
 			
 			List<Integer> t1 = Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 			

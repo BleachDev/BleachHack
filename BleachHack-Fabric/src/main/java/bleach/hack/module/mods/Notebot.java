@@ -31,11 +31,17 @@ public class Notebot extends Module {
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingToggle(true, "Tune"),
 			new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
-			new SettingToggle(false, "Loop"));
+			new SettingToggle(false, "Loop"),
+			new SettingToggle(false, "NoInstruments"));
 	
-	private List<List<Integer>> tunes = new ArrayList<>();
-	private HashMap<BlockPos, Integer> blockTunes = new HashMap<>();
+	/* All the lines of the file [tick:pitch:instrument] */
 	private List<List<Integer>> notes = new ArrayList<>();
+	
+	/* All unique intruments and pitches [pitch:instrument] */
+	private List<List<Integer>> tunes = new ArrayList<>();
+	
+	/* Map of noteblocks to hit when playing and the pitch of each */
+	private HashMap<BlockPos, Integer> blockTunes = new HashMap<>();
 	private int timer = -10;
 	private int tuneDelay = 0;
 	
@@ -65,15 +71,23 @@ public class Notebot extends Module {
 				for(int y = -4; y <= 4; y++) {
 					for(int z = -4; z <= 4; z++) {
 						BlockPos pos = mc.player.getBlockPos().add(x, y, z);
-						if(!isNoteblock(pos) || i.get(1) != getInstrument(pos).ordinal()
-								|| (i.get(1) == getInstrument(pos).ordinal() && blockTunes.get(pos) != null)) continue;
-						blockTunes.put(pos, i.get(0));
-						break loop;
+						if(!isNoteblock(pos)) continue;
+						if(getSettings().get(3).toToggle().state) {
+							if(blockTunes.get(pos) != null) if(!blockTunes.get(pos).equals(i.get(0))) continue;
+							blockTunes.put(pos, i.get(0));
+							break loop;
+						}else {
+							if(i.get(1) != getInstrument(pos).ordinal()
+									|| (i.get(1) == getInstrument(pos).ordinal() && blockTunes.get(pos) != null)) continue;
+							blockTunes.put(pos, i.get(0));
+							break loop;
+						}
 					}
 				}
 			}
 		}
-		if(tunes.size() > blockTunes.size()) {
+		
+		if(tunes.size() > blockTunes.size() && !getSettings().get(3).toToggle().state) {
 			BleachLogger.warningMessage("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
 		}
 	}
@@ -141,8 +155,9 @@ public class Notebot extends Module {
 		
 		for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 			for(List<Integer> i: curNotes) {
-				if(isNoteblock(e.getKey()) && i.get(1) == (getNote(e.getKey()))
-						&& i.get(2) == (getInstrument(e.getKey()).ordinal())) playBlock(e.getKey());
+				if(isNoteblock(e.getKey()) && (i.get(1) == (getNote(e.getKey()))
+						&& (getSettings().get(3).toToggle().state
+								|| i.get(2) == (getInstrument(e.getKey()).ordinal())))) playBlock(e.getKey());
 			}
 		}
 	}
@@ -183,7 +198,7 @@ public class Notebot extends Module {
 		BleachFileMang.createFile("notebot", fileName);
 		List<String> lines = BleachFileMang.readFileLines("notebot", fileName)
 				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
-		for(String s: lines) s = s.replaceAll(" ", " ");
+		for(String s: lines) s = s.replaceAll(" ", "");
 
 		/* Parse note info into "memory" */
 		for(String s: lines) {
@@ -192,17 +207,14 @@ public class Notebot extends Module {
 			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Note: §o" + s); }
 		}
 		
-		/* Generate tuners */
-		List<List<String>> neededTunes = new ArrayList<>();
+		/* Get all unique pitches and instruments */
 		for(String s: lines) {
-			List<String> strings = Arrays.asList(s.split(":"));
-			if(!neededTunes.contains(Arrays.asList(strings.get(1), strings.get(2)))) {
-				neededTunes.add(Arrays.asList(strings.get(1), strings.get(2)));
-			}
-		}
-		for(List<String> s: neededTunes) {
-			try { tunes.add(Arrays.asList(Integer.parseInt(s.get(0)), Integer.parseInt(s.get(1))));
-			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Tuner: §o" + s); }
+			try { 
+				List<String> strings = Arrays.asList(s.split(":"));
+				if(!tunes.contains(Arrays.asList(Integer.parseInt(strings.get(1)),Integer.parseInt( strings.get(2))))) {
+					tunes.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
+				}
+			}catch(Exception e) { BleachLogger.warningMessage("Error Trying To Tune: §o" + s); }
 		}
 	}
 

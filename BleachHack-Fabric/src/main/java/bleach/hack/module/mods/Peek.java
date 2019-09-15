@@ -13,15 +13,19 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HopperBlock;
+import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import org.lwjgl.opengl.GL12;
+import net.minecraft.item.map.MapState;
 
+import org.lwjgl.opengl.GL12;
 
 public class Peek extends Module {
 
@@ -49,6 +53,7 @@ public class Peek extends Module {
 		
 		drawShulkerToolTip(slot, mX, mY);
 		drawBookToolTip(slot, mX, mY);
+		drawMapToolTip(slot, mX, mY);
 	}
 	
 	public void drawShulkerToolTip(Slot slot, int mX, int mY) {
@@ -63,9 +68,9 @@ public class Peek extends Module {
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 		
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock ? 18 : 0;
-		if(block instanceof HopperBlock) renderTooltipBox(mX, mY - 21, 13, 82);
-		else if(block instanceof DispenserBlock) renderTooltipBox(mX, mY - 21, 13, 150);
-		else renderTooltipBox(mX, mY - 55, 47, 150);
+		if(block instanceof HopperBlock) renderTooltipBox(mX, mY - 21, 13, 82, true);
+		else if(block instanceof DispenserBlock) renderTooltipBox(mX, mY - 21, 13, 150, true);
+		else renderTooltipBox(mX, mY - 55, 47, 150, true);
 		for(ItemStack i: items) {
 			if(count > 26) break;
 			int x = mX + 10 + (17 * (count % 9));
@@ -92,8 +97,8 @@ public class Peek extends Module {
 		
 		int lenght = mc.textRenderer.getStringWidth("Page: " + (pageCount + 1) + "/" + pages.size());
 		
-		renderTooltipBox(mX + 56 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, lenght);
-		renderTooltipBox(mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120);
+		renderTooltipBox(mX + 56 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, lenght, true);
+		renderTooltipBox(mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
 		mc.textRenderer.drawWithShadow("Page: " + (pageCount + 1) + "/" + pages.size(),
 				mX + 68 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
 		
@@ -103,10 +108,42 @@ public class Peek extends Module {
 			count++;
 		}
 		
+	}
+	
+	public void drawMapToolTip(Slot slot, int mX, int mY) {
+		if(slot.getStack().getItem() != Items.FILLED_MAP) return;
 		
+		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
+		byte[] colors = data.colors;
+		
+		GL11.glScaled(0.5, 0.5 ,0.5);
+		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
+		int x = mX*2 + 21;
+		int y = mY*2 - 164;
+		
+		renderTooltipBox(x - 12, y + 12, 128, 128, false);
+		for(byte c: colors) {
+			int c1 = c & 255;
+			
+			if(c1 / 4 != 0) Screen.fill(x, y, x+1, y+1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
+			if(x - (mX*2+21) == 127) { x = mX*2+21; y++; }
+			else x++;
+		}
+		
+		GL11.glScaled(2, 2 ,2);
 	}
 
-	public void renderTooltipBox(int x1, int y1, int x2, int y2) {
+	/* Fix your game 🅱️ojang */
+	private int getRenderColorFix(int color, int offset) {
+		int int_2 = (offset == 3 ? 135 : offset == 2 ? 255 : offset == 0 ? 180 : 220);
+		
+		int r = (color >> 16 & 255) * int_2 / 255;
+		int g = (color >> 8 & 255) * int_2 / 255;
+		int b = (color & 255) * int_2 / 255;
+		return -16777216 | r << 16 | g << 8 | b;
+	}
+	
+	public void renderTooltipBox(int x1, int y1, int x2, int y2, boolean wrap) {
 		GL12.glDisable(GL12.GL_RESCALE_NORMAL);
 		GuiLighting.disable();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -116,8 +153,10 @@ public class Peek extends Module {
 
 		int int_5 = x1 + 12;
 		int int_6 = y1 - 12;
-		if (int_5 + y2 > mc.currentScreen.width) int_5 -= 28 + y2;
-		if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
+		if(wrap) {
+			if (int_5 + y2 > mc.currentScreen.width) int_5 -= 28 + y2;
+			if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
+		}
 
 		/* why the fork is this private? */
 		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, -267386864, -267386864);
