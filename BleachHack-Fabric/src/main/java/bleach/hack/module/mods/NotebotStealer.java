@@ -89,7 +89,7 @@ public class NotebotStealer extends Module {
 		
 		prevSoundMap.clear();
 		prevSoundMap.putAll(soundMap);
-		ticks++;
+		if(!notes.isEmpty()) ticks++;
 	}
 
 }
