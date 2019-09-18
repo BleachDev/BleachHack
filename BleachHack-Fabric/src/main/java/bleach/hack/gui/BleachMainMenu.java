@@ -2,7 +2,6 @@ package bleach.hack.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.fabricmc.loader.api.FabricLoader;
 import org.lwjgl.opengl.GL11;
 

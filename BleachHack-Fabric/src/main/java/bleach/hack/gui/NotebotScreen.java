@@ -1,31 +1,22 @@
 package bleach.hack.gui;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.module.mods.Notebot;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.NotebotUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.gui.screen.Screen;
@@ -73,7 +64,7 @@ public class NotebotScreen extends Screen {
 		
 		drawCenteredString(font, "<  Page " + (page + 1) + "  >", x + 55, y + 5, 0xc0c0ff);
 		
-		fill(x + 10, y + h - 13, x + 99, y + h - 3, 0xff353535);
+		fillButton(x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, int_1, int_2);
 		drawCenteredString(font, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 		
 		int c = 0, c1 = -1;
@@ -82,11 +73,8 @@ public class NotebotScreen extends Screen {
 			if(c1 < page * pageEntries) continue;
 			if(c1 > (page + 1) * pageEntries) break;
 			
-			fill(x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10, 
-					Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0303030 : 0xf0404040);
-			if(int_1 > x + 5 && int_1 < x + 105 && int_2 > y + 15 + c * 10 && int_2 < y + 25 + c * 10) {
-				fill(x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10, 0xf0202020);
-			}
+			fillButton(x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10, 
+					Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, int_1, int_2);
 			if(cutText(s, 105).equals(s)) drawCenteredString(font, s, x + 55, y + 16 + c * 10, -1);
 			else drawString(font, cutText(s, 105), x + 5, y + 16 + c * 10, -1);
 			c++;
@@ -123,11 +111,19 @@ public class NotebotScreen extends Screen {
 				GL11.glPopMatrix();
 			}
 			
-			fill(x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030);
-			fill(x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030);
+			if(entry.playing && entry.lastPlayTick + 50 < System.currentTimeMillis()) {
+				entry.playTick++;
+				entry.lastPlayTick = System.currentTimeMillis();
+				NotebotUtils.playNote(entry.lines, entry.playTick);
+			}
+			
+			fillButton(x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, int_1, int_2);
+			fillButton(x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, int_1, int_2);
+			fillButton(x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, int_1, int_2);
 			
 			drawCenteredString(font, "Delete", (int)(x + w - w / 2.8), y + h - 14, 0xff0000);
 			drawCenteredString(font, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
+			drawCenteredString(font, "Play (scuffed)", x + w - w / 4, y + h - 26, 0x5050ff);
 		}
 		
 		super.render(int_1, int_2, float_1);
@@ -142,43 +138,20 @@ public class NotebotScreen extends Screen {
 			try { SystemUtil.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=clT_aNvQedk")); }catch(Exception e) {}
 		}
 		if(double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
-			try {
-				FileUtils.copyURLToFile(
-						  new URL("https://github.com/BleachDrinker420/bleachhack-1.14/raw/master/online/notebot/songs.zip"), 
-						  BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
-				ZipFile zip = new ZipFile(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
-				Enumeration<? extends ZipEntry> files = zip.entries();
-				int count = 0;
-				while (files.hasMoreElements()) {
-					count++;
-					ZipEntry file = files.nextElement();
-					File outFile = BleachFileMang.getDir().resolve("notebot").resolve(file.getName()).toFile();
-					if (file.isDirectory()) outFile.mkdirs();
-				    else {
-				        outFile.getParentFile().mkdirs();
-				        InputStream in = zip.getInputStream(file);
-				        FileOutputStream out = new FileOutputStream(outFile);
-				        IOUtils.copy(in, out);
-				        IOUtils.closeQuietly(in);
-				        out.close();
-				    }
-				}
-				zip.close();
-				Files.deleteIfExists(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip"));
-	
-				BleachLogger.infoMessage("Downloaded " + count + " Songs");
-				minecraft.openScreen(this);
-			} catch (Exception e) { BleachLogger.warningMessage("Looks like i did an oopsie");}
-
+			NotebotUtils.downloadSongs(true);
 		}
 		
 		if(entry != null) {
+			/* Pfft why use buttons when you can use meaningless rectangles with messy code */
 			if(double_1 > x + w - w / 2 + 10 && double_1 < x + w - w / 4 && double_2 > y + h - 15 && double_2 < y + h - 5) {
 				BleachFileMang.deleteFile("notebot", entry.fileName);
 				minecraft.openScreen(this);
 			}
 			if(double_1 > x + w - w / 4 + 5 && double_1 < x + w - 5 && double_2 > y + h - 15 && double_2 < y + h - 5) {
 				Notebot.filePath = entry.fileName;
+			}
+			if(double_1 > x + w - w / 4 - w / 8 && double_1 < x + w - w / 4 + w / 8 && double_2 > y + h - 27 && double_2 < y + h - 17) {
+				entry.playing = !entry.playing;
 			}
 		}
 		
@@ -199,6 +172,10 @@ public class NotebotScreen extends Screen {
 		return super.mouseClicked(double_1, double_2, int_1);
 	}
 	
+	private void fillButton(int x1, int y1, int x2, int y2, int color, int colorHover, int mX, int mY) {
+		fill(x1, y1, x2, y2, (mX > x1 && mX < x2 && mY > y1 && mY < y2 ? colorHover : color));
+	}
+	
 	private String cutText(String text, int leng) {
 		String text1 = text;
 		for(int i = 0; i < text.length(); i++) {
@@ -213,6 +190,10 @@ public class NotebotScreen extends Screen {
 		public List<String> lines = new ArrayList<>();
 		public HashMap<Instrument, Integer> notes = new HashMap<>();
 		public int length;
+		
+		public boolean playing = false;
+		public int playTick = 0;
+		public long lastPlayTick = 0;
 		
 		public NotebotEntry(String file) {
 			/* File and lines */

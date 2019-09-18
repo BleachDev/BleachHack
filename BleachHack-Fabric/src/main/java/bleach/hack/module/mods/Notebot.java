@@ -141,9 +141,10 @@ public class Notebot extends Module {
 		}
 		
 		/* Loop */
-		loop: {
-			for(List<Integer> n: notes) if(timer < n.get(0) || !getSettings().get(2).toToggle().state) break loop;
-			timer = -20;
+		if(getSettings().get(2).toToggle().state) {
+			boolean loopityloop = true;
+			for(List<Integer> n: notes) if(timer < n.get(0)) loopityloop = false;
+			if(loopityloop) timer = -20;
 		}
 		
 		/* Play Noteblocks */
@@ -162,8 +163,6 @@ public class Notebot extends Module {
 		}
 	}
 	
-	
-	/* i have literally no idea how to do this, scuff 100 */
 	public Instrument getInstrument(BlockPos pos) {
 		if(!isNoteblock(pos)) return Instrument.HARP;
 		
