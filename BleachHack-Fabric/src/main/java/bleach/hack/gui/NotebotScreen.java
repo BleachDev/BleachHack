@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.SystemUtil;
+import net.minecraft.util.math.MathHelper;
 
 public class NotebotScreen extends Screen {
 
@@ -111,22 +112,28 @@ public class NotebotScreen extends Screen {
 				GL11.glPopMatrix();
 			}
 			
-			if(entry.playing && entry.lastPlayTick + 50 < System.currentTimeMillis()) {
-				entry.playTick++;
-				entry.lastPlayTick = System.currentTimeMillis();
-				NotebotUtils.playNote(entry.lines, entry.playTick);
-			}
-			
 			fillButton(x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, int_1, int_2);
 			fillButton(x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, int_1, int_2);
 			fillButton(x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, int_1, int_2);
 			
+			int pixels = (int) Math.round(MathHelper.clamp((w / 4)*((double)entry.playTick / (double)entry.length), 0, w / 4));
+			fill(x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
+			
 			drawCenteredString(font, "Delete", (int)(x + w - w / 2.8), y + h - 14, 0xff0000);
 			drawCenteredString(font, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
-			drawCenteredString(font, "Play (scuffed)", x + w - w / 4, y + h - 26, 0x5050ff);
+			drawCenteredString(font, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x5050ff);
 		}
 		
 		super.render(int_1, int_2, float_1);
+	}
+	
+	public void tick() {
+		if(entry != null) {
+			if(entry.playing) {
+				entry.playTick++;
+				NotebotUtils.playNote(entry.lines, entry.playTick);
+			}
+		}
 	}
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
@@ -193,7 +200,6 @@ public class NotebotScreen extends Screen {
 		
 		public boolean playing = false;
 		public int playTick = 0;
-		public long lastPlayTick = 0;
 		
 		public NotebotEntry(String file) {
 			/* File and lines */

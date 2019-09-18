@@ -64,9 +64,8 @@ public class NotebotUtils {
 		}
 		
 		for(Entry<Instrument, Integer> e: notes.entrySet()) {
-			float i = (float) Math.pow(2.0D, (double)(e.getValue() - 12) / 12.0D);
 			//System.out.println(e.getValue() + " | " + i + " | "); /* this is how debugging works right? */
-			play(e.getKey().getSound(), i);
+			play(e.getKey().getSound(), (float) Math.pow(2.0D, (double)(e.getValue() - 12) / 12.0D));
 		}
 	}
 	
