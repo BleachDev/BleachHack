@@ -3,11 +3,11 @@ package bleach.hack.utils.file;
 import java.util.List;
 
 import bleach.hack.command.CommandManager;
-import bleach.hack.gui.clickgui.ModuleWindow;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;

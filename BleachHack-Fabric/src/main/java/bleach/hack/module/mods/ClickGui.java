@@ -15,7 +15,7 @@ import bleach.hack.module.Module;
 public class ClickGui extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("View: ", "Normal", "Compact"),
+			new SettingMode("Theme: ", "Normal", "Dark"),
 			new SettingSlider(50, 80, 68, 0, "Length: "));
 	
 	public static ClickGuiScreen clickGui = new ClickGuiScreen();
@@ -26,7 +26,7 @@ public class ClickGui extends Module {
 	
 	public void onEnable() {
 		mc.openScreen(clickGui);
-		this.setToggled(false);
+		setToggled(false);
 	}
 
 }
