@@ -17,27 +17,42 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
+import bleach.hack.utils.file.BleachFileMang;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RayTraceContext;
 
 public class Nuker extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "Survival", "Creative", "Multi"),
+			new SettingMode("Mode: ", "Normal", "Instant"),
 			new SettingSlider(1, 6, 4.2, 1, "Range: "),
+			new SettingSlider(0, 4, 0, 0, "Cooldown: "),
+			new SettingToggle(true, "All Blocks"),
 			new SettingToggle(false, "Flatten"),
 			new SettingToggle(false, "Rotate"),
 			new SettingToggle(false, "NoParticles"),
 			new SettingMode("Sort: ", "Normal", "Hardness"));
 	
+	private List<Block> blockList = new ArrayList<>();
+	
 	public Nuker() {
 		super("Nuker", -1, Category.WORLD, "Breaks blocks around you", settings);
+	}
+	
+	public void onEnable() {
+		blockList.clear();
+		for(String s: BleachFileMang.readFileLines("nukerblocks.txt")) blockList.add(Registry.BLOCK.get(new Identifier(s)));
+		
+		super.onEnable();
 	}
 	
 	@Subscribe
@@ -47,7 +62,7 @@ public class Nuker extends Module {
 		
 		/* Add blocks around player */
 		for(int x = (int) range; x >= (int) -range; x--) {
-			for(int y = (int) range; y >= (getSettings().get(2).toToggle().state ? 0 : (int) -range); y--) {
+			for(int y = (int) range; y >= (getSettings().get(4).toToggle().state ? 0 : (int) -range); y--) {
 				for(int z = (int) range; z >= (int) -range; z--) {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
 					if(!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos)) continue;
@@ -56,13 +71,15 @@ public class Nuker extends Module {
 			}
 		}
 		
-		if(!blocks.isEmpty() && getSettings().get(4).toToggle().state) FabricReflect.writeField(
+		if(!blocks.isEmpty() && getSettings().get(6).toToggle().state) FabricReflect.writeField(
 				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
 		
-		if(getSettings().get(5).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
+		if(getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 		
 		for(BlockPos pos: blocks) {
+			if(!getSettings().get(3).toToggle().state) if(!blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
+			
 			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 			
 			if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
@@ -78,7 +95,7 @@ public class Nuker extends Module {
 			
 			if(dir == null) continue;
 			
-			if(getSettings().get(3).toToggle().state) {
+			if(getSettings().get(5).toToggle().state) {
 				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
 				EntityUtils.facePos(vec.x, vec.y, vec.z);
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
@@ -87,11 +104,10 @@ public class Nuker extends Module {
 				mc.player.pitch = prevRot[1];
 			}
 			
-			if(getSettings().get(0).toMode().mode == 0) mc.interactionManager.method_2902(pos, dir);
-			else mc.interactionManager.attackBlock(pos, dir);
+			mc.interactionManager.method_2902(pos, dir);
 			
 			mc.player.swingHand(Hand.MAIN_HAND);
-			if(getSettings().get(0).toMode().mode != 2) return;
+			if(getSettings().get(0).toMode().mode != 1) return;
 		}
 	}
 	

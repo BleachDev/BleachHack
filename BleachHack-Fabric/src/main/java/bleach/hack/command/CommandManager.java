@@ -19,6 +19,7 @@ public class CommandManager {
 			new CmdGuiReset(),
 			new CmdHelp(),
 			new CmdNotebot(),
+			new CmdNuker(),
 			new CmdPeek(),
 			new CmdPrefix(),
 			new CmdRbook(),

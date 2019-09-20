@@ -26,7 +26,7 @@ import net.minecraft.util.math.Vec3d;
 public class Scaffold extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
-			new SettingSlider(0, 1.5, 0.3, 1, "Range: "));
+			new SettingSlider(0, 1, 0.3, 1, "Range: "));
 	
 	private HashMap<BlockPos, Integer> lastPlaced = new HashMap<>();
 	

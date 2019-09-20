@@ -67,6 +67,7 @@ public class Notebot extends Module {
 		timer = -10;
 
 		for(List<Integer> i: tunes) {
+			BlockPos found = null;
 			loop: for(int x = -4; x <= 4; x++) {
 				for(int y = -4; y <= 4; y++) {
 					for(int z = -4; z <= 4; z++) {
@@ -77,14 +78,14 @@ public class Notebot extends Module {
 							blockTunes.put(pos, i.get(0));
 							break loop;
 						}else {
-							if(i.get(1) != getInstrument(pos).ordinal()
-									|| (i.get(1) == getInstrument(pos).ordinal() && blockTunes.get(pos) != null)) continue;
-							blockTunes.put(pos, i.get(0));
-							break loop;
+							if(i.get(1) != getInstrument(pos).ordinal() || blockTunes.get(pos) != null) continue;
+							found = pos;
+							if(i.get(0) == getNote(pos)) break loop;
 						}
 					}
 				}
 			}
+			if(found != null) blockTunes.put(found, i.get(0));
 		}
 		
 		if(tunes.size() > blockTunes.size() && !getSettings().get(3).toToggle().state) {

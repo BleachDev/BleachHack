@@ -20,7 +20,8 @@ public class NoSlow extends Module {
 			new SettingToggle(true, "Slowness"),
 			new SettingToggle(true, "Soul Sand"),
 			new SettingToggle(true, "Slime Blocks"),
-			new SettingToggle(true, "Webs"));
+			new SettingToggle(true, "Webs"),
+			new SettingToggle(true, "Ladder"));
 	
 	private Vec3d addVelocity = Vec3d.ZERO;
 	
@@ -64,6 +65,12 @@ public class NoSlow extends Module {
 			if(!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m2));
 			}
+		}
+		
+		/* Ladder */
+		//if(getSettings().get(3).toToggle().state && mc.player.isClimbing()) {
+		if(mc.player.isClimbing()) {
+			if(mc.player.input.pressingForward) mc.player.setVelocity(mc.player.getVelocity().x, 0.25, mc.player.getVelocity().z);
 		}
 	}
 }
