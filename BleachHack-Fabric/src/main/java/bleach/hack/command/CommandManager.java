@@ -25,7 +25,8 @@ public class CommandManager {
 			new CmdRbook(),
 			new CmdRename(),
 			new CmdSkull(),
-			new CmdToggle());
+			new CmdToggle(),
+			new CmdXray());
 	
 	public List<Command> getCommands(){
 		return commands;
