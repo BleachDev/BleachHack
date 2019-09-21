@@ -51,7 +51,8 @@ public class ModuleManager {
 			new Step(),
 			new Tracers(),
 			new Trail(),
-			new UI());
+			new UI(),
+			new Xray());
 	
 	public static List<Module> getModules() {
 		return mods;

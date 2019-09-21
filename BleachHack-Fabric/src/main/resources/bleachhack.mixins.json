@@ -5,10 +5,15 @@
   "mixins": [
   ],
   "client": [
+    "MixinBlock",
+    "MixinBlockModelRenderer",
+    "MixinBlockRenderManager",
+    "MixinChunkOcclusionGraphBuilder",
   	"MixinClientConnection",
   	"MixinClientPlayerInteractionManager",
     "MixinContainerScreen",
   	"MixinEntityRenderer",
+    "MixinFluidRenderer",
     "MixinGameRenderer",
     "MixinIngameHud",
     "MixinMinecraftClient",
