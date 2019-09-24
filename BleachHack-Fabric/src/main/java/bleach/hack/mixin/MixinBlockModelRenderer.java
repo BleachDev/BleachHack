@@ -35,9 +35,7 @@ public class MixinBlockModelRenderer {
     @ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateSmooth(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
     private boolean tesselateSmooth(boolean checkSides) {
         try {
-            if (ModuleManager.getModule(Xray.class).isToggled()) {
-                return false;
-            }
+            if (ModuleManager.getModule(Xray.class).isToggled()) return false;
         } catch (Exception ignored) {}
         return checkSides;
     }
@@ -45,11 +43,10 @@ public class MixinBlockModelRenderer {
     @ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateFlat(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
     private boolean tesselateFlat(boolean checkSides) {
         try {
-            if (ModuleManager.getModule(Xray.class).isToggled()) {
-                return false;
-            }
+            if (ModuleManager.getModule(Xray.class).isToggled()) return false;
         } catch (Exception ignored) {}
 
         return checkSides;
     }
+	
 }

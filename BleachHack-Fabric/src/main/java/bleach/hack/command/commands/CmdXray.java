@@ -37,6 +37,7 @@ public class CmdXray extends Command {
                 return;
             } else if (xray.isVisible(Registry.BLOCK.get(new Identifier(args[1].toLowerCase())))) {
                 BleachLogger.errorMessage("Block is already added!");
+                return;
             }
             BleachFileMang.appendFile(args[1].toLowerCase(), "xrayblocks.txt");
             xray.toggle();

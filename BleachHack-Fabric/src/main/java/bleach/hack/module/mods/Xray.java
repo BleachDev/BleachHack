@@ -1,6 +1,5 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventBlockRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
@@ -8,7 +7,6 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
@@ -19,8 +17,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Xray extends Module {
+	
     private Set<Block> visibleBlocks = new HashSet<>();
-
+    		
     public Xray() {
         super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers", null);
     }
@@ -43,25 +42,29 @@ public class Xray extends Module {
 
     @Override
     public void onEnable() {
-        BleachHack.eventBus.register(this);
         visibleBlocks.clear();
+        
         for(String s: BleachFileMang.readFileLines("xrayblocks.txt")) {
             setVisible(Registry.BLOCK.get(new Identifier(s)));
         }
+        
         mc.worldRenderer.reload();
+        
+        super.onEnable();
     }
 
     @Override
     public void onDisable() {
-        if (mc.world != null) {
-            mc.worldRenderer.setWorld(mc.world);
-        }
-        BleachHack.eventBus.unregister(this);
+        if (mc.world != null) mc.worldRenderer.setWorld(mc.world);
+        
         for (int i = 0; i <= 15; ++i) {
             float float_2 = 1.0F - (float) i / 15.0F;
             mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) / (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F;
         }
+        
         mc.worldRenderer.reload();
+        
+        super.onDisable();
     }
 
     @Subscribe

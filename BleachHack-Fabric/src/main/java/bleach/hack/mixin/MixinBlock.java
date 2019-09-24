@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Block.class)
 public class MixinBlock {
+	
     @Inject(method = "getAmbientOcclusionLightLevel", at = @At("HEAD"), cancellable = true)
     public void getAmbientOcclusionLightLevel(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, CallbackInfoReturnable<Float> callbackInfoReturnable) {
         if (ModuleManager.getModule(Xray.class).isToggled()) {
@@ -39,11 +40,9 @@ public class MixinBlock {
                 callback.setReturnValue(xray.isVisible(blockState_1.getBlock()));
                 callback.cancel();
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
-    //opacity soon
     @Inject(method = "isFullOpaque", at = @At("HEAD"), cancellable = true)
     public void isFullOpaque(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, CallbackInfoReturnable<Boolean> callback) {
         try {
@@ -52,20 +51,16 @@ public class MixinBlock {
                 callback.setReturnValue(xray.isVisible(blockState_1.getBlock()));
                 callback.cancel();
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     @Inject(method = "getRenderLayer", at = @At("HEAD"), cancellable = true)
     public void getRenderLayer(CallbackInfoReturnable<BlockRenderLayer> callback) {
         try {
-            Xray xray = (Xray) ModuleManager.getModule(Xray.class);
-            if (xray.isToggled()) {
-                //opacity soon
+            if (ModuleManager.getModule(Xray.class).isToggled()) {
                 callback.setReturnValue(BlockRenderLayer.TRANSLUCENT);
                 callback.cancel();
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 }

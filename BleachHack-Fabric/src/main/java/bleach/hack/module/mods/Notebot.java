@@ -1,11 +1,16 @@
 package bleach.hack.module.mods;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import bleach.hack.event.events.Event3DRender;
 import bleach.hack.event.events.EventTick;
@@ -32,7 +37,8 @@ public class Notebot extends Module {
 			new SettingToggle(true, "Tune"),
 			new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
 			new SettingToggle(false, "Loop"),
-			new SettingToggle(false, "NoInstruments"));
+			new SettingToggle(false, "NoInstruments"),
+			new SettingToggle(false, "AutoPlay"));
 	
 	/* All the lines of the file [tick:pitch:instrument] */
 	private List<List<Integer>> notes = new ArrayList<>();
@@ -142,10 +148,23 @@ public class Notebot extends Module {
 		}
 		
 		/* Loop */
-		if(getSettings().get(2).toToggle().state) {
+		if(getSettings().get(2).toToggle().state || getSettings().get(3).toToggle().state) {
 			boolean loopityloop = true;
-			for(List<Integer> n: notes) if(timer < n.get(0)) loopityloop = false;
-			if(loopityloop) timer = -20;
+			for(List<Integer> n: notes) if(timer - 10 < n.get(0)) loopityloop = false;
+			if(getSettings().get(4).toToggle().state && loopityloop) {
+				try {
+					List<String> files = new ArrayList<>();
+					Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
+					paths.forEach(p -> files.add(p.getFileName().toString()));
+					paths.close();
+					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
+					setToggled(false);
+					setToggled(true);
+					BleachLogger.infoMessage("Now Playing: §a" + filePath);
+				} catch (IOException e) {}
+			}else if(getSettings().get(2).toToggle().state && loopityloop) {
+				if(loopityloop) timer = -10;
+			}
 		}
 		
 		/* Play Noteblocks */

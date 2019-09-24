@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 
 public class EventBlockRender extends Event {
+	
     private BlockState blockState;
     private BlockPos blockPos;
 

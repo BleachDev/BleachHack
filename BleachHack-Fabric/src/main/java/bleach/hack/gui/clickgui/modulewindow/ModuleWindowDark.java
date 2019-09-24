@@ -29,7 +29,7 @@ public class ModuleWindowDark extends ModuleWindow {
 		font = MinecraftClient.getInstance().textRenderer;
 		
 		Screen.fill(posX, posY-10, posX+len, posY, 
-				mouseOver(posX, posY-10, posX+len, posY) ? 0x70101010 : 0x70404040);
+				mouseOver(posX, posY-10, posX+len, posY) ? 0x90101010 : 0x90303030);
 		font.drawWithShadow(name, posX+(len/2)-(font.getStringWidth(name)/2), posY-9, 0x70afa0);
 		
 		/* window dragging */

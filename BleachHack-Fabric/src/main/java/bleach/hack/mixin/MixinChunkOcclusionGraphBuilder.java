@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChunkOcclusionGraphBuilder.class)
 public class MixinChunkOcclusionGraphBuilder {
+	
     //Forces chunks to render regardless of assumed occlusion. Without this you'd see blocks on xray disappear from your view based on your angle, even if they're in your FOV.
     @Inject(method = "markClosed", at = @At("HEAD"), cancellable = true)
     public void markClosed(BlockPos pos, CallbackInfo callback) {
