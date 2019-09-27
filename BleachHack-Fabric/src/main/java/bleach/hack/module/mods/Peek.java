@@ -5,6 +5,10 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import bleach.hack.event.events.EventDrawContainer;
+import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
@@ -16,7 +20,6 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
@@ -27,33 +30,41 @@ import net.minecraft.item.map.MapState;
 
 import org.lwjgl.opengl.GL12;
 
+import com.google.common.eventbus.Subscribe;
+
 public class Peek extends Module {
 
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingToggle(true, "Containers"),
+			new SettingToggle(true, "Books"),
+			new SettingToggle(true, "Maps"),
+			new SettingSlider(0.25, 1.5, 0.5, 2, "Map Size: "));
+	
 	private List<List<String>> pages;
 	private int[] slotPos;
 	private int pageCount = 0;
 	private boolean shown = false;
 	
 	public Peek() {
-		super("Peek", -1, Category.MISC, "Shows whats inside containers", null);
+		super("Peek", -1, Category.MISC, "Shows whats inside containers", settings);
 	}
 	
-	public void drawTooltip(int mX, int mY) {
-		AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) mc.currentScreen;
-		
+	@Subscribe
+	public void drawScreen(EventDrawContainer event) {
 		Slot slot = null;
-		try { slot = (Slot) FabricReflect.getFieldValue(screen, "field_2787", "focusedSlot"); } catch (Exception e) {}
+		try { slot = (Slot) FabricReflect.getFieldValue(event.getScreen(), "field_2787", "focusedSlot"); } catch (Exception e) {}
 		if(slot == null) return;
 		
 		if(!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) {
 			pageCount = 0;
 			pages = null;
 		}
+		
 		slotPos = new int[] {slot.xPosition, slot.yPosition};
 		
-		drawShulkerToolTip(slot, mX, mY);
-		drawBookToolTip(slot, mX, mY);
-		drawMapToolTip(slot, mX, mY);
+		if(getSettings().get(0).toToggle().state) drawShulkerToolTip(slot, event.mouseX, event.mouseY);
+		if(getSettings().get(1).toToggle().state) drawBookToolTip(slot, event.mouseX, event.mouseY);
+		if(getSettings().get(2).toToggle().state) drawMapToolTip(slot, event.mouseX, event.mouseY);
 	}
 	
 	public void drawShulkerToolTip(Slot slot, int mX, int mY) {
@@ -116,21 +127,25 @@ public class Peek extends Module {
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
 		byte[] colors = data.colors;
 		
-		GL11.glScaled(0.5, 0.5 ,0.5);
+		double size = getSettings().get(3).toSlider().getValue();
+		
+		GL11.glPushMatrix();
+		GL11.glScaled(size, size, 1.0);
 		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
-		int x = mX*2 + 21;
-		int y = mY*2 - 164;
+		int x = (int) (mX*(1/size) + 12*(1/size));
+		int y = (int) (mY*(1/size) - 12*(1/size) - 140);
+		System.out.println(y);
 		
 		renderTooltipBox(x - 12, y + 12, 128, 128, false);
 		for(byte c: colors) {
 			int c1 = c & 255;
 			
 			if(c1 / 4 != 0) Screen.fill(x, y, x+1, y+1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
-			if(x - (mX*2+21) == 127) { x = mX*2+21; y++; }
+			if(x - (int) (mX*(1/size)+12*(1/size)) == 127) { x = (int) (mX*(1/size)+12*(1/size)); y++; }
 			else x++;
 		}
 		
-		GL11.glScaled(2, 2 ,2);
+		GL11.glPopMatrix();
 	}
 
 	/* Fix your game 🅱️ojang */

@@ -131,6 +131,7 @@ public class ModuleWindowDark extends ModuleWindow {
 		if(s.state) { if(mouseOver(x, y, x+len, y+12)) {color = 0x9020ff20; color2 = "§2";} else {color = 0x7020ff20; color2 = "§a";}
 		}else{ if(mouseOver(x, y, x+len, y+12)) {color = 0x90ff2020; color2 = "§4";} else {color = 0x70ff2020; color2 = "§c";} }
 		
+		Screen.fill(x, y, x+len, y+14, 0x70000000);
 		Screen.fill(x, y, x+1, y+12, color);
 		font.drawWithShadow(color2 + s.text, x+3, y+2, -1);
 		
