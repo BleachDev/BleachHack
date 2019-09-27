@@ -2,6 +2,8 @@ package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventBlockRender;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.file.BleachFileMang;
@@ -14,14 +16,17 @@ import org.lwjgl.glfw.GLFW;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Xray extends Module {
 	
     private Set<Block> visibleBlocks = new HashSet<>();
+    private static List<SettingBase> settings = Arrays.asList(
+    		new SettingToggle(false, "Fluids"));
     		
     public Xray() {
-        super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers", null);
+        super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers", settings);
     }
 
     public boolean isVisible(Block block) {

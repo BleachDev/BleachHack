@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import bleach.hack.gui.clickgui.SettingMode;
-import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Module;
 import net.minecraft.client.font.TextRenderer;
 
@@ -60,14 +57,6 @@ public abstract class ModuleWindow {
 	public void onRmPressed() { rmDown = true; }
 	
 	public void onKeyPressed(int key) { keyDown = key; }
-	
-	public abstract void drawBindSetting(Module m, int key, int x, int y);
-	
-	public abstract void drawModeSetting(SettingMode s, int x, int y);
-	
-	public abstract void drawToggleSetting(SettingToggle s, int x, int y);
-	
-	public abstract void drawSliderSetting(SettingSlider s, int x, int y);
 	
 	protected boolean mouseOver(int minX, int minY, int maxX, int maxY) {
         return mouseX > minX && mouseX < maxX && mouseY > minY && mouseY < maxY;

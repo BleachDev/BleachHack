@@ -125,13 +125,14 @@ public class ModuleWindowLight extends ModuleWindow {
 	}
 	
 	public void drawToggleSetting(SettingToggle s, int x, int y) {
-		String color;
+		int color;
+		String color2;
 		
-		if(s.state) { if(mouseOver(x, y, x+len, y+12)) color = "§2"; else color = "§a";
-		}else{ if(mouseOver(x, y, x+len, y+12)) color = "§4"; else color = "§c"; }
+		if(s.state) { if(mouseOver(x, y, x+len, y+12)) {color = 0x9020ff20; color2 = "§2";} else {color = 0x7020ff20; color2 = "§a";}
+		}else{ if(mouseOver(x, y, x+len, y+12)) {color = 0x90ff2020; color2 = "§4";} else {color = 0x70ff2020; color2 = "§c";} }
 		
-		Screen.fill(x, y, x+len, y+12, 0x70000000);
-		font.drawWithShadow(color + s.text, x+2, y+2, -1);
+		Screen.fill(x, y, x+1, y+12, color);
+		font.drawWithShadow(color2 + s.text, x+3, y+2, -1);
 		
 		if(mouseOver(x, y, x+len, y+12) && lmDown) s.state = !s.state;
 	}

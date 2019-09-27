@@ -6,6 +6,7 @@ import java.util.List;
 import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindowDark;
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindowFuture;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindowLight;
 import bleach.hack.module.Category;
 import bleach.hack.module.ModuleManager;
@@ -54,6 +55,8 @@ public class ClickGuiScreen extends Screen {
 		for(ModuleWindow m: tabs) {
 			if(mode == 0 && !(m instanceof ModuleWindowLight)) tempTabs.add(new ModuleWindowLight(m.modList, m.name, len, m.posX, m.posY));
 			else if(mode == 1 && !(m instanceof ModuleWindowDark)) tempTabs.add(new ModuleWindowDark(m.modList, m.name, len, m.posX, m.posY));
+			else if(mode == 2 && !(m instanceof ModuleWindowFuture)) tempTabs.add(new ModuleWindowFuture(m.modList, m.name, len, m.posX, m.posY));
+			
 			if(!tempTabs.isEmpty()) tempTabs.get(tempTabs.size() -1).mods = m.mods;
 		}
 		if(!tempTabs.isEmpty()) tabs = tempTabs;
