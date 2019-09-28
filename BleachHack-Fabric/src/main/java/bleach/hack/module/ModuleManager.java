@@ -31,6 +31,7 @@ public class ModuleManager {
 			new Fullbright(),
 			new Ghosthand(),
 			new Jesus(),
+			new KamiSkid(),
 			new Killaura(),
 			new Nametags(),
 			new Nofall(),
