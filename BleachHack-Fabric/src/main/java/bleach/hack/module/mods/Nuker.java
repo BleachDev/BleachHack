@@ -104,7 +104,8 @@ public class Nuker extends Module {
 				mc.player.pitch = prevRot[1];
 			}
 			
-			mc.interactionManager.method_2902(pos, dir);
+			if(getSettings().get(0).toMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
+			else mc.interactionManager.method_2902(pos, dir);
 			
 			mc.player.swingHand(Hand.MAIN_HAND);
 			if(getSettings().get(0).toMode().mode != 1) return;

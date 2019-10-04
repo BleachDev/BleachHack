@@ -20,6 +20,7 @@ public class NoVelocity extends Module {
     //The name of the method doesn't matter nor does it need to be consistent between modules, what matters is the argument.
     @Subscribe
     public void readPacket(EventReadPacket event) {
+    	if(mc.player == null) return;
         if(event.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
             EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) event.getPacket();
             if(packet.getId() == mc.player.getEntityId()) {

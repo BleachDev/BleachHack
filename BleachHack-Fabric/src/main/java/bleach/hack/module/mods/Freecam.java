@@ -3,7 +3,7 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.event.events.EventPreTick;
+import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventSendPacket;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -68,7 +68,7 @@ public class Freecam extends Module {
     }
 	
 	@Subscribe
-	public void onPreTick(EventPreTick event) {
+	public void onMovement(EventMovementTick event) {
 		mc.player.setVelocity(0, 0, 0);
 		camera.setVelocity(0, 0, 0);
 		mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
@@ -91,6 +91,7 @@ public class Freecam extends Module {
 		mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SNEAKING));
 		
 		camera.setPosition(camera.x + motion.x, camera.y + motion.y, camera.z + motion.z);
+		event.setCancelled(true);
 	}
 
 }

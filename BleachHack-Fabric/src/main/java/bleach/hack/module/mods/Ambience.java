@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventPreTick;
+import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
@@ -29,7 +29,7 @@ public class Ambience extends Module {
 	}
 	
 	@Subscribe
-	public void onPreTick(EventPreTick event) {
+	public void onPreTick(EventMovementTick event) {
 		if(getSettings().get(0).toToggle().state) {
 			if(getSettings().get(2).toMode().mode == 0) mc.world.setRainGradient(0f);
 			else mc.world.setRainGradient((float) getSettings().get(3).toSlider().getValue());

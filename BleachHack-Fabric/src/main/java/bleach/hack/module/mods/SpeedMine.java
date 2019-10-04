@@ -17,7 +17,7 @@ public class SpeedMine extends Module {
 
 	private static List<SettingBase> settings = Arrays.asList(
 			new SettingMode("Mode: ", "Haste", "OG"),
-			new SettingSlider(1, 3, 1, 0, "Haste Level: "),
+			new SettingSlider(1, 3, 1, 0, "Haste Lvl: "),
 			new SettingSlider(0, 4, 1, 0, "Cooldown: "),
 			new SettingSlider(1, 3, 1.3, 1, "Multiplier: "));
 
