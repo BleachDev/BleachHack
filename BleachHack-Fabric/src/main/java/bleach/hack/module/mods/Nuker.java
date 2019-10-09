@@ -1,14 +1,12 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -31,21 +29,19 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RayTraceContext;
 
 public class Nuker extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "Normal", "Instant"),
-			new SettingSlider(1, 6, 4.2, 1, "Range: "),
-			new SettingSlider(0, 4, 0, 0, "Cooldown: "),
-			new SettingToggle(true, "All Blocks"),
-			new SettingToggle(false, "Flatten"),
-			new SettingToggle(false, "Rotate"),
-			new SettingToggle(false, "NoParticles"),
-			new SettingMode("Sort: ", "Normal", "Hardness"));
 	
 	private List<Block> blockList = new ArrayList<>();
 	
 	public Nuker() {
-		super("Nuker", -1, Category.WORLD, "Breaks blocks around you", settings);
+		super("Nuker", -1, Category.WORLD, "Breaks blocks around you",
+				new SettingMode("Mode: ", "Normal", "Instant"),
+				new SettingSlider(1, 6, 4.2, 1, "Range: "),
+				new SettingSlider(0, 4, 0, 0, "Cooldown: "),
+				new SettingToggle(true, "All Blocks"),
+				new SettingToggle(false, "Flatten"),
+				new SettingToggle(false, "Rotate"),
+				new SettingToggle(false, "NoParticles"),
+				new SettingMode("Sort: ", "Normal", "Hardness"));
 	}
 	
 	public void onEnable() {

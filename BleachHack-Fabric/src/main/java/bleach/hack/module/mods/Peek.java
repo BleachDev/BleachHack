@@ -6,7 +6,6 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.event.events.EventDrawContainer;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -33,12 +32,6 @@ import org.lwjgl.opengl.GL12;
 import com.google.common.eventbus.Subscribe;
 
 public class Peek extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(true, "Containers"),
-			new SettingToggle(true, "Books"),
-			new SettingToggle(true, "Maps"),
-			new SettingSlider(0.25, 1.5, 0.5, 2, "Map Size: "));
 	
 	private List<List<String>> pages;
 	private int[] slotPos;
@@ -46,7 +39,11 @@ public class Peek extends Module {
 	private boolean shown = false;
 	
 	public Peek() {
-		super("Peek", -1, Category.MISC, "Shows whats inside containers", settings);
+		super("Peek", -1, Category.MISC, "Shows whats inside containers",
+				new SettingToggle(true, "Containers"),
+				new SettingToggle(true, "Books"),
+				new SettingToggle(true, "Maps"),
+				new SettingSlider(0.25, 1.5, 0.5, 2, "Map Size: "));
 	}
 	
 	@Subscribe

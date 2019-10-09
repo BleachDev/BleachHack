@@ -1,28 +1,22 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 
 public class Speed extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "OnGround", "MiniHop", "Bhop"),
-			new SettingSlider(0.1, 10, 2, 1, "Speed: "));
 	
 	private boolean jumping;
 	
 	public Speed() {
-		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, idk what do you expect?", settings);
+		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, idk what do you expect?",
+				new SettingMode("Mode: ", "OnGround", "MiniHop", "Bhop"),
+				new SettingSlider(0.1, 10, 2, 1, "Speed: "));
 	}
 
 	@Subscribe

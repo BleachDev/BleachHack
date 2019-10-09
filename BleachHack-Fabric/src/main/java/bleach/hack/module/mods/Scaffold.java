@@ -1,15 +1,12 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -24,14 +21,12 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class Scaffold extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingSlider(0, 1, 0.3, 1, "Range: "));
 	
 	private HashMap<BlockPos, Integer> lastPlaced = new HashMap<>();
 	
 	public Scaffold() {
-		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you", settings);
+		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
+				new SettingSlider(0, 1, 0.3, 1, "Range: "));
 	}
 
 	@Subscribe

@@ -1,13 +1,9 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -19,17 +15,15 @@ import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 
 public class CrystalAura extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(false, "Aimbot"),
-			new SettingToggle(false, "Thru Walls"),
-			new SettingSlider(0, 6, 4.25, 2, "Range: "),
-			new SettingSlider(0, 20, 16, 0, "CPS: "));
 	
 	private int delay = 0;
 	
 	public CrystalAura() {
-		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.", settings);
+		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.",
+				new SettingToggle(false, "Aimbot"),
+				new SettingToggle(false, "Thru Walls"),
+				new SettingSlider(0, 6, 4.25, 2, "Range: "),
+				new SettingSlider(0, 20, 16, 0, "CPS: "));
 	}
 
 	@Subscribe

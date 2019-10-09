@@ -1,12 +1,10 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
@@ -15,17 +13,15 @@ import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 
 public class Spammer extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Read: ", "Random", "Order"),
-			new SettingSlider(1, 120, 20, 0, "Delay: "));
 	
 	private Random rand = new Random();
 	private List<String> lines = new ArrayList<>();
 	private int lineCount = 0;
 	
 	public Spammer() {
-		super("Spammer", -1, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)", settings);
+		super("Spammer", -1, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
+				new SettingMode("Read: ", "Random", "Order"),
+				new SettingSlider(1, 120, 20, 0, "Delay: "));
 	}
 
 	@Override

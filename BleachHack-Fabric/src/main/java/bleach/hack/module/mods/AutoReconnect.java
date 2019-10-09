@@ -1,14 +1,10 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -29,12 +25,10 @@ public class AutoReconnect extends Module {
 	
 	public ServerEntry server;
 	
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(true, "Auto"),
-			new SettingSlider(0.2, 10, 5, 2, "Time: "));
-	
 	public AutoReconnect() {
-		super("AutoReconnect", -1, Category.MISC, "Shows reconnect options when disconnecting from a server", settings);
+		super("AutoReconnect", -1, Category.MISC, "Shows reconnect options when disconnecting from a server",
+				new SettingToggle(true, "Auto"),
+				new SettingSlider(0.2, 10, 5, 2, "Time: "));
 	}
 	
 	@Subscribe

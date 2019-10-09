@@ -101,6 +101,7 @@ public class NotebotScreen extends Screen {
 				if(e.getKey() == Instrument.FLUTE) itemRenderer.renderGuiItem(new ItemStack(Items.CLAY), x + w - w / 4 + 40, y + 46 + c2 * 10);
 				if(e.getKey() == Instrument.BELL) itemRenderer.renderGuiItem(new ItemStack(Items.GOLD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
 				if(e.getKey() == Instrument.GUITAR) itemRenderer.renderGuiItem(new ItemStack(Items.WHITE_WOOL), x + w - w / 4 + 40, y + 46 + c2 * 10);
+				if(e.getKey() == Instrument.CHIME) itemRenderer.renderGuiItem(new ItemStack(Items.PACKED_ICE), x + w - w / 4 + 40, y + 46 + c2 * 10);
 				if(e.getKey() == Instrument.XYLOPHONE) itemRenderer.renderGuiItem(new ItemStack(Items.BONE_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
 				if(e.getKey() == Instrument.IRON_XYLOPHONE) itemRenderer.renderGuiItem(new ItemStack(Items.IRON_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
 				if(e.getKey() == Instrument.COW_BELL) itemRenderer.renderGuiItem(new ItemStack(Items.SOUL_SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);

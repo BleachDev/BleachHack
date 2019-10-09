@@ -1,13 +1,9 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -19,13 +15,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 public class OffhandCrash extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingSlider(0, 2000, 420, 0, "Switches: "),
-			new SettingToggle(true, "Player Packet"));
 	
 	public OffhandCrash() {
-		super("OffhandCrash", GLFW.GLFW_KEY_P, Category.EXPLOITS, "Lags people using the snowball exploit", settings);
+		super("OffhandCrash", GLFW.GLFW_KEY_P, Category.EXPLOITS, "Lags people using the snowball exploit",
+				new SettingSlider(0, 2000, 420, 0, "Switches: "),
+				new SettingToggle(true, "Player Packet"));
 	}
 
 	@Subscribe

@@ -1,14 +1,10 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventSendPacket;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -18,16 +14,14 @@ import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.math.Vec3d;
 
 public class Freecam extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingSlider(0, 2, 0.5, 2, "Speed: "));
 	
 	private PlayerCopyEntity camera;
 	private PlayerCopyEntity dummy;
 	double[] playerPos;
 	
 	public Freecam() {
-		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does", settings);
+		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",
+				new SettingSlider(0, 2, 0.5, 2, "Speed: "));
 	}
 
 	@Override

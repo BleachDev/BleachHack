@@ -1,12 +1,8 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventLivingRender;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -22,17 +18,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
 public class Nametags extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Armor: ", "H", "V", "None"),
-			new SettingMode("Health: ", "Number", "Bar"),
-			new SettingSlider(0.5, 5, 2, 1, "Size Players: "),
-			new SettingSlider(0.5, 5, 1, 1, "Size Mobs: "),
-			new SettingToggle(true, "Players"),
-			new SettingToggle(false, "Mobs"));
 	
 	public Nametags() {
-		super("Nametags", -1, Category.RENDER, "Shows bigger/cooler nametags above entities.", settings);
+		super("Nametags", -1, Category.RENDER, "Shows bigger/cooler nametags above entities.",
+				new SettingMode("Armor: ", "H", "V", "None"),
+				new SettingMode("Health: ", "Number", "Bar"),
+				new SettingSlider(0.5, 5, 2, 1, "Size Players: "),
+				new SettingSlider(0.5, 5, 1, 1, "Size Mobs: "),
+				new SettingToggle(true, "Players"),
+				new SettingToggle(false, "Mobs"));
 	}
 	
 	@Subscribe

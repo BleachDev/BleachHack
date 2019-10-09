@@ -1,10 +1,6 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -13,12 +9,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
 public class Nofall extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "Simple", "Packet"));
 			
 	public Nofall() {
-		super("Nofall", -1, Category.PLAYER, "Prevents you from taking fall damage.", settings);
+		super("Nofall", -1, Category.PLAYER, "Prevents you from taking fall damage.",
+				new SettingMode("Mode: ", "Simple", "Packet"));
 	}
 
 	@Subscribe
