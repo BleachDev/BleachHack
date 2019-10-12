@@ -6,6 +6,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.lwjgl.opengl.GL11;
+
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -65,6 +67,7 @@ public class ModuleWindowDark extends ModuleWindow {
 			
 			/* Set which module settings show on */
 			if(mouseOver(posX, posY+(count*12), posX+len, posY+12+(count*12))) {
+				GL11.glTranslated(0, 0, 300);
 				/* Match lines to end of words */
 		        Matcher mat = Pattern.compile("\\b.{1,22}\\b\\W?").matcher(m.getKey().getDesc());
 
@@ -81,6 +84,7 @@ public class ModuleWindowDark extends ModuleWindow {
 				if(lmDown) m.getKey().toggle();
 				if(rmDown) mods.replace(m.getKey(), !m.getValue());
 				if(lmDown || rmDown) MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				GL11.glTranslated(0, 0, -300);
 			}
 			
 			/* draw settings */
