@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
@@ -64,8 +63,7 @@ public class RenderUtils {
 	}
 	
 	public static Vec3d renderPos() {
-		Camera ren = mc.gameRenderer.getCamera();
-		return ren.getPos();
+		return mc.gameRenderer.getCamera().getPos();
 	}
 	
 	public static void gl11Setup() {

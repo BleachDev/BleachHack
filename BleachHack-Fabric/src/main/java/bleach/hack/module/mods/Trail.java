@@ -9,7 +9,6 @@ import bleach.hack.event.events.Event3DRender;
 import bleach.hack.event.events.EventTick;
 import com.google.common.collect.Iterables;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -20,17 +19,15 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
 
 public class Trail extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(true, "Trail"),
-			new SettingToggle(false, "Keep Trail"),
-			new SettingMode("Color: ", "Red", "Green", "Blue", "B2G", "R2B"),
-			new SettingSlider(0.1, 10, 3, 1, "Thick: "));
 	
 	private List<List<Vec3d>> trails = new ArrayList<>();
 	
 	public Trail() {
-		super("Trail", -1, Category.RENDER, "Shows a trail where you go", settings);
+		super("Trail", -1, Category.RENDER, "Shows a trail where you go",
+				new SettingToggle(true, "Trail"),
+				new SettingToggle(false, "Keep Trail"),
+				new SettingMode("Color: ", "Red", "Green", "Blue", "B2G", "R2B"),
+				new SettingSlider(0.1, 10, 3, 1, "Thick: "));
 	}
 
 	@Override

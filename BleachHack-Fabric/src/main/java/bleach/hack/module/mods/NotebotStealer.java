@@ -25,7 +25,7 @@ public class NotebotStealer extends Module {
 	private int ticks = 0;
 	
 	public NotebotStealer() {
-		super("NotebotStealer", -1, Category.MISC, "Steals noteblock songs", null);
+		super("NotebotStealer", -1, Category.MISC, "Steals noteblock songs");
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class NotebotStealer extends Module {
 		
 		prevSoundMap.clear();
 		prevSoundMap.putAll(soundMap);
-		ticks++;
+		if(!notes.isEmpty()) ticks++;
 	}
 
 }

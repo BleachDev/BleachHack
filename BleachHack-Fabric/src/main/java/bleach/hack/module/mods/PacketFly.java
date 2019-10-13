@@ -1,18 +1,17 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
-import bleach.hack.event.events.EventPreTick;
+import bleach.hack.event.events.EventMovementTick;
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.client.network.packet.PlayerPositionLookS2CPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.server.network.packet.TeleportConfirmC2SPacket;
@@ -20,15 +19,14 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class PacketFly extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "Phase", "Packet"),
-			new SettingSlider(0.05, 2, 0.5, 2, "HSpeed: "),
-			new SettingSlider(0.05, 2, 0.5, 2, "VSpeed: "),
-			new SettingSlider(0, 40, 20, 0, "Fall: "));
 	
 	public PacketFly() {
-		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.", settings);
+		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.",
+				new SettingMode("Mode: ", "Phase", "Packet"),
+				new SettingSlider(0.05, 2, 0.5, 2, "HSpeed: "),
+				new SettingSlider(0.05, 2, 0.5, 2, "VSpeed: "),
+				new SettingSlider(0, 40, 20, 0, "Fall: "),
+				new SettingToggle(false, "Packet Cancel"));
 	}
 	
 	private double posX, posY, posZ;
@@ -43,8 +41,17 @@ public class PacketFly extends Module {
 	}
 
 	@Subscribe
-	public void onPreTick(EventPreTick event) {
+	public void onMovement(EventMovementTick event) {
 		mc.player.setVelocity(0, 0, 0);
+		event.setCancelled(true);
+	}
+	
+	@Subscribe
+	public void readPacket(EventReadPacket event) {
+		if(mc.world == null || mc.player == null) return;
+		if(event.getPacket() instanceof PlayerPositionLookS2CPacket && getSettings().get(4).toToggle().state) {
+			event.setCancelled(true);
+		}
 	}
 	
 	@Subscribe

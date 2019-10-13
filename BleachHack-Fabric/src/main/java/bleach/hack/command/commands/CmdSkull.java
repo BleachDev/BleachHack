@@ -2,7 +2,6 @@ package bleach.hack.command.commands;
 
 import java.util.Base64;
 import java.util.UUID;
-
 import bleach.hack.command.Command;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -36,7 +35,6 @@ public class CmdSkull extends Command {
 					+ Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + args[1] + "\"}}}").getBytes())
 					+ "\"}]}}}"));
 		}
-		System.out.println(mc.player.inventory.getMainHandStack().getTag());
 		
 		mc.player.inventory.addPickBlock(item);
 	}

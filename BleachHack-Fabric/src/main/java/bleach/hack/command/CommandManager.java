@@ -19,12 +19,14 @@ public class CommandManager {
 			new CmdGuiReset(),
 			new CmdHelp(),
 			new CmdNotebot(),
+			new CmdNuker(),
 			new CmdPeek(),
 			new CmdPrefix(),
 			new CmdRbook(),
 			new CmdRename(),
 			new CmdSkull(),
-			new CmdToggle());
+			new CmdToggle(),
+			new CmdXray());
 	
 	public List<Command> getCommands(){
 		return commands;

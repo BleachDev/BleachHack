@@ -1,13 +1,11 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
@@ -19,13 +17,11 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 public class ArrowJuke extends Module {
-
-	private final static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Move: ", "Client", "Packet"),
-			new SettingSlider(0.01, 2, 1, 2, "Speed: "));
 	
 	public ArrowJuke() {
-		super("ArrowJuke", -1, Category.COMBAT, "Tries to dodge arrows coming at you", settings);
+		super("ArrowJuke", -1, Category.COMBAT, "Tries to dodge arrows coming at you",
+				new SettingMode("Move: ", "Client", "Packet"),
+				new SettingSlider(0.01, 2, 1, 2, "Speed: "));
 	}
 	
 	@Subscribe

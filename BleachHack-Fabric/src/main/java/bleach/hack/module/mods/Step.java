@@ -1,10 +1,6 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -14,11 +10,9 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
 public class Step extends Module {
 	
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "Simple", "Spider", "Jump"));
-	
 	public Step() {
-		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.", settings);
+		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
+				new SettingMode("Mode: ", "Simple", "Spider", "Jump"));
 	}
 	
 	private boolean flag;

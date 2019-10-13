@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bleach.hack.BleachHack;
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindowDark;
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindowFuture;
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindowLight;
 import bleach.hack.module.Category;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -20,13 +24,13 @@ public class ClickGuiScreen extends Screen {
 	}
 	
 	public void initWindows() {
-		tabs.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS), "Exploits", len, 30, 35));
-		tabs.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC), "Misc", len, 100, 35));
-		tabs.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT), "Combat", len, 170, 35));
-		tabs.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER), "Player", len, 240, 35));
-		tabs.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT), "Movement", len, 310, 35));
-		tabs.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER), "Render", len, 380, 35));
-		tabs.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD), "World", len, 450, 35));
+		tabs.add(new ModuleWindowDark(ModuleManager.getModulesInCat(Category.EXPLOITS), "Exploits", len, 30, 35));
+		tabs.add(new ModuleWindowDark(ModuleManager.getModulesInCat(Category.MISC), "Misc", len, 100, 35));
+		tabs.add(new ModuleWindowDark(ModuleManager.getModulesInCat(Category.COMBAT), "Combat", len, 170, 35));
+		tabs.add(new ModuleWindowDark(ModuleManager.getModulesInCat(Category.PLAYER), "Player", len, 240, 35));
+		tabs.add(new ModuleWindowDark(ModuleManager.getModulesInCat(Category.MOVEMENT), "Movement", len, 310, 35));
+		tabs.add(new ModuleWindowDark(ModuleManager.getModulesInCat(Category.RENDER), "Render", len, 380, 35));
+		tabs.add(new ModuleWindowDark(ModuleManager.getModulesInCat(Category.WORLD), "World", len, 450, 35));
 	}
 	
 	public boolean isPauseScreen() {
@@ -44,9 +48,22 @@ public class ClickGuiScreen extends Screen {
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		font.drawWithShadow("Hover over a bind setting and press a key to change a bind" , 2, height-10, 0xff9999);
 		font.drawWithShadow("Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
-		for(ModuleWindow w: tabs) w.draw(int_1, int_2, len);
+		
+		/* Change Themes */
+		int mode = ModuleManager.getModule(ClickGui.class).getSettings().get(0).toMode().mode;
+		List<ModuleWindow> tempTabs = new ArrayList<>();
+		for(ModuleWindow m: tabs) {
+			if(mode == 0 && !(m instanceof ModuleWindowLight)) tempTabs.add(new ModuleWindowLight(m.modList, m.name, len, m.posX, m.posY));
+			else if(mode == 1 && !(m instanceof ModuleWindowDark)) tempTabs.add(new ModuleWindowDark(m.modList, m.name, len, m.posX, m.posY));
+			else if(mode == 2 && !(m instanceof ModuleWindowFuture)) tempTabs.add(new ModuleWindowFuture(m.modList, m.name, len, m.posX, m.posY));
+			
+			if(!tempTabs.isEmpty()) tempTabs.get(tempTabs.size() -1).mods = m.mods;
+		}
+		if(!tempTabs.isEmpty()) tabs = tempTabs;
 		
 		len = (int) Math.round(ModuleManager.getModule(ClickGui.class).getSettings().get(1).toSlider().getValue());
+		for(ModuleWindow w: tabs) w.draw(int_1, int_2, len);
+		
 		super.render(int_1, int_2, float_1);
 	}
 	
@@ -68,12 +85,10 @@ public class ClickGuiScreen extends Screen {
 	}
 	
 	public void resetGui() {
-		tabs.get(0).setPos(30, 35);
-		tabs.get(1).setPos(100, 35);
-		tabs.get(2).setPos(170, 35);
-		tabs.get(3).setPos(240, 35);
-		tabs.get(4).setPos(310, 35);
-		tabs.get(5).setPos(380, 35);
-		tabs.get(6).setPos(450, 35);
+		int x = 30;
+		for(ModuleWindow m: tabs) {
+			m.setPos(x, 35);
+			x += len + 5;
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +10,6 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -26,22 +24,20 @@ import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 
 public class Killaura extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(true, "Players"),
-			new SettingToggle(true, "Mobs"),
-			new SettingToggle(false, "Animals"),
-			new SettingToggle(false, "Armor Stands"),
-			new SettingToggle(true, "Aimbot"),
-			new SettingToggle(false, "Thru Walls"),
-			new SettingToggle(false, "1.9 Delay"),
-			new SettingSlider(0, 6, 4.25, 2, "Range: "),
-			new SettingSlider(0, 20, 8, 0, "CPS: "));
 	
 	private int delay = 0;
 	
 	public Killaura() {
-		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities", settings);
+		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities",
+				new SettingToggle(true, "Players"),
+				new SettingToggle(true, "Mobs"),
+				new SettingToggle(false, "Animals"),
+				new SettingToggle(false, "Armor Stands"),
+				new SettingToggle(true, "Aimbot"),
+				new SettingToggle(false, "Thru Walls"),
+				new SettingToggle(false, "1.9 Delay"),
+				new SettingSlider(0, 6, 4.25, 2, "Range: "),
+				new SettingSlider(0, 20, 8, 0, "CPS: "));
 	}
 
 	@Subscribe

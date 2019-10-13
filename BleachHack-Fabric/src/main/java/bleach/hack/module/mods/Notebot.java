@@ -1,15 +1,19 @@
 package bleach.hack.module.mods;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import bleach.hack.event.events.Event3DRender;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -27,12 +31,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 public class Notebot extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(true, "Tune"),
-			new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
-			new SettingToggle(false, "Loop"),
-			new SettingToggle(false, "NoInstruments"));
 	
 	/* All the lines of the file [tick:pitch:instrument] */
 	private List<List<Integer>> notes = new ArrayList<>();
@@ -48,7 +46,12 @@ public class Notebot extends Module {
 	public static String filePath = "";
 	
 	public Notebot() {
-		super("Notebot", -1, Category.MISC, "Plays those noteblocks nicely", settings);
+		super("Notebot", -1, Category.MISC, "Plays those noteblocks nicely",
+				new SettingToggle(true, "Tune"),
+				new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
+				new SettingToggle(false, "Loop"),
+				new SettingToggle(false, "NoInstruments"),
+				new SettingToggle(false, "AutoPlay"));
 	}
 
 	@Override
@@ -67,6 +70,7 @@ public class Notebot extends Module {
 		timer = -10;
 
 		for(List<Integer> i: tunes) {
+			BlockPos found = null;
 			loop: for(int x = -4; x <= 4; x++) {
 				for(int y = -4; y <= 4; y++) {
 					for(int z = -4; z <= 4; z++) {
@@ -77,14 +81,14 @@ public class Notebot extends Module {
 							blockTunes.put(pos, i.get(0));
 							break loop;
 						}else {
-							if(i.get(1) != getInstrument(pos).ordinal()
-									|| (i.get(1) == getInstrument(pos).ordinal() && blockTunes.get(pos) != null)) continue;
-							blockTunes.put(pos, i.get(0));
-							break loop;
+							if(i.get(1) != getInstrument(pos).ordinal() || blockTunes.get(pos) != null) continue;
+							found = pos;
+							if(i.get(0) == getNote(pos)) break loop;
 						}
 					}
 				}
 			}
+			if(found != null) blockTunes.put(found, i.get(0));
 		}
 		
 		if(tunes.size() > blockTunes.size() && !getSettings().get(3).toToggle().state) {
@@ -141,9 +145,23 @@ public class Notebot extends Module {
 		}
 		
 		/* Loop */
-		loop: {
-			for(List<Integer> n: notes) if(timer < n.get(0) || !getSettings().get(2).toToggle().state) break loop;
-			timer = -20;
+		if(getSettings().get(2).toToggle().state || getSettings().get(3).toToggle().state) {
+			boolean loopityloop = true;
+			for(List<Integer> n: notes) if(timer - 10 < n.get(0)) loopityloop = false;
+			if(getSettings().get(4).toToggle().state && loopityloop) {
+				try {
+					List<String> files = new ArrayList<>();
+					Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
+					paths.forEach(p -> files.add(p.getFileName().toString()));
+					paths.close();
+					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
+					setToggled(false);
+					setToggled(true);
+					BleachLogger.infoMessage("Now Playing: §a" + filePath);
+				} catch (IOException e) {}
+			}else if(getSettings().get(2).toToggle().state && loopityloop) {
+				if(loopityloop) timer = -10;
+			}
 		}
 		
 		/* Play Noteblocks */
@@ -162,8 +180,6 @@ public class Notebot extends Module {
 		}
 	}
 	
-	
-	/* i have literally no idea how to do this, scuff 100 */
 	public Instrument getInstrument(BlockPos pos) {
 		if(!isNoteblock(pos)) return Instrument.HARP;
 		

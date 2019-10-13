@@ -2,7 +2,7 @@ package bleach.hack.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import net.fabricmc.loader.api.FabricLoader;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.BleachHack;
@@ -95,7 +95,7 @@ public class BleachMainMenu extends Screen {
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		
 		font.drawWithShadow("Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
-		font.drawWithShadow("Fabric: " + "???", 4, height - 30, -1);
+		font.drawWithShadow("Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(), 4, height - 30, -1);
 		font.drawWithShadow("Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
 		font.drawWithShadow("Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
 		

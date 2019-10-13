@@ -1,10 +1,6 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -20,14 +16,12 @@ import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.math.Vec3d;
 
 public class ElytraFly extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "Normal", "Control", "Bruh Momentum"),
-			new SettingToggle(false, "FlatFly"),
-			new SettingSlider(0, 5, 0.8, 2, "Speed: "));
 			
 	public ElytraFly() {
-		super("ElytraFly", -1, Category.MOVEMENT, "Improves the elytra", settings);
+		super("ElytraFly", -1, Category.MOVEMENT, "Improves the elytra",
+				new SettingMode("Mode: ", "Normal", "Control", "Bruh Momentum"),
+				new SettingToggle(false, "FlatFly"),
+				new SettingSlider(0, 5, 0.8, 2, "Speed: "));
 	}
 
 	@Subscribe

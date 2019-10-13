@@ -1,7 +1,5 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -10,7 +8,6 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -21,14 +18,12 @@ import net.minecraft.server.network.packet.UpdateSignC2SPacket;
 import net.minecraft.text.LiteralText;
 
 public class AutoSign extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(false, "Random"));
 	
 	public String[] text = new String[] {};
 	
 	public AutoSign() {
-		super("AutoSign", -1, Category.PLAYER, "Automatically writes on signs", settings);
+		super("AutoSign", -1, Category.PLAYER, "Automatically writes on signs",
+				new SettingToggle(false, "Random"));
 	}
 	
 	public void onDisable() {

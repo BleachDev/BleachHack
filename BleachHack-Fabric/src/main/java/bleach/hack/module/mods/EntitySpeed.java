@@ -1,13 +1,9 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -20,14 +16,12 @@ import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class EntitySpeed extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingSlider(0, 5, 1.2, 2, "Speed: "),
-			new SettingToggle(false, "EntityFly"),
-			new SettingToggle(false, "Ground Snap"));
 	
 	public EntitySpeed() {
-		super("EntitySpeed", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Allows you to go fast while riding entities.", settings);
+		super("EntitySpeed", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Allows you to go fast while riding entities.",
+				new SettingSlider(0, 5, 1.2, 2, "Speed: "),
+				new SettingToggle(false, "EntityFly"),
+				new SettingToggle(false, "Ground Snap"));
 	}
 
 	@Subscribe

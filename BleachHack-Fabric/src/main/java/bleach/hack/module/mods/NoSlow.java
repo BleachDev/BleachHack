@@ -1,10 +1,6 @@
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -15,17 +11,15 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.Vec3d;
 
 public class NoSlow extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingToggle(true, "Slowness"),
-			new SettingToggle(true, "Soul Sand"),
-			new SettingToggle(true, "Slime Blocks"),
-			new SettingToggle(true, "Webs"));
 	
 	private Vec3d addVelocity = Vec3d.ZERO;
 	
 	public NoSlow() {
-		super("NoSlow", -1, Category.MOVEMENT, "Disables Stuff From Slowing You Down", settings);
+		super("NoSlow", -1, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
+				new SettingToggle(true, "Slowness"),
+				new SettingToggle(true, "Soul Sand"),
+				new SettingToggle(true, "Slime Blocks"),
+				new SettingToggle(true, "Webs"));
 	}
 
 	@Subscribe

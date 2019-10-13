@@ -1,14 +1,12 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -17,18 +15,16 @@ import bleach.hack.module.Module;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
 public class FakeLag extends Module {
-
-	private static List<SettingBase> settings = Arrays.asList(
-			new SettingMode("Mode: ", "Always", "Pulse"),
-			new SettingToggle(false, "Limit"),
-			new SettingSlider(0, 15, 5, 1, "Limit: "),
-			new SettingSlider(0, 5, 1, 1, "Pulse: "));
 	
 	public List<PlayerMoveC2SPacket> queue = new ArrayList<>();
 	public long startTime = 0;
 	
 	public FakeLag() {
-		super("FakeLag", -1, Category.MOVEMENT, "Stores up movement packets", settings);
+		super("FakeLag", -1, Category.MOVEMENT, "Stores up movement packets",
+				new SettingMode("Mode: ", "Always", "Pulse"),
+				new SettingToggle(false, "Limit"),
+				new SettingSlider(0, 15, 5, 1, "Limit: "),
+				new SettingSlider(0, 5, 1, 1, "Pulse: "));
 	}
 	
 	@Override

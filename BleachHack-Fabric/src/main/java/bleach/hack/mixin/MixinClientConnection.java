@@ -30,7 +30,7 @@ public class MixinClientConnection {
 
     @Inject(method = "method_10770", at = @At("HEAD"), cancellable = true)
     public void IchannelRead0(ChannelHandlerContext channelHandlerContext_1, Packet<?> packet_1, CallbackInfo callback) {
-        if (this.channel.isOpen()) {
+        if (this.channel.isOpen() && packet_1 != null) {
         	try {
                 EventReadPacket event = new EventReadPacket(packet_1);
                 BleachHack.eventBus.post(event);
@@ -59,9 +59,9 @@ public class MixinClientConnection {
     /* Blocks Packet kicks, probably shoudn't do this but idc */
     @Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
     public void exceptionCaught(ChannelHandlerContext channelHandlerContext_1, Throwable throwable_1, CallbackInfo callback) {
-    	if(throwable_1 instanceof PacketEncoderException) return;
-    	
-    	BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);
-    	callback.cancel();
+    	if(!(throwable_1 instanceof PacketEncoderException)) {
+    		BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);
+        	callback.cancel();
+    	}
     }
 }
