@@ -1,6 +1,10 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.event.events.Event3DRender;
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -26,21 +30,23 @@ import net.minecraft.entity.vehicle.HopperMinecartEntity;
 import net.minecraft.item.Items;
 
 public class ChestESP extends Module {
+
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingToggle(true, "Chests"),
+			new SettingToggle(true, "EndChests"),
+			new SettingToggle(true, "Furnaces"),
+			new SettingToggle(true, "Dispensers"),
+			new SettingToggle(true, "Hoppers"),
+			new SettingToggle(true, "Shulkers"),
+			new SettingToggle(true, "BrewStands"),
+			new SettingToggle(true, "ChestCarts"),
+			new SettingToggle(true, "FurnaceCarts"),
+			new SettingToggle(true, "HopperCarts"),
+			new SettingToggle(true, "ItemFrames"),
+			new SettingToggle(true, "ArmorStands"));
 	
 	public ChestESP() {
-		super("ChestESP", -1, Category.RENDER, "Draws a box around storage containers.",
-				new SettingToggle(true, "Chests"),
-				new SettingToggle(true, "EndChests"),
-				new SettingToggle(true, "Furnaces"),
-				new SettingToggle(true, "Dispensers"),
-				new SettingToggle(true, "Hoppers"),
-				new SettingToggle(true, "Shulkers"),
-				new SettingToggle(true, "BrewStands"),
-				new SettingToggle(true, "ChestCarts"),
-				new SettingToggle(true, "FurnaceCarts"),
-				new SettingToggle(true, "HopperCarts"),
-				new SettingToggle(true, "ItemFrames"),
-				new SettingToggle(true, "ArmorStands"));
+		super("ChestESP", -1, Category.RENDER, "Draws a box around storage containers.", settings);
 	}
 
 	@Subscribe

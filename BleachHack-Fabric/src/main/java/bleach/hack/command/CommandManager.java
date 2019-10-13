@@ -4,7 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.command.commands.*;
+import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.utils.BleachLogger;
+import com.google.common.eventbus.Subscribe;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.util.InputUtil;
 
 public class CommandManager {
 
@@ -26,7 +31,9 @@ public class CommandManager {
 			new CmdRename(),
 			new CmdSkull(),
 			new CmdToggle(),
-			new CmdXray());
+			new CmdXray(),
+			new CmdVanish(),
+			new CmdTeleport());
 	
 	public List<Command> getCommands(){
 		return commands;

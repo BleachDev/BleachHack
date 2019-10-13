@@ -1,6 +1,10 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.event.events.EventTick;
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -17,14 +21,16 @@ import net.minecraft.util.Formatting;
 
 public class ESP extends Module {
 	
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingToggle(true, "Players"),
+			new SettingToggle(false, "Mobs"),
+			new SettingToggle(false, "Animals"),
+			new SettingToggle(true, "Items"),
+			new SettingToggle(true, "Crystals"),
+			new SettingToggle(false, "Vehicles"));
+	
 	public ESP() {
-		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.",
-				new SettingToggle(true, "Players"),
-				new SettingToggle(false, "Mobs"),
-				new SettingToggle(false, "Animals"),
-				new SettingToggle(true, "Items"),
-				new SettingToggle(true, "Crystals"),
-				new SettingToggle(false, "Vehicles"));
+		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.", settings);
 	}
 
 	@Override
@@ -44,23 +50,22 @@ public class ESP extends Module {
 				EntityUtils.setGlowing(e, Formatting.RED, "players");
 			}
 			
-			else if(e instanceof Monster && getSettings().get(1).toToggle().state) {
+			if(e instanceof Monster && getSettings().get(1).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.DARK_BLUE, "mobs");
 			}
 			
-			else if(EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
+			if(EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GREEN, "passive");
 			}
 			
-			else if(e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
+			if(e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GOLD, "items");
 			}
 			
-			else if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
+			if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.LIGHT_PURPLE, "crystals");
 			}
-			
-			else if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+			if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GRAY, "vehicles");
 			}
 		}

@@ -53,7 +53,7 @@ public class ChunkSize extends Module {
 	private int size = 0;
 	
 	public ChunkSize() {
-		super("ChunkSize", -1, Category.WORLD, "Shows the size of the chunk you are standing in");
+		super("ChunkSize", -1, Category.WORLD, "Shows the size of the chunk you are standing in", null);
 	}
 	
 	@Subscribe

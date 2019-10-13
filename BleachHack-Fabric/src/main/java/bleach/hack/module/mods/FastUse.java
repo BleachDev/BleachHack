@@ -1,9 +1,13 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
@@ -12,10 +16,12 @@ import bleach.hack.utils.FabricReflect;
 
 public class FastUse extends Module {
 	
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingMode("Mode: ", "Single", "Multi"),
+			new SettingSlider(1, 100, 20, 0, "Multi: "));
+	
 	public FastUse() {
-		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster",
-				new SettingMode("Mode: ", "Single", "Multi"),
-				new SettingSlider(1, 100, 20, 0, "Multi: "));
+		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster", settings);
 	}
 
 	@Subscribe

@@ -2,7 +2,6 @@ package bleach.hack.module;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.BleachHack;
@@ -20,12 +19,12 @@ public class Module {
 	private String desc;
 	private List<SettingBase> settings = new ArrayList<>();
 	
-	public Module(String nm, int k, Category c, String d, SettingBase... s) {
+	public Module(String nm, int k, Category c, String d, List<SettingBase> s) {
 		name = nm;
 		setKey(k);
 		category = c;
 		desc = d;
-		settings = Arrays.asList(s);
+		if(s != null) settings = s;
 		toggled = false;
 	}
 	

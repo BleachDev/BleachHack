@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 import bleach.hack.event.events.Event3DRender;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -31,6 +32,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 public class Notebot extends Module {
+
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingToggle(true, "Tune"),
+			new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
+			new SettingToggle(false, "Loop"),
+			new SettingToggle(false, "NoInstruments"),
+			new SettingToggle(false, "AutoPlay"));
 	
 	/* All the lines of the file [tick:pitch:instrument] */
 	private List<List<Integer>> notes = new ArrayList<>();
@@ -46,12 +54,7 @@ public class Notebot extends Module {
 	public static String filePath = "";
 	
 	public Notebot() {
-		super("Notebot", -1, Category.MISC, "Plays those noteblocks nicely",
-				new SettingToggle(true, "Tune"),
-				new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
-				new SettingToggle(false, "Loop"),
-				new SettingToggle(false, "NoInstruments"),
-				new SettingToggle(false, "AutoPlay"));
+		super("Notebot", -1, Category.MISC, "Plays those noteblocks nicely", settings);
 	}
 
 	@Override

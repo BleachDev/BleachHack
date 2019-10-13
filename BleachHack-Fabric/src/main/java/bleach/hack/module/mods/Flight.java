@@ -1,9 +1,14 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.event.events.EventTick;
+import bleach.hack.utils.BleachLogger;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
@@ -12,23 +17,35 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class Flight extends Module {
+
+	private Float normalSpeed;
+	private boolean alreadyDone;
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingMode("Mode: ", "Normal","Static","Jetpack"),
+			new SettingSlider(0, 5, 1, 1, "Speed: "),
+			new SettingMode("AntiKick: ", "Off","Fall","Bob","Packet"));
 	
 	public Flight() {
-		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
-				new SettingMode("Mode: ", "Normal","Static","Jetpack"),
-				new SettingSlider(0, 5, 1, 1, "Speed: "),
-				new SettingMode("AntiKick: ", "Off","Fall","Bob","Packet"));
+		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly", settings);
 	}
+
 
 	@Override
 	public void onDisable() {
 		super.onDisable();
 		if(!mc.player.abilities.creativeMode) mc.player.abilities.allowFlying = false;
 		mc.player.abilities.flying = false;
+		mc.player.abilities.setFlySpeed(normalSpeed);
+
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
+
+		if (!alreadyDone) {
+			normalSpeed = mc.player.abilities.getFlySpeed();
+			alreadyDone = true;
+		}
 		float speed = (float) getSettings().get(1).toSlider().getValue();
 		
 		if(mc.player.age % 20 == 0 && getSettings().get(2).toMode().mode == 3 && !(getSettings().get(0).toMode().mode == 2)) {

@@ -1,10 +1,11 @@
 package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventMovementTick;
+import bleach.hack.event.events.EventPreTick;
 import bleach.hack.event.events.EventTick;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.damage.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,10 +34,10 @@ public class MixinPlayerEntity {
 		if (event.isCancelled()) info.cancel();
 	}
 	
-	@Inject(at = @At("HEAD"), method = "sendMovementPackets()V", cancellable = true)
-	public void sendMovementPackets(CallbackInfo info) {
-		EventMovementTick event = new EventMovementTick();
-		BleachHack.eventBus.post(new EventMovementTick());
+	@Inject(at = @At("HEAD"), method = "tick()V", cancellable = true)
+	public void tick2(CallbackInfo info) {
+		EventPreTick event = new EventPreTick();
+		BleachHack.eventBus.post(new EventPreTick());
 		if (event.isCancelled()) info.cancel();
 	}
 }

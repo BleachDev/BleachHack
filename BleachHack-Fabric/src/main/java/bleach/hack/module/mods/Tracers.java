@@ -1,6 +1,10 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.event.events.Event3DRender;
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -18,16 +22,18 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class Tracers extends Module {
+
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingToggle(true, "Players"),
+			new SettingToggle(false, "Mobs"),
+			new SettingToggle(false, "Animals"),
+			new SettingToggle(false, "Items"),
+			new SettingToggle(false, "Crystals"),
+			new SettingToggle(false, "Vehicles"),
+			new SettingSlider(0.1, 5, 1.5, 1, "Thick: "));
 	
 	public Tracers() {
-		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.",
-				new SettingToggle(true, "Players"),
-				new SettingToggle(false, "Mobs"),
-				new SettingToggle(false, "Animals"),
-				new SettingToggle(false, "Items"),
-				new SettingToggle(false, "Crystals"),
-				new SettingToggle(false, "Vehicles"),
-				new SettingSlider(0.1, 5, 1.5, 1, "Thick: "));
+		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.", settings);
 	}
 
 	@Subscribe
@@ -45,23 +51,23 @@ public class Tracers extends Module {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f,0f,0f,thick);
 			}
-			else if(e instanceof Monster && getSettings().get(1).toToggle().state) {
+			if(e instanceof Monster && getSettings().get(1).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0f,0f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0f,0f,0f,thick);
 			}
-			else if(EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
+			if(EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0f,1f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0f,1f,0f,thick);
 			}
-			else if(e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
+			if(e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0.7f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f,0.7f,0f,thick);
 			}
-			else if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
+			if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f, 0f, 1f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f, 0f, 1f,thick);
 			}
-			else if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+			if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0.5f, 0.5f, 0.5f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0.5f, 0.5f, 0.5f,thick);
 			}

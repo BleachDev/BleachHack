@@ -1,9 +1,13 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -11,10 +15,12 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 
 public class Fullbright extends Module {
+
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingMode("Mode: ", "Gamma", "Potion", "Table"));
 			
 	public Fullbright() {
-		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.",
-				new SettingMode("Mode: ", "Gamma", "Potion", "Table"));
+		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.", settings);
 	}
 
 	@Override

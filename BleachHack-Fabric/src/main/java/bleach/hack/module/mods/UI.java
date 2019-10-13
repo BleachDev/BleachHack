@@ -2,6 +2,7 @@ package bleach.hack.module.mods;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventReadPacket;
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -25,6 +27,19 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
 
 public class UI extends Module {
+
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingToggle(true, "Arraylist"),
+			new SettingToggle(false, "Extra Line"),
+			new SettingToggle(true, "Watermark"),
+			new SettingToggle(true, "FPS"),
+			new SettingToggle(true, "Ping"),
+			new SettingToggle(true, "Coords"),
+			new SettingToggle(true, "TPS"),
+			new SettingToggle(true, "Lag-Meter"),
+			new SettingToggle(false, "Server"),
+			new SettingToggle(false, "Players"),
+			new SettingMode("Info: ", "Down Left", "Top Right", "Down Right"));
 	
 	public List<String> infoList = new ArrayList<>();
 	private int count = 0;
@@ -33,18 +48,7 @@ public class UI extends Module {
 	private long lastPacket = 0;
 	
 	public UI() {
-		super("UI", -1, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle(true, "Arraylist"),
-				new SettingToggle(false, "Extra Line"),
-				new SettingToggle(true, "Watermark"),
-				new SettingToggle(true, "FPS"),
-				new SettingToggle(true, "Ping"),
-				new SettingToggle(true, "Coords"),
-				new SettingToggle(true, "TPS"),
-				new SettingToggle(true, "Lag-Meter"),
-				new SettingToggle(false, "Server"),
-				new SettingToggle(false, "Players"),
-				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right"));
+		super("UI", -1, Category.RENDER, "Shows stuff onscreen.", settings);
 	}
 	
 	@Subscribe

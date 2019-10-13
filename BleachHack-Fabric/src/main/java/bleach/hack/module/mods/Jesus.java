@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 public class Jesus extends Module {
 
 	public Jesus() {
-		super("Jesus", GLFW.GLFW_KEY_J, Category.PLAYER, "Allows you to walk on water");
+		super("Jesus", GLFW.GLFW_KEY_J, Category.PLAYER, "Allows you to walk on water", null);
 	}
 
 	@Subscribe

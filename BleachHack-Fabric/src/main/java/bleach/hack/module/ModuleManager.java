@@ -31,6 +31,7 @@ public class ModuleManager {
 			new Fullbright(),
 			new Ghosthand(),
 			new Jesus(),
+			new KamiSkid(),
 			new Killaura(),
 			new Nametags(),
 			new Nofall(),
@@ -52,6 +53,9 @@ public class ModuleManager {
 			new Tracers(),
 			new Trail(),
 			new UI(),
+			new Teleport(),
+			new GodLock(),
+			new PrefixChat(),
 			new Xray());
 	
 	public static List<Module> getModules() {

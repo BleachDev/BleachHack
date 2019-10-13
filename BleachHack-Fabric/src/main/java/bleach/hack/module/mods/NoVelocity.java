@@ -14,13 +14,12 @@ import net.minecraft.client.network.packet.EntityVelocityUpdateS2CPacket;
 
 public class NoVelocity extends Module {
     public NoVelocity() {
-        super("NoVelocity", -1, Category.PLAYER, "If you take some damage, you don't move. Maybe.");
+        super("NoVelocity", -1, Category.PLAYER, "If you take some damage, you don't move. Maybe.", null);
     }
 
     //The name of the method doesn't matter nor does it need to be consistent between modules, what matters is the argument.
     @Subscribe
     public void readPacket(EventReadPacket event) {
-    	if(mc.player == null) return;
         if(event.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
             EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) event.getPacket();
             if(packet.getId() == mc.player.getEntityId()) {

@@ -1,6 +1,10 @@
 package bleach.hack.module.mods;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.event.events.EventTick;
+import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -11,15 +15,18 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.Vec3d;
 
 public class NoSlow extends Module {
+
+	private static List<SettingBase> settings = Arrays.asList(
+			new SettingToggle(true, "Slowness"),
+			new SettingToggle(true, "Soul Sand"),
+			new SettingToggle(true, "Slime Blocks"),
+			new SettingToggle(true, "Webs"),
+			new SettingToggle(true, "Ladder"));
 	
 	private Vec3d addVelocity = Vec3d.ZERO;
 	
 	public NoSlow() {
-		super("NoSlow", -1, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
-				new SettingToggle(true, "Slowness"),
-				new SettingToggle(true, "Soul Sand"),
-				new SettingToggle(true, "Slime Blocks"),
-				new SettingToggle(true, "Webs"));
+		super("NoSlow", -1, Category.MOVEMENT, "Disables Stuff From Slowing You Down", settings);
 	}
 
 	@Subscribe
@@ -58,6 +65,12 @@ public class NoSlow extends Module {
 			if(!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m2));
 			}
+		}
+		
+		/* Ladder */
+		//if(getSettings().get(3).toToggle().state && mc.player.isClimbing()) {
+		if(mc.player.isClimbing()) {
+			if(mc.player.input.pressingForward) mc.player.setVelocity(mc.player.getVelocity().x, 0.25, mc.player.getVelocity().z);
 		}
 	}
 }

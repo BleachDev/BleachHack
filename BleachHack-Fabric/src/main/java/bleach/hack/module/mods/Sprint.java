@@ -8,7 +8,7 @@ import com.google.common.eventbus.Subscribe;
 public class Sprint extends Module {
 	
 	public Sprint() {
-		super("Sprint", -1, Category.MOVEMENT, "Makes the player automatically sprint.");
+		super("Sprint", -1, Category.MOVEMENT, "Makes the player automatically sprint.", null);
 	}
 
 	@Subscribe
