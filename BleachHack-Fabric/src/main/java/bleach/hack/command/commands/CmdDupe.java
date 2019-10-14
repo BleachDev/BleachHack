@@ -12,7 +12,7 @@ public class CmdDupe extends Command {
 
 	@Override
 	public String getDescription() {
-		return "Dupes an item on vanilla servers.";
+		return "Dupes an item on vanilla servers. (PATCHED IN 1.14.4+)";
 	}
 
 	@Override

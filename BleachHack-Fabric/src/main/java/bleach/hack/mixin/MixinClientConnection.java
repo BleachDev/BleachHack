@@ -44,8 +44,7 @@ public class MixinClientConnection {
     	if(packet_1 instanceof ChatMessageC2SPacket) {
 			ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet_1;
 			if(pack.getChatMessage().startsWith(CommandManager.prefix)) {
-				CommandManager cmd = new CommandManager();
-	    		cmd.callCommand(pack.getChatMessage().substring(CommandManager.prefix.length()));
+	    		CommandManager.callCommand(pack.getChatMessage().substring(CommandManager.prefix.length()));
 	    		callback.cancel();
 			}
 		}

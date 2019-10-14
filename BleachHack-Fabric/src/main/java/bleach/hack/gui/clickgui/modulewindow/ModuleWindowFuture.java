@@ -138,13 +138,13 @@ public class ModuleWindowFuture extends ModuleWindow {
 		Screen.fill(x, y, x+len, y+14, mouseOver(x, y, x+len, y+14) ? 0x70303030 : 0x70000000);
 		Screen.fill(x+1, y, x+1+pixels, y+14, mouseOver(x, y, x+len, y+14) ? 0x90ff0000 : 0x70ff0000);
 		
-		font.drawWithShadow(s.text + "§7" + (s.round == 0  && s .value > 100 ? Integer.toString((int)s.value) : s.value),
+		font.drawWithShadow(s.text + "§7" + (s.round == 0  && s.getValue() > 100 ? Integer.toString((int)s.getValue()) : s.getValue()),
 				x+2, y+3, -1);
 		
 		if(mouseOver(x, y, x+len, y+14) && lmHeld) {
 			int percent = ((mouseX - x) * 100) / (len-2);
 				
-			s.value = s.round(percent*((s.max - s.min) / 100) + s.min, s.round);
+			s.setValue(s.round(percent*((s.max - s.min) / 100) + s.min, s.round));
 		}
 	}
 }

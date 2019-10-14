@@ -44,7 +44,7 @@ public class NoSlow extends Module {
 		}
 		
 		/* Soul Sand */
-		if(getSettings().get(1).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.SOUL_SAND)) {
+		if(getSettings().get(1).toToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.SOUL_SAND)) {
 			Vec3d m = new Vec3d(0, 0, 0.125).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			if(!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m));
@@ -52,7 +52,7 @@ public class NoSlow extends Module {
 		}
 		
 		/* Slime Block */
-		if(getSettings().get(2).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox().offset(0,-0.02,0), Blocks.SLIME_BLOCK)) {
+		if(getSettings().get(2).toToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox().offset(0,-0.02,0), Blocks.SLIME_BLOCK)) {
 			Vec3d m1 = new Vec3d(0, 0, 0.1).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			if(!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m1));
@@ -60,7 +60,7 @@ public class NoSlow extends Module {
 		}
 		
 		/* Web */
-		if(getSettings().get(3).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
+		if(getSettings().get(3).toToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
 			Vec3d m2 = new Vec3d(0, -1, 0.9).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			if(!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m2));
