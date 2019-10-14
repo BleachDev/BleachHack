@@ -74,7 +74,7 @@ public class BleachFileHelper {
 				for(SettingBase set: m.getSettings()) {
 					try {
 						if(set instanceof SettingSlider) {
-							m.getSettings().get(count).toSlider().value = Double.parseDouble(line[count+1]);}
+							m.getSettings().get(count).toSlider().setValue(Double.parseDouble(line[count+1]));}
 						if(set instanceof SettingMode) {
 							m.getSettings().get(count).toMode().mode = Integer.parseInt(line[count+1]);}
 						if(set instanceof SettingToggle) {

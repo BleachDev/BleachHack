@@ -10,6 +10,7 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
@@ -51,7 +52,7 @@ public class ArrowJuke extends Module {
 				if(pBox.intersects(nextBox)) {
 					for(Vec3d vel: new Vec3d[] {new Vec3d(1,0,0), new Vec3d(-1,0,0), new Vec3d(0,0,1)}) {
 						boolean contains = false;
-						for(Box b : boxes) if(b.intersects(moveBox(pBox, vel.x, vel.y, vel.z))) contains = true;
+						for(Box b : boxes) if(b.intersects(WorldUtils.moveBox(pBox, vel.x, vel.y, vel.z))) contains = true;
 						if(!contains) {
 							if(mode == 0) {
 								Vec3d vel2 = vel.multiply(speed);
@@ -75,10 +76,6 @@ public class ArrowJuke extends Module {
 				}
 			}
 		}
-	}
-	
-	public Box moveBox(Box box, double x, double y, double z) {
-		return new Box(new Vec3d(box.minX, box.minY, box.minZ).add(x, y, z), new Vec3d(box.maxX, box.maxY, box.maxZ).add(x, y, z));
 	}
 
 }

@@ -147,13 +147,13 @@ public class ModuleWindowLight extends ModuleWindow {
 		Screen.fill(x, y, x+len, y+12, 0x70000000);
 		Screen.fill(x, y, x+pixels, y+12, 0xf03080a0);
 		
-		font.drawWithShadow(s.text + (s.round == 0  && s .value > 100 ? Integer.toString((int)s.value) : s.value),
+		font.drawWithShadow(s.text + (s.round == 0  && s.getValue() > 100 ? Integer.toString((int)s.getValue()) : s.getValue()),
 				x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xffc3ff : 0xffe0ff);
 		
 		if(mouseOver(x, y, x+len, y+12) && lmHeld) {
 			int percent = ((mouseX - x) * 100) / len;
 				
-			s.value = s.round(percent*((s.max - s.min) / 100) + s.min, s.round);
+			s.setValue(s.round(percent*((s.max - s.min) / 100) + s.min, s.round));
 		}
 	}
 }

@@ -7,7 +7,7 @@ public class SettingSlider extends SettingBase {
 
 	public double min;
 	public double max;
-	public double value;
+	private double value;
 	public int round;
 	public String text;
 	
@@ -21,6 +21,10 @@ public class SettingSlider extends SettingBase {
 	
 	public double getValue() {
 		return round(value, round);
+	}
+	
+	public void setValue(double value) {
+		this.value = value;
 	}
 	
 	public double round(double value, int places) {

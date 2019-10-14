@@ -10,7 +10,7 @@ public class CommandManager {
 
 	public static String prefix = ".";
 	
-	private List<Command> commands = Arrays.asList(
+	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
 			new CmdDupe(),
 			new CmdEnchant(),
@@ -28,11 +28,11 @@ public class CommandManager {
 			new CmdToggle(),
 			new CmdXray());
 	
-	public List<Command> getCommands(){
+	public static List<Command> getCommands(){
 		return commands;
 	}
 	
-	public void callCommand(String input) {
+	public static void callCommand(String input) {
 		String[] split = input.split(" ");
 		System.out.println(Arrays.asList(split));
 		String command = split[0];
