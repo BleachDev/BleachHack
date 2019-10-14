@@ -9,9 +9,6 @@ public class ParticleManager {
 
 	private List<Particle> particles = new ArrayList<>();
 	
-	public ParticleManager() {
-	}
-	
 	public void addParticle(int x, int y) {
 		particles.add(new Particle(x, y));
 	}

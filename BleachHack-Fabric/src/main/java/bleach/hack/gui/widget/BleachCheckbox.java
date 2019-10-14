@@ -9,7 +9,7 @@ public class BleachCheckbox extends AbstractPressableButtonWidget {
 
 	public boolean checked;
 	
-	public BleachCheckbox(int int_1, int int_2, int int_3, int int_4, String text, boolean pressed) {
+	public BleachCheckbox(int int_1, int int_2, String text, boolean pressed) {
 		super(int_1, int_2, int_1 + 10, int_2 + 10 + MinecraftClient.getInstance().textRenderer.getStringWidth(text), text);
 		checked = pressed;
 	}

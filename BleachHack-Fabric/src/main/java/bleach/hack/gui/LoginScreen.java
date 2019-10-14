@@ -43,7 +43,7 @@ public class LoginScreen extends Screen {
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 62, 200, 20, "Login", (button) -> {
 			loginResult = LoginManager.login(userField.getText(), passField.getText());
 			String text = userField.getText() + ":" + passField.getText();
-			if(checkBox.checked && loginResult == "§aLogin Successful" 
+			if(checkBox.checked && loginResult.equals("§aLogin Successful")
 					&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
 				entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
 				BleachFileMang.createFile("logins.txt");
@@ -55,7 +55,7 @@ public class LoginScreen extends Screen {
 		if(passField == null)  passField = new TextFieldWidget(font, width / 2 - 98, height / 4 + 40, 196, 18, "");
 		userField.x = width / 2 - 98; userField.y = height / 4 + 10;
 		passField.x = width / 2 - 98; passField.y = height / 4 + 40;
-		if(checkBox == null) checkBox = new BleachCheckbox(width / 2 - 99, height / 4 + 63, width / 2 - 89, height / 4 + 64, "Save Login", false);
+		if(checkBox == null) checkBox = new BleachCheckbox(width / 2 - 99, height / 4 + 63, "Save Login", false);
 		checkBox.x = width / 2 - 99;
 		checkBox.y = height / 4 + 63;
 		userField.setMaxLength(32767);

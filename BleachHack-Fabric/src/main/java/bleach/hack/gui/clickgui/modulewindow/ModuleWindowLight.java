@@ -71,7 +71,8 @@ public class ModuleWindowLight extends ModuleWindow {
 				/* Match lines to end of words */
 		        Matcher mat = Pattern.compile("\\b.{1,22}\\b\\W?").matcher(m.getKey().getDesc());
 
-		        int c2 = 0, c3 = 0;
+		        int c2 = 0;
+		        int c3 = 0;
 		        while(mat.find()) { c2++; } mat.reset();
 		        
 		        while(mat.find()) {

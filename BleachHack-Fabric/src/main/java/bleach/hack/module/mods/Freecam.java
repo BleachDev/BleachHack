@@ -17,7 +17,7 @@ public class Freecam extends Module {
 	
 	private PlayerCopyEntity camera;
 	private PlayerCopyEntity dummy;
-	double[] playerPos;
+	private double[] playerPos;
 	
 	public Freecam() {
 		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",

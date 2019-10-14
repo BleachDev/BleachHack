@@ -166,7 +166,8 @@ public class NotebotScreen extends Screen {
 		int pageEntries = 0;
 		for(int i = y + 20; i < y + h - 27; i += 10) pageEntries++;
 		
-		int c = 0, c1 = -1;
+		int c = 0;
+		int c1 = -1;
 		for(String s: files) {
 			c1++;
 			if(c1 < page * pageEntries) continue;

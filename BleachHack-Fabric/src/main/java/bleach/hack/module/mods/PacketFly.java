@@ -20,6 +20,11 @@ import net.minecraft.util.math.Vec3d;
 
 public class PacketFly extends Module {
 	
+	private double posX;
+	private double posY;
+	private double posZ;
+	private int timer = 0;
+	
 	public PacketFly() {
 		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.",
 				new SettingMode("Mode: ", "Phase", "Packet"),
@@ -28,9 +33,6 @@ public class PacketFly extends Module {
 				new SettingSlider(0, 40, 20, 0, "Fall: "),
 				new SettingToggle(false, "Packet Cancel"));
 	}
-	
-	private double posX, posY, posZ;
-	private int timer = 0;
 
 	@Override
 	public void onEnable() {

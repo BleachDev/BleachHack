@@ -10,13 +10,13 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
 public class Step extends Module {
 	
+	private boolean flag;
+	private double pos;
+	
 	public Step() {
 		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
 				new SettingMode("Mode: ", "Simple", "Spider", "Jump"));
 	}
-	
-	private boolean flag;
-	private double pos;
 
 	@Override
 	public void onDisable() {
