@@ -40,7 +40,7 @@ public class AltManagerScreen extends Screen {
 		
 		drawString(font, "Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
 		drawCenteredString(font, "§cTemprary™ alt manager", width / 2, height / 4 - 30, -1);
-		drawCenteredString(font, "§c(accounts stored in plaintext for now)", width / 2, height / 4 - 20, -1);
+		drawCenteredString(font, "§4(accounts stored in plaintext for now)", width / 2, height / 4 - 20, -1);
 		
 		int c = 0;
 		for(List<String> e: entries) {
@@ -79,7 +79,7 @@ public class AltManagerScreen extends Screen {
 				int c1 = 0;
 				String lines = "";
 				for(String l: BleachFileMang.readFileLines("logins.txt")) {
-					if(l.trim().replace("\r", "").replace("\n", "") == "") continue;
+					if(l.trim().replace("\r", "").replace("\n", "").isEmpty()) continue;
 					if (c1 != c) lines += l + "\r\n";
 					c1++;
 				}

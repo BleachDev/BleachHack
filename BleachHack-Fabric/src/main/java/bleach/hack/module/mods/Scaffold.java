@@ -7,6 +7,7 @@ import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
+import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -26,22 +27,20 @@ public class Scaffold extends Module {
 	
 	public Scaffold() {
 		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
-				new SettingSlider(0, 1, 0.3, 1, "Range: "));
+				new SettingSlider(0, 1, 0.3, 1, "Range: "),
+				new SettingMode("Mode: ", "Normal", "3x3", "5x5"));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		HashMap<BlockPos, Integer> tempMap = new HashMap<>();
-		for(Entry<BlockPos, Integer> e: lastPlaced.entrySet()) {
-			if(e.getValue() > 0) tempMap.put(e.getKey(), e.getValue() - 1);
+		for(Entry<BlockPos, Integer> e: new HashMap<>(lastPlaced).entrySet()) {
+			if(e.getValue() > 0) lastPlaced.replace(e.getKey(), e.getValue() - 1);
+			else lastPlaced.remove(e.getKey());
 		}
-		lastPlaced.clear();
-		lastPlaced.putAll(tempMap);
-		
-		if(!(mc.player.inventory.getMainHandStack().getItem() instanceof BlockItem)) return;
 		
 		int slot = -1;
 		int prevSlot = mc.player.inventory.selectedSlot;
+		
 		if(mc.player.inventory.getMainHandStack().getItem() instanceof BlockItem) {
 			slot = mc.player.inventory.selectedSlot;
 		}else for(int i = 0; i < 9; i++) {
@@ -50,41 +49,61 @@ public class Scaffold extends Module {
 				break;
 			}
 		}
+		
 		if(slot == -1) return;
 		
 		mc.player.inventory.selectedSlot = slot;
 		double range = getSettings().get(0).toSlider().getValue();
-		for(int r = 0; r < 5; r++) {
-			Vec3d r1 = new Vec3d(0,-0.85,0);
-			if(r == 1) r1 = r1.add(range, 0, 0);
-			if(r == 2) r1 = r1.add(-range, 0, 0);
-			if(r == 3) r1 = r1.add(0, 0, range);
-			if(r == 4) r1 = r1.add(0, 0, -range);
-			
-			if(WorldUtils.NONSOLID_BLOCKS.contains(
-					mc.world.getBlockState(new BlockPos(mc.player.getPos().add(r1))).getBlock())) {
-				placeBlockAuto(new BlockPos(mc.player.getPos().add(r1)));
-				return;
+		int mode = getSettings().get(1).toMode().mode;
+		
+		if(mode == 0) {
+			for(int r = 0; r < 5; r++) {
+				Vec3d r1 = new Vec3d(0,-0.85,0);
+				if(r == 1) r1 = r1.add(range, 0, 0);
+				if(r == 2) r1 = r1.add(-range, 0, 0);
+				if(r == 3) r1 = r1.add(0, 0, range);
+				if(r == 4) r1 = r1.add(0, 0, -range);
+				
+				if(placeBlockAuto(new BlockPos(mc.player.getPos().add(r1)))) {
+					return;
+				}
+			}
+		}else {
+			int cap = 0;
+			for(int x = (mode == 1 ? -1 : -2); x <= (mode == 1 ? 1 : 2); x++) {
+				for(int z = (mode == 1 ? -1 : -2); z <= (mode == 1 ? 1 : 2); z++) {
+					if(placeBlockAuto(new BlockPos(mc.player.getPos().add(x, -0.85, z)))) cap++;
+					if(cap > 3) return;
+				}
 			}
 		}
+		
 		mc.player.inventory.selectedSlot = prevSlot;
 	}
 	
-	public void placeBlockAuto(BlockPos block) {
-		if(lastPlaced.containsKey(block)) return;
+	public boolean placeBlockAuto(BlockPos block) {
+		if(lastPlaced.containsKey(block) || !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(block).getBlock())) {
+			return false;
+		}
+		
 		for(Direction d: Direction.values()) {
 			if(!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
 				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
-					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));}
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));
+				
+				}
 				mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, 
 						new BlockHitResult(new Vec3d(block), d.getOpposite(), block.offset(d), false));
 				mc.player.swingHand(Hand.MAIN_HAND);
 				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
-					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));}
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));
+				}
 				lastPlaced.put(block, 5);
-				return;
+				return true;
 			}
 		}
+		
+		return false;
 	}
 
 }

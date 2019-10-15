@@ -42,10 +42,11 @@ public class LoginScreen extends Screen {
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 62, 98, 20, "Accounts", (button) -> {
 			minecraft.openScreen(new AltManagerScreen(this));
 		}));
-		addButton(new ButtonWidget(width / 2 - 2, height / 3 + 62, 102, 20, "Login", (button) -> {
+		addButton(new ButtonWidget(width / 2, height / 3 + 62, 100, 20, "Login", (button) -> {
 			loginResult = LoginManager.login(userField.getText(), passField.getText());
 			String text = userField.getText() + ":" + passField.getText();
-			if(checkBox.checked //&& loginResult.equals("§aLogin Successful")
+			if(checkBox.checked && (loginResult.equals("§aLogin Successful")
+					|| loginResult.equals("§6Logged in as an unverified account"))
 					&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
 				entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
 				BleachFileMang.createFile("logins.txt");
