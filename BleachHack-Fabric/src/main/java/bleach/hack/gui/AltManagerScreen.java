@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.gui.particle.ParticleManager;
-import bleach.hack.utils.BleachCipher;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
@@ -13,7 +12,7 @@ import net.minecraft.text.LiteralText;
 public class AltManagerScreen extends Screen {
 
 	private ParticleManager particleMang = new ParticleManager();
-	private BleachCipher cipher = new BleachCipher();
+	//private BleachCipher cipher = new BleachCipher();
 	
 	private LoginScreen loginScreen;
 	
@@ -27,7 +26,9 @@ public class AltManagerScreen extends Screen {
 	public void init() {
 		BleachFileMang.createFile("logins.txt");
 		entries.clear();
-		for(String s: BleachFileMang.readFileLines("logins.txt")) entries.add(new ArrayList<>(Arrays.asList(cipher.decrypt(s).split(":"))));
+		for(String s: BleachFileMang.readFileLines("logins.txt")) {
+			entries.add(new ArrayList<>(Arrays.asList(s.split(":"))));
+		}
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
@@ -39,11 +40,11 @@ public class AltManagerScreen extends Screen {
 		
 		drawString(font, "Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
 		drawCenteredString(font, "§cTemprary™ alt manager", width / 2, height / 4 - 30, -1);
-		drawCenteredString(font, "§cits broken, lets hope i can fix it before release", width / 2, height / 4 - 20, -1);
+		drawCenteredString(font, "§c(accounts stored in plaintext for now)", width / 2, height / 4 - 20, -1);
 		
 		int c = 0;
 		for(List<String> e: entries) {
-			String text = "§a" + e.get(0) + ":***";
+			String text = (e.size() > 1 ? "§a" + e.get(0) + ":***" : "§6" + e.get(0));
 			int lenght = minecraft.textRenderer.getStringWidth(text);
 			
 			fill(width / 2 - lenght / 2 - 1, height / 4 + c - 2, width / 2 + lenght / 2 + 1, height / 4 + c - 1, 0xFF303030);
@@ -63,14 +64,17 @@ public class AltManagerScreen extends Screen {
 		
 		int c = 0;
 		for(List<String> e: new ArrayList<>(entries)) {
-			String text = "§a" + e.get(0) + ":***";
+			String text = (e.size() > 1 ? "§a" + e.get(0) + ":***" : "§6" + e.get(0));
 			int lenght = minecraft.textRenderer.getStringWidth(text);
 			
 			if(mX>width/2-lenght/2-1 && mX<width/2+lenght/2+1 && mY>height/4+c*14-2 && mY<height/4+c*14+11) {
-				try{ loginScreen.userField.setText(e.get(0)); }catch(Exception e1) {}
-				try{ loginScreen.passField.setText(e.get(1)); }catch(Exception e1) {}
+				try{ loginScreen.userField.setText(e.get(0));
+				}catch(Exception e1) { loginScreen.userField.setText(""); }
+				try{ loginScreen.passField.setText(e.get(1));
+				}catch(Exception e1) { loginScreen.passField.setText(""); }
 				onClose();
 			}
+			
 			if(mX>width/2+lenght/2+4 && mX<width/2+lenght/2+14 && mY>height/4+c*14-2 && mY<height/4+c*14+11) {
 				int c1 = 0;
 				String lines = "";
