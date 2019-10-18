@@ -103,7 +103,13 @@ public class UI extends Module {
 		}
 		
 		if(getSettings().get(6).toToggle().state) {
-			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps);
+			String suffix = "§7";
+			if(lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
+			else if(lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
+			else if(lastPacket + 2500 < System.currentTimeMillis()) suffix += "..";
+			else if(lastPacket + 1200 < System.currentTimeMillis()) suffix += ".";
+			
+			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 		}
 		
 		if(getSettings().get(7).toToggle().state) {
@@ -163,9 +169,6 @@ public class UI extends Module {
 			tps = Math.round(MathHelper.clamp(20 / ((double) timeOffset / 1000), 0, 20) * 100d) / 100d;
 			prevTime = time;
 		}
-	}
-	
-	public void drawServerInfo() {
 	}
 	
 	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {

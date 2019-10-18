@@ -2,6 +2,8 @@ package bleach.hack.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import net.fabricmc.loader.api.FabricLoader;
 import org.lwjgl.opengl.GL11;
 
@@ -20,6 +22,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.SystemUtil;
 import net.minecraft.util.math.MathHelper;
 
 public class BleachMainMenu extends Screen {
@@ -32,6 +35,7 @@ public class BleachMainMenu extends Screen {
 	private BleachGithubReader github = new BleachGithubReader();
 	public LoginScreen loginScreen = new LoginScreen();
 	public static boolean customTitleScreen = true;
+	public String splash;
 
 	private List<String> versions = new ArrayList<>();
 	
@@ -63,6 +67,9 @@ public class BleachMainMenu extends Screen {
 	    
 	    versions.clear();
 	    versions.addAll(github.readFileLines("latestversion.txt"));
+	    
+	    List<String> sp = github.readFileLines("splashes.txt");
+	    splash = !sp.isEmpty() ? sp.get(new Random().nextInt(sp.size())) : "";
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
@@ -80,17 +87,24 @@ public class BleachMainMenu extends Screen {
 		particleMang.addParticle(p_render_1_, p_render_2_);
 		particleMang.renderParticles();
 		
+		GL11.glPushMatrix();
 		GL11.glScaled(3, 3, 3);
 		drawString(this.font, "BleachHack", (width/2 - 81)/3, (height/4 - 15)/3, 0xffc0e0);
 		GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 		
-		GL11.glScaled(1/1.5, 1/1.5, 1/1.5);
-		drawCenteredString(this.font, "Now with 100%        more title screen", (int)((width/2+6)*1.5), (int)((height/4 + 8)*1.5), 0xcf6060);
-		GL11.glScaled(1.5, 1.5, 1.5);
-		
 		GL11.glScaled(1.5, 1.5, 1.5);
 		drawCenteredString(this.font, BleachHack.VERSION, (int)((width/2)/1.5), (int)((height/4 + 6)/1.5), 0xffc050);
 		GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
+		GL11.glPopMatrix();
+		
+		GL11.glPushMatrix();
+		GL11.glTranslated(width / 2 + 80, height/4 + 8, 0.0F);
+		GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
+        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(SystemUtil.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
+        float_4 = float_4 * 60.0F / (float)(font.getStringWidth(splash) + 32);
+        GL11.glScalef(float_4, float_4, float_4);
+        this.drawCenteredString(font, splash, 0, -8, 16776960);
+        GL11.glPopMatrix();
 		
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		
