@@ -18,7 +18,7 @@ public class Ambience extends Module {
 				new SettingToggle(true, "Weather"),
 				new SettingToggle(false, "Time"),
 				new SettingMode("Weather: ", "Clear", "Rain"),
-				new SettingSlider(0, 2, 0, 2, "Rain:"),
+				new SettingSlider(0, 2, 0, 2, "Rain: "),
 				new SettingSlider(0, 24000, 12500, 0, "Time: "));
 	}
 	
