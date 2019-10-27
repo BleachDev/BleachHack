@@ -2,6 +2,7 @@ package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.WorldUtils;
@@ -15,7 +16,8 @@ public class Step extends Module {
 	
 	public Step() {
 		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
-				new SettingMode("Mode: ", "Simple", "Spider", "Jump"));
+				new SettingMode("Mode: ", "Simple", "Spider", "Jump"),
+				new SettingToggle(false, "Down"));
 	}
 
 	@Override
@@ -26,6 +28,11 @@ public class Step extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		if(getSettings().get(1).toToggle().state && !mc.player.onGround && mc.player.fallDistance > 0.1
+				&& !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().add(0, -1, 0)).getBlock())) {
+			mc.player.addVelocity(0, -1, 0);
+		}
+		
 		if(!WorldUtils.NONSOLID_BLOCKS.contains(
 				mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight()+1, 0)).getBlock())) return;
 		
