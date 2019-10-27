@@ -32,7 +32,7 @@ public class CmdXray extends Command {
     public void onCommand(String command, String[] args) throws Exception {
         Xray xray = (Xray) ModuleManager.getModule(Xray.class);
         
-        String block = (args[1].contains(":") ? "" : "minecraft") + args[1].toLowerCase();
+        String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
         
         if (args[0].equalsIgnoreCase("add")) {
             if (Registry.BLOCK.get(new Identifier(block)) == Blocks.AIR) {
