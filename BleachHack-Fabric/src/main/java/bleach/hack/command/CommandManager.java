@@ -27,6 +27,7 @@ public class CommandManager {
 			new CmdSkull(),
 			new CmdToggle(),
 			new CmdVanish(),
+			new CmdTeleport(),
 			new CmdXray());
 	
 	public static List<Command> getCommands(){
@@ -44,16 +45,7 @@ public class CommandManager {
 					c.onCommand(command, args.split(" "));
 				}catch(Exception e) {
 					e.printStackTrace();
-					BleachLogger.errorMessage("Stacktrace Error! (someone did an oopsie)");
-					
-					/*int i = 0;
-					StackTraceElement trace;
-					while((trace = e.getStackTrace()[i]) != null ) {
-						BleachLogger.noPrefixMessage("§c - " + trace.getFileName().replace(".java", ".") + trace.getMethodName()
-						+ "(" + trace.getFileName().replace(".java", "") + ":" + trace.getLineNumber() + ")");
-						i++;
-					}*/
-					
+					BleachLogger.errorMessage("Invalid Syntax!");
 					BleachLogger.infoMessage(c.getSyntax());
 				}
 				return;
