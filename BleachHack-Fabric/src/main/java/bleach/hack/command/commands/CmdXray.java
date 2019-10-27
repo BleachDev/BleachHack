@@ -31,15 +31,18 @@ public class CmdXray extends Command {
     @Override
     public void onCommand(String command, String[] args) throws Exception {
         Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+        
+        String block = (args[1].contains(":") ? "" : "minecraft") + args[1].toLowerCase();
+        
         if (args[0].equalsIgnoreCase("add")) {
-            if (Registry.BLOCK.get(new Identifier(args[1].toLowerCase())) == Blocks.AIR) {
+            if (Registry.BLOCK.get(new Identifier(block)) == Blocks.AIR) {
                 BleachLogger.errorMessage("Invalid Block: " + args[1]);
                 return;
-            } else if (xray.isVisible(Registry.BLOCK.get(new Identifier(args[1].toLowerCase())))) {
+            } else if (xray.isVisible(Registry.BLOCK.get(new Identifier(block)))) {
                 BleachLogger.errorMessage("Block is already added!");
                 return;
             }
-            BleachFileMang.appendFile(args[1].toLowerCase(), "xrayblocks.txt");
+            BleachFileMang.appendFile(block, "xrayblocks.txt");
             xray.toggle();
             xray.toggle();
             BleachLogger.infoMessage("Added Block: " + args[1]);
@@ -47,8 +50,8 @@ public class CmdXray extends Command {
         } else if (args[0].equalsIgnoreCase("remove")) {
             List<String> lines = BleachFileMang.readFileLines("xrayblocks.txt");
 
-            if (lines.contains(args[1].toLowerCase())) {
-                lines.remove(args[1].toLowerCase());
+            if (lines.contains(block)) {
+                lines.remove(block);
 
                 String s = "";
                 for (String s1 : lines) s += s1 + "\n";
