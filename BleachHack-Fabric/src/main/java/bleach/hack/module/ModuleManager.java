@@ -53,6 +53,7 @@ public class ModuleManager {
 			new Tracers(),
 			new Trail(),
 			new UI(),
+			new Teleport(),
 			new Xray());
 	
 	public static List<Module> getModules() {
