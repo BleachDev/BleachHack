@@ -1,0 +1,17 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: CmdLine@2
+  inputs:
+    script: |
+      cd BleachHack-Fabric
+      gradlew build
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: './BleachHack-Fabric/build/libs/bleachhack-1.0.jar'
+    ArtifactName: 'jarFile'
+    publishLocation: 'Container'
