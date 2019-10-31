@@ -31,8 +31,8 @@ public class BookCrash extends Module {
                 new SettingSlider("Uses: ",1, 20, 5, 0),
                 new SettingSlider("Delay: ", 0, 5, 0, 0),
                 new SettingMode("Mode: ", "Ascii", "Fill", "Random"),
-                new SettingSlider("Pages", 1,100,50,0),
-                new SettingSlider("Chars in Page", 1,210,210,0));
+                new SettingSlider("Pages: ", 1,100,50,0),
+                new SettingSlider("Chars per Page: ", 1,210,210,0));
     }
 
     private static String repeat(int count, String with) {
