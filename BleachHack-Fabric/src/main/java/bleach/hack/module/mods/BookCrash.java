@@ -33,6 +33,7 @@ public class BookCrash extends Module {
                 new SettingMode("Mode: ", "Ascii", "Fill", "Random", "Old"),
                 new SettingSlider("Pages: ", 1,100,50,0),
                 new SettingSlider("Chars per Page: ", 1,210,210,0));
+                new SettingToggle("Auto-Off: ", true)
     }
 
     private static String repeat(int count, String with) {
@@ -83,5 +84,10 @@ public class BookCrash extends Module {
         for(int i = 0; i < getSettings().get(0).toSlider().getValue(); i++) {
             mc.player.networkHandler.sendPacket(new ClickWindowC2SPacket(0, 0, 0, SlotActionType.PICKUP, bookObj, (short) 0));
         }
+    }
+    
+    @Subscribe
+    private void EventDisconnect(EventReadPacket event) {
+        if (event.getPacket() instanceof DisconnectS2CPacket && getSettings().get(5).toToggle().state) setToggled(false);
     }
 }
