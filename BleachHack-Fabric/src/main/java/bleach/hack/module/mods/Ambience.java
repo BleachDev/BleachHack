@@ -15,11 +15,11 @@ public class Ambience extends Module {
 	
 	public Ambience() {
 		super("Ambience", -1, Category.WORLD, "Changes The World Time/Weather",
-				new SettingToggle(true, "Weather"),
-				new SettingToggle(false, "Time"),
+				new SettingToggle("Weather", true),
+				new SettingToggle("Time", false),
 				new SettingMode("Weather: ", "Clear", "Rain"),
-				new SettingSlider(0, 2, 0, 2, "Rain: "),
-				new SettingSlider(0, 24000, 12500, 0, "Time: "));
+				new SettingSlider("Rain: ", 0, 2, 0, 2),
+				new SettingSlider("Time: ", 0, 24000, 12500, 0));
 	}
 	
 	@Subscribe

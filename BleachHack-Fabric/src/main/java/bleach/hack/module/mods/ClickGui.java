@@ -15,7 +15,7 @@ public class ClickGui extends Module {
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
 				new SettingMode("Theme: ", "Light", "Dark", "Future"),
-				new SettingSlider(50, 80, 68, 0, "Length: "));
+				new SettingSlider("Length: ", 50, 80, 68, 0));
 	}
 	
 	public void onEnable() {

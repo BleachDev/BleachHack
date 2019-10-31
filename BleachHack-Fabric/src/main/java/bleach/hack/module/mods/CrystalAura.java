@@ -20,10 +20,10 @@ public class CrystalAura extends Module {
 	
 	public CrystalAura() {
 		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.",
-				new SettingToggle(false, "Aimbot"),
-				new SettingToggle(false, "Thru Walls"),
-				new SettingSlider(0, 6, 4.25, 2, "Range: "),
-				new SettingSlider(0, 20, 16, 0, "CPS: "));
+				new SettingToggle("Aimbot", false),
+				new SettingToggle("Thru Walls", false),
+				new SettingSlider("Range: ", 0, 6, 4.25, 2),
+				new SettingSlider("CPS: ", 0, 20, 16, 0));
 	}
 
 	@Subscribe

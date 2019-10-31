@@ -23,8 +23,8 @@ public class Teleport extends Module {
 
     public Teleport() {
         super("Teleport", -1, Category.MISC, "What are you doing here?",
-            new SettingSlider(0.01, 20, 1, 2, "BPT: "),
-            new SettingToggle(false, "TP Exploit"));
+            new SettingSlider("BPT: ", 0.01, 20, 1, 2),
+            new SettingToggle("TP Exploit", false));
     }
 
     @Subscribe

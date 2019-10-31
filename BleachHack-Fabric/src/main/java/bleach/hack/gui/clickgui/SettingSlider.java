@@ -11,7 +11,7 @@ public class SettingSlider extends SettingBase {
 	public int round;
 	public String text;
 	
-	public SettingSlider(double min, double max, double value, int round, String text) {
+	public SettingSlider(String text, double min, double max, double value, int round) {
 		this.min = min;
 		this.max = max;
 		this.value = value;

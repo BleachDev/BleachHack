@@ -29,18 +29,18 @@ public class ChestESP extends Module {
 	
 	public ChestESP() {
 		super("ChestESP", -1, Category.RENDER, "Draws a box around storage containers.",
-				new SettingToggle(true, "Chests"),
-				new SettingToggle(true, "EndChests"),
-				new SettingToggle(true, "Furnaces"),
-				new SettingToggle(true, "Dispensers"),
-				new SettingToggle(true, "Hoppers"),
-				new SettingToggle(true, "Shulkers"),
-				new SettingToggle(true, "BrewStands"),
-				new SettingToggle(true, "ChestCarts"),
-				new SettingToggle(true, "FurnaceCarts"),
-				new SettingToggle(true, "HopperCarts"),
-				new SettingToggle(true, "ItemFrames"),
-				new SettingToggle(true, "ArmorStands"));
+				new SettingToggle("Chests", true),
+				new SettingToggle("EndChests", true),
+				new SettingToggle("Furnaces", true),
+				new SettingToggle("Dispensers", true),
+				new SettingToggle("Hoppers", true),
+				new SettingToggle("Shulkers", true),
+				new SettingToggle("BrewStands", true),
+				new SettingToggle("ChestCarts", true),
+				new SettingToggle("FurnaceCarts", true),
+				new SettingToggle("HopperCarts", true),
+				new SettingToggle("ItemFrames", true),
+				new SettingToggle("ArmorStands", true));
 	}
 
 	@Subscribe

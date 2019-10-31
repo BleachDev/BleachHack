@@ -16,10 +16,10 @@ public class NoSlow extends Module {
 	
 	public NoSlow() {
 		super("NoSlow", -1, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
-				new SettingToggle(true, "Slowness"),
-				new SettingToggle(true, "Soul Sand"),
-				new SettingToggle(true, "Slime Blocks"),
-				new SettingToggle(true, "Webs"));
+				new SettingToggle("Slowness", true),
+				new SettingToggle("Soul Sand", true),
+				new SettingToggle("Slime Blocks", true),
+				new SettingToggle("Webs", true));
 	}
 
 	@Subscribe

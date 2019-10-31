@@ -5,7 +5,7 @@ public class SettingToggle extends SettingBase {
 	public boolean state;
 	public String text;
 	
-	public SettingToggle(boolean state, String text) {
+	public SettingToggle(String text, boolean state) {
 		this.state = state;
 		this.text = text;
 	}

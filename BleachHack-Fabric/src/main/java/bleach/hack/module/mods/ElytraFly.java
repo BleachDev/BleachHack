@@ -20,8 +20,8 @@ public class ElytraFly extends Module {
 	public ElytraFly() {
 		super("ElytraFly", -1, Category.MOVEMENT, "Improves the elytra",
 				new SettingMode("Mode: ", "Normal", "Control", "Bruh Momentum"),
-				new SettingToggle(false, "FlatFly"),
-				new SettingSlider(0, 5, 0.8, 2, "Speed: "));
+				new SettingToggle("FlatFly", false),
+				new SettingSlider("Speed: ", 0, 5, 0.8, 2));
 	}
 
 	@Subscribe

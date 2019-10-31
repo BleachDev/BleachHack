@@ -16,7 +16,7 @@ public class Speed extends Module {
 	public Speed() {
 		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, idk what do you expect?",
 				new SettingMode("Mode: ", "OnGround", "MiniHop", "Bhop"),
-				new SettingSlider(0.1, 10, 2, 1, "Speed: "));
+				new SettingSlider("Speed: ", 0.1, 10, 2, 1));
 	}
 
 	@Subscribe

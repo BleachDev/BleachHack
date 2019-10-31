@@ -23,7 +23,7 @@ public class Xray extends Module {
     		
     public Xray() {
         super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
-        		new SettingToggle(false, "Fluids"));
+        		new SettingToggle("Fluids", false));
     }
 
     public boolean isVisible(Block block) {
