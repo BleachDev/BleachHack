@@ -34,16 +34,16 @@ public class UI extends Module {
 	
 	public UI() {
 		super("UI", -1, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle(true, "Arraylist"),
-				new SettingToggle(false, "Extra Line"),
-				new SettingToggle(true, "Watermark"),
-				new SettingToggle(true, "FPS"),
-				new SettingToggle(true, "Ping"),
-				new SettingToggle(true, "Coords"),
-				new SettingToggle(true, "TPS"),
-				new SettingToggle(true, "Lag-Meter"),
-				new SettingToggle(false, "Server"),
-				new SettingToggle(false, "Players"),
+				new SettingToggle("Arraylist", true),
+				new SettingToggle("Extra Line", false),
+				new SettingToggle("Watermark", true),
+				new SettingToggle("FPS", true),
+				new SettingToggle("Ping", true),
+				new SettingToggle("Coords", true),
+				new SettingToggle("TPS", true),
+				new SettingToggle("Lag-Meter", true),
+				new SettingToggle("Server", false),
+				new SettingToggle("Players", false),
 				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right"));
 	}
 	

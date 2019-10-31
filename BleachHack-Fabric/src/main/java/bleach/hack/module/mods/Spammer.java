@@ -21,7 +21,7 @@ public class Spammer extends Module {
 	public Spammer() {
 		super("Spammer", -1, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
 				new SettingMode("Read: ", "Random", "Order"),
-				new SettingSlider(1, 120, 20, 0, "Delay: "));
+				new SettingSlider("Delay: ", 1, 120, 20, 0));
 	}
 
 	@Override

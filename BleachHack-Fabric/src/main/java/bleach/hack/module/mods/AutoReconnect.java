@@ -27,8 +27,8 @@ public class AutoReconnect extends Module {
 	
 	public AutoReconnect() {
 		super("AutoReconnect", -1, Category.MISC, "Shows reconnect options when disconnecting from a server",
-				new SettingToggle(true, "Auto"),
-				new SettingSlider(0.2, 10, 5, 2, "Time: "));
+				new SettingToggle("Auto", true),
+				new SettingSlider("Time: ", 0.2, 10, 5, 2));
 	}
 	
 	@Subscribe

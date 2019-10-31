@@ -23,10 +23,10 @@ public class Nametags extends Module {
 		super("Nametags", -1, Category.RENDER, "Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor: ", "H", "V", "None"),
 				new SettingMode("Health: ", "Number", "Bar"),
-				new SettingSlider(0.5, 5, 2, 1, "Size Players: "),
-				new SettingSlider(0.5, 5, 1, 1, "Size Mobs: "),
-				new SettingToggle(true, "Players"),
-				new SettingToggle(false, "Mobs"));
+				new SettingSlider("Size Players: ", 0.5, 5, 2, 1),
+				new SettingSlider("Size Mobs: ", 0.5, 5, 1, 1),
+				new SettingToggle("Players", true),
+				new SettingToggle("Mobs", false));
 	}
 	
 	@Subscribe

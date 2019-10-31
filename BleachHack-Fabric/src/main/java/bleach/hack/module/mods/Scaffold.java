@@ -27,7 +27,7 @@ public class Scaffold extends Module {
 	
 	public Scaffold() {
 		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
-				new SettingSlider(0, 1, 0.3, 1, "Range: "),
+				new SettingSlider("Range: ", 0, 1, 0.3, 1),
 				new SettingMode("Mode: ", "Normal", "3x3", "5x5"));
 	}
 

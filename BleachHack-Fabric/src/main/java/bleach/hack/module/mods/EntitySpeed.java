@@ -19,10 +19,10 @@ public class EntitySpeed extends Module {
 	
 	public EntitySpeed() {
 		super("EntitySpeed", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Allows you to go fast while riding entities.",
-				new SettingSlider(0, 5, 1.2, 2, "Speed: "),
-				new SettingToggle(false, "EntityFly"),
-				new SettingToggle(false, "Ground Snap"),
-				new SettingToggle(false, "AntiStuck"));
+				new SettingSlider("Speed: ", 0, 5, 1.2, 2),
+				new SettingToggle("EntityFly", false),
+				new SettingToggle("Ground Snap", false),
+				new SettingToggle("AntiStuck", false));
 	}
 
 	@Subscribe

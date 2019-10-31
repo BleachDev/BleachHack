@@ -17,7 +17,7 @@ public class Step extends Module {
 	public Step() {
 		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
 				new SettingMode("Mode: ", "Simple", "Spider", "Jump"),
-				new SettingToggle(false, "Down"));
+				new SettingToggle("Down", false));
 	}
 
 	@Override

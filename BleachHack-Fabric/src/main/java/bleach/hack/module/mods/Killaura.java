@@ -29,15 +29,15 @@ public class Killaura extends Module {
 	
 	public Killaura() {
 		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities",
-				new SettingToggle(true, "Players"),
-				new SettingToggle(true, "Mobs"),
-				new SettingToggle(false, "Animals"),
-				new SettingToggle(false, "Armor Stands"),
-				new SettingToggle(true, "Aimbot"),
-				new SettingToggle(false, "Thru Walls"),
-				new SettingToggle(false, "1.9 Delay"),
-				new SettingSlider(0, 6, 4.25, 2, "Range: "),
-				new SettingSlider(0, 20, 8, 0, "CPS: "));
+				new SettingToggle("Players", true),
+				new SettingToggle("Mobs", true),
+				new SettingToggle("Animals", false),
+				new SettingToggle("Armor Stands", false),
+				new SettingToggle("Aimbot", true),
+				new SettingToggle("Thru Walls", false),
+				new SettingToggle("1.9 Delay", false),
+				new SettingSlider("Range: ", 0, 6, 4.25, 2),
+				new SettingSlider("CPS: ", 0, 20, 8, 0));
 	}
 
 	@Subscribe

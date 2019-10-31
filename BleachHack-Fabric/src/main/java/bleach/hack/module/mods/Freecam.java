@@ -21,7 +21,7 @@ public class Freecam extends Module {
 	
 	public Freecam() {
 		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",
-				new SettingSlider(0, 2, 0.5, 2, "Speed: "));
+				new SettingSlider("Speed: ", 0, 2, 0.5, 2));
 	}
 
 	@Override

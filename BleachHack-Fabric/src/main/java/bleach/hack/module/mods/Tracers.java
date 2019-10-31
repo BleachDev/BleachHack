@@ -21,13 +21,13 @@ public class Tracers extends Module {
 	
 	public Tracers() {
 		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.",
-				new SettingToggle(true, "Players"),
-				new SettingToggle(false, "Mobs"),
-				new SettingToggle(false, "Animals"),
-				new SettingToggle(false, "Items"),
-				new SettingToggle(false, "Crystals"),
-				new SettingToggle(false, "Vehicles"),
-				new SettingSlider(0.1, 5, 1.5, 1, "Thick: "));
+				new SettingToggle("Players", true),
+				new SettingToggle("Mobs", false),
+				new SettingToggle("Animals", false),
+				new SettingToggle("Items", false),
+				new SettingToggle("Crystals", false),
+				new SettingToggle("Vehicles", false),
+				new SettingSlider("Thick: ", 0.1, 5, 1.5, 1));
 	}
 
 	@Subscribe

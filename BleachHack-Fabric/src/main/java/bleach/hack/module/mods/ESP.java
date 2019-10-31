@@ -19,12 +19,12 @@ public class ESP extends Module {
 	
 	public ESP() {
 		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.",
-				new SettingToggle(true, "Players"),
-				new SettingToggle(false, "Mobs"),
-				new SettingToggle(false, "Animals"),
-				new SettingToggle(true, "Items"),
-				new SettingToggle(true, "Crystals"),
-				new SettingToggle(false, "Vehicles"));
+				new SettingToggle("Players", true),
+				new SettingToggle("Mobs", false),
+				new SettingToggle("Animals", false),
+				new SettingToggle("Items", true),
+				new SettingToggle("Crystals", true),
+				new SettingToggle("Vehicles", false));
 	}
 
 	@Override

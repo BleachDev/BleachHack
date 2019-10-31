@@ -28,10 +28,10 @@ public class PacketFly extends Module {
 	public PacketFly() {
 		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.",
 				new SettingMode("Mode: ", "Phase", "Packet"),
-				new SettingSlider(0.05, 2, 0.5, 2, "HSpeed: "),
-				new SettingSlider(0.05, 2, 0.5, 2, "VSpeed: "),
-				new SettingSlider(0, 40, 20, 0, "Fall: "),
-				new SettingToggle(false, "Packet Cancel"));
+				new SettingSlider("HSpeed: ", 0.05, 2, 0.5, 2),
+				new SettingSlider("VSpeed: ", 0.05, 2, 0.5, 2),
+				new SettingSlider("Fall: ", 0, 40, 20, 0),
+				new SettingToggle("Packet Cancel", false));
 	}
 
 	@Override

@@ -35,12 +35,12 @@ public class Nuker extends Module {
 	public Nuker() {
 		super("Nuker", -1, Category.WORLD, "Breaks blocks around you",
 				new SettingMode("Mode: ", "Normal", "Instant"),
-				new SettingSlider(1, 6, 4.2, 1, "Range: "),
-				new SettingSlider(0, 4, 0, 0, "Cooldown: "),
-				new SettingToggle(true, "All Blocks"),
-				new SettingToggle(false, "Flatten"),
-				new SettingToggle(false, "Rotate"),
-				new SettingToggle(false, "NoParticles"),
+				new SettingSlider("Range: ", 1, 6, 4.2, 1),
+				new SettingSlider("Cooldown: ", 0, 4, 0, 0),
+				new SettingToggle("All Blocks", true),
+				new SettingToggle("Flatten", false),
+				new SettingToggle("Rotate", false),
+				new SettingToggle("NoParticles", false),
 				new SettingMode("Sort: ", "Normal", "Hardness"));
 	}
 	

@@ -22,9 +22,9 @@ public class FakeLag extends Module {
 	public FakeLag() {
 		super("FakeLag", -1, Category.MOVEMENT, "Stores up movement packets",
 				new SettingMode("Mode: ", "Always", "Pulse"),
-				new SettingToggle(false, "Limit"),
-				new SettingSlider(0, 15, 5, 1, "Limit: "),
-				new SettingSlider(0, 5, 1, 1, "Pulse: "));
+				new SettingToggle("Limit", false),
+				new SettingSlider("Limit: ", 0, 15, 5, 1),
+				new SettingSlider("Pulse: ", 0, 5, 1, 1));
 	}
 	
 	@Override

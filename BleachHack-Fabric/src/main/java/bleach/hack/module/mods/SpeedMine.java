@@ -14,9 +14,9 @@ public class SpeedMine extends Module {
 	public SpeedMine() {
 		super("SpeedMine", -1, Category.EXPLOITS, "Allows you to mine at sanic speeds",
 				new SettingMode("Mode: ", "Haste", "OG"),
-				new SettingSlider(1, 3, 1, 0, "Haste Lvl: "),
-				new SettingSlider(0, 4, 1, 0, "Cooldown: "),
-				new SettingSlider(1, 3, 1.3, 1, "Multiplier: "));
+				new SettingSlider("Haste Lvl: ", 1, 3, 1, 0),
+				new SettingSlider("Cooldown: ", 0, 4, 1, 0),
+				new SettingSlider("Multiplier: ", 1, 3, 1.3, 1));
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class AutoSign extends Module {
 	
 	public AutoSign() {
 		super("AutoSign", -1, Category.PLAYER, "Automatically writes on signs",
-				new SettingToggle(false, "Random"));
+				new SettingToggle("Random", false));
 	}
 	
 	public void onDisable() {

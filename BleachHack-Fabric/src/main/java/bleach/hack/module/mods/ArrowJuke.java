@@ -22,7 +22,7 @@ public class ArrowJuke extends Module {
 	public ArrowJuke() {
 		super("ArrowJuke", -1, Category.COMBAT, "Tries to dodge arrows coming at you",
 				new SettingMode("Move: ", "Client", "Packet"),
-				new SettingSlider(0.01, 2, 1, 2, "Speed: "));
+				new SettingSlider("Speed: ", 0.01, 2, 1, 2));
 	}
 	
 	@Subscribe

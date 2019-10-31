@@ -22,8 +22,8 @@ public class BookCrash extends Module {
 	
 	public BookCrash() {
 		super("BookCrash", -1, Category.EXPLOITS, "Abuses book and quill packets to remotely kick people.",
-				new SettingSlider(1, 20, 5, 0, "Uses: "),
-				new SettingSlider(0, 5, 0, 0, "Delay: "));
+				new SettingSlider("Uses: ", 1, 20, 5, 0),
+				new SettingSlider("Delay: ", 0, 5, 0, 0));
 	}
 
 	@Subscribe

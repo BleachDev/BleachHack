@@ -40,10 +40,10 @@ public class Peek extends Module {
 	
 	public Peek() {
 		super("Peek", -1, Category.MISC, "Shows whats inside containers",
-				new SettingToggle(true, "Containers"),
-				new SettingToggle(true, "Books"),
-				new SettingToggle(true, "Maps"),
-				new SettingSlider(0.25, 1.5, 0.5, 2, "Map Size: "));
+				new SettingToggle("Containers", true),
+				new SettingToggle("Books", true),
+				new SettingToggle("Maps", true),
+				new SettingSlider("Map Size: ", 0.25, 1.5, 0.5, 2));
 	}
 	
 	@Subscribe
