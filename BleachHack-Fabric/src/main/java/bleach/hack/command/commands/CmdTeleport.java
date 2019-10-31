@@ -48,8 +48,8 @@ public class CmdTeleport extends Command {
             }
 
         }
-        else{
-            BleachLogger.noPrefixMessage(".tp [(~)x] [(~)y] [(~)z] [blocks per teleport]");
+        else {
+            BleachLogger.errorMessage(getSyntax());
         }
         return;
     }
