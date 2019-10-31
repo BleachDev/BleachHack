@@ -15,10 +15,8 @@ public class Step extends Module {
 	private double pos;
 	
 	public Step() {
-		super("VelocityAbuse", -1, Category.MOVEMENT, "Abuses Velocity.",
-				new SettingMode("Mode: ", "Simple", "Spider", "Jump"),
-		      		new SettingToggle("Up", true),
-				new SettingToggle("FastFall", false));
+		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
+				new SettingMode("Mode: ", "Simple", "Spider", "Jump"));
 	}
 
 	@Override
@@ -29,11 +27,6 @@ public class Step extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(getSettings().get(1).toToggle().state && mc.player.fallDistance > 0.1
-				&& !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().add(0, -1, 0)).getBlock())) {
-			mc.player.addVelocity(0, -1, 0);
-		}
-		
 		if(!WorldUtils.NONSOLID_BLOCKS.contains(
 				mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight()+1, 0)).getBlock())) return;
 		
