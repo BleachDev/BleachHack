@@ -54,6 +54,7 @@ public class ModuleManager {
 			new Tracers(),
 			new Trail(),
 			new UI(),
+			new FastFall(),
 			new Xray());
 	
 	public static List<Module> getModules() {

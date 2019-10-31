@@ -6,6 +6,7 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 
+import bleach.hack.gui.clickgui.SettingToggle;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.module.Category;
