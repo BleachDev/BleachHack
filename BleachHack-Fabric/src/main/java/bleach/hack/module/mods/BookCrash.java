@@ -1,13 +1,16 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 
+import bleach.hack.gui.clickgui.SettingToggle;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.client.network.packet.DisconnectS2CPacket;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
