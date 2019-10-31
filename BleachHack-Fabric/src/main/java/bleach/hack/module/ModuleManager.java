@@ -50,10 +50,10 @@ public class ModuleManager {
 			new Sprint(),
 			new StarGithub(),
 			new Step(),
+			new Teleport(),
 			new Tracers(),
 			new Trail(),
 			new UI(),
-			new Teleport(),
 			new Xray());
 	
 	public static List<Module> getModules() {

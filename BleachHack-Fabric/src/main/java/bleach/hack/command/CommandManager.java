@@ -25,9 +25,9 @@ public class CommandManager {
 			new CmdRbook(),
 			new CmdRename(),
 			new CmdSkull(),
+			new CmdTeleport(),
 			new CmdToggle(),
 			new CmdVanish(),
-			new CmdTeleport(),
 			new CmdXray());
 	
 	public static List<Command> getCommands(){
