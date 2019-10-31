@@ -1,13 +1,16 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.client.network.packet.DisconnectS2CPacket;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,8 +34,9 @@ public class BookCrash extends Module {
                 new SettingSlider("Uses: ", 1, 20, 5, 0),
                 new SettingSlider("Delay: ", 0, 5, 0, 0),
                 new SettingMode("Mode: ", "Ascii", "Fill", "Random", "Old"),
-                new SettingSlider("Pages: ", 1, 100, 50, 0),
-                new SettingSlider("Chars/Page: ", 1, 210, 210, 0));
+                new SettingSlider("Pages: ", 1,100,50,0),
+                new SettingSlider("Chars per Page: ", 1,210,210,0),
+                new SettingToggle("Auto-Off: ", true));
     }
 
     @Subscribe
@@ -82,5 +86,10 @@ public class BookCrash extends Module {
     
     private static String repeat(int count, String with) {
         return new String(new char[count]).replace("\0", with);
+    }
+    
+    @Subscribe
+    private void EventDisconnect(EventReadPacket event) {
+        if (event.getPacket() instanceof DisconnectS2CPacket && getSettings().get(5).toToggle().state) setToggled(false);
     }
 }
