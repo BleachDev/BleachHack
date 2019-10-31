@@ -2,39 +2,24 @@ package bleach.hack.module.mods;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.Screens;
 import net.minecraft.client.network.packet.DisconnectS2CPacket;
 import net.minecraft.client.network.packet.LoginHelloS2CPacket;
 import net.minecraft.client.network.packet.PlayerRespawnS2CPacket;
-import net.minecraft.server.network.packet.*;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.glfw.GLFW;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class Teleport extends Module {
 
     private boolean alreadyDone;
     private long lastTp;
     private Vec3d lastPos;
-    private double toX;
-    private double toY;
-    private double toZ;
-    private double remainder;
 
     public Teleport() {
         super("Teleport", -1, Category.MISC, "What are you doing here?",
