@@ -55,6 +55,8 @@ public class ModuleManager {
 			new Trail(),
 			new UI(),
 			new FastFall(),
+			new CancelPacket(),
+			new BlockParty(),
 			new Xray());
 	
 	public static List<Module> getModules() {
