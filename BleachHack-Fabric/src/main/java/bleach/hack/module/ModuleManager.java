@@ -16,6 +16,7 @@ public class ModuleManager {
 			new AutoReconnect(),
 			new AutoSign(),
 			new AutoTotem(),
+			new BlockParty(),
 			new BookCrash(),
 			new ChestESP(),
 			new ChunkSize(),
