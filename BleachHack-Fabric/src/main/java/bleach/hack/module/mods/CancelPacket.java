@@ -16,7 +16,7 @@ import net.minecraft.server.network.packet.*;
 public class CancelPacket extends Module {
 
     public CancelPacket() {
-        super("Cancel Pkt", -1, Category.MISC, "Cancel Packets.",
+        super("Cancel Pkts", -1, Category.MISC, "Cancel Packets.",
             new SettingToggle("Respawn S2C", false), //0
             new SettingToggle("Stop Sound S2C", false), //1
             new SettingToggle("Play Sound S2C", false), //2
