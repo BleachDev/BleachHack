@@ -18,8 +18,8 @@ steps:
 
 - task: ado-discord-webhook@1
   inputs:
-    channelId: '638063710413520932'
-    webhookKey: '$(webhookKey)'
+    channelId: '$(webhookChannel)'
+    webhookKey: '$(webhookKeyBoi)'
     name: 'Build Poster'
     messageType: 'embeds'
     embeds: |
