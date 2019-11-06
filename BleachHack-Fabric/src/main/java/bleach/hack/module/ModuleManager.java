@@ -18,6 +18,7 @@ public class ModuleManager {
 			new AutoTotem(),
 			new BlockParty(),
 			new BookCrash(),
+			new CancelPacket(),
 			new ChestESP(),
 			new ChunkSize(),
 			new ClickGui(),
@@ -27,6 +28,7 @@ public class ModuleManager {
 			new EntitySpeed(),
 			new ESP(),
 			new FakeLag(),
+			new FastFall(),
 			new FastUse(),
 			new Flight(),
 			new Freecam(),
@@ -55,9 +57,6 @@ public class ModuleManager {
 			new Tracers(),
 			new Trail(),
 			new UI(),
-			new FastFall(),
-			new CancelPacket(),
-			new BlockParty(),
 			new Xray());
 	
 	public static List<Module> getModules() {

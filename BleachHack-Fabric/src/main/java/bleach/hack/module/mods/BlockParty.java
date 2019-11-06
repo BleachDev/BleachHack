@@ -17,10 +17,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 public class BlockParty extends Module {
-			
+	
+	private boolean jumping;
+	
 	public BlockParty() {
 		super("Blockparty", -1, Category.MISC, "Wins You Blockparty",
-				new SettingToggle("Jump", true));
+				new SettingToggle("Jump", true),
+				new SettingToggle("AutoSpeed", true));
 	}
 	
 	@Subscribe
@@ -59,11 +62,35 @@ public class BlockParty extends Module {
 		
 		KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKeyCode(), true);
 		
-		if(mc.player.getBlockPos().getSquaredDistance(poses.get(0)) < (mc.player.isSprinting() ? 25 : 10)
+		if(mc.player.getBlockPos().getSquaredDistance(poses.get(0)) < (mc.player.isSprinting() ? 25 : 8)
+				&& Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().z) > 0.15
 				&& mc.player.verticalCollision) {
 			mc.player.jump();
 			mc.player.verticalCollision = false;
 			//mc.player.setPosition(mc.player.x, mc.player.y + 0.02, mc.player.z);
+		}
+		
+		if(getSettings().get(1).toToggle().state && mc.player.fallDistance < 0.25) {
+			if (jumping && mc.player.y >= mc.player.prevY + 0.399994D) {
+				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
+				mc.player.y = mc.player.prevY;
+				jumping = false;
+			}
+			
+			if (mc.player.forwardSpeed != 0.0F && !mc.player.horizontalCollision) {
+				if (mc.player.verticalCollision) {
+					mc.player.setVelocity(mc.player.getVelocity().x * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300),
+							mc.player.getVelocity().y,
+							mc.player.getVelocity().z * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300));
+					jumping = true;
+					mc.player.jump();
+				}
+				
+				if (jumping && mc.player.y >= mc.player.prevY + 0.399994D) {
+					mc.player.setVelocity(mc.player.getVelocity().x, -100, mc.player.getVelocity().z);
+					jumping = false;
+				}
+			}
 		}
 	}
 }
