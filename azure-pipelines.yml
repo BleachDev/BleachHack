@@ -4,9 +4,6 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-variables:
-  urlVer: ${{3843969 + $(Build.BuildId)}}
-
 steps:
 - task: CmdLine@2
   inputs:
