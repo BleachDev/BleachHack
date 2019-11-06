@@ -4,6 +4,9 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+variables:
+  urlVer: $[3844049 - 80 + $(Build.BuildId)]
+
 steps:
 - task: CmdLine@2
   inputs:
@@ -15,3 +18,11 @@ steps:
     PathtoPublish: './BleachHack-Fabric/build/libs/bleachhack-6.9.jar'
     ArtifactName: 'BleachHack$(Build.BuildId)'
     publishLocation: 'Container'
+
+- task: ado-discord-webhook@1
+  inputs:
+    channelId: '638063710413520932'
+    webhookKey: 'szjie_ZuZnAbWIgf_TG-xQIkAftHT4DiXhYh9BH-hRJinF05mpR1RVfsos6j6dcu29nQ'
+    name: 'Build Poster'
+    messageType: 'content'
+    content: 'https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$[urlVer]?itemPath=BleachHack80&$format=zip'
