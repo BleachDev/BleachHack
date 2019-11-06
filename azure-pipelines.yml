@@ -22,4 +22,4 @@ steps:
     webhookKey: 'szjie_ZuZnAbWIgf_TG-xQIkAftHT4DiXhYh9BH-hRJinF05mpR1RVfsos6j6dcu29nQ'
     name: 'Build Poster'
     messageType: 'content'
-    content: 'https://dev.azure.com/dragoclanleader/_apis/resources/Containers/${{urlVer}}?itemPath=BleachHack80&$format=zip'
+    content: 'https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVer)?itemPath=BleachHack80&$format=zip'
