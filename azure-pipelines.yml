@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  urlVer: $[3844049 - 80 + $(Build.BuildId)]
+  urlVer: $[3843969 + $(Build.BuildId)]
 
 steps:
 - task: CmdLine@2
