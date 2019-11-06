@@ -20,11 +20,6 @@ steps:
   inputs:
     channelId: '$(webhookChannel)'
     webhookKey: '$(webhookKeyBoi)'
-    name: 'Build Poster'
-    messageType: 'embeds'
-    embeds: |
-      [{
-          "title": "New build from Pipelines.",
-          "description": "https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVer)?itemPath=BleachHack80&$format=zip",
-          "author": "Qther's Pipeline Webhook"
-      }]
+    name: 'Build Poster 2: Electric Boogaloo'
+    messageType: 'content'
+    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVer)?itemPath=BleachHack80&$format=zip'
