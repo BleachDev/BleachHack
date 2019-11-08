@@ -40,4 +40,4 @@ steps:
     webhookKey: '$(webhookKeyBoi)'
     name: 'Build Poster 2: Electric Boogaloo'
     messageType: 'content'
-    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVersion.urlVer)?itemPath=BleachHack$(Build.BuildId)&$format=zip'
+    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVersion)?itemPath=BleachHack$(Build.BuildId)&$format=zip'
