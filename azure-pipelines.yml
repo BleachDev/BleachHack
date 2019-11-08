@@ -10,11 +10,6 @@ steps:
     script: |
       cd BleachHack-Fabric
       gradlew build
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: './BleachHack-Fabric/build/libs/bleachhack-6.9.jar'
-    ArtifactName: 'BleachHack'
-    publishLocation: 'Container'
 
 - task: GitHubRelease@1
   inputs:
@@ -31,30 +26,3 @@ steps:
     isPreRelease: true
     changeLogCompareToRelease: 'lastNonDraftRelease'
     changeLogType: 'commitBased'
-    
-- task: PythonScript@0
-  inputs:
-    scriptSource: 'inline'
-    script: |
-      urlVer = open("urlVer.xml","w+")
-      num = int(3864915) + 8 * (int($(Build.BuildId)) - int(100))
-      
-      urlVer.write('<?xml version="1.0" encoding="UTF-8"?>\n\n<file>\n\n<tag>' + str(num) + '</tag>\n\n</file>')
-      
-      urlVer.close()
-
-- task: SetValueFromXML@0
-  inputs:
-    variableName: 'urlVersion'
-    xPathExpression: '//urlVer'
-    namespaces: 'urlVer = urlVer'
-    xmlFile: './urlVer.xml'
-
-
-#- task: ado-discord-webhook@1
-#  inputs:
-#    channelId: '$(webhookChannel)'
-#    webhookKey: '$(webhookKeyBoi)'
-#    name: 'Build Poster 2: Electric Boogaloo'
-#    messageType: 'content'
-#    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVersion)?itemPath=BleachHack$(Build.BuildId)&$format=zip'
