@@ -16,12 +16,27 @@ steps:
     ArtifactName: 'BleachHack'
     publishLocation: 'Container'
 
+- task: GitHubRelease@1
+  inputs:
+    gitHubConnection: 'BleachHack'
+    repositoryName: 'd1gress/bleachhack-1.14'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    title: 'BleachHack b$(Build.BuildId)'
+    releaseNotesSource: 'inline'
+    releaseNotesInline: 'beta build'
+    assets: './BleachHack-Fabric/build/libs/bleachhack-6.9.jar'
+    isPreRelease: true
+    changeLogCompareToRelease: 'lastNonDraftRelease'
+    changeLogType: 'commitBased'
+    
 - task: PythonScript@0
   inputs:
     scriptSource: 'inline'
     script: |
       urlVer = open("urlVer.xml","w+")
-      num = int(3864915) + 8 * (int($(Build.BuildId)) - int(99))
+      num = int(3864915) + 8 * (int($(Build.BuildId)) - int(100))
       
       urlVer.write('<?xml version="1.0" encoding="UTF-8"?>\n\n<file>\n\n<urlVer>' + str(num) + '</urlVer>\n\n</file>')
       
@@ -34,10 +49,11 @@ steps:
     namespaces: 'urlVer = urlVer'
     xmlFile: './urlVer.xml'
 
-- task: ado-discord-webhook@1
-  inputs:
-    channelId: '$(webhookChannel)'
-    webhookKey: '$(webhookKeyBoi)'
-    name: 'Build Poster 2: Electric Boogaloo'
-    messageType: 'content'
-    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVersion)?itemPath=BleachHack$(Build.BuildId)&$format=zip'
+
+#- task: ado-discord-webhook@1
+#  inputs:
+#    channelId: '$(webhookChannel)'
+#    webhookKey: '$(webhookKeyBoi)'
+#    name: 'Build Poster 2: Electric Boogaloo'
+#    messageType: 'content'
+#    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVersion)?itemPath=BleachHack$(Build.BuildId)&$format=zip'
