@@ -18,6 +18,7 @@ public class ModuleManager {
 			new AutoTotem(),
 			new BlockParty(),
 			new BookCrash(),
+			new CancelPacket(),
 			new ChestESP(),
 			new ChunkSize(),
 			new ClickGui(),
@@ -55,16 +56,13 @@ public class ModuleManager {
 			new Tracers(),
 			new Trail(),
 			new UI(),
-			new FastFall(),
-			new CancelPacket(),
-			new BlockParty(),
 			new Xray());
 	
 	public static List<Module> getModules() {
 		return mods;
 	}
 
-	public static Module getModule(Class<?extends Module> clazz) {
+	public static Module getModule(Class<? extends Module> clazz) {
 		for(Module module : mods) {
 			if(module.getClass().equals(clazz)) {
 				return module;

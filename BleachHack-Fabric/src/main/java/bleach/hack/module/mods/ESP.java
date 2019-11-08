@@ -63,6 +63,9 @@ public class ESP extends Module {
 			else if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GRAY, "vehicles");
 			}
+			else {
+			    e.setGlowing(false);
+			}
 		}
 	}
 }

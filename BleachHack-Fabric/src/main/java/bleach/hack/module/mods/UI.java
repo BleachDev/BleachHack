@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.lwjgl.opengl.GL11;
+
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
@@ -19,6 +21,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -44,6 +48,7 @@ public class UI extends Module {
 				new SettingToggle("Lag-Meter", true),
 				new SettingToggle("Server", false),
 				new SettingToggle("Players", false),
+				new SettingToggle("Armor", true),
 				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right"));
 	}
 	
@@ -149,8 +154,47 @@ public class UI extends Module {
 			}
 		}
 		
+		if(getSettings().get(10).toToggle().state && !mc.player.isCreative()) {
+			GL11.glPushMatrix();
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+	        int count = 0;
+	        int x1 = mc.window.getScaledWidth() / 2;
+	        int y = mc.window.getScaledHeight() -
+	        		(mc.player.isInFluid(FluidTags.WATER) || mc.player.getBreath() < mc.player.getMaxBreath() ? 64 : 55);
+	        for (ItemStack is : mc.player.inventory.armor) {
+	            count++;
+	            if (is.isEmpty()) continue;
+	            int x = x1 - 90 + (9 - count) * 20 + 2;
+
+	            GL11.glEnable(GL11.GL_DEPTH_TEST);
+	            mc.getItemRenderer().zOffset = 200F;
+	            mc.getItemRenderer().renderGuiItemIcon(is, x, y);
+	            mc.getItemRenderer().zOffset = 0F;
+	            GL11.glEnable(GL11.GL_TEXTURE_2D);
+	            GL11.glDisable(GL11.GL_DEPTH_TEST);
+	            
+	            GL11.glPushMatrix();
+	            GL11.glScaled(0.75, 0.75, 0.75);
+	            String s = is.getCount() > 1 ? "x" + is.getCount() : "";
+	            mc.textRenderer.drawWithShadow(s, (x + 19 - mc.textRenderer.getStringWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
+
+	            if(is.isDamageable()) {
+	            	String dur = is.getMaxDamage() - is.getDamage() + "";
+		            int durcolor = 0x000000;
+		            try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); }catch(Exception e) {}
+		    	    
+		            mc.textRenderer.drawWithShadow(dur + "", (x + 10 - mc.textRenderer.getStringWidth(dur + "") / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
+	            }
+	            
+	            GL11.glPopMatrix();
+	        }
+	        GL11.glEnable(GL11.GL_DEPTH_TEST);
+	        GL11.glPopMatrix();
+		}
+		
 		int count2 = 0;
-		int infoMode = getSettings().get(10).toMode().mode;
+		int infoMode = getSettings().get(11).toMode().mode;
 		for(String s: infoList) {
 			mc.textRenderer.drawWithShadow(s, 
 					infoMode == 0 ? 2 : mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,

@@ -35,9 +35,9 @@ public class BleachMainMenu extends Screen {
 	private BleachGithubReader github = new BleachGithubReader();
 	public LoginScreen loginScreen = new LoginScreen();
 	public static boolean customTitleScreen = true;
-	public String splash;
 
-	private List<String> versions = new ArrayList<>();
+	public static String splash = "";
+	public static List<String> versions = new ArrayList<>();
 	
 	public BleachMainMenu() {
 		super(new TranslatableText("narrator.screen.title"));
@@ -65,11 +65,15 @@ public class BleachMainMenu extends Screen {
 	    	this.minecraft.close();
 	    }));
 	    
-	    versions.clear();
-	    versions.addAll(github.readFileLines("latestversion.txt"));
+	    if(versions.isEmpty()) {
+	    	versions.clear();
+		    versions.addAll(github.readFileLines("latestversion.txt"));
+	    }
 	    
-	    List<String> sp = github.readFileLines("splashes.txt");
-	    splash = !sp.isEmpty() ? sp.get(new Random().nextInt(sp.size())) : "";
+	    if(splash == "") {
+	    	List<String> sp = github.readFileLines("splashes.txt");
+		    splash = !sp.isEmpty() ? sp.get(new Random().nextInt(sp.size())) : "";
+	    }
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {

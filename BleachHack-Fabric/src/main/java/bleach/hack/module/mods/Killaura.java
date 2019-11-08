@@ -54,7 +54,7 @@ public class Killaura extends Module {
 
 		for(Entity e: targets) {
 			if(mc.player.distanceTo(e) > getSettings().get(7).toSlider().getValue()
-					|| ((LivingEntity)e).getHealth() <= 0 || e == mc.player || e == mc.player.getVehicle() || e == mc.cameraEntity
+					|| ((LivingEntity)e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
 					|| (!mc.player.canSee(e) && !getSettings().get(5).toToggle().state)) continue;
 			
 			if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
@@ -71,7 +71,7 @@ public class Killaura extends Module {
 
 				if(wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
 
-				delay=0;
+				delay = 0;
 			}
 		}
 	}
