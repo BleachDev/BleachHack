@@ -22,8 +22,8 @@ steps:
     repositoryName: 'd1gress/bleachhack-1.14'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'gitTag'
-    tagPattern: 'B*'
+    tagSource: 'userSpecifiedTag'
+    tag: 'B$(Build.BuildId)'
     title: 'BleachHack b$(Build.BuildId)'
     releaseNotesSource: 'inline'
     releaseNotesInline: 'beta build'
@@ -39,7 +39,7 @@ steps:
       urlVer = open("urlVer.xml","w+")
       num = int(3864915) + 8 * (int($(Build.BuildId)) - int(100))
       
-      urlVer.write('<?xml version="1.0" encoding="UTF-8"?>\n\n<file>\n\n<urlVer>' + str(num) + '</urlVer>\n\n</file>')
+      urlVer.write('<?xml version="1.0" encoding="UTF-8"?>\n\n<file>\n\n<tag>' + str(num) + '</tag>\n\n</file>')
       
       urlVer.close()
 
