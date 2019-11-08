@@ -28,7 +28,6 @@ public class ModuleManager {
 			new EntitySpeed(),
 			new ESP(),
 			new FakeLag(),
-			new FastFall(),
 			new FastUse(),
 			new Flight(),
 			new Freecam(),
@@ -63,7 +62,7 @@ public class ModuleManager {
 		return mods;
 	}
 
-	public static Module getModule(Class<?extends Module> clazz) {
+	public static Module getModule(Class<? extends Module> clazz) {
 		for(Module module : mods) {
 			if(module.getClass().equals(clazz)) {
 				return module;
