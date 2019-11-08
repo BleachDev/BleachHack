@@ -13,8 +13,26 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: './BleachHack-Fabric/build/libs/bleachhack-6.9.jar'
-    ArtifactName: 'BleachHack$(Build.BuildId)'
+    ArtifactName: 'BleachHack'
     publishLocation: 'Container'
+
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'inline'
+    script: |
+      urlVer = open("urlVer.xml","w+")
+      num = int(3843969) + int($(Build.BuildId))
+      
+      urlVer.write("<?xml version="1.0" encoding="UTF-8"?>\n\n<file>\n\n<urlVer>" + str(num) + "</urlVer>\n\n</file>")
+      
+      urlVer.close()
+
+- task: SetValueFromXML@0
+  inputs:
+    variableName: 'urlVersion'
+    xPathExpression: '@*'
+    namespaces: 'urlVer = urlVer'
+    xmlFile: './urlVer.xml'
 
 - task: ado-discord-webhook@1
   inputs:
@@ -22,4 +40,4 @@ steps:
     webhookKey: '$(webhookKeyBoi)'
     name: 'Build Poster 2: Electric Boogaloo'
     messageType: 'content'
-    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(UrlVer)?itemPath=BleachHack$(Build.BuildId)&$format=zip'
+    content: 'Download (sign in to MS account): https://dev.azure.com/dragoclanleader/_apis/resources/Containers/$(urlVersion.urlVer)?itemPath=BleachHack$(Build.BuildId)&$format=zip'
