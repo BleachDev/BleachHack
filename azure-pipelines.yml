@@ -30,7 +30,7 @@ steps:
 - task: SetValueFromXML@0
   inputs:
     variableName: 'urlVersion'
-    xPathExpression: '@*'
+    xPathExpression: '//urlVer'
     namespaces: 'urlVer = urlVer'
     xmlFile: './urlVer.xml'
 
