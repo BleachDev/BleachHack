@@ -21,7 +21,7 @@ steps:
     scriptSource: 'inline'
     script: |
       urlVer = open("urlVer.xml","w+")
-      num = int(3864802) + int($(Build.BuildId))
+      num = int(3864915) + 8 * (int($(Build.BuildId)) - int(99))
       
       urlVer.write('<?xml version="1.0" encoding="UTF-8"?>\n\n<file>\n\n<urlVer>' + str(num) + '</urlVer>\n\n</file>')
       
