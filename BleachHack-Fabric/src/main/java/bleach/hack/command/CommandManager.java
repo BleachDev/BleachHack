@@ -24,6 +24,7 @@ public class CommandManager {
 			new CmdPrefix(),
 			new CmdRbook(),
 			new CmdRename(),
+			new CmdSetting(),
 			new CmdSkull(),
 			new CmdTeleport(),
 			new CmdToggle(),
