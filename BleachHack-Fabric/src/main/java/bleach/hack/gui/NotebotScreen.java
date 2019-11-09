@@ -15,12 +15,12 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
+import bleach.hack.gui.window.AbstractWindowScreen;
+import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.Notebot;
 import bleach.hack.utils.NotebotUtils;
-import bleach.hack.utils.ScreenUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -28,7 +28,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.SystemUtil;
 import net.minecraft.util.math.MathHelper;
 
-public class NotebotScreen extends Screen {
+public class NotebotScreen extends AbstractWindowScreen {
 
 	public List<String> files;
 	public NotebotEntry entry;
@@ -48,14 +48,21 @@ public class NotebotScreen extends Screen {
 			paths.close();
 			files.remove(0);
 		} catch (IOException e) {}
+		
+		windows.clear();
+		windows.add(new Window(width / 4, height / 4 - 10, width / 4 + width / 2, height / 4 + height / 2, "Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
+		windows.add(new Window(20, 20, 200, 150, "Memes", new ItemStack(Items.GOLDEN_HOE)));
+		windows.add(new Window(400, 200, 700, 400, "How to download more ram", new ItemStack(Items.SPRUCE_BOAT)));
 	}
 	
 	public void render(int int_1, int int_2, float float_1) {
 		renderBackground();
+		super.render(int_1, int_2, float_1);
 		
-		int x = width / 4, y = height / 4, w = width / 2, h = height / 2;
-		
-		ScreenUtils.drawBackground(new ItemStack(Items.NOTE_BLOCK), "Notebot Gui", x, y - 10, x + w, y + h);
+		int x = windows.get(0).x1,
+				y = windows.get(0).y1 + 10,
+				w = width / 2,
+				h = height / 2;
 		
 		drawCenteredString(font, "Tutorial..", x + w - 24, y + 4, 0x9090c0);
 		
@@ -123,8 +130,6 @@ public class NotebotScreen extends Screen {
 			drawCenteredString(font, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
 			drawCenteredString(font, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x6060ff);
 		}
-		
-		super.render(int_1, int_2, float_1);
 	}
 	
 	public void tick() {
@@ -137,7 +142,10 @@ public class NotebotScreen extends Screen {
 	}
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		int x = width / 4, y = height / 4, w = width / 2, h = height / 2;
+		int x = windows.get(0).x1,
+				y = windows.get(0).y1 + 10,
+				w = width / 2,
+				h = height / 2;
 		
 		if(double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15) if(page > 0) page--;
 		if(double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15) page++;
