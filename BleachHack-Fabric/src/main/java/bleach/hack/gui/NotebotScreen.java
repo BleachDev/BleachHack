@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import bleach.hack.module.mods.Notebot;
 import bleach.hack.utils.NotebotUtils;
+import bleach.hack.utils.ScreenUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.gui.screen.Screen;
@@ -54,11 +55,9 @@ public class NotebotScreen extends Screen {
 		
 		int x = width / 4, y = height / 4, w = width / 2, h = height / 2;
 		
-		fill(x, y, x + w, y + h, 0xd0505059);
-		fill(x + 1, y + 1, x + w - 2, y + 2, 0xff303030);
-		fill(x + 1, y + h - 2, x + w - 2, y + h - 1, 0xff303030);
-		drawCenteredString(font, "Notebot Gui", x + w / 2, y - 10, 0x909090);
-		drawCenteredString(font, "Tutorial..", x + w - 22, y - 10, 0x9090c0);
+		ScreenUtils.drawBackground(new ItemStack(Items.NOTE_BLOCK), "Notebot Gui", x, y - 10, x + w, y + h);
+		
+		drawCenteredString(font, "Tutorial..", x + w - 24, y + 4, 0x9090c0);
 		
 		int pageEntries = 0;
 		for(int i = y + 20; i < y + h - 27; i += 10) pageEntries++;
@@ -82,15 +81,15 @@ public class NotebotScreen extends Screen {
 		}
 		
 		if(entry != null) {
-			drawCenteredString(font, entry.fileName, x + w - w / 4, y + 10, 0x800080);
-			drawCenteredString(font, entry.length / 20 + "s", x + w - w / 4, y + 20, 0xa000a0);
-			drawCenteredString(font, "Notes: ", x + w - w / 4, y + 38, 0x60a060);
+			drawCenteredString(font, entry.fileName, x + w - w / 4, y + 10, 0xa030a0);
+			drawCenteredString(font, entry.length / 20 + "s", x + w - w / 4, y + 20, 0xc000c0);
+			drawCenteredString(font, "Notes: ", x + w - w / 4, y + 38, 0x80f080);
 			
 			int c2 = 0;
 			for(Entry<Instrument, Integer> e: entry.notes.entrySet()) {
 				itemRenderer.zOffset = 500 - c2 * 20;
 				drawCenteredString(font, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(), 
-						x + w - w / 4, y + 50 + c2 * 10, 0x70c070);
+						x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
 				GL11.glPushMatrix();
 				GuiLighting.enableForItems();
 				if(e.getKey() == Instrument.HARP) itemRenderer.renderGuiItem(new ItemStack(Items.DIRT), x + w - w / 4 + 40, y + 46 + c2 * 10);
@@ -122,7 +121,7 @@ public class NotebotScreen extends Screen {
 			
 			drawCenteredString(font, "Delete", (int)(x + w - w / 2.8), y + h - 14, 0xff0000);
 			drawCenteredString(font, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
-			drawCenteredString(font, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x5050ff);
+			drawCenteredString(font, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x6060ff);
 		}
 		
 		super.render(int_1, int_2, float_1);
@@ -142,7 +141,7 @@ public class NotebotScreen extends Screen {
 		
 		if(double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15) if(page > 0) page--;
 		if(double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15) page++;
-		if(double_1 > x + w - 44 && double_1 < x + w && double_2 > y - 12 && double_2 < y) {
+		if(double_1 > x + w - 44 && double_1 < x + w && double_2 > y + 3 && double_2 < y + 15) {
 			try { SystemUtil.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=clT_aNvQedk")); }catch(Exception e) {}
 		}
 		if(double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
