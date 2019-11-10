@@ -1,8 +1,7 @@
 package bleach.hack.utils;
 
 import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.platform.GlStateManager;
+import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -89,20 +88,20 @@ public class RenderUtils {
 	}
 	
 	public static void gl11Setup() {
-		GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.lineWidth(2.5F);
-        GlStateManager.disableTexture();
-        GlStateManager.disableDepthTest();
-        GlStateManager.matrixMode(5889);
-        GlStateManager.pushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GL11.glLineWidth(2.5F);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glMatrixMode(5889);
+        GL11.glPushMatrix();
 	}
 	
 	public static void gl11Cleanup() {
-		GlStateManager.popMatrix();
-        GlStateManager.matrixMode(5888);
-        GlStateManager.enableDepthTest();
-        GlStateManager.enableTexture();
-        GlStateManager.disableBlend();
+		GL11.glPopMatrix();
+		GL11.glMatrixMode(5888);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 }

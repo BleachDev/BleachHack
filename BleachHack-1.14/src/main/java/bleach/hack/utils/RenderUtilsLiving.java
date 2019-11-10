@@ -2,7 +2,8 @@ package bleach.hack.utils;
 
 import java.util.Map.Entry;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -24,10 +25,10 @@ public class RenderUtilsLiving {
 	public static void drawText(String str, double x, double y, double z, double scale) {
 		glSetup(x, y, z);
 		
-		GlStateManager.scaled(-0.025*scale, -0.025*scale, 0.025*scale);
+		GL11.glScaled(-0.025*scale, -0.025*scale, 0.025*scale);
 	      
 		int i = mc.fontRenderer.getStringWidth(str) / 2;
-	    GlStateManager.disableTexture();
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	    Tessellator tessellator = Tessellator.getInstance();
 	    BufferBuilder bufferbuilder = tessellator.getBuffer();
 	    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
@@ -37,7 +38,7 @@ public class RenderUtilsLiving {
 	    bufferbuilder.pos(i + 1, 8, 0.0D).color(0.0F, 0.0F, 0.0F, f).endVertex();
 	    bufferbuilder.pos(i + 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, f).endVertex();
 	    tessellator.draw();
-	    GlStateManager.enableTexture();
+	    GL11.glEnable(GL11.GL_TEXTURE_2D);
 	      
 	    mc.fontRenderer.drawString(str, -i, 0, 553648127);
 	    mc.fontRenderer.drawString(str, -i, 0, -1);
@@ -48,22 +49,22 @@ public class RenderUtilsLiving {
 	public static void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
 		glSetup(x, y, z);
 		
-	    GlStateManager.scaled(0.4*scale, 0.4*scale, 0);
+	    GL11.glScaled(0.4*scale, 0.4*scale, 0);
 	    
-	    GlStateManager.translated(offX, offY, 0);
-	    if(item.getItem() instanceof BlockItem) GlStateManager.rotatef(180F, 1F, 180F, 10F);
+	    GL11.glTranslated(offX, offY, 0);
+	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
 	    mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), ItemCameraTransforms.TransformType.GUI);
-	    if(item.getItem() instanceof BlockItem) GlStateManager.rotatef(-180F, -1F, -180F, -10F);
-	    GlStateManager.disableLighting();
+	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
+	    GL11.glDisable(GL11.GL_LIGHTING);
 	    
-	    GlStateManager.scalef(-0.05F, -0.05F, 0);
+	    GL11.glScalef(-0.05F, -0.05F, 0);
 	    
 	    if(item.getCount() > 0) {
 		    int w = mc.fontRenderer.getStringWidth("x" + item.getCount()) / 2;
 		    mc.fontRenderer.drawStringWithShadow("x" + item.getCount(), 7 - w, 5, 0xffffff);
 	    }
 	    
-	    GlStateManager.scalef(0.85F, 0.85F, 0.85F);
+	    GL11.glScalef(0.85F, 0.85F, 0.85F);
 	    
 	    int c = 0;
 	    for(Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
@@ -79,25 +80,25 @@ public class RenderUtilsLiving {
 	}
 	
 	public static void glSetup(double x, double y, double z) {
-		GlStateManager.pushMatrix();
-	    GlStateManager.translated(x - RenderUtils.renderPos().x, y - RenderUtils.renderPos().y, z - RenderUtils.renderPos().z);
-	    GlStateManager.normal3f(0.0F, 1.0F, 0.0F);
-	    GlStateManager.rotatef(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-	    GlStateManager.rotatef(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-	    GlStateManager.disableLighting();
-	    GlStateManager.disableDepthTest();
+		GL11.glPushMatrix();
+	    GL11.glTranslated(x - RenderUtils.renderPos().x, y - RenderUtils.renderPos().y, z - RenderUtils.renderPos().z);
+	    GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+	    GL11.glRotatef(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+	    GL11.glRotatef(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+	    GL11.glDisable(GL11.GL_LIGHTING);
+	    GL11.glDisable(GL11.GL_DEPTH_TEST);
 	
-	    GlStateManager.enableBlend();
-	    GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	    GL11.glEnable(GL11.GL_BLEND);
+	    GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 	    
 	}
 	
 	public static void glCleanup() {
-		GlStateManager.enableLighting();
-	    GlStateManager.disableBlend();
-	    GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-	    GlStateManager.enableDepthTest();
-	    GlStateManager.translatef(-.5f, 0, 0);
-	    GlStateManager.popMatrix();
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_BLEND);
+	    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	    GL11.glEnable(GL11.GL_DEPTH_TEST);
+	    GL11.glTranslatef(-.5f, 0, 0);
+	    GL11.glPopMatrix();
 	}
 }
