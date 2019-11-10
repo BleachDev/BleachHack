@@ -131,7 +131,6 @@ public class Peek extends Module {
 		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
 		int x = (int) (mX*(1/size) + 12*(1/size));
 		int y = (int) (mY*(1/size) - 12*(1/size) - 140);
-		System.out.println(y);
 		
 		renderTooltipBox(x - 12, y + 12, 128, 128, false);
 		for(byte c: colors) {

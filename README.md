@@ -1,4 +1,6 @@
 # BleachHack-1.14
+[![Github All Releases](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total.svg)]()
+
 Very cool client.  
 
 Works on fabric 1.14  

@@ -18,6 +18,7 @@ public class ModuleManager {
 			new AutoTotem(),
 			new BlockParty(),
 			new BookCrash(),
+			new BowBot(),
 			new CancelPacket(),
 			new ChestESP(),
 			new ChunkSize(),
@@ -74,7 +75,7 @@ public class ModuleManager {
 
 	public static Module getModuleByName(String name) {
 	    for (Module m: mods) {
-	        if (name.equals(m.getName())) return m;
+	        if (name.equalsIgnoreCase(m.getName())) return m;
 	    }
 	    return null;
 	}
