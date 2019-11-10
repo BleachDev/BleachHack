@@ -17,6 +17,7 @@ import bleach.hack.utils.LoginManager;
 import bleach.hack.utils.file.BleachFileMang;
 import bleach.hack.utils.file.BleachGithubReader;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -109,10 +110,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		
 		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		
-		font.drawWithShadow("Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
-		font.drawWithShadow("Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(), 4, height - 30, -1);
-		font.drawWithShadow("Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
-		font.drawWithShadow("Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 10, -1);
+		font.drawWithShadow("Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 24, -1);
+		font.drawWithShadow("Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(), 4, height - 44, -1);
+		font.drawWithShadow("Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 34, -1);
+		font.drawWithShadow("Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 24, -1);
 		
 		try {
 			if(Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
@@ -120,6 +121,19 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				drawCenteredString(this.font,"§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
 			}
 		}catch(Exception e) {}
+		
+		drawButton("", 0, height - 14, width, height);
+		drawButton("§cX", 0, height - 13, 20, height - 1);
+		
+		int wid = 20;
+		for(Window w: windows) {
+			if(w.closed) continue;
+			Screen.fill(wid, height - 13, wid + 80 - 1, height - 1 - 1, 0xffb0b0b0);
+			Screen.fill(wid + 1, height - 13 + 1, wid + 80, height - 1, 0xff000000);
+			Screen.fill(wid + 1, height - 13 + 1, wid + 80 - 1, height - 1 - 1, (w.selected ? 0xffb0b0b0 : 0xff858585));
+			font.draw(w.title, wid + 2, height - 11, 0x000000);
+			wid += 80;
+		}
 		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
 		
@@ -213,6 +227,22 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	}
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
+		if(double_1 > 0 && double_1 < 20 && double_2 > height - 14 && double_2 < height) {
+			minecraft.openScreen(this);
+		}
+		
+		if(double_2 > height - 14 && double_2 < height) {
+			int count = 0;
+			for(Window w: windows) {
+				if(!w.closed) count++;
+				if(count == (int) ((double_1 + 60) / 80)) {
+					selectWindow(windows.indexOf(w));
+					//w.selected = true;
+					break;
+				}
+			}
+		}
+		
 		if(!windows.get(0).closed && windows.get(0).selected) {
 			int x = windows.get(0).x1,
 					y = windows.get(0).y1 - 10,

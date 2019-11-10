@@ -54,7 +54,7 @@ public abstract class AbstractWindowScreen extends Screen {
 		Screen.fill(x1, y1, x2 - 1, y2 - 1, 0xffb0b0b0);
 		Screen.fill(x1 + 1, y1 + 1, x2, y2, 0xff000000);
 		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
-		drawCenteredString(font, text, x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2 - 3, -1);
+		drawCenteredString(font, text, x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2 - 4, -1);
 	}
 	
 	public void selectWindow(int window) {
