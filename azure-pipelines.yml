@@ -19,7 +19,7 @@ steps:
     target: '$(Build.SourceVersion)'
     tagSource: 'userSpecifiedTag'
     tag: 'B$(Build.BuildId)'
-    title: 'BleachHack b$(Build.BuildId)'
+    title: 'BleachHack alpha$(Build.BuildId)'
     releaseNotesSource: 'inline'
     releaseNotesInline: 'beta build'
     assets: './BleachHack-Fabric/build/libs/bleachhack-6.9.jar'
