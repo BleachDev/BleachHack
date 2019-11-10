@@ -9,41 +9,59 @@ import net.minecraft.text.Text;
 public abstract class AbstractWindowScreen extends Screen {
 
 	public List<Window> windows = new ArrayList<>();
-	private List<Window> renderedWindows = new ArrayList<>();
 	
 	public AbstractWindowScreen(Text text_1) {
 		super(text_1);
 	}
 	
 	public void render(int int_1, int int_2, float float_1) {
-		renderedWindows.clear();
-		
 		boolean close = true;
-		boolean noneSelected = true;
+		int noneSelected = -1;
+		int selected = -1;
+		int count = 0;
 		for(Window w: windows) {
 			if(!w.closed) {
 				close = false;
 				if(!w.selected) {
-					w.render(int_1, int_2);
-					renderedWindows.add(w);
+					onRenderWindow(count, int_1, int_2);
+				}else {
+					selected = count;
 				}
+				
+				if(noneSelected >= -1) noneSelected = count;
 			}
 			
-			if(w.selected) {
-				noneSelected = false;
+			if(w.selected && !w.closed) {
+				noneSelected = -2;
 			}
+			count++;
 		}
 		
-		if(noneSelected && !windows.isEmpty()) windows.get(windows.size() - 1).selected = true;
+		if(selected >= 0) onRenderWindow(selected, int_1, int_2);
+		if(noneSelected >= 0) windows.get(noneSelected).selected = true;
 		if(close) this.onClose();
 		
 		super.render(int_1, int_2, float_1);
 	}
 	
-	public void renderWindow(int window, int mX, int mY) {
-		if(!renderedWindows.contains(windows.get(window)) && !windows.get(window).closed) {
+	public void onRenderWindow(int window, int mX, int mY) {
+		if(!windows.get(window).closed) {
 			windows.get(window).render(mX, mY);
-			renderedWindows.add(windows.get(window));
+		}
+	}
+	
+	public void drawButton(String text, int x1, int y1, int x2, int y2) {
+		Screen.fill(x1, y1, x2 - 1, y2 - 1, 0xffb0b0b0);
+		Screen.fill(x1 + 1, y1 + 1, x2, y2, 0xff000000);
+		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
+		drawCenteredString(font, text, x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2 - 3, -1);
+	}
+	
+	public void selectWindow(int window) {
+		int count = 0;
+		for(Window w: windows) {
+			w.selected = (count == window);
+			count++;
 		}
 	}
 	
