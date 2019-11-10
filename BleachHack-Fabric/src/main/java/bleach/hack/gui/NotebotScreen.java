@@ -51,17 +51,17 @@ public class NotebotScreen extends AbstractWindowScreen {
 		
 		windows.clear();
 		windows.add(new Window(width / 4, height / 4 - 10, width / 4 + width / 2, height / 4 + height / 2, "Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
-		windows.add(new Window(20, 20, 200, 150, "Memes", new ItemStack(Items.GOLDEN_HOE)));
-		windows.add(new Window(400, 200, 700, 400, "How to download more ram", new ItemStack(Items.SPRUCE_BOAT)));
 	}
 	
 	public void render(int int_1, int int_2, float float_1) {
 		renderBackground();
 		super.render(int_1, int_2, float_1);
+	}
+	
+	public void onRenderWindow(int window, int mX, int mY) {
+		super.onRenderWindow(window, mX, mY);
 		
-		renderWindow(0, int_1, int_2);
-		
-		if(!windows.get(0).closed) {
+		if(window == 0) {
 			int x = windows.get(0).x1,
 					y = windows.get(0).y1 + 10,
 					w = width / 2,
@@ -74,7 +74,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 			
 			drawCenteredString(font, "<  Page " + (page + 1) + "  >", x + 55, y + 5, 0xc0c0ff);
 			
-			fillButton(x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, int_1, int_2);
+			fillButton(x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mX, mY);
 			drawCenteredString(font, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 			
 			int c = 0, c1 = -1;
@@ -84,7 +84,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 				if(c1 > (page + 1) * pageEntries) break;
 				
 				fillButton(x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10, 
-						Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, int_1, int_2);
+						Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, mX, mY);
 				if(cutText(s, 105).equals(s)) drawCenteredString(font, s, x + 55, y + 16 + c * 10, -1);
 				else drawString(font, cutText(s, 105), x + 5, y + 16 + c * 10, -1);
 				c++;
@@ -122,9 +122,9 @@ public class NotebotScreen extends AbstractWindowScreen {
 					GL11.glPopMatrix();
 				}
 				
-				fillButton(x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, int_1, int_2);
-				fillButton(x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, int_1, int_2);
-				fillButton(x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, int_1, int_2);
+				fillButton(x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, mX, mY);
+				fillButton(x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mX, mY);
+				fillButton(x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mX, mY);
 				
 				int pixels = (int) Math.round(MathHelper.clamp((w / 4)*((double)entry.playTick / (double)entry.length), 0, w / 4));
 				fill(x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
@@ -134,9 +134,6 @@ public class NotebotScreen extends AbstractWindowScreen {
 				drawCenteredString(font, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x6060ff);
 			}
 		}
-		
-		renderWindow(1, int_1, int_2);
-		renderWindow(2, int_1, int_2);
 	}
 	
 	public void tick() {

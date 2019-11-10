@@ -93,7 +93,7 @@ public class Window {
 	private void fillGrey(int x1, int y1, int x2, int y2) {
 		Screen.fill(x1, y1, x2 - 1, y2 - 1, 0xffb0b0b0);
 		Screen.fill(x1 + 1, y1 + 1, x2, y2, 0xff000000);
-		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff7a7a7a);
+		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
 	}
 		
 	private void fillGradient(int x1, int y1, int x2, int y2, int color1, int color2) {
