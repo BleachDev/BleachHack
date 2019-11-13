@@ -7,6 +7,8 @@ import bleach.hack.module.mods.Teleport;
 import bleach.hack.utils.BleachLogger;
 import net.minecraft.util.math.Vec3d;
 
+import java.text.DecimalFormat;
+
 public class CmdTeleport extends Command {
 
     @Override
@@ -24,6 +26,8 @@ public class CmdTeleport extends Command {
         return ".tp [(~)x] [(~)y] [(~)z] [blocks per teleport]";
     }
 
+    DecimalFormat df = new DecimalFormat("#.###");
+
     public void onCommand(final String command, final String[] args) throws Exception {
     	if (args[0].equalsIgnoreCase("stop")) {
             BleachLogger.warningMessage("Teleport Cancelled!");
@@ -39,7 +43,7 @@ public class CmdTeleport extends Command {
                 Teleport.finalPos = new Vec3d(x, y, z);
                 ModuleManager.getModule(Teleport.class).getSettings().get(0).toSlider().setValue(blocksPerTeleport);
                 ModuleManager.getModule(Teleport.class).setToggled(true);
-                BleachLogger.infoMessage("\n§aTeleporting to \n§cX: §b" + x + "§a, §cY: §b" + y + "§a, §cZ: §b" + z + "\n§aat §b" + ModuleManager.getModule(Teleport.class).getSettings().get(0).toSlider().getValue() + "§c blocks per teleport.");
+                BleachLogger.infoMessage("\n§aTeleporting to \n§cX: §b" + df.format(x) + "§a, \n§cY: §b" + df.format(y) + "§a, \n§cZ: §b" + df.format(z) + "\n§aat §b" + df.format(ModuleManager.getModule(Teleport.class).getSettings().get(0).toSlider().getValue()) + "§c blocks per teleport.");
             }
             catch (NullPointerException e){
                 BleachLogger.warningMessage("Null Pointer Exception Caught!\nHonestly probably close MC.");

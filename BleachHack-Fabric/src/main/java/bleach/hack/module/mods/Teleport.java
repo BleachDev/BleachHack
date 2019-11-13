@@ -3,12 +3,9 @@ package bleach.hack.module.mods;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.EntityUtils;
 
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.server.network.packet.LoginHelloC2SPacket;
@@ -22,8 +19,7 @@ public class Teleport extends Module {
 
     public Teleport() {
         super("Teleport", -1, Category.MISC, "What are you doing here?",
-            new SettingSlider("BPT: ", 0.01, 20, 1, 2),
-            new SettingToggle("TP Exploit", false));
+            new SettingSlider("BPT: ", 0.01, 20000, 1, 2));
     }
 
     @Subscribe
@@ -40,36 +36,31 @@ public class Teleport extends Module {
     		setToggled(false);
     		return;
     	}
-        
-        if (getSettings().get(1).toToggle().state) {
-            mc.player.setPosition(finalPos.getX(), finalPos.getY(), finalPos.getZ());
-            ModuleManager.getModule(BookCrash.class).setToggled(true);
-        } else {
-        	EntityUtils.facePos(finalPos.x, finalPos.y, finalPos.z);
-        	
-            Vec3d nextStep = new Vec3d(0, 0, Math.min(finalPos.distanceTo(mc.player.getPosVector()), getSettings().get(0).toSlider().getValue()))
-    				.rotateX(-(float) Math.toRadians(mc.player.pitch))
-    				.rotateY(-(float) Math.toRadians(mc.player.yaw));
-            
-            int chunkX = (int) Math.floor(mc.player.getPosVector().x / 16.0D);
-            int chunkZ = (int) Math.floor(mc.player.getPosVector().z / 16.0D);
-            if (mc.world.isChunkLoaded(chunkX, chunkZ)) {
-                lastPos = mc.player.getPosVector();
-                if (finalPos.distanceTo(mc.player.getPosVector()) < 0.3 || getSettings().get(0).toSlider().getValue() == 0) {
-                    setToggled(false);
-                }
 
-                if (finalPos.distanceTo(mc.player.getPosVector()) >= Math.max(1, getSettings().get(0).toSlider().getValue())) {
-                    mc.player.setPosition(mc.player.x + nextStep.x, mc.player.y + nextStep.y, mc.player.z + nextStep.z);
-                } else {
-                    mc.player.setPosition(finalPos.x, finalPos.y, finalPos.z);
-                }
-                lastTp = System.currentTimeMillis();
-            } else if (lastTp + 2000L > System.currentTimeMillis()) {
-                mc.player.setPosition(lastPos.x, lastPos.y, lastPos.z);
+        Vec3d tpDirectionVec = finalPos.subtract(mc.player.getPosVector()).normalize();
+
+        int chunkX = (int) Math.floor(mc.player.getPosVector().x / 16.0D);
+        int chunkZ = (int) Math.floor(mc.player.getPosVector().z / 16.0D);
+        if (mc.world.isChunkLoaded(chunkX, chunkZ)) {
+            lastPos = mc.player.getPosVector();
+            if (finalPos.distanceTo(mc.player.getPosVector()) < 0.3 || getSettings().get(0).toSlider().getValue() == 0) {
+                BleachLogger.infoMessage("Teleport Finished!");
+                setToggled(false);
+            } else {
+                mc.player.setVelocity(0,0,0);
             }
-        }
 
+            if (finalPos.distanceTo(mc.player.getPosVector()) >= getSettings().get(0).toSlider().getValue()) {
+                final Vec3d vec = tpDirectionVec.multiply(getSettings().get(0).toSlider().getValue());
+                mc.player.setPosition(mc.player.getPos().getX() + vec.getX(), mc.player.getPos().getY() + vec.getY(), mc.player.getPos().getZ() + vec.getZ());
+            } else {
+                final Vec3d vec = tpDirectionVec.multiply(finalPos.distanceTo(mc.player.getPosVector()));
+                mc.player.setPosition(mc.player.getPosVector().getX() + vec.x, mc.player.getPosVector().getY() + vec.y, mc.player.getPosVector().getZ() + vec.z);
+            }
+            lastTp = System.currentTimeMillis();
+        } else if (lastTp + 2000L > System.currentTimeMillis()) {
+            mc.player.setPosition(lastPos.x, lastPos.y, lastPos.z);
+        }
     }
 
 }
