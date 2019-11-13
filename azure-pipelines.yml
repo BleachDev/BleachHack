@@ -10,8 +10,19 @@ steps:
     script: |
       cd BleachHack-Fabric
       gradlew build
-- task: PublishBuildArtifacts@1
+
+- task: GitHubRelease@1
   inputs:
-    PathtoPublish: './BleachHack-Fabric/build/libs/bleachhack-6.9.jar'
-    ArtifactName: 'BleachHack$(Build.BuildId)'
-    publishLocation: 'Container'
+    gitHubConnection: 'BleachHack'
+    repositoryName: 'd1gress/bleachhack-1.14'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'userSpecifiedTag'
+    tag: 'alpha$(Build.BuildId)'
+    title: 'BleachHack alpha$(Build.BuildId)'
+    releaseNotesSource: 'inline'
+    releaseNotesInline: 'beta build'
+    assets: './BleachHack-Fabric/build/libs/bleachhack-6.9.jar'
+    isPreRelease: true
+    changeLogCompareToRelease: 'lastNonDraftRelease'
+    changeLogType: 'commitBased'

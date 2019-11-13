@@ -14,6 +14,7 @@ public class CommandManager {
 			new CmdBind(),
 			new CmdDupe(),
 			new CmdEnchant(),
+			new CmdEntityStats(),
 			new CmdGamemode(),
 			new CmdGive(),
 			new CmdGuiReset(),
