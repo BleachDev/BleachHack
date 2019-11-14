@@ -14,10 +14,12 @@
   	"MixinEntityRenderer",
     "MixinFluidRenderer",
     "MixinGameRenderer",
+	"MixinHorseBaseEntity",
     "MixinIngameHud",
     "MixinKeyboard",
     "MixinMinecraftClient",
     "MixinPlayerEntity",
+	"MixinPlayerEntity2",
     "MixinPlayerInventory",
     "MixinServerScreen",
     "MixinTitleScreen"

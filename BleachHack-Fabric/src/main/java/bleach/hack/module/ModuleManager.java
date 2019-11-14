@@ -25,6 +25,7 @@ public class ModuleManager {
 			new ClickGui(),
 			new Criticals(),
 			new CrystalAura(),
+			new DotLock(),
 			new ElytraFly(),
 			new EntitySpeed(),
 			new ESP(),
