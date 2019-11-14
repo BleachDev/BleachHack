@@ -18,6 +18,7 @@
     "MixinKeyboard",
     "MixinMinecraftClient",
     "MixinPlayerEntity",
+	"MixinPlayerEntity2",
     "MixinPlayerInventory",
     "MixinServerScreen",
     "MixinTitleScreen"
