@@ -18,7 +18,7 @@ public class CmdGuiReset extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".guireset";
+		return "guireset";
 	}
 
 	@Override

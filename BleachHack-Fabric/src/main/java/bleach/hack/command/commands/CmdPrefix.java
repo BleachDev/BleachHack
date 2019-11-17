@@ -19,7 +19,7 @@ public class CmdPrefix extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".prefix [Char]";
+		return "prefix [Char]";
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class CmdNotebot extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".notebot";
+		return "notebot";
 	}
 
 	@Override

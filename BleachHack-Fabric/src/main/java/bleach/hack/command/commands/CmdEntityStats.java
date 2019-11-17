@@ -23,7 +23,7 @@ public class CmdEntityStats extends Command {
 
     @Override
     public String getSyntax() {
-        return ".estats";
+        return "estats";
     }
 
     @Override

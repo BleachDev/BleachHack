@@ -20,7 +20,7 @@ public class CmdVanish extends Command {
 
     @Override
     public String getSyntax() {
-        return ".vanish";
+        return "vanish";
     }
 
     @Override

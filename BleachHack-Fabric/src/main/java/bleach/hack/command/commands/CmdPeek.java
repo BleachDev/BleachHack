@@ -30,7 +30,7 @@ public class CmdPeek extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".peek";
+		return "peek";
 	}
 
 	@Override

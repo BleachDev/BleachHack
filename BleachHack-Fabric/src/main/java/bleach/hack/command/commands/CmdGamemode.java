@@ -18,7 +18,7 @@ public class CmdGamemode extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".gm [0-3]";
+		return "gm [0-3]";
 	}
 
 	@Override
