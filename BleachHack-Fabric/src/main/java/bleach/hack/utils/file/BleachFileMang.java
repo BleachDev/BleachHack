@@ -74,6 +74,7 @@ public class BleachFileMang {
 		} catch (Exception e) { System.out.println("Error Deleting File: " + file); e.printStackTrace(); } 
 	}
 	
+	/** Gets a file by walking down all of the parameters (starts at .minecraft/bleach/). **/
 	public static Path stringsToPath(String... strings) {
 		Path path = dir;
 		for(String s: strings) path = path.resolve(s);
