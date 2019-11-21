@@ -10,14 +10,15 @@ import java.util.Scanner;
 
 public class BleachGithubReader {
 
-	private URI url;
+	private static URI url;
 
-	public BleachGithubReader() {
+	static {
+		//why java, why do i have to use a static block to set a varable, theres nothing wrong with that url
 		try { url = new URI("https://raw.githubusercontent.com/BleachDrinker420/bleachhack-1.14/master/online/");
 		} catch (URISyntaxException e) {}
 	}
 
-	public List<String> readFileLines(String file) {
+	public static List<String> readFileLines(String file) {
 		List<String> st = new ArrayList<>();
 		try {
 			URL fileUrl = url.resolve(file).toURL();

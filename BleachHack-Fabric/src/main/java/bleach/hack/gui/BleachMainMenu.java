@@ -33,7 +33,6 @@ import net.minecraft.util.math.MathHelper;
 public class BleachMainMenu extends AbstractWindowScreen {
 	
 	private ParticleManager particleMang = new ParticleManager();
-	private BleachGithubReader github = new BleachGithubReader();
 	public static boolean customTitleScreen = true;
 
 	public static String splash = "";
@@ -69,11 +68,11 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	    
 	    if(versions.isEmpty()) {
 	    	versions.clear();
-		    versions.addAll(github.readFileLines("latestversion.txt"));
+		    versions.addAll(BleachGithubReader.readFileLines("latestversion.txt"));
 	    }
 	    
 	    if(splash == "") {
-	    	List<String> sp = github.readFileLines("splashes.txt");
+	    	List<String> sp = BleachGithubReader.readFileLines("splashes.txt");
 		    splash = !sp.isEmpty() ? sp.get(new Random().nextInt(sp.size())) : "";
 	    }
 	    
@@ -100,6 +99,8 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		checkBox.y = y + h / 4 + 63;
 		userField.setMaxLength(32767);
 		passField.setMaxLength(32767);
+		
+		
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
