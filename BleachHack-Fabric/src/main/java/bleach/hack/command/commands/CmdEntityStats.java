@@ -45,14 +45,14 @@ public class CmdEntityStats extends Command {
                     mc.player.getVehicle() instanceof LlamaEntity ||
                     mc.player.getVehicle() instanceof MuleEntity) {
                 HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
-                maxHealth = h.getHealthMaximum() + " HP";
-                speed = round((100 + 10 * h.getMovementSpeed()) * 4.317, 2) + " m/s";
-                jumpHeight = round(-0.1817584952 * Math.pow(h.getJumpStrength(), 3) + 3.689713992 * Math.pow(h.getJumpStrength(), 2) + 2.128599134 * h.getJumpStrength() - 0.343930367, 4) + " m";
+                maxHealth = h.getHealthMaximum() + " §2HP";
+                speed = round(43.17 * h.getMovementSpeed(), 2) + " §2m/s";
+                jumpHeight = round(-0.1817584952 * Math.pow(h.getJumpStrength(), 3) + 3.689713992 * Math.pow(h.getJumpStrength(), 2) + 2.128599134 * h.getJumpStrength() - 0.343930367, 4) + " §2m";
                 BleachLogger.infoMessage("\n§6Entity Stats:\n§cMax Health: §b" + maxHealth + "\n§cSpeed: §b" + speed + "\n§cJump: §b" + jumpHeight);
             }else if (mc.player.getVehicle() instanceof LivingEntity) {
                 LivingEntity l = (LivingEntity) mc.player.getVehicle();
-                maxHealth = l.getHealthMaximum() + " HP";
-                speed = round((100 + 10 * l.getMovementSpeed()) * 4.317, 2) + " m/s";
+                maxHealth = l.getHealthMaximum() + " §2HP";
+                speed = round(43.17 * l.getMovementSpeed(), 2) + " §2m/s";
                 BleachLogger.infoMessage("\n§6Entity Stats:\n§cMax Health: §b" + maxHealth + "\n§cSpeed: §b" + speed);
             }
         }else {
