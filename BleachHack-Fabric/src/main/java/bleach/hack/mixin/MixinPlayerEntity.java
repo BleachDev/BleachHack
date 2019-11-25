@@ -3,8 +3,6 @@ package bleach.hack.mixin;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.DotLock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,11 +38,6 @@ public class MixinPlayerEntity {
 		EventMovementTick event = new EventMovementTick();
 		BleachHack.eventBus.post(new EventMovementTick());
 		if (event.isCancelled()) info.cancel();
-	}
-
-	@Inject(at = @At("HEAD"), method = "applyDamage", cancellable = true)
-	public void dotLock(CallbackInfo info) {
-		if (ModuleManager.getModule(DotLock.class).isToggled()) info.cancel();
 	}
 
 }

@@ -7,10 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringNbtReader;
 
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.Toolkit;
-
 public class CmdNBT extends Command {
 
     @Override
@@ -37,8 +33,9 @@ public class CmdNBT extends Command {
         }
         ItemStack item = mc.player.inventory.getMainHandStack();
 
-        if (args[0].equalsIgnoreCase("get")) BleachLogger.infoMessage("§6§lNBT:\n" + item.getTag() + "");
-        else if (args[0].equalsIgnoreCase("copy")) {
+        if (args[0].equalsIgnoreCase("get")) {
+        	BleachLogger.infoMessage("§6§lNBT:\n" + item.getTag() + "");
+        }else if (args[0].equalsIgnoreCase("copy")) {
             mc.keyboard.setClipboard(item.getTag() + "");
             BleachLogger.infoMessage("§6Copied\n§f" + (item.getTag() + "\n") + "§6to clipboard.");
         }else if (args[0].equalsIgnoreCase("set")) {
@@ -52,7 +49,7 @@ public class CmdNBT extends Command {
                 BleachLogger.infoMessage("§6Set NBT of " + item.getItem().getName() + "to\n§f" + (item.getTag()));
             } catch (Exception e) {
                 BleachLogger.errorMessage("Invalid Syntax!");
-                BleachLogger.infoMessage(CommandManager.prefix + getSyntax());
+                BleachLogger.infoMessage(getSyntax());
             }
         }else if (args[0].equalsIgnoreCase("wipe")) {
             item.setTag(new CompoundTag());
