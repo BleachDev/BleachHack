@@ -20,7 +20,7 @@ public class CmdBind extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".bind add [Module] [Key] | .bind del [Module]";
+		return "bind add [Module] [Key] | .bind del [Module]";
 	}
 
 	@Override

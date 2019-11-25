@@ -23,7 +23,7 @@ public class CmdTeleport extends Command {
 
     @Override
     public String getSyntax() {
-        return ".tp [(~)x] [(~)y] [(~)z] [blocks per teleport]";
+        return "tp [(~)x] [(~)y] [(~)z] [blocks per teleport]";
     }
 
     DecimalFormat df = new DecimalFormat("#.###");

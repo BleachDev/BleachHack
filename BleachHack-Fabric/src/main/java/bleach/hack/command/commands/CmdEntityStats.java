@@ -5,6 +5,9 @@ import bleach.hack.utils.BleachLogger;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class CmdEntityStats extends Command {
 
     private String maxHealth;
@@ -23,7 +26,15 @@ public class CmdEntityStats extends Command {
 
     @Override
     public String getSyntax() {
-        return ".estats";
+        return "estats";
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     @Override
@@ -34,14 +45,14 @@ public class CmdEntityStats extends Command {
                     mc.player.getVehicle() instanceof LlamaEntity ||
                     mc.player.getVehicle() instanceof MuleEntity) {
                 HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
-                maxHealth = "" + h.getHealthMaximum();
-                speed = "" + (int) (1000 * h.getMovementSpeed());
-                jumpHeight = "" + (float) (1.25219 * (1 + h.getJumpStrength()));
+                maxHealth = h.getHealthMaximum() + " §2HP";
+                speed = round(43.17 * h.getMovementSpeed(), 2) + " §2m/s";
+                jumpHeight = round(-0.1817584952 * Math.pow(h.getJumpStrength(), 3) + 3.689713992 * Math.pow(h.getJumpStrength(), 2) + 2.128599134 * h.getJumpStrength() - 0.343930367, 4) + " §2m";
                 BleachLogger.infoMessage("\n§6Entity Stats:\n§cMax Health: §b" + maxHealth + "\n§cSpeed: §b" + speed + "\n§cJump: §b" + jumpHeight);
             }else if (mc.player.getVehicle() instanceof LivingEntity) {
                 LivingEntity l = (LivingEntity) mc.player.getVehicle();
-                maxHealth = "" + l.getHealthMaximum();
-                speed = "" + (int) (1000 * l.getMovementSpeed());
+                maxHealth = l.getHealthMaximum() + " §2HP";
+                speed = round(43.17 * l.getMovementSpeed(), 2) + " §2m/s";
                 BleachLogger.infoMessage("\n§6Entity Stats:\n§cMax Health: §b" + maxHealth + "\n§cSpeed: §b" + speed);
             }
         }else {

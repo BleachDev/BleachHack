@@ -12,6 +12,7 @@ public class CommandManager {
 	
 	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
+			new CmdCI(),
 			new CmdDupe(),
 			new CmdEnchant(),
 			new CmdEntityStats(),
@@ -19,6 +20,7 @@ public class CommandManager {
 			new CmdGive(),
 			new CmdGuiReset(),
 			new CmdHelp(),
+			new CmdNBT(),
 			new CmdNotebot(),
 			new CmdNuker(),
 			new CmdPeek(),
@@ -48,7 +50,7 @@ public class CommandManager {
 				}catch(Exception e) {
 					e.printStackTrace();
 					BleachLogger.errorMessage("Invalid Syntax!");
-					BleachLogger.infoMessage(c.getSyntax());
+					BleachLogger.infoMessage(prefix + c.getSyntax());
 				}
 				return;
 			}

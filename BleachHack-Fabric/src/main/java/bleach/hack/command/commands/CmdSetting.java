@@ -23,7 +23,7 @@ public class CmdSetting extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".setting [Module] [Setting number (starts at 0)] [value]";
+		return "setting [Module] [Setting number (starts at 0)] [value]";
 	}
 
 	@Override

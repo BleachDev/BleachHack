@@ -17,7 +17,7 @@ public class CmdDupe extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".dupe";
+		return "dupe";
 	}
 
 	@Override

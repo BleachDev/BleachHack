@@ -20,7 +20,7 @@ public class CmdToggle extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".toggle [Module]";
+		return "toggle [Module]";
 	}
 
 	@Override

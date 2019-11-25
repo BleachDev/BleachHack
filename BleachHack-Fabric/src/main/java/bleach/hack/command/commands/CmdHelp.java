@@ -18,7 +18,7 @@ public class CmdHelp extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".help / .help [Command]";
+		return "help / .help [Command]";
 	}
 
 	@Override
