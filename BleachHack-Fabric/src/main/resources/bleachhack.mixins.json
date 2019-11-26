@@ -17,6 +17,7 @@
     "MixinIngameHud",
     "MixinKeyboard",
     "MixinMinecraftClient",
+    "MixinPacketInflater",
     "MixinPlayerEntity",
     "MixinPlayerInventory",
     "MixinServerScreen",

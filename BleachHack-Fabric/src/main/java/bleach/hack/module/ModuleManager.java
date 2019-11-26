@@ -12,6 +12,7 @@ public class ModuleManager {
 
 	private static List<Module> mods = Arrays.asList(
 			new Ambience(),
+			new AntiChunkBan(),
 			new ArrowJuke(),
 			new AutoReconnect(),
 			new AutoSign(),
