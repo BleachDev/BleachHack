@@ -18,6 +18,7 @@ public class ModuleManager {
 			new AutoSign(),
 			new AutoTotem(),
 			new BlockParty(),
+			new BoatCrash(),
 			new BookCrash(),
 			new BowBot(),
 			new ChestESP(),

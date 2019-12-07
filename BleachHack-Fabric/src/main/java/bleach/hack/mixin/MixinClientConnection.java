@@ -4,12 +4,16 @@ import bleach.hack.BleachHack;
 import bleach.hack.command.CommandManager;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.AntiChunkBan;
+import bleach.hack.utils.BleachLogger;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketEncoderException;
 import net.minecraft.server.network.packet.ChatMessageC2SPacket;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -53,12 +57,14 @@ public class MixinClientConnection {
         if (event.isCancelled()) callback.cancel();
     }
     
-    /* Packet kick blocc 
+    // Packet kick blocc 
     @Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
     public void exceptionCaught(ChannelHandlerContext channelHandlerContext_1, Throwable throwable_1, CallbackInfo callback) {
+    	if(!ModuleManager.getModule(AntiChunkBan.class).isToggled()) return;
+    	
     	if(!(throwable_1 instanceof PacketEncoderException)) {
     		BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);
         	callback.cancel();
     	}
-    }*/
+    }
 }
