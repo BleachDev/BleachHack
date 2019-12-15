@@ -152,12 +152,13 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					w = width - width / 4,
 					h = height - height / 4;
 			
+			int maxY = MathHelper.clamp(y + h / 4 + 129, 0, y + h - 12);
 			drawButton(I18n.translate("menu.singleplayer"), x + w / 2 - 100, y + h / 4 + 48, x + w / 2 + 100, y + h / 4 + 68);
 			drawButton(I18n.translate("menu.multiplayer"), x + w / 2 - 100, y + h / 4 + 72, x + w / 2 + 100, y + h / 4 + 92);
 			drawButton("MC Menu", x + w / 2 - 100, y + h / 4 + 96, x + w / 2 - 2, y + h / 4 + 116);
 			drawButton("Login Manager", x + w / 2 + 2, y + h / 4 + 96, x + w / 2 + 100, y + h / 4 + 116);
-			drawButton(I18n.translate("menu.options"), x + w / 2 - 100, y + h / 4 + 129, x + w / 2 - 2, y + h / 4 + 149);
-			drawButton(I18n.translate("menu.quit"), x + w / 2 + 2, y + h / 4 + 129, x + w / 2 + 100, y + h / 4 + 149);
+			drawButton(I18n.translate("menu.options"), x + w / 2 - 100, maxY, x + w / 2 - 2, maxY + 20);
+			drawButton(I18n.translate("menu.quit"), x + w / 2 + 2, maxY, x + w / 2 + 100, maxY + 20);
 			
 			GL11.glPushMatrix();
 			GL11.glScaled(3, 3, 3);
