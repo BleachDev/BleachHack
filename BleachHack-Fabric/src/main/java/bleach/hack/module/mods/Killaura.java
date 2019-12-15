@@ -57,7 +57,7 @@ public class Killaura extends Module {
 					|| ((LivingEntity)e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
 					|| (!mc.player.canSee(e) && !getSettings().get(5).toToggle().state)) continue;
 			
-			if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
+			if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
 				
 			if(((delay > reqDelay || reqDelay == 0) && !getSettings().get(6).toToggle().state) || 
 					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSettings().get(6).toToggle().state)) {

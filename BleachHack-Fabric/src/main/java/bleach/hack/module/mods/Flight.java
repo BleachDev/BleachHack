@@ -34,8 +34,8 @@ public class Flight extends Module {
 		float speed = (float) getSettings().get(1).toSlider().getValue();
 		
 		if(mc.player.age % 20 == 0 && getSettings().get(2).toMode().mode == 3 && !(getSettings().get(0).toMode().mode == 2)) {
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y - 0.06, mc.player.z, false));
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y + 0.06, mc.player.z, true));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() - 0.06, mc.player.getZ(), false));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getZ() + 0.06, mc.player.getZ(), true));
 		}
 		
 		if(getSettings().get(0).toMode().mode == 0) {

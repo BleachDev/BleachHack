@@ -44,8 +44,8 @@ public class ClickGuiScreen extends Screen {
 	
 	public void render(int int_1, int int_2, float float_1) {
 		this.renderBackground();
-		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
-		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
+		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
+		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		font.drawWithShadow("Hover over a bind setting and press a key to change a bind" , 2, height-10, 0xff9999);
 		font.drawWithShadow("Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
 		

@@ -11,6 +11,7 @@ import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import net.minecraft.util.math.MathHelper;
 
 public class BleachFileHelper {
 
@@ -76,7 +77,8 @@ public class BleachFileHelper {
 						if(set instanceof SettingSlider) {
 							m.getSettings().get(count).toSlider().setValue(Double.parseDouble(line[count+1]));}
 						if(set instanceof SettingMode) {
-							m.getSettings().get(count).toMode().mode = Integer.parseInt(line[count+1]);}
+							m.getSettings().get(count).toMode().mode = MathHelper.clamp(Integer.parseInt(line[count+1]),
+									0, m.getSettings().get(count).toMode().modes.length - 1);}
 						if(set instanceof SettingToggle) {
 							m.getSettings().get(count).toToggle().state = Boolean.parseBoolean(line[count+1]);}
 					}catch(Exception e) {}

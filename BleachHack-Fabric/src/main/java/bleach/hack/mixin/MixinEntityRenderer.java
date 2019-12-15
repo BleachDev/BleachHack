@@ -1,30 +1,30 @@
 package bleach.hack.mixin;
 
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.entity.LivingEntity;
-
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventLivingRender;
+import bleach.hack.event.events.EventEntityRender;
 
-@Mixin(LivingEntityRenderer.class)
-public abstract class MixinEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
-	
-	protected MixinEntityRenderer(EntityRenderDispatcher entityRenderDispatcher_1) {
-		super(entityRenderDispatcher_1);
+@Mixin(EntityRenderer.class)
+public abstract class MixinEntityRenderer<T extends Entity> {
+
+	@Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", cancellable = true)
+	public void render(T entity_1, float float_1, float float_2, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1, CallbackInfo info) {
+		EventEntityRender.Render event = new EventEntityRender.Render((Entity) entity_1);
+		BleachHack.eventBus.post(event);
+		if (event.isCancelled()) info.cancel();
 	}
-
-	@Inject(at = @At("HEAD"), method = "method_4041(Lnet/minecraft/entity/LivingEntity;DDD)V", cancellable = true)
-	public void render(T livingEntity_1, double double_1, double double_2, double double_3, CallbackInfo info) {
-		EventLivingRender event = new EventLivingRender(livingEntity_1);
+	
+	@Inject(at = @At("HEAD"), method = "renderLabelIfPresent(Lnet/minecraft/entity/Entity;Ljava/lang/String;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", cancellable = true)
+	public void renderLabelIfPresent(T entity_1, String string_1, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1, CallbackInfo info) {
+		EventEntityRender.Label event = new EventEntityRender.Label((Entity) entity_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}

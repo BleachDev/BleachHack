@@ -12,35 +12,35 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ClientPlayerInteractionManager.class)
 public class MixinClientPlayerInteractionManager {
     @Shadow
-    private int field_3716;
+    private int blockBreakingCooldown;
 
-    @Redirect(method = "method_2902", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;field_3716:I", ordinal = 3))
-    public void onDamageBlockFirst(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
+    @Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 3))
+    public void updateBlockBreakingProgress(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
         i = ModuleManager.getModule(Nuker.class).isToggled() ?
         		(int) ModuleManager.getModule(Nuker.class).getSettings().get(2).toSlider().getValue()
         		: ModuleManager.getModule(SpeedMine.class).isToggled()
         		&& ModuleManager.getModule(SpeedMine.class).getSettings().get(0).toMode().mode == 1
                 ? (int) ModuleManager.getModule(SpeedMine.class).getSettings().get(2).toSlider().getValue() : 5;
-        this.field_3716 = i;
+        this.blockBreakingCooldown = i;
     }
 
-    @Redirect(method = "method_2902", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;field_3716:I", ordinal = 4))
-    public void onDamageBlockSecond(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
+    @Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 4))
+    public void updateBlockBreakingProgress2(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
         i = ModuleManager.getModule(Nuker.class).isToggled()
         		? (int) ModuleManager.getModule(Nuker.class).getSettings().get(2).toSlider().getValue()
         		: ModuleManager.getModule(SpeedMine.class).isToggled()
         		&& ModuleManager.getModule(SpeedMine.class).getSettings().get(0).toMode().mode == 1
                 ? (int) ModuleManager.getModule(SpeedMine.class).getSettings().get(2).toSlider().getValue() : 5;
-        this.field_3716 = i;
+        this.blockBreakingCooldown = i;
     }
 
-    @Redirect(method = "attackBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;field_3716:I"))
+    @Redirect(method = "attackBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I"))
     public void attackBlock(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
         i = ModuleManager.getModule(Nuker.class).isToggled()
         		? (int) ModuleManager.getModule(Nuker.class).getSettings().get(2).toSlider().getValue()
         		: ModuleManager.getModule(SpeedMine.class).isToggled()
         		&& ModuleManager.getModule(SpeedMine.class).getSettings().get(0).toMode().mode == 1
                 ? (int) ModuleManager.getModule(SpeedMine.class).getSettings().get(2).toSlider().getValue() : 5;
-        this.field_3716 = i;
+        this.blockBreakingCooldown = i;
     }
 }

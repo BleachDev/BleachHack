@@ -37,9 +37,9 @@ public class PacketFly extends Module {
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		posX = mc.player.x;
-		posY = mc.player.y;
-		posZ = mc.player.z;
+		posX = mc.player.getX();
+		posY = mc.player.getY();
+		posZ = mc.player.getZ();
 	}
 
 	@Subscribe
@@ -114,9 +114,9 @@ public class PacketFly extends Module {
 			}
 			
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.x + mX, mc.player.y + mY, mc.player.z + mZ, false));
+					mc.player.getX() + mX, mc.player.getY() + mY, mc.player.getZ() + mZ, false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.x + mX, mc.player.y - 420.69, mc.player.z + mZ, true));
+					mc.player.getX() + mX, mc.player.getY() - 420.69, mc.player.getZ() + mZ, true));
 			
 		}
 	}

@@ -58,13 +58,13 @@ public class BowBot extends Module {
 			// set position to aim at
 			double d = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
 				.distanceTo(target.getBoundingBox().getCenter());
-			double x = target.x + (target.x - target.prevX) * d
-				- mc.player.x;
-			double y = target.y + (target.y - target.prevY) * d
-				+ target.getHeight() * 0.5 - mc.player.y
+			double x = target.getX() + (target.getX() - target.prevX) * d
+				- mc.player.getX();
+			double y = target.getY() + (target.getY() - target.prevY) * d
+				+ target.getHeight() * 0.5 - mc.player.getY()
 				- mc.player.getEyeHeight(mc.player.getPose());
-			double z = target.z + (target.z - target.prevZ) * d
-				- mc.player.z;
+			double z = target.getZ() + (target.getZ() - target.prevZ) * d
+				- mc.player.getZ();
 			
 			// set yaw
 			mc.player.yaw = (float) Math.toDegrees(Math.atan2(z, x)) - 90;
@@ -80,7 +80,7 @@ public class BowBot extends Module {
 				/ (g * hDistance)));
 			
 			// set pitch
-			if(Float.isNaN(neededPitch)) EntityUtils.facePos(target.x, target.y + target.getHeight() / 2, target.z);
+			if(Float.isNaN(neededPitch)) EntityUtils.facePos(target.getX(), target.getY() + target.getHeight() / 2, target.getZ());
 			else mc.player.pitch = neededPitch;
 		}
 	}

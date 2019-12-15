@@ -89,14 +89,14 @@ public class Scaffold extends Module {
 		for(Direction d: Direction.values()) {
 			if(!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
 				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
-					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
 				
 				}
 				mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, 
 						new BlockHitResult(new Vec3d(block), d.getOpposite(), block.offset(d), false));
 				mc.player.swingHand(Hand.MAIN_HAND);
 				if(WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
-					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
 				}
 				lastPlaced.put(block, 5);
 				return true;

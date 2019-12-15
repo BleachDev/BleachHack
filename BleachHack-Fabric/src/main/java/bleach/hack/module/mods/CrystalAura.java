@@ -34,7 +34,7 @@ public class CrystalAura extends Module {
 		for(Entity e: mc.world.getEntities()) {
 			if(e instanceof EnderCrystalEntity && mc.player.distanceTo(e) < getSettings().get(2).toSlider().getValue()) {
 				if(!mc.player.canSee(e) && !getSettings().get(1).toToggle().state) continue;
-				if(getSettings().get(0).toToggle().state) EntityUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
+				if(getSettings().get(0).toToggle().state) EntityUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
 				
 				if(delay > reqDelay || reqDelay == 0) {
 					mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e));

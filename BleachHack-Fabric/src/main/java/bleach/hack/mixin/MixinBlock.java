@@ -3,7 +3,7 @@ package bleach.hack.mixin;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.Xray;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderLayer;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -54,11 +54,11 @@ public class MixinBlock {
         } catch (Exception ignored) {}
     }
 
-    @Inject(method = "getRenderLayer", at = @At("HEAD"), cancellable = true)
-    public void getRenderLayer(CallbackInfoReturnable<BlockRenderLayer> callback) {
+    @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
+    public void getRenderType(CallbackInfoReturnable<BlockRenderType> callback) {
         try {
             if (ModuleManager.getModule(Xray.class).isToggled()) {
-                callback.setReturnValue(BlockRenderLayer.TRANSLUCENT);
+                callback.setReturnValue(BlockRenderType.INVISIBLE);
                 callback.cancel();
             }
         } catch (Exception ignored) {}

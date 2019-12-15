@@ -12,6 +12,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.json.ModelTransformation.Type;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -31,7 +32,7 @@ public class RenderUtilsLiving {
 		int i = mc.textRenderer.getStringWidth(str) / 2;
 	    GL11.glDisable(GL11.GL_TEXTURE_2D);
 	    Tessellator tessellator = Tessellator.getInstance();
-	    BufferBuilder bufferbuilder = tessellator.getBufferBuilder();
+	    BufferBuilder bufferbuilder = tessellator.getBuffer();
 	    bufferbuilder.begin(7, VertexFormats.POSITION_COLOR);
 	    float f = mc.options.getTextBackgroundOpacity(0.25F);
 	    bufferbuilder.vertex(-i - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, f).next();
@@ -54,7 +55,8 @@ public class RenderUtilsLiving {
 	    
 	    GL11.glTranslated(offX, offY, 0);
 	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
-	    mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), Type.GUI);
+	    mc.getItemRenderer().renderItem(new ItemStack(
+	    		item.getItem()), Type.GUI, 0, 0, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
 	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
 	    GL11.glDisable(GL11.GL_LIGHTING);
 	    
@@ -83,16 +85,18 @@ public class RenderUtilsLiving {
         try{ color = MathHelper.hsvToRgb(((float) (item.getMaxDamage() - item.getDamage()) / item.getMaxDamage()) / 3.0F, 1.0F, 1.0F); }catch(Exception e) {}
 	    if(item.isDamageable()) mc.textRenderer.drawWithShadow(dur, -8 - dur.length() * 3, 15,
 	    		new Color(color >> 16 & 255, color >> 8 & 255, color & 255).getRGB());
+	    
 	    glCleanup();
 	}
 	
 	public static void glSetup(double x, double y, double z) {
 		GL11.glPushMatrix();
-	    GL11.glTranslated(x - RenderUtils.renderPos().x, y - RenderUtils.renderPos().y, z - RenderUtils.renderPos().z);
+		RenderUtils.offsetRender();
+	    GL11.glTranslated(x, y, z);
 	    GL11.glNormal3f(0.0F, 1.0F, 0.0F);
 	    GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
 	    GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
-	    GL11.glDisable(GL11.GL_LIGHTING);
+	    //GL11.glDisable(GL11.GL_LIGHTING);
 	    GL11.glDisable(GL11.GL_DEPTH_TEST);
 	
 	    GL11.glEnable(GL11.GL_BLEND);
@@ -101,11 +105,10 @@ public class RenderUtilsLiving {
 	}
 	
 	public static void glCleanup() {
-		GL11.glEnable(GL11.GL_LIGHTING);
+		//GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
 	    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	    GL11.glEnable(GL11.GL_DEPTH_TEST);
-	    GL11.glTranslatef(-.5f, 0, 0);
 	    GL11.glPopMatrix();
 	}
 }

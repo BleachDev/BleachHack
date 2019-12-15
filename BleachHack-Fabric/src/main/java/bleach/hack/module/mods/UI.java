@@ -17,6 +17,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.utils.FabricReflect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
@@ -97,7 +98,7 @@ public class UI extends Module {
 		}
 		
 		if(getSettings().get(3).toToggle().state) {
-			int fps = MinecraftClient.getCurrentFps();
+			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
 			infoList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
 		}
 		
@@ -121,7 +122,7 @@ public class UI extends Module {
 			long time = System.currentTimeMillis();
 			if(time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
-				mc.textRenderer.drawWithShadow(text, mc.window.getScaledWidth() / 2 - mc.textRenderer.getStringWidth(text) / 2,
+				mc.textRenderer.drawWithShadow(text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getStringWidth(text) / 2,
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), 0xd0d0d0);
 			}
 		}
@@ -129,8 +130,8 @@ public class UI extends Module {
 		if(getSettings().get(8).toToggle().state) {
 			String server = "";
 			try{ server = mc.getCurrentServerEntry().address; }catch(Exception e) {}
-			InGameHud.fill(mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.window.getScaledWidth() - 3, 12, 0xa0000000);
-			mc.textRenderer.drawWithShadow(server, mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
+			InGameHud.fill(mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.getWindow().getScaledWidth() - 3, 12, 0xa0000000);
+			mc.textRenderer.drawWithShadow(server, mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
 		}
 		
 		if(getSettings().get(9).toToggle().state && !mc.options.debugEnabled) {
@@ -159,9 +160,9 @@ public class UI extends Module {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 	        int count = 0;
-	        int x1 = mc.window.getScaledWidth() / 2;
-	        int y = mc.window.getScaledHeight() -
-	        		(mc.player.isInFluid(FluidTags.WATER) || mc.player.getBreath() < mc.player.getMaxBreath() ? 64 : 55);
+	        int x1 = mc.getWindow().getScaledWidth() / 2;
+	        int y = mc.getWindow().getScaledHeight() -
+	        		(mc.player.isInFluid(FluidTags.WATER) || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
 	        for (ItemStack is : mc.player.inventory.armor) {
 	            count++;
 	            if (is.isEmpty()) continue;
@@ -197,8 +198,8 @@ public class UI extends Module {
 		int infoMode = getSettings().get(11).toMode().mode;
 		for(String s: infoList) {
 			mc.textRenderer.drawWithShadow(s, 
-					infoMode == 0 ? 2 : mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
-					infoMode == 1 ? 2+(count2*10) : mc.window.getScaledHeight()-9-(count2*10), 0xa0a0a0);
+					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
+					infoMode == 1 ? 2+(count2*10) : mc.getWindow().getScaledHeight()-9-(count2*10), 0xa0a0a0);
 			count2++;
 		}
 	}

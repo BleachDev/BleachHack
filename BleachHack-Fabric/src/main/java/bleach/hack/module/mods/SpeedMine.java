@@ -22,13 +22,13 @@ public class SpeedMine extends Module {
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		mc.player.removePotionEffect(StatusEffects.HASTE);
+		mc.player.removeStatusEffect(StatusEffects.HASTE);
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (this.getSettings().get(0).toMode().mode == 0) {
-			mc.player.addPotionEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, (int) getSettings().get(1).toSlider().getValue()));
+			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, (int) getSettings().get(1).toSlider().getValue()));
 		}
 	}
 }

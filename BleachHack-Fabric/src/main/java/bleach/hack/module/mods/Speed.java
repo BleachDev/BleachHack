@@ -28,9 +28,9 @@ public class Speed extends Module {
 		if(getSettings().get(0).toMode().mode == 0) {
 			if(mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25) return;
 			
-			if (jumping && mc.player.y >= mc.player.prevY + 0.399994D) {
+			if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
-				mc.player.y = mc.player.prevY;
+				mc.player.setPos(mc.player.getX(), mc.player.prevY, mc.player.getZ());
 				jumping = false;
 			}
 			
@@ -42,7 +42,7 @@ public class Speed extends Module {
 					// 1.0379
 				}
 				
-				if (jumping && mc.player.y >= mc.player.prevY + 0.399994D) {
+				if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 					mc.player.setVelocity(mc.player.getVelocity().x, -100, mc.player.getVelocity().z);
 					jumping = false;
 				}

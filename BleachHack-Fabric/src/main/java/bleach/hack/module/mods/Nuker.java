@@ -101,7 +101,7 @@ public class Nuker extends Module {
 			}
 			
 			if(getSettings().get(0).toMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
-			else mc.interactionManager.method_2902(pos, dir);
+			else mc.interactionManager.updateBlockBreakingProgress(pos, dir);
 			
 			mc.player.swingHand(Hand.MAIN_HAND);
 			if(getSettings().get(0).toMode().mode != 1) return;

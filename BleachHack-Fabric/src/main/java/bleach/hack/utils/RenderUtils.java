@@ -3,18 +3,18 @@ package bleach.hack.utils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class RenderUtils {
-
-	private static MinecraftClient mc = MinecraftClient.getInstance();
 	
 	public static void drawFilledBox(BlockPos blockPos, float r, float g, float b, float a) {
 		drawFilledBox(new Box(
@@ -24,23 +24,36 @@ public class RenderUtils {
 	
 	public static void drawFilledBox(Box box, float r, float g, float b, float a) {
 		gl11Setup();
-		
-		Vec3d ren = renderPos();
 
-        /* Fill */
+        // Fill
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBufferBuilder();
+        BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(5, VertexFormats.POSITION_COLOR);
-        WorldRenderer.buildBox(buffer,
-        		box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
-        		box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z, r, g, b, a/2f);
+        WorldRenderer.drawBox(buffer,
+        		box.x1, box.y1, box.z1,
+        		box.x2, box.y2, box.z2, r, g, b, a/2f);
         tessellator.draw();
         
-        /* Outline */
-        WorldRenderer.drawBoxOutline(new Box(
-        		box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
-        		box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z), r, g, b, a);
-
+        // Outline
+        buffer.begin(3, VertexFormats.POSITION_COLOR);
+        buffer.vertex(box.x1, box.y1, box.z1).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x1, box.y1, box.z2).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x2, box.y1, box.z2).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x2, box.y1, box.z1).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x1, box.y1, box.z1).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x1, box.y2, box.z1).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x2, box.y2, box.z1).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x2, box.y2, box.z2).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x1, box.y2, box.z2).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x1, box.y2, box.z1).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x1, box.y1, box.z2).color(r, b, b, 0f).next();
+        buffer.vertex(box.x1, box.y2, box.z2).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x2, box.y1, box.z2).color(r, b, b, 0f).next();
+        buffer.vertex(box.x2, box.y2, box.z2).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x2, box.y1, box.z1).color(r, b, b, 0f).next();
+        buffer.vertex(box.x2, box.y2, box.z1).color(r, b, b, a/2f).next();
+        tessellator.draw();
+        
         gl11Cleanup();
     }
 	
@@ -48,22 +61,24 @@ public class RenderUtils {
 		gl11Setup();
 		GL11.glLineWidth(t);
         
-		Vec3d ren = renderPos();
-        
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBufferBuilder();
+        BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(3, VertexFormats.POSITION_COLOR);
-        buffer.vertex(x1 - ren.x, y1 - ren.y, z1 - ren.z).color(r, g, b, 0.0F).next();
-        buffer.vertex(x1 - ren.x, y1 - ren.y, z1 - ren.z).color(r, g, b, 1.0F).next();
-        buffer.vertex(x2 - ren.x, y2 - ren.y, z2 - ren.z).color(r, g, b, 1.0F).next();
+        buffer.vertex(x1, y1, z1).color(r, g, b, 0.0F).next();
+        buffer.vertex(x1, y1, z1).color(r, g, b, 1.0F).next();
+        buffer.vertex(x2, y2, z2).color(r, g, b, 1.0F).next();
         tessellator.draw();
         
 		gl11Cleanup();
         
 	}
 	
-	public static Vec3d renderPos() {
-		return mc.gameRenderer.getCamera().getPos();
+	public static void offsetRender() {
+		Camera camera = BlockEntityRenderDispatcher.INSTANCE.camera;
+		Vec3d camPos = camera.getPos();
+		GL11.glRotated(MathHelper.wrapDegrees(camera.getPitch()), 1, 0, 0);
+		GL11.glRotated(MathHelper.wrapDegrees(camera.getYaw() + 180.0), 0, 1, 0);
+		GL11.glTranslated(-camPos.x, -camPos.y, -camPos.z);
 	}
 	
 	public static void gl11Setup() {
@@ -75,6 +90,7 @@ public class RenderUtils {
         GL11.glMatrixMode(5889);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
 		GL11.glPushMatrix();
+		offsetRender();
 	}
 	
 	public static void gl11Cleanup() {

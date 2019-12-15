@@ -24,8 +24,8 @@ public class AutoTotem extends Module {
 		/* Inventory */
 		for(int i = 9; i < 44; i++) {
 			if(mc.player.inventory.getInvStack(i).getItem() == Items.TOTEM_OF_UNDYING) {
-				mc.interactionManager.method_2906(0, 0, i, SlotActionType.PICKUP, mc.player);
-				mc.interactionManager.method_2906(1, 0, 45, SlotActionType.PICKUP, mc.player);
+				mc.interactionManager.clickSlot(0, 0, i, SlotActionType.PICKUP, mc.player);
+				mc.interactionManager.clickSlot(1, 0, 45, SlotActionType.PICKUP, mc.player);
 				return;
 			}
 		}

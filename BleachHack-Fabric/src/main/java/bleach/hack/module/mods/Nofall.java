@@ -27,7 +27,7 @@ public class Nofall extends Module {
 						0,-1.5+(mc.player.getVelocity().y*0.1),0)).getBlock() != Blocks.AIR) {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.x, mc.player.y - 420.69, mc.player.z, true));
+					mc.player.getX(), mc.player.getY() - 420.69, mc.player.getZ(), true));
 			mc.player.fallDistance = 0;
 		}
 	}

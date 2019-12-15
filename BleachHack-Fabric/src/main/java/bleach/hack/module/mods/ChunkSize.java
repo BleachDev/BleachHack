@@ -36,7 +36,7 @@ import net.minecraft.world.Heightmap.Type;
 import net.minecraft.world.LightType;
 import net.minecraft.world.TickScheduler;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.source.BiomeArray;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkNibbleArray;
 import net.minecraft.world.chunk.ChunkSection;
@@ -85,7 +85,7 @@ public class ChunkSize extends Module {
 	      compoundTag_2.putInt("zPos", chunkPos_1.z);
 	      compoundTag_2.putLong("LastUpdate", serverWorld_1.getTime());
 	      compoundTag_2.putLong("InhabitedTime", chunk_1.getInhabitedTime());
-	      compoundTag_2.putString("Status", chunk_1.getStatus().getName());
+	      compoundTag_2.putString("Status", chunk_1.getStatus().getId());
 	      UpgradeData upgradeData_1 = chunk_1.getUpgradeData();
 	      if (!upgradeData_1.method_12349()) {
 	         compoundTag_2.put("UpgradeData", upgradeData_1.toTag());
@@ -101,8 +101,8 @@ public class ChunkSize extends Module {
 	         ChunkSection chunkSection_1 = (ChunkSection)Arrays.stream(chunkSections_1).filter((chunkSection_1x) -> {
 	            return chunkSection_1x != null && chunkSection_1x.getYOffset() >> 4 == int_1;
 	         }).findFirst().orElse(WorldChunk.EMPTY_SECTION);
-	         ChunkNibbleArray chunkNibbleArray_1 = lightingProvider_1.get(LightType.BLOCK).getChunkLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
-	         ChunkNibbleArray chunkNibbleArray_2 = lightingProvider_1.get(LightType.SKY).getChunkLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
+	         ChunkNibbleArray chunkNibbleArray_1 = lightingProvider_1.get(LightType.BLOCK).getLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
+	         ChunkNibbleArray chunkNibbleArray_2 = lightingProvider_1.get(LightType.SKY).getLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
 	         if (chunkSection_1 != WorldChunk.EMPTY_SECTION || chunkNibbleArray_1 != null || chunkNibbleArray_2 != null) {
 	            compoundTag_6 = new CompoundTag();
 	            compoundTag_6.putByte("Y", (byte)(int_1 & 255));
@@ -127,11 +127,11 @@ public class ChunkSize extends Module {
 	         compoundTag_2.putBoolean("isLightOn", true);
 	      }
 
-	      Biome[] biomes_1 = chunk_1.getBiomeArray();
-	      int[] ints_1 = biomes_1 != null ? new int[biomes_1.length] : new int[0];
+	      BiomeArray biomes_1 = chunk_1.getBiomeArray();
+	      int[] ints_1 = biomes_1 != null ? biomes_1.toIntArray() : new int[0];
 	      if (biomes_1 != null) {
-	         for(int int_3 = 0; int_3 < biomes_1.length; ++int_3) {
-	            ints_1[int_3] = Registry.BIOME.getRawId(biomes_1[int_3]);
+	         for(int int_3 = 0; int_3 < biomes_1.toIntArray().length; ++int_3) {
+	            ints_1[int_3] = Registry.BIOME.getRawId(Registry.BIOME.get(biomes_1.toIntArray()[int_3]));
 	         }
 	      }
 
@@ -202,7 +202,7 @@ public class ChunkSize extends Module {
 
 	      while(var34.hasNext()) {
 	         Entry<Heightmap.Type, Heightmap> map$Entry_1 = (Entry<Type, Heightmap>)var34.next();
-	         if (chunk_1.getStatus().isSurfaceGenerated().contains(map$Entry_1.getKey())) {
+	         if (chunk_1.getStatus().getHeightmapTypes().contains(map$Entry_1.getKey())) {
 	            compoundTag_7.put(((Heightmap.Type)map$Entry_1.getKey()).getName(), new LongArrayTag(((Heightmap)map$Entry_1.getValue()).asLongArray()));
 	         }
 	      }

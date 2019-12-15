@@ -21,11 +21,11 @@ import bleach.hack.module.mods.Notebot;
 import bleach.hack.utils.NotebotUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.SystemUtil;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
 public class NotebotScreen extends AbstractWindowScreen {
@@ -101,7 +101,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 					drawCenteredString(font, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(), 
 							x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
 					GL11.glPushMatrix();
-					GuiLighting.enableForItems();
+					DiffuseLighting.enableGuiDepthLighting();
 					if(e.getKey() == Instrument.HARP) itemRenderer.renderGuiItem(new ItemStack(Items.DIRT), x + w - w / 4 + 40, y + 46 + c2 * 10);
 					if(e.getKey() == Instrument.BASEDRUM) itemRenderer.renderGuiItem(new ItemStack(Items.STONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
 					if(e.getKey() == Instrument.SNARE) itemRenderer.renderGuiItem(new ItemStack(Items.SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
@@ -155,7 +155,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 			if(double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15) if(page > 0) page--;
 			if(double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15) page++;
 			if(double_1 > x + w - 44 && double_1 < x + w && double_2 > y + 3 && double_2 < y + 15) {
-				try { SystemUtil.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=clT_aNvQedk")); }catch(Exception e) {}
+				try { Util.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=clT_aNvQedk")); }catch(Exception e) {}
 			}
 			if(double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
 				NotebotUtils.downloadSongs(true);

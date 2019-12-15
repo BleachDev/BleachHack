@@ -53,7 +53,7 @@ public class CmdRbook extends Command {
 		
 		ListTag textSplit = new ListTag();
 		
-		for (int t = 0; t < pages; t++) textSplit.add(new StringTag(text.substring(t * pageChars, (t + 1) * pageChars)));
+		for (int t = 0; t < pages; t++) textSplit.add(StringTag.of(text.substring(t * pageChars, (t + 1) * pageChars)));
 		
 		item.getOrCreateTag().put("pages", textSplit);
 		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, Hand.MAIN_HAND));

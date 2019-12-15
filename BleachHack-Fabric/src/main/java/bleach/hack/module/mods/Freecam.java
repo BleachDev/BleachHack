@@ -27,7 +27,7 @@ public class Freecam extends Module {
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		playerPos = new double[] {mc.player.x, mc.player.y, mc.player.z};
+		playerPos = new double[] {mc.player.getX(), mc.player.getY(), mc.player.getZ()};
 
 		camera = new PlayerCopyEntity();
 		camera.copyPositionAndRotation(mc.player);
@@ -55,7 +55,7 @@ public class Freecam extends Module {
     public void sendPacket(EventSendPacket event) {
         if (event.getPacket() instanceof ClientCommandC2SPacket) {
         	ClientCommandC2SPacket packet = (ClientCommandC2SPacket) event.getPacket();
-            if (packet.getMode() == Mode.START_SNEAKING || packet.getMode() == Mode.STOP_SNEAKING) {
+            if (packet.getMode() == Mode.PRESS_SHIFT_KEY || packet.getMode() == Mode.RELEASE_SHIFT_KEY) {
             	event.setCancelled(true);
             }
         }
@@ -82,9 +82,9 @@ public class Freecam extends Module {
 		if(mc.options.keyBack.isPressed()) motion = motion.add(-forward.x, 0, -forward.z);
 		if(mc.options.keyLeft.isPressed()) motion = motion.add(strafe.x, 0, strafe.z);
 		if(mc.options.keyRight.isPressed()) motion = motion.add(-strafe.x, 0, -strafe.z);
-		mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SNEAKING));
+		mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
 		
-		camera.setPosition(camera.x + motion.x, camera.y + motion.y, camera.z + motion.z);
+		camera.setPosition(camera.getX() + motion.x, camera.getY() + motion.y, camera.getZ() + motion.z);
 		event.setCancelled(true);
 	}
 

@@ -2,8 +2,8 @@ package bleach.hack.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.WaterCreatureEntity;
 import net.minecraft.entity.mob.AmbientEntity;
+import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -34,9 +34,9 @@ public class EntityUtils {
 	}
 	
 	public static void facePos(double x, double y, double z) {
-		double diffX = x - mc.player.x;
-		double diffY = y - (mc.player.y + mc.player.getEyeHeight(mc.player.getPose()));
-		double diffZ = z - mc.player.z;
+		double diffX = x - mc.player.getX();
+		double diffY = y - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
+		double diffZ = z - mc.player.getZ();
 			
 		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
 			

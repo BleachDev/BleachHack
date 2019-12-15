@@ -14,7 +14,7 @@ import bleach.hack.module.mods.EntityControl;
 public abstract class MixinLlamaEntity {
 
 	@Inject(at = @At("HEAD"), method = "canBeControlledByRider()Z")
-	public boolean canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
-		return ModuleManager.getModule(EntityControl.class).isToggled();
+	public void canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
+		info.setReturnValue(ModuleManager.getModule(EntityControl.class).isToggled());
 	}
 }

@@ -19,7 +19,7 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FilledMapItem;
@@ -156,7 +156,7 @@ public class Peek extends Module {
 	
 	public void renderTooltipBox(int x1, int y1, int x2, int y2, boolean wrap) {
 		GL12.glDisable(GL12.GL_RESCALE_NORMAL);
-		GuiLighting.disable();
+		DiffuseLighting.disable();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDepthMask(false);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -183,7 +183,7 @@ public class Peek extends Module {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GuiLighting.enable();
+		DiffuseLighting.enable();
 		GL12.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 }

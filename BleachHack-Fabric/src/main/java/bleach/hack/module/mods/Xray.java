@@ -20,6 +20,7 @@ import java.util.Set;
 public class Xray extends Module {
 	
     private Set<Block> visibleBlocks = new HashSet<>();
+    private double gamma;
     		
     public Xray() {
         super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
@@ -52,6 +53,8 @@ public class Xray extends Module {
         
         mc.worldRenderer.reload();
         
+        gamma = mc.options.gamma;
+        
         super.onEnable();
     }
 
@@ -59,10 +62,11 @@ public class Xray extends Module {
     public void onDisable() {
         if (mc.world != null) mc.worldRenderer.setWorld(mc.world);
         
-        for (int i = 0; i <= 15; ++i) {
+        /*for (int i = 0; i <= 15; ++i) {
             float float_2 = 1.0F - (float) i / 15.0F;
             mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) / (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F;
-        }
+        }*/
+        mc.options.gamma = gamma;
         
         mc.worldRenderer.reload();
         
@@ -78,10 +82,6 @@ public class Xray extends Module {
 
     @Subscribe
     public void onTick(EventTick eventPreUpdate) {
-        for (int i = 0; i < 16; i++) {
-            if (mc.world.dimension.getLightLevelToBrightness()[i] != 1) {
-                mc.world.dimension.getLightLevelToBrightness()[i] = 1;
-            }
-        }
+    	mc.options.gamma = 69.420;
     }
 }

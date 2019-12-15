@@ -2,7 +2,7 @@ package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventLivingRender;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.MathHelper;
 public class Nametags extends Module {
 	
 	public Nametags() {
-		super("Nametags", -1, Category.RENDER, "Shows bigger/cooler nametags above entities.",
+		super("Nametags", -1, Category.RENDER, "BROKEN!!! BROKEN!!! BROKEN!!! BROKEN!!! Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor: ", "H", "V", "None"),
 				new SettingMode("Health: ", "Number", "Bar"),
 				new SettingSlider("Size Players: ", 0.5, 5, 2, 1),
@@ -30,8 +30,15 @@ public class Nametags extends Module {
 	}
 	
 	@Subscribe
-	public void onLivingRender(EventLivingRender event) {
-		LivingEntity e = event.getEntity();
+	public void onLivingLabelRender(EventEntityRender.Label event) {
+		if(event.getEntity() instanceof LivingEntity) event.setCancelled(true);
+	}
+	
+	@Subscribe
+	public void onLivingRender(EventEntityRender.Render event) {
+		if(!(event.getEntity() instanceof LivingEntity)) return;
+		
+		LivingEntity e = (LivingEntity) event.getEntity();
 		
 		/* Color before name */
 		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
@@ -51,21 +58,29 @@ public class Nametags extends Module {
 		/* - Add Green Normal Health */
 		for(int i = 0; i < e.getHealth(); i++) health += "§a|";
 		/* - Add Red Empty Health (Remove Based on absorption amount) */
-		for(int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getHealthMaximum() - e.getHealth()); i++) health += "§e|";
+		for(int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaximumHealth() - e.getHealth()); i++) health += "§e|";
 		/* Add Yellow Absorption Health */
-		for(int i = 0; i < e.getHealthMaximum() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
+		for(int i = 0; i < e.getMaximumHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
 		/* Add "+??" to the end if the entity has extra hearts */
-		if(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()) > 0) {
-			health +=  " §e+" + (int)(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()));
+		if(e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()) > 0) {
+			health += " §e+" + (int)(e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
 		}
 		
 		/* Drawing Nametags */
 		if(getSettings().get(1).toMode().mode == 0) {
-			RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getHealthMaximum() + "]",
-					e.x,e.y + e.getHeight() + (0.5f * scale), e.z, scale);
+			RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaximumHealth() + "]",
+					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 		}else if(getSettings().get(1).toMode().mode == 1) {
-			RenderUtilsLiving.drawText(color + e.getName().getString(), e.x, e.y + e.getHeight() + (0.5f * scale), e.z, scale);
-			RenderUtilsLiving.drawText(health, e.x, e.y + e.getHeight() + (0.75f * scale), e.z, scale);
+			RenderUtilsLiving.drawText(color + e.getName().getString(),
+					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
+			RenderUtilsLiving.drawText(health,
+					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
+					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 		}
 		
 		/* Drawing Items */
@@ -73,20 +88,32 @@ public class Nametags extends Module {
 		double higher = getSettings().get(1).toMode().mode == 1 ? 0.25 : 0;
 		
 		if(getSettings().get(0).toMode().mode == 0) {
-			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+			RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+			RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 			
 			for(ItemStack i: e.getArmorItems()) {
-				RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
+				RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), c+1.5, 0, scale, i);
 				c--;
 			}
 		}else if(getSettings().get(0).toMode().mode == 1) {
-			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-			RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+			RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+			RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 			
 			for(ItemStack i: e.getArmorItems()) {
 				if(i.getCount() < 1) continue;
-				RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 0, c, scale, i);
+				RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 0, c, scale, i);
 				c++;
 			}
 		}

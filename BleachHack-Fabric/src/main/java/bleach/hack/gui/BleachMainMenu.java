@@ -27,7 +27,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.SystemUtil;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
 public class BleachMainMenu extends AbstractWindowScreen {
@@ -173,7 +173,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + w / 2 + 80, y + h/4 + 8, 0.0F);
 			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(SystemUtil.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
+	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(Util.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
 	        float_4 = float_4 * 60.0F / (float)(font.getStringWidth(splash) + 32);
 	        GL11.glScalef(float_4, float_4, float_4);
 	        this.drawCenteredString(font, splash, 0, -8, 16776960);
@@ -265,10 +265,11 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				windows.get(1).closed = false;
 				selectWindow(1);
 			}
-			if(double_1 > x + w / 2 - 100 && double_1 < x + w / 2 - 2 && double_2 > y + h / 4 + 129 && double_2 < y + h / 4 + 149) {
+			int maxY = MathHelper.clamp(y + h / 4 + 129, 0, y + h - 12);
+			if(double_1 > x + w / 2 - 100 && double_1 < x + w / 2 - 2 && double_2 > maxY && double_2 < maxY + 20) {
 				minecraft.openScreen(new SettingsScreen(this, minecraft.options));
 			}
-			if(double_1 > x + w / 2 + 2 && double_1 < x + w / 2 + 100 && double_2 > y + h / 4 + 129 && double_2 < y + h / 4 + 149) {
+			if(double_1 > x + w / 2 + 2 && double_1 < x + w / 2 + 100 && double_2 > maxY && double_2 < maxY + 20) {
 				minecraft.close();
 			}
 		}

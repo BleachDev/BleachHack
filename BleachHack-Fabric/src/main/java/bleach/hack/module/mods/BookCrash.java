@@ -74,7 +74,7 @@ public class BookCrash extends Module {
         }else {
 	        for (int i = 0; i < pages; i++) {
 	            String siteContent = size;
-	            StringTag tString = new StringTag(siteContent);
+	            StringTag tString = StringTag.of(siteContent);
 	            list.add(tString);
 	        }
 	

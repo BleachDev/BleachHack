@@ -53,8 +53,8 @@ public class BlockParty extends Module {
 		
 		poses.sort((a,b) -> Double.compare(a.getSquaredDistance(mc.player.getBlockPos()), b.getSquaredDistance(mc.player.getBlockPos())));
 		
-		double diffX = poses.get(0).getX() + 0.5 - mc.player.x;
-		double diffZ = poses.get(0).getZ() + 0.5 - mc.player.z;
+		double diffX = poses.get(0).getX() + 0.5 - mc.player.getX();
+		double diffZ = poses.get(0).getZ() + 0.5 - mc.player.getZ();
 			
 		float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
 			
@@ -67,13 +67,13 @@ public class BlockParty extends Module {
 				&& mc.player.verticalCollision) {
 			mc.player.jump();
 			mc.player.verticalCollision = false;
-			//mc.player.setPosition(mc.player.x, mc.player.y + 0.02, mc.player.z);
+			//mc.player.setPosition(mc.player.getX(), mc.player.y + 0.02, mc.player.getZ());
 		}
 		
 		if(getSettings().get(1).toToggle().state && mc.player.fallDistance < 0.25) {
-			if (jumping && mc.player.y >= mc.player.prevY + 0.399994D) {
+			if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
-				mc.player.y = mc.player.prevY;
+				mc.player.setPos(mc.player.getX(), mc.player.prevY, mc.player.getZ());
 				jumping = false;
 			}
 			
@@ -86,7 +86,7 @@ public class BlockParty extends Module {
 					mc.player.jump();
 				}
 				
-				if (jumping && mc.player.y >= mc.player.prevY + 0.399994D) {
+				if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 					mc.player.setVelocity(mc.player.getVelocity().x, -100, mc.player.getVelocity().z);
 					jumping = false;
 				}
