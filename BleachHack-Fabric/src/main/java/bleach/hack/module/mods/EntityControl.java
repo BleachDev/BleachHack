@@ -16,15 +16,14 @@ import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntitySpeed extends Module {
+public class EntityControl extends Module {
 	
-	public EntitySpeed() {
+	public EntityControl() {
 		super("EntityControl", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Manipulate Entities.",
-				new SettingToggle("Speed Toggle", true),
+				new SettingToggle("EntitySpeed", true),
 				new SettingSlider("Speed: ", 0, 5, 1.2, 2),
 				new SettingToggle("EntityFly", false),
 				new SettingToggle("Ground Snap", false),
-				new SettingToggle("Saddleless Ride", true),
 				new SettingToggle("AntiStuck", false));
 	}
 
@@ -32,22 +31,16 @@ public class EntitySpeed extends Module {
 	public void onTick(EventTick event) {
 		if (mc.player.getVehicle() == null) return;
 
-		/*if (getSettings().get(6).toToggle().state) {
-			HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
-			h.setAngry(false);
-			h.setTame(true);
-		}*/
+		Entity e = mc.player.getVehicle();
+		e.yaw = mc.player.yaw;
+		double speed = getSettings().get(1).toSlider().getValue();
 
-		if (getSettings().get(4).toToggle().state) {
-			HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
+		if(getSettings().get(4).toToggle().state && e instanceof HorseBaseEntity) {
+			HorseBaseEntity h = (HorseBaseEntity) e;
 			h.setSaddled(true);
 			h.setTame(true);
 			h.setAiDisabled(true);
 		}
-
-		Entity e = mc.player.getVehicle();
-		e.yaw = mc.player.yaw;
-		double speed = getSettings().get(1).toSlider().getValue();
 		
 		if (e instanceof LlamaEntity) {
 			((LlamaEntity) e).headYaw = mc.player.headYaw;
@@ -88,7 +81,7 @@ public class EntitySpeed extends Module {
 			}
 		}
 		
-		if(getSettings().get(5).toToggle().state) {
+		if(getSettings().get(4).toToggle().state) {
 			Vec3d vel = e.getVelocity().multiply(2);
 			if(!WorldUtils.isBoxEmpty(WorldUtils.moveBox(e.getBoundingBox(), vel.x, 0, vel.z))) {
 				for(int i = 2; i < 10; i++) {

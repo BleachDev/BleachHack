@@ -27,7 +27,7 @@ public class ModuleManager {
 			new Criticals(),
 			new CrystalAura(),
 			new ElytraFly(),
-			new EntitySpeed(),
+			new EntityControl(),
 			new ESP(),
 			new FakeLag(),
 			new FastUse(),
