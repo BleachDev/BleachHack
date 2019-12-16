@@ -161,13 +161,13 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			drawButton(I18n.translate("menu.quit"), x + w / 2 + 2, maxY, x + w / 2 + 100, maxY + 20);
 			
 			GL11.glPushMatrix();
-			GL11.glScaled(3, 3, 3);
+			GL11.glScaled(3, 3, 0);
 			drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3, 0xffc0e0);
-			GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
+			GL11.glScaled(1d/3d, 1d/3d, 0);
 			
-			GL11.glScaled(1.5, 1.5, 1.5);
+			GL11.glScaled(1.5, 1.5, 0);
 			drawCenteredString(this.font, BleachHack.VERSION, (int)((x + w/2)/1.5), (int)((y + h/4 + 6)/1.5), 0xffc050);
-			GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
+			GL11.glScaled(1d/1.5d, 1d/1.5d, 0);
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
