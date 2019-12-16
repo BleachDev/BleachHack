@@ -12,7 +12,7 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 public class PlayerCrash extends Module {
 
 	public PlayerCrash() {
-        super("PacketCrash", -1, Category.EXPLOITS, "Uses cpacketplayer packets to packetify the server so it packets your packet and packs enough to crash",
+        super("PlayerCrash", -1, Category.EXPLOITS, "Uses cpacketplayer packets to packetify the server so it packets your packet and packs enough to crash",
                 new SettingSlider("Uses: ", 1,1000,100,0));
     }
 	
