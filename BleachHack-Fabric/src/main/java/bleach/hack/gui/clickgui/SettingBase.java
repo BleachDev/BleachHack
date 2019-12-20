@@ -6,7 +6,7 @@ public class SettingBase {
 		try {
 			return (SettingMode) this;
 		}catch(Exception e) {
-			System.out.println("Unable To Parse Setting");
+			System.out.println("Unable To Parse Setting To Mode: " + this);
 			return new SettingMode("PARSING ERROR");
 		}
 	}
@@ -15,7 +15,7 @@ public class SettingBase {
 		try {
 			return (SettingToggle) this;
 		}catch(Exception e) {
-			System.out.println("Unable To Parse Setting");
+			System.out.println("Unable To Parse Setting To Toggle: " + this);
 			return new SettingToggle("PARSING ERROR", false);
 		}
 	}
@@ -24,7 +24,7 @@ public class SettingBase {
 		try {
 			return (SettingSlider) this;
 		}catch(Exception e) {
-			System.out.println("Unable To Parse Setting");
+			System.out.println("Unable To Parse Setting To Slider: " + this);
 			return new SettingSlider("PARSING ERROR", 0, 1, 0, 0);
 		}
 	}

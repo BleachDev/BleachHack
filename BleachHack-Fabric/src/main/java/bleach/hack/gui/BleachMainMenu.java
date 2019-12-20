@@ -13,6 +13,7 @@ import bleach.hack.gui.particle.ParticleManager;
 import bleach.hack.gui.widget.BleachCheckbox;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
+import bleach.hack.module.mods.UI;
 import bleach.hack.utils.LoginManager;
 import bleach.hack.utils.file.BleachFileMang;
 import bleach.hack.utils.file.BleachGithubReader;
@@ -27,7 +28,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.SystemUtil;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
 public class BleachMainMenu extends AbstractWindowScreen {
@@ -165,8 +166,8 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			//drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3, 0xffc0e0);
 			int[] intarray = {7, 13, 16, 22, 28, 34, 40, 46, 52, 58};
 			String[] bruh = { "B", "l", "e", "a", "c", "h", "H", "a", "c", "k" };
-			for (int i = 0; i < 10; i++) {
-				drawString(this.font, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, bleach.hack.module.mods.UI.rainbow(i * 25));
+			for (int i = 0; i < bruh.length; i++) {
+				drawString(this.font, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, UI.getRainbowFromSettings(i * 25));
 			}
 			GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 			
@@ -178,7 +179,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + w / 2 + 80, y + h/4 + 8, 0.0F);
 			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(SystemUtil.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
+	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(Util.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
 	        float_4 = float_4 * 60.0F / (float)(font.getStringWidth(splash) + 32);
 	        GL11.glScalef(float_4, float_4, float_4);
 	        this.drawCenteredString(font, splash, 0, -8, 16776960);

@@ -20,6 +20,7 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.utils.FabricReflect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
@@ -41,21 +42,22 @@ public class UI extends Module {
 	
 	public UI() {
 		super("UI", -1, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle("Arraylist", true),
-				new SettingToggle("Extra Line", false),
-				new SettingToggle("Watermark", true),
-				new SettingToggle("FPS", true),
-				new SettingToggle("Ping", true),
-				new SettingToggle("Coords", true),
-				new SettingToggle("TPS", true),
-				new SettingToggle("Lag-Meter", true),
-				new SettingToggle("Server", false),
-				new SettingToggle("Players", false),
-				new SettingToggle("Armor", true),
-				new SettingToggle("TimeStamp", true),
-				new SettingSlider("RGBBrightness: ", 0, 5, 0.97, 1),
-				new SettingSlider("RGBSaturation: ", 0, 5, 0.3, 1),
-				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right"));
+				new SettingToggle("Arraylist", true), // 0
+				new SettingToggle("Extra Line", false), // 1
+				new SettingToggle("Watermark", true), // 2
+				new SettingToggle("FPS", true), // 3
+				new SettingToggle("Ping", true), // 4
+				new SettingToggle("Coords", true), // 5
+				new SettingToggle("TPS", true), // 6
+				new SettingToggle("Lag-Meter", true), // 7
+				new SettingToggle("Server", false), // 8
+				new SettingToggle("Players", false), // 9
+				new SettingToggle("Armor", true), // 10
+				new SettingToggle("TimeStamp", true), // 11
+				new SettingSlider("HueBright: ", 0, 1, 0.97, 2), // 12
+				new SettingSlider("HueSat: ", 0, 1, 0.3, 2), // 13
+				new SettingSlider("HueSpeed: ", 0, 5, 1, 2), // 14
+				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right")); // 15
 	}
 	
 	@Subscribe
@@ -69,11 +71,11 @@ public class UI extends Module {
 			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
 			if(getSettings().get(2).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 			//new colors
-			double aegaegaeg = getSettings().get(14).toSlider().getValue();
-			int color = this.HTB((int) aegaegaeg);
+			int color = getRainbowFromSettings(0);
 			count = 0;
 			int extra = getSettings().get(1).toToggle().state ? 1 : 0;
 			for(String s: lines) {
+				color = getRainbowFromSettings(count);
 				InGameHud.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
 				InGameHud.fill(0, count*10, extra, 10+(count*10), color);
 				InGameHud.fill(mc.textRenderer.getStringWidth(s)+3+extra, (count*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(count*10), color);
@@ -103,7 +105,7 @@ public class UI extends Module {
 		}
 		
 		if(getSettings().get(3).toToggle().state) {
-			int fps = MinecraftClient.getCurrentFps();
+			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
 			infoList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
 		}
 		
@@ -127,7 +129,7 @@ public class UI extends Module {
 			long time = System.currentTimeMillis();
 			if(time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
-				mc.textRenderer.drawWithShadow(text, mc.window.getScaledWidth() / 2 - mc.textRenderer.getStringWidth(text) / 2,
+				mc.textRenderer.drawWithShadow(text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getStringWidth(text) / 2,
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), 0xd0d0d0);
 			}
 		}
@@ -135,8 +137,8 @@ public class UI extends Module {
 		if(getSettings().get(8).toToggle().state) {
 			String server = "";
 			try{ server = mc.getCurrentServerEntry().address; }catch(Exception e) {}
-			InGameHud.fill(mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.window.getScaledWidth() - 3, 12, 0xa0000000);
-			mc.textRenderer.drawWithShadow(server, mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
+			InGameHud.fill(mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.getWindow().getScaledWidth() - 3, 12, 0xa0000000);
+			mc.textRenderer.drawWithShadow(server, mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
 		}
 		
 		if(getSettings().get(9).toToggle().state && !mc.options.debugEnabled) {
@@ -165,9 +167,9 @@ public class UI extends Module {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 	        int count = 0;
-	        int x1 = mc.window.getScaledWidth() / 2;
-	        int y = mc.window.getScaledHeight() -
-	        		(mc.player.isInFluid(FluidTags.WATER) || mc.player.getBreath() < mc.player.getMaxBreath() ? 64 : 55);
+	        int x1 = mc.getWindow().getScaledWidth() / 2;
+	        int y = mc.getWindow().getScaledHeight() -
+	        		(mc.player.isInFluid(FluidTags.WATER) || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
 	        for (ItemStack is : mc.player.inventory.armor) {
 	            count++;
 	            if (is.isEmpty()) continue;
@@ -201,11 +203,11 @@ public class UI extends Module {
 
 
 		int count2 = 0;
-		int infoMode = getSettings().get(14).toMode().mode;
+		int infoMode = getSettings().get(15).toMode().mode;
 		for(String s: infoList) {
 			mc.textRenderer.drawWithShadow(s, 
-					infoMode == 0 ? 2 : mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
-					infoMode == 1 ? 2+(count2*10) : mc.window.getScaledHeight()-9-(count2*10), 0xa0a0a0);
+					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
+					infoMode == 1 ? 2+(count2*10) : mc.getWindow().getScaledHeight()-9-(count2*10), 0xa0a0a0);
 			count2++;
 		}
 	}
@@ -231,34 +233,22 @@ public class UI extends Module {
 		else return "§4";
 	}
 
-	public static int getRainbow(int speed, int offset) {
-		float hue = (System.currentTimeMillis() + offset) % speed;
-		hue /= speed;
-		return Color.getHSBColor(hue, 0.2f, 0.8f).getRGB();
-	  }
-	
-	  public static int rainbow(final int delay) {
-		double rainbowState = Math.ceil((System.currentTimeMillis() + delay) / 4L);
+	public static int getRainbow(float sat, float bri, float speed, int offset) {
+		//System.out.println((float) (((System.currentTimeMillis() + offset) % (double) speed) / (double) speed));
+		//float hue = (float) (((System.currentTimeMillis() + offset) % (double) speed));
+		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / (double) (5 - speed));
 		rainbowState %= 360.0;
-		return Color.getHSBColor((float) (rainbowState / 360.0), 0.2f, 3f).getRGB();
-	  }
-	
-	  public static int rainbow2(final int delay) {
-		double rainbowState = Math.ceil((System.currentTimeMillis() + delay) / 4L);
-		rainbowState %= 360.0;
-		return Color.getHSBColor((float) (rainbowState / 360.0), 0.2f, 2f).getRGB();
-	  }
-	
-	  public static int rainbow3(final int delay) {
-		double rainbowState = Math.ceil((System.currentTimeMillis() + delay) / 4L);
-		rainbowState %= 360.0;
-		return Color.getHSBColor((float) (rainbowState / 360.0), 0.12f, 3f).getRGB();
-	  }
-	
-	  public int HTB(final int delay) {
-		double rainbowState = Math.ceil((System.currentTimeMillis() + delay) / 4L);
-		rainbowState %= 360.0;
-		return Color.getHSBColor((float) (rainbowState / 360.0), (float) (getSettings().get(13).toSlider().getValue()/*saturation */),
-			(float) (getSettings().get(12).toSlider().getValue()/*brightness */)).getRGB();
-	  }
+		return Color.HSBtoRGB((float) (rainbowState / 360.0), sat, bri);
+	}
+
+	public static int getRainbowFromSettings(int offset) {
+		Module ui = ModuleManager.getModule(UI.class);
+		
+		if(ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
+		
+		return getRainbow((float) ui.getSettings().get(13).toSlider().getValue(),
+				(float) ui.getSettings().get(12).toSlider().getValue(),
+				(float) ui.getSettings().get(14).toSlider().getValue(),
+				offset);
+	}
 }
