@@ -27,7 +27,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Util;
+import net.minecraft.util.SystemUtil;
 import net.minecraft.util.math.MathHelper;
 
 public class BleachMainMenu extends AbstractWindowScreen {
@@ -161,19 +161,24 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			drawButton(I18n.translate("menu.quit"), x + w / 2 + 2, maxY, x + w / 2 + 100, maxY + 20);
 			
 			GL11.glPushMatrix();
-			GL11.glScaled(3, 3, 0);
-			drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3, 0xffc0e0);
-			GL11.glScaled(1d/3d, 1d/3d, 0);
+			GL11.glScaled(3, 3, 3);
+			//drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3, 0xffc0e0);
+			int[] intarray = {7, 13, 16, 22, 28, 34, 40, 46, 52, 58};
+			String[] bruh = { "B", "l", "e", "a", "c", "h", "H", "a", "c", "k" };
+			for (int i = 0; i < 10; i++) {
+				drawString(this.font, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, bleach.hack.module.mods.UI.rainbow(i * 25));
+			}
+			GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 			
-			GL11.glScaled(1.5, 1.5, 0);
+			GL11.glScaled(1.5, 1.5, 1.5);
 			drawCenteredString(this.font, BleachHack.VERSION, (int)((x + w/2)/1.5), (int)((y + h/4 + 6)/1.5), 0xffc050);
-			GL11.glScaled(1d/1.5d, 1d/1.5d, 0);
+			GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + w / 2 + 80, y + h/4 + 8, 0.0F);
 			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(Util.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
+	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(SystemUtil.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
 	        float_4 = float_4 * 60.0F / (float)(font.getStringWidth(splash) + 32);
 	        GL11.glScalef(float_4, float_4, float_4);
 	        this.drawCenteredString(font, splash, 0, -8, 16776960);
@@ -265,11 +270,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				windows.get(1).closed = false;
 				selectWindow(1);
 			}
-			int maxY = MathHelper.clamp(y + h / 4 + 129, 0, y + h - 12);
-			if(double_1 > x + w / 2 - 100 && double_1 < x + w / 2 - 2 && double_2 > maxY && double_2 < maxY + 20) {
+			if(double_1 > x + w / 2 - 100 && double_1 < x + w / 2 - 2 && double_2 > y + h / 4 + 129 && double_2 < y + h / 4 + 149) {
 				minecraft.openScreen(new SettingsScreen(this, minecraft.options));
 			}
-			if(double_1 > x + w / 2 + 2 && double_1 < x + w / 2 + 100 && double_2 > maxY && double_2 < maxY + 20) {
+			if(double_1 > x + w / 2 + 2 && double_1 < x + w / 2 + 100 && double_2 > y + h / 4 + 129 && double_2 < y + h / 4 + 149) {
 				minecraft.close();
 			}
 		}
