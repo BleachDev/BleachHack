@@ -54,46 +54,46 @@ public class CmdEnchant extends Command {
 			}
 		}
 		
-		if(equals(args[0], "Aqua_Affinity", "Aqua")) enchant(item, Enchantments.AQUA_AFFINITY, level);
-		if(equals(args[0], "Arthropods")) enchant(item, Enchantments.BANE_OF_ARTHROPODS, level);
-		if(equals(args[0], "Blast", "Blast_Prot")) enchant(item, Enchantments.BLAST_PROTECTION, level);
-		if(equals(args[0], "Channeling")) enchant(item, Enchantments.CHANNELING, level);
-		if(equals(args[0], "Curse_Binding", "Binding")) enchant(item, Enchantments.BINDING_CURSE, level);
-		if(equals(args[0], "Curse_Vanish", "Vanish")) enchant(item, Enchantments.VANISHING_CURSE, level);
-		if(equals(args[0], "Depth_Strider", "Strider")) enchant(item, Enchantments.DEPTH_STRIDER, level);
-		if(equals(args[0], "Efficiency", "Eff")) enchant(item, Enchantments.EFFICIENCY, level);
-		if(equals(args[0], "Feather_Falling", "Fall")) enchant(item, Enchantments.FEATHER_FALLING, level);
-		if(equals(args[0], "Fire_Aspect")) enchant(item, Enchantments.FIRE_ASPECT, level);
-		if(equals(args[0], "Fire_Prot")) enchant(item, Enchantments.FIRE_PROTECTION, level);
-		if(equals(args[0], "Flame")) enchant(item, Enchantments.FLAME, level);
-		if(equals(args[0], "Fortune")) enchant(item, Enchantments.FORTUNE, level);
-		if(equals(args[0], "Frost_Walker", "Frost")) enchant(item, Enchantments.FROST_WALKER, level);
-		if(equals(args[0], "Impaling")) enchant(item, Enchantments.IMPALING, level);
-		if(equals(args[0], "Infinity")) enchant(item, Enchantments.INFINITY, level);
-		if(equals(args[0], "Knockback", "Knock")) enchant(item, Enchantments.KNOCKBACK, level);
-		if(equals(args[0], "Looting", "Loot")) enchant(item, Enchantments.LOOTING, level);
-		if(equals(args[0], "Loyalty")) enchant(item, Enchantments.LOYALTY, level);
-		if(equals(args[0], "Luck_Of_The_Sea", "Luck")) enchant(item, Enchantments.LUCK_OF_THE_SEA, level);
-		if(equals(args[0], "Lure")) enchant(item, Enchantments.LURE, level);
-		if(equals(args[0], "Mending", "Mend")) enchant(item, Enchantments.MENDING, level);
-		if(equals(args[0], "Multishot")) enchant(item, Enchantments.MULTISHOT, level);
-		if(equals(args[0], "Piercing")) enchant(item, Enchantments.PIERCING, level);
-		if(equals(args[0], "Power")) enchant(item, Enchantments.POWER, level);
-		if(equals(args[0], "Projectile_Prot", "Proj_Prot")) enchant(item, Enchantments.PROJECTILE_PROTECTION, level);
-		if(equals(args[0], "Protection", "Prot")) enchant(item, Enchantments.PROTECTION, level);
-		if(equals(args[0], "Punch")) enchant(item, Enchantments.PUNCH, level);
-		if(equals(args[0], "Quick_Charge", "Charge")) enchant(item, Enchantments.QUICK_CHARGE, level);
-		if(equals(args[0], "Respiration", "Resp")) enchant(item, Enchantments.RESPIRATION, level);
-		if(equals(args[0], "Riptide")) enchant(item, Enchantments.RIPTIDE, level);
-		if(equals(args[0], "Sharpness", "Sharp")) enchant(item, Enchantments.SHARPNESS, level);
-		if(equals(args[0], "Silk_Touch", "Silk")) enchant(item, Enchantments.SILK_TOUCH, level);
-		if(equals(args[0], "Smite")) enchant(item, Enchantments.SMITE, level);
-		if(equals(args[0], "Sweeping_Edge", "Sweep")) enchant(item, Enchantments.SWEEPING, level);
-		if(equals(args[0], "Thorns")) enchant(item, Enchantments.THORNS, level);
-		if(equals(args[0], "Unbreaking")) enchant(item, Enchantments.UNBREAKING, level);
+		if(doesEqual(args[0], "Aqua_Affinity", "Aqua")) enchant(item, Enchantments.AQUA_AFFINITY, level);
+		if(doesEqual(args[0], "Arthropods")) enchant(item, Enchantments.BANE_OF_ARTHROPODS, level);
+		if(doesEqual(args[0], "Blast", "Blast_Prot")) enchant(item, Enchantments.BLAST_PROTECTION, level);
+		if(doesEqual(args[0], "Channeling")) enchant(item, Enchantments.CHANNELING, level);
+		if(doesEqual(args[0], "Curse_Binding", "Binding")) enchant(item, Enchantments.BINDING_CURSE, level);
+		if(doesEqual(args[0], "Curse_Vanish", "Vanish")) enchant(item, Enchantments.VANISHING_CURSE, level);
+		if(doesEqual(args[0], "Depth_Strider", "Strider")) enchant(item, Enchantments.DEPTH_STRIDER, level);
+		if(doesEqual(args[0], "Efficiency", "Eff")) enchant(item, Enchantments.EFFICIENCY, level);
+		if(doesEqual(args[0], "Feather_Falling", "Fall")) enchant(item, Enchantments.FEATHER_FALLING, level);
+		if(doesEqual(args[0], "Fire_Aspect")) enchant(item, Enchantments.FIRE_ASPECT, level);
+		if(doesEqual(args[0], "Fire_Prot")) enchant(item, Enchantments.FIRE_PROTECTION, level);
+		if(doesEqual(args[0], "Flame")) enchant(item, Enchantments.FLAME, level);
+		if(doesEqual(args[0], "Fortune")) enchant(item, Enchantments.FORTUNE, level);
+		if(doesEqual(args[0], "Frost_Walker", "Frost")) enchant(item, Enchantments.FROST_WALKER, level);
+		if(doesEqual(args[0], "Impaling")) enchant(item, Enchantments.IMPALING, level);
+		if(doesEqual(args[0], "Infinity")) enchant(item, Enchantments.INFINITY, level);
+		if(doesEqual(args[0], "Knockback", "Knock")) enchant(item, Enchantments.KNOCKBACK, level);
+		if(doesEqual(args[0], "Looting", "Loot")) enchant(item, Enchantments.LOOTING, level);
+		if(doesEqual(args[0], "Loyalty")) enchant(item, Enchantments.LOYALTY, level);
+		if(doesEqual(args[0], "Luck_Of_The_Sea", "Luck")) enchant(item, Enchantments.LUCK_OF_THE_SEA, level);
+		if(doesEqual(args[0], "Lure")) enchant(item, Enchantments.LURE, level);
+		if(doesEqual(args[0], "Mending", "Mend")) enchant(item, Enchantments.MENDING, level);
+		if(doesEqual(args[0], "Multishot")) enchant(item, Enchantments.MULTISHOT, level);
+		if(doesEqual(args[0], "Piercing")) enchant(item, Enchantments.PIERCING, level);
+		if(doesEqual(args[0], "Power")) enchant(item, Enchantments.POWER, level);
+		if(doesEqual(args[0], "Projectile_Prot", "Proj_Prot")) enchant(item, Enchantments.PROJECTILE_PROTECTION, level);
+		if(doesEqual(args[0], "Protection", "Prot")) enchant(item, Enchantments.PROTECTION, level);
+		if(doesEqual(args[0], "Punch")) enchant(item, Enchantments.PUNCH, level);
+		if(doesEqual(args[0], "Quick_Charge", "Charge")) enchant(item, Enchantments.QUICK_CHARGE, level);
+		if(doesEqual(args[0], "Respiration", "Resp")) enchant(item, Enchantments.RESPIRATION, level);
+		if(doesEqual(args[0], "Riptide")) enchant(item, Enchantments.RIPTIDE, level);
+		if(doesEqual(args[0], "Sharpness", "Sharp")) enchant(item, Enchantments.SHARPNESS, level);
+		if(doesEqual(args[0], "Silk_Touch", "Silk")) enchant(item, Enchantments.SILK_TOUCH, level);
+		if(doesEqual(args[0], "Smite")) enchant(item, Enchantments.SMITE, level);
+		if(doesEqual(args[0], "Sweeping_Edge", "Sweep")) enchant(item, Enchantments.SWEEPING, level);
+		if(doesEqual(args[0], "Thorns")) enchant(item, Enchantments.THORNS, level);
+		if(doesEqual(args[0], "Unbreaking")) enchant(item, Enchantments.UNBREAKING, level);
 	}
 	
-	public boolean equals(String a, String... b) {
+	public boolean doesEqual(String a, String... b) {
 		for(int i = 0; i < b.length; i++) {
 			if(a.equalsIgnoreCase(b[i])) return true;
 		}
