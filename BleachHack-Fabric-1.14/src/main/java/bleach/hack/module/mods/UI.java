@@ -2,7 +2,9 @@ package bleach.hack.module.mods;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
@@ -13,6 +15,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.SettingMode;
+import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -38,18 +41,22 @@ public class UI extends Module {
 	
 	public UI() {
 		super("UI", -1, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle("Arraylist", true),
-				new SettingToggle("Extra Line", false),
-				new SettingToggle("Watermark", true),
-				new SettingToggle("FPS", true),
-				new SettingToggle("Ping", true),
-				new SettingToggle("Coords", true),
-				new SettingToggle("TPS", true),
-				new SettingToggle("Lag-Meter", true),
-				new SettingToggle("Server", false),
-				new SettingToggle("Players", false),
-				new SettingToggle("Armor", true),
-				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right"));
+				new SettingToggle("Arraylist", true), // 0
+				new SettingToggle("Extra Line", false), // 1
+				new SettingToggle("Watermark", true), // 2
+				new SettingToggle("FPS", true), // 3
+				new SettingToggle("Ping", true), // 4
+				new SettingToggle("Coords", true), // 5
+				new SettingToggle("TPS", true), // 6
+				new SettingToggle("Lag-Meter", true), // 7
+				new SettingToggle("Server", false), // 8
+				new SettingToggle("Players", false), // 9
+				new SettingToggle("Armor", true), // 10
+				new SettingToggle("TimeStamp", false), // 11
+				new SettingSlider("HueBright: ", 0, 1, 1, 2), // 12
+				new SettingSlider("HueSat: ", 0, 1, 0.5, 2), // 13
+				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1), // 14
+				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right")); // 15
 	}
 	
 	@Subscribe
@@ -64,12 +71,12 @@ public class UI extends Module {
 			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
 			if(getSettings().get(2).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 			
-			int age = mc.player.age % 510;
-			Color clr = new Color(255, (age > 255 ? 510 - age : age), 255 - (age > 255 ? 510 - age : age));
-			int color = clr.getRGB();
+			//new colors
+			int color = getRainbowFromSettings(0);
 			count = 0;
 			int extra = getSettings().get(1).toToggle().state ? 1 : 0;
 			for(String s: lines) {
+				color = getRainbowFromSettings(count);
 				InGameHud.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
 				InGameHud.fill(0, count*10, extra, 10+(count*10), color);
 				InGameHud.fill(mc.textRenderer.getStringWidth(s)+3+extra, (count*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(count*10), color);
@@ -78,11 +85,14 @@ public class UI extends Module {
 							mc.textRenderer.getStringWidth(s)+4+extra, 11+(count*10), color);
 				}
 				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(count*10), color);
-				clr = new Color(clr.getRed() - 250/lines.size(), Math.min(255, clr.getGreen() + 255/lines.size()), clr.getBlue());
-				color = clr.getRGB();
 				count++;
 			}
+			
 			InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
+		}
+		
+		if(getSettings().get(11).toToggle().state) {
+			infoList.add("§7Time: §e" + Calendar.getInstance(TimeZone.getDefault()).getTime().toString());
 		}
 		
 		if(getSettings().get(5).toToggle().state) {
@@ -222,6 +232,23 @@ public class UI extends Module {
 		else if(!rev ? value > bad : value < bad) return "§6";
 		else if(!rev ? value > worst : value < worst) return "§c";
 		else return "§4";
+	}
+	
+	public static int getRainbow(float sat, float bri, double speed, int offset) {
+		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / speed);
+		rainbowState %= 360.0;
+		return Color.HSBtoRGB((float) (rainbowState / 360.0), sat, bri);
+	}
+
+	public static int getRainbowFromSettings(int offset) {
+		Module ui = ModuleManager.getModule(UI.class);
+		
+		if(ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
+		
+		return getRainbow((float) ui.getSettings().get(13).toSlider().getValue(),
+				(float) ui.getSettings().get(12).toSlider().getValue(),
+				ui.getSettings().get(14).toSlider().getValue(),
+				offset);
 	}
 
 }

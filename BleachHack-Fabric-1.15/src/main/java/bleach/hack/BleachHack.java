@@ -13,8 +13,8 @@ import net.minecraft.util.registry.Registry;
 
 public class BleachHack implements ModInitializer {
 	
-	public static String VERSION = "B11.1";
-	public static int INTVERSION = 16;
+	public static String VERSION = "B11.2";
+	public static int INTVERSION = 17;
 	public static EventBus eventBus;
 
 	@Override

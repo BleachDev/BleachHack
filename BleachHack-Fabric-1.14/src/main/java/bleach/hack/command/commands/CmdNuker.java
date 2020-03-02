@@ -20,7 +20,7 @@ public class CmdNuker extends Command {
 
 	@Override
 	public String getDescription() {
-		return "Add/Remove Nuker Blocks";
+		return "Edit Nuker Blocks";
 	}
 
 	@Override
@@ -57,6 +57,18 @@ public class CmdNuker extends Command {
 			}
 			
 			BleachLogger.errorMessage("Block Not In List: " + args[1]);
+		}else if(args[0].equalsIgnoreCase("clear")) {
+			BleachFileMang.createEmptyFile("nukerblocks.txt");
+			BleachLogger.infoMessage("Cleared Nuker Blocks");
+		}else if(args[0].equalsIgnoreCase("list")) {
+			List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
+			
+			String s = "";
+			for(String l: lines) {
+				s += "§6" + l + "\n";
+			}
+			
+			BleachLogger.infoMessage(s);
 		}
 	}
 

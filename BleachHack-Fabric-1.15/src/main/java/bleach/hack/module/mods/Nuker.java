@@ -73,6 +73,12 @@ public class Nuker extends Module {
 		if(getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 		
+		/* Move the block under the player to last so it doesn't mine itself down without clearing everything above first */
+		if(blocks.contains(mc.player.getBlockPos().down())) {
+			blocks.remove(mc.player.getBlockPos().down());
+			blocks.add(mc.player.getBlockPos().down());
+		}
+		
 		for(BlockPos pos: blocks) {
 			if(!getSettings().get(3).toToggle().state) if(!blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 			
@@ -81,7 +87,7 @@ public class Nuker extends Module {
 			if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
 			
 			Direction dir = null;
-			double dist = 6.9;
+			double dist = Double.MAX_VALUE;
 			for(Direction d: Direction.values()) {
 				double dist2 = mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
 				if(dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;

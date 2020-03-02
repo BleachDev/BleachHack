@@ -73,6 +73,12 @@ public class Nuker extends Module {
 		if(getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 		
+		/* Move the block under the player to last so it doesn't mine itself down without clearing everything above first */
+		if(blocks.contains(mc.player.getBlockPos().down())) {
+			blocks.remove(mc.player.getBlockPos().down());
+			blocks.add(mc.player.getBlockPos().down());
+		}
+		
 		for(BlockPos pos: blocks) {
 			if(!getSettings().get(3).toToggle().state) if(!blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 			

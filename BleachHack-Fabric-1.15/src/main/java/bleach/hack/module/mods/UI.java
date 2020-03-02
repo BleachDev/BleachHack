@@ -53,7 +53,7 @@ public class UI extends Module {
 				new SettingToggle("Server", false), // 8
 				new SettingToggle("Players", false), // 9
 				new SettingToggle("Armor", true), // 10
-				new SettingToggle("TimeStamp", true), // 11
+				new SettingToggle("TimeStamp", false), // 11
 				new SettingSlider("HueBright: ", 0, 1, 1, 2), // 12
 				new SettingSlider("HueSat: ", 0, 1, 0.5, 2), // 13
 				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1), // 14
@@ -70,6 +70,7 @@ public class UI extends Module {
 			
 			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
 			if(getSettings().get(2).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
+			
 			//new colors
 			int color = getRainbowFromSettings(0);
 			count = 0;
@@ -86,6 +87,7 @@ public class UI extends Module {
 				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(count*10), color);
 				count++;
 			}
+			
 			InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
 		}
 
