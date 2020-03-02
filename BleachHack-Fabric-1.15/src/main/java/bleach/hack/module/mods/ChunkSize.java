@@ -87,7 +87,7 @@ public class ChunkSize extends Module {
 	      compoundTag_2.putLong("InhabitedTime", chunk_1.getInhabitedTime());
 	      compoundTag_2.putString("Status", chunk_1.getStatus().getId());
 	      UpgradeData upgradeData_1 = chunk_1.getUpgradeData();
-	      if (!upgradeData_1.method_12349()) {
+	      if (!upgradeData_1.isDone()) {
 	         compoundTag_2.put("UpgradeData", upgradeData_1.toTag());
 	      }
 

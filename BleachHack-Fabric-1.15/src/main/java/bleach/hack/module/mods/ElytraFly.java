@@ -10,9 +10,9 @@ import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.item.Items;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class ElytraFly extends Module {

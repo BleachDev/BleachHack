@@ -8,9 +8,13 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
 
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.server.network.packet.LoginHelloC2SPacket;
+
+import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
+/**
+ * @author Cosmic (pro skidder)
+ */
 public class Teleport extends Module {
 
 	private long lastTp;
@@ -52,14 +56,14 @@ public class Teleport extends Module {
 
             if (finalPos.distanceTo(mc.player.getPosVector()) >= getSettings().get(0).toSlider().getValue()) {
                 final Vec3d vec = tpDirectionVec.multiply(getSettings().get(0).toSlider().getValue());
-                mc.player.setPosition(mc.player.getPos().getX() + vec.getX(), mc.player.getPos().getY() + vec.getY(), mc.player.getPos().getZ() + vec.getZ());
+                mc.player.setPos(mc.player.getPos().getX() + vec.getX(), mc.player.getPos().getY() + vec.getY(), mc.player.getPos().getZ() + vec.getZ());
             } else {
                 final Vec3d vec = tpDirectionVec.multiply(finalPos.distanceTo(mc.player.getPosVector()));
-                mc.player.setPosition(mc.player.getPosVector().getX() + vec.x, mc.player.getPosVector().getY() + vec.y, mc.player.getPosVector().getZ() + vec.z);
+                mc.player.setPos(mc.player.getPosVector().getX() + vec.x, mc.player.getPosVector().getY() + vec.y, mc.player.getPosVector().getZ() + vec.z);
             }
             lastTp = System.currentTimeMillis();
         } else if (lastTp + 2000L > System.currentTimeMillis()) {
-            mc.player.setPosition(lastPos.x, lastPos.y, lastPos.z);
+            mc.player.setPos(lastPos.x, lastPos.y, lastPos.z);
         }
     }
 

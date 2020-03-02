@@ -14,7 +14,7 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
-import net.minecraft.server.network.packet.UpdateSignC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.text.LiteralText;
 
 public class AutoSign extends Module {

@@ -17,8 +17,8 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.network.packet.DisconnectS2CPacket;
-import net.minecraft.server.network.packet.HandshakeC2SPacket;
+import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.Text;
 
 public class AutoReconnect extends Module {

@@ -11,7 +11,7 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.EnderCrystalEntity;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 
 public class CrystalAura extends Module {

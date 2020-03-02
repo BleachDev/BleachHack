@@ -9,8 +9,8 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.PlayerCopyEntity;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.math.Vec3d;
 
 public class Freecam extends Module {
@@ -65,7 +65,7 @@ public class Freecam extends Module {
 	public void onMovement(EventMovementTick event) {
 		mc.player.setVelocity(0, 0, 0);
 		camera.setVelocity(0, 0, 0);
-		mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
+		mc.player.setPos(playerPos[0], playerPos[1], playerPos[2]);
 		
 		camera.yaw = mc.player.yaw;
 		camera.headYaw = mc.player.headYaw;
@@ -84,7 +84,7 @@ public class Freecam extends Module {
 		if(mc.options.keyRight.isPressed()) motion = motion.add(-strafe.x, 0, -strafe.z);
 		mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
 		
-		camera.setPosition(camera.getX() + motion.x, camera.getY() + motion.y, camera.getZ() + motion.z);
+		camera.setPos(camera.getX() + motion.x, camera.getY() + motion.y, camera.getZ() + motion.z);
 		event.setCancelled(true);
 	}
 

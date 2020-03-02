@@ -18,7 +18,7 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 	
 	public PlayerCopyEntity(GameProfile profile, double x, double y, double z) {
 		super(MinecraftClient.getInstance().world, profile);
-		setPosition(x, y, z);
+		setPos(x, y, z);
 	}
 	
 	public void spawn() {

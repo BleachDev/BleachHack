@@ -14,7 +14,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketEncoderException;
-import net.minecraft.server.network.packet.ChatMessageC2SPacket;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

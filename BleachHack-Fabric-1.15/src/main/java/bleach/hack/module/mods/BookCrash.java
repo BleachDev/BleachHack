@@ -10,16 +10,16 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import net.minecraft.client.network.packet.DisconnectS2CPacket;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.server.network.packet.ClickWindowC2SPacket;
-import net.minecraft.server.network.packet.CreativeInventoryActionC2SPacket;
-import net.minecraft.server.network.packet.UpdateSignC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClickWindowC2SPacket;
+import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.Text;
 
 import java.util.Random;

@@ -12,7 +12,7 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class FakeLag extends Module {
 	

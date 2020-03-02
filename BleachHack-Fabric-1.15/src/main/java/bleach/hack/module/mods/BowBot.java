@@ -16,8 +16,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.server.network.packet.PlayerActionC2SPacket;
-import net.minecraft.server.network.packet.PlayerActionC2SPacket.Action;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 

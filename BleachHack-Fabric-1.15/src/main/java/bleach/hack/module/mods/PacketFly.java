@@ -11,10 +11,10 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import net.minecraft.client.network.packet.PlayerPositionLookS2CPacket;
 import net.minecraft.entity.Entity;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
-import net.minecraft.server.network.packet.TeleportConfirmC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
@@ -83,7 +83,7 @@ public class PacketFly extends Module {
 			
 			
 			target.noClip = true;
-			target.setPositionAnglesAndUpdate(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
+			target.updatePositionAndAngles(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY, posZ, false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY - 0.01, posZ, true));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket(timer));

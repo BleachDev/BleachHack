@@ -6,7 +6,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Nofall extends Module {
 			

@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
@@ -20,7 +19,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 
 public class Killaura extends Module {
@@ -63,13 +64,13 @@ public class Killaura extends Module {
 					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSettings().get(6).toToggle().state)) {
 				boolean wasSprinting = mc.player.isSprinting();
 
-				if(wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
+				if(wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 
 				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e));
 				mc.player.attack(e);
 				mc.player.swingHand(Hand.MAIN_HAND);
 
-				if(wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+				if(wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
 
 				delay = 0;
 			}

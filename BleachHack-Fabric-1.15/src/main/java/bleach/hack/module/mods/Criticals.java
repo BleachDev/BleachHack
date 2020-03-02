@@ -9,12 +9,12 @@ import java.util.Random;
 import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
 /**
- * @author sl
+ * @author sl, Bleach
  */
 public class Criticals extends Module {
 
@@ -42,7 +42,7 @@ public class Criticals extends Module {
 
     private void doCritical() {
         if(!mc.player.onGround) return;
-        if(mc.player.isInLava() || mc.player.isInWater()) return;
+        if(mc.player.isInLava() || mc.player.isTouchingWater()) return;
         double posX = mc.player.getX();
         double posY = mc.player.getY();
         double posZ = mc.player.getZ();

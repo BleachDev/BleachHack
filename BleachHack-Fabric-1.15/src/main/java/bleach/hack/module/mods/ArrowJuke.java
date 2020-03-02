@@ -13,7 +13,7 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
