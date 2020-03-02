@@ -56,7 +56,7 @@ public class UI extends Module {
 				new SettingToggle("TimeStamp", true), // 11
 				new SettingSlider("HueBright: ", 0, 1, 1, 2), // 12
 				new SettingSlider("HueSat: ", 0, 1, 0.5, 2), // 13
-				new SettingSlider("HueSpeed: ", 0, 1, 0.03, 3), // 14
+				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1), // 14
 				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right")); // 15
 	}
 	
@@ -233,10 +233,8 @@ public class UI extends Module {
 		else return "§4";
 	}
 
-	public static int getRainbow(float sat, float bri, float speed, int offset) {
-		//System.out.println((float) (((System.currentTimeMillis() + offset) % (double) speed) / (double) speed));
-		//float hue = (float) (((System.currentTimeMillis() + offset) % (double) speed));
-		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / (double) (5 - speed));
+	public static int getRainbow(float sat, float bri, double speed, int offset) {
+		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / speed);
 		rainbowState %= 360.0;
 		return Color.HSBtoRGB((float) (rainbowState / 360.0), sat, bri);
 	}
@@ -248,7 +246,7 @@ public class UI extends Module {
 		
 		return getRainbow((float) ui.getSettings().get(13).toSlider().getValue(),
 				(float) ui.getSettings().get(12).toSlider().getValue(),
-				(float) ui.getSettings().get(14).toSlider().getValue(),
+				ui.getSettings().get(14).toSlider().getValue(),
 				offset);
 	}
 }

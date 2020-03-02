@@ -25,7 +25,7 @@ public class CmdNuker extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "nuker add [block] | .nuker remove [block]";
+		return "nuker add [block] | .nuker remove [block] | .nuker clear | .nuker list";
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class CmdNuker extends Command {
 			ModuleManager.getModule(Nuker.class).toggle();
 			BleachLogger.infoMessage("Added Block: " + args[1]);
 			
-		}else if(args[0].equalsIgnoreCase("remove")) {
+		} else if(args[0].equalsIgnoreCase("remove")) {
 			List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
 			
 			if(lines.contains(args[1].toLowerCase())) {
@@ -57,6 +57,18 @@ public class CmdNuker extends Command {
 			}
 			
 			BleachLogger.errorMessage("Block Not In List: " + args[1]);
+		} else if(args[0].equalsIgnoreCase("clear")) {
+			BleachFileMang.createEmptyFile("nukerblocks.txt");
+			BleachLogger.infoMessage("Cleared Nuker Blocks");
+		} else if(args[0].equalsIgnoreCase("list")) {
+			List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
+			
+			String s = "";
+			for(String l: lines) {
+				s += "§6" + l + "\n";
+			}
+			
+			BleachLogger.infoMessage(s);
 		}
 	}
 

@@ -163,12 +163,14 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			
 			GL11.glPushMatrix();
 			GL11.glScaled(3, 3, 3);
+			
 			//drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3, 0xffc0e0);
 			int[] intarray = {7, 13, 16, 22, 28, 34, 40, 46, 52, 58};
 			String[] bruh = { "B", "l", "e", "a", "c", "h", "H", "a", "c", "k" };
 			for (int i = 0; i < bruh.length; i++) {
 				drawString(this.font, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, UI.getRainbowFromSettings(i * 25));
 			}
+			
 			GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 			
 			GL11.glScaled(1.5, 1.5, 1.5);
