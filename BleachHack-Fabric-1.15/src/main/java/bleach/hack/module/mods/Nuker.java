@@ -34,14 +34,15 @@ public class Nuker extends Module {
 	
 	public Nuker() {
 		super("Nuker", -1, Category.WORLD, "Breaks blocks around you",
-				new SettingMode("Mode: ", "Normal", "Instant"),
+				new SettingMode("Mode: ", "Normal", "Multi", "Instant"),
 				new SettingSlider("Range: ", 1, 6, 4.2, 1),
 				new SettingSlider("Cooldown: ", 0, 4, 0, 0),
 				new SettingToggle("All Blocks", true),
 				new SettingToggle("Flatten", false),
 				new SettingToggle("Rotate", false),
 				new SettingToggle("NoParticles", false),
-				new SettingMode("Sort: ", "Normal", "Hardness"));
+				new SettingMode("Sort: ", "Normal", "Hardness"),
+				new SettingSlider("Multi: ", 1, 10, 2, 0));
 	}
 	
 	public void onEnable() {
@@ -67,7 +68,9 @@ public class Nuker extends Module {
 			}
 		}
 		
-		if(!blocks.isEmpty() && getSettings().get(6).toToggle().state) FabricReflect.writeField(
+		if(blocks.isEmpty()) return;
+		
+		if(getSettings().get(6).toToggle().state) FabricReflect.writeField(
 				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
 		
 		if(getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
@@ -79,8 +82,9 @@ public class Nuker extends Module {
 			blocks.add(mc.player.getBlockPos().down());
 		}
 		
+		int broken = 0;
 		for(BlockPos pos: blocks) {
-			if(!getSettings().get(3).toToggle().state) if(!blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
+			if(!getSettings().get(3).toToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 			
 			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 			
@@ -110,7 +114,10 @@ public class Nuker extends Module {
 			else mc.interactionManager.updateBlockBreakingProgress(pos, dir);
 			
 			mc.player.swingHand(Hand.MAIN_HAND);
-			if(getSettings().get(0).toMode().mode != 1) return;
+			
+			broken++;
+			if(getSettings().get(0).toMode().mode == 0
+					|| (getSettings().get(0).toMode().mode == 1 && broken >= (int) getSettings().get(8).toSlider().getValue())) return;
 		}
 	}
 	

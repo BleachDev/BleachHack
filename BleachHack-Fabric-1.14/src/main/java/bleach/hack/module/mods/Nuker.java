@@ -41,7 +41,8 @@ public class Nuker extends Module {
 				new SettingToggle("Flatten", false),
 				new SettingToggle("Rotate", false),
 				new SettingToggle("NoParticles", false),
-				new SettingMode("Sort: ", "Normal", "Hardness"));
+				new SettingMode("Sort: ", "Normal", "Hardness"),
+				new SettingSlider("Multi: ", 1, 10, 2, 0));
 	}
 	
 	public void onEnable() {
@@ -67,7 +68,9 @@ public class Nuker extends Module {
 			}
 		}
 		
-		if(!blocks.isEmpty() && getSettings().get(6).toToggle().state) FabricReflect.writeField(
+		if(blocks.isEmpty()) return;
+		
+		if(getSettings().get(6).toToggle().state) FabricReflect.writeField(
 				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
 		
 		if(getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
@@ -79,15 +82,16 @@ public class Nuker extends Module {
 			blocks.add(mc.player.getBlockPos().down());
 		}
 		
+		int broken = 0;
 		for(BlockPos pos: blocks) {
-			if(!getSettings().get(3).toToggle().state) if(!blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
+			if(!getSettings().get(3).toToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 			
 			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 			
 			if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
 			
 			Direction dir = null;
-			double dist = 6.9;
+			double dist = Double.MAX_VALUE;
 			for(Direction d: Direction.values()) {
 				double dist2 = mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
 				if(dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
@@ -110,7 +114,10 @@ public class Nuker extends Module {
 			else mc.interactionManager.method_2902(pos, dir);
 			
 			mc.player.swingHand(Hand.MAIN_HAND);
-			if(getSettings().get(0).toMode().mode != 1) return;
+			
+			broken++;
+			if(getSettings().get(0).toMode().mode == 0
+					|| (getSettings().get(0).toMode().mode == 1 && broken >= (int) getSettings().get(8).toSlider().getValue())) return;
 		}
 	}
 	
