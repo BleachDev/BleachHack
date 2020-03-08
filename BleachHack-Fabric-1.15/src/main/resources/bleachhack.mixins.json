@@ -22,7 +22,6 @@
     "MixinPlayerEntity",
     "MixinPlayerInventory",
     "MixinServerScreen",
-    "MixinSoundSystem",
     "MixinTitleScreen"
   ],
   "injectors": {

@@ -1,15 +1,21 @@
 package bleach.hack.gui.window;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundEvents;
 
 public class Window {
 
@@ -23,6 +29,8 @@ public class Window {
 	
 	public boolean closed;
 	public boolean selected = false;
+	
+	public List<WindowButton> buttons = new ArrayList<>();
 	
 	private boolean dragging = false;
 	private int dragOffX;
@@ -43,6 +51,8 @@ public class Window {
 	}
 	
 	public void render(int mX, int mY) {
+		TextRenderer textRend = MinecraftClient.getInstance().textRenderer;
+		
 		if(dragging) {
 			x2 = (x2 - x1) + mX - dragOffX;
 			y2 = (y2 - y1) + mY - dragOffY;
@@ -56,22 +66,34 @@ public class Window {
 		
 		/* buttons */
 		fillGrey(x2 - 12, y1 + 3, x2 - 4, y1 + 11);
-		MinecraftClient.getInstance().textRenderer.draw("x", x2 - 11, y1 + 2, 0x000000);
+		textRend.draw("x", x2 - 11, y1 + 2, 0x000000);
 		
 		fillGrey(x2 - 22, y1 + 3, x2 - 14, y1 + 11);
-		MinecraftClient.getInstance().textRenderer.draw("_", x2 - 21, y1 + 1, 0x000000);
+		textRend.draw("_", x2 - 21, y1 + 1, 0x000000);
+		
+		for(WindowButton w: buttons) {
+			int bx1 = x1 + w.x1;
+			int by1 = y1 + w.y1;
+			int bx2 = x1 + w.x2;
+			int by2 = y1 + w.y2;
+			
+			Screen.fill(bx1, by1, bx2 - 1, by2 - 1, 0xffb0b0b0);
+			Screen.fill(bx1 + 1, by1 + 1, bx2, by2, 0xff000000);
+			Screen.fill(bx1 + 1, by1 + 1, bx2 - 1, by2 - 1, mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0xff959595 : 0xff858585);
+			textRend.drawWithShadow(w.text, bx1 + (bx2 - bx1) / 2 - textRend.getStringWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
+		}
 		
 		/* window icon */
 		if(icon != null && selected) {
 			GL11.glPushMatrix();
 			GL11.glScaled(0.55, 0.55, 1);
-			GuiLighting.enableForItems();
+			GuiLighting.enable();
 			MinecraftClient.getInstance().getItemRenderer().renderGuiItem(icon, (int)((x1 + 3) * 1/0.55), (int)((y1 + 3) * 1/0.55));
 			GL11.glPopMatrix();
 		}
 		
 		/* window title */
-		MinecraftClient.getInstance().textRenderer.draw(title, x1 + (icon == null  || !selected ? 4 : 15), y1 + 3, -1);
+		textRend.drawWithShadow(title, x1 + (icon == null  || !selected ? 4 : 15), y1 + 3, -1);
 	}
 	
 	public boolean shouldClose(int mX, int mY) {
@@ -83,6 +105,13 @@ public class Window {
 			dragging = true;
 			dragOffX = x - x1;
 			dragOffY = y - y1;
+		}
+		
+		for(WindowButton w: buttons) {
+			if(x >= x1 + w.x1 && x <= x1 + w.x2 && y >= y1 + w.y1 && y <= y1 + w.y2) {
+				w.action.run();
+				MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			}
 		}
 	}
 	

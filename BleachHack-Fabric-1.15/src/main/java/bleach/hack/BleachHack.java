@@ -5,11 +5,9 @@ import com.google.common.eventbus.EventBus;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.module.mods.Speed;
-import bleach.hack.module.mods.Augh;
 import bleach.hack.utils.file.BleachFileHelper;
 import bleach.hack.utils.file.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.util.registry.Registry;
 
 public class BleachHack implements ModInitializer {
 	
@@ -29,9 +27,6 @@ public class BleachHack implements ModInitializer {
     	ClickGui.clickGui.initWindows();
     	BleachFileHelper.readClickGui();
     	BleachFileHelper.readPrefix();
-    	
-    	//🥕🐡 augh
-    	Registry.register(Registry.SOUND_EVENT, Augh.AUGH_ID, Augh.AUGH_EVENT);
     	
     	//v This makes a scat fetishist look like housekeeping.
     	eventBus.register(new ModuleManager());

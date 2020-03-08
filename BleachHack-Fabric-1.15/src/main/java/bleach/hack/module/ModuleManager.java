@@ -14,7 +14,6 @@ public class ModuleManager {
 			new Ambience(),
 			new AntiChunkBan(),
 			new ArrowJuke(),
-			new Augh(),
 			new AutoReconnect(),
 			new AutoSign(),
 			new AutoTotem(),
