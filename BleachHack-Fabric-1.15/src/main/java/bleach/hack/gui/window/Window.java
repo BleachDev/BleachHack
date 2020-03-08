@@ -15,6 +15,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 
 public class Window {
@@ -60,16 +61,7 @@ public class Window {
 			y1 = mY - dragOffY;
 		}
 		
-		/* background and title bar */
-		fillGrey(x1, y1, x2, y2);
-		fillGradient(x1 + 2, y1 + 2, x2 - 2, y1 + 12, (selected ? 0xff0000ff : 0xff606060), (selected ? 0xff4080ff : 0xffa0a0a0));
-		
-		/* buttons */
-		fillGrey(x2 - 12, y1 + 3, x2 - 4, y1 + 11);
-		textRend.draw("x", x2 - 11, y1 + 2, 0x000000);
-		
-		fillGrey(x2 - 22, y1 + 3, x2 - 14, y1 + 11);
-		textRend.draw("_", x2 - 21, y1 + 1, 0x000000);
+		drawBar(mX, mY, textRend);
 		
 		for(WindowButton w: buttons) {
 			int bx1 = x1 + w.x1;
@@ -93,7 +85,20 @@ public class Window {
 		}
 		
 		/* window title */
-		textRend.drawWithShadow(title, x1 + (icon == null  || !selected ? 4 : 15), y1 + 3, -1);
+		textRend.drawWithShadow(title, x1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, -1);
+	}
+	
+	protected void drawBar(int mX, int mY, TextRenderer textRend) {
+		/* background and title bar */
+		fillGrey(x1, y1, x2, y2);
+		fillGradient(x1 + 2, y1 + 2, x2 - 2, y1 + 12, (selected ? 0xff0000ff : 0xff606060), (selected ? 0xff4080ff : 0xffa0a0a0));
+		
+		/* buttons */
+		fillGrey(x2 - 12, y1 + 3, x2 - 4, y1 + 11);
+		textRend.draw("x", x2 - 11, y1 + 2, 0x000000);
+		
+		fillGrey(x2 - 22, y1 + 3, x2 - 14, y1 + 11);
+		textRend.draw("_", x2 - 21, y1 + 1, 0x000000);
 	}
 	
 	public boolean shouldClose(int mX, int mY) {
@@ -119,13 +124,13 @@ public class Window {
 		dragging = false;
 	}
 	
-	private void fillGrey(int x1, int y1, int x2, int y2) {
+	public void fillGrey(int x1, int y1, int x2, int y2) {
 		Screen.fill(x1, y1, x2 - 1, y2 - 1, 0xffb0b0b0);
 		Screen.fill(x1 + 1, y1 + 1, x2, y2, 0xff000000);
 		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
 	}
 		
-	private void fillGradient(int x1, int y1, int x2, int y2, int color1, int color2) {
+	protected void fillGradient(int x1, int y1, int x2, int y2, int color1, int color2) {
 		float float_1 = (float)(color1 >> 24 & 255) / 255.0F;
 		float float_2 = (float)(color1 >> 16 & 255) / 255.0F;
 		float float_3 = (float)(color1 >> 8 & 255) / 255.0F;

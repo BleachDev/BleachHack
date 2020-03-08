@@ -7,7 +7,7 @@ import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -115,7 +115,7 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("clickgui.txt");
 		
 		String text = "";
-		for(ModuleWindow w: ClickGui.clickGui.tabs) text += w.getPos()[0] + ":" + w.getPos()[1] + "\n";
+		for(Window w: ClickGui.clickGui.windows) text += w.x1 + ":" + w.y1 + "\n";
 		
 		BleachFileMang.appendFile(text, "clickgui.txt");
 	}
@@ -125,8 +125,9 @@ public class BleachFileHelper {
 		
 		try {
 			int c = 0;
-			for(ModuleWindow w: ClickGui.clickGui.tabs) {
-				w.setPos(Integer.parseInt(lines.get(c).split(":")[0]), Integer.parseInt(lines.get(c).split(":")[1]));
+			for(Window w: ClickGui.clickGui.windows) {
+				w.x1 = Integer.parseInt(lines.get(c).split(":")[0]);
+				w.y1 = Integer.parseInt(lines.get(c).split(":")[1]);
 				c++;
 			}
 		}catch(Exception e) {}
