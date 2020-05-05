@@ -17,9 +17,9 @@
  */
 package bleach.hack.module;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
@@ -99,19 +99,11 @@ public class ModuleManager {
 	}
 	
 	public static List<Module> getModulesInCat(Category cat) {
-		List<Module> mds = new ArrayList<>();
-	    for (Module m: mods) {
-	        if (m.getCategory().equals(cat)) mds.add(m);
-	    }
-	    return mds;
+		return mods.stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
 	}
 
 	@Subscribe
 	public static void handleKeyPress(EventKeyPress eventKeyPress) {
-		for (Module m : mods) {
-			if (m.getKey() == eventKeyPress.getKey()) {
-				m.toggle();
-			}
-		}
+		mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(m -> m.toggle());
 	}
 }
