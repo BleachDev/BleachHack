@@ -70,14 +70,14 @@ public class RenderUtilsLiving {
 	    GL11.glScaled(0.4*scale, 0.4*scale, 0);
 	    
 	    GL11.glTranslated(offX, offY, 0);
-	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
+	    if (item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
 	    mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), Type.GUI);
-	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
+	    if (item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
 	    GL11.glDisable(GL11.GL_LIGHTING);
 	    
 	    GL11.glScalef(-0.05F, -0.05F, 0);
 	    
-	    if(item.getCount() > 0) {
+	    if (item.getCount() > 0) {
 		    int w = mc.textRenderer.getStringWidth("x" + item.getCount()) / 2;
 		    mc.textRenderer.drawWithShadow("x" + item.getCount(), 7 - w, 5, 0xffffff);
 	    }
@@ -85,7 +85,7 @@ public class RenderUtilsLiving {
 	    GL11.glScalef(0.85F, 0.85F, 0.85F);
 	    
 	    int c = 0;
-	    for(Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
+	    for (Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
 	    	int w1 = mc.textRenderer.getStringWidth(I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue()) / 2;
 	    	mc.textRenderer.drawWithShadow(
 	    			I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue(), -4 - w1, c*10-1,
@@ -97,8 +97,8 @@ public class RenderUtilsLiving {
 	    GL11.glScalef(0.6F, 0.6F, 0.6F);
 	    String dur = item.getMaxDamage() - item.getDamage() + "";
         int color = 0x000000;
-        try{ color = MathHelper.hsvToRgb(((float) (item.getMaxDamage() - item.getDamage()) / item.getMaxDamage()) / 3.0F, 1.0F, 1.0F); }catch(Exception e) {}
-	    if(item.isDamageable()) mc.textRenderer.drawWithShadow(dur, -8 - dur.length() * 3, 15,
+        try{ color = MathHelper.hsvToRgb(((float) (item.getMaxDamage() - item.getDamage()) / item.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
+	    if (item.isDamageable()) mc.textRenderer.drawWithShadow(dur, -8 - dur.length() * 3, 15,
 	    		new Color(color >> 16 & 255, color >> 8 & 255, color & 255).getRGB());
 	    glCleanup();
 	}

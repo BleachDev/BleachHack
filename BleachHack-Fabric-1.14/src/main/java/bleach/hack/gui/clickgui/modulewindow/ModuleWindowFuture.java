@@ -52,13 +52,13 @@ public class ModuleWindowFuture extends ModuleWindow {
 		font.drawWithShadow(name, posX+3, posY-10, -1);
 		
 		/* window dragging */
-		if(mouseOver(posX, posY-12, posX+len, posY)) {
-			if(rmDown) hiding = !hiding;
-			if(lmDown) dragging = true;
+		if (mouseOver(posX, posY-12, posX+len, posY)) {
+			if (rmDown) hiding = !hiding;
+			if (lmDown) dragging = true;
 		}
 		
-		if(!lmHeld) dragging = false;
-		if(dragging) {
+		if (!lmHeld) dragging = false;
+		if (dragging) {
 			posX = mouseX-(prevmX - posX);
 			posY = mouseY-(prevmY - posY);
 		}
@@ -67,14 +67,14 @@ public class ModuleWindowFuture extends ModuleWindow {
 		prevmY = mouseY;
 		
 		/* Draw Modules */
-		if(hiding) {
+		if (hiding) {
 			font.drawWithShadow("-", posX+len-8, posY-10, -1);
 			return;
-		}else font.drawWithShadow("+", posX+len-8, posY-10, -1);
+		} else font.drawWithShadow("+", posX+len-8, posY-10, -1);
 			
 		int count = 0;
-		for(Entry<Module, Boolean> m: new LinkedHashMap<>(mods).entrySet()) {
-			if(m.getKey().isToggled()) Screen.fill(posX, posY+(count*14), posX+len, posY+14+(count*14), 0xffff0000);
+		for (Entry<Module, Boolean> m: new LinkedHashMap<>(mods).entrySet()) {
+			if (m.getKey().isToggled()) Screen.fill(posX, posY+(count*14), posX+len, posY+14+(count*14), 0xffff0000);
 			Screen.fill(posX, posY+(count*14), posX+len, posY+14+(count*14),
 					mouseOver(posX, posY+(count*14), posX+len, posY+14+(count*14)) ? 0x70303030 : 0x70000000);
 			font.drawWithShadow(cutText(m.getKey().getName(), len),
@@ -83,7 +83,7 @@ public class ModuleWindowFuture extends ModuleWindow {
 			Screen.fill(posX+len-1, posY+(count*14), posX+len, posY+14+(count*14), m.getValue() ? 0xafffffff : 0x5fffffff);
 			
 			/* Set which module settings show on */
-			if(mouseOver(posX, posY+(count*14), posX+len, posY+14+(count*14))) {
+			if (mouseOver(posX, posY+(count*14), posX+len, posY+14+(count*14))) {
 				GL11.glTranslated(0, 0, 300);
 				/* Match lines to end of words */
 		        Matcher mat = Pattern.compile("\\b.{1,22}\\b\\W?").matcher(m.getKey().getDesc());
@@ -99,19 +99,19 @@ public class ModuleWindowFuture extends ModuleWindow {
 		        	font.drawWithShadow(mat.group(), posX+len+5, posY+(count*14)-(c2 * 10)+(c3 * 10), -1);
 					c3++;
 				}
-				if(lmDown) m.getKey().toggle();
-				if(rmDown) mods.replace(m.getKey(), !m.getValue());
-				if(lmDown || rmDown) MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				if (lmDown) m.getKey().toggle();
+				if (rmDown) mods.replace(m.getKey(), !m.getValue());
+				if (lmDown || rmDown) MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				GL11.glTranslated(0, 0, -300);
 			}
 			
 			/* draw settings */
-			if(m.getValue()) {
-				for(SettingBase s: m.getKey().getSettings()) {
+			if (m.getValue()) {
+				for (SettingBase s: m.getKey().getSettings()) {
 					count++;
-					if(s instanceof SettingMode) drawModeSetting(s.toMode(), posX, posY+(count*14));
-					if(s instanceof SettingToggle) drawToggleSetting(s.toToggle(), posX, posY+(count*14));
-					if(s instanceof SettingSlider) drawSliderSetting(s.toSlider(), posX, posY+(count*14));
+					if (s instanceof SettingMode) drawModeSetting(s.toMode(), posX, posY+(count*14));
+					if (s instanceof SettingToggle) drawToggleSetting(s.toToggle(), posX, posY+(count*14));
+					if (s instanceof SettingSlider) drawSliderSetting(s.toSlider(), posX, posY+(count*14));
 				}
 				count++;
 				drawBindSetting(m.getKey(), keyDown, posX, posY+(count*14));
@@ -127,10 +127,10 @@ public class ModuleWindowFuture extends ModuleWindow {
 	public void drawBindSetting(Module m, int key, int x, int y) {
 		Screen.fill(x, y, x+len, y+14, mouseOver(x, y, x+len, y+14) ? 0x70303030 : 0x70000000);
 		
-		if(key != -1 && mouseOver(x, y, x+len, y+14)) m.setKey((key != 261 && key != 256) ? key : -1);
+		if (key != -1 && mouseOver(x, y, x+len, y+14)) m.setKey((key != 261 && key != 256) ? key : -1);
 		String name = InputUtil.getKeycodeName(m.getKey());
-		if(name == null) name = "KEY" + m.getKey();
-		if(name.isEmpty()) name = "NONE";
+		if (name == null) name = "KEY" + m.getKey();
+		if (name.isEmpty()) name = "NONE";
 		
 		font.drawWithShadow("Bind §7" + name + (mouseOver(x, y, x+len, y+14) ? "..." : "")
 				, x+2, y+3, -1);
@@ -140,15 +140,15 @@ public class ModuleWindowFuture extends ModuleWindow {
 		Screen.fill(x, y, x+len, y+14, mouseOver(x, y, x+len, y+14) ? 0x70303030 : 0x70000000);
 		font.drawWithShadow(s.text + "§7" + s.modes[s.mode],x+2, y+3, -1);
 		
-		if(mouseOver(x, y, x+len, y+14) && lmDown) s.mode = s.getNextMode();
+		if (mouseOver(x, y, x+len, y+14) && lmDown) s.mode = s.getNextMode();
 	}
 	
 	public void drawToggleSetting(SettingToggle s, int x, int y) {
 		Screen.fill(x, y, x+len, y+14, mouseOver(x, y, x+len, y+14) ? 0x70303030 : 0x70000000);
-		if(s.state) Screen.fill(x+1, y, x+len-1, y+14, mouseOver(x, y, x+len, y+14) ? 0x90ff0000 : 0x70ff0000);
+		if (s.state) Screen.fill(x+1, y, x+len-1, y+14, mouseOver(x, y, x+len, y+14) ? 0x90ff0000 : 0x70ff0000);
 		font.drawWithShadow(s.text, x+3, y+3, -1);
 		
-		if(mouseOver(x, y, x+len, y+14) && lmDown) s.state = !s.state;
+		if (mouseOver(x, y, x+len, y+14) && lmDown) s.state = !s.state;
 	}
 	
 	public void drawSliderSetting(SettingSlider s, int x, int y) {
@@ -159,7 +159,7 @@ public class ModuleWindowFuture extends ModuleWindow {
 		font.drawWithShadow(s.text + "§7" + (s.round == 0  && s.getValue() > 100 ? Integer.toString((int)s.getValue()) : s.getValue()),
 				x+2, y+3, -1);
 		
-		if(mouseOver(x, y, x+len, y+14) && lmHeld) {
+		if (mouseOver(x, y, x+len, y+14) && lmHeld) {
 			int percent = ((mouseX - x) * 100) / (len-2);
 				
 			s.setValue(s.round(percent*((s.max - s.min) / 100) + s.min, s.round));

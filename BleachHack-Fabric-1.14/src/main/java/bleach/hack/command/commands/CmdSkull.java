@@ -45,9 +45,9 @@ public class CmdSkull extends Command {
 	public void onCommand(String command, String[] args) throws Exception {
 		ItemStack item = new ItemStack(Items.PLAYER_HEAD, 64);
 		
-		if(args.length < 2) {
+		if (args.length < 2) {
 			item.setTag(StringNbtReader.parse("{SkullOwner:{Name:\"" + args[0] + "\"}}"));
-		}else if(args[0].equalsIgnoreCase("img")) {
+		} else if (args[0].equalsIgnoreCase("img")) {
 			item.setTag(StringNbtReader.parse("{SkullOwner:{Id:\"" + UUID.randomUUID() + "\",Properties:{textures:[{Value:\""
 					+ Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + args[1] + "\"}}}").getBytes())
 					+ "\"}]}}}"));

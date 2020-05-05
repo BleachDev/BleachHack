@@ -44,33 +44,33 @@ public class Step extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(!WorldUtils.NONSOLID_BLOCKS.contains(
+		if (!WorldUtils.NONSOLID_BLOCKS.contains(
 				mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight()+1, 0)).getBlock())) return;
 		
-		if(getSettings().get(0).toMode().mode == 0) {
+		if (getSettings().get(0).toMode().mode == 0) {
 			mc.player.stepHeight = 1.065F;
-		}else if(getSettings().get(0).toMode().mode == 1) {
+		} else if (getSettings().get(0).toMode().mode == 1) {
 			
-			if(!mc.player.horizontalCollision && flag) {
+			if (!mc.player.horizontalCollision && flag) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.1, mc.player.getVelocity().z);
-			}else if(mc.player.horizontalCollision) {
+			} else if (mc.player.horizontalCollision) {
 				mc.player.setVelocity(mc.player.getVelocity().x, 1, mc.player.getVelocity().z);
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
 				mc.player.jump();
 				flag = true;
 			}
 			
-			if(!mc.player.horizontalCollision) flag = false;
+			if (!mc.player.horizontalCollision) flag = false;
 			
-		}else if(getSettings().get(0).toMode().mode == 2) {
+		} else if (getSettings().get(0).toMode().mode == 2) {
 			
-			if(mc.player.horizontalCollision && mc.player.onGround) {
+			if (mc.player.horizontalCollision && mc.player.onGround) {
 				pos = mc.player.getY();
 				mc.player.jump();
 				flag = true;
 			}
 			
-			if(flag && pos + 1.065 < mc.player.getY()) {
+			if (flag && pos + 1.065 < mc.player.getY()) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.1, mc.player.getVelocity().z);
 				flag = false;
 			}

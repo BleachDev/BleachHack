@@ -41,10 +41,10 @@ public class CmdHelp extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		String cmd = null;
-		try {cmd = args[0];}catch(Exception e) {}
+		try {cmd = args[0];} catch (Exception e) {}
 		
-		for(Command c: new CommandManager().getCommands()) {
-			if(!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
+		for (Command c: new CommandManager().getCommands()) {
+			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
 			BleachLogger.noPrefixMessage("§5." + c.getAlias() + " | §6" + c.getDescription() + " | §e" + c.getSyntax());
 		}
 	}

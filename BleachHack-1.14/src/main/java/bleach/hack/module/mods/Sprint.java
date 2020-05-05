@@ -27,8 +27,8 @@ public class Sprint extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
-			if(mc.player.moveStrafing != 0 || mc.player.moveForward != 0) {
+		if (this.isToggled()) {
+			if (mc.player.moveStrafing != 0 || mc.player.moveForward != 0) {
 				mc.player.setSprinting(true);
 			}
 		}

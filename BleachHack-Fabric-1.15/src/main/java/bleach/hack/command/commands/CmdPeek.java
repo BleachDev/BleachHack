@@ -54,12 +54,12 @@ public class CmdPeek extends Command {
 	public void onCommand(String command, String[] args) throws Exception {
 		ItemStack item = mc.player.inventory.getMainHandStack();
 		
-		if(!(item.getItem() instanceof BlockItem)) {
+		if (!(item.getItem() instanceof BlockItem)) {
 			BleachLogger.errorMessage("Must be holding a containter to peek.");
 			return;
 		}
 		
-		if(!(((BlockItem) item.getItem()).getBlock() instanceof ShulkerBoxBlock)
+		if (!(((BlockItem) item.getItem()).getBlock() instanceof ShulkerBoxBlock)
 				 && !(((BlockItem) item.getItem()).getBlock() instanceof ChestBlock)
 				 && !(((BlockItem) item.getItem()).getBlock() instanceof DispenserBlock)
 				 && !(((BlockItem) item.getItem()).getBlock() instanceof HopperBlock)) {

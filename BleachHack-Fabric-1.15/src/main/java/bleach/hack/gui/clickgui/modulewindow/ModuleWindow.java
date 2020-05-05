@@ -38,7 +38,7 @@ public class ModuleWindow extends Window {
 	public ModuleWindow(List<Module> mods, int x1, int y1, int len, String title, ItemStack icon) {
 		super(x1, y1, x1 + len, 0, title, icon);
 		modList = mods;
-		for(Module m: mods) this.mods.put(m, false);
+		for (Module m: mods) this.mods.put(m, false);
 		y2 = getHeight();
 	}
 	
@@ -66,10 +66,10 @@ public class ModuleWindow extends Window {
 	
 	public int getHeight() {
 		int h = 1;
-		for(Entry<Module, Boolean> e: mods.entrySet()) {
+		for (Entry<Module, Boolean> e: mods.entrySet()) {
 			h += 12;
 			
-			if(e.getValue()) {
+			if (e.getValue()) {
 				h += (12 * (e.getKey().getSettings().size() + 1));
 			}
 		}

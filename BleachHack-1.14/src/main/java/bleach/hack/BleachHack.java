@@ -57,31 +57,31 @@ public class BleachHack {
     
 	@SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-		if(!(event.phase == Phase.END)) return;
+		if (!(event.phase == Phase.END)) return;
 		
 		try {
 			ModuleManager.onUpdate();
     		ModuleManager.updateKeys();
     		
-    		if(Minecraft.getInstance().player.ticksExisted % 100 == 0) {
+    		if (Minecraft.getInstance().player.ticksExisted % 100 == 0) {
     			fileReader.saveModules();
     			fileReader.saveSettings();
     			fileReader.saveClickGui();
     		}
     		
     		BleachQueue.nextQueue();
-    	}catch(Exception e){}
+    	} catch (Exception e) {}
     }
     
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
     	try { ModuleManager.onRender();
-    	}catch(Exception e){}
+    	} catch (Exception e) {}
     }
     
     @SubscribeEvent
     public void onChatMsg(ClientChatEvent event) {
-    	if(event.getMessage().startsWith(".")) {
+    	if (event.getMessage().startsWith(".")) {
     		CommandManager cmd = new CommandManager();
     		cmd.callCommand(event.getMessage().substring(1));
     		event.setCanceled(true);

@@ -36,7 +36,7 @@ public class CommandManager {
 			new CmdRename(),
 			new CmdToggle());
 	
-	public List<Command> getCommands(){
+	public List<Command> getCommands() {
 		return commands;
 	}
 	
@@ -44,11 +44,11 @@ public class CommandManager {
 		String[] split = input.split(" ");
 		String command = split[0];
 		String args = input.substring(command.length()).trim();
-		for(Command c: getCommands()) {
-			if(c.getAlias().equalsIgnoreCase(command)) {
+		for (Command c: getCommands()) {
+			if (c.getAlias().equalsIgnoreCase(command)) {
 				try {
 					c.onCommand(command, args.split(" "));
-				}catch(Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					BleachLogger.errorMessage("Invalid command usage!");
 					BleachLogger.infoMessage(c.getSyntax());

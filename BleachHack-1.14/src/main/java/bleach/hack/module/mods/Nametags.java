@@ -66,10 +66,10 @@ public class Nametags extends Module {
 		String color = e instanceof IMob ? "§5" : EntityUtils.isAnimal(e)
 				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 		
-		if(e == mc.player || e == mc.player.getRidingEntity() || color == "§f" || 
+		if (e == mc.player || e == mc.player.getRidingEntity() || color == "§f" || 
 				((color == "§c" || color == "§6") && !getSettings().get(4).toToggle().state) ||
 				((color == "§5" || color == "§a") && !getSettings().get(5).toToggle().state)) return;
-		if(e.isInvisible()) color = "§e";
+		if (e.isInvisible()) color = "§e";
 		
 		double scale = (e instanceof PlayerEntity) ?
 				Math.max(getSettings().get(2).toSlider().getValue() * (mc.getRenderViewEntity().getDistance(e) / 20), 1):
@@ -78,21 +78,21 @@ public class Nametags extends Module {
 		/* Health bar */
 		String health = "";
 		/* - Add Green Normal Health */
-		for(int i = 0; i < e.getHealth(); i++) health += "§a|";
+		for (int i = 0; i < e.getHealth(); i++) health += "§a|";
 		/* - Add Red Empty Health (Remove Based on absorption amount) */
-		for(int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaxHealth() - e.getHealth()); i++) health += "§e|";
+		for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaxHealth() - e.getHealth()); i++) health += "§e|";
 		/* Add Yellow Absorption Health */
-		for(int i = 0; i < e.getMaxHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
+		for (int i = 0; i < e.getMaxHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
 		/* Add "+??" to the end if the entity has extra hearts */
-		if(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
+		if (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
 			health +=  " §e+" + (int)(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
 		}
 		
 		/* Drawing Nametags */
-		if(getSettings().get(1).toMode().mode == 0) {
+		if (getSettings().get(1).toMode().mode == 0) {
 			RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
 					e.posX,e.posY + e.getHeight() + (0.5f * scale), e.posZ, scale);
-		}else if(getSettings().get(1).toMode().mode == 1) {
+		} else if (getSettings().get(1).toMode().mode == 1) {
 			RenderUtilsLiving.drawText(color + e.getName().getString(), e.posX, e.posY + e.getHeight() + (0.5f * scale), e.posZ, scale);
 			RenderUtilsLiving.drawText(health, e.posX, e.posY + e.getHeight() + (0.75f * scale), e.posZ, scale);
 		}
@@ -101,20 +101,20 @@ public class Nametags extends Module {
 		double c = 0;
 		double higher = getSettings().get(1).toMode().mode == 1 ? 0.25 : 0;
 		
-		if(getSettings().get(0).toMode().mode == 1) {
+		if (getSettings().get(0).toMode().mode == 1) {
 			RenderUtilsLiving.drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, -1.25, 0, scale, e.getHeldItemMainhand());
 			RenderUtilsLiving.drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, 1.25, 0, scale, e.getHeldItemOffhand());
 			
-			for(ItemStack i: e.getArmorInventoryList()) {
-				if(i.getCount() < 1) continue;
+			for (ItemStack i: e.getArmorInventoryList()) {
+				if (i.getCount() < 1) continue;
 				RenderUtilsLiving.drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, 0, c, scale, i);
 				c++;
 			}
-		}else if(getSettings().get(0).toMode().mode == 2) {
+		} else if (getSettings().get(0).toMode().mode == 2) {
 			RenderUtilsLiving.drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, -2.5, 0, scale, e.getHeldItemMainhand());
 			RenderUtilsLiving.drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, 2.5, 0, scale, e.getHeldItemOffhand());
 			
-			for(ItemStack i: e.getArmorInventoryList()) {
+			for (ItemStack i: e.getArmorInventoryList()) {
 				RenderUtilsLiving.drawItem(e.posX, e.posY + e.getHeight() + ((0.75 + higher) * scale), e.posZ, c+1.5, 0, scale, i);
 				c--;
 			}

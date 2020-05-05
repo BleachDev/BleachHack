@@ -62,7 +62,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		len = 60;
 		
 		int i = 30;
-		for(Category c: Category.values()) {
+		for (Category c: Category.values()) {
 			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
 					StringUtils.capitalize(StringUtils.lowerCase(c.toString())), new ItemStack(Items.AIR)));
 			
@@ -92,29 +92,29 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		mouseY = mY;
 		
 		len = Math.max(50, (int) Math.round(ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue()));
-		for(Window w: windows) {
-			if(w instanceof ModuleWindow) {
+		for (Window w: windows) {
+			if (w instanceof ModuleWindow) {
 				ModuleWindow mw = (ModuleWindow) w;
 				
 				int x = mw.x1 + 1;
 				int y = mw.y1 + 13;
 				mw.x2 = x + len + 1;
 				
-				if(rmDown && mouseOver(x, y-12, x+len, y)) {
+				if (rmDown && mouseOver(x, y-12, x+len, y)) {
 					minecraft.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					mw.hiding = !mw.hiding;
 				}
 				
-				if(mw.hiding) {
+				if (mw.hiding) {
 					mw.y2 = y;
 					continue;
-				}else {
+				} else {
 					mw.y2 = y + mw.getHeight();
 				}
 				
 				int count = 0;
-				for(Entry<Module, Boolean> m: new LinkedHashMap<>(mw.mods).entrySet()) {
-					if(m.getValue()) fillReverseGrey(x, y+(count*12), x+len-1, y+12+(count*12));
+				for (Entry<Module, Boolean> m: new LinkedHashMap<>(mw.mods).entrySet()) {
+					if (m.getValue()) fillReverseGrey(x, y+(count*12), x+len-1, y+12+(count*12));
 					fill(x, y+(count*12), x+len, y+12+(count*12),
 							mouseOver(x, y+(count*12), x+len, y+12+(count*12)) ? 0x70303070 : 0x00000000);
 					
@@ -125,7 +125,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 					//		x+len, y+12+(count*12), m.getValue() ? 0x9f70fff0 : 0x5f70fff0);
 					
 					/* Set which module settings show on */
-					if(mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
+					if (mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
 						GL11.glTranslated(0, 0, 300);
 						/* Match lines to end of words */
 				        Matcher mat = Pattern.compile("\\b.{1,22}\\b\\W?").matcher(m.getKey().getDesc());
@@ -141,19 +141,19 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				        	font.drawWithShadow(mat.group(), x+len+5, y+(count*12)-(c2 * 10)+(c3 * 10), -1);
 							c3++;
 						}
-						if(lmDown) m.getKey().toggle();
-						if(rmDown) mw.mods.replace(m.getKey(), !m.getValue());
-						if(lmDown || rmDown) minecraft.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+						if (lmDown) m.getKey().toggle();
+						if (rmDown) mw.mods.replace(m.getKey(), !m.getValue());
+						if (lmDown || rmDown) minecraft.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 						GL11.glTranslated(0, 0, -300);
 					}
 					
 					/* draw settings */
-					if(m.getValue()) {
-						for(SettingBase s: m.getKey().getSettings()) {
+					if (m.getValue()) {
+						for (SettingBase s: m.getKey().getSettings()) {
 							count++;
-							if(s instanceof SettingMode) drawModeSetting(s.toMode(), x, y+(count*12));
-							if(s instanceof SettingToggle) drawToggleSetting(s.toToggle(), x, y+(count*12));
-							if(s instanceof SettingSlider) drawSliderSetting(s.toSlider(), x, y+(count*12));
+							if (s instanceof SettingMode) drawModeSetting(s.toMode(), x, y+(count*12));
+							if (s instanceof SettingToggle) drawToggleSetting(s.toToggle(), x, y+(count*12));
+							if (s instanceof SettingSlider) drawSliderSetting(s.toSlider(), x, y+(count*12));
 							//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
 						}
 						count++;
@@ -175,10 +175,10 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		Screen.fill(x+len - 2, y, x+len-1, y+12, 0x90b0b0b0);
 		Screen.fill(x, y - 1, x + 1, y+11, 0x90000000);
 		
-		if(key != -1 && mouseOver(x, y, x+len, y+12)) m.setKey((key != 261 && key != 256) ? key : -1);
+		if (key != -1 && mouseOver(x, y, x+len, y+12)) m.setKey((key != 261 && key != 256) ? key : -1);
 		String name = InputUtil.getKeycodeName(m.getKey());
-		if(name == null) name = "KEY" + m.getKey();
-		if(name.isEmpty()) name = "NONE";
+		if (name == null) name = "KEY" + m.getKey();
+		if (name.isEmpty()) name = "NONE";
 		
 		font.drawWithShadow("Bind: " + name + (mouseOver(x, y, x+len, y+12) ? "..." : "")
 				, x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
@@ -189,19 +189,19 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		font.drawWithShadow(s.text + s.modes[s.mode],x+2, y+2,
 				mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 		
-		if(mouseOver(x, y, x+len, y+12) && lmDown) s.mode = s.getNextMode();
+		if (mouseOver(x, y, x+len, y+12) && lmDown) s.mode = s.getNextMode();
 	}
 	
 	public void drawToggleSetting(SettingToggle s, int x, int y) {
 		String color2;
 		
-		if(s.state) { if(mouseOver(x, y, x+len, y+12)) color2 = "§2"; else color2 = "§a";
-		}else{ if(mouseOver(x, y, x+len, y+12)) color2 = "§4"; else color2 = "§c"; }
+		if (s.state) { if (mouseOver(x, y, x+len, y+12)) color2 = "§2"; else color2 = "§a";
+		} else { if (mouseOver(x, y, x+len, y+12)) color2 = "§4"; else color2 = "§c"; }
 		
 		fillGreySides(x, y-1, x+len-1, y+12);
 		font.drawWithShadow(color2 + s.text, x+3, y+2, -1);
 		
-		if(mouseOver(x, y, x+len, y+12) && lmDown) s.state = !s.state;
+		if (mouseOver(x, y, x+len, y+12) && lmDown) s.state = !s.state;
 	}
 	
 	public void drawSliderSetting(SettingSlider s, int x, int y) {
@@ -212,7 +212,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		font.drawWithShadow(s.text + (s.round == 0  && s.getValue() > 100 ? Integer.toString((int)s.getValue()) : s.getValue()),
 				x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 		
-		if(mouseOver(x+1, y, x+len-2, y+12) && lmHeld) {
+		if (mouseOver(x+1, y, x+len-2, y+12) && lmHeld) {
 			int percent = ((mouseX - x) * 100) / (len - 2);
 				
 			s.setValue(s.round(percent*((s.max - s.min) / 100) + s.min, s.round));
@@ -221,8 +221,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	
 	private String cutText(String text, int leng) {
 		String text1 = text;
-		for(int i = 0; i < text.length(); i++) {
-			if(font.getStringWidth(text1) < len-2) return text1;
+		for (int i = 0; i < text.length(); i++) {
+			if (font.getStringWidth(text1) < len-2) return text1;
 			text1 = text1.replaceAll(".$", "");
 		}
 		return "";
@@ -244,16 +244,16 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 	
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
-		if(p_mouseClicked_5_ == 0) {
+		if (p_mouseClicked_5_ == 0) {
 			lmDown = true;
 			lmHeld = true;
-		}else if(p_mouseClicked_5_ == 1) rmDown = true;
+		} else if (p_mouseClicked_5_ == 1) rmDown = true;
 		
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
 	
 	public boolean mouseReleased(double double_1, double double_2, int int_1) {
-		if(int_1 == 0) lmHeld = false;
+		if (int_1 == 0) lmHeld = false;
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
 	
@@ -264,7 +264,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	
 	public void resetGui() {
 		int x = 30;
-		for(Window m: windows) {
+		for (Window m: windows) {
 			m.x1 = x;
 			m.y2 = 35;
 			x += len + 5;

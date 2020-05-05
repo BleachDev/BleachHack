@@ -39,9 +39,9 @@ public class MixinTitleScreen extends Screen {
 	
 	@Inject(at = @At("HEAD"), method = "init()V")
 	private void init(CallbackInfo info) {
-		if(BleachMainMenu.customTitleScreen) {
+		if (BleachMainMenu.customTitleScreen) {
 			MinecraftClient.getInstance().openScreen(new BleachMainMenu());
-		}else {
+		} else {
 			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, "BH", button -> {
 				BleachMainMenu.customTitleScreen = !BleachMainMenu.customTitleScreen;
 				minecraft.openScreen(new TitleScreen(false));

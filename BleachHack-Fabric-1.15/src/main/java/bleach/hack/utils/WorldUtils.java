@@ -66,10 +66,10 @@ public class WorldUtils {
     }
 	
 	public static boolean doesBoxTouchBlock(Box box, Block block) {
-		for(int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
-			for(int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
-				for(int z = (int) Math.floor(box.z1); z < Math.ceil(box.z2); z++) {
-					if(MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock() == block) {
+		for (int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
+			for (int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
+				for (int z = (int) Math.floor(box.z1); z < Math.ceil(box.z2); z++) {
+					if (MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock() == block) {
 						return true;
 					}
 				}
@@ -79,10 +79,10 @@ public class WorldUtils {
 	}
 	
 	public static boolean isBoxEmpty(Box box) {
-		for(int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
-			for(int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
-				for(int z = (int) Math.floor(box.z1); z < Math.ceil(box.z2); z++) {
-					if(!NONSOLID_BLOCKS.contains(MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
+		for (int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
+			for (int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
+				for (int z = (int) Math.floor(box.z1); z < Math.ceil(box.z2); z++) {
+					if (!NONSOLID_BLOCKS.contains(MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
 						return false;
 					}
 				}

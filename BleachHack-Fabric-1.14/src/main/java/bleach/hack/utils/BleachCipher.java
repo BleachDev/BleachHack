@@ -34,22 +34,22 @@ public class BleachCipher {
 			
 			String output = "";
 			
-			for(Character c: string.toCharArray()) {
+			for (Character c: string.toCharArray()) {
 				int count = rand.nextInt(new Random().nextInt(50)+50);
 				salt.add(count);
 				
-				for(int i = 0; i < count; i++) {
+				for (int i = 0; i < count; i++) {
 					output += intToString(range.ints.get(new Random().nextInt(range.ints.size())));
 				}
 				
 				output += intToString(range.min + (int)c);
 			}
 			
-			for(Integer i: salt) output += intToString(range.min + i);
+			for (Integer i: salt) output += intToString(range.min + i);
 			output += intToString(range.min + salt.size());
 			
 			return output;
-		}catch(Exception e) {return string;}
+		} catch (Exception e) {return string;}
 	}
 	
 	public String decrypt(String string) {
@@ -59,7 +59,7 @@ public class BleachCipher {
 			
 			/* Anti-salt */
 			String newString = string;
-			for(int i = 0; i < size; i++) {
+			for (int i = 0; i < size; i++) {
 				salt.add((int) string.charAt(string.length() - 1 - size + i) - range.min);
 				newString = newString.replace(newString.substring(i, i+salt.get(i)), "");
 			}
@@ -67,12 +67,12 @@ public class BleachCipher {
 			
 			/* Recreate string from the remaining chars */
 			String finalString = "";
-			for(Character c: newString.toCharArray()) {
+			for (Character c: newString.toCharArray()) {
 				finalString += intToString((int)c - range.min);
 			}
 			
 			return finalString;
-		}catch(Exception e) {return string;}
+		} catch (Exception e) {return string;}
 	}
 	
 	private String intToString(int i) { return String.copyValueOf(Character.toChars(i)); }
@@ -80,8 +80,8 @@ public class BleachCipher {
 	public long getProcessorID() {
 		String id = new SystemInfo().getHardware().getProcessors()[0].getIdentifier();
 		String nums = "";
-		for(Character c: id.toCharArray()) nums += (int)c;
-		if(nums.length() > 18) nums = nums.substring(0, 18);
+		for (Character c: id.toCharArray()) nums += (int)c;
+		if (nums.length() > 18) nums = nums.substring(0, 18);
 		return Long.parseLong(nums);
 	}
 }
@@ -95,6 +95,6 @@ class Range {
 	public Range(int min, int max) {
 		this.min = min;
 		this.max = max;
-		for(int i = min; i < max; i++) ints.add(i);
+		for (int i = min; i < max; i++) ints.add(i);
 	}
 }

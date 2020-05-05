@@ -63,7 +63,7 @@ public class Xray extends Module {
     public void onEnable() {
         visibleBlocks.clear();
         
-        for(String s: BleachFileMang.readFileLines("xrayblocks.txt")) {
+        for (String s: BleachFileMang.readFileLines("xrayblocks.txt")) {
             setVisible(Registry.BLOCK.get(new Identifier(s)));
         }
         

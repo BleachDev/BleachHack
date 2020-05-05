@@ -51,7 +51,7 @@ public class CmdRbook extends Command {
 	public void onCommand(String command, String[] args) throws Exception {
 		ItemStack item = mc.player.inventory.getMainHandStack();
 		
-		if(item.getItem() != Items.WRITABLE_BOOK) {
+		if (item.getItem() != Items.WRITABLE_BOOK) {
 			BleachLogger.errorMessage("Not Holding A Writable Book!");
 			return;
 		}
@@ -60,10 +60,10 @@ public class CmdRbook extends Command {
 		int startChar = 0x0;
 		int endChar = 0x10FFFF;
 		int pageChars = 210;
-		try { pages = Math.min(Integer.parseInt(args[0]), 100); } catch(Exception e) {}
-		try { startChar = Integer.parseInt(args[1]); } catch(Exception e) {}
-		try { endChar = Integer.parseInt(args[2]); } catch(Exception e) {}
-		try { pageChars = Integer.parseInt(args[3]); } catch(Exception e) {}
+		try { pages = Math.min(Integer.parseInt(args[0]), 100); } catch (Exception e) {}
+		try { startChar = Integer.parseInt(args[1]); } catch (Exception e) {}
+		try { endChar = Integer.parseInt(args[2]); } catch (Exception e) {}
+		try { pageChars = Integer.parseInt(args[3]); } catch (Exception e) {}
 		
 		IntStream chars = new Random().ints(startChar, endChar + 1);
 		String text = chars.limit(pageChars*100).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());

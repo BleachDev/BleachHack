@@ -53,31 +53,31 @@ public class Peek extends Module {
 	
 	@SubscribeEvent
 	public void onGuiDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
-		if(!(event.getGui() instanceof ContainerScreen<?>)) return;
+		if (!(event.getGui() instanceof ContainerScreen<?>)) return;
 		ContainerScreen<?> screen = (ContainerScreen<?>) event.getGui();
 		
-		if(screen.getSlotUnderMouse() == null) return;
-		if(!(screen.getSlotUnderMouse().getStack().getItem() instanceof BlockItem)) return;
-		if(!(((BlockItem) screen.getSlotUnderMouse().getStack().getItem()).getBlock() instanceof ContainerBlock)) return;
+		if (screen.getSlotUnderMouse() == null) return;
+		if (!(screen.getSlotUnderMouse().getStack().getItem() instanceof BlockItem)) return;
+		if (!(((BlockItem) screen.getSlotUnderMouse().getStack().getItem()).getBlock() instanceof ContainerBlock)) return;
 		
 		NonNullList<ItemStack> items = NonNullList.withSize(27, new ItemStack(Items.AIR));
 		CompoundNBT nbt = screen.getSlotUnderMouse().getStack().getTag();
 		
-		if(nbt != null && nbt.contains("BlockEntityTag")) {
+		if (nbt != null && nbt.contains("BlockEntityTag")) {
 			CompoundNBT itemnbt = nbt.getCompound("BlockEntityTag");
-			if(itemnbt.contains("Items")) ItemStackHelper.loadAllItems(itemnbt, items);
+			if (itemnbt.contains("Items")) ItemStackHelper.loadAllItems(itemnbt, items);
 		}
 		
 		GlStateManager.translatef(0.0F, 0.0F, 500.0F);
 		Block block = ((BlockItem) screen.getSlotUnderMouse().getStack().getItem()).getBlock();
 		
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock ? 18 : 0;
-		for(ItemStack i: items) {
-			if(count > 26) break;
+		for (ItemStack i: items) {
+			if (count > 26) break;
 			int x = event.getMouseX() + 8 + (17 * (count % 9));
 			int y = event.getMouseY() - 68 + (17 * (count / 9));
 			
-			if(i.getItem() != Items.AIR) {
+			if (i.getItem() != Items.AIR) {
 				Screen.fill(x, y, x+17, y+17, 0x90000000);
 				Screen.fill(x, y, x+17, y+1, 0xff000000); Screen.fill(x, y+1, x+1, y+17, 0xff000000);
 				Screen.fill(x+16, y+1, x+17, y+17, 0xff000000); Screen.fill(x+1, y+16, x+17, y+17, 0xff000000);

@@ -41,7 +41,7 @@ public class CmdPrefix extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		if(args[0].isEmpty()) {
+		if (args[0].isEmpty()) {
 			BleachLogger.errorMessage("Prefix Cannot Be Empty");
 			return;
 		}

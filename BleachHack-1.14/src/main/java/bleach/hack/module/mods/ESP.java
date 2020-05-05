@@ -49,28 +49,28 @@ public class ESP extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
-			for(Entity e: EntityUtils.getLoadedEntities()) {
-				if(e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
+		if (this.isToggled()) {
+			for (Entity e: EntityUtils.getLoadedEntities()) {
+				if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
 					EntityUtils.setGlowing(e, TextFormatting.RED, "players");
 				}
 				
-				if(e instanceof IMob && getSettings().get(1).toToggle().state) {
+				if (e instanceof IMob && getSettings().get(1).toToggle().state) {
 					EntityUtils.setGlowing(e, TextFormatting.DARK_BLUE, "mobs");
 				}
 				
-				if(EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
+				if (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
 					EntityUtils.setGlowing(e, TextFormatting.GREEN, "passive");
 				}
 				
-				if(e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
+				if (e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
 					EntityUtils.setGlowing(e, TextFormatting.GOLD, "items");
 				}
 				
-				if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
+				if (e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
 					EntityUtils.setGlowing(e, TextFormatting.LIGHT_PURPLE, "crystals");
 				}
-				if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+				if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
 					EntityUtils.setGlowing(e, TextFormatting.GRAY, "vehicles");
 				}
 			}
@@ -78,9 +78,9 @@ public class ESP extends Module {
 	}
 	
 	public void onDisable() {
-		for(Entity e: EntityUtils.getLoadedEntities()) {
-			if(e != mc.player) {
-				if(e.isGlowing()) e.setGlowing(false);
+		for (Entity e: EntityUtils.getLoadedEntities()) {
+			if (e != mc.player) {
+				if (e.isGlowing()) e.setGlowing(false);
 			}
 		}
 	}

@@ -49,7 +49,7 @@ public abstract class ModuleWindow {
 	
 	public ModuleWindow(List<Module> mods, String name, int len, int posX, int posY) {
 		modList = mods;
-		for(Module m: mods) this.mods.put(m, false);
+		for (Module m: mods) this.mods.put(m, false);
 		this.name = name;
 		this.len = len;
 		this.posX = posX;
@@ -81,8 +81,8 @@ public abstract class ModuleWindow {
 	
 	protected String cutText(String text, int leng) {
 		String text1 = text;
-		for(int i = 0; i < text.length(); i++) {
-			if(font.getStringWidth(text1) < len-2) return text1;
+		for (int i = 0; i < text.length(); i++) {
+			if (font.getStringWidth(text1) < len-2) return text1;
 			text1 = text1.replaceAll(".$", "");
 		}
 		return "";

@@ -55,10 +55,10 @@ public class Killaura extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			delay++;
 			int reqDelay = (int) Math.round(20/getSettings().get(8).toSlider().getValue());
-			if(getSettings().get(6).toToggle().state) reqDelay = (int)Math.ceil(mc.player.getCooldownPeriod());
+			if (getSettings().get(6).toToggle().state) reqDelay = (int)Math.ceil(mc.player.getCooldownPeriod());
 			
 			List<Entity> targets = EntityUtils.getLoadedEntities().stream()
 					.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).toToggle().state)
@@ -68,15 +68,15 @@ public class Killaura extends Module {
 					.collect(Collectors.toList());
 			targets.sort((a,b) -> Float.compare(a.getDistance(mc.player), b.getDistance(mc.player)));
 			
-			for(Entity e: targets) {
-				if(mc.player.getDistance(e) > getSettings().get(7).toSlider().getValue()
+			for (Entity e: targets) {
+				if (mc.player.getDistance(e) > getSettings().get(7).toSlider().getValue()
 						|| !e.isAlive()
 						|| e == mc.player || e == mc.player.getRidingEntity() || e == mc.renderViewEntity
 						|| (!mc.player.canEntityBeSeen(e) && !getSettings().get(5).toToggle().state)) continue;
 				
-				if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.posX, e.posY+e.getHeight()/2, e.posZ);
+				if (getSettings().get(4).toToggle().state) EntityUtils.facePos(e.posX, e.posY+e.getHeight()/2, e.posZ);
 					
-				if(delay > reqDelay || reqDelay == 0) {
+				if (delay > reqDelay || reqDelay == 0) {
 					mc.playerController.attackEntity(mc.player, e);
 					mc.player.swingArm(Hand.MAIN_HAND);
 					delay=0;

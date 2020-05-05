@@ -52,7 +52,7 @@ public class EntityControl extends Module {
 		e.yaw = mc.player.yaw;
 		double speed = getSettings().get(1).toSlider().getValue();
 
-		if(getSettings().get(4).toToggle().state && e instanceof HorseBaseEntity) {
+		if (getSettings().get(4).toToggle().state && e instanceof HorseBaseEntity) {
 			HorseBaseEntity h = (HorseBaseEntity) e;
 			h.setSaddled(true);
 			h.setTame(true);
@@ -89,20 +89,20 @@ public class EntityControl extends Module {
 			}
 		}
 		
-		if(getSettings().get(2).toToggle().state && mc.options.keyJump.isPressed()) e.setVelocity(e.getVelocity().x, 0.3, e.getVelocity().z);
+		if (getSettings().get(2).toToggle().state && mc.options.keyJump.isPressed()) e.setVelocity(e.getVelocity().x, 0.3, e.getVelocity().z);
 		
-		if(getSettings().get(3).toToggle().state) {
+		if (getSettings().get(3).toToggle().state) {
 			BlockPos p = new BlockPos(e.getPos());
-			if(!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
+			if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
 				e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}
 		
-		if(getSettings().get(4).toToggle().state) {
+		if (getSettings().get(4).toToggle().state) {
 			Vec3d vel = e.getVelocity().multiply(2);
-			if(!WorldUtils.isBoxEmpty(WorldUtils.moveBox(e.getBoundingBox(), vel.x, 0, vel.z))) {
-				for(int i = 2; i < 10; i++) {
-					if(WorldUtils.isBoxEmpty(WorldUtils.moveBox(e.getBoundingBox(), vel.x / i, 0, vel.z / i))) {
+			if (!WorldUtils.isBoxEmpty(WorldUtils.moveBox(e.getBoundingBox(), vel.x, 0, vel.z))) {
+				for (int i = 2; i < 10; i++) {
+					if (WorldUtils.isBoxEmpty(WorldUtils.moveBox(e.getBoundingBox(), vel.x / i, 0, vel.z / i))) {
 						e.setVelocity(vel.x / i / 2, vel.y, vel.z / i / 2);
 						break;
 					}

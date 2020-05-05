@@ -45,7 +45,7 @@ public class CmdSetting extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		if(args.length < 2) {
+		if (args.length < 2) {
 			BleachLogger.errorMessage(getSyntax());
 			return;
 		}
@@ -53,9 +53,9 @@ public class CmdSetting extends Command {
 		Module m = ModuleManager.getModuleByName(args[0]);
 		SettingBase s = m.getSettings().get(Integer.parseInt(args[1]));
 		
-		if(s instanceof SettingSlider) s.toSlider().setValue(Double.parseDouble(args[2]));
-		else if(s instanceof SettingToggle) s.toToggle().state = Boolean.valueOf(args[2]);
-		else if(s instanceof SettingMode) s.toMode().mode = Integer.parseInt(args[2]);
+		if (s instanceof SettingSlider) s.toSlider().setValue(Double.parseDouble(args[2]));
+		else if (s instanceof SettingToggle) s.toToggle().state = Boolean.valueOf(args[2]);
+		else if (s instanceof SettingMode) s.toMode().mode = Integer.parseInt(args[2]);
 		else {
 			BleachLogger.errorMessage("Invalid Command");
 			return;

@@ -50,19 +50,19 @@ public class AutoSign extends Module {
 	
 	@Subscribe
 	public void sendPacket(EventSendPacket event) {
-		if(event.getPacket() instanceof UpdateSignC2SPacket && text.length < 3) {
+		if (event.getPacket() instanceof UpdateSignC2SPacket && text.length < 3) {
 			text = ((UpdateSignC2SPacket) event.getPacket()).getText();
 		}
 	}
 	
 	@Subscribe
 	public void onOpenScreen(EventOpenScreen event) {
-		if(text.length < 3) return;
+		if (text.length < 3) return;
 		
-		if(event.getScreen() instanceof SignEditScreen) {
+		if (event.getScreen() instanceof SignEditScreen) {
 			event.setCancelled(true);
 			
-			if(getSettings().get(0).toToggle().state) {
+			if (getSettings().get(0).toToggle().state) {
 				text =  new String[] {};
 				while(text.length < 4) {
 					IntStream chars = new Random().ints(0, 0x10FFFF);

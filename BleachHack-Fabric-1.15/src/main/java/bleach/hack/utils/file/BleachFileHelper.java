@@ -36,8 +36,8 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("modules.txt");
 		
 		String lines = "";
-		for(Module m: ModuleManager.getModules()) {
-			if(m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
+		for (Module m: ModuleManager.getModules()) {
+			if (m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
 			lines += m.getName() + ":" + m.isToggled() + "\n";
 		}
 		
@@ -47,15 +47,15 @@ public class BleachFileHelper {
 	public static void readModules() {
 		List<String> lines = BleachFileMang.readFileLines("modules.txt");
 		
-		for(Module m: ModuleManager.getModules()) {
-			for(String s: lines) {
+		for (Module m: ModuleManager.getModules()) {
+			for (String s: lines) {
 				String[] line = s.split(":");
 				try {
-					if(line[0].contains(m.getName()) && line[1].contains("true")) {
+					if (line[0].contains(m.getName()) && line[1].contains("true")) {
 						m.toggle();
 						break;
 					}
-				}catch(Exception e) {}
+				} catch (Exception e) {}
 			}
 		}
 	}
@@ -64,14 +64,14 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("settings.txt");
 		
 		String lines = "";
-		for(Module m: ModuleManager.getModules()) {
+		for (Module m: ModuleManager.getModules()) {
 			String line = m.getName();
 			int count = 0;
 			
-			for(SettingBase set: m.getSettings()) {
-				if(set instanceof SettingSlider) line += ":" + m.getSettings().get(count).toSlider().getValue();
-				if(set instanceof SettingMode) line += ":" + m.getSettings().get(count).toMode().mode;
-				if(set instanceof SettingToggle) line += ":" + m.getSettings().get(count).toToggle().state;
+			for (SettingBase set: m.getSettings()) {
+				if (set instanceof SettingSlider) line += ":" + m.getSettings().get(count).toSlider().getValue();
+				if (set instanceof SettingMode) line += ":" + m.getSettings().get(count).toMode().mode;
+				if (set instanceof SettingToggle) line += ":" + m.getSettings().get(count).toToggle().state;
 				count++;
 			}
 			lines += line + "\n";
@@ -83,22 +83,22 @@ public class BleachFileHelper {
 	public static void readSettings() {
 		List<String> lines = BleachFileMang.readFileLines("settings.txt");
 		
-		for(Module m: ModuleManager.getModules()) {
-			for(String s: lines) {
+		for (Module m: ModuleManager.getModules()) {
+			for (String s: lines) {
 				String[] line = s.split(":");
-				if(!line[0].startsWith(m.getName())) continue;
+				if (!line[0].startsWith(m.getName())) continue;
 				int count = 0;
 				
-				for(SettingBase set: m.getSettings()) {
+				for (SettingBase set: m.getSettings()) {
 					try {
-						if(set instanceof SettingSlider) {
+						if (set instanceof SettingSlider) {
 							m.getSettings().get(count).toSlider().setValue(Double.parseDouble(line[count+1]));}
-						if(set instanceof SettingMode) {
+						if (set instanceof SettingMode) {
 							m.getSettings().get(count).toMode().mode = MathHelper.clamp(Integer.parseInt(line[count+1]),
 									0, m.getSettings().get(count).toMode().modes.length - 1);}
-						if(set instanceof SettingToggle) {
+						if (set instanceof SettingToggle) {
 							m.getSettings().get(count).toToggle().state = Boolean.parseBoolean(line[count+1]);}
-					}catch(Exception e) {}
+					} catch (Exception e) {}
 					count++;
 				}
 			}
@@ -109,7 +109,7 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("binds.txt");
 		
 		String lines = "";
-		for(Module m: ModuleManager.getModules()) {
+		for (Module m: ModuleManager.getModules()) {
 			lines += m.getName() + ":" + m.getKey() + "\n";
 		}
 		
@@ -119,11 +119,11 @@ public class BleachFileHelper {
 	public static void readBinds() {
 		List<String> lines = BleachFileMang.readFileLines("binds.txt");
 		
-		for(Module m: ModuleManager.getModules()) {
-			for(String s: lines) {
+		for (Module m: ModuleManager.getModules()) {
+			for (String s: lines) {
 				String[] line = s.split(":");
-				if(!line[0].startsWith(m.getName())) continue;
-				try { m.setKey(Integer.parseInt(line[line.length - 1])); }catch(Exception e) {}
+				if (!line[0].startsWith(m.getName())) continue;
+				try { m.setKey(Integer.parseInt(line[line.length - 1])); } catch (Exception e) {}
 			}
 		}
 	}
@@ -132,7 +132,7 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("clickgui.txt");
 		
 		String text = "";
-		for(Window w: ClickGui.clickGui.windows) text += w.x1 + ":" + w.y1 + "\n";
+		for (Window w: ClickGui.clickGui.windows) text += w.x1 + ":" + w.y1 + "\n";
 		
 		BleachFileMang.appendFile(text, "clickgui.txt");
 	}
@@ -142,16 +142,16 @@ public class BleachFileHelper {
 		
 		try {
 			int c = 0;
-			for(Window w: ClickGui.clickGui.windows) {
+			for (Window w: ClickGui.clickGui.windows) {
 				w.x1 = Integer.parseInt(lines.get(c).split(":")[0]);
 				w.y1 = Integer.parseInt(lines.get(c).split(":")[1]);
 				c++;
 			}
-		}catch(Exception e) {}
+		} catch (Exception e) {}
 	}
 	
 	public static void readPrefix() {
-		try{ CommandManager.prefix = BleachFileMang.readFileLines("prefix.txt").get(0); }catch(Exception e) {}
+		try{ CommandManager.prefix = BleachFileMang.readFileLines("prefix.txt").get(0); } catch (Exception e) {}
 	}
 	
 }

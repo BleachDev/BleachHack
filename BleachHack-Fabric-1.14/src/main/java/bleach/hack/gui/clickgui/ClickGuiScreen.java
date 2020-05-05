@@ -69,41 +69,41 @@ public class ClickGuiScreen extends Screen {
 		/* Change Themes */
 		int mode = ModuleManager.getModule(ClickGui.class).getSettings().get(0).toMode().mode;
 		List<ModuleWindow> tempTabs = new ArrayList<>();
-		for(ModuleWindow m: tabs) {
-			if(mode == 0 && !(m instanceof ModuleWindowLight)) tempTabs.add(new ModuleWindowLight(m.modList, m.name, len, m.posX, m.posY));
-			else if(mode == 1 && !(m instanceof ModuleWindowDark)) tempTabs.add(new ModuleWindowDark(m.modList, m.name, len, m.posX, m.posY));
-			else if(mode == 2 && !(m instanceof ModuleWindowFuture)) tempTabs.add(new ModuleWindowFuture(m.modList, m.name, len, m.posX, m.posY));
+		for (ModuleWindow m: tabs) {
+			if (mode == 0 && !(m instanceof ModuleWindowLight)) tempTabs.add(new ModuleWindowLight(m.modList, m.name, len, m.posX, m.posY));
+			else if (mode == 1 && !(m instanceof ModuleWindowDark)) tempTabs.add(new ModuleWindowDark(m.modList, m.name, len, m.posX, m.posY));
+			else if (mode == 2 && !(m instanceof ModuleWindowFuture)) tempTabs.add(new ModuleWindowFuture(m.modList, m.name, len, m.posX, m.posY));
 			
-			if(!tempTabs.isEmpty()) tempTabs.get(tempTabs.size() -1).mods = m.mods;
+			if (!tempTabs.isEmpty()) tempTabs.get(tempTabs.size() -1).mods = m.mods;
 		}
-		if(!tempTabs.isEmpty()) tabs = tempTabs;
+		if (!tempTabs.isEmpty()) tabs = tempTabs;
 		
 		len = (int) Math.round(ModuleManager.getModule(ClickGui.class).getSettings().get(1).toSlider().getValue());
-		for(ModuleWindow w: tabs) w.draw(int_1, int_2, len);
+		for (ModuleWindow w: tabs) w.draw(int_1, int_2, len);
 		
 		super.render(int_1, int_2, float_1);
 	}
 	
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
-		if(p_mouseClicked_5_ == 0) for(ModuleWindow w: tabs) w.onLmPressed();
-		else if(p_mouseClicked_5_ == 1) for(ModuleWindow w: tabs) w.onRmPressed();
+		if (p_mouseClicked_5_ == 0) for (ModuleWindow w: tabs) w.onLmPressed();
+		else if (p_mouseClicked_5_ == 1) for (ModuleWindow w: tabs) w.onRmPressed();
 		
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
 	
 	public boolean mouseReleased(double double_1, double double_2, int int_1) {
-		if(int_1 == 0) for(ModuleWindow w: tabs) w.onLmReleased();
+		if (int_1 == 0) for (ModuleWindow w: tabs) w.onLmReleased();
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
 	
 	public boolean keyPressed(int int_1, int int_2, int int_3) {
-		for(ModuleWindow w: tabs) w.onKeyPressed(int_1);
+		for (ModuleWindow w: tabs) w.onKeyPressed(int_1);
 		return super.keyPressed(int_1, int_2, int_3);
 	}
 	
 	public void resetGui() {
 		int x = 30;
-		for(ModuleWindow m: tabs) {
+		for (ModuleWindow m: tabs) {
 			m.setPos(x, 35);
 			x += len + 5;
 		}

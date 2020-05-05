@@ -44,10 +44,10 @@ public class OffhandCrash extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
-			for(int i = 0; i < getSettings().get(0).toSlider().getValue(); i++) {
+		if (this.isToggled()) {
+			for (int i = 0; i < getSettings().get(0).toSlider().getValue(); i++) {
 				mc.player.connection.sendPacket(new CPlayerDiggingPacket(Action.SWAP_HELD_ITEMS, BlockPos.ZERO, Direction.UP));
-				if(getSettings().get(1).toToggle().state) mc.player.connection.sendPacket(new CPlayerPacket(true));
+				if (getSettings().get(1).toToggle().state) mc.player.connection.sendPacket(new CPlayerPacket(true));
 			}
 		}
 	}

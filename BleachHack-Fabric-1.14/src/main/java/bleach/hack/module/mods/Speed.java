@@ -38,12 +38,12 @@ public class Speed extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(mc.options.keySneak.isPressed()) return;
+		if (mc.options.keySneak.isPressed()) return;
 		double speeds = getSettings().get(1).toSlider().getValue() / 30;
 		
 		/* OnGround */
-		if(getSettings().get(0).toMode().mode == 0) {
-			if(mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25) return;
+		if (getSettings().get(0).toMode().mode == 0) {
+			if (mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25) return;
 			
 			if (jumping && mc.player.y >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
@@ -67,16 +67,16 @@ public class Speed extends Module {
 			}
 			
 		/* MiniHop */
-		}else if(getSettings().get(0).toMode().mode == 1) {
-			if(mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0) return;
+		} else if (getSettings().get(0).toMode().mode == 1) {
+			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0) return;
 			if (mc.player.onGround) mc.player.jump();
-			else if(mc.player.getVelocity().y > 0){
+			else if (mc.player.getVelocity().y > 0) {
 				mc.player.setVelocity(mc.player.getVelocity().x * (0.9 + speeds), -1, mc.player.getVelocity().z * (0.9 + speeds));
 				mc.player.input.movementSideways += 1.5F;
 			}
 			
 		/* Bhop */
-		}else if(getSettings().get(0).toMode().mode == 2) {
+		} else if (getSettings().get(0).toMode().mode == 2) {
 			if (mc.player.forwardSpeed > 0 && mc.player.onGround) {
 				mc.player.jump();
 				mc.player.setVelocity(mc.player.getVelocity().x * (0.65 + speeds), 0.255556, mc.player.getVelocity().z * (0.65 + speeds));

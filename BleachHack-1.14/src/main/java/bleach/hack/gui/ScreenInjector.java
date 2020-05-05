@@ -28,14 +28,14 @@ public class ScreenInjector {
 
 	@SubscribeEvent
 	public void initGui(InitGuiEvent.Pre event) {
-		if(!(Minecraft.getInstance().currentScreen instanceof MainMenuScreen)) return;
+		if (!(Minecraft.getInstance().currentScreen instanceof MainMenuScreen)) return;
 		
 		Minecraft.getInstance().displayGuiScreen(new BleachMainMenu());
 	}
 	
 	@SubscribeEvent
 	public void initGui(InitGuiEvent.Post event) {
-		if(!(Minecraft.getInstance().currentScreen instanceof MultiplayerScreen)) return;
+		if (!(Minecraft.getInstance().currentScreen instanceof MultiplayerScreen)) return;
 		
 		event.addWidget(new Button(5, 7, 50, 18, "Scraper", button -> {
 			Minecraft.getInstance().displayGuiScreen(new ServerScraperScreen((MultiplayerScreen) event.getGui()));

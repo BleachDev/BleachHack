@@ -49,20 +49,20 @@ public class BowBot extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(!(mc.player.getMainHandStack().getItem() instanceof RangedWeaponItem) || !mc.player.isUsingItem()) return;
+		if (!(mc.player.getMainHandStack().getItem() instanceof RangedWeaponItem) || !mc.player.isUsingItem()) return;
 		
-		if(getSettings().get(0).toToggle().state && BowItem.getPullProgress(mc.player.getItemUseTime()) > getSettings().get(1).toSlider().getValue()) {
+		if (getSettings().get(0).toToggle().state && BowItem.getPullProgress(mc.player.getItemUseTime()) > getSettings().get(1).toSlider().getValue()) {
 			mc.player.stopUsingItem();
 			mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.UP));
 		}
 		
 		// skidded from wurst no bully pls
-		if(getSettings().get(2).toToggle().state) {
+		if (getSettings().get(2).toToggle().state) {
 			List<Entity> targets = Streams.stream(mc.world.getEntities())
 					.filter(e -> e instanceof LivingEntity && e != mc.player)
 					.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
 			
-			if(targets.isEmpty()) return;
+			if (targets.isEmpty()) return;
 			
 			LivingEntity target = (LivingEntity) targets.get(0);
 			
@@ -70,7 +70,7 @@ public class BowBot extends Module {
 			float velocity = (72000 - mc.player.getItemUseTimeLeft()) / 20F;
 			velocity = (velocity * velocity + velocity * 2) / 3;
 			
-			if(velocity > 1) velocity = 1;
+			if (velocity > 1) velocity = 1;
 			
 			// set position to aim at
 			double d = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
@@ -97,7 +97,7 @@ public class BowBot extends Module {
 				/ (g * hDistance)));
 			
 			// set pitch
-			if(Float.isNaN(neededPitch)) EntityUtils.facePos(target.x, target.y + target.getHeight() / 2, target.z);
+			if (Float.isNaN(neededPitch)) EntityUtils.facePos(target.x, target.y + target.getHeight() / 2, target.z);
 			else mc.player.pitch = neededPitch;
 		}
 	}

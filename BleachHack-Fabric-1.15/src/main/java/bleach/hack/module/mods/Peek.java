@@ -50,23 +50,23 @@ public class Peek extends Module {
 	public void drawScreen(EventDrawContainer event) {
 		Slot slot = null;
 		try { slot = (Slot) FabricReflect.getFieldValue(event.getScreen(), "field_2787", "focusedSlot"); } catch (Exception e) {}
-		if(slot == null) return;
+		if (slot == null) return;
 		
-		if(!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) {
+		if (!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) {
 			pageCount = 0;
 			pages = null;
 		}
 		
 		slotPos = new int[] {slot.xPosition, slot.yPosition};
 		
-		if(getSettings().get(0).toToggle().state) drawShulkerToolTip(slot, event.mouseX, event.mouseY);
-		if(getSettings().get(1).toToggle().state) drawBookToolTip(slot, event.mouseX, event.mouseY);
-		if(getSettings().get(2).toToggle().state) drawMapToolTip(slot, event.mouseX, event.mouseY);
+		if (getSettings().get(0).toToggle().state) drawShulkerToolTip(slot, event.mouseX, event.mouseY);
+		if (getSettings().get(1).toToggle().state) drawBookToolTip(slot, event.mouseX, event.mouseY);
+		if (getSettings().get(2).toToggle().state) drawMapToolTip(slot, event.mouseX, event.mouseY);
 	}
 	
 	public void drawShulkerToolTip(Slot slot, int mX, int mY) {
-		if(!(slot.getStack().getItem() instanceof BlockItem)) return;
-		if(!(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
+		if (!(slot.getStack().getItem() instanceof BlockItem)) return;
+		if (!(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
 				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ChestBlock)
 				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof DispenserBlock)
 				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof HopperBlock)) return;
@@ -76,11 +76,11 @@ public class Peek extends Module {
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 		
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock ? 18 : 0;
-		if(block instanceof HopperBlock) renderTooltipBox(mX, mY - 21, 13, 82, true);
-		else if(block instanceof DispenserBlock) renderTooltipBox(mX, mY - 21, 13, 150, true);
+		if (block instanceof HopperBlock) renderTooltipBox(mX, mY - 21, 13, 82, true);
+		else if (block instanceof DispenserBlock) renderTooltipBox(mX, mY - 21, 13, 150, true);
 		else renderTooltipBox(mX, mY - 55, 47, 150, true);
-		for(ItemStack i: items) {
-			if(count > 26) break;
+		for (ItemStack i: items) {
+			if (count > 26) break;
 			int x = mX + 10 + (17 * (count % 9));
 			int y = mY - 69 + (17 * (count / 9));
 			
@@ -91,17 +91,17 @@ public class Peek extends Module {
 	}
 	
 	public void drawBookToolTip(Slot slot, int mX, int mY) {
-		if(slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK) return;
+		if (slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK) return;
 		
-		if(pages == null) pages = ItemContentUtils.getTextInBook(slot.getStack());
-		if(pages.isEmpty()) return;
+		if (pages == null) pages = ItemContentUtils.getTextInBook(slot.getStack());
+		if (pages.isEmpty()) return;
 		
 		/* Cycle through pages */
-		if(mc.player.age % 80 == 0 && !shown) {
+		if (mc.player.age % 80 == 0 && !shown) {
 			shown = true;
-			if(pageCount == pages.size() - 1) pageCount = 0;
+			if (pageCount == pages.size() - 1) pageCount = 0;
 			else pageCount++;
-		}else if(mc.player.age % 80 != 0) shown = false;
+		} else if (mc.player.age % 80 != 0) shown = false;
 		
 		int lenght = mc.textRenderer.getStringWidth("Page: " + (pageCount + 1) + "/" + pages.size());
 		
@@ -111,7 +111,7 @@ public class Peek extends Module {
 				mX + 68 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
 		
 		int count = 0;
-		for(String s: pages.get(pageCount)) {
+		for (String s: pages.get(pageCount)) {
 			mc.textRenderer.drawWithShadow(s, mX + 12, mY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
 			count++;
 		}
@@ -119,7 +119,7 @@ public class Peek extends Module {
 	}
 	
 	public void drawMapToolTip(Slot slot, int mX, int mY) {
-		if(slot.getStack().getItem() != Items.FILLED_MAP) return;
+		if (slot.getStack().getItem() != Items.FILLED_MAP) return;
 		
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
 		byte[] colors = data.colors;
@@ -133,11 +133,11 @@ public class Peek extends Module {
 		int y = (int) (mY*(1/size) - 12*(1/size) - 140);
 		
 		renderTooltipBox(x - 12, y + 12, 128, 128, false);
-		for(byte c: colors) {
+		for (byte c: colors) {
 			int c1 = c & 255;
 			
-			if(c1 / 4 != 0) Screen.fill(x, y, x+1, y+1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
-			if(x - (int) (mX*(1/size)+12*(1/size)) == 127) { x = (int) (mX*(1/size)+12*(1/size)); y++; }
+			if (c1 / 4 != 0) Screen.fill(x, y, x+1, y+1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
+			if (x - (int) (mX*(1/size)+12*(1/size)) == 127) { x = (int) (mX*(1/size)+12*(1/size)); y++; }
 			else x++;
 		}
 		
@@ -164,7 +164,7 @@ public class Peek extends Module {
 
 		int int_5 = x1 + 12;
 		int int_6 = y1 - 12;
-		if(wrap) {
+		if (wrap) {
 			if (int_5 + y2 > mc.currentScreen.width) int_5 -= 28 + y2;
 			if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
 		}

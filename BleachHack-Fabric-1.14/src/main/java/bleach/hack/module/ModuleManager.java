@@ -82,8 +82,8 @@ public class ModuleManager {
 	}
 
 	public static Module getModule(Class<? extends Module> clazz) {
-		for(Module module : mods) {
-			if(module.getClass().equals(clazz)) {
+		for (Module module : mods) {
+			if (module.getClass().equals(clazz)) {
 				return module;
 			}
 		}

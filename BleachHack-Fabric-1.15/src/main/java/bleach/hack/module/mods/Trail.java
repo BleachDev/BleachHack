@@ -50,15 +50,15 @@ public class Trail extends Module {
 	@Override
 	public void onEnable() {
 		super.onEnable();
-		if(!getSettings().get(1).toToggle().state) trails.clear();
+		if (!getSettings().get(1).toToggle().state) trails.clear();
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(!getSettings().get(0).toToggle().state) return;
+		if (!getSettings().get(0).toToggle().state) return;
 		
-		if(trails.isEmpty()) trails.add(Arrays.asList(mc.player.getPos().add(0, 0.1, 0), mc.player.getPos()));
-		else if(mc.player.getPos().add(0, 0.1, 0).distanceTo(Iterables.getLast(trails).get(1)) > 0.15) {
+		if (trails.isEmpty()) trails.add(Arrays.asList(mc.player.getPos().add(0, 0.1, 0), mc.player.getPos()));
+		else if (mc.player.getPos().add(0, 0.1, 0).distanceTo(Iterables.getLast(trails).get(1)) > 0.15) {
 			trails.add(Arrays.asList(Iterables.getLast(trails).get(1), mc.player.getPos().add(0, 0.1, 0)));
 		}
 	}
@@ -66,19 +66,19 @@ public class Trail extends Module {
 	@Subscribe
 	public void onRender(Event3DRender event) {
 		Color clr = new Color(0, 0, 0);
-		if(getSettings().get(2).toMode().mode == 0) clr = new Color(200, 50, 50);
-		else if(getSettings().get(2).toMode().mode == 1) clr = new Color(50, 200, 50);
-		else if(getSettings().get(2).toMode().mode == 2) clr = new Color(50, 50, 200);
+		if (getSettings().get(2).toMode().mode == 0) clr = new Color(200, 50, 50);
+		else if (getSettings().get(2).toMode().mode == 1) clr = new Color(50, 200, 50);
+		else if (getSettings().get(2).toMode().mode == 2) clr = new Color(50, 50, 200);
 		
 		int count = 250;
 		boolean rev = false;
-		for(List<Vec3d> e: trails) {
-			if(getSettings().get(2).toMode().mode == 3) clr = new Color(50, 255-count, count);
-			else if(getSettings().get(2).toMode().mode == 4) clr = new Color(count, 50, 255-count);
+		for (List<Vec3d> e: trails) {
+			if (getSettings().get(2).toMode().mode == 3) clr = new Color(50, 255-count, count);
+			else if (getSettings().get(2).toMode().mode == 4) clr = new Color(count, 50, 255-count);
 			RenderUtils.drawLine(e.get(0).x, e.get(0).y, e.get(0).z, e.get(1).x, e.get(1).y, e.get(1).z,
 					clr.getRed()/255f, clr.getGreen()/255f, clr.getBlue()/255f,
 					(float) getSettings().get(3).toSlider().getValue());
-			if(count < 5 || count > 250) rev = !rev;
+			if (count < 5 || count > 250) rev = !rev;
 			count += rev ? 3 : -3;
 		}
 	}

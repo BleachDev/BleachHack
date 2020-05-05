@@ -37,16 +37,16 @@ public class Jesus extends Module {
 
 	/* This works surprisingly well, just threw come code together and it worked */
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			Entity e = mc.player.getRidingEntity() != null ? mc.player.getRidingEntity() : mc.player;
 			
-			if(e.isSneaking() || e.fallDistance > 3f || e.collidedHorizontally) return;
+			if (e.isSneaking() || e.fallDistance > 3f || e.collidedHorizontally) return;
 
-			if(isFluid(e.getPositionVec().add(0,0.3,0))) {
+			if (isFluid(e.getPositionVec().add(0,0.3,0))) {
 				e.setMotion(e.getMotion().x, 0.08, e.getMotion().z);
-			}else if(isFluid(e.getPositionVec().add(0,0.07,0))) {
+			} else if (isFluid(e.getPositionVec().add(0,0.07,0))) {
 				e.setMotion(e.getMotion().x, 0.01, e.getMotion().z);
-			}else if(isFluid(e.getPositionVec())) {
+			} else if (isFluid(e.getPositionVec())) {
 				e.setMotion(e.getMotion().x, -0.005, e.getMotion().z);
 				e.onGround = true;
 			}
@@ -59,7 +59,7 @@ public class Jesus extends Module {
 		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA,
 				Material.SEA_GRASS, Material.CORAL);
 
-		if(fluids.contains(mc.world.getBlockState(p).getMaterial())) return true;
+		if (fluids.contains(mc.world.getBlockState(p).getMaterial())) return true;
 		
 		return false;
 	}

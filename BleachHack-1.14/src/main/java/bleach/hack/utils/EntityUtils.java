@@ -48,7 +48,7 @@ public class EntityUtils {
 	
 	public static List<PlayerEntity> getPlayerEntites() {
 		List<PlayerEntity> entities = new ArrayList<>();
-		for(Entity e: getLoadedEntities()) if(e instanceof PlayerEntity) entities.add((PlayerEntity)e);
+		for (Entity e: getLoadedEntities()) if (e instanceof PlayerEntity) entities.add((PlayerEntity)e);
 		return entities;
 	}
 	
@@ -85,13 +85,13 @@ public class EntityUtils {
 	public static int getDirectionFacing(Entity e) {
 		int yaw = (int)e.rotationYaw;
 		
-		if(yaw > 180) while(yaw > 180) yaw -= 360; 
-		else if(yaw < -180) while(yaw < -180) yaw += 360;
+		if (yaw > 180) while(yaw > 180) yaw -= 360; 
+		else if (yaw < -180) while(yaw < -180) yaw += 360;
 		
-		if(yaw >= 135 || yaw <= -135) return 0;
-		if(yaw <= -45 && yaw >= -135) return 1;
-		if(yaw <= 45 && yaw >= -45) return 2;
-		if(yaw <= 135 && yaw >= 45) return 3;
+		if (yaw >= 135 || yaw <= -135) return 0;
+		if (yaw <= -45 && yaw >= -135) return 1;
+		if (yaw <= 45 && yaw >= -45) return 2;
+		if (yaw <= 135 && yaw >= 45) return 3;
 		
 		return 0;
 	}

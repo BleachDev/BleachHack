@@ -67,8 +67,8 @@ public class PacketFly extends Module {
 	
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
-		if(mc.world == null || mc.player == null) return;
-		if(event.getPacket() instanceof PlayerPositionLookS2CPacket && getSettings().get(4).toToggle().state) {
+		if (mc.world == null || mc.player == null) return;
+		if (event.getPacket() instanceof PlayerPositionLookS2CPacket && getSettings().get(4).toToggle().state) {
 			event.setCancelled(true);
 		}
 	}
@@ -78,22 +78,22 @@ public class PacketFly extends Module {
 		double hspeed = getSettings().get(1).toSlider().getValue();
 		double vspeed = getSettings().get(2).toSlider().getValue();
 		
-		if(!mc.player.isAlive()) return;
+		if (!mc.player.isAlive()) return;
 		timer++;
 		
 		Entity target = mc.player.getVehicle() == null ? mc.player : mc.player.getVehicle();
-		if(getSettings().get(0).toMode().mode == 0) {
-			if(mc.options.keyJump.isPressed()) posY += vspeed;
-			if(mc.options.keySneak.isPressed()) posY -= vspeed;
+		if (getSettings().get(0).toMode().mode == 0) {
+			if (mc.options.keyJump.isPressed()) posY += vspeed;
+			if (mc.options.keySneak.isPressed()) posY -= vspeed;
 			
 			Vec3d forward = new Vec3d(0,0,hspeed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
-			if(mc.options.keyForward.isPressed()) { posX += forward.x; posZ += forward.z; }
-			if(mc.options.keyBack.isPressed()) { posX -= forward.x; posZ -= forward.z; }
-			if(mc.options.keyLeft.isPressed()) { posX += strafe.x; posZ += strafe.z; }
-			if(mc.options.keyRight.isPressed()) { posX -= strafe.x; posZ -= strafe.z; }
+			if (mc.options.keyForward.isPressed()) { posX += forward.x; posZ += forward.z; }
+			if (mc.options.keyBack.isPressed()) { posX -= forward.x; posZ -= forward.z; }
+			if (mc.options.keyLeft.isPressed()) { posX += strafe.x; posZ += strafe.z; }
+			if (mc.options.keyRight.isPressed()) { posX -= strafe.x; posZ -= strafe.z; }
 			
-			if(timer > getSettings().get(3).toSlider().getValue()) {
+			if (timer > getSettings().get(3).toSlider().getValue()) {
 				posY -= 0.2;
 				timer = 0;
 			}
@@ -105,25 +105,25 @@ public class PacketFly extends Module {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY - 0.01, posZ, true));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket(timer));
 			
-		}else if(getSettings().get(0).toMode().mode == 1) {
+		} else if (getSettings().get(0).toMode().mode == 1) {
 			double mX = 0; double mY = 0; double mZ = 0;
-			if(mc.player.headYaw != mc.player.yaw) {
+			if (mc.player.headYaw != mc.player.yaw) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
 						mc.player.headYaw, mc.player.pitch, mc.player.onGround));
 				return;
 			}
 			
-			if(mc.options.keyJump.isPressed()) mY = 0.062;
-			if(mc.options.keySneak.isPressed()) mY = -0.062;
+			if (mc.options.keyJump.isPressed()) mY = 0.062;
+			if (mc.options.keySneak.isPressed()) mY = -0.062;
 			
-			if(mc.options.keyForward.isPressed()) {
-				if(mc.player.getMovementDirection().equals(Direction.NORTH)) mZ = -0.275;
-				if(mc.player.getMovementDirection().equals(Direction.EAST)) mX = 0.275;
-				if(mc.player.getMovementDirection().equals(Direction.SOUTH)) mZ = 0.275;
-				if(mc.player.getMovementDirection().equals(Direction.WEST)) mX = -0.275;
+			if (mc.options.keyForward.isPressed()) {
+				if (mc.player.getMovementDirection().equals(Direction.NORTH)) mZ = -0.275;
+				if (mc.player.getMovementDirection().equals(Direction.EAST)) mX = 0.275;
+				if (mc.player.getMovementDirection().equals(Direction.SOUTH)) mZ = 0.275;
+				if (mc.player.getMovementDirection().equals(Direction.WEST)) mX = -0.275;
 			}
 			
-			if(timer > getSettings().get(3).toSlider().getValue()) {
+			if (timer > getSettings().get(3).toSlider().getValue()) {
 				mX = 0;
 				mZ = 0;
 				mY = -0.062;

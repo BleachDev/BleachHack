@@ -80,10 +80,10 @@ public class ChunkSize extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(System.currentTimeMillis() - 1500 < timer) return;
+		if (System.currentTimeMillis() - 1500 < timer) return;
 		timer = System.currentTimeMillis();
 		
-		if(mc.world.getWorldChunk(mc.player.getBlockPos()) == null) return;
+		if (mc.world.getWorldChunk(mc.player.getBlockPos()) == null) return;
 		new Thread(() -> {
 			CompoundTag tag = serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
 			DataOutputStream output = new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
@@ -114,7 +114,7 @@ public class ChunkSize extends Module {
 	      boolean boolean_1 = chunk_1.isLightOn();
 
 	      CompoundTag compoundTag_6;
-	      for(Integer int_1: IntStream.range(-1, 17).boxed().collect(Collectors.toList())) {
+	      for (Integer int_1: IntStream.range(-1, 17).boxed().collect(Collectors.toList())) {
 	         ChunkSection chunkSection_1 = (ChunkSection)Arrays.stream(chunkSections_1).filter((chunkSection_1x) -> {
 	            return chunkSection_1x != null && chunkSection_1x.getYOffset() >> 4 == int_1;
 	         }).findFirst().orElse(WorldChunk.EMPTY_SECTION);
@@ -147,7 +147,7 @@ public class ChunkSize extends Module {
 	      BiomeArray biomes_1 = chunk_1.getBiomeArray();
 	      int[] ints_1 = biomes_1 != null ? biomes_1.toIntArray() : new int[0];
 	      if (biomes_1 != null) {
-	         for(int int_3 = 0; int_3 < biomes_1.toIntArray().length; ++int_3) {
+	         for (int int_3 = 0; int_3 < biomes_1.toIntArray().length; ++int_3) {
 	            ints_1[int_3] = Registry.BIOME.getRawId(Registry.BIOME.get(biomes_1.toIntArray()[int_3]));
 	         }
 	      }
@@ -170,7 +170,7 @@ public class ChunkSize extends Module {
 	         WorldChunk worldChunk_1 = (WorldChunk)chunk_1;
 	         worldChunk_1.setUnsaved(false);
 
-	         for(int int_4 = 0; int_4 < worldChunk_1.getEntitySectionArray().length; ++int_4) {
+	         for (int int_4 = 0; int_4 < worldChunk_1.getEntitySectionArray().length; ++int_4) {
 	            Iterator<Entity> var16 = worldChunk_1.getEntitySectionArray()[int_4].iterator();
 
 	            while(var16.hasNext()) {
@@ -190,7 +190,7 @@ public class ChunkSize extends Module {
 	         GenerationStep.Carver[] var30 = GenerationStep.Carver.values();
 	         int var33 = var30.length;
 
-	         for(int var35 = 0; var35 < var33; ++var35) {
+	         for (int var35 = 0; var35 < var33; ++var35) {
 	            GenerationStep.Carver generationStep$Carver_1 = var30[var35];
 	            compoundTag_6.putByteArray(generationStep$Carver_1.toString(), chunk_1.getCarvingMask(generationStep$Carver_1).toByteArray());
 	         }

@@ -49,7 +49,7 @@ public class Criticals extends Module {
             	/* Lets fake some extra paricles to make the player feel good */
             	Entity e = packet.getEntity(mc.world);
             	Random r = new Random();
-                for(int i = 0; i < 10; i++) {
+                for (int i = 0; i < 10; i++) {
                 	mc.particleManager.addParticle(ParticleTypes.CRIT, e.x, e.y + e.getHeight() / 2, e.z,
                 			r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5);
                 }
@@ -58,8 +58,8 @@ public class Criticals extends Module {
     }
 
     private void doCritical() {
-        if(!mc.player.onGround) return;
-        if(mc.player.isInLava() || mc.player.isInWater()) return;
+        if (!mc.player.onGround) return;
+        if (mc.player.isInLava() || mc.player.isInWater()) return;
         double posX = mc.player.x;
         double posY = mc.player.y;
         double posZ = mc.player.z;

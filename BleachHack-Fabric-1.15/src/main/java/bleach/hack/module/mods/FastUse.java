@@ -41,8 +41,8 @@ public class FastUse extends Module {
 		FabricReflect.writeField(mc, 0, "field_1752", "itemUseCooldown");
 		
 		/* call rightClickMouse */
-		if(getSettings().get(0).toMode().mode == 1 && mc.options.keyUse.isPressed()) {
-			for(int i = 0; i < (int) getSettings().get(1).toSlider().getValue(); i++) {
+		if (getSettings().get(0).toMode().mode == 1 && mc.options.keyUse.isPressed()) {
+			for (int i = 0; i < (int) getSettings().get(1).toSlider().getValue(); i++) {
 				FabricReflect.invokeMethod(mc, "method_1583", "doItemUse");
 			}
 		}

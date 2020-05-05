@@ -70,24 +70,24 @@ public class Killaura extends Module {
 						|| (e instanceof ArmorStandEntity && getSettings().get(3).toToggle().state))
 				.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
 
-		for(Entity e: targets) {
-			if(mc.player.distanceTo(e) > getSettings().get(7).toSlider().getValue()
+		for (Entity e: targets) {
+			if (mc.player.distanceTo(e) > getSettings().get(7).toSlider().getValue()
 					|| ((LivingEntity)e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
 					|| (!mc.player.canSee(e) && !getSettings().get(5).toToggle().state)) continue;
 			
-			if(getSettings().get(4).toToggle().state) EntityUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
+			if (getSettings().get(4).toToggle().state) EntityUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
 				
-			if(((delay > reqDelay || reqDelay == 0) && !getSettings().get(6).toToggle().state) || 
+			if (((delay > reqDelay || reqDelay == 0) && !getSettings().get(6).toToggle().state) || 
 					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSettings().get(6).toToggle().state)) {
 				boolean wasSprinting = mc.player.isSprinting();
 
-				if(wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
+				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 
 				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e));
 				mc.player.attack(e);
 				mc.player.swingHand(Hand.MAIN_HAND);
 
-				if(wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
+				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
 
 				delay = 0;
 			}

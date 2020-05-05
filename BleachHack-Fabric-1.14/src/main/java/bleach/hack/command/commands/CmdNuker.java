@@ -47,8 +47,8 @@ public class CmdNuker extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		if(args[0].equalsIgnoreCase("add")) {
-			if(Registry.BLOCK.get(new Identifier(args[1].toLowerCase())) == Blocks.AIR){
+		if (args[0].equalsIgnoreCase("add")) {
+			if (Registry.BLOCK.get(new Identifier(args[1].toLowerCase())) == Blocks.AIR) {
 				BleachLogger.errorMessage("Invalid Block: " + args[1]);
 				return;
 			}
@@ -58,14 +58,14 @@ public class CmdNuker extends Command {
 			ModuleManager.getModule(Nuker.class).toggle();
 			BleachLogger.infoMessage("Added Block: " + args[1]);
 			
-		}else if(args[0].equalsIgnoreCase("remove")) {
+		} else if (args[0].equalsIgnoreCase("remove")) {
 			List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
 			
-			if(lines.contains(args[1].toLowerCase())) {
+			if (lines.contains(args[1].toLowerCase())) {
 				lines.remove(args[1].toLowerCase());
 				
 				String s = "";
-				for(String s1: lines) s += s1 + "\n";
+				for (String s1: lines) s += s1 + "\n";
 				
 				BleachFileMang.createEmptyFile("nukerblocks.txt");
 				BleachFileMang.appendFile(s, "nukerblocks.txt");
@@ -74,14 +74,14 @@ public class CmdNuker extends Command {
 			}
 			
 			BleachLogger.errorMessage("Block Not In List: " + args[1]);
-		}else if(args[0].equalsIgnoreCase("clear")) {
+		} else if (args[0].equalsIgnoreCase("clear")) {
 			BleachFileMang.createEmptyFile("nukerblocks.txt");
 			BleachLogger.infoMessage("Cleared Nuker Blocks");
-		}else if(args[0].equalsIgnoreCase("list")) {
+		} else if (args[0].equalsIgnoreCase("list")) {
 			List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
 			
 			String s = "";
-			for(String l: lines) {
+			for (String l: lines) {
 				s += "§6" + l + "\n";
 			}
 			

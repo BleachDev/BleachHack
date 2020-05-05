@@ -54,27 +54,27 @@ public class PacketFly extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			double hspeed = getSettings().get(1).toSlider().getValue();
 			double vspeed = getSettings().get(2).toSlider().getValue();
 			
-			if(!mc.player.isAlive()) return;
+			if (!mc.player.isAlive()) return;
 			timer++;
 			mc.player.setVelocity(0, 0, 0);
 			mc.player.setMotion(0, 0, 0);
 			
-			if(getSettings().get(0).toMode().mode == 0) {
-				if(mc.gameSettings.keyBindJump.isKeyDown()) posY += vspeed;
-				if(mc.gameSettings.keyBindSneak.isKeyDown()) posY -= vspeed;
+			if (getSettings().get(0).toMode().mode == 0) {
+				if (mc.gameSettings.keyBindJump.isKeyDown()) posY += vspeed;
+				if (mc.gameSettings.keyBindSneak.isKeyDown()) posY -= vspeed;
 				
 				Vec3d forward = new Vec3d(0,0,hspeed).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
 				Vec3d strafe = forward.rotateYaw((float) Math.toRadians(90));
-				if(mc.gameSettings.keyBindForward.isKeyDown()) { posX += forward.x; posZ += forward.z; }
-				if(mc.gameSettings.keyBindBack.isKeyDown()) { posX -= forward.x; posZ -= forward.z; }
-				if(mc.gameSettings.keyBindLeft.isKeyDown()) { posX += strafe.x; posZ += strafe.z; }
-				if(mc.gameSettings.keyBindRight.isKeyDown()) { posX -= strafe.x; posZ -= strafe.z; }
+				if (mc.gameSettings.keyBindForward.isKeyDown()) { posX += forward.x; posZ += forward.z; }
+				if (mc.gameSettings.keyBindBack.isKeyDown()) { posX -= forward.x; posZ -= forward.z; }
+				if (mc.gameSettings.keyBindLeft.isKeyDown()) { posX += strafe.x; posZ += strafe.z; }
+				if (mc.gameSettings.keyBindRight.isKeyDown()) { posX -= strafe.x; posZ -= strafe.z; }
 				
-				if(timer > getSettings().get(3).toSlider().getValue()) {
+				if (timer > getSettings().get(3).toSlider().getValue()) {
 					posY -= 0.2;
 					timer = 0;
 				}
@@ -84,25 +84,25 @@ public class PacketFly extends Module {
 				mc.player.connection.sendPacket(new CPlayerPacket());
 				mc.player.connection.sendPacket(new CConfirmTeleportPacket());
 				
-			}else if(getSettings().get(0).toMode().mode == 1) {
+			} else if (getSettings().get(0).toMode().mode == 1) {
 				double mX = 0; double mY = 0; double mZ = 0;
-				if(mc.player.rotationYawHead != mc.player.rotationYaw) {
+				if (mc.player.rotationYawHead != mc.player.rotationYaw) {
 					mc.player.connection.sendPacket(new CPlayerPacket.RotationPacket(
 							mc.player.rotationYawHead, mc.player.rotationPitch, mc.player.onGround));
 					return;
 				}
 				
-				if(mc.gameSettings.keyBindJump.isKeyDown()) mY = 0.062;
-				if(mc.gameSettings.keyBindSneak.isKeyDown()) mY = -0.062;
+				if (mc.gameSettings.keyBindJump.isKeyDown()) mY = 0.062;
+				if (mc.gameSettings.keyBindSneak.isKeyDown()) mY = -0.062;
 				
-				if(mc.gameSettings.keyBindForward.isKeyDown()) {
-					if(EntityUtils.getDirectionFacing(mc.player) == 0) mZ = -0.275;
-					if(EntityUtils.getDirectionFacing(mc.player) == 1) mX = 0.275;
-					if(EntityUtils.getDirectionFacing(mc.player) == 2) mZ = 0.275;
-					if(EntityUtils.getDirectionFacing(mc.player) == 3) mX = -0.275;
+				if (mc.gameSettings.keyBindForward.isKeyDown()) {
+					if (EntityUtils.getDirectionFacing(mc.player) == 0) mZ = -0.275;
+					if (EntityUtils.getDirectionFacing(mc.player) == 1) mX = 0.275;
+					if (EntityUtils.getDirectionFacing(mc.player) == 2) mZ = 0.275;
+					if (EntityUtils.getDirectionFacing(mc.player) == 3) mX = -0.275;
 				}
 				
-				if(timer > getSettings().get(3).toSlider().getValue()) {
+				if (timer > getSettings().get(3).toSlider().getValue()) {
 					mX = 0;
 					mZ = 0;
 					mY = -0.062;

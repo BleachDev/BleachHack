@@ -51,20 +51,20 @@ public final class LoginManager {
 				.set(Minecraft.getInstance(), newsession);
 			return "§aLogin Successful";
 		
-		}catch (IllegalAccessException | SecurityException e) 
+		} catch (IllegalAccessException | SecurityException e) 
 		{
 			return "§cInternal Error (" + e.toString() + ")";
 			
-		}catch(AuthenticationException e)
+		} catch (AuthenticationException e)
 		{
 			e.printStackTrace();
-			if(e.getMessage().contains("Invalid username or password.")
+			if (e.getMessage().contains("Invalid username or password.")
 				|| e.getMessage().toLowerCase().contains("account migrated"))
 				return "§4Wrong password!";
 			else
 				return "§cCannot contact authentication server!";
 			
-		}catch(NullPointerException e)
+		} catch (NullPointerException e)
 		{
 			return "§4Wrong password!";
 			

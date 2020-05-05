@@ -47,7 +47,7 @@ public class EntitySpeed extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			if (mc.player.getRidingEntity() == null) return;
 			
 			Entity e = mc.player.getRidingEntity();
@@ -78,11 +78,11 @@ public class EntitySpeed extends Module {
 					em.setVelocity((forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F))), em.getMotion().y, (forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F))));
 				}
 				
-				if(getSettings().get(1).toToggle().state) if(mc.gameSettings.keyBindJump.isKeyDown()) e.setMotion(e.getMotion().x, 0.3, e.getMotion().z);
+				if (getSettings().get(1).toToggle().state) if (mc.gameSettings.keyBindJump.isKeyDown()) e.setMotion(e.getMotion().x, 0.3, e.getMotion().z);
 				
-				if(getSettings().get(2).toToggle().state) {
+				if (getSettings().get(2).toToggle().state) {
 					BlockPos p = e.getPosition().add(0, 0.5, 0);
-					if(mc.world.getBlockState(p.down()).getBlock() == Blocks.AIR &&
+					if (mc.world.getBlockState(p.down()).getBlock() == Blocks.AIR &&
 						mc.world.getBlockState(p.down(2)).getBlock() != Blocks.AIR &&
 						!(mc.world.getBlockState(p.down(2)).getMaterial() == Material.WATER) &&
 						e.fallDistance > 0.01) e.setMotion(e.getMotion().x, -1, e.getMotion().z);

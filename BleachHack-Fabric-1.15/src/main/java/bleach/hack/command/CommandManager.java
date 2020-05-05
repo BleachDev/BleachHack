@@ -51,7 +51,7 @@ public class CommandManager {
 			new CmdVanish(),
 			new CmdXray());
 	
-	public static List<Command> getCommands(){
+	public static List<Command> getCommands() {
 		return commands;
 	}
 	
@@ -60,11 +60,11 @@ public class CommandManager {
 		System.out.println(Arrays.asList(split));
 		String command = split[0];
 		String args = input.substring(command.length()).trim();
-		for(Command c: getCommands()) {
-			if(c.getAlias().equalsIgnoreCase(command)) {
+		for (Command c: getCommands()) {
+			if (c.getAlias().equalsIgnoreCase(command)) {
 				try {
 					c.onCommand(command, args.split(" "));
-				}catch(Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					BleachLogger.errorMessage("Invalid Syntax!");
 					BleachLogger.infoMessage(prefix + c.getSyntax());

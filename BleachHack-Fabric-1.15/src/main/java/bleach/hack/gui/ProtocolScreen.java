@@ -87,28 +87,28 @@ public class ProtocolScreen extends Screen {
 	}
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		if(double_1 >= nameField.x && double_1 <= nameField.x + nameField.getWidth()
+		if (double_1 >= nameField.x && double_1 <= nameField.x + nameField.getWidth()
 				&& double_2 >= nameField.y && double_2 <= nameField.y + 18) {
 			nameField.changeFocus(true);
 			protocolField.setSelected(false);
 			targetField.setSelected(false);
 			packVerField.setSelected(false);
 		}
-		if(double_1 >= protocolField.x && double_1 <= protocolField.x + protocolField.getWidth()
+		if (double_1 >= protocolField.x && double_1 <= protocolField.x + protocolField.getWidth()
 				&& double_2 >= protocolField.y && double_2 <= protocolField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.changeFocus(true);
 			targetField.setSelected(false);
 			packVerField.setSelected(false);
 		}
-		if(double_1 >= targetField.x && double_1 <= targetField.x + targetField.getWidth()
+		if (double_1 >= targetField.x && double_1 <= targetField.x + targetField.getWidth()
 				&& double_2 >= targetField.y && double_2 <= targetField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.setSelected(false);
 			targetField.changeFocus(true);
 			packVerField.setSelected(false);
 		}
-		if(double_1 >= packVerField.x && double_1 <= packVerField.x + packVerField.getWidth()
+		if (double_1 >= packVerField.x && double_1 <= packVerField.x + packVerField.getWidth()
 				&& double_2 >= packVerField.y && double_2 <= packVerField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.setSelected(false);
@@ -119,18 +119,18 @@ public class ProtocolScreen extends Screen {
 	}
 	
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
-		if(nameField.isFocused()) nameField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		if(protocolField.isFocused()) protocolField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		if(targetField.isFocused()) targetField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		if(packVerField.isFocused()) packVerField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (nameField.isFocused()) nameField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (protocolField.isFocused()) protocolField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (targetField.isFocused()) targetField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (packVerField.isFocused()) packVerField.charTyped(p_charTyped_1_, p_charTyped_2_);
 		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
 	}
 	
 	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-		if(nameField.isFocused()) nameField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		if(protocolField.isFocused()) protocolField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		if(targetField.isFocused()) targetField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		if(packVerField.isFocused()) packVerField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (nameField.isFocused()) nameField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (protocolField.isFocused()) protocolField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (targetField.isFocused()) targetField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (packVerField.isFocused()) packVerField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 	}
 	

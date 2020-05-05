@@ -35,7 +35,7 @@ public class PlayerCrash extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		for(int i = 0; i < getSettings().get(0).toSlider().getValue(); i++) {
+		for (int i = 0; i < getSettings().get(0).toSlider().getValue(); i++) {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(Math.random() >= 0.5));
 			mc.player.networkHandler.sendPacket(new KeepAliveC2SPacket((int) (Math.random() * 8)));
 		}

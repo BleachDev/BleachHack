@@ -66,31 +66,31 @@ public class NotebotUtils {
 			zip.close();
 			Files.deleteIfExists(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip"));
 
-			if(log) BleachLogger.infoMessage("Downloaded " + count + " Songs");
-		} catch (Exception e) { if(log) BleachLogger.warningMessage("Error Downloading Songs... " + e); e.printStackTrace(); }
+			if (log) BleachLogger.infoMessage("Downloaded " + count + " Songs");
+		} catch (Exception e) { if (log) BleachLogger.warningMessage("Error Downloading Songs... " + e); e.printStackTrace(); }
 	}
 	
 	public static void playNote(List<String> lines, int tick) {
 		HashMap<Instrument, Integer> notes = new HashMap<>();
 		
-		for(String s: lines) {
+		for (String s: lines) {
 			try {
 				String[] split = s.split(":");
-				if(split[0].equals(tick + "")) notes.put(Instrument.values()[Integer.parseInt(split[2])], Integer.parseInt(split[1]));
-			}catch(Exception e) { System.out.println("oops"); }
+				if (split[0].equals(tick + "")) notes.put(Instrument.values()[Integer.parseInt(split[2])], Integer.parseInt(split[1]));
+			} catch (Exception e) { System.out.println("oops"); }
 		}
 		
-		for(Entry<Instrument, Integer> e: notes.entrySet()) {
+		for (Entry<Instrument, Integer> e: notes.entrySet()) {
 			//System.out.println(e.getValue() + " | " + i + " | "); /* this is how debugging works right? */
 			play(e.getKey().getSound(), (float) Math.pow(2.0D, (double)(e.getValue() - 12) / 12.0D));
 		}
 	}
 	
 	private static void play(SoundEvent sound, float pitch) {
-		if(MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null) {
+		if (MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null) {
 			MinecraftClient.getInstance().world.playSound(MinecraftClient.getInstance().player,
 					MinecraftClient.getInstance().player.getBlockPos(), sound, SoundCategory.RECORDS, 3.0F, pitch);
-		}else {
+		} else {
 			MinecraftClient.getInstance().getSoundManager().play(
 					new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, 0F, 0F, 0F));
 		}

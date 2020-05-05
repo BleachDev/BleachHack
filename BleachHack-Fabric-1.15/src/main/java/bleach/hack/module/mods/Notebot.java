@@ -75,50 +75,50 @@ public class Notebot extends Module {
 	public void onEnable() {
 		super.onEnable();
 		blockTunes.clear();
-		if(mc.player.abilities.creativeMode) {
+		if (mc.player.abilities.creativeMode) {
 			BleachLogger.errorMessage("Not In Survival Mode!");
 			setToggled(false);
 			return;
-		}else if(filePath.isEmpty()) {
+		} else if (filePath.isEmpty()) {
 			BleachLogger.errorMessage("No File Loaded!, Use .notebot load [File]");
 			setToggled(false);
 			return;
-		}else readFile(filePath);
+		} else readFile(filePath);
 		timer = -10;
 
-		for(List<Integer> i: tunes) {
+		for (List<Integer> i: tunes) {
 			BlockPos found = null;
-			loop: for(int x = -4; x <= 4; x++) {
-				for(int y = -4; y <= 4; y++) {
-					for(int z = -4; z <= 4; z++) {
+			loop: for (int x = -4; x <= 4; x++) {
+				for (int y = -4; y <= 4; y++) {
+					for (int z = -4; z <= 4; z++) {
 						BlockPos pos = mc.player.getBlockPos().add(x, y, z);
-						if(!isNoteblock(pos)) continue;
-						if(getSettings().get(3).toToggle().state) {
-							if(blockTunes.get(pos) != null) if(!blockTunes.get(pos).equals(i.get(0))) continue;
+						if (!isNoteblock(pos)) continue;
+						if (getSettings().get(3).toToggle().state) {
+							if (blockTunes.get(pos) != null) if (!blockTunes.get(pos).equals(i.get(0))) continue;
 							blockTunes.put(pos, i.get(0));
 							break loop;
-						}else {
-							if(i.get(1) != getInstrument(pos).ordinal() || blockTunes.get(pos) != null) continue;
+						} else {
+							if (i.get(1) != getInstrument(pos).ordinal() || blockTunes.get(pos) != null) continue;
 							found = pos;
-							if(i.get(0) == getNote(pos)) break loop;
+							if (i.get(0) == getNote(pos)) break loop;
 						}
 					}
 				}
 			}
-			if(found != null) blockTunes.put(found, i.get(0));
+			if (found != null) blockTunes.put(found, i.get(0));
 		}
 		
-		if(tunes.size() > blockTunes.size() && !getSettings().get(3).toToggle().state) {
+		if (tunes.size() > blockTunes.size() && !getSettings().get(3).toToggle().state) {
 			BleachLogger.warningMessage("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
 		}
 	}
 
 	@Subscribe
 	public void onRender(Event3DRender event) {
-		for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
-			if(getNote(e.getKey()) != e.getValue()) {
+		for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
+			if (getNote(e.getKey()) != e.getValue()) {
 				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);
-			}else {
+			} else {
 				RenderUtils.drawFilledBox(e.getKey(), 0F, 1F, 0F, 0.4F);
 			}
 		}
@@ -127,32 +127,32 @@ public class Notebot extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		/* Tune Noteblocks */
-		if(getSettings().get(0).toToggle().state) {
-			for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
-				if(getNote(e.getKey()) != e.getValue()) {
-					if(getSettings().get(1).toMode().mode <= 2) {
-						if(getSettings().get(1).toMode().mode >= 1) {
-							if(mc.player.age % 2 == 0 ||
+		if (getSettings().get(0).toToggle().state) {
+			for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
+				if (getNote(e.getKey()) != e.getValue()) {
+					if (getSettings().get(1).toMode().mode <= 2) {
+						if (getSettings().get(1).toMode().mode >= 1) {
+							if (mc.player.age % 2 == 0 ||
 									(mc.player.age % 3 == 0 && getSettings().get(1).toMode().mode == 2)) return;
 						}
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
 								new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
-					}else if(getSettings().get(1).toMode().mode >= 3) {
-						if(tuneDelay < (getSettings().get(1).toMode().mode == 3 ? 3 : 5)) {
+					} else if (getSettings().get(1).toMode().mode >= 3) {
+						if (tuneDelay < (getSettings().get(1).toMode().mode == 3 ? 3 : 5)) {
 							tuneDelay++;
 							return;
 						}
 						
 						int tunes = getNote(e.getKey());
 						int reqTunes = 0;
-						for(int i = 0; i < (getSettings().get(1).toMode().mode == 3 ? 5 : 25); i++) {
-							if(tunes == 25) tunes = 0;
-							if(tunes == e.getValue()) break;
+						for (int i = 0; i < (getSettings().get(1).toMode().mode == 3 ? 5 : 25); i++) {
+							if (tunes == 25) tunes = 0;
+							if (tunes == e.getValue()) break;
 							tunes++;
 							reqTunes++;
 						}
 						
-						for(int i = 0; i < reqTunes; i++) mc.interactionManager.interactBlock(mc.player, mc.world, 
+						for (int i = 0; i < reqTunes; i++) mc.interactionManager.interactBlock(mc.player, mc.world, 
 								Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
 						tuneDelay = 0;
 					}
@@ -162,10 +162,10 @@ public class Notebot extends Module {
 		}
 		
 		/* Loop */
-		if(getSettings().get(2).toToggle().state || getSettings().get(3).toToggle().state) {
+		if (getSettings().get(2).toToggle().state || getSettings().get(3).toToggle().state) {
 			boolean loopityloop = true;
-			for(List<Integer> n: notes) if(timer - 10 < n.get(0)) loopityloop = false;
-			if(getSettings().get(4).toToggle().state && loopityloop) {
+			for (List<Integer> n: notes) if (timer - 10 < n.get(0)) loopityloop = false;
+			if (getSettings().get(4).toToggle().state && loopityloop) {
 				try {
 					List<String> files = new ArrayList<>();
 					Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
@@ -176,8 +176,8 @@ public class Notebot extends Module {
 					setToggled(true);
 					BleachLogger.infoMessage("Now Playing: §a" + filePath);
 				} catch (IOException e) {}
-			}else if(getSettings().get(2).toToggle().state && loopityloop) {
-				if(loopityloop) timer = -10;
+			} else if (getSettings().get(2).toToggle().state && loopityloop) {
+				if (loopityloop) timer = -10;
 			}
 		}
 		
@@ -185,12 +185,12 @@ public class Notebot extends Module {
 		timer++;
 		
 		List<List<Integer>> curNotes = new ArrayList<>();
-		for(List<Integer> i: notes) if(i.get(0) == timer) curNotes.add(i);
-		if(curNotes.isEmpty()) return;
+		for (List<Integer> i: notes) if (i.get(0) == timer) curNotes.add(i);
+		if (curNotes.isEmpty()) return;
 		
-		for(Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
-			for(List<Integer> i: curNotes) {
-				if(isNoteblock(e.getKey()) && (i.get(1) == (getNote(e.getKey()))
+		for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
+			for (List<Integer> i: curNotes) {
+				if (isNoteblock(e.getKey()) && (i.get(1) == (getNote(e.getKey()))
 						&& (getSettings().get(3).toToggle().state
 								|| i.get(2) == (getInstrument(e.getKey()).ordinal())))) playBlock(e.getKey());
 			}
@@ -198,27 +198,27 @@ public class Notebot extends Module {
 	}
 	
 	public Instrument getInstrument(BlockPos pos) {
-		if(!isNoteblock(pos)) return Instrument.HARP;
+		if (!isNoteblock(pos)) return Instrument.HARP;
 		
 		return mc.world.getBlockState(pos).get(NoteBlock.INSTRUMENT);
 	}
 	
 	public int getNote(BlockPos pos) {
-		if(!isNoteblock(pos)) return 0;
+		if (!isNoteblock(pos)) return 0;
 		
 		return mc.world.getBlockState(pos).get(NoteBlock.NOTE);
 	}
 	
 	public boolean isNoteblock(BlockPos pos) {
 		/* Checks if this block is a noteblock and the noteblock can be played */
-		if(mc.world.getBlockState(pos).getBlock() instanceof NoteBlock) {
+		if (mc.world.getBlockState(pos).getBlock() instanceof NoteBlock) {
             return mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
 		}
 		return false;
 	}
 	
 	public void playBlock(BlockPos pos) {
-		if(!isNoteblock(pos)) return;
+		if (!isNoteblock(pos)) return;
 		mc.interactionManager.attackBlock(pos, Direction.UP);
 		mc.player.swingHand(Hand.MAIN_HAND);
 	}
@@ -231,23 +231,23 @@ public class Notebot extends Module {
 		BleachFileMang.createFile("notebot", fileName);
 		List<String> lines = BleachFileMang.readFileLines("notebot", fileName)
 				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
-		for(String s: lines) s = s.replaceAll(" ", "");
+		for (String s: lines) s = s.replaceAll(" ", "");
 
 		/* Parse note info into "memory" */
-		for(String s: lines) {
+		for (String s: lines) {
 			String[] s1 = s.split(":");
 			try { notes.add(Arrays.asList(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
-			}catch(Exception e) { BleachLogger.warningMessage("Error Parsing Note: §o" + s); }
+			} catch (Exception e) { BleachLogger.warningMessage("Error Parsing Note: §o" + s); }
 		}
 		
 		/* Get all unique pitches and instruments */
-		for(String s: lines) {
+		for (String s: lines) {
 			try { 
 				List<String> strings = Arrays.asList(s.split(":"));
-				if(!tunes.contains(Arrays.asList(Integer.parseInt(strings.get(1)),Integer.parseInt( strings.get(2))))) {
+				if (!tunes.contains(Arrays.asList(Integer.parseInt(strings.get(1)),Integer.parseInt( strings.get(2))))) {
 					tunes.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
 				}
-			}catch(Exception e) { BleachLogger.warningMessage("Error Trying To Tune: §o" + s); }
+			} catch (Exception e) { BleachLogger.warningMessage("Error Trying To Tune: §o" + s); }
 		}
 	}
 

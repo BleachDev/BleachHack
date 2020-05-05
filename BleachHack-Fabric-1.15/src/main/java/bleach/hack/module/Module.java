@@ -49,12 +49,12 @@ public class Module {
 	
 	public void toggle() {
 		toggled = !toggled;
-		if(toggled) onEnable();
+		if (toggled) onEnable();
 		else onDisable();
 	}
 	
 	public void onEnable() {
-		for(Method method : getClass().getMethods()) {
+		for (Method method : getClass().getMethods()) {
 			if (method.isAnnotationPresent(Subscribe.class)) {
 				BleachHack.eventBus.register(this);
 				break;
@@ -64,13 +64,13 @@ public class Module {
 
 	public void onDisable() {
 		try{
-			for(Method method : getClass().getMethods()) {
+			for (Method method : getClass().getMethods()) {
 				if (method.isAnnotationPresent(Subscribe.class)) {
 					BleachHack.eventBus.unregister(this);
 					break;
 				}
 			}
-		}catch(Exception this_didnt_get_registered_hmm_weird) { this_didnt_get_registered_hmm_weird.printStackTrace(); } 
+		} catch (Exception this_didnt_get_registered_hmm_weird) { this_didnt_get_registered_hmm_weird.printStackTrace(); } 
 	}
 
 	public String getName() {
@@ -107,7 +107,7 @@ public class Module {
 
 	public void setToggled(boolean toggled) {
 		this.toggled = toggled;
-		if(toggled) onEnable();
+		if (toggled) onEnable();
 		else onDisable();
 	}
 	

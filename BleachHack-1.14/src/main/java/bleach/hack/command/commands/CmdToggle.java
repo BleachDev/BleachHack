@@ -41,8 +41,8 @@ public class CmdToggle extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		for(Module m: ModuleManager.getModules()) {
-			if(args[0].equalsIgnoreCase(m.getName())) {
+		for (Module m: ModuleManager.getModules()) {
+			if (args[0].equalsIgnoreCase(m.getName())) {
 				m.toggle();
 				BleachLogger.infoMessage(m.getName() + " Toggled");
 				return;

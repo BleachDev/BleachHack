@@ -41,7 +41,7 @@ public class CmdRename extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		if(!mc.player.abilities.isCreativeMode) {
+		if (!mc.player.abilities.isCreativeMode) {
 			BleachLogger.errorMessage("Not In Creative Mode!");
 			return;
 		}
@@ -49,7 +49,7 @@ public class CmdRename extends Command {
 		ItemStack i = mc.player.inventory.getCurrentItem();
 		
 		String name = "";
-		for(int j = 0; j < args.length; j++) name += args[j] += " ";
+		for (int j = 0; j < args.length; j++) name += args[j] += " ";
 		
 		i.setDisplayName(new StringTextComponent(name.replace("&", "§").replace("§§", "&")));
 		BleachLogger.infoMessage("Renamed Item");

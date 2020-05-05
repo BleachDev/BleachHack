@@ -48,12 +48,12 @@ public class CrystalAura extends Module {
 		delay++;
 		int reqDelay = (int) Math.round(20/getSettings().get(3).toSlider().getValue());
 		
-		for(Entity e: mc.world.getEntities()) {
-			if(e instanceof EnderCrystalEntity && mc.player.distanceTo(e) < getSettings().get(2).toSlider().getValue()) {
-				if(!mc.player.canSee(e) && !getSettings().get(1).toToggle().state) continue;
-				if(getSettings().get(0).toToggle().state) EntityUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
+		for (Entity e: mc.world.getEntities()) {
+			if (e instanceof EnderCrystalEntity && mc.player.distanceTo(e) < getSettings().get(2).toSlider().getValue()) {
+				if (!mc.player.canSee(e) && !getSettings().get(1).toToggle().state) continue;
+				if (getSettings().get(0).toToggle().state) EntityUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
 				
-				if(delay > reqDelay || reqDelay == 0) {
+				if (delay > reqDelay || reqDelay == 0) {
 					mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e));
 					mc.player.attack(e);
 					mc.player.swingHand(Hand.MAIN_HAND);

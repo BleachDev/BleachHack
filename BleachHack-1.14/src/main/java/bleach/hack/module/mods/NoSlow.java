@@ -44,38 +44,38 @@ public class NoSlow extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			
 			/* Slowness */
-			if(getSettings().get(0).toToggle().state && (mc.player.getActivePotionEffect(Effects.SLOWNESS) != null || mc.player.getActivePotionEffect(Effects.BLINDNESS) != null)) {
-				if(mc.gameSettings.keyBindForward.isKeyDown() 
+			if (getSettings().get(0).toToggle().state && (mc.player.getActivePotionEffect(Effects.SLOWNESS) != null || mc.player.getActivePotionEffect(Effects.BLINDNESS) != null)) {
+				if (mc.gameSettings.keyBindForward.isKeyDown() 
 						&& mc.player.getMotion().x > -0.15 && mc.player.getMotion().x < 0.15
 						&& mc.player.getMotion().z > -0.15 && mc.player.getMotion().z < 0.15) {
 					mc.player.setMotion(mc.player.getMotion().add(addMotion));
 					addMotion = addMotion.add(new Vec3d(0, 0, 0.05).rotateYaw(-(float)Math.toRadians(mc.player.rotationYaw)));
-				}else addMotion = addMotion.scale(0.75);
+				} else addMotion = addMotion.scale(0.75);
 			}
 			
 			/* Soul Sand */
-			if(getSettings().get(1).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.SOUL_SAND)) {
+			if (getSettings().get(1).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.SOUL_SAND)) {
 				Vec3d m = new Vec3d(0, 0, 0.125).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
-				if(!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
+				if (!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
 					mc.player.setMotion(mc.player.getMotion().add(m));
 				}
 			}
 			
 			/* Slime Block */
-			if(getSettings().get(2).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox().offset(0,-0.02,0), Blocks.SLIME_BLOCK)) {
+			if (getSettings().get(2).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox().offset(0,-0.02,0), Blocks.SLIME_BLOCK)) {
 				Vec3d m1 = new Vec3d(0, 0, 0.1).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
-				if(!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
+				if (!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
 					mc.player.setMotion(mc.player.getMotion().add(m1));
 				}
 			}
 			
 			/* Web */
-			if(getSettings().get(3).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
+			if (getSettings().get(3).toToggle().state && WorldUtils.doesAABBTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
 				Vec3d m2 = new Vec3d(0, -1, 0.9).rotateYaw(-(float) Math.toRadians(mc.player.rotationYaw));
-				if(!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
+				if (!mc.player.abilities.isFlying && mc.gameSettings.keyBindForward.isKeyDown()) {
 					mc.player.setMotion(mc.player.getMotion().add(m2));
 				}
 			}

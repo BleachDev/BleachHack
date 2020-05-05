@@ -75,14 +75,14 @@ public class ClickGuiScreen extends Screen {
 	}
 	
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
-		if(p_mouseClicked_5_ == 0) lMousePressed = true;
-		else if(p_mouseClicked_5_ == 1) rMousePressed = true;
+		if (p_mouseClicked_5_ == 0) lMousePressed = true;
+		else if (p_mouseClicked_5_ == 1) rMousePressed = true;
 		
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
 	
 	public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
-		if(p_mouseDragged_5_ == 0) dragging = true;
+		if (p_mouseDragged_5_ == 0) dragging = true;
 		return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
 	}
 	

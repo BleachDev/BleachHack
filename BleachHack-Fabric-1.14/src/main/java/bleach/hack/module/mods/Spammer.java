@@ -51,16 +51,16 @@ public class Spammer extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(lines.isEmpty()) return;
+		if (lines.isEmpty()) return;
 		
-		if(mc.player.age % (int) (getSettings().get(1).toSlider().getValue() * 20) == 0) {
-			if(getSettings().get(0).toMode().mode == 0) {
+		if (mc.player.age % (int) (getSettings().get(1).toSlider().getValue() * 20) == 0) {
+			if (getSettings().get(0).toMode().mode == 0) {
 				mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())));
-			}else if(getSettings().get(0).toMode().mode == 1) {
+			} else if (getSettings().get(0).toMode().mode == 1) {
 				mc.player.sendChatMessage(lines.get(lineCount));
 			}
 			
-			if(lineCount >= lines.size() -1) lineCount = 0;
+			if (lineCount >= lines.size() -1) lineCount = 0;
 			else lineCount++;
 		}
 	}

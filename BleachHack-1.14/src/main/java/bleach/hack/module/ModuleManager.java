@@ -75,20 +75,20 @@ public class ModuleManager {
 	}
 	
 	public static void onUpdate() {
-		for(Module m: mods) {
+		for (Module m: mods) {
 			m.onUpdate();
 		}
 	}
 	
 	public static void onRender() {
-		for(Module m: mods) {
+		for (Module m: mods) {
 			m.onRender();
 		}
 	}
 	
 	public static void updateKeys() {
-		for(Module m: mods) {
-			if(m.getKey().isPressed()) {
+		for (Module m: mods) {
+			if (m.getKey().isPressed()) {
 				m.toggle();
 			}
 		}

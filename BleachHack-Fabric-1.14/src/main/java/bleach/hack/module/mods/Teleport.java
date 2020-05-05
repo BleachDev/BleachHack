@@ -48,7 +48,7 @@ public class Teleport extends Module {
 
     @Subscribe
     public void onTick(EventTick event) {
-    	if(finalPos == null) {
+    	if (finalPos == null) {
     		BleachLogger.errorMessage("Position not set, use .tp");
     		setToggled(false);
     		return;

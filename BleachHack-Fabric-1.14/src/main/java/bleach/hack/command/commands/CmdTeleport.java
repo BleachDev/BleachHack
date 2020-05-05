@@ -62,7 +62,7 @@ public class CmdTeleport extends Command {
                 ModuleManager.getModule(Teleport.class).setToggled(true);
                 BleachLogger.infoMessage("\n§aTeleporting to \n§cX: §b" + df.format(x) + "§a, \n§cY: §b" + df.format(y) + "§a, \n§cZ: §b" + df.format(z) + "\n§aat §b" + df.format(ModuleManager.getModule(Teleport.class).getSettings().get(0).toSlider().getValue()) + "§c blocks per teleport.");
             }
-            catch (NullPointerException e){
+            catch (NullPointerException e) {
                 BleachLogger.warningMessage("Null Pointer Exception Caught!\nHonestly probably close MC.");
             }
 

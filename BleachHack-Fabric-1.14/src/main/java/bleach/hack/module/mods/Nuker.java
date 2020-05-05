@@ -64,7 +64,7 @@ public class Nuker extends Module {
 	
 	public void onEnable() {
 		blockList.clear();
-		for(String s: BleachFileMang.readFileLines("nukerblocks.txt")) blockList.add(Registry.BLOCK.get(new Identifier(s)));
+		for (String s: BleachFileMang.readFileLines("nukerblocks.txt")) blockList.add(Registry.BLOCK.get(new Identifier(s)));
 		
 		super.onEnable();
 	}
@@ -75,50 +75,50 @@ public class Nuker extends Module {
 		List<BlockPos> blocks = new ArrayList<>();
 		
 		/* Add blocks around player */
-		for(int x = (int) range; x >= (int) -range; x--) {
-			for(int y = (int) range; y >= (getSettings().get(4).toToggle().state ? 0 : (int) -range); y--) {
-				for(int z = (int) range; z >= (int) -range; z--) {
+		for (int x = (int) range; x >= (int) -range; x--) {
+			for (int y = (int) range; y >= (getSettings().get(4).toToggle().state ? 0 : (int) -range); y--) {
+				for (int z = (int) range; z >= (int) -range; z--) {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
-					if(!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos)) continue;
+					if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos)) continue;
 					blocks.add(pos);
 				}
 			}
 		}
 		
-		if(blocks.isEmpty()) return;
+		if (blocks.isEmpty()) return;
 		
-		if(getSettings().get(6).toToggle().state) FabricReflect.writeField(
+		if (getSettings().get(6).toToggle().state) FabricReflect.writeField(
 				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
 		
-		if(getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
+		if (getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 		
 		/* Move the block under the player to last so it doesn't mine itself down without clearing everything above first */
-		if(blocks.contains(mc.player.getBlockPos().down())) {
+		if (blocks.contains(mc.player.getBlockPos().down())) {
 			blocks.remove(mc.player.getBlockPos().down());
 			blocks.add(mc.player.getBlockPos().down());
 		}
 		
 		int broken = 0;
-		for(BlockPos pos: blocks) {
-			if(!getSettings().get(3).toToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
+		for (BlockPos pos: blocks) {
+			if (!getSettings().get(3).toToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 			
 			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 			
-			if(mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
+			if (mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
 			
 			Direction dir = null;
 			double dist = Double.MAX_VALUE;
-			for(Direction d: Direction.values()) {
+			for (Direction d: Direction.values()) {
 				double dist2 = mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
-				if(dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
+				if (dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
 				dist = dist2;
 				dir = d;
 			}
 			
-			if(dir == null) continue;
+			if (dir == null) continue;
 			
-			if(getSettings().get(5).toToggle().state) {
+			if (getSettings().get(5).toToggle().state) {
 				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
 				EntityUtils.facePos(vec.x, vec.y, vec.z);
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
@@ -127,13 +127,13 @@ public class Nuker extends Module {
 				mc.player.pitch = prevRot[1];
 			}
 			
-			if(getSettings().get(0).toMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
+			if (getSettings().get(0).toMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
 			else mc.interactionManager.method_2902(pos, dir);
 			
 			mc.player.swingHand(Hand.MAIN_HAND);
 			
 			broken++;
-			if(getSettings().get(0).toMode().mode == 0
+			if (getSettings().get(0).toMode().mode == 0
 					|| (getSettings().get(0).toMode().mode == 1 && broken >= (int) getSettings().get(8).toSlider().getValue())) return;
 		}
 	}

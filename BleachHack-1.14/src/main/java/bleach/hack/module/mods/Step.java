@@ -37,23 +37,23 @@ public class Step extends Module {
 	private int tickCount;
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
-			if(getSettings().get(0).toMode().mode == 0) {
+		if (this.isToggled()) {
+			if (getSettings().get(0).toMode().mode == 0) {
 				mc.player.stepHeight = 1.065F;
-			}else if(getSettings().get(0).toMode().mode == 1) {
+			} else if (getSettings().get(0).toMode().mode == 1) {
 				
-				if(mc.player.collidedHorizontally) {
+				if (mc.player.collidedHorizontally) {
 					tickCount = 0;
 				}
 				
 				tickCount++;
 				
-				if(tickCount < 2) {
+				if (tickCount < 2) {
 					mc.player.setMotion(mc.player.getMotion().x, 1, mc.player.getMotion().z);
 					mc.player.jump();
 				}
 					
-				if(tickCount == 2) {
+				if (tickCount == 2) {
 					mc.player.setMotion(mc.player.getMotion().x, 0, mc.player.getMotion().z);
 					mc.player.setSprinting(true);
 				}

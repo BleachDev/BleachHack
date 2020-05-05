@@ -40,14 +40,14 @@ public final class LoginManager {
 		
 		try
 		{
-			if(email.isEmpty()) return "§cNo Username/Email!";
+			if (email.isEmpty()) return "§cNo Username/Email!";
 			
-			if(password.isEmpty()) {
+			if (password.isEmpty()) {
 				FabricReflect.writeField(MinecraftClient.getInstance().getSession(), email, "a", "username");
 				return "§6Logged in as an unverified account"; /* Idk this sound weird */
 			}
 			
-			if(!email.isEmpty() && !password.isEmpty()) auth.logIn();
+			if (!email.isEmpty() && !password.isEmpty()) auth.logIn();
 			
 			Session newsession = new Session(auth.getSelectedProfile().getName(),
 					auth.getSelectedProfile().getId().toString(),
@@ -56,20 +56,20 @@ public final class LoginManager {
 			FabricReflect.writeField(MinecraftClient.getInstance(), newsession, "field_1726", "session");
 			return "§aLogin Successful";
 		
-		}catch (SecurityException e) 
+		} catch (SecurityException e) 
 		{
 			return "§cReflection Error";
 			
-		}catch(AuthenticationException e)
+		} catch (AuthenticationException e)
 		{
 			e.printStackTrace();
-			if(e.getMessage().contains("Invalid username or password.")
+			if (e.getMessage().contains("Invalid username or password.")
 				|| e.getMessage().toLowerCase().contains("account migrated"))
 				return "§4Wrong password!";
 			else
 				return "§cCannot contact authentication server!";
 			
-		}catch(NullPointerException e)
+		} catch (NullPointerException e)
 		{
 			return "§4Wrong password!";
 			

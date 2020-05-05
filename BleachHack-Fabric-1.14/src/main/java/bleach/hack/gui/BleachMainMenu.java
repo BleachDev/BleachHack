@@ -121,13 +121,13 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		w = width - width / 2;
 		h = height - height / 2;
 		
-		if(userField == null) userField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4, 196, 18, "");
-		if(passField == null) passField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4 + 30, 196, 18, "");
+		if (userField == null) userField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4, 196, 18, "");
+		if (passField == null) passField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4 + 30, 196, 18, "");
 		userField.x = x + w / 2 - 98;
 		userField.y = y + h / 4 ;
 		passField.x = x + w / 2 - 98;
 		passField.y = y + h / 4 + 30;
-		if(checkBox == null) checkBox = new BleachCheckbox(x + w / 2 - 99, y + h / 4 + 53, "Save Login", false);
+		if (checkBox == null) checkBox = new BleachCheckbox(x + w / 2 - 99, y + h / 4 + 53, "Save Login", false);
 		checkBox.x = x + w / 2 - 99;
 		checkBox.y = y + h / 4 + 53;
 		userField.setMaxLength(32767);
@@ -145,13 +145,13 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				}));
 		windows.get(1).buttons.add(
 				new WindowButton(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
-					for(String s: BleachFileMang.readFileLines("logins.txt")) {
+					for (String s: BleachFileMang.readFileLines("logins.txt")) {
 						entries.add(new ArrayList<>(Arrays.asList(s.split(":"))));
 					}
 					
 					loginResult = LoginManager.login(userField.getText(), passField.getText());
 					String text = userField.getText() + ":" + passField.getText();
-					if(checkBox.checked && (loginResult.equals("§aLogin Successful")
+					if (checkBox.checked && (loginResult.equals("§aLogin Successful")
 							|| loginResult.equals("§6Logged in as an unverified account"))
 							&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
 						entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
@@ -160,12 +160,12 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					}
 				}));
 		
-	    if(versions.isEmpty()) {
+	    if (versions.isEmpty()) {
 	    	versions.clear();
 		    versions.addAll(BleachGithubReader.readFileLines("latestversion.txt"));
 	    }
 	    
-	    if(splash == "") {
+	    if (splash == "") {
 	    	List<String> sp = BleachGithubReader.readFileLines("splashes.txt");
 		    splash = !sp.isEmpty() ? sp.get(new Random().nextInt(sp.size())) : "";
 	    }
@@ -173,13 +173,13 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	    entries.clear();
 		BleachFileMang.createFile("logins.txt");
 		
-		for(String s: BleachFileMang.readFileLines("logins.txt")) {
+		for (String s: BleachFileMang.readFileLines("logins.txt")) {
 			entries.add(new ArrayList<>(Arrays.asList(s.split(":"))));
 		}
 	}
 	
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-		//if(windows.get(0).x1 != width / 8 || windows.get(0).y1 != height / 8) minecraft.openScreen(new BleachMainMenu());
+		//if (windows.get(0).x1 != width / 8 || windows.get(0).y1 != height / 8) minecraft.openScreen(new BleachMainMenu());
 		
 		this.renderBackground();
 		fill(0, 0, width, height, 0xff008080);
@@ -192,18 +192,18 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		font.drawWithShadow("Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 24, -1);
 		
 		try {
-			if(Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
+			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
 				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
 				drawCenteredString(this.font,"§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
 			}
-		}catch(Exception e) { }
+		} catch (Exception e) { }
 		
 		drawButton("", 0, height - 14, width, height);
 		drawButton("§cX", 0, height - 13, 20, height - 1);
 		
 		int wid = 20;
-		for(Window w: windows) {
-			if(w.closed) continue;
+		for (Window w: windows) {
+			if (w.closed) continue;
 			Screen.fill(wid, height - 13, wid + 80 - 1, height - 1 - 1, 0xffb0b0b0);
 			Screen.fill(wid + 1, height - 13 + 1, wid + 80, height - 1, 0xff000000);
 			Screen.fill(wid + 1, height - 13 + 1, wid + 80 - 1, height - 1 - 1, (w.selected ? 0xffb0b0b0 : 0xff858585));
@@ -221,7 +221,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	public void onRenderWindow(int window, int mX, int mY) {
 		super.onRenderWindow(window, mX, mY);
 		
-		if(window == 0) {
+		if (window == 0) {
 			int x = windows.get(0).x1,
 					y = windows.get(0).y1 - 10,
 					w = width - width / 4,
@@ -255,7 +255,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	        GL11.glScalef(float_4, float_4, float_4);
 	        this.drawCenteredString(font, splash, 0, -8, 16776960);
 	        GL11.glPopMatrix();
-		}else if(window == 1) {
+		} else if (window == 1) {
 			int x = windows.get(1).x1,
 					y = windows.get(1).y1 - 10,
 					w = width - width / 2,
@@ -276,7 +276,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			userField.render(mX, mY, 1f);
 			passField.render(mX, mY, 1f);
 			checkBox.render(mX, mY, 1f);
-		}else if(window == 2) {
+		} else if (window == 2) {
 			int x = windows.get(2).x1,
 					y = windows.get(2).y1 - 10,
 					w = width - width / 2,
@@ -286,7 +286,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			drawCenteredString(font, "§4(accounts stored in plaintext for now)", x + w / 2, y + h / 4 - 20, -1);
 			
 			int c = 0;
-			for(List<String> e: entries) {
+			for (List<String> e: entries) {
 				String text = (e.size() > 1 ? "§a" + e.get(0) + ":***" : "§6" + e.get(0));
 				int length = minecraft.textRenderer.getStringWidth(text);
 				
@@ -302,15 +302,15 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	}
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		if(double_1 > 0 && double_1 < 20 && double_2 > height - 14 && double_2 < height) {
+		if (double_1 > 0 && double_1 < 20 && double_2 > height - 14 && double_2 < height) {
 			minecraft.openScreen(this);
 		}
 		
-		if(double_2 > height - 14 && double_2 < height) {
+		if (double_2 > height - 14 && double_2 < height) {
 			int count = 0;
-			for(Window w: windows) {
-				if(!w.closed) count++;
-				if(count == (int) ((double_1 + 60) / 80)) {
+			for (Window w: windows) {
+				if (!w.closed) count++;
+				if (count == (int) ((double_1 + 60) / 80)) {
 					selectWindow(windows.indexOf(w));
 					//w.selected = true;
 					break;
@@ -318,44 +318,44 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			}
 		}
 		
-		if(!windows.get(1).closed && windows.get(1).selected) {
-			if(double_1 > userField.x && double_1 < userField.x+userField.getWidth() && double_2 > userField.y && double_2 < userField.y+20) {
+		if (!windows.get(1).closed && windows.get(1).selected) {
+			if (double_1 > userField.x && double_1 < userField.x+userField.getWidth() && double_2 > userField.y && double_2 < userField.y+20) {
 				userField.changeFocus(true);
-				if(passField.isFocused()) passField.changeFocus(true);
+				if (passField.isFocused()) passField.changeFocus(true);
 			}
-			if(double_1 > passField.x && double_1 < passField.x+passField.getWidth() && double_2 > passField.y && double_2 < passField.y+20) {
+			if (double_1 > passField.x && double_1 < passField.x+passField.getWidth() && double_2 > passField.y && double_2 < passField.y+20) {
 				passField.changeFocus(true);
-				if(userField.isFocused()) userField.changeFocus(true);
+				if (userField.isFocused()) userField.changeFocus(true);
 			}
-			if(double_1 > checkBox.x && double_1 < checkBox.x+10 && double_2 > checkBox.y && double_2 < checkBox.y+10) {
+			if (double_1 > checkBox.x && double_1 < checkBox.x+10 && double_2 > checkBox.y && double_2 < checkBox.y+10) {
 				checkBox.checked = !checkBox.checked;
 			}
-		}else if(!windows.get(2).closed && windows.get(2).selected) {
+		} else if (!windows.get(2).closed && windows.get(2).selected) {
 			int x = windows.get(2).x1,
 					y = windows.get(2).y1 - 10,
 					w = width - width / 2,
 					h = height - height / 2;
 			
 			int c = 0;
-			for(List<String> e: new ArrayList<>(entries)) {
+			for (List<String> e: new ArrayList<>(entries)) {
 				String text = (e.size() > 1 ? "§a" + e.get(0) + ":***" : "§6" + e.get(0));
 				int lenght = minecraft.textRenderer.getStringWidth(text);
 				
-				if(double_1 > x + w/2-lenght/2-1 && double_1 < x + w/2+lenght/2+1 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
+				if (double_1 > x + w/2-lenght/2-1 && double_1 < x + w/2+lenght/2+1 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
 					try{ userField.setText(e.get(0));
-					}catch(Exception e1) { userField.setText(""); }
+					} catch (Exception e1) { userField.setText(""); }
 					try{ passField.setText(e.get(1));
-					}catch(Exception e1) { passField.setText(""); }
+					} catch (Exception e1) { passField.setText(""); }
 					windows.get(2).closed = true;
 					windows.get(1).closed = false;
 					selectWindow(1);
 				}
 				
-				if(double_1 > x + w/2+lenght/2+4 && double_1 < x + w/2+lenght/2+14 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
+				if (double_1 > x + w/2+lenght/2+4 && double_1 < x + w/2+lenght/2+14 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
 					int c1 = 0;
 					String lines = "";
-					for(String l: BleachFileMang.readFileLines("logins.txt")) {
-						if(l.trim().replace("\r", "").replace("\n", "").isEmpty()) continue;
+					for (String l: BleachFileMang.readFileLines("logins.txt")) {
+						if (l.trim().replace("\r", "").replace("\n", "").isEmpty()) continue;
 						if (c1 != c) lines += l + "\r\n";
 						c1++;
 					}
@@ -372,25 +372,25 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	}
 	
 	public boolean charTyped(char char_1, int int_1) {
-		if(!windows.get(1).closed) {
-			if(userField.isFocused()) userField.charTyped(char_1, int_1);
-			if(passField.isFocused()) passField.charTyped(char_1, int_1);
+		if (!windows.get(1).closed) {
+			if (userField.isFocused()) userField.charTyped(char_1, int_1);
+			if (passField.isFocused()) passField.charTyped(char_1, int_1);
 		}
 		
 		return super.charTyped(char_1, int_1);
 	}
 	
 	public void tick() {
-		if(!windows.get(1).closed) {
+		if (!windows.get(1).closed) {
 			userField.tick();
 			passField.tick();
 		}
 	}
 	
 	public boolean keyPressed(int int_1, int int_2, int int_3) {
-		if(!windows.get(1).closed) {
-			if(userField.isFocused()) userField.keyPressed(int_1, int_2, int_3);
-			if(passField.isFocused()) passField.keyPressed(int_1, int_2, int_3);
+		if (!windows.get(1).closed) {
+			if (userField.isFocused()) userField.keyPressed(int_1, int_2, int_3);
+			if (passField.isFocused()) passField.keyPressed(int_1, int_2, int_3);
 		}
 		
 		return super.keyPressed(int_1, int_2, int_3);

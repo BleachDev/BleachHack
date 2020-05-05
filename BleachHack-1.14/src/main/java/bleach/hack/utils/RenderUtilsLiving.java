@@ -69,14 +69,14 @@ public class RenderUtilsLiving {
 	    GL11.glScaled(0.4*scale, 0.4*scale, 0);
 	    
 	    GL11.glTranslated(offX, offY, 0);
-	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
+	    if (item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
 	    mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), ItemCameraTransforms.TransformType.GUI);
-	    if(item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
+	    if (item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
 	    GL11.glDisable(GL11.GL_LIGHTING);
 	    
 	    GL11.glScalef(-0.05F, -0.05F, 0);
 	    
-	    if(item.getCount() > 0) {
+	    if (item.getCount() > 0) {
 		    int w = mc.fontRenderer.getStringWidth("x" + item.getCount()) / 2;
 		    mc.fontRenderer.drawStringWithShadow("x" + item.getCount(), 7 - w, 5, 0xffffff);
 	    }
@@ -84,7 +84,7 @@ public class RenderUtilsLiving {
 	    GL11.glScalef(0.85F, 0.85F, 0.85F);
 	    
 	    int c = 0;
-	    for(Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
+	    for (Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
 	    	int w1 = mc.fontRenderer.getStringWidth(I18n.format(m.getKey().getName()).substring(0, 2) + m.getValue()) / 2;
 	    	mc.fontRenderer.drawStringWithShadow(
 	    			I18n.format(m.getKey().getName()).substring(0, 2) + m.getValue(), -4 - w1, c*10-1,

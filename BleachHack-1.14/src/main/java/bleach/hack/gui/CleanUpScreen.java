@@ -66,17 +66,17 @@ public class CleanUpScreen extends Screen {
 			cleanAll = !cleanAll;
 		}));
 		addButton(new Button(width / 2 - 100, height / 3 + 82, 200, 20, "Clean", button -> {
-			for(ServerData s: servers) {
+			for (ServerData s: servers) {
 				try {
-					if(s.serverMOTD == null) s.serverMOTD = "";
-					if((cleanNoHost && s.serverMOTD.contains("Can't resolve hostname")) ||
+					if (s.serverMOTD == null) s.serverMOTD = "";
+					if ((cleanNoHost && s.serverMOTD.contains("Can't resolve hostname")) ||
 							(cleanVersion && s.version <= 404) ||
 							(cleanNoPing && (s.serverMOTD.contains("Pinging...") || s.serverMOTD.contains("Can't connect to server"))) ||
 							cleanAll) {
 						serverList.func_217506_a(s);
 						serverList.saveServerList();
 					}
-				}catch(Exception e) {e.printStackTrace();}
+				} catch (Exception e) {e.printStackTrace();}
 			}
 			result = "§aFinished";
 		}));

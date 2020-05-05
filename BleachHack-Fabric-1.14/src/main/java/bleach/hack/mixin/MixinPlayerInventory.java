@@ -39,7 +39,7 @@ public class MixinPlayerInventory {
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     public void getBlockBreakingSpeed(BlockState blockState_1, CallbackInfoReturnable<Float> callback) {
         SpeedMine speedMine = (SpeedMine) ModuleManager.getModule(SpeedMine.class);
-        if(speedMine.isToggled() && speedMine.getSettings().get(0).toMode().mode == 1) {
+        if (speedMine.isToggled() && speedMine.getSettings().get(0).toMode().mode == 1) {
             callback.setReturnValue((float) (this.main.get(this.selectedSlot).getMiningSpeed(blockState_1) * speedMine.getSettings().get(3).toSlider().getValue()));
             callback.cancel();
         }

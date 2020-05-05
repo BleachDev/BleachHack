@@ -59,7 +59,7 @@ public class FakeLag extends Module {
 	
 	@Subscribe
     public void sendPacket(EventSendPacket event) {
-		if(!(event.getPacket() instanceof PlayerMoveC2SPacket
+		if (!(event.getPacket() instanceof PlayerMoveC2SPacket
 				|| event.getPacket() instanceof PlayerMoveC2SPacket.PositionOnly
 				|| event.getPacket() instanceof PlayerMoveC2SPacket.LookOnly
 				|| event.getPacket() instanceof PlayerMoveC2SPacket.Both)) return;
@@ -69,11 +69,11 @@ public class FakeLag extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		if(getSettings().get(0).toMode().mode == 0) {
-			if(getSettings().get(1).toToggle().state &&
+		if (getSettings().get(0).toMode().mode == 0) {
+			if (getSettings().get(1).toToggle().state &&
 					System.currentTimeMillis() - startTime > getSettings().get(2).toSlider().getValue() * 1000) setToggled(false);
-		}else if(getSettings().get(0).toMode().mode == 1) {
-			if(System.currentTimeMillis() - startTime > getSettings().get(3).toSlider().getValue() * 1000) {
+		} else if (getSettings().get(0).toMode().mode == 1) {
+			if (System.currentTimeMillis() - startTime > getSettings().get(3).toSlider().getValue() * 1000) {
 				setToggled(false);
 				setToggled(true);
 			}
@@ -81,8 +81,8 @@ public class FakeLag extends Module {
 	}
 	
 	public void sendPackets() {
-		for(PlayerMoveC2SPacket p: new ArrayList<>(queue)) {
-			if(p instanceof PlayerMoveC2SPacket.LookOnly) continue;
+		for (PlayerMoveC2SPacket p: new ArrayList<>(queue)) {
+			if (p instanceof PlayerMoveC2SPacket.LookOnly) continue;
 			mc.player.networkHandler.sendPacket(p);
 		}
 		queue.clear();

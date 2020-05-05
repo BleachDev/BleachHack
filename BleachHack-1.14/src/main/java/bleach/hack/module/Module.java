@@ -40,16 +40,16 @@ public class Module {
 		registerBind(nm, k);
 		category = c;
 		desc = d;
-		if(s != null) settings = s;
+		if (s != null) settings = s;
 		toggled = false;
 	}
 	
 	
 	public void toggle() {
 		toggled = !toggled;
-		if(toggled) {
+		if (toggled) {
 			onEnable();
-		}else {
+		} else {
 			onDisable();
 		}
 	}

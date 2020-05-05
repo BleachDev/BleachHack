@@ -55,14 +55,14 @@ public class UI extends Module {
 	@SubscribeEvent
 	public void drawOverlay(RenderGameOverlayEvent.Text event) {
 		gui.bottomLeftList.clear();
-		if(getSettings().get(0).toToggle().state) gui.drawArrayList();
-		if(getSettings().get(3).toToggle().state) {
+		if (getSettings().get(0).toToggle().state) gui.drawArrayList();
+		if (getSettings().get(3).toToggle().state) {
 			gui.addNetherCoords();
 			gui.addCoords();
 		}
-		if(getSettings().get(1).toToggle().state) gui.addFPS();
-		try{ if(getSettings().get(2).toToggle().state) gui.addPing(); }catch(Exception e) {}
-		try{ if(getSettings().get(4).toToggle().state) gui.drawServerInfo(); }catch(Exception e) {}
+		if (getSettings().get(1).toToggle().state) gui.addFPS();
+		try{ if (getSettings().get(2).toToggle().state) gui.addPing(); } catch (Exception e) {}
+		try{ if (getSettings().get(4).toToggle().state) gui.drawServerInfo(); } catch (Exception e) {}
 		gui.drawBottomLeft();
 	}
 

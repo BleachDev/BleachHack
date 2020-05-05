@@ -42,12 +42,12 @@ public class CmdBind extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		for(Module m: ModuleManager.getModules()) {
-			if(m.getName().equalsIgnoreCase(args[1])) {
-				if(args[0].equalsIgnoreCase("add")) {
+		for (Module m: ModuleManager.getModules()) {
+			if (m.getName().equalsIgnoreCase(args[1])) {
+				if (args[0].equalsIgnoreCase("add")) {
 					m.setKey(InputUtil.fromName("key.keyboard." + args[2].toLowerCase()).getKeyCode());
 					BleachLogger.infoMessage("Bound " + m.getName() + " To " + args[2]);
-				}else if(args[0].equalsIgnoreCase("del")) {
+				} else if (args[0].equalsIgnoreCase("del")) {
 					m.setKey(-1);
 					BleachLogger.infoMessage("Removed Bind For " + m.getName());
 				}

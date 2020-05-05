@@ -45,16 +45,16 @@ public class CmdNotebot extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		if(args.length >= 2 && args[0].equalsIgnoreCase("convert")) {
+		if (args.length >= 2 && args[0].equalsIgnoreCase("convert")) {
 			int i = 0;
 			String s = "";
 			List<List<Integer>> notes = Midi2Notebot.convert(BleachFileMang.stringsToPath(args[1]));
 
 			while(BleachFileMang.fileExists("notebot", "notebot" + i + ".txt")) i++;
-			for(List<Integer> i1: notes) s += i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
+			for (List<Integer> i1: notes) s += i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
 			BleachFileMang.appendFile(s, "notebot", "notebot" + i + ".txt");
 			BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
-		}else {
+		} else {
 			BleachQueue.queue.add(() -> mc.openScreen(new NotebotScreen()));
 		}
 	}

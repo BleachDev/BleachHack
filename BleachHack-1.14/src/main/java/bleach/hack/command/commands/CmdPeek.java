@@ -52,12 +52,12 @@ public class CmdPeek extends Command {
 	public void onCommand(String command, String[] args) throws Exception {
 		ItemStack item = mc.player.inventory.getCurrentItem();
 		
-		if(!(item.getItem() instanceof BlockItem)) {
+		if (!(item.getItem() instanceof BlockItem)) {
 			BleachLogger.errorMessage("Must be holding a containter to peek.");
 			return;
 		}
 		
-		if(!(((BlockItem) item.getItem()).getBlock() instanceof ContainerBlock)) {
+		if (!(((BlockItem) item.getItem()).getBlock() instanceof ContainerBlock)) {
 			BleachLogger.errorMessage("Must be holding a containter to peek.");
 			return;
 		}
@@ -65,9 +65,9 @@ public class CmdPeek extends Command {
 		NonNullList<ItemStack> items = NonNullList.withSize(27, new ItemStack(Items.AIR));
 		CompoundNBT nbt = item.getTag();
 		
-		if(nbt != null && nbt.contains("BlockEntityTag")) {
+		if (nbt != null && nbt.contains("BlockEntityTag")) {
 			CompoundNBT itemnbt = nbt.getCompound("BlockEntityTag");
-			if(itemnbt.contains("Items")) ItemStackHelper.loadAllItems(itemnbt, items);
+			if (itemnbt.contains("Items")) ItemStackHelper.loadAllItems(itemnbt, items);
 		}
 		
 		Inventory inv = new Inventory(items.toArray(new ItemStack[27]));

@@ -50,7 +50,7 @@ public class AutoReconnect extends Module {
 	
 	@Subscribe
 	public void onOpenScreen(EventOpenScreen event) {
-		if(event.getScreen() instanceof DisconnectedScreen
+		if (event.getScreen() instanceof DisconnectedScreen
 				&& !(event.getScreen() instanceof newDisconnectScreen)) {
 			mc.openScreen(new newDisconnectScreen((DisconnectedScreen) event.getScreen()));
 			event.setCancelled(true);
@@ -59,17 +59,17 @@ public class AutoReconnect extends Module {
 	
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
-		if(event.getPacket() instanceof DisconnectS2CPacket) {
-			try { server = mc.getCurrentServerEntry(); }catch(Exception e) {}
+		if (event.getPacket() instanceof DisconnectS2CPacket) {
+			try { server = mc.getCurrentServerEntry(); } catch (Exception e) {}
 		}
 	}
 	
 	@Subscribe
 	public void sendPacket(EventSendPacket event) {
-		if(event.getPacket() instanceof HandshakeC2SPacket) {
+		if (event.getPacket() instanceof HandshakeC2SPacket) {
 			try { server = new ServerEntry("Server", 
 					(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
-					+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"), false); }catch(Exception e) {}
+					+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"), false); } catch (Exception e) {}
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class AutoReconnect extends Module {
 			super.init();
 			reconnectTime = System.currentTimeMillis();
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 35, 200, 20, "Reconnect", (button) -> {
-				if(server != null) minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));
+				if (server != null) minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));
 		    }));
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
 					(getSettings().get(0).toToggle().state ? "§a" : "§c") + "AutoReconnect ["
@@ -106,8 +106,8 @@ public class AutoReconnect extends Module {
 					+ ((reconnectTime + getSettings().get(1).toSlider().getValue() * 1000) - System.currentTimeMillis())
 					+ "]" : "§cAutoReconnect [" + getSettings().get(1).toSlider().getValue() * 1000 + "]"));
 			
-			if(reconnectTime + getSettings().get(1).toSlider().getValue() * 1000 < System.currentTimeMillis() && getSettings().get(0).toToggle().state) {
-				if(server != null) minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));
+			if (reconnectTime + getSettings().get(1).toSlider().getValue() * 1000 < System.currentTimeMillis() && getSettings().get(0).toToggle().state) {
+				if (server != null) minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));
 				reconnectTime = System.currentTimeMillis();
 			}
 		}

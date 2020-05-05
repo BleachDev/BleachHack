@@ -49,23 +49,23 @@ public class CmdGamemode extends Command {
 			return;
 		}
 		
-		if(gm == 0) {
+		if (gm == 0) {
 			mc.player.setGameMode(GameMode.SURVIVAL);
 			mc.interactionManager.setGameMode(GameMode.SURVIVAL);
 			BleachLogger.infoMessage("Set gamemode to survival.");
-		}else if(gm == 1) {
+		} else if (gm == 1) {
 			mc.player.setGameMode(GameMode.CREATIVE);
 			mc.interactionManager.setGameMode(GameMode.CREATIVE);
 			BleachLogger.infoMessage("Set gamemode to creative.");
-		}else if(gm == 2) {
+		} else if (gm == 2) {
 			mc.player.setGameMode(GameMode.ADVENTURE);
 			mc.interactionManager.setGameMode(GameMode.ADVENTURE);
 			BleachLogger.infoMessage("Set gamemode to adventure.");
-		}else if(gm == 3) {
+		} else if (gm == 3) {
 			mc.player.setGameMode(GameMode.SPECTATOR);
 			mc.interactionManager.setGameMode(GameMode.SPECTATOR);
 			BleachLogger.infoMessage("Set gamemode to spectator.");
-		}else {
+		} else {
 			BleachLogger.warningMessage("Unknown Gamemode Number.");
 		}
 	}

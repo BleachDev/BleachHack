@@ -78,19 +78,19 @@ public class BleachMainMenu extends Screen {
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		this.renderBackground();
 		
-		if(CREEPERAWWMAN) {
-			if(System.currentTimeMillis() - 40000 > time) creeperAwMan("creeper9.jpg", "I couldn't care to do all of these");
-			else if(System.currentTimeMillis() - 32000 > time) creeperAwMan("creeper9.jpg", "Total shock fills your body, Oh no, it's you again");
-			else if(System.currentTimeMillis() - 28000 > time) creeperAwMan("creeper8.jpg", "Heads up, You hear a sound, turn around and look up");
-			else if(System.currentTimeMillis() - 22000 > time) creeperAwMan("creeper7.jpg", "Hope to find some diamonds tonight, night, night, Diamonds tonight");
-			else if(System.currentTimeMillis() - 18000 > time) creeperAwMan("creeper6.jpg", "This task, a grueling one");
-			else if(System.currentTimeMillis() - 14000 > time) creeperAwMan("creeper5.jpg", "Side-side to side");
-			else if(System.currentTimeMillis() - 11000 > time) creeperAwMan("creeper4.jpg", "So we back in the mine got our pickaxe swinging from side to side");
-			else if(System.currentTimeMillis() - 8000 > time) creeperAwMan("creeper3.jpg", "AWW MAN");
-			else if(System.currentTimeMillis() - 3000 > time) creeperAwMan("creeper2.jpg", "CREEPER!");
+		if (CREEPERAWWMAN) {
+			if (System.currentTimeMillis() - 40000 > time) creeperAwMan("creeper9.jpg", "I couldn't care to do all of these");
+			else if (System.currentTimeMillis() - 32000 > time) creeperAwMan("creeper9.jpg", "Total shock fills your body, Oh no, it's you again");
+			else if (System.currentTimeMillis() - 28000 > time) creeperAwMan("creeper8.jpg", "Heads up, You hear a sound, turn around and look up");
+			else if (System.currentTimeMillis() - 22000 > time) creeperAwMan("creeper7.jpg", "Hope to find some diamonds tonight, night, night, Diamonds tonight");
+			else if (System.currentTimeMillis() - 18000 > time) creeperAwMan("creeper6.jpg", "This task, a grueling one");
+			else if (System.currentTimeMillis() - 14000 > time) creeperAwMan("creeper5.jpg", "Side-side to side");
+			else if (System.currentTimeMillis() - 11000 > time) creeperAwMan("creeper4.jpg", "So we back in the mine got our pickaxe swinging from side to side");
+			else if (System.currentTimeMillis() - 8000 > time) creeperAwMan("creeper3.jpg", "AWW MAN");
+			else if (System.currentTimeMillis() - 3000 > time) creeperAwMan("creeper2.jpg", "CREEPER!");
 			else {creeperAwMan("creeper1.jpg", ""); }
 			drawRightAlignedString(font, "§cMusic removed because of copyright stuff", width, 2, -1);
-		}else{
+		} else {
 			fill(0, 0, width, height, 0xff000000);
 		}
 		
@@ -114,17 +114,17 @@ public class BleachMainMenu extends Screen {
 		drawString(this.font, "Logged in as: §a" + this.minecraft.getSession().getUsername(), 4, height - 10, -1);
 		
 		try {
-			if(Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
+			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
 				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
 				drawCenteredString(this.font,"§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
 			}
-		}catch(Exception e) {}
+		} catch (Exception e) {}
 		
 		super.render(p_render_1_, p_render_2_, p_render_3_);
 	}
 	
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
-		if(p_mouseClicked_1_ < 60 && p_mouseClicked_3_ < 15) { CREEPERAWWMAN = !CREEPERAWWMAN; init(); }
+		if (p_mouseClicked_1_ < 60 && p_mouseClicked_3_ < 15) { CREEPERAWWMAN = !CREEPERAWWMAN; init(); }
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
 	

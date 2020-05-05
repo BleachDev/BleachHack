@@ -51,34 +51,34 @@ public class Tracers extends Module {
 	public void onRender(Event3DRender event) {
 		final float thick = (float) getSettings().get(6).toSlider().getValue();
 		
-		for(Entity e: mc.world.getEntities()) {
+		for (Entity e: mc.world.getEntities()) {
 			Vec3d vec = e.getPos();
 			
 			Vec3d vec2 = new Vec3d(0, 0, 75).rotateX(-(float) Math.toRadians(mc.cameraEntity.pitch))
 					.rotateY(-(float) Math.toRadians(mc.cameraEntity.yaw))
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
 			
-			if(e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).toToggle().state) {
+			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f,0f,0f,thick);
 			}
-			else if(e instanceof Monster && getSettings().get(1).toToggle().state) {
+			else if (e instanceof Monster && getSettings().get(1).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0f,0f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0f,0f,0f,thick);
 			}
-			else if(EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
+			else if (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0f,1f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0f,1f,0f,thick);
 			}
-			else if(e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
+			else if (e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0.7f,0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f,0.7f,0f,thick);
 			}
-			else if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
+			else if (e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f, 0f, 1f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f, 0f, 1f,thick);
 			}
-			else if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+			else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0.5f, 0.5f, 0.5f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0.5f, 0.5f, 0.5f,thick);
 			}

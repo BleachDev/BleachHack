@@ -47,25 +47,25 @@ public class ElytraFly extends Module {
 				.rotateX(getSettings().get(1).toToggle().state ? 0 : -(float) Math.toRadians(mc.player.pitch))
 				.rotateY(-(float) Math.toRadians(mc.player.yaw));
 		
-		if(mc.player.isFallFlying()) {
-			if(getSettings().get(0).toMode().mode == 0) {
+		if (mc.player.isFallFlying()) {
+			if (getSettings().get(0).toMode().mode == 0) {
 				mc.player.setVelocity(
 						mc.player.getVelocity().x + vec3d.x + (vec3d.x - mc.player.getVelocity().x),
 						mc.player.getVelocity().y + vec3d.y + (vec3d.y - mc.player.getVelocity().y),
 						mc.player.getVelocity().z + vec3d.z + (vec3d.z - mc.player.getVelocity().z));
-			}else if(getSettings().get(0).toMode().mode == 1) {
-				if(mc.options.keyBack.isPressed()) vec3d = vec3d.multiply(-1);
-				else if(mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
-				else if(mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
-				else if(mc.options.keyJump.isPressed()) vec3d = new Vec3d(0, getSettings().get(2).toSlider().getValue(), 0);
-				else if(mc.options.keySneak.isPressed()) vec3d = new Vec3d(0, -getSettings().get(2).toSlider().getValue(), 0);
-				else if(!mc.options.keyForward.isPressed()) vec3d = Vec3d.ZERO;
+			} else if (getSettings().get(0).toMode().mode == 1) {
+				if (mc.options.keyBack.isPressed()) vec3d = vec3d.multiply(-1);
+				else if (mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
+				else if (mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
+				else if (mc.options.keyJump.isPressed()) vec3d = new Vec3d(0, getSettings().get(2).toSlider().getValue(), 0);
+				else if (mc.options.keySneak.isPressed()) vec3d = new Vec3d(0, -getSettings().get(2).toSlider().getValue(), 0);
+				else if (!mc.options.keyForward.isPressed()) vec3d = Vec3d.ZERO;
 				mc.player.setVelocity(vec3d);
 			}
-		}else if(getSettings().get(0).toMode().mode == 2 && !mc.player.onGround 
+		} else if (getSettings().get(0).toMode().mode == 2 && !mc.player.onGround 
 				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA && mc.player.fallDistance > 0.5) {
 			/* I tried packet mode and got whatever the fuck **i mean frick** this is */
-			if(mc.options.keySneak.isPressed()) return;
+			if (mc.options.keySneak.isPressed()) return;
 			mc.player.setVelocity(vec3d);
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));

@@ -47,16 +47,16 @@ public class CrystalAura extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			delay++;
 			int reqDelay = (int) Math.round(20/getSettings().get(3).toSlider().getValue());
 			
-			for(Entity e: EntityUtils.getLoadedEntities()) {
-				if(e instanceof EnderCrystalEntity && mc.player.getDistance(e) < getSettings().get(2).toSlider().getValue()) {
-					if(!mc.player.canEntityBeSeen(e) && !getSettings().get(1).toToggle().state) continue;
-					if(getSettings().get(0).toToggle().state) EntityUtils.facePos(e.posX, e.posY+e.getHeight()/2, e.posZ);
+			for (Entity e: EntityUtils.getLoadedEntities()) {
+				if (e instanceof EnderCrystalEntity && mc.player.getDistance(e) < getSettings().get(2).toSlider().getValue()) {
+					if (!mc.player.canEntityBeSeen(e) && !getSettings().get(1).toToggle().state) continue;
+					if (getSettings().get(0).toToggle().state) EntityUtils.facePos(e.posX, e.posY+e.getHeight()/2, e.posZ);
 					
-					if(delay > reqDelay || reqDelay == 0) {
+					if (delay > reqDelay || reqDelay == 0) {
 						mc.playerController.attackEntity(mc.player, e);
 						mc.player.swingArm(Hand.MAIN_HAND);
 						delay=0;

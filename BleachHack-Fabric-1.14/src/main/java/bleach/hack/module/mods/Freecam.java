@@ -93,12 +93,12 @@ public class Freecam extends Module {
 		Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 		Vec3d motion = camera.getVelocity();
 		
-		if(mc.options.keyJump.isPressed()) motion = motion.add(0, speed * 1.5, 0);
-		if(mc.options.keySneak.isPressed()) motion = motion.add(0, -speed * 1.5, 0);
-		if(mc.options.keyForward.isPressed()) motion = motion.add(forward.x, 0, forward.z);
-		if(mc.options.keyBack.isPressed()) motion = motion.add(-forward.x, 0, -forward.z);
-		if(mc.options.keyLeft.isPressed()) motion = motion.add(strafe.x, 0, strafe.z);
-		if(mc.options.keyRight.isPressed()) motion = motion.add(-strafe.x, 0, -strafe.z);
+		if (mc.options.keyJump.isPressed()) motion = motion.add(0, speed * 1.5, 0);
+		if (mc.options.keySneak.isPressed()) motion = motion.add(0, -speed * 1.5, 0);
+		if (mc.options.keyForward.isPressed()) motion = motion.add(forward.x, 0, forward.z);
+		if (mc.options.keyBack.isPressed()) motion = motion.add(-forward.x, 0, -forward.z);
+		if (mc.options.keyLeft.isPressed()) motion = motion.add(strafe.x, 0, strafe.z);
+		if (mc.options.keyRight.isPressed()) motion = motion.add(-strafe.x, 0, -strafe.z);
 		mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SNEAKING));
 		
 		camera.setPosition(camera.x + motion.x, camera.y + motion.y, camera.z + motion.z);

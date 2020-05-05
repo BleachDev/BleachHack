@@ -69,7 +69,7 @@ public class Freecam extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			mc.player.setMotion(0, 0, 0);
 			mc.player.setPosition(playerPos[0], playerPos[1], playerPos[2]);
 			
@@ -81,12 +81,12 @@ public class Freecam extends Module {
 			Vec3d strafe = forward.rotateYaw((float) Math.toRadians(90));
 			Vec3d motion = Vec3d.ZERO;
 			
-			if(mc.gameSettings.keyBindJump.isKeyDown()) motion = motion.add(0, speed, 0);
-			if(mc.gameSettings.keyBindSneak.isKeyDown()) motion = motion.add(0, -speed, 0);
-			if(mc.gameSettings.keyBindForward.isKeyDown()) motion = motion.add(forward.x, 0, forward.z);
-			if(mc.gameSettings.keyBindBack.isKeyDown()) motion = motion.add(-forward.x, 0, -forward.z);
-			if(mc.gameSettings.keyBindLeft.isKeyDown()) motion = motion.add(strafe.x, 0, strafe.z);
-			if(mc.gameSettings.keyBindRight.isKeyDown()) motion = motion.add(-strafe.x, 0, -strafe.z);
+			if (mc.gameSettings.keyBindJump.isKeyDown()) motion = motion.add(0, speed, 0);
+			if (mc.gameSettings.keyBindSneak.isKeyDown()) motion = motion.add(0, -speed, 0);
+			if (mc.gameSettings.keyBindForward.isKeyDown()) motion = motion.add(forward.x, 0, forward.z);
+			if (mc.gameSettings.keyBindBack.isKeyDown()) motion = motion.add(-forward.x, 0, -forward.z);
+			if (mc.gameSettings.keyBindLeft.isKeyDown()) motion = motion.add(strafe.x, 0, strafe.z);
+			if (mc.gameSettings.keyBindRight.isKeyDown()) motion = motion.add(-strafe.x, 0, -strafe.z);
 			
 			camera.setPosition(camera.posX + motion.x, camera.posY + motion.y, camera.posZ + motion.z);
 		}

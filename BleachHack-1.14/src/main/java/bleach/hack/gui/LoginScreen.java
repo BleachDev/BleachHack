@@ -72,8 +72,8 @@ public class LoginScreen extends Screen {
 	}
 	
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
-		if(userField.isFocused()) userField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		if(passField.isFocused()) passField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (userField.isFocused()) userField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (passField.isFocused()) passField.charTyped(p_charTyped_1_, p_charTyped_2_);
 		
 		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
 	}
@@ -81,13 +81,13 @@ public class LoginScreen extends Screen {
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
 		double mX = p_mouseClicked_1_, mY = p_mouseClicked_3_;
 		
-		if(mX>userField.x && mX<userField.x+userField.getWidth() && mY>userField.y && mY<userField.y+userField.getHeight()) {
+		if (mX>userField.x && mX<userField.x+userField.getWidth() && mY>userField.y && mY<userField.y+userField.getHeight()) {
 			userField.setFocused2(true);
 			passField.setFocused2(false);
 			userField.setEnabled(true);
 		}
 		
-		if(mX>passField.x && mX<passField.x+passField.getWidth() && mY>passField.y && mY<passField.y+passField.getHeight()) {
+		if (mX>passField.x && mX<passField.x+passField.getWidth() && mY>passField.y && mY<passField.y+passField.getHeight()) {
 			passField.setFocused2(true);
 			userField.setFocused2(false);
 		}
@@ -102,8 +102,8 @@ public class LoginScreen extends Screen {
 	}
 	
 	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-		if(userField.isFocused()) userField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		if(passField.isFocused()) passField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (userField.isFocused()) userField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (passField.isFocused()) passField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 		
 		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 	}

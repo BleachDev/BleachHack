@@ -47,9 +47,9 @@ public class BlockParty extends Module {
 	public void onTick(EventTick event) {
 		Item item = mc.player.inventory.getMainHandStack().getItem();
 		Block block = Block.getBlockFromItem(item);
-		if(block == Blocks.AIR) return;
+		if (block == Blocks.AIR) return;
 		
-		if(mc.world.getBlockState(mc.player.getBlockPos().add(0, -1, 0)).getBlock() == block
+		if (mc.world.getBlockState(mc.player.getBlockPos().add(0, -1, 0)).getBlock() == block
 				|| mc.world.getBlockState(mc.player.getBlockPos().add(0, -2, 0)).getBlock() == block) {
 			mc.player.setVelocity(0, mc.player.getVelocity().y, 0);
 			KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKeyCode(), false);
@@ -57,16 +57,16 @@ public class BlockParty extends Module {
 		}
 		
 		List<BlockPos> poses = new ArrayList<>();
-		for(int x = -50; x < 50; x++) {
-			for(int y = -2; y < 1; y++) {
-				for(int z = -50; z < 50; z++) {
-					if(mc.world.getBlockState(mc.player.getBlockPos().add(x, y, z)).getBlock() == block
+		for (int x = -50; x < 50; x++) {
+			for (int y = -2; y < 1; y++) {
+				for (int z = -50; z < 50; z++) {
+					if (mc.world.getBlockState(mc.player.getBlockPos().add(x, y, z)).getBlock() == block
 							&& mc.world.getBlockState(mc.player.getBlockPos().add(x, y+1, z)).getBlock() == Blocks.AIR) poses.add(mc.player.getBlockPos().add(x, y, z));
 				}
 			}
 		}
 		
-		if(poses.isEmpty()) return;
+		if (poses.isEmpty()) return;
 		
 		poses.sort((a,b) -> Double.compare(a.getSquaredDistance(mc.player.getBlockPos()), b.getSquaredDistance(mc.player.getBlockPos())));
 		
@@ -79,7 +79,7 @@ public class BlockParty extends Module {
 		
 		KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKeyCode(), true);
 		
-		if(mc.player.getBlockPos().getSquaredDistance(poses.get(0)) < (mc.player.isSprinting() ? 25 : 8)
+		if (mc.player.getBlockPos().getSquaredDistance(poses.get(0)) < (mc.player.isSprinting() ? 25 : 8)
 				&& Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().z) > 0.15
 				&& mc.player.verticalCollision) {
 			mc.player.jump();
@@ -87,7 +87,7 @@ public class BlockParty extends Module {
 			//mc.player.setPosition(mc.player.getX(), mc.player.y + 0.02, mc.player.getZ());
 		}
 		
-		if(getSettings().get(1).toToggle().state && mc.player.fallDistance < 0.25) {
+		if (getSettings().get(1).toToggle().state && mc.player.fallDistance < 0.25) {
 			if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
 				mc.player.setPos(mc.player.getX(), mc.player.prevY, mc.player.getZ());

@@ -45,6 +45,6 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 		EventDrawContainer event = new EventDrawContainer(
 				(AbstractContainerScreen<?>) MinecraftClient.getInstance().currentScreen, int_1, int_2); // hmm
 		BleachHack.eventBus.post(event);
-		if(event.isCancelled()) info.cancel();
+		if (event.isCancelled()) info.cancel();
 	}
 }

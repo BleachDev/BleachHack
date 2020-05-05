@@ -38,8 +38,8 @@ public class BleachFileReader {
 	public void saveModules() {
 		fileMang.createEmptyFile("modules.txt");
 		
-		for(Module m: ModuleManager.getModules()) {
-			if(m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
+		for (Module m: ModuleManager.getModules()) {
+			if (m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
 			fileMang.appendFile("modules.txt", m.getName() + ":" + Boolean.toString(m.isToggled()));
 		}
 	}
@@ -47,15 +47,15 @@ public class BleachFileReader {
 	public void readModules() {
 		List<String> lines = fileMang.readFileLines("modules.txt");
 		
-		for(Module m: ModuleManager.getModules()) {
-			for(String s: lines) {
+		for (Module m: ModuleManager.getModules()) {
+			for (String s: lines) {
 				String[] line = s.split(":");
 				try {
-					if(line[0].contains(m.getName()) && line[1].contains("true")) {
+					if (line[0].contains(m.getName()) && line[1].contains("true")) {
 						m.toggle();
 						break;
 					}
-				}catch(Exception e) {}
+				} catch (Exception e) {}
 			}
 		}
 	}
@@ -63,14 +63,14 @@ public class BleachFileReader {
 	public void saveSettings() {
 		fileMang.createEmptyFile("settings.txt");
 		
-		for(Module m: ModuleManager.getModules()) {
+		for (Module m: ModuleManager.getModules()) {
 			String line = m.getName();
 			int count = 0;
 			
-			for(SettingBase set: m.getSettings()) {
-				if(set instanceof SettingSlider) line += ":" + m.getSettings().get(count).toSlider().getValue();
-				if(set instanceof SettingMode) line += ":" + m.getSettings().get(count).toMode().mode;
-				if(set instanceof SettingToggle) line += ":" + m.getSettings().get(count).toToggle().state;
+			for (SettingBase set: m.getSettings()) {
+				if (set instanceof SettingSlider) line += ":" + m.getSettings().get(count).toSlider().getValue();
+				if (set instanceof SettingMode) line += ":" + m.getSettings().get(count).toMode().mode;
+				if (set instanceof SettingToggle) line += ":" + m.getSettings().get(count).toToggle().state;
 				count++;
 			}
 			
@@ -81,22 +81,22 @@ public class BleachFileReader {
 	public void readSettings() {
 		List<String> lines = fileMang.readFileLines("settings.txt");
 		
-		for(Module m: ModuleManager.getModules()) {
-			for(String s: lines) {
+		for (Module m: ModuleManager.getModules()) {
+			for (String s: lines) {
 				String[] line = s.split(":");
 				int count = 0;
 				
-				for(SettingBase set: m.getSettings()) {
+				for (SettingBase set: m.getSettings()) {
 					try {
-						if(line[0].contains(m.getName())) {
-							if(set instanceof SettingSlider) {
+						if (line[0].contains(m.getName())) {
+							if (set instanceof SettingSlider) {
 								m.getSettings().get(count).toSlider().value = Double.parseDouble(line[count+1]);}
-							if(set instanceof SettingMode) {
+							if (set instanceof SettingMode) {
 								m.getSettings().get(count).toMode().mode = Integer.parseInt(line[count+1]);}
-							if(set instanceof SettingToggle) {
+							if (set instanceof SettingToggle) {
 								m.getSettings().get(count).toToggle().state = Boolean.parseBoolean(line[count+1]);}
 						}
-					}catch(Exception e) {}
+					} catch (Exception e) {}
 					count++;
 				}
 			}
@@ -128,6 +128,6 @@ public class BleachFileReader {
 			gui.modsMvm.setPos(Integer.parseInt(lines.get(3).split(":")[0]), Integer.parseInt(lines.get(3).split(":")[1]));
 			gui.modsPly.setPos(Integer.parseInt(lines.get(4).split(":")[0]), Integer.parseInt(lines.get(4).split(":")[1]));
 			gui.modsRen.setPos(Integer.parseInt(lines.get(5).split(":")[0]), Integer.parseInt(lines.get(5).split(":")[1]));
-		}catch(Exception e) {}
+		} catch (Exception e) {}
 	}
 }

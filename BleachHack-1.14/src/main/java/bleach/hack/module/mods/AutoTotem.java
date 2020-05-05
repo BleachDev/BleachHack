@@ -33,12 +33,12 @@ public class AutoTotem extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
-			if(mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) return;
+		if (this.isToggled()) {
+			if (mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) return;
 			
 			/*Inventory*/
-			for(int i = 9; i < 44; i++) {
-				if(mc.player.inventory.getStackInSlot(i).getItem() == Items.TOTEM_OF_UNDYING) {
+			for (int i = 9; i < 44; i++) {
+				if (mc.player.inventory.getStackInSlot(i).getItem() == Items.TOTEM_OF_UNDYING) {
 					mc.playerController.windowClick(0, i, 0, ClickType.PICKUP, mc.player);
 					mc.playerController.windowClick(0, 45, 0, ClickType.PICKUP, mc.player);
 					return;
@@ -46,8 +46,8 @@ public class AutoTotem extends Module {
 			}
 			
 			/*Hotbar*/
-			for(int i = 0; i < 8; i++) {
-				if(mc.player.inventory.getStackInSlot(i).getItem() == Items.TOTEM_OF_UNDYING) {
+			for (int i = 0; i < 8; i++) {
+				if (mc.player.inventory.getStackInSlot(i).getItem() == Items.TOTEM_OF_UNDYING) {
 					//int oldSlot = mc.player.inventory.currentItem;
 					mc.player.inventory.currentItem = i;
 					mc.player.connection.sendPacket(new CPlayerDiggingPacket(

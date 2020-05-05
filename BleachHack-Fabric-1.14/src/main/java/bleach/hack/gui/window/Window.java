@@ -70,7 +70,7 @@ public class Window {
 	public void render(int mX, int mY) {
 		TextRenderer textRend = MinecraftClient.getInstance().textRenderer;
 		
-		if(dragging) {
+		if (dragging) {
 			x2 = (x2 - x1) + mX - dragOffX;
 			y2 = (y2 - y1) + mY - dragOffY;
 			x1 = mX - dragOffX;
@@ -88,7 +88,7 @@ public class Window {
 		fillGrey(x2 - 22, y1 + 3, x2 - 14, y1 + 11);
 		textRend.draw("_", x2 - 21, y1 + 1, 0x000000);
 		
-		for(WindowButton w: buttons) {
+		for (WindowButton w: buttons) {
 			int bx1 = x1 + w.x1;
 			int by1 = y1 + w.y1;
 			int bx2 = x1 + w.x2;
@@ -101,7 +101,7 @@ public class Window {
 		}
 		
 		/* window icon */
-		if(icon != null && selected) {
+		if (icon != null && selected) {
 			GL11.glPushMatrix();
 			GL11.glScaled(0.55, 0.55, 1);
 			GuiLighting.enable();
@@ -118,14 +118,14 @@ public class Window {
 	}
 	
 	public void onMousePressed(int x, int y) {
-		if(x > x1 + 2 && x < x2 - 2 && y > y1 + 2 && y < y1 + 12) {
+		if (x > x1 + 2 && x < x2 - 2 && y > y1 + 2 && y < y1 + 12) {
 			dragging = true;
 			dragOffX = x - x1;
 			dragOffY = y - y1;
 		}
 		
-		for(WindowButton w: buttons) {
-			if(x >= x1 + w.x1 && x <= x1 + w.x2 && y >= y1 + w.y1 && y <= y1 + w.y2) {
+		for (WindowButton w: buttons) {
+			if (x >= x1 + w.x1 && x <= x1 + w.x2 && y >= y1 + w.y1 && y <= y1 + w.y2) {
 				w.action.run();
 				MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}

@@ -41,12 +41,12 @@ public class Speed extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
+		if (this.isToggled()) {
 			double speeds = getSettings().get(1).toSlider().getValue() / 30;
 			
 			/* OnGround */
-			if(getSettings().get(0).toMode().mode == 0) {
-				if(mc.gameSettings.keyBindJump.isKeyDown()) return;
+			if (getSettings().get(0).toMode().mode == 0) {
+				if (mc.gameSettings.keyBindJump.isKeyDown()) return;
 				
 				if (jumping && mc.player.posY >= mc.player.prevPosY + 0.399994D) {
 					mc.player.setMotion(mc.player.getMotion().x, -0.9, mc.player.getMotion().z);
@@ -69,15 +69,15 @@ public class Speed extends Module {
 	
 				}
 			/* MiniHop */
-			}else if(getSettings().get(0).toMode().mode == 1) {
-				if(mc.player.collidedHorizontally || mc.gameSettings.keyBindJump.isKeyDown() || mc.player.moveForward == 0) return;
+			} else if (getSettings().get(0).toMode().mode == 1) {
+				if (mc.player.collidedHorizontally || mc.gameSettings.keyBindJump.isKeyDown() || mc.player.moveForward == 0) return;
 				if (mc.player.onGround) mc.player.jump();
-				else if(mc.player.getMotion().y > 0){
+				else if (mc.player.getMotion().y > 0) {
 					mc.player.setMotion(mc.player.getMotion().x * (0.9 + speeds), -1, mc.player.getMotion().z * (0.9 + speeds));
 					mc.player.moveStrafing += 1.5F;
 				}
 			/* Bhop */
-			}else if(getSettings().get(0).toMode().mode == 2) {
+			} else if (getSettings().get(0).toMode().mode == 2) {
 				if (mc.player.moveForward > 0 && mc.player.onGround) {
 					mc.player.jump();
 					mc.player.setMotion(mc.player.getMotion().x * (0.65 + speeds), 0.255556, mc.player.getMotion().z * (0.65 + speeds));

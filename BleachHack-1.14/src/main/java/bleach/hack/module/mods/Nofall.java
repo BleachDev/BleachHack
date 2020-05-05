@@ -37,12 +37,12 @@ public class Nofall extends Module {
 	}
 	
 	public void onUpdate() {
-		if(this.isToggled()) {
-			if(mc.player.fallDistance > 2f && getSettings().get(0).toMode().mode == 0) {
+		if (this.isToggled()) {
+			if (mc.player.fallDistance > 2f && getSettings().get(0).toMode().mode == 0) {
 				mc.player.connection.sendPacket(new CPlayerPacket(true));
 			}
 			
-			if(mc.player.fallDistance > 2f && getSettings().get(0).toMode().mode == 1 &&
+			if (mc.player.fallDistance > 2f && getSettings().get(0).toMode().mode == 1 &&
 					mc.world.getBlockState(mc.player.getPosition().add(
 							0,-1.5+(mc.player.getMotion().y*0.1),0)).getBlock() != Blocks.AIR) {
 				mc.player.connection.sendPacket(new CPlayerPacket(false));

@@ -47,37 +47,37 @@ public class ESP extends Module {
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		for(Entity e: mc.world.getEntities()) {
-			if(e != mc.player) {
-				if(e.isGlowing()) e.setGlowing(false);
+		for (Entity e: mc.world.getEntities()) {
+			if (e != mc.player) {
+				if (e.isGlowing()) e.setGlowing(false);
 			}
 		}
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		for(Entity e: mc.world.getEntities()) {
-			if(e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
+		for (Entity e: mc.world.getEntities()) {
+			if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.RED, "players");
 			}
 			
-			else if(e instanceof Monster && getSettings().get(1).toToggle().state) {
+			else if (e instanceof Monster && getSettings().get(1).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.DARK_BLUE, "mobs");
 			}
 			
-			else if(EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
+			else if (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GREEN, "passive");
 			}
 			
-			else if(e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
+			else if (e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GOLD, "items");
 			}
 			
-			else if(e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
+			else if (e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.LIGHT_PURPLE, "crystals");
 			}
 			
-			else if((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+			else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GRAY, "vehicles");
 			}
 			else {
