@@ -87,7 +87,9 @@ public abstract class AbstractWindowScreen extends Screen {
 		int count = 0;
 		int nextSelected = -1;
 		for (Window w: windows) {
-			w.onMousePressed((int) double_1, (int) double_2);
+			if (w.selected) {
+				w.onMousePressed((int) double_1, (int) double_2);
+			}
 			
 			if (w.shouldClose((int) double_1, (int) double_2)) w.closed = true;
 			

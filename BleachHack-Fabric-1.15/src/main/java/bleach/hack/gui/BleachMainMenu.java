@@ -317,14 +317,9 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		}
 		
 		if (!windows.get(1).closed && windows.get(1).selected) {
-			if (double_1 > userField.x && double_1 < userField.x+userField.getWidth() && double_2 > userField.y && double_2 < userField.y+20) {
-				userField.changeFocus(true);
-				if (passField.isFocused()) passField.changeFocus(true);
-			}
-			if (double_1 > passField.x && double_1 < passField.x+passField.getWidth() && double_2 > passField.y && double_2 < passField.y+20) {
-				passField.changeFocus(true);
-				if (userField.isFocused()) userField.changeFocus(true);
-			}
+			userField.mouseClicked(double_1, double_2, int_1);
+			passField.mouseClicked(double_1, double_2, int_1);
+			
 			if (double_1 > checkBox.x && double_1 < checkBox.x+10 && double_2 > checkBox.y && double_2 < checkBox.y+10) {
 				checkBox.checked = !checkBox.checked;
 			}

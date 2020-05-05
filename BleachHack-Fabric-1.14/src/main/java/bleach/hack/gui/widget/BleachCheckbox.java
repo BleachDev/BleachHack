@@ -43,7 +43,7 @@ public class BleachCheckbox extends AbstractPressableButtonWidget {
 		TextRenderer textRenderer = minecraftClient_1.textRenderer;
 		int color = int_1 > x && int_1 < x + 10 && int_2 > y && int_2 < y + 10 ? 0xFFD0F0D0 : 0xFFA0A0A0;
 		fill(x, y, x + 11, y + 11, 0xFF000000);
-		fill(x, y, x + 1, y + 11, color);
+		fill(x, y, x + 1, y + 11, 0xff858585);
 		fill(x, y + 10, x + 11, y + 11, color);
 		fill(x, y, x + 10, y + 1, color);
 		fill(x + 10, y, x + 11, y + 11, color);
