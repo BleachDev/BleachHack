@@ -46,6 +46,7 @@ public class CommandManager {
 			new CmdRename(),
 			new CmdSetting(),
 			new CmdSkull(),
+			new CmdTeleport(),
 			new CmdToggle(),
 			new CmdXray());
 	
