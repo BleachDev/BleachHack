@@ -46,9 +46,7 @@ public class CommandManager {
 			new CmdRename(),
 			new CmdSetting(),
 			new CmdSkull(),
-			new CmdTeleport(),
 			new CmdToggle(),
-			new CmdVanish(),
 			new CmdXray());
 	
 	public static List<Command> getCommands() {

