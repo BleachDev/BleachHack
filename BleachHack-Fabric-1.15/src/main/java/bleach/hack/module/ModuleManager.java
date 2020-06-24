@@ -42,6 +42,7 @@ public class ModuleManager {
 			new ClickGui(),
 			new Criticals(),
 			new CrystalAura(),
+			new DiscordRPCMod(),
 			new ElytraFly(),
 			new EntityControl(),
 			new ESP(),

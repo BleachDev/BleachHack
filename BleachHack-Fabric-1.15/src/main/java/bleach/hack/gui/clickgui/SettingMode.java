@@ -32,6 +32,7 @@ public class SettingMode extends SettingBase {
 		if (mode + 1 >= modes.length) {
 			return 0;
 		}
-		return mode+1;
+		
+		return mode + 1;
 	}
 }

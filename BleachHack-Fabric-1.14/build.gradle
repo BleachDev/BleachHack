@@ -3,6 +3,12 @@ plugins {
 	id 'maven-publish'
 }
 
+allprojects {
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+}
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -15,6 +21,7 @@ minecraft {
 
 dependencies {
 	//to change the versions see the gradle.properties file
+    implementation 'com.github.Vatuu:discord-rpc:1.6.2'
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"

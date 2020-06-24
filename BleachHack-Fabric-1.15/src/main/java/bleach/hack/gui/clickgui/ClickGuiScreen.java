@@ -229,7 +229,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 	
 	protected boolean mouseOver(int minX, int minY, int maxX, int maxY) {
-        return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY <= maxY;
+        return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY < maxY;
     }
 	
 	public void fillReverseGrey(int x1, int y1, int x2, int y2) {
