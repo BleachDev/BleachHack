@@ -1,0 +1,30 @@
+{
+  "required": true,
+  "package": "bleach.hack.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "MixinBlock",
+    "MixinBlockModelRenderer",
+    "MixinChunkOcclusionGraphBuilder",
+  	"MixinClientConnection",
+  	"MixinClientPlayerInteractionManager",
+  	"MixinContainerScreen",
+  	"MixinEntityRenderer",
+    "MixinFluidRenderer",
+    "MixinGameRenderer",
+    "MixinIngameHud",
+    "MixinKeyboard",
+    "MixinLlamaEntity",
+    "MixinMinecraftClient",
+    "MixinPacketInflater",
+    "MixinPlayerEntity",
+    "MixinPlayerInventory",
+    "MixinServerScreen",
+    "MixinTitleScreen"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
