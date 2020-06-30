@@ -33,22 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Block.class)
 public class MixinBlock {
 	
-    @Inject(method = "getAmbientOcclusionLightLevel", at = @At("HEAD"), cancellable = true)
-    public void getAmbientOcclusionLightLevel(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, CallbackInfoReturnable<Float> callbackInfoReturnable) {
-        if (ModuleManager.getModule(Xray.class).isToggled()) {
-            callbackInfoReturnable.setReturnValue(1.0F);
-        }
-    }
-
-    @Inject(method = "isShapeFullCube", at = @At("HEAD"), cancellable = true)
-    private static void isShapeFullCube(VoxelShape voxelShape_1, CallbackInfoReturnable<Boolean> callback) {
-        if (ModuleManager.getModule(Xray.class).isToggled()) {
-            callback.setReturnValue(false);
-            callback.cancel();
-        }
-    }
-
-    @Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
     private static void shouldDrawSide(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, Direction direction_1, CallbackInfoReturnable<Boolean> callback) {
         try {
             Xray xray = (Xray) ModuleManager.getModule(Xray.class);
@@ -58,16 +43,13 @@ public class MixinBlock {
             }
         } catch (Exception ignored) {}
     }
-
-    @Inject(method = "isFullOpaque", at = @At("HEAD"), cancellable = true)
-    public void isFullOpaque(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, CallbackInfoReturnable<Boolean> callback) {
-        try {
-            Xray xray = (Xray) ModuleManager.getModule(Xray.class);
-            if (xray.isToggled()) {
-                callback.setReturnValue(xray.isVisible(blockState_1.getBlock()));
-                callback.cancel();
-            }
-        } catch (Exception ignored) {}
+	
+	@Inject(method = "isShapeFullCube", at = @At("HEAD"), cancellable = true)
+    private static void isShapeFullCube(VoxelShape voxelShape_1, CallbackInfoReturnable<Boolean> callback) {
+        if (ModuleManager.getModule(Xray.class).isToggled()) {
+            callback.setReturnValue(false);
+            callback.cancel();
+        }
     }
 
     /*@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)

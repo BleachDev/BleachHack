@@ -69,7 +69,7 @@ public class Speed extends Module {
 		/* MiniHop */
 		} else if (getSettings().get(0).toMode().mode == 1) {
 			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0) return;
-			if (mc.player.onGround) mc.player.jump();
+			if (mc.player.isOnGround()) mc.player.jump();
 			else if (mc.player.getVelocity().y > 0) {
 				mc.player.setVelocity(mc.player.getVelocity().x * (0.9 + speeds), -1, mc.player.getVelocity().z * (0.9 + speeds));
 				mc.player.input.movementSideways += 1.5F;
@@ -77,7 +77,7 @@ public class Speed extends Module {
 			
 		/* Bhop */
 		} else if (getSettings().get(0).toMode().mode == 2) {
-			if (mc.player.forwardSpeed > 0 && mc.player.onGround) {
+			if (mc.player.forwardSpeed > 0 && mc.player.isOnGround()) {
 				mc.player.jump();
 				mc.player.setVelocity(mc.player.getVelocity().x * (0.65 + speeds), 0.255556, mc.player.getVelocity().z * (0.65 + speeds));
 				mc.player.sidewaysSpeed += 3.0F;

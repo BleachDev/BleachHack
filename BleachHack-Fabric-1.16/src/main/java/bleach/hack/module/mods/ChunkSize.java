@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -75,7 +76,7 @@ public class ChunkSize extends Module {
 	
 	@Subscribe
 	public void onOverlay(EventDrawOverlay event) {
-		mc.textRenderer.drawWithShadow("Chunk: " + (size < 1000 ? size + "B" : size / 1000d + "KB"), 120, 5, -1);
+		mc.textRenderer.drawWithShadow(event.matrix, "Chunk: " + (size < 1000 ? size + "B" : size / 1000d + "KB"), 120, 5, -1);
 	}
 	
 	@Subscribe
@@ -190,10 +191,13 @@ public class ChunkSize extends Module {
 	         GenerationStep.Carver[] var30 = GenerationStep.Carver.values();
 	         int var33 = var30.length;
 
-	         for (int var35 = 0; var35 < var33; ++var35) {
-	            GenerationStep.Carver generationStep$Carver_1 = var30[var35];
-	            compoundTag_6.putByteArray(generationStep$Carver_1.toString(), chunk_1.getCarvingMask(generationStep$Carver_1).toByteArray());
-	         }
+	         for(int var34 = 0; var34 < var33; ++var34) {
+	             GenerationStep.Carver carver = var30[var34];
+	             BitSet bitSet = protoChunk_1.getCarvingMask(carver);
+	             if (bitSet != null) {
+	            	 compoundTag_6.putByteArray(carver.toString(), bitSet.toByteArray());
+	             }
+	          }
 
 	         compoundTag_2.put("CarvingMasks", compoundTag_6);
 	      }
@@ -203,14 +207,14 @@ public class ChunkSize extends Module {
 	      if (tickScheduler_1 instanceof ChunkTickScheduler) {
 	         compoundTag_2.put("ToBeTicked", ((ChunkTickScheduler<?>)tickScheduler_1).toNbt());
 	      } else if (tickScheduler_1 instanceof SimpleTickScheduler) {
-	         compoundTag_2.put("TileTicks", ((SimpleTickScheduler<?>)tickScheduler_1).toNbt(serverWorld_1.getTime()));
+	         compoundTag_2.put("TileTicks", ((SimpleTickScheduler<?>)tickScheduler_1).toNbt());
 	      }
 
 	      TickScheduler<Fluid> tickScheduler_2 = chunk_1.getFluidTickScheduler();
 	      if (tickScheduler_2 instanceof ChunkTickScheduler) {
 	         compoundTag_2.put("LiquidsToBeTicked", ((ChunkTickScheduler<?>)tickScheduler_2).toNbt());
 	      } else if (tickScheduler_2 instanceof SimpleTickScheduler) {
-	         compoundTag_2.put("LiquidTicks", ((SimpleTickScheduler<?>)tickScheduler_2).toNbt(serverWorld_1.getTime()));
+	         compoundTag_2.put("LiquidTicks", ((SimpleTickScheduler<?>)tickScheduler_2).toNbt());
 	      }
 
 	      compoundTag_2.put("PostProcessing", ChunkSerializer.toNbt(chunk_1.getPostProcessingLists()));

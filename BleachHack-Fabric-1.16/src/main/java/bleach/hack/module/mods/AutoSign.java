@@ -32,7 +32,6 @@ import bleach.hack.utils.FabricReflect;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
-import net.minecraft.text.LiteralText;
 
 public class AutoSign extends Module {
 	
@@ -73,8 +72,7 @@ public class AutoSign extends Module {
 			SignEditScreen screen = (SignEditScreen) event.getScreen();
 			SignBlockEntity sign = (SignBlockEntity) FabricReflect.getFieldValue(screen, "field_3031", "sign");
 			
-			mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(sign.getPos(), 
-					new LiteralText(text[0]), new LiteralText(text[1]), new LiteralText(text[2]), new LiteralText(text[3])));
+			mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(sign.getPos(), text[0], text[1], text[2], text[3]));
 		}
 	}
 }

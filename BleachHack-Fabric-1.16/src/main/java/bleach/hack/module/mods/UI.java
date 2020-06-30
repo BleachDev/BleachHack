@@ -43,7 +43,6 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -85,7 +84,7 @@ public class UI extends Module {
 			List<String> lines = new ArrayList<>();
 			for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
 			
-			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
+			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getWidth(b), mc.textRenderer.getWidth(a)));
 			if (getSettings().get(2).toToggle().state) lines.add(0, "\u00a7a> BleachHack " + BleachHack.VERSION);
 			
 			//new colors
@@ -94,18 +93,18 @@ public class UI extends Module {
 			int extra = getSettings().get(1).toToggle().state ? 1 : 0;
 			for (String s: lines) {
 				color = getRainbowFromSettings(count);
-				InGameHud.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
-				InGameHud.fill(0, count*10, extra, 10+(count*10), color);
-				InGameHud.fill(mc.textRenderer.getStringWidth(s)+3+extra, (count*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(count*10), color);
+				InGameHud.fill(event.matrix, 0, count*10, mc.textRenderer.getWidth(s)+3+extra, 10+(count*10), 0x70003030);
+				InGameHud.fill(event.matrix, 0, count*10, extra, 10+(count*10), color);
+				InGameHud.fill(event.matrix, mc.textRenderer.getWidth(s)+3+extra, (count*10), mc.textRenderer.getWidth(s)+4+extra, 10+(count*10), color);
 				if (count + 1 < lines.size()) {
-					InGameHud.fill(mc.textRenderer.getStringWidth(lines.get(count + 1))+4+extra, 10+(count*10),
-							mc.textRenderer.getStringWidth(s)+4+extra, 11+(count*10), color);
+					InGameHud.fill(event.matrix, mc.textRenderer.getWidth(lines.get(count + 1))+4+extra, 10+(count*10),
+							mc.textRenderer.getWidth(s)+4+extra, 11+(count*10), color);
 				}
-				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(count*10), color);
+				mc.textRenderer.drawWithShadow(event.matrix, s, 2+extra, 1+(count*10), color);
 				count++;
 			}
 			
-			InGameHud.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
+			InGameHud.fill(event.matrix, 0, (count*10), mc.textRenderer.getWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
 		}
 
 		if (getSettings().get(11).toToggle().state) {
@@ -113,7 +112,7 @@ public class UI extends Module {
 		}
 		
 		if (getSettings().get(5).toToggle().state) {
-			boolean nether = mc.player.dimension == DimensionType.THE_NETHER;
+			boolean nether = mc.world.getDimension() != DimensionType.getOverworldDimensionType();
 			BlockPos pos = mc.player.getBlockPos();
 			Vec3d vec = mc.player.getPos();
 			BlockPos pos2 = nether ? new BlockPos(vec.getX()*8, vec.getY(), vec.getZ()*8)
@@ -148,7 +147,7 @@ public class UI extends Module {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
-				mc.textRenderer.drawWithShadow(text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getStringWidth(text) / 2,
+				mc.textRenderer.drawWithShadow(event.matrix, text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getWidth(text) / 2,
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), 0xd0d0d0);
 			}
 		}
@@ -156,13 +155,13 @@ public class UI extends Module {
 		if (getSettings().get(8).toToggle().state) {
 			String server = "";
 			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
-			InGameHud.fill(mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.getWindow().getScaledWidth() - 3, 12, 0xa0000000);
-			mc.textRenderer.drawWithShadow(server, mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
+			InGameHud.fill(event.matrix, mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(server) - 4, 2, mc.getWindow().getScaledWidth() - 3, 12, 0xa0000000);
+			mc.textRenderer.drawWithShadow(event.matrix, server, mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(server) - 3, 3, 0xb0b0b0);
 		}
 		
 		if (getSettings().get(9).toToggle().state && !mc.options.debugEnabled) {
-			InGameHud.fill(0, 3+(count*10), mc.textRenderer.getStringWidth("Players:")+4, 13+(count*10), 0x40000000);
-			mc.textRenderer.drawWithShadow("Players:", 2, 4+count*10, 0xff0000);
+			InGameHud.fill(event.matrix, 0, 3+(count*10), mc.textRenderer.getWidth("Players:")+4, 13+(count*10), 0x40000000);
+			mc.textRenderer.drawWithShadow(event.matrix, "Players:", 2, 4+count*10, 0xff0000);
 			count++;
 			
 			for (Entity e: mc.world.getPlayers().stream().sorted(
@@ -170,12 +169,12 @@ public class UI extends Module {
 					.collect(Collectors.toList())) {
 				if (e == mc.player) continue;
 				
-				String text = e.getDisplayName().asFormattedString() + " | " + 
+				String text = e.getDisplayName().getString() + " | " + 
 						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
 						+ " (" + Math.round(mc.player.getPos().distanceTo(e.getPos())) + "m)";
 				
-				InGameHud.fill(0, 3+(count*10), mc.textRenderer.getStringWidth(text)+4, 13+(count*10), 0x40000000);
-				mc.textRenderer.drawWithShadow(text, 2, 4+count*10,
+				InGameHud.fill(event.matrix, 0, 3+(count*10), mc.textRenderer.getWidth(text)+4, 13+(count*10), 0x40000000);
+				mc.textRenderer.drawWithShadow(event.matrix, text, 2, 4+count*10,
 						0xf00000 + (int) Math.min(mc.player.getPos().distanceTo(e.getPos()) * 3, 255));
 				count++;
 			}
@@ -188,7 +187,7 @@ public class UI extends Module {
 	        int count = 0;
 	        int x1 = mc.getWindow().getScaledWidth() / 2;
 	        int y = mc.getWindow().getScaledHeight() -
-	        		(mc.player.isInFluid(FluidTags.WATER) || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
+	        		(mc.player.isSubmergedInWater() || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
 	        for (ItemStack is : mc.player.inventory.armor) {
 	            count++;
 	            if (is.isEmpty()) continue;
@@ -204,14 +203,14 @@ public class UI extends Module {
 	            GL11.glPushMatrix();
 	            GL11.glScaled(0.75, 0.75, 0.75);
 	            String s = is.getCount() > 1 ? "x" + is.getCount() : "";
-	            mc.textRenderer.drawWithShadow(s, (x + 19 - mc.textRenderer.getStringWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
+	            mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
 
 	            if (is.isDamageable()) {
 	            	String dur = is.getMaxDamage() - is.getDamage() + "";
 		            int durcolor = 0x000000;
 		            try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
 		    	    
-		            mc.textRenderer.drawWithShadow(dur + "", (x + 10 - mc.textRenderer.getStringWidth(dur + "") / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
+		            mc.textRenderer.drawWithShadow(event.matrix, dur + "", (x + 10 - mc.textRenderer.getWidth(dur + "") / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
 	            }
 	            
 	            GL11.glPopMatrix();
@@ -224,8 +223,8 @@ public class UI extends Module {
 		int count2 = 0;
 		int infoMode = getSettings().get(15).toMode().mode;
 		for (String s: infoList) {
-			mc.textRenderer.drawWithShadow(s, 
-					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
+			mc.textRenderer.drawWithShadow(event.matrix, s, 
+					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
 					infoMode == 1 ? 2+(count2*10) : mc.getWindow().getScaledHeight()-9-(count2*10), 0xa0a0a0);
 			count2++;
 		}

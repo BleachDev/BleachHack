@@ -58,7 +58,7 @@ public class Criticals extends Module {
     }
 
     private void doCritical() {
-        if (!mc.player.onGround) return;
+        if (!mc.player.isOnGround()) return;
         if (mc.player.isInLava() || mc.player.isTouchingWater()) return;
         double posX = mc.player.getX();
         double posY = mc.player.getY();

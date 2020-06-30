@@ -75,17 +75,17 @@ public class Nametags extends Module {
 		/* - Add Green Normal Health */
 		for (int i = 0; i < e.getHealth(); i++) health += "\u00a7a|";
 		/* - Add Red Empty Health (Remove Based on absorption amount) */
-		for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaximumHealth() - e.getHealth()); i++) health += "\u00a7e|";
+		for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaxHealth() - e.getHealth()); i++) health += "\u00a7e|";
 		/* Add Yellow Absorption Health */
-		for (int i = 0; i < e.getMaximumHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "\u00a7c|";
+		for (int i = 0; i < e.getMaxHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "\u00a7c|";
 		/* Add "+??" to the end if the entity has extra hearts */
-		if (e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()) > 0) {
-			health += " \u00a7e+" + (int)(e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
+		if (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
+			health += " \u00a7e+" + (int)(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
 		}
 		
 		/* Drawing Nametags */
 		if (getSettings().get(1).toMode().mode == 0) {
-			RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaximumHealth() + "]",
+			RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
 					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);

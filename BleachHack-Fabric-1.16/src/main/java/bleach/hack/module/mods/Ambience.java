@@ -46,7 +46,7 @@ public class Ambience extends Module {
 			else mc.world.setRainGradient((float) getSettings().get(3).toSlider().getValue());
 		}
 		if (getSettings().get(1).toToggle().state) {
-			mc.world.setTime((long) getSettings().get(4).toSlider().getValue());
+			mc.world.setTimeOfDay((long) getSettings().get(4).toSlider().getValue());
 			mc.world.setTimeOfDay((long) getSettings().get(4).toSlider().getValue());
 		}
 	}

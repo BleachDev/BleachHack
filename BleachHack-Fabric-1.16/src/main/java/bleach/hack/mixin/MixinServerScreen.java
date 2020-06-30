@@ -20,6 +20,7 @@ package bleach.hack.mixin;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,14 +41,14 @@ public class MixinServerScreen extends Screen {
 
 	@Inject(at = @At("HEAD"), method = "init()V")
 	private void init(CallbackInfo info) {
-		addButton(new ButtonWidget(5, 7, 50, 18, "Scraper", button -> {
-			minecraft.openScreen(new ServerScraperScreen((MultiplayerScreen) minecraft.currentScreen));
+		addButton(new ButtonWidget(5, 7, 50, 18, new LiteralText("Scraper"), button -> {
+			client.openScreen(new ServerScraperScreen((MultiplayerScreen) client.currentScreen));
 		}));
-		addButton(new ButtonWidget(58, 7, 50, 18, "Cleanup", button -> {
-			minecraft.openScreen(new CleanUpScreen((MultiplayerScreen) minecraft.currentScreen));
+		addButton(new ButtonWidget(58, 7, 50, 18, new LiteralText("Cleanup"), button -> {
+			client.openScreen(new CleanUpScreen((MultiplayerScreen) client.currentScreen));
 		}));
-		addButton(new ButtonWidget(111, 7, 50, 18, "Protocol", button -> {
-			minecraft.openScreen(new ProtocolScreen((MultiplayerScreen) minecraft.currentScreen));
+		addButton(new ButtonWidget(111, 7, 50, 18, new LiteralText("Protocol"), button -> {
+			client.openScreen(new ProtocolScreen((MultiplayerScreen) client.currentScreen));
 		}));
 	}
 }

@@ -25,7 +25,7 @@ import bleach.hack.utils.EntityUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.decoration.EnderCrystalEntity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
@@ -73,7 +73,7 @@ public class ESP extends Module {
 				EntityUtils.setGlowing(e, Formatting.GOLD, "items");
 			}
 			
-			else if (e instanceof EnderCrystalEntity && getSettings().get(4).toToggle().state) {
+			else if (e instanceof EndCrystalEntity && getSettings().get(4).toToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.LIGHT_PURPLE, "crystals");
 			}
 			

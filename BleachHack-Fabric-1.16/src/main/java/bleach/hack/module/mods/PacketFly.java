@@ -109,7 +109,7 @@ public class PacketFly extends Module {
 			double mX = 0; double mY = 0; double mZ = 0;
 			if (mc.player.headYaw != mc.player.yaw) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
-						mc.player.headYaw, mc.player.pitch, mc.player.onGround));
+						mc.player.headYaw, mc.player.pitch, mc.player.isOnGround()));
 				return;
 			}
 			

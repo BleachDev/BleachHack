@@ -27,7 +27,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.EnderCrystalEntity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 
@@ -49,12 +49,12 @@ public class CrystalAura extends Module {
 		int reqDelay = (int) Math.round(20/getSettings().get(3).toSlider().getValue());
 		
 		for (Entity e: mc.world.getEntities()) {
-			if (e instanceof EnderCrystalEntity && mc.player.distanceTo(e) < getSettings().get(2).toSlider().getValue()) {
+			if (e instanceof EndCrystalEntity && mc.player.distanceTo(e) < getSettings().get(2).toSlider().getValue()) {
 				if (!mc.player.canSee(e) && !getSettings().get(1).toToggle().state) continue;
 				if (getSettings().get(0).toToggle().state) EntityUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
 				
 				if (delay > reqDelay || reqDelay == 0) {
-					mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e));
+					mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e, mc.player.isSneaking()));
 					mc.player.attack(e);
 					mc.player.swingHand(Hand.MAIN_HAND);
 					delay=0;

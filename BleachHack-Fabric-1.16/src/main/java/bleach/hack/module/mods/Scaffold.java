@@ -61,7 +61,7 @@ public class Scaffold extends Module {
 		if (mc.player.inventory.getMainHandStack().getItem() instanceof BlockItem) {
 			slot = mc.player.inventory.selectedSlot;
 		} else for (int i = 0; i < 9; i++) {
-			if (mc.player.inventory.getInvStack(i).getItem() instanceof BlockItem) {
+			if (mc.player.inventory.getStack(i).getItem() instanceof BlockItem) {
 				slot = i;
 				break;
 			}
@@ -110,7 +110,7 @@ public class Scaffold extends Module {
 				
 				}
 				mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, 
-						new BlockHitResult(new Vec3d(block), d.getOpposite(), block.offset(d), false));
+						new BlockHitResult(Vec3d.of(block), d.getOpposite(), block.offset(d), false));
 				mc.player.swingHand(Hand.MAIN_HAND);
 				if (WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(mc.world.getBlockState(block.offset(d)).getBlock())) {
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));

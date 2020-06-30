@@ -64,7 +64,7 @@ public class Step extends Module {
 			
 		} else if (getSettings().get(0).toMode().mode == 2) {
 			
-			if (mc.player.horizontalCollision && mc.player.onGround) {
+			if (mc.player.horizontalCollision && mc.player.isOnGround()) {
 				pos = mc.player.getY();
 				mc.player.jump();
 				flag = true;

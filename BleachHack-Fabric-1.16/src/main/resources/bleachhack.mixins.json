@@ -5,6 +5,7 @@
   "mixins": [
   ],
   "client": [
+  	"MixinAbstractBlock",
     "MixinBlock",
     "MixinBlockModelRenderer",
     "MixinChunkOcclusionGraphBuilder",

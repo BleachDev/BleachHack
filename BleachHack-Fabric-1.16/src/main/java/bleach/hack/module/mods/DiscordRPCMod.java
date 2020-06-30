@@ -82,7 +82,7 @@ public class DiscordRPCMod extends Module {
 			
 			ItemStack currentItem = mc.player.inventory.getMainHandStack();
 			String itemName = currentItem.getItem() == Items.AIR ? "Nothing" :
-				(currentItem.getCount() > 1 ? currentItem.getCount() + " " : "") + currentItem.getItem().getName().asString();
+				(currentItem.getCount() > 1 ? currentItem.getCount() + " " : "") + currentItem.getItem().getName().getString();
 			
 			switch (getSettings().get(1).toMode().mode) {
 				case 0:

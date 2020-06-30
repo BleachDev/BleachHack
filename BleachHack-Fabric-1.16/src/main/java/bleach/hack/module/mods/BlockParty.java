@@ -52,7 +52,7 @@ public class BlockParty extends Module {
 		if (mc.world.getBlockState(mc.player.getBlockPos().add(0, -1, 0)).getBlock() == block
 				|| mc.world.getBlockState(mc.player.getBlockPos().add(0, -2, 0)).getBlock() == block) {
 			mc.player.setVelocity(0, mc.player.getVelocity().y, 0);
-			KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKeyCode(), false);
+			KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKey(), false);
 			return;
 		}
 		
@@ -77,7 +77,7 @@ public class BlockParty extends Module {
 			
 		mc.player.yaw += MathHelper.wrapDegrees(yaw - mc.player.yaw);
 		
-		KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKeyCode(), true);
+		KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKey(), true);
 		
 		if (mc.player.getBlockPos().getSquaredDistance(poses.get(0)) < (mc.player.isSprinting() ? 25 : 8)
 				&& Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().z) > 0.15

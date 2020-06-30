@@ -54,7 +54,7 @@ public class EntityControl extends Module {
 
 		if (getSettings().get(4).toToggle().state && e instanceof HorseBaseEntity) {
 			HorseBaseEntity h = (HorseBaseEntity) e;
-			h.setSaddled(true);
+			h.saddle(null);
 			h.setTame(true);
 			h.setAiDisabled(true);
 		}

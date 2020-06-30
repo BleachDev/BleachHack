@@ -103,14 +103,14 @@ public class Nuker extends Module {
 		for (BlockPos pos: blocks) {
 			if (!getSettings().get(3).toToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 			
-			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
+			Vec3d vec = Vec3d.of(pos).add(0.5, 0.5, 0.5);
 			
 			if (mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
 			
 			Direction dir = null;
 			double dist = Double.MAX_VALUE;
 			for (Direction d: Direction.values()) {
-				double dist2 = mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
+				double dist2 = mc.player.getPos().distanceTo(Vec3d.of(pos.offset(d)).add(0.5, 0.5, 0.5));
 				if (dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
 				dist = dist2;
 				dir = d;
@@ -122,7 +122,7 @@ public class Nuker extends Module {
 				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
 				EntityUtils.facePos(vec.x, vec.y, vec.z);
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
-						mc.player.yaw, mc.player.pitch, mc.player.onGround));
+						mc.player.yaw, mc.player.pitch, mc.player.isOnGround()));
 				mc.player.yaw = prevRot[0];
 				mc.player.pitch = prevRot[1];
 			}

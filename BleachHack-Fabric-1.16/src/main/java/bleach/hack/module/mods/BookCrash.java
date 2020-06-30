@@ -27,7 +27,6 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import net.minecraft.container.SlotActionType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +36,7 @@ import net.minecraft.network.packet.c2s.play.ClickWindowC2SPacket;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
-import net.minecraft.text.Text;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Random;
@@ -87,7 +86,7 @@ public class BookCrash extends Module {
         }
         
         if (getSettings().get(0).toMode().mode == 2) {
-        	Text text = Text.Serializer.fromJson("{\"text\":\"pp\"}");
+        	String text = "bh ontop";
         	Random rand = new Random();
         	for (int i = 0; i < getSettings().get(1).toSlider().getValue(); i++) {
 	        	mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(

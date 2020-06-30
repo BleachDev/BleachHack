@@ -62,7 +62,7 @@ public class ElytraFly extends Module {
 				else if (!mc.options.keyForward.isPressed()) vec3d = Vec3d.ZERO;
 				mc.player.setVelocity(vec3d);
 			}
-		} else if (getSettings().get(0).toMode().mode == 2 && !mc.player.onGround 
+		} else if (getSettings().get(0).toMode().mode == 2 && !mc.player.isOnGround() 
 				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA && mc.player.fallDistance > 0.5) {
 			/* I tried packet mode and got whatever the fuck **i mean frick** this is */
 			if (mc.options.keySneak.isPressed()) return;

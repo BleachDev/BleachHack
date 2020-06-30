@@ -18,6 +18,8 @@
 package bleach.hack.mixin;
 
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.util.math.MatrixStack;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,9 +31,9 @@ import bleach.hack.event.events.EventDrawOverlay;
 @Mixin(InGameHud.class)
 public class MixinIngameHud {
 	
-	@Inject(at = @At(value = "RETURN"), method = "render(F)V", cancellable = true)
-	public void render(float float_1, CallbackInfo info) {
-		EventDrawOverlay event = new EventDrawOverlay();
+	@Inject(at = @At(value = "RETURN"), method = "render", cancellable = true)
+	public void render(MatrixStack matrixStack, float float_1, CallbackInfo info) {
+		EventDrawOverlay event = new EventDrawOverlay(matrixStack);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}

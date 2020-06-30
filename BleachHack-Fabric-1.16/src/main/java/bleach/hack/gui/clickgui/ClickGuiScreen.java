@@ -82,8 +82,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	
 	public void render(MatrixStack matrix, int mX, int mY, float float_1) {
 		this.renderBackground(matrix);
-		textRenderer.draw(matrix, "BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
-		textRenderer.draw(matrix, "BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
+		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 3, 3, 0x305090);
+		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		textRenderer.drawWithShadow(matrix, "Hover over a bind setting and press a key to change a bind" , 2, height-10, 0xff9999);
 		textRenderer.drawWithShadow(matrix, "Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
 		
@@ -177,7 +177,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		Screen.fill(matrix, x, y - 1, x + 1, y+11, 0x90000000);
 		
 		if (key != -1 && mouseOver(x, y, x+len, y+12)) m.setKey((key != 261 && key != 256) ? key : -1);
-		String name = InputUtil.fromKeyCode(m.getKey(), -1).getLocalizedText().asString();
+		String name = InputUtil.fromKeyCode(m.getKey(), -1).getLocalizedText().getString();
 		if (name == null) name = "KEY" + m.getKey();
 		if (name.isEmpty()) name = "NONE";
 		

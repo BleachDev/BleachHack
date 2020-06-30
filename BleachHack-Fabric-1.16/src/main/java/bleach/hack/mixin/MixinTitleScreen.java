@@ -21,6 +21,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,9 +43,9 @@ public class MixinTitleScreen extends Screen {
 		if (BleachMainMenu.customTitleScreen) {
 			MinecraftClient.getInstance().openScreen(new BleachMainMenu());
 		} else {
-			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, "BH", button -> {
+			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
 				BleachMainMenu.customTitleScreen = !BleachMainMenu.customTitleScreen;
-				minecraft.openScreen(new TitleScreen(false));
+				client.openScreen(new TitleScreen(false));
 			}));
 		}
 	}

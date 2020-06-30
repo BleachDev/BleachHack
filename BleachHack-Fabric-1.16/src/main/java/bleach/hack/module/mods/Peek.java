@@ -20,12 +20,13 @@ import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.container.Slot;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
+import net.minecraft.screen.slot.Slot;
 
 import org.lwjgl.opengl.GL12;
 
@@ -52,16 +53,16 @@ public class Peek extends Module {
 		try { slot = (Slot) FabricReflect.getFieldValue(event.getScreen(), "field_2787", "focusedSlot"); } catch (Exception e) {}
 		if (slot == null) return;
 		
-		if (!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) {
+		if (!Arrays.equals(new int[] {slot.x, slot.y}, slotPos)) {
 			pageCount = 0;
 			pages = null;
 		}
 		
-		slotPos = new int[] {slot.xPosition, slot.yPosition};
+		slotPos = new int[] {slot.x, slot.y};
 		
 		if (getSettings().get(0).toToggle().state) drawShulkerToolTip(slot, event.mouseX, event.mouseY);
-		if (getSettings().get(1).toToggle().state) drawBookToolTip(slot, event.mouseX, event.mouseY);
-		if (getSettings().get(2).toToggle().state) drawMapToolTip(slot, event.mouseX, event.mouseY);
+		if (getSettings().get(1).toToggle().state) drawBookToolTip(event.matrix, slot, event.mouseX, event.mouseY);
+		if (getSettings().get(2).toToggle().state) drawMapToolTip(event.matrix, slot, event.mouseX, event.mouseY);
 	}
 	
 	public void drawShulkerToolTip(Slot slot, int mX, int mY) {
@@ -84,13 +85,13 @@ public class Peek extends Module {
 			int x = mX + 10 + (17 * (count % 9));
 			int y = mY - 69 + (17 * (count / 9));
 			
-			mc.getItemRenderer().renderGuiItem(i, x, y);
+			mc.getItemRenderer().renderGuiItemIcon(i, x, y);
 		    mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, i, x, y, i.getCount() > 1 ? i.getCount() + "" : "");
 			count++;
 		}
 	}
 	
-	public void drawBookToolTip(Slot slot, int mX, int mY) {
+	public void drawBookToolTip(MatrixStack matrix, Slot slot, int mX, int mY) {
 		if (slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK) return;
 		
 		if (pages == null) pages = ItemContentUtils.getTextInBook(slot.getStack());
@@ -103,22 +104,22 @@ public class Peek extends Module {
 			else pageCount++;
 		} else if (mc.player.age % 80 != 0) shown = false;
 		
-		int lenght = mc.textRenderer.getStringWidth("Page: " + (pageCount + 1) + "/" + pages.size());
+		int lenght = mc.textRenderer.getWidth("Page: " + (pageCount + 1) + "/" + pages.size());
 		
 		renderTooltipBox(mX + 56 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, lenght, true);
 		renderTooltipBox(mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
-		mc.textRenderer.drawWithShadow("Page: " + (pageCount + 1) + "/" + pages.size(),
+		mc.textRenderer.drawWithShadow(matrix, "Page: " + (pageCount + 1) + "/" + pages.size(),
 				mX + 68 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
 		
 		int count = 0;
 		for (String s: pages.get(pageCount)) {
-			mc.textRenderer.drawWithShadow(s, mX + 12, mY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
+			mc.textRenderer.drawWithShadow(matrix, s, mX + 12, mY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
 			count++;
 		}
 		
 	}
 	
-	public void drawMapToolTip(Slot slot, int mX, int mY) {
+	public void drawMapToolTip(MatrixStack matrix, Slot slot, int mX, int mY) {
 		if (slot.getStack().getItem() != Items.FILLED_MAP) return;
 		
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
@@ -136,7 +137,7 @@ public class Peek extends Module {
 		for (byte c: colors) {
 			int c1 = c & 255;
 			
-			if (c1 / 4 != 0) Screen.fill(x, y, x+1, y+1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
+			if (c1 / 4 != 0) Screen.fill(matrix, x, y, x+1, y+1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
 			if (x - (int) (mX*(1/size)+12*(1/size)) == 127) { x = (int) (mX*(1/size)+12*(1/size)); y++; }
 			else x++;
 		}
@@ -144,7 +145,7 @@ public class Peek extends Module {
 		GL11.glPopMatrix();
 	}
 
-	/* Fix your game 🅱️ojang */
+	/* Fix your game [B]ojang */
 	private int getRenderColorFix(int color, int offset) {
 		int int_2 = (offset == 3 ? 135 : offset == 2 ? 255 : offset == 0 ? 180 : 220);
 		

@@ -18,14 +18,8 @@
 package bleach.hack.mixin;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.ContainerProvider;
-import net.minecraft.client.gui.screen.ingame.ContainerScreen;
-import net.minecraft.container.Container;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -34,13 +28,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawContainer;
 
-@Mixin(ScreenHandler.class)
+@Mixin(HandledScreen.class)
 public abstract class MixinContainerScreen {
 
-	@Inject(at = @At("RETURN"), method = "render(IIF)V")
-	public void render(int int_1, int int_2, float float_1, CallbackInfo info) {
+	@Inject(at = @At("RETURN"), method = "render")
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		EventDrawContainer event = new EventDrawContainer(
-				(ContainerScreen<?>) MinecraftClient.getInstance().currentScreen, int_1, int_2); // hmm
+				(HandledScreen<?>) MinecraftClient.getInstance().currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}

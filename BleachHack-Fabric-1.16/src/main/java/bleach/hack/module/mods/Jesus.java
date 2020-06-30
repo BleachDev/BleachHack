@@ -47,7 +47,7 @@ public class Jesus extends Module {
 			e.setVelocity(e.getVelocity().x, 0.01, e.getVelocity().z);
 		} else if (WorldUtils.isFluid(new BlockPos(e.getPos()))) {
 			e.setVelocity(e.getVelocity().x, -0.005, e.getVelocity().z);
-			e.onGround = true;
+			e.setOnGround(true);
 		}
 	}
 }
