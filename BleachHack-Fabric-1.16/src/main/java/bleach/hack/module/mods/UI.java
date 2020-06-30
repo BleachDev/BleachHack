@@ -181,6 +181,7 @@ public class UI extends Module {
 		
 		if (getSettings().get(10).toToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			GL11.glPushMatrix();
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 	        int count = 0;
 	        int x1 = mc.getWindow().getScaledWidth() / 2;
