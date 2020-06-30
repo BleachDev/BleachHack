@@ -36,6 +36,7 @@ import bleach.hack.module.mods.ClickGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
@@ -76,17 +77,17 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	
 	public void onClose() {
 		ModuleManager.getModule(ClickGui.class).setToggled(false);
-		this.minecraft.openScreen(null);
+		this.client.openScreen(null);
 	}
 	
-	public void render(int mX, int mY, float float_1) {
-		this.renderBackground();
-		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
-		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
-		font.drawWithShadow("Hover over a bind setting and press a key to change a bind" , 2, height-10, 0xff9999);
-		font.drawWithShadow("Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
+	public void render(MatrixStack matrix, int mX, int mY, float float_1) {
+		this.renderBackground(matrix);
+		textRenderer.draw(matrix, "BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
+		textRenderer.draw(matrix, "BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
+		textRenderer.drawWithShadow(matrix, "Hover over a bind setting and press a key to change a bind" , 2, height-10, 0xff9999);
+		textRenderer.drawWithShadow(matrix, "Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
 		
-		super.render(mX, mY, float_1);
+		super.render(matrix, mX, mY, float_1);
 		
 		mouseX = mX;
 		mouseY = mY;
@@ -101,7 +102,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				mw.x2 = x + len + 1;
 				
 				if (rmDown && mouseOver(x, y-12, x+len, y)) {
-					minecraft.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					mw.hiding = !mw.hiding;
 				}
 				
@@ -114,11 +115,11 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				
 				int count = 0;
 				for (Entry<Module, Boolean> m: new LinkedHashMap<>(mw.mods).entrySet()) {
-					if (m.getValue()) fillReverseGrey(x, y+(count*12), x+len-1, y+12+(count*12));
-					fill(x, y+(count*12), x+len, y+12+(count*12),
+					if (m.getValue()) fillReverseGrey(matrix, x, y+(count*12), x+len-1, y+12+(count*12));
+					fill(matrix, x, y+(count*12), x+len, y+12+(count*12),
 							mouseOver(x, y+(count*12), x+len, y+12+(count*12)) ? 0x70303070 : 0x00000000);
 					
-					font.drawWithShadow(cutText(m.getKey().getName(), len),
+					textRenderer.drawWithShadow(matrix, cutText(m.getKey().getName(), len),
 							x+2, y+2+(count*12), m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
 					
 					//fill(m.getValue() ? x+len-2 : x+len-1, y+(count*12), 
@@ -135,15 +136,15 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				        while(mat.find()) { c2++; } mat.reset();
 				        
 				        while(mat.find()) {
-				        	fill(x+len+3, y-1+(count*12)-(c2 * 10)+(c3 * 10),
-				        			x+len+6+font.getStringWidth(mat.group().trim()), y+(count*12)-(c2 * 10)+(c3 * 10)+9,
+				        	fill(matrix, x+len+3, y-1+(count*12)-(c2 * 10)+(c3 * 10),
+				        			x+len+6+textRenderer.getWidth(mat.group().trim()), y+(count*12)-(c2 * 10)+(c3 * 10)+9,
 									0x90000000);
-				        	font.drawWithShadow(mat.group(), x+len+5, y+(count*12)-(c2 * 10)+(c3 * 10), -1);
+				        	textRenderer.drawWithShadow(matrix, mat.group(), x+len+5, y+(count*12)-(c2 * 10)+(c3 * 10), -1);
 							c3++;
 						}
 						if (lmDown) m.getKey().toggle();
 						if (rmDown) mw.mods.replace(m.getKey(), !m.getValue());
-						if (lmDown || rmDown) minecraft.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+						if (lmDown || rmDown) client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 						GL11.glTranslated(0, 0, -300);
 					}
 					
@@ -151,13 +152,13 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 					if (m.getValue()) {
 						for (SettingBase s: m.getKey().getSettings()) {
 							count++;
-							if (s instanceof SettingMode) drawModeSetting(s.toMode(), x, y+(count*12));
-							if (s instanceof SettingToggle) drawToggleSetting(s.toToggle(), x, y+(count*12));
-							if (s instanceof SettingSlider) drawSliderSetting(s.toSlider(), x, y+(count*12));
+							if (s instanceof SettingMode) drawModeSetting(matrix, s.toMode(), x, y+(count*12));
+							if (s instanceof SettingToggle) drawToggleSetting(matrix, s.toToggle(), x, y+(count*12));
+							if (s instanceof SettingSlider) drawSliderSetting(matrix, s.toSlider(), x, y+(count*12));
 							//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
 						}
 						count++;
-						drawBindSetting(m.getKey(), keyDown, x, y+(count*12));
+						drawBindSetting(matrix, m.getKey(), keyDown, x, y+(count*12));
 						//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
 					}
 					count++;
@@ -170,46 +171,46 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		keyDown = -1;
 	}
 	
-	public void drawBindSetting(Module m, int key, int x, int y) {
-		Screen.fill(x, y+11, x+len-2, y+12, 0x90b0b0b0);
-		Screen.fill(x+len - 2, y, x+len-1, y+12, 0x90b0b0b0);
-		Screen.fill(x, y - 1, x + 1, y+11, 0x90000000);
+	public void drawBindSetting(MatrixStack matrix, Module m, int key, int x, int y) {
+		Screen.fill(matrix, x, y+11, x+len-2, y+12, 0x90b0b0b0);
+		Screen.fill(matrix, x+len - 2, y, x+len-1, y+12, 0x90b0b0b0);
+		Screen.fill(matrix, x, y - 1, x + 1, y+11, 0x90000000);
 		
 		if (key != -1 && mouseOver(x, y, x+len, y+12)) m.setKey((key != 261 && key != 256) ? key : -1);
-		String name = InputUtil.getKeycodeName(m.getKey());
+		String name = InputUtil.fromKeyCode(m.getKey(), -1).getLocalizedText().asString();
 		if (name == null) name = "KEY" + m.getKey();
 		if (name.isEmpty()) name = "NONE";
 		
-		font.drawWithShadow("Bind: " + name + (mouseOver(x, y, x+len, y+12) ? "..." : "")
+		textRenderer.drawWithShadow(matrix, "Bind: " + name + (mouseOver(x, y, x+len, y+12) ? "..." : "")
 				, x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 	}
 	
-	public void drawModeSetting(SettingMode s, int x, int y) {
-		fillGreySides(x, y-1, x+len-1, y+12);
-		font.drawWithShadow(s.text + s.modes[s.mode],x+2, y+2,
+	public void drawModeSetting(MatrixStack matrix, SettingMode s, int x, int y) {
+		fillGreySides(matrix, x, y-1, x+len-1, y+12);
+		textRenderer.drawWithShadow(matrix, s.text + s.modes[s.mode],x+2, y+2,
 				mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 		
 		if (mouseOver(x, y, x+len, y+12) && lmDown) s.mode = s.getNextMode();
 	}
 	
-	public void drawToggleSetting(SettingToggle s, int x, int y) {
+	public void drawToggleSetting(MatrixStack matrix, SettingToggle s, int x, int y) {
 		String color2;
 		
-		if (s.state) { if (mouseOver(x, y, x+len, y+12)) color2 = "§2"; else color2 = "§a";
-		} else { if (mouseOver(x, y, x+len, y+12)) color2 = "§4"; else color2 = "§c"; }
+		if (s.state) { if (mouseOver(x, y, x+len, y+12)) color2 = "\u00a72"; else color2 = "\u00a7a";
+		} else { if (mouseOver(x, y, x+len, y+12)) color2 = "\u00a74"; else color2 = "\u00a7c"; }
 		
-		fillGreySides(x, y-1, x+len-1, y+12);
-		font.drawWithShadow(color2 + s.text, x+3, y+2, -1);
+		fillGreySides(matrix, x, y-1, x+len-1, y+12);
+		textRenderer.drawWithShadow(matrix, color2 + s.text, x+3, y+2, -1);
 		
 		if (mouseOver(x, y, x+len, y+12) && lmDown) s.state = !s.state;
 	}
 	
-	public void drawSliderSetting(SettingSlider s, int x, int y) {
+	public void drawSliderSetting(MatrixStack matrix, SettingSlider s, int x, int y) {
 		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((s.getValue() - s.min) / (s.max - s.min)), 0, len-2));
-		fillGreySides(x, y-1, x+len-1, y+12);
-		fillGradient(x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
+		fillGreySides(matrix, x, y-1, x+len-1, y+12);
+		fillGradient(matrix, x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
 		
-		font.drawWithShadow(s.text + (s.round == 0  && s.getValue() > 100 ? Integer.toString((int)s.getValue()) : s.getValue()),
+		textRenderer.drawWithShadow(matrix, s.text + (s.round == 0  && s.getValue() > 100 ? Integer.toString((int)s.getValue()) : s.getValue()),
 				x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 		
 		if (mouseOver(x+1, y, x+len-2, y+12) && lmHeld) {
@@ -222,7 +223,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	private String cutText(String text, int leng) {
 		String text1 = text;
 		for (int i = 0; i < text.length(); i++) {
-			if (font.getStringWidth(text1) < len-2) return text1;
+			if (textRenderer.getWidth(text1) < len-2) return text1;
 			text1 = text1.replaceAll(".$", "");
 		}
 		return "";
@@ -232,15 +233,15 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY < maxY;
     }
 	
-	public void fillReverseGrey(int x1, int y1, int x2, int y2) {
-		Screen.fill(x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		Screen.fill(x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
-		Screen.fill(x2 - 2, y1 + 1, x2, y2, 0x90b0b0b0);
+	public void fillReverseGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+		Screen.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
+		Screen.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
+		Screen.fill(matrix, x2 - 2, y1 + 1, x2, y2, 0x90b0b0b0);
 	}
 	
-	public void fillGreySides(int x1, int y1, int x2, int y2) {
-		Screen.fill(x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		Screen.fill(x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
+	public void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+		Screen.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
+		Screen.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
 	}
 	
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {

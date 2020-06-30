@@ -26,6 +26,7 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 
 public class ModuleWindow extends Window {
@@ -46,22 +47,22 @@ public class ModuleWindow extends Window {
 		return false;
 	}
 	
-	public void fillGrey(int x1, int y1, int x2, int y2) {
-		Screen.fill(x1, y1, x1 + 1, y2 - 1, 0x90b0b0b0);
-		Screen.fill(x1 + 1, y1, x2 - 1, y1 + 1, 0x90b0b0b0);
-		Screen.fill(x1 + 1, y2 - 1, x2, y2, 0x90000000);
-		Screen.fill(x2 - 1, y1 + 1, x2, y2, 0x90000000);
-		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
+	public void fillGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+		Screen.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90b0b0b0);
+		Screen.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90b0b0b0);
+		Screen.fill(matrix, x1 + 1, y2 - 1, x2, y2, 0x90000000);
+		Screen.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90000000);
+		Screen.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
 	}
 	
-	protected void drawBar(int mX, int mY, TextRenderer textRend) {
+	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
 		/* background and title bar */
-		fillGrey(x1, y1, x2, y2);
-		fillGradient(x1 + 1, y1 + 1, x2 - 2, y1 + 12, 0xff0000ff, 0xff4080ff);
+		fillGrey(matrix, x1, y1, x2, y2);
+		fillGradient(matrix, x1 + 1, y1 + 1, x2 - 2, y1 + 12, 0xff0000ff, 0xff4080ff);
 		
 		/* buttons */
 		//fillRealGrey(x2 - 12, y1 + 3, x2 - 4, y1 + 11);
-		textRend.draw(hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
+		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
 	}
 	
 	public int getHeight() {

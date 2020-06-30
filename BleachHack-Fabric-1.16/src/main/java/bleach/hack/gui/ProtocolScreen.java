@@ -23,6 +23,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
 public class ProtocolScreen extends Screen {
@@ -39,7 +40,7 @@ public class ProtocolScreen extends Screen {
 	}
 	
 	public void init() {
-		addButton(new ButtonWidget(width / 2 - 100, height / 2 + 50, 98, 20, "Update", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 2 + 50, 98, 20, new LiteralText("Update"), button -> {
 			try {
 				int i = Integer.parseInt(protocolField.getText());
 				int i1 = Integer.parseInt(packVerField.getText());
@@ -53,37 +54,37 @@ public class ProtocolScreen extends Screen {
 				e.printStackTrace();
 			}
 		}));
-		addButton(new ButtonWidget(width / 2 + 2, height / 2 + 50, 98, 20, "Done", button -> {
-			minecraft.openScreen(serverScreen);
+		addButton(new ButtonWidget(width / 2 + 2, height / 2 + 50, 98, 20, new LiteralText("Done"), button -> {
+			client.openScreen(serverScreen);
 		}));
 		
-		nameField = new TextFieldWidget(font, width / 2 - 98, height / 2 - 60, 196, 18, "");
+		nameField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, LiteralText.EMPTY);
 		nameField.setText(SharedConstants.getGameVersion().getName());
-		protocolField = new TextFieldWidget(font, width / 2 - 98, height / 2 - 35, 196, 18, "");
+		protocolField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 35, 196, 18, LiteralText.EMPTY);
 		protocolField.setText(SharedConstants.getGameVersion().getProtocolVersion() + "");
-		targetField = new TextFieldWidget(font, width / 2 - 98, height / 2 - 10, 196, 18, "");
+		targetField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 10, 196, 18, LiteralText.EMPTY);
 		targetField.setText(SharedConstants.getGameVersion().getReleaseTarget());
-		packVerField = new TextFieldWidget(font, width / 2 - 98, height / 2 + 15, 196, 18, "");
+		packVerField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 196, 18, LiteralText.EMPTY);
 		packVerField.setText(SharedConstants.getGameVersion().getPackVersion() + "");
 		//ipField.changeFocus(true);
 	}
 	
-	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-		renderBackground();
-		drawRightAlignedString(font, "§7Name:", width / 2 - 103, height / 2 - 55, -1);
-		drawRightAlignedString(font, "§7Protocol:", width / 2 - 103, height / 2 - 30, -1);
-		drawRightAlignedString(font, "§7Target Ver:", width / 2 - 103, height / 2 - 5, -1);
-		drawRightAlignedString(font, "§7Packet Ver:", width / 2 - 103, height / 2 + 20, -1);
-		nameField.render(p_render_1_, p_render_2_, p_render_3_);
-		protocolField.render(p_render_1_, p_render_2_, p_render_3_);
-		targetField.render(p_render_1_, p_render_2_, p_render_3_);
-		packVerField.render(p_render_1_, p_render_2_, p_render_3_);
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+		renderBackground(matrix);
+		drawStringWithShadow(matrix, textRenderer, "\u00a77Name:", width / 2 - 103 - textRenderer.getWidth("Name:"), height / 2 - 55, -1);
+		drawStringWithShadow(matrix, textRenderer, "\u00a77Protocol:", width / 2 - 103 - textRenderer.getWidth("Protocol:"), height / 2 - 30, -1);
+		drawStringWithShadow(matrix, textRenderer, "\u00a77Target Ver:", width / 2 - 103 - textRenderer.getWidth("Target Ver:"), height / 2 - 5, -1);
+		drawStringWithShadow(matrix, textRenderer, "\u00a77Packet Ver:", width / 2 - 103 - textRenderer.getWidth("Packet Ver:"), height / 2 + 20, -1);
+		nameField.render(matrix, mouseX, mouseY, delta);
+		protocolField.render(matrix, mouseX, mouseY, delta);
+		targetField.render(matrix, mouseX, mouseY, delta);
+		packVerField.render(matrix, mouseX, mouseY, delta);
 		
-		super.render(p_render_1_, p_render_2_, p_render_3_);
+		super.render(matrix, mouseX, mouseY, delta);
 	}
 	
 	public void onClose() {
-		minecraft.openScreen(serverScreen);
+		client.openScreen(serverScreen);
 	}
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {

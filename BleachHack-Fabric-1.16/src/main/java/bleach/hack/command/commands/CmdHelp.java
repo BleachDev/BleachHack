@@ -45,7 +45,7 @@ public class CmdHelp extends Command {
 		
 		for (Command c: CommandManager.getCommands()) {
 			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
-			BleachLogger.noPrefixMessage("§5." + c.getAlias() + " | §6" + c.getDescription() + " | §e" + c.getSyntax());
+			BleachLogger.noPrefixMessage("\u00a75." + c.getAlias() + " | \u00a76" + c.getDescription() + " | \u00a7e" + c.getSyntax());
 		}
 	}
 

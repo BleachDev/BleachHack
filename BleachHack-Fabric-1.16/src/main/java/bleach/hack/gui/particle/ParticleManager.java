@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class ParticleManager {
 
@@ -30,7 +31,7 @@ public class ParticleManager {
 		particles.add(new Particle(x, y));
 	}
 	
-	public void renderParticles() {
+	public void renderParticles(MatrixStack matrix) {
 		List<Particle> tempParts = new ArrayList<>();
 		
 		for (Particle p: particles) {
@@ -42,7 +43,7 @@ public class ParticleManager {
 		
 		for (Particle p: particles) {
 			for (int[] p1: p.getParticles()) {
-				Screen.fill(p1[0], p1[1], p1[0]+1, p1[1]+1, 0xffffc0e0);
+				Screen.fill(matrix, p1[0], p1[1], p1[0]+1, p1[1]+1, 0xffffc0e0);
 			}
 		}
 	}

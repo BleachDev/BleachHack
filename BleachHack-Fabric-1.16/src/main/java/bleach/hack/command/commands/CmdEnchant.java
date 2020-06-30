@@ -46,14 +46,14 @@ public class CmdEnchant extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if (args[0].equalsIgnoreCase("list")) {
-			BleachLogger.infoMessage("§d[Aqua_Affinity/Aqua] §5[Arthropods] §d[Blast/Blast_Prot] "
-					+ "§5[Channeling] §d[Curse_Binding/Binding] §5[Curse_Vanish/Vanish] §d[Depth_Strider/Strider] "
-					+ "§5[Efficiency/Eff] §d[Feather_Falling/Fall] §5[Fire_Aspect] §d[Fire_Prot] "
-					+ "§5[Flame] §d[Fortune] §5[Frost_Walker/Frost] §d[Impaling] §5[Infinity] §d[Knockback/Knock] "
-					+ "§5[Looting/Loot] §d[Loyalty] §5[Luck_Of_The_Sea/Luck] §d[Lure] §5[Mending/Mend] §d[Multishot] "
-					+ "§5[Piercing] §d[Power] §5[Projectile_Prot/Proj_Prot] §d[Protection/Prot] "
-					+ "§5[Punch] §d[Quick_Charge/Charge] §5[Respiration/Resp] §d[Riptide] "
-					+ "§5[Sharpness/Sharp] §d[Silk_Touch/Silk] §5[Smite] §d[Sweeping_Edge/Sweep] §5[Thorns] §d[Unbreaking]");
+			BleachLogger.infoMessage("\u00a7d[Aqua_Affinity/Aqua] \u00a75[Arthropods] \u00a7d[Blast/Blast_Prot] "
+					+ "\u00a75[Channeling] \u00a7d[Curse_Binding/Binding] \u00a75[Curse_Vanish/Vanish] \u00a7d[Depth_Strider/Strider] "
+					+ "\u00a75[Efficiency/Eff] \u00a7d[Feather_Falling/Fall] \u00a75[Fire_Aspect] \u00a7d[Fire_Prot] "
+					+ "\u00a75[Flame] \u00a7d[Fortune] \u00a75[Frost_Walker/Frost] \u00a7d[Impaling] \u00a75[Infinity] \u00a7d[Knockback/Knock] "
+					+ "\u00a75[Looting/Loot] \u00a7d[Loyalty] \u00a75[Luck_Of_The_Sea/Luck] \u00a7d[Lure] \u00a75[Mending/Mend] \u00a7d[Multishot] "
+					+ "\u00a75[Piercing] \u00a7d[Power] \u00a75[Projectile_Prot/Proj_Prot] \u00a7d[Protection/Prot] "
+					+ "\u00a75[Punch] \u00a7d[Quick_Charge/Charge] \u00a75[Respiration/Resp] \u00a7d[Riptide] "
+					+ "\u00a75[Sharpness/Sharp] \u00a7d[Silk_Touch/Silk] \u00a75[Smite] \u00a7d[Sweeping_Edge/Sweep] \u00a75[Thorns] \u00a7d[Unbreaking]");
 			return;
 		}
 		

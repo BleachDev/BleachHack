@@ -82,7 +82,7 @@ public class CmdNuker extends Command {
 			
 			String s = "";
 			for (String l: lines) {
-				s += "§6" + l + "\n";
+				s += "\u00a76" + l + "\n";
 			}
 			
 			BleachLogger.infoMessage(s);

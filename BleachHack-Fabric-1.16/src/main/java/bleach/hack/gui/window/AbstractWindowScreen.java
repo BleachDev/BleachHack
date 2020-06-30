@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public abstract class AbstractWindowScreen extends Screen {
@@ -31,7 +32,7 @@ public abstract class AbstractWindowScreen extends Screen {
 		super(text_1);
 	}
 	
-	public void render(int int_1, int int_2, float float_1) {
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		boolean close = true;
 		int noneSelected = -1;
 		int selected = -1;
@@ -40,7 +41,7 @@ public abstract class AbstractWindowScreen extends Screen {
 			if (!w.closed) {
 				close = false;
 				if (!w.selected) {
-					onRenderWindow(count, int_1, int_2);
+					onRenderWindow(matrix, count, mouseX, mouseY);
 				} else {
 					selected = count;
 				}
@@ -54,24 +55,24 @@ public abstract class AbstractWindowScreen extends Screen {
 			count++;
 		}
 		
-		if (selected >= 0) onRenderWindow(selected, int_1, int_2);
+		if (selected >= 0) onRenderWindow(matrix, selected, mouseX, mouseY);
 		if (noneSelected >= 0) windows.get(noneSelected).selected = true;
 		if (close) this.onClose();
 		
-		super.render(int_1, int_2, float_1);
+		super.render(matrix, mouseX, mouseY, delta);
 	}
 	
-	public void onRenderWindow(int window, int mX, int mY) {
+	public void onRenderWindow(MatrixStack matrix, int window, int mX, int mY) {
 		if (!windows.get(window).closed) {
-			windows.get(window).render(mX, mY);
+			windows.get(window).render(matrix, mX, mY);
 		}
 	}
 	
-	public void drawButton(String text, int x1, int y1, int x2, int y2) {
-		Screen.fill(x1, y1, x2 - 1, y2 - 1, 0xffb0b0b0);
-		Screen.fill(x1 + 1, y1 + 1, x2, y2, 0xff000000);
-		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
-		drawCenteredString(font, text, x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2 - 4, -1);
+	public void drawButton(MatrixStack matrix, String text, int x1, int y1, int x2, int y2) {
+		Screen.fill(matrix, x1, y1, x2 - 1, y2 - 1, 0xffb0b0b0);
+		Screen.fill(matrix, x1 + 1, y1 + 1, x2, y2, 0xff000000);
+		Screen.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
+		drawCenteredString(matrix, textRenderer, text, x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2 - 4, -1);
 	}
 	
 	public void selectWindow(int window) {

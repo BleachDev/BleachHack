@@ -91,7 +91,7 @@ public class AutoReconnect extends Module {
 				if (server != null) minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));
 		    }));
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
-					(getSettings().get(0).toToggle().state ? "§a" : "§c") + "AutoReconnect ["
+					(getSettings().get(0).toToggle().state ? "\u00a7a" : "\u00a7c") + "AutoReconnect ["
 							+ ((reconnectTime + getSettings().get(1).toSlider().getValue() * 1000) - System.currentTimeMillis())
 							+ "]", (button) -> {
 		        getSettings().get(0).toToggle().state = !getSettings().get(0).toToggle().state;
@@ -102,9 +102,9 @@ public class AutoReconnect extends Module {
 		public void render(int int_1, int int_2, float float_1) {
 			super.render(int_1, int_2, float_1);
 			
-			buttons.get(2).setMessage((getSettings().get(0).toToggle().state ? "§aAutoReconnect ["
+			buttons.get(2).setMessage((getSettings().get(0).toToggle().state ? "\u00a7aAutoReconnect ["
 					+ ((reconnectTime + getSettings().get(1).toSlider().getValue() * 1000) - System.currentTimeMillis())
-					+ "]" : "§cAutoReconnect [" + getSettings().get(1).toSlider().getValue() * 1000 + "]"));
+					+ "]" : "\u00a7cAutoReconnect [" + getSettings().get(1).toSlider().getValue() * 1000 + "]"));
 			
 			if (reconnectTime + getSettings().get(1).toSlider().getValue() * 1000 < System.currentTimeMillis() && getSettings().get(0).toToggle().state) {
 				if (server != null) minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));

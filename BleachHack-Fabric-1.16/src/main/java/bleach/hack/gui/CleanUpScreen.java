@@ -27,6 +27,7 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.options.ServerList;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
 public class CleanUpScreen extends Screen {
@@ -52,51 +53,51 @@ public class CleanUpScreen extends Screen {
 			for (int i = 0; i < serverList.size(); i++) servers.add(serverList.get(i));
 		} catch (Exception e) {}
 		
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 - 32, 200, 20, "Unknown Host", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 - 32, 200, 20, new LiteralText("Unknown Host"), button -> {
 			cleanNoHost = !cleanNoHost;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 - 10, 200, 20, "Outdated Version", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 - 10, 200, 20, new LiteralText("Outdated Version"), button -> {
 			cleanVersion = !cleanVersion;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 12, 200, 20, "Failed Ping", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 12, 200, 20, new LiteralText("Failed Ping"), button -> {
 			cleanNoPing = !cleanNoPing;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 34, 200, 20, "Clear All", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 34, 200, 20, new LiteralText("Clear All"), button -> {
 			cleanAll = !cleanAll;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, "Clean", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, new LiteralText("Clean"), button -> {
 			for (ServerInfo s: servers) {
 				try {
-					if (s.label == null) s.label = "";
-					if ((cleanNoHost && s.label.contains("Can't resolve hostname")) ||
+					if (s.label == null) s.label = LiteralText.EMPTY;
+					if ((cleanNoHost && s.label.asString().contains("Can't resolve hostname")) ||
 							(cleanVersion && s.protocolVersion < SharedConstants.getGameVersion().getProtocolVersion()) ||
-							(cleanNoPing && (s.label.contains("Pinging...") || s.label.contains("Can't connect to server"))) ||
+							(cleanNoPing && (s.label.asString().contains("Pinging...") || s.label.asString().contains("Can't connect to server"))) ||
 							cleanAll) {
 						serverList.remove(s);
 						serverList.saveFile();
 					}
 				} catch (Exception e) {e.printStackTrace();}
 			}
-			result = "§aFinished";
+			result = "\u00a7aFinished";
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, "Done", button -> {
-			minecraft.openScreen(new MultiplayerScreen(new TitleScreen(false)));
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, new LiteralText("Done"), button -> {
+			client.openScreen(new MultiplayerScreen(new TitleScreen(false)));
 		}));
 	
 	}
 	
-	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-		renderBackground();
-		buttons.get(0).setMessage((cleanNoHost ? "§a" : "§c") + "Unknown Host");
-		buttons.get(1).setMessage((cleanVersion ? "§a" : "§c") + "Wrong Version");
-		buttons.get(2).setMessage((cleanNoPing ? "§a" : "§c") + "Failed Ping");
-		buttons.get(3).setMessage((cleanAll ? "§a" : "§c") + "Clear All");
-		drawCenteredString(font, result, width / 2, height / 3 + 58, -1);
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+		renderBackground(matrix);
+		buttons.get(0).setMessage(new LiteralText((cleanNoHost ? "\u00a7a" : "\u00a7c") + "Unknown Host"));
+		buttons.get(1).setMessage(new LiteralText((cleanVersion ? "\u00a7a" : "\u00a7c") + "Wrong Version"));
+		buttons.get(2).setMessage(new LiteralText((cleanNoPing ? "\u00a7a" : "\u00a7c") + "Failed Ping"));
+		buttons.get(3).setMessage(new LiteralText((cleanAll ? "\u00a7a" : "\u00a7c") + "Clear All"));
+		drawCenteredString(matrix, textRenderer, result, width / 2, height / 3 + 58, -1);
 		
-		super.render(p_render_1_, p_render_2_, p_render_3_);
+		super.render(matrix, mouseX, mouseY, delta);
 	}
 	
 	public void onClose() {
-		minecraft.openScreen(new MultiplayerScreen(new TitleScreen(false)));
+		client.openScreen(new MultiplayerScreen(new TitleScreen(false)));
 	}
 }

@@ -58,13 +58,13 @@ public class Nametags extends Module {
 		LivingEntity e = (LivingEntity) event.getEntity();
 		
 		/* Color before name */
-		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
-				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
+		String color = e instanceof Monster ? "\u00a75" : EntityUtils.isAnimal(e)
+				? "\u00a7a" : e.isSneaking() ? "\u00a76" : e instanceof PlayerEntity ? "\u00a7c" : "\u00a7f";
 		
-		if (e == mc.player || e == mc.player.getVehicle() || color == "§f" || 
-				((color == "§c" || color == "§6") && !getSettings().get(4).toToggle().state) ||
-				((color == "§5" || color == "§a") && !getSettings().get(5).toToggle().state)) return;
-		if (e.isInvisible()) color = "§e";
+		if (e == mc.player || e == mc.player.getVehicle() || color == "\u00a7f" || 
+				((color == "\u00a7c" || color == "\u00a76") && !getSettings().get(4).toToggle().state) ||
+				((color == "\u00a75" || color == "\u00a7a") && !getSettings().get(5).toToggle().state)) return;
+		if (e.isInvisible()) color = "\u00a7e";
 		
 		double scale = (e instanceof PlayerEntity) ?
 				Math.max(getSettings().get(2).toSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
@@ -73,14 +73,14 @@ public class Nametags extends Module {
 		/* Health bar */
 		String health = "";
 		/* - Add Green Normal Health */
-		for (int i = 0; i < e.getHealth(); i++) health += "§a|";
+		for (int i = 0; i < e.getHealth(); i++) health += "\u00a7a|";
 		/* - Add Red Empty Health (Remove Based on absorption amount) */
-		for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaximumHealth() - e.getHealth()); i++) health += "§e|";
+		for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaximumHealth() - e.getHealth()); i++) health += "\u00a7e|";
 		/* Add Yellow Absorption Health */
-		for (int i = 0; i < e.getMaximumHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
+		for (int i = 0; i < e.getMaximumHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "\u00a7c|";
 		/* Add "+??" to the end if the entity has extra hearts */
 		if (e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()) > 0) {
-			health += " §e+" + (int)(e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
+			health += " \u00a7e+" + (int)(e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
 		}
 		
 		/* Drawing Nametags */

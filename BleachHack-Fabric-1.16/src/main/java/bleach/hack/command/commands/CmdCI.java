@@ -43,7 +43,7 @@ public class CmdCI extends Command {
     public void onCommand(String command, String[] args) throws Exception {
         for (int i = 0; i < 200; i++) {
             if (mc.interactionManager.getCurrentGameMode() == GameMode.CREATIVE) {
-                mc.player.inventory.setInvStack(i, new ItemStack(null));
+                mc.player.inventory.setStack(i, new ItemStack(null));
             } else {
                 BleachLogger.errorMessage("Bruh you're not in creative.");
                 return;

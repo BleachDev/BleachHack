@@ -86,7 +86,7 @@ public class UI extends Module {
 			for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
 			
 			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
-			if (getSettings().get(2).toToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
+			if (getSettings().get(2).toToggle().state) lines.add(0, "\u00a7a> BleachHack " + BleachHack.VERSION);
 			
 			//new colors
 			int color = getRainbowFromSettings(0);
@@ -109,7 +109,7 @@ public class UI extends Module {
 		}
 
 		if (getSettings().get(11).toToggle().state) {
-			infoList.add("§7Time: §e" + Calendar.getInstance(TimeZone.getDefault()).getTime().toString());
+			infoList.add("\u00a77Time: \u00a7e" + Calendar.getInstance(TimeZone.getDefault()).getTime().toString());
 		}
 		
 		if (getSettings().get(5).toToggle().state) {
@@ -119,8 +119,8 @@ public class UI extends Module {
 			BlockPos pos2 = nether ? new BlockPos(vec.getX()*8, vec.getY(), vec.getZ()*8)
 					: new BlockPos(vec.getX()/8, vec.getY(), vec.getZ()/8);
 			
-			infoList.add("XYZ: " + (nether ? "§4" : "§b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-			+ " §7[" + (nether ? "§b" : "§4") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "§7]");
+			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
+			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
 		
 		if (getSettings().get(3).toToggle().state) {
@@ -135,7 +135,7 @@ public class UI extends Module {
 		}
 		
 		if (getSettings().get(6).toToggle().state) {
-			String suffix = "§7";
+			String suffix = "\u00a77";
 			if (lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
 			else if (lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
 			else if (lastPacket + 2500 < System.currentTimeMillis()) suffix += "..";
@@ -244,12 +244,12 @@ public class UI extends Module {
 	}
 	
 	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {
-		if (!rev ? value > best : value < best) return "§2";
-		else if (!rev ? value > good : value < good) return "§a";
-		else if (!rev ? value > mid : value < mid) return "§e";
-		else if (!rev ? value > bad : value < bad) return "§6";
-		else if (!rev ? value > worst : value < worst) return "§c";
-		else return "§4";
+		if (!rev ? value > best : value < best) return "\u00a72";
+		else if (!rev ? value > good : value < good) return "\u00a7a";
+		else if (!rev ? value > mid : value < mid) return "\u00a7e";
+		else if (!rev ? value > bad : value < bad) return "\u00a76";
+		else if (!rev ? value > worst : value < worst) return "\u00a7c";
+		else return "\u00a74";
 	}
 
 	public static int getRainbow(float sat, float bri, double speed, int offset) {

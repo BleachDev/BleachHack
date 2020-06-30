@@ -174,7 +174,7 @@ public class Notebot extends Module {
 					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
 					setToggled(false);
 					setToggled(true);
-					BleachLogger.infoMessage("Now Playing: §a" + filePath);
+					BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
 				} catch (IOException e) {}
 			} else if (getSettings().get(2).toToggle().state && loopityloop) {
 				if (loopityloop) timer = -10;
@@ -237,7 +237,7 @@ public class Notebot extends Module {
 		for (String s: lines) {
 			String[] s1 = s.split(":");
 			try { notes.add(Arrays.asList(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
-			} catch (Exception e) { BleachLogger.warningMessage("Error Parsing Note: §o" + s); }
+			} catch (Exception e) { BleachLogger.warningMessage("Error Parsing Note: \u00a7o" + s); }
 		}
 		
 		/* Get all unique pitches and instruments */
@@ -247,7 +247,7 @@ public class Notebot extends Module {
 				if (!tunes.contains(Arrays.asList(Integer.parseInt(strings.get(1)),Integer.parseInt( strings.get(2))))) {
 					tunes.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
 				}
-			} catch (Exception e) { BleachLogger.warningMessage("Error Trying To Tune: §o" + s); }
+			} catch (Exception e) { BleachLogger.warningMessage("Error Trying To Tune: \u00a7o" + s); }
 		}
 	}
 

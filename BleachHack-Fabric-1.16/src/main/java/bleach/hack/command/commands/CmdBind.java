@@ -45,7 +45,7 @@ public class CmdBind extends Command {
 		for (Module m: ModuleManager.getModules()) {
 			if (m.getName().equalsIgnoreCase(args[1])) {
 				if (args[0].equalsIgnoreCase("add")) {
-					m.setKey(InputUtil.fromName("key.keyboard." + args[2].toLowerCase()).getKeyCode());
+					m.setKey(InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase()).getCode());
 					BleachLogger.infoMessage("Bound " + m.getName() + " To " + args[2]);
 				} else if (args[0].equalsIgnoreCase("del")) {
 					m.setKey(-1);

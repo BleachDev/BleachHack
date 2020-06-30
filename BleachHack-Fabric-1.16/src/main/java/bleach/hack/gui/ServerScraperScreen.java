@@ -28,6 +28,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.network.MultiplayerServerListPinger;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.options.ServerList;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
 public class ServerScraperScreen extends Screen {
@@ -40,7 +41,7 @@ public class ServerScraperScreen extends Screen {
 	private int working;
 	private boolean abort = false;
 	private List<BleachServerPinger> pingers = new ArrayList<>();
-	private String result = "§7Idle...";
+	private String result = "\u00a77Idle...";
 	
 	public ServerScraperScreen(MultiplayerScreen serverScreen) {
 		super(new LiteralText("Server Scraper"));
@@ -48,7 +49,7 @@ public class ServerScraperScreen extends Screen {
 	}
 	
 	public void init() {
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, "Scrape", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, new LiteralText("Scrape"), button -> {
 			try {
 				if (pingers.size() > 0) return;
 				if (ipField.getText().split(":")[0].trim().isEmpty()) throw new Exception();
@@ -58,34 +59,34 @@ public class ServerScraperScreen extends Screen {
 				working = 0;
 				scrapeIp(ip);
 			} catch (Exception e) {
-				result = "§cFailed Scraping!";
+				result = "\u00a7cFailed Scraping!";
 				e.printStackTrace();
 				return;
 			}
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, "Done", button -> {
+		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, new LiteralText("Done"), button -> {
 			if (!abort) {
 				abort = true;
 			}
 		}));
 		
-		ipField = new TextFieldWidget(font, width / 2 - 98, height / 4 + 30, 196, 18, "");
+		ipField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 4 + 30, 196, 18, LiteralText.EMPTY);
 		ipField.changeFocus(true);
 	}
 	
-	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-		renderBackground();
-		drawCenteredString(font, "§7IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
-		drawCenteredString(font, "§7" + checked + " / 1792 [§a" + working + "§7]", this.width / 2, this.height / 4 + 58, -1);
-		drawCenteredString(font, result, this.width / 2, this.height / 4 + 70, -1);
-		ipField.render(p_render_1_, p_render_2_, p_render_3_);
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+		renderBackground(matrix);
+		drawCenteredString(matrix, textRenderer, "\u00a77IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
+		drawCenteredString(matrix, textRenderer, "\u00a77" + checked + " / 1792 [\u00a7a" + working + "\u00a77]", this.width / 2, this.height / 4 + 58, -1);
+		drawCenteredString(matrix, textRenderer, result, this.width / 2, this.height / 4 + 70, -1);
+		ipField.render(matrix, mouseX, mouseY, delta);
 		
 		if (abort) {
-			result = "§7Aborting.. [" + pingers.size() + "] Left";
-			if (pingers.size() == 0) minecraft.openScreen(new MultiplayerScreen(new TitleScreen()));
+			result = "\u00a77Aborting.. [" + pingers.size() + "] Left";
+			if (pingers.size() == 0) client.openScreen(new MultiplayerScreen(new TitleScreen()));
 		}
 		
-		super.render(p_render_1_, p_render_2_, p_render_3_);
+		super.render(matrix, mouseX, mouseY, delta);
 	}
 	
 	public void onClose() {
@@ -93,7 +94,7 @@ public class ServerScraperScreen extends Screen {
 	}
 	
 	public void scrapeIp(InetAddress ip) {
-		result = "§eScraping...";
+		result = "\u00a7eScraping...";
 		scrapeThread = new Thread(() -> {
 			for (int change : new int[] {0, -1, 1, -2, 2, -3, 3}) {
 				for (int i = 0; i <= 255; i++) {
@@ -109,7 +110,7 @@ public class ServerScraperScreen extends Screen {
 			}
 			
 			while(pingers.size() > 0) updatePingers();
-			result = "§aDone!";
+			result = "\u00a7aDone!";
 		});
 		scrapeThread.start();
 	}
@@ -159,7 +160,7 @@ class BleachServerPinger {
 		new Thread(() -> {
 			MultiplayerServerListPinger pinger = new MultiplayerServerListPinger();
 			try {
-				pinger.add(server);
+				pinger.add(server, () -> {});
 			} catch (Exception e) {
 				failed = true;
 			}

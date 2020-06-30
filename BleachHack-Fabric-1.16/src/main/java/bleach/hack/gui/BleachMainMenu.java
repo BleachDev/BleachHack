@@ -37,14 +37,16 @@ import bleach.hack.utils.file.BleachFileMang;
 import bleach.hack.utils.file.BleachGithubReader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.gui.screen.options.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
@@ -91,16 +93,16 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"),() -> {
-					minecraft.openScreen(new SelectWorldScreen(this));
+					client.openScreen(new SelectWorldScreen(this));
 				}));
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
-					minecraft.openScreen(new MultiplayerScreen(this));
+					client.openScreen(new MultiplayerScreen(this));
 				}));
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 - 2, h / 4 + 106, "MC Menu", () -> {
 					customTitleScreen = !customTitleScreen;
-					minecraft.openScreen(new TitleScreen(false));
+					client.openScreen(new TitleScreen(false));
 				}));
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 + 2, h / 4 + 86, w / 2 + 100, h / 4 + 106, "Login Manager", () -> {
@@ -109,11 +111,11 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				}));
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
-					minecraft.openScreen(new SettingsScreen(this, minecraft.options));
+					client.openScreen(new OptionsScreen(this, client.options));
 				}));
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
-					minecraft.close();
+					client.close();
 				}));
 		
 		int x = windows.get(1).x1;
@@ -121,13 +123,13 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		w = width - width / 2;
 		h = height - height / 2;
 		
-		if (userField == null) userField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4, 196, 18, "");
-		if (passField == null) passField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4 + 30, 196, 18, "");
+		if (userField == null) userField = new TextFieldWidget(textRenderer, x + w / 2 - 98, y + h / 4, 196, 18, LiteralText.EMPTY);
+		if (passField == null) passField = new TextFieldWidget(textRenderer, x + w / 2 - 98, y + h / 4 + 30, 196, 18, LiteralText.EMPTY);
 		userField.x = x + w / 2 - 98;
 		userField.y = y + h / 4 ;
 		passField.x = x + w / 2 - 98;
 		passField.y = y + h / 4 + 30;
-		if (checkBox == null) checkBox = new BleachCheckbox(x + w / 2 - 99, y + h / 4 + 53, "Save Login", false);
+		if (checkBox == null) checkBox = new BleachCheckbox(x + w / 2 - 99, y + h / 4 + 53, new LiteralText("Save Login"), false);
 		checkBox.x = x + w / 2 - 99;
 		checkBox.y = y + h / 4 + 53;
 		userField.setMaxLength(32767);
@@ -151,8 +153,8 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					
 					loginResult = LoginManager.login(userField.getText(), passField.getText());
 					String text = userField.getText() + ":" + passField.getText();
-					if (checkBox.checked && (loginResult.equals("§aLogin Successful")
-							|| loginResult.equals("§6Logged in as an unverified account"))
+					if (checkBox.checked && (loginResult.equals("\u00a7aLogin Successful")
+							|| loginResult.equals("\u00a76Logged in as an unverified account"))
 							&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
 						entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
 						BleachFileMang.createFile("logins.txt");
@@ -178,46 +180,46 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		}
 	}
 	
-	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-		this.renderBackground();
-		fill(0, 0, width, height, 0xff008080);
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrix);
+		fill(matrix, 0, 0, width, height, 0xff008080);
 		
-		int copyWidth = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!") + 2;
+		int copyWidth = this.textRenderer.getWidth("Copyright Mojang AB. Do not distribute!") + 2;
 		
-		font.drawWithShadow("Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 24, -1);
-		font.drawWithShadow("Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(), 4, height - 44, -1);
-		font.drawWithShadow("Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 34, -1);
-		font.drawWithShadow("Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 24, -1);
+		textRenderer.drawWithShadow(matrix, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 24, -1);
+		textRenderer.drawWithShadow(matrix, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(), 4, height - 44, -1);
+		textRenderer.drawWithShadow(matrix, "Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 34, -1);
+		textRenderer.drawWithShadow(matrix, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 24, -1);
 		
 		try {
 			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
-				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
-				drawCenteredString(this.font,"§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
+				drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack Version!", width/2, 2, -1);
+				drawCenteredString(matrix, this.textRenderer,"\u00a74[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
 			}
 		} catch (Exception e) { }
 		
-		drawButton("", 0, height - 14, width, height);
-		drawButton("§cX", 0, height - 13, 20, height - 1);
+		drawButton(matrix, "", 0, height - 14, width, height);
+		drawButton(matrix, "\u00a7cX", 0, height - 13, 20, height - 1);
 		
 		int wid = 20;
 		for (Window w: windows) {
 			if (w.closed) continue;
-			Screen.fill(wid, height - 13, wid + 80 - 1, height - 1 - 1, 0xffb0b0b0);
-			Screen.fill(wid + 1, height - 13 + 1, wid + 80, height - 1, 0xff000000);
-			Screen.fill(wid + 1, height - 13 + 1, wid + 80 - 1, height - 1 - 1, (w.selected ? 0xffb0b0b0 : 0xff858585));
-			font.draw(w.title, wid + 2, height - 11, 0x000000);
+			Screen.fill(matrix, wid, height - 13, wid + 80 - 1, height - 1 - 1, 0xffb0b0b0);
+			Screen.fill(matrix, wid + 1, height - 13 + 1, wid + 80, height - 1, 0xff000000);
+			Screen.fill(matrix, wid + 1, height - 13 + 1, wid + 80 - 1, height - 1 - 1, (w.selected ? 0xffb0b0b0 : 0xff858585));
+			textRenderer.draw(matrix, w.title, wid + 2, height - 11, 0x000000);
 			wid += 80;
 		}
 		
-		super.render(p_render_1_, p_render_2_, p_render_3_);
+		super.render(matrix, mouseX, mouseY, delta);
 		
-		particleMang.addParticle(p_render_1_, p_render_2_);
-		particleMang.renderParticles();
+		particleMang.addParticle(mouseX, mouseY);
+		particleMang.renderParticles(matrix);
 		
 	}
 	
-	public void onRenderWindow(int window, int mX, int mY) {
-		super.onRenderWindow(window, mX, mY);
+	public void onRenderWindow(MatrixStack matrix, int window, int mX, int mY) {
+		super.onRenderWindow(matrix, window, mX, mY);
 		
 		if (window == 0) {
 			int x = windows.get(0).x1,
@@ -233,14 +235,14 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			int[] intarray = {7, 13, 16, 22, 28, 34, 40, 46, 52, 58};
 			String[] bruh = { "B", "l", "e", "a", "c", "h", "H", "a", "c", "k" };
 			for (int i = 0; i < bruh.length; i++) {
-				drawString(this.font, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, UI.getRainbowFromSettings(i * 25));
+				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, UI.getRainbowFromSettings(i * 25));
 			}
 			
 			GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
 			
 			/* Version Text */
 			GL11.glScaled(1.5, 1.5, 1.5);
-			drawCenteredString(this.font, BleachHack.VERSION, (int)((x + w/2)/1.5), (int)((y + h/4 + 6)/1.5), 0xffc050);
+			drawCenteredString(matrix, this.textRenderer, BleachHack.VERSION, (int)((x + w/2)/1.5), (int)((y + h/4 + 6)/1.5), 0xffc050);
 			GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
 			GL11.glPopMatrix();
 			
@@ -249,9 +251,9 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			GL11.glTranslated(x + w / 2 + 80, y + h/4 + 8, 0.0F);
 			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
 	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(Util.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
-	        float_4 = float_4 * 60.0F / (float)(font.getStringWidth(splash) + 32);
+	        float_4 = float_4 * 60.0F / (float)(textRenderer.getWidth(splash) + 32);
 	        GL11.glScalef(float_4, float_4, float_4);
-	        this.drawCenteredString(font, splash, 0, -8, 16776960);
+	        this.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
 	        GL11.glPopMatrix();
 		} else if (window == 1) {
 			int x = windows.get(1).x1,
@@ -259,10 +261,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					w = width - width / 2,
 					h = height - height / 2;
 			
-			drawString(font, "Email: ", x + w / 2 - 130, y + h / 4 + 15, 0xC0C0C0);
-			drawString(font, "Password: ", x + w / 2 - 154, y + h / 4 + 45, 0xC0C0C0);
+			drawStringWithShadow(matrix, textRenderer, "Email: ", x + w / 2 - 130, y + h / 4 + 15, 0xC0C0C0);
+			drawStringWithShadow(matrix, textRenderer, "Password: ", x + w / 2 - 154, y + h / 4 + 45, 0xC0C0C0);
 			
-			drawString(font, loginResult == "" ? "" : "|  " + loginResult, x + w / 2 - 24, y + h / 4 + 65, 0xC0C0C0);
+			drawStringWithShadow(matrix, textRenderer, loginResult == "" ? "" : "|  " + loginResult, x + w / 2 - 24, y + h / 4 + 65, 0xC0C0C0);
 			
 			userField.x = x + w / 2 - 98;
 			userField.y = y + h / 4 + 10;
@@ -271,29 +273,29 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			checkBox.x = x + w / 2 - 99;
 			checkBox.y = y + h / 4 + 63;
 			
-			userField.render(mX, mY, 1f);
-			passField.render(mX, mY, 1f);
-			checkBox.render(mX, mY, 1f);
+			userField.render(matrix, mX, mY, 1f);
+			passField.render(matrix, mX, mY, 1f);
+			checkBox.render(matrix, mX, mY, 1f);
 		} else if (window == 2) {
 			int x = windows.get(2).x1,
 					y = windows.get(2).y1 - 10,
 					w = width - width / 2,
 					h = height - height / 2;
 			
-			drawCenteredString(font, "§cTemprary™ alt manager", x + w / 2, y + h / 4 - 30, -1);
-			drawCenteredString(font, "§4(accounts stored in plaintext for now)", x + w / 2, y + h / 4 - 20, -1);
+			drawCenteredString(matrix, textRenderer, "\u00a7cTemprary™ alt manager", x + w / 2, y + h / 4 - 30, -1);
+			drawCenteredString(matrix, textRenderer, "\u00a74(accounts stored in plaintext for now)", x + w / 2, y + h / 4 - 20, -1);
 			
 			int c = 0;
 			for (List<String> e: entries) {
-				String text = (e.size() > 1 ? "§a" + e.get(0) + ":***" : "§6" + e.get(0));
-				int length = minecraft.textRenderer.getStringWidth(text);
+				String text = (e.size() > 1 ? "\u00a7a" + e.get(0) + ":***" : "\u00a76" + e.get(0));
+				int length = client.textRenderer.getWidth(text);
 				
-				fill(x + w / 2 - length / 2 - 1, y + h / 4 + c - 2, x + w / 2 + length / 2 + 1, y + h / 4 + c - 1, 0xFF303030);
-				fill(x + w / 2 - length / 2 - 1, y + h / 4 + c + 9, x + w / 2 + length / 2 + 1, y + h / 4 + c + 10, 0xFF303030);
-				fill(x + w / 2 - length / 2 - 2, y + h / 4 + c - 2, x + w / 2 - length / 2 - 1, y + h / 4 + c + 10, 0xFF303030);
-				fill(x + w / 2 + length / 2 + 1, y + h / 4 + c - 2, x + w / 2 + length / 2 + 2, y + h / 4 + c + 10, 0xFF303030);
-				drawCenteredString(font, "§cx", x + w / 2 + length / 2 + 9, y + h / 4 + c, -1);
-				drawCenteredString(font, text, x + w / 2, y + h / 4 + c, -1);
+				fill(matrix, x + w / 2 - length / 2 - 1, y + h / 4 + c - 2, x + w / 2 + length / 2 + 1, y + h / 4 + c - 1, 0xFF303030);
+				fill(matrix, x + w / 2 - length / 2 - 1, y + h / 4 + c + 9, x + w / 2 + length / 2 + 1, y + h / 4 + c + 10, 0xFF303030);
+				fill(matrix, x + w / 2 - length / 2 - 2, y + h / 4 + c - 2, x + w / 2 - length / 2 - 1, y + h / 4 + c + 10, 0xFF303030);
+				fill(matrix, x + w / 2 + length / 2 + 1, y + h / 4 + c - 2, x + w / 2 + length / 2 + 2, y + h / 4 + c + 10, 0xFF303030);
+				drawCenteredString(matrix, textRenderer, "\u00a7cx", x + w / 2 + length / 2 + 9, y + h / 4 + c, -1);
+				drawCenteredString(matrix, textRenderer, text, x + w / 2, y + h / 4 + c, -1);
 				c += 14;
 			}
 		}
@@ -301,7 +303,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
 		if (double_1 > 0 && double_1 < 20 && double_2 > height - 14 && double_2 < height) {
-			minecraft.openScreen(this);
+			client.openScreen(this);
 		}
 		
 		if (double_2 > height - 14 && double_2 < height) {
@@ -331,8 +333,8 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			
 			int c = 0;
 			for (List<String> e: new ArrayList<>(entries)) {
-				String text = (e.size() > 1 ? "§a" + e.get(0) + ":***" : "§6" + e.get(0));
-				int lenght = minecraft.textRenderer.getStringWidth(text);
+				String text = (e.size() > 1 ? "\u00a7a" + e.get(0) + ":***" : "\u00a76" + e.get(0));
+				int lenght = client.textRenderer.getWidth(text);
 				
 				if (double_1 > x + w/2-lenght/2-1 && double_1 < x + w/2+lenght/2+1 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
 					try{ userField.setText(e.get(0));
