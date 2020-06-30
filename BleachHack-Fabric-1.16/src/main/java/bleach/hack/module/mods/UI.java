@@ -46,7 +46,6 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.dimension.DimensionType;
 
 public class UI extends Module {
 	
@@ -112,7 +111,7 @@ public class UI extends Module {
 		}
 		
 		if (getSettings().get(5).toToggle().state) {
-			boolean nether = mc.world.getDimension() != DimensionType.getOverworldDimensionType();
+			boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 			BlockPos pos = mc.player.getBlockPos();
 			Vec3d vec = mc.player.getPos();
 			BlockPos pos2 = nether ? new BlockPos(vec.getX()*8, vec.getY(), vec.getZ()*8)
@@ -182,7 +181,6 @@ public class UI extends Module {
 		
 		if (getSettings().get(10).toToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			GL11.glPushMatrix();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 	        int count = 0;
 	        int x1 = mc.getWindow().getScaledWidth() / 2;
