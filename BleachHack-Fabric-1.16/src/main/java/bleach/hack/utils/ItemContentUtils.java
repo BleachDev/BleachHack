@@ -62,7 +62,7 @@ public class ItemContentUtils {
 			List<String> pageBuffer = new ArrayList<>();
 			
 			for (char c: s.toCharArray()) {
-				if (MinecraftClient.getInstance().textRenderer.getStringWidth(buffer) > 114 || buffer.endsWith("\n")) {
+				if (MinecraftClient.getInstance().textRenderer.getWidth(buffer) > 114 || buffer.endsWith("\n")) {
 					pageBuffer.add(buffer.replace("\n", ""));
 					buffer = "";
 				}

@@ -60,15 +60,15 @@ public class WorldUtils {
 			Blocks.SPRUCE_BUTTON, Blocks.BARREL, Blocks.BLAST_FURNACE);
 		
 	public static boolean isFluid(BlockPos pos) {
-		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.SEAGRASS);
+		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
 
         return fluids.contains(MinecraftClient.getInstance().world.getBlockState(pos).getMaterial());
     }
 	
 	public static boolean doesBoxTouchBlock(Box box, Block block) {
-		for (int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
-			for (int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
-				for (int z = (int) Math.floor(box.z1); z < Math.ceil(box.z2); z++) {
+		for (int x = (int) Math.floor(box.minX); x < Math.ceil(box.maxX); x++) {
+			for (int y = (int) Math.floor(box.minY); y < Math.ceil(box.maxY); y++) {
+				for (int z = (int) Math.floor(box.minZ); z < Math.ceil(box.maxZ); z++) {
 					if (MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock() == block) {
 						return true;
 					}
@@ -79,9 +79,9 @@ public class WorldUtils {
 	}
 	
 	public static boolean isBoxEmpty(Box box) {
-		for (int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
-			for (int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
-				for (int z = (int) Math.floor(box.z1); z < Math.ceil(box.z2); z++) {
+		for (int x = (int) Math.floor(box.minX); x < Math.ceil(box.maxX); x++) {
+			for (int y = (int) Math.floor(box.minY); y < Math.ceil(box.maxY); y++) {
+				for (int z = (int) Math.floor(box.minZ); z < Math.ceil(box.maxZ); z++) {
 					if (!NONSOLID_BLOCKS.contains(MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
 						return false;
 					}
@@ -92,6 +92,6 @@ public class WorldUtils {
 	}
 	
 	public static Box moveBox(Box box, double x, double y, double z) {
-		return new Box(new Vec3d(box.x1, box.y1, box.z1).add(x, y, z), new Vec3d(box.x2, box.y2, box.z2).add(x, y, z));
+		return new Box(new Vec3d(box.minX, box.minY, box.minZ).add(x, y, z), new Vec3d(box.maxX, box.maxY, box.maxZ).add(x, y, z));
 	}
 }
