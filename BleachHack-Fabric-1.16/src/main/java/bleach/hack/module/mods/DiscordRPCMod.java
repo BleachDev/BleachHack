@@ -7,6 +7,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.DiscordRPCManager;
@@ -23,16 +24,21 @@ public class DiscordRPCMod extends Module {
 	
 	private int tick = 0;
 	
+	private boolean silent;
+	
 	public DiscordRPCMod() {
 		super("DiscordRPC", -1, Category.MISC, "Dicord RPC, use /rpc to set a custom status",
 				new SettingMode("Text 1: ", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%"),
 				new SettingMode("Text 2: ", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
-				new SettingMode("Elapsed: ", "Normal", "Random", "Backwards", "None"));
+				new SettingMode("Elapsed: ", "Normal", "Random", "Backwards", "None"),
+				new SettingToggle("Silent", false));
 	}
 	
 	public void onEnable() {
+		silent = getSettings().get(3).toToggle().state;
+		
 		tick = 0;
-		DiscordRPCManager.start();
+		DiscordRPCManager.start(silent ? "727434331089272903" : "725237549563379724");
 		
 		super.onEnable();
 	}
@@ -45,6 +51,11 @@ public class DiscordRPCMod extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		if (silent != getSettings().get(3).toToggle().state) {
+			onDisable();
+			onEnable();
+		}
+		
 		if (tick % 40 == 0) {
 			String text1 = customText1;
 			String text2 = customText2;
@@ -115,7 +126,8 @@ public class DiscordRPCMod extends Module {
 			}
 			
 			DiscordRPC.discordUpdatePresence(
-					new DiscordRichPresence.Builder(text2).setBigImage("bleachhack", "BleachHack " + BleachHack.VERSION)
+					new DiscordRichPresence.Builder(text2)
+					.setBigImage("bleachhack", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION)
 					.setDetails(text1).setStartTimestamps(start).build());
 		}
 		
