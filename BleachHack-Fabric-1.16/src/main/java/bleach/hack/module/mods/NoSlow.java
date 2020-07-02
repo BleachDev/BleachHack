@@ -32,7 +32,7 @@ public class NoSlow extends Module {
 	private Vec3d addVelocity = Vec3d.ZERO;
 	
 	public NoSlow() {
-		super("NoSlow", -1, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
+		super("NoSlow", KEY_UNBOUND, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
 				new SettingToggle("Slowness", true),
 				new SettingToggle("Soul Sand", true),
 				new SettingToggle("Slime Blocks", true),

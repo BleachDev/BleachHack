@@ -37,7 +37,7 @@ import net.minecraft.util.math.Vec3d;
 public class Tracers extends Module {
 	
 	public Tracers() {
-		super("Tracers", -1, Category.RENDER, "Shows lines to entities you select.",
+		super("Tracers", KEY_UNBOUND, Category.RENDER, "Shows lines to entities you select.",
 				new SettingToggle("Players", true),
 				new SettingToggle("Mobs", false),
 				new SettingToggle("Animals", false),

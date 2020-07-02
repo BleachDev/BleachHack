@@ -29,6 +29,8 @@ import net.minecraft.client.MinecraftClient;
 
 public class Module {
 
+	public final static int KEY_UNBOUND = -2;
+	
 	protected MinecraftClient mc = MinecraftClient.getInstance();
 	private String name;
 	private int key;

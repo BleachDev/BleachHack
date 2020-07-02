@@ -32,7 +32,7 @@ public class Step extends Module {
 	private double pos;
 	
 	public Step() {
-		super("Step", -1, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
+		super("Step", KEY_UNBOUND, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
 				new SettingMode("Mode: ", "Simple", "Spider", "Jump"));
 	}
 

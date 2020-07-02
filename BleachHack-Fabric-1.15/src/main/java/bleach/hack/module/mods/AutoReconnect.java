@@ -43,7 +43,7 @@ public class AutoReconnect extends Module {
 	public ServerInfo server;
 	
 	public AutoReconnect() {
-		super("AutoReconnect", -1, Category.MISC, "Shows reconnect options when disconnecting from a server",
+		super("AutoReconnect", KEY_UNBOUND, Category.MISC, "Shows reconnect options when disconnecting from a server",
 				new SettingToggle("Auto", true),
 				new SettingSlider("Time: ", 0.2, 10, 5, 2));
 	}

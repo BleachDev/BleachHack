@@ -26,7 +26,7 @@ public class BleachQueue {
 	
 	public static void nextQueue() {
 		if (queue.isEmpty()) return;
-		queue.get(0).run();
+		if (queue.get(0) != null) queue.get(0).run();
 		queue.remove(0);
 	}
 }

@@ -38,7 +38,7 @@ public class BlockParty extends Module {
 	private boolean jumping;
 	
 	public BlockParty() {
-		super("Blockparty", -1, Category.MISC, "Wins You Blockparty",
+		super("Blockparty", KEY_UNBOUND, Category.MISC, "Wins You Blockparty",
 				new SettingToggle("Jump", true),
 				new SettingToggle("AutoSpeed", true));
 	}

@@ -50,7 +50,7 @@ public class BookCrash extends Module {
     private int delay = 0;
 
     public BookCrash() {
-        super("BookCrash", -1, Category.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
+        super("BookCrash", KEY_UNBOUND, Category.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
         		new SettingMode("Mode: ", "Jessica", "Raion", "Sign"),
                 new SettingSlider("Uses: ", 1, 20, 5, 0),
                 new SettingSlider("Delay: ", 0, 5, 0, 0),

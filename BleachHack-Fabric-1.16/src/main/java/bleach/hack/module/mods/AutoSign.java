@@ -38,7 +38,7 @@ public class AutoSign extends Module {
 	public String[] text = new String[] {};
 	
 	public AutoSign() {
-		super("AutoSign", -1, Category.PLAYER, "Automatically writes on signs",
+		super("AutoSign", KEY_UNBOUND, Category.PLAYER, "Automatically writes on signs",
 				new SettingToggle("Random", false));
 	}
 	

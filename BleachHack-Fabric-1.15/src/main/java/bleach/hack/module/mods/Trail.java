@@ -40,7 +40,7 @@ public class Trail extends Module {
 	private List<List<Vec3d>> trails = new ArrayList<>();
 	
 	public Trail() {
-		super("Trail", -1, Category.RENDER, "Shows a trail where you go",
+		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
 				new SettingToggle("Trail", true),
 				new SettingToggle("Keep Trail", false),
 				new SettingMode("Color: ", "Red", "Green", "Blue", "B2G", "R2B"),

@@ -40,7 +40,7 @@ public class Peek extends Module {
 	private boolean shown = false;
 	
 	public Peek() {
-		super("Peek", -1, Category.MISC, "Shows whats inside containers",
+		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
 				new SettingToggle("Containers", true),
 				new SettingToggle("Books", true),
 				new SettingToggle("Maps", true),

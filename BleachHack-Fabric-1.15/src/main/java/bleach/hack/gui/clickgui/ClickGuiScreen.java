@@ -175,10 +175,11 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		Screen.fill(x+len - 2, y, x+len-1, y+12, 0x90b0b0b0);
 		Screen.fill(x, y - 1, x + 1, y+11, 0x90000000);
 		
-		if (key != -1 && mouseOver(x, y, x+len, y+12)) m.setKey((key != 261 && key != 256) ? key : -1);
-		String name = InputUtil.getKeycodeName(m.getKey());
+		if (key >= 0 && mouseOver(x, y, x+len, y+12)) m.setKey((key != 261 && key != 256) ? key : Module.KEY_UNBOUND);
+		
+		String name = key < 0 ? "NONE" : InputUtil.getKeycodeName(m.getKey());
 		if (name == null) name = "KEY" + m.getKey();
-		if (name.isEmpty()) name = "NONE";
+		else if (name.isEmpty()) name = "NONE";
 		
 		font.drawWithShadow("Bind: " + name + (mouseOver(x, y, x+len, y+12) ? "..." : "")
 				, x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);

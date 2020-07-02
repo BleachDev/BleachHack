@@ -45,7 +45,7 @@ import net.minecraft.item.Items;
 public class ChestESP extends Module {
 	
 	public ChestESP() {
-		super("ChestESP", -1, Category.RENDER, "Draws a box around storage containers.",
+		super("ChestESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.",
 				new SettingToggle("Chests", true),
 				new SettingToggle("EndChests", true),
 				new SettingToggle("Furnaces", true),

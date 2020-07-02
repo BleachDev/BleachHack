@@ -28,7 +28,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 public class Nofall extends Module {
 			
 	public Nofall() {
-		super("Nofall", -1, Category.PLAYER, "Prevents you from taking fall damage.",
+		super("Nofall", KEY_UNBOUND, Category.PLAYER, "Prevents you from taking fall damage.",
 				new SettingMode("Mode: ", "Simple", "Packet"));
 	}
 

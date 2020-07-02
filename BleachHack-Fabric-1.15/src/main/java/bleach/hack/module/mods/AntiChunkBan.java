@@ -23,7 +23,7 @@ import bleach.hack.module.Module;
 public class AntiChunkBan extends Module {
 
 	public AntiChunkBan() {
-		super("AntiChunkBan", -1, Category.EXPLOITS, "bypasses chunks bans");
+		super("AntiChunkBan", KEY_UNBOUND, Category.EXPLOITS, "bypasses chunks bans");
 	}
 
 }

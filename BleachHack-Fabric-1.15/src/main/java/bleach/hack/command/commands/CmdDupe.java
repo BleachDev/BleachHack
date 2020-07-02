@@ -40,6 +40,7 @@ public class CmdDupe extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		mc.player.dropSelectedItem(true);
+		mc.player.inventory.dropAll();
 		mc.player.networkHandler.getConnection().disconnect(new LiteralText("Duping..."));
 	}
 
