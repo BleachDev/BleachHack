@@ -6,7 +6,7 @@
 
 Very cool client.  
 
-Works on fabric 1.14-1.16 (1.14 and a.a14 for forge is discontinued)
+Works on fabric 1.14-1.16 (1.14 and 1.14 for forge is discontinued)
 
 > Join The Discord: https://discord.gg/b5Wc4nQ
 
