@@ -6,15 +6,15 @@
 
 Very cool client.  
 
-Works on fabric 1.14 and 1.15 (but 1.14 is the current maintained version, also works on forge but that isn't supported anymore)
+Works on fabric 1.14-1.16 (1.14 and a.a14 for forge is discontinued)
 
 > Join The Discord: https://discord.gg/b5Wc4nQ
 
 ## Installation:
 **For Normal People:**
 
-Download [fabric for minecraft 1.14 OR 1.15](https://fabricmc.net/use/)  
-Download the lastest compiled version of bleachhack from the releases section  
+Download [fabric for minecraft 1.14/1.15/1.16](https://fabricmc.net/use/)  
+Download the lastest compiled version of bleachhack for your mc version from the releases section 
 Put the jar in your mods foler  
 ???  
 Profit
@@ -24,7 +24,7 @@ Profit
 **For 200iq People Who Want To Help The Project:**
 
 Download the project  
-Start A Command Prompt in the BleachHack-Fabric-(1.14/1.15) folder 
+Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder 
 Generate the needed files for your preferred IDE.
 
 Windows Users
@@ -48,4 +48,4 @@ OR
 
 Start a new workspace in eclipse  
 Click File > Import... > Gradle > Gradle Project  
-Select the BleachHack-Fabric-(1.14/1.15) folder  
+Select the BleachHack-Fabric-(*Version*) folder  
