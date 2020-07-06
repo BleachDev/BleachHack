@@ -18,7 +18,7 @@ public class CmdRpc extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "/rpc [top text] [bottom text]";
+		return "rpc [top text] [bottom text]";
 	}
 
 	@Override

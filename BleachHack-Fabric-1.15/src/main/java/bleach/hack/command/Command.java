@@ -20,7 +20,9 @@ package bleach.hack.command;
 import net.minecraft.client.MinecraftClient;
 
 public abstract class Command {
-
+	
+	public static String PREFIX = "$";
+	
 	protected MinecraftClient mc = MinecraftClient.getInstance();
 	
 	public abstract String getAlias();

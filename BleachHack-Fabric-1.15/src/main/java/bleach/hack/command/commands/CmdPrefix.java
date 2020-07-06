@@ -18,7 +18,6 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
 
@@ -48,7 +47,7 @@ public class CmdPrefix extends Command {
 		
 		BleachFileMang.createEmptyFile("prefix.txt");
 		BleachFileMang.appendFile(args[0], "prefix.txt");
-		CommandManager.prefix = args[0];
+		PREFIX = args[0];
 		BleachLogger.infoMessage("Set Prefix To: \"" + args[0] + "\"");
 	}
 

@@ -40,7 +40,7 @@ public class CmdNotebot extends Command {
 
 	@Override
 	public String getSyntax() {
-		return ".notebot | .notebot convert (file in .minecraft/bleach/)";
+		return "notebot | notebot convert (file in .minecraft/bleach/)";
 	}
 
 	@Override

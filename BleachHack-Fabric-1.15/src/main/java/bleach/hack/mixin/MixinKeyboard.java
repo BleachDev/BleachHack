@@ -18,7 +18,7 @@
 package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
-import bleach.hack.command.CommandManager;
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventKeyPress;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -34,8 +34,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinKeyboard {
     @Inject(method = "onKey", at = @At(value = "INVOKE", target = "net/minecraft/client/util/InputUtil.isKeyPressed(JI)Z", ordinal = 5), cancellable = true)
     private void onKeyEvent(long windowPointer, int key, int scanCode, int action, int modifiers, CallbackInfo callbackInfo) {
-    	if (InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()) != null && InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()).equals(CommandManager.prefix)) {
-            MinecraftClient.getInstance().openScreen(new ChatScreen(CommandManager.prefix));
+    	if (InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()) != null && InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()).equals(Command.PREFIX)) {
+            MinecraftClient.getInstance().openScreen(new ChatScreen(Command.PREFIX));
         }
     	
         EventKeyPress event = new EventKeyPress(key, scanCode);

@@ -18,7 +18,6 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
 import bleach.hack.utils.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -45,7 +44,7 @@ public class CmdNBT extends Command {
     public void onCommand(String command, String[] args) throws Exception {
         if (args[0].isEmpty()) {
             BleachLogger.errorMessage("Invalid Syntax!");
-            BleachLogger.infoMessage(CommandManager.prefix + getSyntax());
+            BleachLogger.infoMessage(getSyntax());
             return;
         }
         ItemStack item = mc.player.inventory.getMainHandStack();
@@ -59,7 +58,7 @@ public class CmdNBT extends Command {
             try {
                 if (args[1].isEmpty()) {
                     BleachLogger.errorMessage("Invalid Syntax!");
-                    BleachLogger.infoMessage(CommandManager.prefix + getSyntax());
+                    BleachLogger.infoMessage(getSyntax());
                     return;
                 }
                 item.setTag(StringNbtReader.parse(args[1]));

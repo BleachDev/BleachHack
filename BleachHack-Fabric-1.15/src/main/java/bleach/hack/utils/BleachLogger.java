@@ -19,30 +19,35 @@ package bleach.hack.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.Formatting;
 
 public class BleachLogger {
 
 	public static void infoMessage(String s) {
 		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText("§5[BleachHack] §9§lINFO: §9" + s));
-		} catch (Exception e) { System.out.println("[BleachHack] INFO: " + s); }
+			.addMessage(new LiteralText(getBHText(Formatting.DARK_BLUE) + "§9§lINFO: §9" + s));
+		} catch (Exception e) { System.out.println("[BH] INFO: " + s); }
 	}
 	
 	public static void warningMessage(String s) {
 		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText("§5[BleachHack] §e§lWARN: §e" + s));
-		} catch (Exception e) { System.out.println("[BleachHack] WARN: " + s); }
+			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "§e§lWARN: §e" + s));
+		} catch (Exception e) { System.out.println("[BH] WARN: " + s); }
 	}
 	
 	public static void errorMessage(String s) {
 		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText("§5[BleachHack] §c§lERROR: §c" + s));
-		} catch (Exception e) { System.out.println("[BleachHack] ERROR: " + s); }
+			.addMessage(new LiteralText(getBHText(Formatting.RED) + "§c§lERROR: §c" + s));
+		} catch (Exception e) { System.out.println("[BH] ERROR: " + s); }
 	}
 	
 	public static void noPrefixMessage(String s) {
 		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(s));
 		} catch (Exception e) { System.out.println(s); }
+	}
+	
+	private static String getBHText(Formatting color) {
+		return color + "§l[§6B§dH" + color + "§l] ";
 	}
 }

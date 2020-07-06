@@ -42,7 +42,7 @@ public class CmdNuker extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "nuker add [block] | .nuker remove [block] | .nuker clear | .nuker list";
+		return "nuker add [block] | nuker remove [block] | nuker clear | nuker list";
 	}
 
 	@Override

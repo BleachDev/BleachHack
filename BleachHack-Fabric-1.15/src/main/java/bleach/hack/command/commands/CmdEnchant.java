@@ -40,7 +40,7 @@ public class CmdEnchant extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "enchant [enchant] [level] / .enchant all [level] / .enchant list";
+		return "enchant [enchant] [level] | enchant all [level] | enchant list";
 	}
 
 	@Override
