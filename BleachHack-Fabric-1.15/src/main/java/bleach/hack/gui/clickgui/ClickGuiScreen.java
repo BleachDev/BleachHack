@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.BleachHack;
@@ -175,9 +176,9 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		Screen.fill(x+len - 2, y, x+len-1, y+12, 0x90b0b0b0);
 		Screen.fill(x, y - 1, x + 1, y+11, 0x90000000);
 		
-		if (key >= 0 && mouseOver(x, y, x+len, y+12)) m.setKey((key != 261 && key != 256) ? key : Module.KEY_UNBOUND);
+		if (key >= 0 && mouseOver(x, y, x+len, y+12)) m.setKey((key != GLFW.GLFW_KEY_DELETE && key != GLFW.GLFW_KEY_ESCAPE) ? key : Module.KEY_UNBOUND);
 		
-		String name = key < 0 ? "NONE" : InputUtil.getKeycodeName(m.getKey());
+		String name = m.getKey() < 0 ? "NONE" : InputUtil.getKeycodeName(m.getKey());
 		if (name == null) name = "KEY" + m.getKey();
 		else if (name.isEmpty()) name = "NONE";
 		

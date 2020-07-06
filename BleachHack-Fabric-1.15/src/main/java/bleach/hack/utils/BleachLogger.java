@@ -19,6 +19,7 @@ package bleach.hack.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class BleachLogger {
@@ -45,6 +46,11 @@ public class BleachLogger {
 		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(s));
 		} catch (Exception e) { System.out.println(s); }
+	}
+	
+	public static void noPrefixMessage(Text text) {
+		try{ MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
+		} catch (Exception e) { System.out.println(text.asString()); }
 	}
 	
 	private static String getBHText(Formatting color) {

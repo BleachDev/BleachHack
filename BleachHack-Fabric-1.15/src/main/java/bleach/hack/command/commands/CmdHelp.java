@@ -20,6 +20,8 @@ package bleach.hack.command.commands;
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandManager;
 import bleach.hack.utils.BleachLogger;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
 
 public class CmdHelp extends Command {
 
@@ -45,7 +47,12 @@ public class CmdHelp extends Command {
 		
 		for (Command c: CommandManager.getCommands()) {
 			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
-			BleachLogger.noPrefixMessage("§5." + c.getAlias() + " | §6" + c.getDescription() + " | §e" + c.getSyntax());
+			
+			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
+			text.setStyle(text.getStyle().setHoverEvent(
+					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
+							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
+			BleachLogger.noPrefixMessage(text);
 		}
 	}
 
