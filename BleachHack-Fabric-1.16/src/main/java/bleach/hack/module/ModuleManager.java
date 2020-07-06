@@ -54,6 +54,7 @@ public class ModuleManager {
 			new Ghosthand(),
 			new Jesus(),
 			new Killaura(),
+			new MountBypass(),
 			new Nametags(),
 			new Nofall(),
 			new NoSlow(),
