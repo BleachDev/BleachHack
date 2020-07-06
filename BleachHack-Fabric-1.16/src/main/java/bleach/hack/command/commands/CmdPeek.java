@@ -71,7 +71,7 @@ public class CmdPeek extends Command {
 		
 		SimpleInventory inv = new SimpleInventory(items.toArray(new ItemStack[27]));
 		
-		BleachQueue.queue.add(() -> {
+		BleachQueue.add(() -> {
 			mc.openScreen(new ShulkerBoxScreen(
 					new ShulkerBoxScreenHandler(420, mc.player.inventory, inv),
 					mc.player.inventory,
