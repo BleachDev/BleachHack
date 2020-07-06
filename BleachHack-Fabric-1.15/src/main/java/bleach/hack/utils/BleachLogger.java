@@ -26,7 +26,7 @@ public class BleachLogger {
 
 	public static void infoMessage(String s) {
 		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.DARK_BLUE) + "§9§lINFO: §9" + s));
+			.addMessage(new LiteralText(getBHText(Formatting.BLUE) + "§9§lINFO: §9" + s));
 		} catch (Exception e) { System.out.println("[BH] INFO: " + s); }
 	}
 	
