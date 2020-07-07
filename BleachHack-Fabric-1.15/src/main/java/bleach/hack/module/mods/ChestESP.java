@@ -69,7 +69,7 @@ public class ChestESP extends Module {
 	public void onRender(Event3DRender event) {
 		for (BlockEntity e: mc.world.blockEntities) {
 			if ((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity) && getSettings().get(0).toToggle().state) {
-				drawChest(e.getPos()); //RenderUtils.drawFilledBox(e.getPos(), 1.9F, 1.5F, 0.3F, 0.7F);
+				drawChest(e.getPos());
 			} else if (e instanceof EnderChestBlockEntity && getSettings().get(1).toToggle().state) {
 				RenderUtils.drawFilledBox(new Box(
 						e.getPos().getX() + 0.06, e.getPos().getY(), e.getPos().getZ() + 0.06,
@@ -114,14 +114,14 @@ public class ChestESP extends Module {
 		BlockState state = mc.world.getBlockState(pos);
 		
 		if (!(state.getBlock() instanceof ChestBlock)) {
-			RenderUtils.drawFilledBox(pos, 1.9F, 1.5F, 0.3F, 0.7F);
+			RenderUtils.drawFilledBox(pos, 1F, 0.6F, 0.3F, 0.7F);
 			return;
 		}
 		
 		if (state.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE) {
 			RenderUtils.drawFilledBox(new Box(
 					pos.getX() + 0.06, pos.getY(), pos.getZ() + 0.06,
-					pos.getX() + 0.94, pos.getY() + 0.875, pos.getZ() + 0.94), 1.9F, 1.5F, 0.3F, 0.7F);
+					pos.getX() + 0.94, pos.getY() + 0.875, pos.getZ() + 0.94), 1F, 0.6F, 0.3F, 0.7F);
 			return;
 		}
 		
@@ -141,7 +141,7 @@ public class ChestESP extends Module {
 		RenderUtils.drawFilledBox(new Box(
 				west ? pos.getX() : pos.getX() + 0.06, pos.getY(), north ? pos.getZ() : pos.getZ() + 0.06,
 				east ? pos.getX() + 1 : pos.getX() + 0.94, pos.getY() + 0.875, south ? pos.getZ() + 1 : pos.getZ() + 0.94),
-				1.9F, 1.5F, 0.3F, 0.7F);
+				1F, 0.6F, 0.3F, 0.7F);
 	}
 
 }
