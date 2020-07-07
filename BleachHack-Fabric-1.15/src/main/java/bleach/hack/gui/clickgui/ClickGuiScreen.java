@@ -27,6 +27,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.BleachHack;
+import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
@@ -84,9 +85,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		this.renderBackground();
 		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
-		font.drawWithShadow("Hover over a bind setting and press a key to change a bind" , 2, height-10, 0xff9999);
-		font.drawWithShadow("Use .guireset to reset the gui" , 2, height-20, 0x9999ff);
-
+		font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height-20, 0x99ff99);
+		font.drawWithShadow("Use .guireset to reset the gui" , 2, height-10, 0x9999ff);
 		super.render(mX, mY, float_1);
 
 		mouseX = mX;
