@@ -34,9 +34,7 @@ import net.minecraft.util.math.Vec3d;
 public class RenderUtils {
 	
 	public static void drawFilledBox(BlockPos blockPos, float r, float g, float b, float a) {
-		drawFilledBox(new Box(
-				blockPos.getX(), blockPos.getY(), blockPos.getZ(),
-				blockPos.getX()+1, blockPos.getY()+1, blockPos.getZ()+1), r, g, b, a);
+		drawFilledBox(new Box(blockPos), r, g, b, a);
 	}
 	
 	public static void drawFilledBox(Box box, float r, float g, float b, float a) {

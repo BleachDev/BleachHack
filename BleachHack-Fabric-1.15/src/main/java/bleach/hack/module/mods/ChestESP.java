@@ -22,6 +22,10 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.RenderUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.block.BlockState;
@@ -67,9 +71,16 @@ public class ChestESP extends Module {
 
 	@Subscribe
 	public void onRender(Event3DRender event) {
+		List<BlockPos> linkedChests = new ArrayList<>();
+		
 		for (BlockEntity e: mc.world.blockEntities) {
+			if (linkedChests.contains(e.getPos())) {
+				continue;
+			}
+			
 			if ((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity) && getSettings().get(0).toToggle().state) {
-				drawChest(e.getPos());
+				BlockPos p = drawChest(e.getPos());
+				if (p != null) linkedChests.add(p);
 			} else if (e instanceof EnderChestBlockEntity && getSettings().get(1).toToggle().state) {
 				RenderUtils.drawFilledBox(new Box(
 						e.getPos().getX() + 0.06, e.getPos().getY(), e.getPos().getZ() + 0.06,
@@ -110,19 +121,20 @@ public class ChestESP extends Module {
 		}
 	}
 	
-	private void drawChest(BlockPos pos) {
+	/** returns the other chest if its linked, othwise null **/
+	private BlockPos drawChest(BlockPos pos) {
 		BlockState state = mc.world.getBlockState(pos);
 		
 		if (!(state.getBlock() instanceof ChestBlock)) {
 			RenderUtils.drawFilledBox(pos, 1F, 0.6F, 0.3F, 0.7F);
-			return;
+			return null;
 		}
 		
 		if (state.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE) {
 			RenderUtils.drawFilledBox(new Box(
 					pos.getX() + 0.06, pos.getY(), pos.getZ() + 0.06,
 					pos.getX() + 0.94, pos.getY() + 0.875, pos.getZ() + 0.94), 1F, 0.6F, 0.3F, 0.7F);
-			return;
+			return null;
 		}
 		
 		boolean north = false, east = false, south = false, west = false;
@@ -139,9 +151,15 @@ public class ChestESP extends Module {
 		}
 		
 		RenderUtils.drawFilledBox(new Box(
-				west ? pos.getX() : pos.getX() + 0.06, pos.getY(), north ? pos.getZ() : pos.getZ() + 0.06,
-				east ? pos.getX() + 1 : pos.getX() + 0.94, pos.getY() + 0.875, south ? pos.getZ() + 1 : pos.getZ() + 0.94),
+				west ? pos.getX() - 0.94 : pos.getX() + 0.06,
+				pos.getY(),
+				north ? pos.getZ() - 0.94 : pos.getZ() + 0.06,
+				east ? pos.getX() + 1.94 : pos.getX() + 0.94,
+				pos.getY() + 0.875,
+				south ? pos.getZ() + 1.94 : pos.getZ() + 0.94),
 				1F, 0.6F, 0.3F, 0.7F);
+		
+		return north ? pos.north() : east ? pos.east() : south ? pos.south() : west ? pos.west() : null;
 	}
 
 }
