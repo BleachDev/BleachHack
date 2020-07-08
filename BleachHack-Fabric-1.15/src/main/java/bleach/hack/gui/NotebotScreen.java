@@ -162,6 +162,10 @@ public class NotebotScreen extends AbstractWindowScreen {
 		}
 	}
 	
+	public boolean isPauseScreen() {
+		return false;
+	}
+	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
 		if (!windows.get(0).closed) {
 			int x = windows.get(0).x1,

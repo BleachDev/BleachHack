@@ -259,7 +259,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 				} catch (Exception e) {}
 			}
 			
-			List<Integer> t1 = Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+			List<Integer> t1 = Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 			
 			for (List<Integer> i: t) t1.set(i.get(1), t1.get(i.get(1)) + 1);
 			for (int i = 0; i < t1.size(); i++) {
