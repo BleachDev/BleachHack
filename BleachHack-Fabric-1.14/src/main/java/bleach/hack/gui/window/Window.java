@@ -99,6 +99,7 @@ public class Window {
 			GL11.glScaled(0.55, 0.55, 1);
 			GuiLighting.enable();
 			MinecraftClient.getInstance().getItemRenderer().renderGuiItem(icon, (int)((x1 + 3) * 1/0.55), (int)((y1 + 3) * 1/0.55));
+			GuiLighting.disable();
 			GL11.glPopMatrix();
 		}
 		
