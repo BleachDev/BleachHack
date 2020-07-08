@@ -24,7 +24,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.util.registry.Registry;
 
 public class CmdEnchant extends Command {
@@ -126,7 +125,7 @@ public class CmdEnchant extends Command {
 
 	    ListTag listnbt = item.getTag().getList("Enchantments", 10);
 	    CompoundTag compoundnbt = new CompoundTag();
-	    compoundnbt.putString("id", String.valueOf((int) ((IndexedIterable<Enchantment>) Registry.ENCHANTMENT).getId(e)));
+	    compoundnbt.putString("id", String.valueOf(Registry.ENCHANTMENT.getRawId(e)));
 	    compoundnbt.putInt("lvl", level);
 	    listnbt.add(compoundnbt);
 	}
