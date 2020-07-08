@@ -18,6 +18,7 @@
 package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
+import bleach.hack.command.Command;
 import bleach.hack.command.CommandManager;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
@@ -62,8 +63,8 @@ public class MixinClientConnection {
     public void send(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1, CallbackInfo callback) {
     	if (packet_1 instanceof ChatMessageC2SPacket) {
 			ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet_1;
-			if (pack.getChatMessage().startsWith(CommandManager.prefix)) {
-	    		CommandManager.callCommand(pack.getChatMessage().substring(CommandManager.prefix.length()));
+			if (pack.getChatMessage().startsWith(Command.PREFIX)) {
+	    		CommandManager.callCommand(pack.getChatMessage().substring(Command.PREFIX.length()));
 	    		callback.cancel();
 			}
 		}

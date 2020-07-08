@@ -50,7 +50,7 @@ public class Nuker extends Module {
 	private List<Block> blockList = new ArrayList<>();
 	
 	public Nuker() {
-		super("Nuker", -1, Category.WORLD, "Breaks blocks around you",
+		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
 				new SettingMode("Mode: ", "Normal", "Instant"),
 				new SettingSlider("Range: ", 1, 6, 4.2, 1),
 				new SettingSlider("Cooldown: ", 0, 4, 0, 0),

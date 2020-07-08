@@ -282,7 +282,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					w = width - width / 2,
 					h = height - height / 2;
 			
-			drawCenteredString(matrix, textRenderer, "\u00a7cTemprary™ alt manager", x + w / 2, y + h / 4 - 30, -1);
+			drawCenteredString(matrix, textRenderer, "\u00a7cTemporary\u2122 alt manager", x + w / 2, y + h / 4 - 30, -1);
 			drawCenteredString(matrix, textRenderer, "\u00a74(accounts stored in plaintext for now)", x + w / 2, y + h / 4 - 20, -1);
 			
 			int c = 0;

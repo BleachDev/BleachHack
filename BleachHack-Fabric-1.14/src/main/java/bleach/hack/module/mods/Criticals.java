@@ -36,7 +36,7 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 public class Criticals extends Module {
 
     public Criticals() {
-        super("Criticals", -1, Category.COMBAT, "Attempts to force Critical hits on entities you hit.");
+        super("Criticals", KEY_UNBOUND, Category.COMBAT, "Attempts to force Critical hits on entities you hit.");
     }
 
     @Subscribe

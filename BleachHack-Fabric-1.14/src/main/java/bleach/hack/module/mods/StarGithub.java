@@ -24,7 +24,7 @@ import net.minecraft.util.SystemUtil;
 public class StarGithub extends Module {
 
 	public StarGithub() {
-		super("StarGithub", -1, Category.MISC, "i need to feed my 420 children pls star github");
+		super("StarGithub", KEY_UNBOUND, Category.MISC, "i need to feed my 420 children pls star github");
 	}
 	
 	public void onEnable() {

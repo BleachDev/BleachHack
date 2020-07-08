@@ -35,7 +35,7 @@ import net.minecraft.util.Formatting;
 public class ESP extends Module {
 	
 	public ESP() {
-		super("ESP", -1, Category.RENDER, "Allows you to see entities though walls.",
+		super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
 				new SettingToggle("Players", true),
 				new SettingToggle("Mobs", false),
 				new SettingToggle("Animals", false),

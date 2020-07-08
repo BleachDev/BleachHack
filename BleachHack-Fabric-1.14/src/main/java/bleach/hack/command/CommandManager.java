@@ -24,8 +24,6 @@ import bleach.hack.command.commands.*;
 import bleach.hack.utils.BleachLogger;
 
 public class CommandManager {
-
-	public static String prefix = ".";
 	
 	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
@@ -66,7 +64,7 @@ public class CommandManager {
 				} catch (Exception e) {
 					e.printStackTrace();
 					BleachLogger.errorMessage("Invalid Syntax!");
-					BleachLogger.infoMessage(prefix + c.getSyntax());
+					BleachLogger.infoMessage(Command.PREFIX + c.getSyntax());
 				}
 				return;
 			}

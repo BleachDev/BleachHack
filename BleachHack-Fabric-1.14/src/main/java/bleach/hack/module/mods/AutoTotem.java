@@ -31,7 +31,7 @@ import net.minecraft.util.math.Direction;
 public class AutoTotem extends Module {
 
 	public AutoTotem() {
-		super("AutoTotem", -1, Category.COMBAT, "Automatically equips totems.");
+		super("AutoTotem", KEY_UNBOUND, Category.COMBAT, "Automatically equips totems.");
 	}
 
 	@Subscribe

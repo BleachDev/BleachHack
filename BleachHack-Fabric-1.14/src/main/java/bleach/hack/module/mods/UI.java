@@ -57,7 +57,7 @@ public class UI extends Module {
 	private long lastPacket = 0;
 	
 	public UI() {
-		super("UI", -1, Category.RENDER, "Shows stuff onscreen.",
+		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
 				new SettingToggle("Arraylist", true), // 0
 				new SettingToggle("Extra Line", false), // 1
 				new SettingToggle("Watermark", true), // 2
@@ -221,7 +221,7 @@ public class UI extends Module {
 		}
 		
 		int count2 = 0;
-		int infoMode = getSettings().get(11).toMode().mode;
+		int infoMode = getSettings().get(15).toMode().mode;
 		for (String s: infoList) {
 			mc.textRenderer.drawWithShadow(s, 
 					infoMode == 0 ? 2 : mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,

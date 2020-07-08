@@ -37,7 +37,7 @@ public class FakeLag extends Module {
 	public long startTime = 0;
 	
 	public FakeLag() {
-		super("FakeLag", -1, Category.MOVEMENT, "Stores up movement packets",
+		super("FakeLag", KEY_UNBOUND, Category.MOVEMENT, "Stores up movement packets",
 				new SettingMode("Mode: ", "Always", "Pulse"),
 				new SettingToggle("Limit", false),
 				new SettingSlider("Limit: ", 0, 15, 5, 1),

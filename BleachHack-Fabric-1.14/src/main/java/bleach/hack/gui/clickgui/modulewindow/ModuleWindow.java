@@ -20,71 +20,60 @@ package bleach.hack.gui.clickgui.modulewindow;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
+import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.item.ItemStack;
 
-public abstract class ModuleWindow {
-	
-	public TextRenderer font;
+public class ModuleWindow extends Window {
 	
 	public List<Module> modList = new ArrayList<>();
 	public LinkedHashMap<Module, Boolean> mods = new LinkedHashMap<>();
-	public String name;
-	public int len;
-	public int posX;
-	public int posY;
 	
-	public int mouseX;
-	public int mouseY;
-	public int prevmX;
-	public int prevmY;
 	public boolean hiding;
 	
-	public int keyDown;
-	public boolean lmDown;
-	public boolean rmDown;
-	public boolean lmHeld;
-	public boolean dragging;
-	
-	public ModuleWindow(List<Module> mods, String name, int len, int posX, int posY) {
+	public ModuleWindow(List<Module> mods, int x1, int y1, int len, String title, ItemStack icon) {
+		super(x1, y1, x1 + len, 0, title, icon);
 		modList = mods;
 		for (Module m: mods) this.mods.put(m, false);
-		this.name = name;
-		this.len = len;
-		this.posX = posX;
-		this.posY = posY;
+		y2 = getHeight();
 	}
 	
-	public abstract void draw(int mX, int mY, int leng);
-	
-	public void setPos(int x, int y) {
-		this.posX = x;
-		this.posY = y;
+	public boolean shouldClose(int mX, int mY) {
+		return false;
 	}
 	
-	public int[] getPos() {
-		return new int[] {posX, posY};
+	public void fillGrey(int x1, int y1, int x2, int y2) {
+		Screen.fill(x1, y1, x1 + 1, y2 - 1, 0x90b0b0b0);
+		Screen.fill(x1 + 1, y1, x2 - 1, y1 + 1, 0x90b0b0b0);
+		Screen.fill(x1 + 1, y2 - 1, x2, y2, 0x90000000);
+		Screen.fill(x2 - 1, y1 + 1, x2, y2, 0x90000000);
+		Screen.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
 	}
 	
-	public void onLmPressed() { lmDown = true; lmHeld = true; }
+	protected void drawBar(int mX, int mY, TextRenderer textRend) {
+		/* background and title bar */
+		fillGrey(x1, y1, x2, y2);
+		fillGradient(x1 + 1, y1 + 1, x2 - 2, y1 + 12, 0xff0000ff, 0xff4080ff);
+		
+		/* buttons */
+		//fillRealGrey(x2 - 12, y1 + 3, x2 - 4, y1 + 11);
+		textRend.draw(hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
+	}
 	
-	public void onLmReleased() { lmHeld = false; }
-	
-	public void onRmPressed() { rmDown = true; }
-	
-	public void onKeyPressed(int key) { keyDown = key; }
-	
-	protected boolean mouseOver(int minX, int minY, int maxX, int maxY) {
-        return mouseX > minX && mouseX < maxX && mouseY > minY && mouseY < maxY;
-    }
-	
-	protected String cutText(String text, int leng) {
-		String text1 = text;
-		for (int i = 0; i < text.length(); i++) {
-			if (font.getStringWidth(text1) < len-2) return text1;
-			text1 = text1.replaceAll(".$", "");
+	public int getHeight() {
+		int h = 1;
+		for (Entry<Module, Boolean> e: mods.entrySet()) {
+			h += 12;
+			
+			if (e.getValue()) {
+				h += (12 * (e.getKey().getSettings().size() + 1));
+			}
 		}
-		return "";
+		
+		return h;
 	}
 }

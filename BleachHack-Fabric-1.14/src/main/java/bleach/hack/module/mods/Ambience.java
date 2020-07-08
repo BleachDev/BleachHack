@@ -31,7 +31,7 @@ import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
 public class Ambience extends Module {
 	
 	public Ambience() {
-		super("Ambience", -1, Category.WORLD, "Changes The World Time/Weather",
+		super("Ambience", KEY_UNBOUND, Category.WORLD, "Changes The World Time/Weather",
 				new SettingToggle("Weather", true),
 				new SettingToggle("Time", false),
 				new SettingMode("Weather: ", "Clear", "Rain"),

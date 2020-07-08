@@ -63,7 +63,7 @@ public class Notebot extends Module {
 	public static String filePath = "";
 	
 	public Notebot() {
-		super("Notebot", -1, Category.MISC, "Plays those noteblocks nicely",
+		super("Notebot", KEY_UNBOUND, Category.MISC, "Plays those noteblocks nicely",
 				new SettingToggle("Tune", true),
 				new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
 				new SettingToggle("Loop", false),

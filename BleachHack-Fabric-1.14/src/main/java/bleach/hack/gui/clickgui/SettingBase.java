@@ -23,8 +23,7 @@ public class SettingBase {
 		try {
 			return (SettingMode) this;
 		} catch (Exception e) {
-			System.out.println("Unable To Parse Setting");
-			return new SettingMode("PARSING ERROR");
+			throw new IllegalStateException("Execption parsing setting: " + this);
 		}
 	}
 	
@@ -32,8 +31,7 @@ public class SettingBase {
 		try {
 			return (SettingToggle) this;
 		} catch (Exception e) {
-			System.out.println("Unable To Parse Setting");
-			return new SettingToggle("PARSING ERROR", false);
+			throw new IllegalStateException("Execption parsing setting: " + this);
 		}
 	}
 	
@@ -41,8 +39,7 @@ public class SettingBase {
 		try {
 			return (SettingSlider) this;
 		} catch (Exception e) {
-			System.out.println("Unable To Parse Setting");
-			return new SettingSlider("PARSING ERROR", 0, 1, 0, 0);
+			throw new IllegalStateException("Execption parsing setting: " + this);
 		}
 	}
 }
