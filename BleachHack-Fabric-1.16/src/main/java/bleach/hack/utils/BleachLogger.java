@@ -39,7 +39,7 @@ public class BleachLogger {
 	public static void errorMessage(String s) {
 		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c" + s));
-		} catch (Exception e) { System.out.println("[BleachHack] ERROR: " + s); }
+		} catch (Exception e) { System.out.println("[BH] ERROR: " + s); }
 	}
 	
 	public static void noPrefixMessage(String s) {

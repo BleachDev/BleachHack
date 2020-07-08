@@ -42,7 +42,7 @@ public class CmdXray extends Command {
 
     @Override
     public String getSyntax() {
-        return "xray add [block] | .xray remove [block] | .xray clear | .xray list";
+        return "xray add [block] | xray remove [block] | xray clear | xray list";
     }
 
     @Override

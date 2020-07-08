@@ -6,15 +6,15 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.InteractionType;
+import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
+import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket.InteractionType;
 
 public class MountBypass extends Module {
 
 	public MountBypass() {
 		super("MountBypass", KEY_UNBOUND, Category.PLAYER, "Bypasses illegalstack on non bungeecord servers");
 	}
-	
+
 	@Subscribe
 	public void onPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket

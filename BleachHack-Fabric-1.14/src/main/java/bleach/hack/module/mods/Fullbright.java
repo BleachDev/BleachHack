@@ -24,6 +24,7 @@ import org.lwjgl.glfw.GLFW;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.utils.BleachQueue;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 
@@ -37,13 +38,30 @@ public class Fullbright extends Module {
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		mc.options.gamma = 1;
+
+		//mc.options.gamma = 1;
+		if (mc.options.gamma > 1) {
+			double g = mc.options.gamma;
+
+			while (g > 1) {
+				double nextStep = Math.max(g - 2, 1);
+				BleachQueue.add("fullbright", () -> mc.options.gamma = nextStep);
+				g -= 2;
+			}
+		}
+		
 		mc.player.removePotionEffect(StatusEffects.NIGHT_VISION);
 		//Vanilla code to remap light level table.
 		for (int i = 0; i <= 15; ++i) {
 			float float_2 = 1.0F - (float)i / 15.0F;
 			mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) / (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F;
 		}
+	}
+	
+	public void onEnable() {
+		super.onEnable();
+
+		BleachQueue.cancelQueue("fullbright");
 	}
 
 	@Subscribe

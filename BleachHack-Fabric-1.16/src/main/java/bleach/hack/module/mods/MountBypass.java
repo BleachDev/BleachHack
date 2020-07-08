@@ -12,7 +12,7 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.Inter
 public class MountBypass extends Module {
 
 	public MountBypass() {
-		super("MountBypass", KEY_UNBOUND, Category.PLAYER, "Bypasses illegalstack <2.1.0 on non bungeecord servers");
+		super("MountBypass", KEY_UNBOUND, Category.PLAYER, "Bypasses illegalstack on non bungeecord servers");
 	}
 	
 	@Subscribe

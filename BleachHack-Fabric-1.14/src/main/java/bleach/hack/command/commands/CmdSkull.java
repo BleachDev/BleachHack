@@ -38,7 +38,7 @@ public class CmdSkull extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "skull [Player] | .skull img [Image url]";
+		return "skull [Player] | skull img [Image url]";
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class Fullbright extends Module {
 			while (g > 1) {
 				double nextStep = Math.max(g - 2, 1);
 				BleachQueue.add("fullbright", () -> mc.options.gamma = nextStep);
-				g -= 1.2;
+				g -= 2;
 			}
 		}
 		
