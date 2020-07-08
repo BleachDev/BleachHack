@@ -162,23 +162,21 @@ public class Notebot extends Module {
 		}
 		
 		/* Loop */
-		if (getSettings().get(2).toToggle().state || getSettings().get(3).toToggle().state) {
-			boolean loopityloop = true;
-			for (List<Integer> n: notes) if (timer - 10 < n.get(0)) loopityloop = false;
-			if (getSettings().get(4).toToggle().state && loopityloop) {
-				try {
-					List<String> files = new ArrayList<>();
-					Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
-					paths.forEach(p -> files.add(p.getFileName().toString()));
-					paths.close();
-					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
-					setToggled(false);
-					setToggled(true);
-					BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
-				} catch (IOException e) {}
-			} else if (getSettings().get(2).toToggle().state && loopityloop) {
-				if (loopityloop) timer = -10;
-			}
+		boolean loopityloop = true;
+		for (List<Integer> n: notes) if (timer - 10 < n.get(0)) loopityloop = false;
+		if (getSettings().get(4).toToggle().state && loopityloop) {
+			try {
+				List<String> files = new ArrayList<>();
+				Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
+				paths.forEach(p -> files.add(p.getFileName().toString()));
+				paths.close();
+				filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
+				setToggled(false);
+				setToggled(true);
+				BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
+			} catch (IOException e) {}
+		} else if (getSettings().get(2).toToggle().state && loopityloop) {
+			if (loopityloop) timer = -10;
 		}
 		
 		/* Play Noteblocks */
