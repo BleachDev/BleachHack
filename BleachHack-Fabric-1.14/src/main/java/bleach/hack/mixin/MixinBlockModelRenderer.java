@@ -36,7 +36,7 @@ import java.util.Random;
 /**
  * Blocks are still tesselated even if they're transparent because Minecraft's rendering engine is retarded.
  */
-@Mixin(BlockModelRenderer.class)
+@Mixin(value = BlockModelRenderer.class, priority = 10000)
 public class MixinBlockModelRenderer {
     @Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
     private void tesselate(ExtendedBlockView extendedBlockView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1, boolean boolean_1, Random random_1, long long_1, CallbackInfoReturnable<Boolean> ci) {

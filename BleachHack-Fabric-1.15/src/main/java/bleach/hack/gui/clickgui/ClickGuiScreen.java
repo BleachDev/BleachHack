@@ -61,7 +61,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void initWindows() {
-		len = 60;
+		len = 70;
 
 		int i = 30;
 		for (Category c: Category.values()) {
@@ -92,7 +92,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		mouseX = mX;
 		mouseY = mY;
 
-		len = Math.max(50, (int) Math.round(ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue()));
+		len = Math.max(70, (int) Math.round(ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue()));
 		for (Window w: windows) {
 			if (w instanceof ModuleWindow) {
 				ModuleWindow mw = (ModuleWindow) w;
