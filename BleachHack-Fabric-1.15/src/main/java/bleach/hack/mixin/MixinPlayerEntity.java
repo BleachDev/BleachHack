@@ -18,10 +18,14 @@
 package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.MovementType;
+import net.minecraft.util.math.Vec3d;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -53,7 +57,14 @@ public class MixinPlayerEntity {
 	@Inject(at = @At("HEAD"), method = "sendMovementPackets()V", cancellable = true)
 	public void sendMovementPackets(CallbackInfo info) {
 		EventMovementTick event = new EventMovementTick();
-		BleachHack.eventBus.post(new EventMovementTick());
+		BleachHack.eventBus.post(event);
+		if (event.isCancelled()) info.cancel();
+	}
+	
+	@Inject(at = @At("HEAD"), method = "move", cancellable = true)
+	public void move(MovementType movementType_1, Vec3d vec3d_1, CallbackInfo info) {
+		EventClientMove event = new EventClientMove(vec3d_1);
+		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}
 
