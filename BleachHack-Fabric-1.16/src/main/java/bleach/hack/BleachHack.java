@@ -28,8 +28,8 @@ import net.fabricmc.api.ModInitializer;
 
 public class BleachHack implements ModInitializer {
 	
-	public static String VERSION = "B12.1";
-	public static int INTVERSION = 18;
+	public static String VERSION = "B13";
+	public static int INTVERSION = 19;
 	public static EventBus eventBus;
 
 	public static FriendManager friendMang;
