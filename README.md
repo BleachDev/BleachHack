@@ -11,7 +11,7 @@ Works on fabric 1.14-1.16 (1.14 for forge is discontinued)
 > Join The Discord: https://discord.gg/b5Wc4nQ
 
 ## Installation:
-**For normal People:**
+**For normal people:**
 
 Download [fabric for minecraft 1.14/1.15/1.16](https://fabricmc.net/use/)  
 Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section](https://github.com/BleachDrinker420/bleachhack-1.14/releases)
@@ -30,7 +30,7 @@ That's where you'll put any mods you want to install.
 **For (200 IQ) developers:**
 
 Download the project  
-Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder.
+Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder. 
 Generate the needed files for your preferred IDE.
 
 ***Eclipse:***
@@ -39,7 +39,7 @@ Generate the needed files for your preferred IDE.
   > gradlew genSources eclipse
   
   On Linux:
-  > chmod +x ./gradlew
+  > chmod +x ./gradlew  
   >./gradlew genSources eclipse
 
   Start a new workspace in eclipse  
