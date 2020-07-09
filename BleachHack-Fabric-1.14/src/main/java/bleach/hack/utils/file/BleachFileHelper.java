@@ -29,6 +29,7 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.utils.FriendManager;
 
 public class BleachFileHelper {
 
@@ -154,12 +155,12 @@ public class BleachFileHelper {
 	}
 	
 	public static void readFriends() {
-		BleachHack.friends = BleachFileMang.readFileLines("friends.txt");
+		BleachHack.friendMang = new FriendManager(BleachFileMang.readFileLines("friends.txt"));
 	}
 	
 	public static void saveFriends() {
 		String toWrite = "";
-		for (String s: BleachHack.friends) toWrite += s + "\n";
+		for (String s: BleachHack.friendMang.getFriends()) toWrite += s + "\n";
 		
 		BleachFileMang.createEmptyFile("friends.txt");
 		BleachFileMang.appendFile(toWrite, "friends.txt");

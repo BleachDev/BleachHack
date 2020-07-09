@@ -30,7 +30,7 @@ public class CmdFriends extends Command {
 				return;
 			}
 			
-			BleachHack.friends.add(args[1].toLowerCase());
+			BleachHack.friendMang.add(args[1]);
 			BleachLogger.infoMessage("Added \"" + args[1] + "\" to the friend list");
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (args.length < 2) {
@@ -39,18 +39,18 @@ public class CmdFriends extends Command {
 				return;
 			}
 			
-			BleachHack.friends.remove(args[1].toLowerCase());
+			BleachHack.friendMang.remove(args[1].toLowerCase());
 			BleachLogger.infoMessage("Removed \"" + args[1] + "\" from the friend list");
 		} else if (args[0].equalsIgnoreCase("list")) {
 			String text = "";
 			
-			for (String f: BleachHack.friends) {
+			for (String f: BleachHack.friendMang.getFriends()) {
 				text += "\n\u00a72" + f;
 			}
 			
 			BleachLogger.infoMessage(text);
 		} else if (args[0].equalsIgnoreCase("clear")) {
-			BleachHack.friends.clear();
+			BleachHack.friendMang.getFriends().clear();
 			
 			BleachLogger.infoMessage("Cleared Friend list");
 		}

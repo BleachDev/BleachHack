@@ -17,12 +17,11 @@
  */
 package bleach.hack;
 
-import java.util.List;
-
 import com.google.common.eventbus.EventBus;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.utils.FriendManager;
 import bleach.hack.utils.file.BleachFileHelper;
 import bleach.hack.utils.file.BleachFileMang;
 import net.fabricmc.api.ClientModInitializer;
@@ -33,7 +32,7 @@ public class BleachHack implements ClientModInitializer {
 	public static int INTVERSION = 18;
 	public static EventBus eventBus;
 	
-	public static List<String> friends;
+	public static FriendManager friendMang;
 
 	@Override
 	public void onInitializeClient() {

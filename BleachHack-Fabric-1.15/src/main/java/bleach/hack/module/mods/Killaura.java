@@ -66,7 +66,7 @@ public class Killaura extends Module {
 		
 		List<Entity> targets = Streams.stream(mc.world.getEntities())
 				.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).toToggle().state
-								&& !BleachHack.friends.contains(e.getName().asString().toLowerCase()))
+								&& !BleachHack.friendMang.has(e.getName().asString()))
 						|| (e instanceof Monster && getSettings().get(1).toToggle().state)
 						|| (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state)
 						|| (e instanceof ArmorStandEntity && getSettings().get(3).toToggle().state))

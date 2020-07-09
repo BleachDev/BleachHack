@@ -59,7 +59,7 @@ public class ESP extends Module {
 	public void onTick(EventTick event) {
 		for (Entity e: mc.world.getEntities()) {
 			if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
-				if (BleachHack.friends.contains(e.getName().asString().toLowerCase())) {
+				if (BleachHack.friendMang.has(e.getName().asString())) {
 					EntityUtils.setGlowing(e, Formatting.AQUA, "friends");
 				} else {
 					EntityUtils.setGlowing(e, Formatting.RED, "players");
