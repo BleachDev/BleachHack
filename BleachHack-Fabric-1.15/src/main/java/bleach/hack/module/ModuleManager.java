@@ -17,13 +17,13 @@
  */
 package bleach.hack.module;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
 import com.google.common.eventbus.Subscribe;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModuleManager {
 
@@ -34,6 +34,9 @@ public class ModuleManager {
 			new AutoReconnect(),
 			new AutoRespawn(),
 			new AutoSign(),
+			new AutoWalk(),
+			new MaintainAltitude(),
+			new ElytraReplace(),
 			new AutoTotem(),
 			new BlockParty(),
 			new BookCrash(),
