@@ -69,7 +69,7 @@ public class ModuleManager {
 			new PlayerCrash(),
 			new Scaffold(),
 			new Spammer(),
-			new Speed(),
+			new SpeedHack(),
 			new SpeedMine(),
 			new Sprint(),
 			new StarGithub(),

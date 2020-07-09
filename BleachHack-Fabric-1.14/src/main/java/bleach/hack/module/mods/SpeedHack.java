@@ -26,12 +26,12 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 
-public class Speed extends Module {
+public class SpeedHack extends Module {
 	
 	private boolean jumping;
 	
-	public Speed() {
-		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, idk what do you expect?",
+	public SpeedHack() {
+		super("SpeedHack", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
 				new SettingMode("Mode: ", "OnGround", "MiniHop", "Bhop"),
 				new SettingSlider("Speed: ", 0.1, 10, 2, 1));
 	}
