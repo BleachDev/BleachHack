@@ -31,6 +31,7 @@ public class CommandManager {
 			new CmdDupe(),
 			new CmdEnchant(),
 			new CmdEntityStats(),
+			new CmdFriends(),
 			new CmdGamemode(),
 			new CmdGive(),
 			new CmdGuiReset(),

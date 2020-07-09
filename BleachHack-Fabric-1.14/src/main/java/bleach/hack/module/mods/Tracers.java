@@ -17,6 +17,7 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.BleachHack;
 import bleach.hack.event.events.Event3DRender;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -59,8 +60,9 @@ public class Tracers extends Module {
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
 			
 			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).toToggle().state) {
-				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0f,0f,thick);
-				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f,0f,0f,thick);
+				boolean friend = BleachHack.friends.contains(e.getName().asString().toLowerCase());
+				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z, friend ? 0.35f : 1f, friend ? 1f : 0f, friend ? 1f : 0f,thick);
+				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z, friend ? 0.35f : 1f, friend ? 1f : 0f, friend ? 1f : 0f,thick);
 			}
 			else if (e instanceof Monster && getSettings().get(1).toToggle().state) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0f,0f,0f,thick);

@@ -19,6 +19,7 @@ package bleach.hack.utils.file;
 
 import java.util.List;
 
+import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
@@ -152,6 +153,18 @@ public class BleachFileHelper {
 	
 	public static void readPrefix() {
 		try{ Command.PREFIX = BleachFileMang.readFileLines("prefix.txt").get(0); } catch (Exception e) {}
+	}
+	
+	public static void readFriends() {
+		BleachHack.friends = BleachFileMang.readFileLines("friends.txt");
+	}
+	
+	public static void saveFriends() {
+		String toWrite = "";
+		for (String s: BleachHack.friends) toWrite += s + "\n";
+		
+		BleachFileMang.createEmptyFile("friends.txt");
+		BleachFileMang.appendFile(toWrite, "friends.txt");
 	}
 	
 }

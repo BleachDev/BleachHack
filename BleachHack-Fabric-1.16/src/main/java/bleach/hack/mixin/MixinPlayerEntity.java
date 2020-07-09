@@ -48,6 +48,7 @@ public class MixinPlayerEntity {
 				BleachFileHelper.saveSettings();
 				BleachFileHelper.saveBinds();
 				BleachFileHelper.saveClickGui();
+				BleachFileHelper.saveFriends();
 			}
 			
 			BleachQueue.nextQueue();

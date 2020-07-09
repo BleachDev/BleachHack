@@ -17,6 +17,7 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -58,7 +59,11 @@ public class ESP extends Module {
 	public void onTick(EventTick event) {
 		for (Entity e: mc.world.getEntities()) {
 			if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
-				EntityUtils.setGlowing(e, Formatting.RED, "players");
+				if (BleachHack.friends.contains(e.getName().asString().toLowerCase())) {
+					EntityUtils.setGlowing(e, Formatting.AQUA, "friends");
+				} else {
+					EntityUtils.setGlowing(e, Formatting.RED, "players");
+				}
 			}
 			
 			else if (e instanceof Monster && getSettings().get(1).toToggle().state) {

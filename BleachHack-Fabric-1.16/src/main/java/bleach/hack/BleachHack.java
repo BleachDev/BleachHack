@@ -17,6 +17,8 @@
  */
 package bleach.hack;
 
+import java.util.List;
+
 import com.google.common.eventbus.EventBus;
 
 import bleach.hack.module.ModuleManager;
@@ -31,6 +33,8 @@ public class BleachHack implements ModInitializer {
 	public static int INTVERSION = 18;
 	public static EventBus eventBus;
 
+	public static List<String> friends;
+
 	@Override
 	public void onInitialize() {
 		eventBus = new EventBus();
@@ -43,6 +47,7 @@ public class BleachHack implements ModInitializer {
     	ClickGui.clickGui.initWindows();
     	BleachFileHelper.readClickGui();
     	BleachFileHelper.readPrefix();
+    	BleachFileHelper.readFriends();
     	
     	//v This makes a scat fetishist look like housekeeping.
     	eventBus.register(new ModuleManager());
