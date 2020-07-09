@@ -6,46 +6,47 @@
 
 Very cool client.  
 
-Works on fabric 1.14-1.16 (1.14 and 1.14 for forge is discontinued)
+Works on fabric 1.14-1.16 (1.14 for forge is discontinued)
 
 > Join The Discord: https://discord.gg/b5Wc4nQ
 
 ## Installation:
-**For Normal People:**
+**For normal Ppople:**
 
 Download [fabric for minecraft 1.14/1.15/1.16](https://fabricmc.net/use/)  
-Download the lastest compiled version of bleachhack for your mc version from the releases section 
-Put the jar in your mods foler  
-???  
-Profit
+Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section] (https://github.com/BleachDrinker420/bleachhack-1.14/releases)
+
+On Windows: type %appdata% into the location field of the Windows Explorer; then open '.minecraft'.
+
+On Mac: click on the desktop, press Command+Shift+G, type ~/Library and press enter; then open 'Application Support' and finally '.minecraft'.
+
+On Linux: in a terminal window, type 'xdg-open ~/.minecraft'... or if you like working at the commandline, 'cd ~/.minecraft'.
+
+Then inside that folder, you should see a folder named 'mods'. (If you don't see one, make sure you've installed Fabric already and started Minecraft again once).
+That's where you'll put any mods you want to install. 
 
 --------------
 
-**For 200iq People Who Want To Help The Project:**
+**For (200 IQ) developers:**
 
 Download the project  
+
 Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder 
 Generate the needed files for your preferred IDE.
 
-Windows Users
+***Eclipse:***
 
-> gradlew genSources eclipse
+  On Windows:
+  > gradlew genSources eclipse
+  
+  On Linux:
+  > chmod +x ./gradlew
+  >./gradlew genSources eclipse
 
-OR
-
-> gradlew genSources idea
-
-Linux
-
-Mark gradlew as executable
-> chmod +x ./gradlew
-
-> ./gradlew genSources eclipse
-
-OR
-
-> ./gradlew genSources idea
-
-Start a new workspace in eclipse  
-Click File > Import... > Gradle > Gradle Project  
-Select the BleachHack-Fabric-(*Version*) folder  
+  Start a new workspace in eclipse  
+  Click File > Import... > Gradle > Gradle Project  
+  Select the BleachHack-Fabric-(*Version*) folder  
+  
+***Other IDE´s:***
+  Use [this link] (https://fabricmc.net/wiki/tutorial:setup) for more information.
+  It should be pretty similar to the eclipse setup.
