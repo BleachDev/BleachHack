@@ -20,6 +20,7 @@ package bleach.hack.module.mods;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
@@ -64,7 +65,8 @@ public class Killaura extends Module {
 		int reqDelay = (int) Math.round(20/getSettings().get(8).toSlider().getValue());
 		
 		List<Entity> targets = Streams.stream(mc.world.getEntities())
-				.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).toToggle().state)
+				.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).toToggle().state
+								&& !BleachHack.friends.contains(e.getName().asString().toLowerCase()))
 						|| (e instanceof Monster && getSettings().get(1).toToggle().state)
 						|| (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state)
 						|| (e instanceof ArmorStandEntity && getSettings().get(3).toToggle().state))

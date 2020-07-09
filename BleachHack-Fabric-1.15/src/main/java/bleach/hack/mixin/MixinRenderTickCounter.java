@@ -32,7 +32,7 @@ public class MixinRenderTickCounter {
 	public void beginRenderTick(long long_1, CallbackInfo ci) {
 		if (ModuleManager.getModule(Timer.class).isToggled()) {
 			this.lastFrameDuration = (float) ((long_1 - this.prevTimeMillis / this.tickTime)
-					* ModuleManager.getModule(Timer.class).getSettings().get(0).toSlider().getValue());;
+					* ModuleManager.getModule(Timer.class).getSettings().get(0).toSlider().getValue());
 			this.prevTimeMillis = long_1;
 			this.tickDelta += this.lastFrameDuration;
 			this.ticksThisFrame = (int)this.tickDelta;
