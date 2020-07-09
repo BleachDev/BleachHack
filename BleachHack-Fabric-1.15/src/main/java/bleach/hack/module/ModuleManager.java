@@ -32,6 +32,7 @@ public class ModuleManager {
 			new AntiChunkBan(),
 			new ArrowJuke(),
 			new AutoReconnect(),
+			new AutoRespawn(),
 			new AutoSign(),
 			new AutoTotem(),
 			new BlockParty(),
