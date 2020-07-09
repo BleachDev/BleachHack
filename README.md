@@ -11,10 +11,10 @@ Works on fabric 1.14-1.16 (1.14 for forge is discontinued)
 > Join The Discord: https://discord.gg/b5Wc4nQ
 
 ## Installation:
-**For normal Ppople:**
+**For normal People:**
 
 Download [fabric for minecraft 1.14/1.15/1.16](https://fabricmc.net/use/)  
-Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section] (https://github.com/BleachDrinker420/bleachhack-1.14/releases)
+Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section](https://github.com/BleachDrinker420/bleachhack-1.14/releases)
 
 On Windows: type %appdata% into the location field of the Windows Explorer; then open '.minecraft'.
 
@@ -30,8 +30,7 @@ That's where you'll put any mods you want to install.
 **For (200 IQ) developers:**
 
 Download the project  
-
-Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder 
+Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder.
 Generate the needed files for your preferred IDE.
 
 ***Eclipse:***
@@ -48,5 +47,6 @@ Generate the needed files for your preferred IDE.
   Select the BleachHack-Fabric-(*Version*) folder  
   
 ***Other IDE´s:***
-  Use [this link] (https://fabricmc.net/wiki/tutorial:setup) for more information.
+
+  Use [this link](https://fabricmc.net/wiki/tutorial:setup) for more information.
   It should be pretty similar to the eclipse setup.
