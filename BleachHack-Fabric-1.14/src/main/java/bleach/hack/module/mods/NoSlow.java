@@ -22,8 +22,14 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.WorldUtils;
+
+import org.lwjgl.glfw.GLFW;
+
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.Vec3d;
 
@@ -36,7 +42,9 @@ public class NoSlow extends Module {
 				new SettingToggle("Slowness", true),
 				new SettingToggle("Soul Sand", true),
 				new SettingToggle("Slime Blocks", true),
-				new SettingToggle("Webs", true));
+				new SettingToggle("Webs", true),
+				new SettingToggle("Items", true),
+				new SettingToggle("Inventory", false));
 	}
 
 	@Subscribe
@@ -74,6 +82,26 @@ public class NoSlow extends Module {
 			Vec3d m2 = new Vec3d(0, -1, 0.9).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			if (!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m2));
+			}
+		}
+		
+		// Items handled in MixinPlayerEntity:sendMovementPackets_isUsingItem
+		
+		/* Inventory */
+		if (getSettings().get(5).toToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
+			for (KeyBinding k: new KeyBinding[] {
+					mc.options.keyForward, mc.options.keyBack, mc.options.keyLeft,
+					mc.options.keyRight, mc.options.keyJump, mc.options.keySneak}) {
+				KeyBinding.setKeyPressed(
+						InputUtil.fromName(k.getName()), InputUtil.isKeyPressed(mc.window.getHandle(), InputUtil.fromName(k.getName()).getKeyCode()));
+			}
+
+			if (InputUtil.isKeyPressed(mc.window.getHandle(), GLFW.GLFW_KEY_LEFT)) {
+				mc.player.yaw -= 3.5f;
+			}
+
+			if (InputUtil.isKeyPressed(mc.window.getHandle(), GLFW.GLFW_KEY_RIGHT)) {
+				mc.player.yaw += 3.5f;
 			}
 		}
 	}

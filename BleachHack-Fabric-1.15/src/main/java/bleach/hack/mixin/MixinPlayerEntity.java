@@ -21,6 +21,8 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.NoSlow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.MovementType;
@@ -29,6 +31,7 @@ import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.utils.BleachQueue;
@@ -59,6 +62,15 @@ public class MixinPlayerEntity {
 		EventMovementTick event = new EventMovementTick();
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
+	}
+	
+	@Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
+	private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
+		if (ModuleManager.getModule(NoSlow.class).isToggled() && ModuleManager.getModule(NoSlow.class).getSettings().get(4).toToggle().state) {
+			return false;
+		}
+
+		return player.isUsingItem();
 	}
 	
 	@Inject(at = @At("HEAD"), method = "move", cancellable = true)
