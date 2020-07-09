@@ -21,6 +21,7 @@
     "MixinPacketInflater",
     "MixinPlayerEntity",
     "MixinPlayerInventory",
+    "MixinRenderTickCounter",
     "MixinServerScreen",
     "MixinTitleScreen"
   ],
