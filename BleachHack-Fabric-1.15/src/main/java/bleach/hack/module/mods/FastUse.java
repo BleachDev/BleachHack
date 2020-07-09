@@ -18,25 +18,44 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventTick;
+
+import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
+
+import java.util.Set;
+
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 
 public class FastUse extends Module {
+	
+	private static final Set<Item> THROWABLE = Sets.newHashSet(
+			Items.SNOWBALL, Items.EGG, Items.EXPERIENCE_BOTTLE,
+			Items.ENDER_EYE, Items.ENDER_PEARL, Items.SPLASH_POTION, Items.LINGERING_POTION);
 	
 	public FastUse() {
 		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster",
 				new SettingMode("Mode: ", "Single", "Multi"),
-				new SettingSlider("Multi: ", 1, 100, 20, 0));
+				new SettingSlider("Multi: ", 1, 100, 20, 0),
+				new SettingToggle("Throwables Only", true),
+				new SettingToggle("XP Only", false));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		if ((getSettings().get(2).toToggle().state && !THROWABLE.contains(mc.player.getMainHandStack().getItem()))
+				|| (getSettings().get(3).toToggle().state && mc.player.getMainHandStack().getItem() != Items.EXPERIENCE_BOTTLE)) {
+			return;
+		}
+		
 		/* set rightClickDelay to 0 */
 		FabricReflect.writeField(mc, 0, "field_1752", "itemUseCooldown");
 		
