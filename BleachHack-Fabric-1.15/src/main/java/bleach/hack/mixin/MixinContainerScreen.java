@@ -44,10 +44,10 @@ import bleach.hack.module.mods.MountBypass;
 public abstract class MixinContainerScreen<T extends Container> extends Screen implements ContainerProvider<T> {
 
 	@Shadow
-	public int left;
+	public int x;
 	
 	@Shadow
-	public int top;
+	public int y;
 	
 	public MixinContainerScreen(Container container_1, PlayerInventory playerInventory_1, Text text_1) {
 		super(text_1);
@@ -61,7 +61,7 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 		
 		AbstractDonkeyEntity entity = (AbstractDonkeyEntity) MinecraftClient.getInstance().player.getVehicle();
 	    
-		addButton(new ButtonWidget(left + 130, top + 4, 39, 12, "Dupe", button -> {
+		addButton(new ButtonWidget(x + 130, y + 4, 39, 12, "Dupe", button -> {
 			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
 			
 			MinecraftClient.getInstance().player.networkHandler.sendPacket(
