@@ -113,7 +113,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				}));
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
-					minecraft.close();
+					minecraft.scheduleStop();
 				}));
 		
 		int x = windows.get(1).x1;

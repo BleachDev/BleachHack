@@ -23,6 +23,7 @@
     "MixinPlayerEntity",
     "MixinPlayerInventory",
     "MixinRenderTickCounter",
+    "MixinScreen",
     "MixinServerScreen",
     "MixinTitleScreen"
   ],
