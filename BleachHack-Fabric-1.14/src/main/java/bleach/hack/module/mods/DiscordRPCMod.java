@@ -1,7 +1,6 @@
 package bleach.hack.module.mods;
 
 import org.apache.commons.lang3.RandomUtils;
-import bleach.hack.command.commands.*;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
@@ -25,7 +24,7 @@ public class DiscordRPCMod extends Module {
 	private int tick = 0;
 	
 	public DiscordRPCMod() {
-		super("DiscordRPC", KEY_UNBOUND, Category.MISC, "Dicord RPC, use " + Command.PREFIX + "rpc to set a custom status",
+		super("DiscordRPC", KEY_UNBOUND, Category.MISC, "Dicord RPC, use \"rpc\" command to set a custom status",
 				new SettingMode("Text 1: ", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%"),
 				new SettingMode("Text 2: ", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
 				new SettingMode("Elapsed: ", "Normal", "Random", "Backwards", "None"));
