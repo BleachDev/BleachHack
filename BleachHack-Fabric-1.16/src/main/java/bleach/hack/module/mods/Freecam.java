@@ -31,6 +31,7 @@ import bleach.hack.utils.PlayerCopyEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.util.math.Vec3d;
 
 public class Freecam extends Module {
 	
@@ -39,9 +40,12 @@ public class Freecam extends Module {
 	private float[] playerRot;
 	private Entity riding;
 	
+	private boolean prevFlying;
+	private float prevFlySpeed;
+	
 	public Freecam() {
 		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",
-				new SettingSlider("Speed: ", 0, 2, 0.5, 2));
+				new SettingSlider("Speed: ", 0, 3, 0.5, 2));
 	}
 
 	@Override
@@ -60,6 +64,9 @@ public class Freecam extends Module {
 			mc.player.getVehicle().removeAllPassengers();
 		}
 		
+		prevFlying = mc.player.abilities.flying;
+		prevFlySpeed = mc.player.abilities.getFlySpeed();
+		
 		super.onEnable();
 	}
 
@@ -67,9 +74,11 @@ public class Freecam extends Module {
 	public void onDisable() {
 		dummy.despawn();
 		mc.player.noClip = false;
+		mc.player.abilities.flying = prevFlying;
+		mc.player.abilities.setFlySpeed(prevFlySpeed);
 		
 		mc.player.refreshPositionAndAngles(playerPos[0], playerPos[1], playerPos[2], playerRot[0], playerRot[1]);
-		mc.player.setVelocity(0, 0, 0);
+		mc.player.setVelocity(Vec3d.ZERO);
 		
 		if (riding != null && mc.world.getEntityById(riding.getEntityId()) != null) {
 			mc.player.startRiding(riding);
@@ -92,12 +101,13 @@ public class Freecam extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		mc.player.setVelocity(0, 0, 0);
-		mc.player.setOnGround(false);
-		mc.player.flyingSpeed = (float) getSettings().get(0).toSlider().getValue();
+		mc.player.setVelocity(Vec3d.ZERO);
+		mc.player.setSprinting(true);
+		mc.player.setOnGround(true);
+		mc.player.abilities.setFlySpeed((float) getSettings().get(0).toSlider().getValue());
+		mc.player.abilities.flying = true;
 		
-		if(mc.options.keyJump.isPressed()) mc.player.addVelocity(0, getSettings().get(0).toSlider().getValue(), 0);
-		if(mc.options.keySneak.isPressed()) mc.player.addVelocity(0, -getSettings().get(0).toSlider().getValue(), 0);
+		mc.player.setVelocity(mc.player.getVelocity().multiply(1, 0.85, 1));
 	}
 
 }
