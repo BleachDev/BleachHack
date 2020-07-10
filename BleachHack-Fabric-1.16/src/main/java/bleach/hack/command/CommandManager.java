@@ -70,6 +70,6 @@ public class CommandManager {
 				return;
 			}
 		}
-		BleachLogger.errorMessage("Command Not Found, Maybe Try .Help");
+		BleachLogger.errorMessage("Command Not Found, Maybe Try " + Command.PREFIX + "help");
 	}
 }

@@ -10,6 +10,8 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.InteractionType;
 
 public class MountBypass extends Module {
+	
+	public boolean dontCancel = false;
 
 	public MountBypass() {
 		super("MountBypass", KEY_UNBOUND, Category.PLAYER, "Bypasses illegalstack on non bungeecord servers");

@@ -1,13 +1,12 @@
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Streams;
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -15,6 +14,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShulkerBoxBlock;
@@ -25,6 +25,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AirBlockItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -41,36 +42,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class Dispenser32k extends Module {
-	
-	private static final List<Block> emptyBlocks = Arrays.asList(
-			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
-			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
-			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE);
-	
-	private static final List<Block> rightclickableBlocks = Arrays.asList(
-			Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
-			Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX,
-			Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX,
-			Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.LIGHT_GRAY_SHULKER_BOX,
-			Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX,
-			Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX,
-			Blocks.BLACK_SHULKER_BOX, Blocks.ANVIL,
-			Blocks.OAK_BUTTON, Blocks.ACACIA_BUTTON, Blocks.BIRCH_BUTTON, Blocks.DARK_OAK_BUTTON,
-			Blocks.JUNGLE_BUTTON, Blocks.SPRUCE_BUTTON, Blocks.STONE_BUTTON, Blocks.COMPARATOR,
-			Blocks.REPEATER, Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE,
-			Blocks.JUNGLE_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.ACACIA_FENCE_GATE,
-			Blocks.BREWING_STAND, Blocks.DISPENSER, Blocks.DROPPER,
-			Blocks.LEVER, Blocks.NOTE_BLOCK, Blocks.JUKEBOX,
-			Blocks.BEACON, Blocks.BLACK_BED, Blocks.BLUE_BED, Blocks.BROWN_BED, Blocks.CYAN_BED, Blocks.GRAY_BED,
-			Blocks.GREEN_BED, Blocks.LIGHT_BLUE_BED, Blocks.LIGHT_GRAY_BED, Blocks.LIME_BED, Blocks.MAGENTA_BED,
-			Blocks.ORANGE_BED, Blocks.PINK_BED, Blocks.PURPLE_BED, Blocks.RED_BED, Blocks.WHITE_BED,
-			Blocks.YELLOW_BED, Blocks.FURNACE, Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR,
-			Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR,
-			Blocks.DARK_OAK_DOOR, Blocks.CAKE, Blocks.ENCHANTING_TABLE,
-			Blocks.DRAGON_EGG, Blocks.HOPPER, Blocks.REPEATING_COMMAND_BLOCK,
-			Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.CRAFTING_TABLE,
-			Blocks.ACACIA_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR,
-			Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR);
 	
 	private BlockPos pos;
 	
@@ -290,14 +261,17 @@ public class Dispenser32k extends Module {
 	private void killAura() {
 		for (int i = 0; i < (getSettings().get(3).toMode().mode == 1 ? getSettings().get(2).toSlider().getValue() : 1); i++) {
 			Entity target = null;
-			try {
-				List<Entity> players = Streams.stream(mc.world.getEntities()).collect(Collectors.toList());
-				for (Entity e: new ArrayList<>(players)) if (!(e instanceof LivingEntity)) players.remove(e);
-				players.remove(mc.player);
-				players.sort((a,b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)));
-				if (players.get(0).getPos().distanceTo(mc.player.getPos()) < 8) target = players.get(0);
-			} catch (Exception e) {}
-			if (target == null) return;
+			
+			List<Entity> players = Streams.stream(mc.world.getEntities())
+					.filter((e) -> e instanceof PlayerEntity && e != mc.player && !(BleachHack.friendMang.has(e.getName().asString())))
+					.sorted((a,b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)))
+					.collect(Collectors.toList());
+			
+			if (!players.isEmpty() && players.get(0).getPos().distanceTo(mc.player.getPos()) < 8) {
+				target = players.get(0);
+			} else {
+				return;
+			}
 			
 			rotateClient(target.getPos().x, target.getPos().y + 1, target.getPos().z);
 			
@@ -310,7 +284,7 @@ public class Dispenser32k extends Module {
 	private void openBlock(BlockPos pos) {
 		for (Direction d: Direction.values()) {
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-			if (!emptyBlocks.contains(neighborBlock)) continue;
+			if (!WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock)) continue;
 			
 			mc.interactionManager.interactBlock(
 					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos, false));
@@ -330,16 +304,16 @@ public class Dispenser32k extends Module {
 					pos.getY() + 0.5 + d.getOffsetY() * 0.5,
 					pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
 			
-			if (emptyBlocks.contains(neighborBlock)
+			if (WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock)
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.25) continue;
 			
 			float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
 			
 			if (rotate) rotatePacket(vec.x, vec.y, vec.z);
-			if (rightclickableBlocks.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
+			if (WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
 			mc.interactionManager.interactBlock(
 					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos, false));
-			if (rightclickableBlocks.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
+			if (WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
 			if (rotateBack) mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(rot[0], rot[1], mc.player.onGround));
 			return true;
 		}
@@ -347,7 +321,7 @@ public class Dispenser32k extends Module {
 	}
 	
 	private boolean isBlockEmpty(BlockPos pos) {
-		if (!emptyBlocks.contains(mc.world.getBlockState(pos).getBlock())) return false;
+		if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) return false;
 		
 		Box box = new Box(pos);
 		for (Entity e: mc.world.getEntities()) {
@@ -360,7 +334,7 @@ public class Dispenser32k extends Module {
 	private boolean canPlaceBlock(BlockPos pos) {
 		if (!isBlockEmpty(pos)) return false;
 		for (Direction d: Direction.values()) {
-			if (emptyBlocks.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
+			if (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 					pos.getY() + 0.5 + d.getOffsetY() * 0.5,

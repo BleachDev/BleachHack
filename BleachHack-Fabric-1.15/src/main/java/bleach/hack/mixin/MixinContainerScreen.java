@@ -21,23 +21,55 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ContainerProvider;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.container.Container;
+import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawContainer;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.MountBypass;
 
 @Mixin(ContainerScreen.class)
 public abstract class MixinContainerScreen<T extends Container> extends Screen implements ContainerProvider<T> {
 
+	@Shadow
+	public int x;
+	
+	@Shadow
+	public int y;
+	
 	public MixinContainerScreen(Container container_1, PlayerInventory playerInventory_1, Text text_1) {
 		super(text_1);
+	}
+	
+	@Inject(at = @At("RETURN"), method = "init()V")
+	protected void init(CallbackInfo info) {
+		if (!(MinecraftClient.getInstance().player.getVehicle() instanceof AbstractDonkeyEntity)) {
+			return;
+		}
+		
+		AbstractDonkeyEntity entity = (AbstractDonkeyEntity) MinecraftClient.getInstance().player.getVehicle();
+	    
+		addButton(new ButtonWidget(x + 130, y + 4, 39, 12, "Dupe", button -> {
+			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
+			
+			MinecraftClient.getInstance().player.networkHandler.sendPacket(
+					new PlayerInteractEntityC2SPacket(
+							entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
+			
+			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
+		}));
 	}
 
 	@Inject(at = @At("RETURN"), method = "render(IIF)V")

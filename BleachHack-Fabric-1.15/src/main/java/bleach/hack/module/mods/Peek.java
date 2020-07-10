@@ -5,13 +5,16 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import bleach.hack.event.events.EventDrawContainer;
+import bleach.hack.event.events.EventDrawTooltip;
+import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.ItemContentUtils;
+import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
@@ -19,6 +22,7 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
@@ -41,15 +45,19 @@ public class Peek extends Module {
 	public Peek() {
 		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
 				new SettingToggle("Containers", true),
+				new SettingMode("Info: ", "All", "Name", "None"),
 				new SettingToggle("Books", true),
 				new SettingToggle("Maps", true),
 				new SettingSlider("Map Size: ", 0.25, 1.5, 0.5, 2));
 	}
 	
 	@Subscribe
-	public void drawScreen(EventDrawContainer event) {
-		Slot slot = null;
-		try { slot = (Slot) FabricReflect.getFieldValue(event.getScreen(), "field_2787", "focusedSlot"); } catch (Exception e) {}
+	public void drawScreen(EventDrawTooltip event) {
+		if (!(event.screen instanceof ContainerScreen)) {
+			return;
+		}
+		
+		Slot slot = (Slot) FabricReflect.getFieldValue(event.screen, "field_2787", "focusedSlot");
 		if (slot == null) return;
 		
 		if (!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) {
@@ -59,30 +67,58 @@ public class Peek extends Module {
 		
 		slotPos = new int[] {slot.xPosition, slot.yPosition};
 		
-		if (getSettings().get(0).toToggle().state) drawShulkerToolTip(slot, event.mouseX, event.mouseY);
-		if (getSettings().get(1).toToggle().state) drawBookToolTip(slot, event.mouseX, event.mouseY);
-		if (getSettings().get(2).toToggle().state) drawMapToolTip(slot, event.mouseX, event.mouseY);
+		if (getSettings().get(0).toToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
+		if (getSettings().get(2).toToggle().state) drawBookToolTip(slot, event.mX, event.mY);
+		if (getSettings().get(3).toToggle().state) drawMapToolTip(slot, event.mX, event.mY);
 	}
 	
-	public void drawShulkerToolTip(Slot slot, int mX, int mY) {
+	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mX, int mY) {
 		if (!(slot.getStack().getItem() instanceof BlockItem)) return;
 		if (!(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
 				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ChestBlock)
+				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof BarrelBlock)
 				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof DispenserBlock)
-				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof HopperBlock)) return;
+				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof HopperBlock)
+				 && !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof AbstractFurnaceBlock)) return;
 		
 		List<ItemStack> items = ItemContentUtils.getItemsInContainer(slot.getStack());
 		
+		boolean empty = true;
+		for (ItemStack i: items) {
+			if (i.getItem() != Items.AIR) {
+				empty = false;
+				break;
+			}
+		}
+		
+		if (empty) return;
+		
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 		
-		int count = block instanceof HopperBlock || block instanceof DispenserBlock ? 18 : 0;
-		if (block instanceof HopperBlock) renderTooltipBox(mX, mY - 21, 13, 82, true);
-		else if (block instanceof DispenserBlock) renderTooltipBox(mX, mY - 21, 13, 150, true);
-		else renderTooltipBox(mX, mY - 55, 47, 150, true);
+		if (getSettings().get(1).toMode().mode == 2) {
+			event.setCancelled(true);
+		} else if (getSettings().get(1).toMode().mode == 1) {
+			event.text = Arrays.asList(slot.getStack().getName().asString());
+		}
+		
+		int realY = getSettings().get(1).toMode().mode == 2 ? mY + 24 : mY;
+		
+		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
+		
+		if (block instanceof AbstractFurnaceBlock) {
+			renderTooltipBox(mX, realY - 21, 13, 47, true);
+		} else if (block instanceof HopperBlock) {
+			renderTooltipBox(mX, realY - 21, 13, 82, true);
+		} else if (block instanceof DispenserBlock) {
+			renderTooltipBox(mX, realY - 21, 13, 150, true);
+		} else {
+			renderTooltipBox(mX, realY - 55, 47, 150, true);
+		}
+		
 		for (ItemStack i: items) {
 			if (count > 26) break;
 			int x = mX + 10 + (17 * (count % 9));
-			int y = mY - 69 + (17 * (count / 9));
+			int y = realY - 69 + (17 * (count / 9));
 			
 			mc.getItemRenderer().renderGuiItem(i, x, y);
 		    mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, i, x, y, i.getCount() > 1 ? i.getCount() + "" : "");
@@ -124,7 +160,7 @@ public class Peek extends Module {
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
 		byte[] colors = data.colors;
 		
-		double size = getSettings().get(3).toSlider().getValue();
+		double size = getSettings().get(4).toSlider().getValue();
 		
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
