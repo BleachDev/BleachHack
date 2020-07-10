@@ -1,12 +1,12 @@
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Streams;
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -24,6 +24,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AirBlockItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -260,14 +261,17 @@ public class Dispenser32k extends Module {
 	private void killAura() {
 		for (int i = 0; i < (getSettings().get(3).toMode().mode == 1 ? getSettings().get(2).toSlider().getValue() : 1); i++) {
 			Entity target = null;
-			try {
-				List<Entity> players = Streams.stream(mc.world.getEntities()).collect(Collectors.toList());
-				for (Entity e: new ArrayList<>(players)) if (!(e instanceof LivingEntity)) players.remove(e);
-				players.remove(mc.player);
-				players.sort((a,b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)));
-				if (players.get(0).getPos().distanceTo(mc.player.getPos()) < 8) target = players.get(0);
-			} catch (Exception e) {}
-			if (target == null) return;
+			
+			List<Entity> players = Streams.stream(mc.world.getEntities())
+					.filter((e) -> e instanceof PlayerEntity && e != mc.player && !(BleachHack.friendMang.has(e.getName().asString())))
+					.sorted((a,b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)))
+					.collect(Collectors.toList());
+			
+			if (!players.isEmpty() && players.get(0).getPos().distanceTo(mc.player.getPos()) < 8) {
+				target = players.get(0);
+			} else {
+				return;
+			}
 			
 			rotateClient(target.getPos().x, target.getPos().y + 1, target.getPos().z);
 			

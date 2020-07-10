@@ -74,6 +74,16 @@ public class Peek extends Module {
 		
 		List<ItemStack> items = ItemContentUtils.getItemsInContainer(slot.getStack());
 		
+		boolean empty = true;
+		for (ItemStack i: items) {
+			if (i.getItem() != Items.AIR) {
+				empty = false;
+				break;
+			}
+		}
+		
+		if (empty) return;
+		
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 		
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock ? 18 : 0;
