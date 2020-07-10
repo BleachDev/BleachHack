@@ -60,6 +60,7 @@ public class ModuleManager {
 			new Jesus(),
 			new Killaura(),
 			new MountBypass(),
+			new MouseFriend(),
 			new Nametags(),
 			new Nofall(),
 			new NoSlow(),

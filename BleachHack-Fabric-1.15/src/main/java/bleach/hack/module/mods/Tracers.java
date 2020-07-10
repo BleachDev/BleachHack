@@ -60,7 +60,7 @@ public class Tracers extends Module {
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
 			
 			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).toToggle().state) {
-				boolean friend = BleachHack.friends.contains(e.getName().asString().toLowerCase());
+				boolean friend = BleachHack.friendMang.has(e.getName().asString());
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z, friend ? 0.35f : 1f, friend ? 1f : 0f, friend ? 1f : 0f,thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z, friend ? 0.35f : 1f, friend ? 1f : 0f, friend ? 1f : 0f,thick);
 			}
