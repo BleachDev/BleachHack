@@ -60,7 +60,7 @@ public class WorldUtils {
 			Blocks.SPRUCE_BUTTON, Blocks.BARREL, Blocks.BLAST_FURNACE);
 		
 	public static boolean isFluid(BlockPos pos) {
-		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.SEAGRASS);
+		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
 
         return fluids.contains(MinecraftClient.getInstance().world.getBlockState(pos).getMaterial());
     }
