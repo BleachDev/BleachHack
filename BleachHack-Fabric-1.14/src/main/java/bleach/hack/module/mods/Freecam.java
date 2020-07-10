@@ -18,6 +18,7 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventClientMove;
+import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 
@@ -26,10 +27,13 @@ import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.PlayerCopyEntity;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
@@ -47,7 +51,8 @@ public class Freecam extends Module {
 	
 	public Freecam() {
 		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",
-				new SettingSlider("Speed: ", 0, 3, 0.5, 2));
+				new SettingSlider("Speed: ", 0, 3, 0.5, 2),
+				new SettingToggle("Horse Inv", true));
 	}
 
 	@Override
@@ -99,6 +104,16 @@ public class Freecam extends Module {
         	event.setCancelled(true);
         }
     }
+	
+	@Subscribe
+	public void onOpenScreen(EventOpenScreen event) {
+		if (getSettings().get(1).toToggle().state && riding instanceof HorseBaseEntity) {
+			if (event.getScreen() instanceof InventoryScreen) {
+				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.OPEN_INVENTORY));
+				event.setCancelled(true);
+			}
+		}
+	}
 	
 	@Subscribe
 	public void onClientMove(EventClientMove event) {
