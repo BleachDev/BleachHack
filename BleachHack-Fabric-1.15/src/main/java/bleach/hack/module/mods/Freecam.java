@@ -97,8 +97,6 @@ public class Freecam extends Module {
     public void sendPacket(EventSendPacket event) {
         if (event.getPacket() instanceof ClientCommandC2SPacket || event.getPacket() instanceof PlayerMoveC2SPacket) {
         	event.setCancelled(true);
-        } else {
-        	System.out.println(event.getPacket());
         }
     }
 	
