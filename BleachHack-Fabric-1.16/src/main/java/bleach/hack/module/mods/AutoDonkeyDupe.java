@@ -19,7 +19,6 @@ import bleach.hack.utils.BleachLogger;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.ingame.HorseScreen;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.container.SlotActionType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.passive.LlamaEntity;
@@ -29,6 +28,7 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.InteractionType;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Hand;
 
 public class AutoDonkeyDupe extends Module {
@@ -51,7 +51,7 @@ public class AutoDonkeyDupe extends Module {
 		
 		int chest = -1;
 		for (int i = 0; i < 9; i++) {
-			if (mc.player.inventory.getInvStack(i).getItem() == Items.CHEST) {
+			if (mc.player.inventory.getStack(i).getItem() == Items.CHEST) {
 				chest = i;
 				break;
 			}
@@ -118,11 +118,11 @@ public class AutoDonkeyDupe extends Module {
 			if (entity.hasChest() || mc.player.inventory.getMainHandStack().getItem() == Items.CHEST) {
 				//mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND));
 				//mc.interactionManager.interactEntityAtLocation(playerEntity_1, entity_1, entityHitResult_1, hand_1)
-				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND));
+				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND, false));
 			} else {
 				int chest = -1;
 				for (int i = 0; i < 9; i++) {
-					if (mc.player.inventory.getInvStack(i).getItem() == Items.CHEST) {
+					if (mc.player.inventory.getStack(i).getItem() == Items.CHEST) {
 						chest = i;
 						break;
 					}
@@ -139,11 +139,11 @@ public class AutoDonkeyDupe extends Module {
 				if (!slotsToThrow.isEmpty()) {
 					if (instant) {
 						for (int i: slotsToThrow) {
-							mc.interactionManager.clickSlot(mc.player.container.syncId, i, 1, SlotActionType.THROW, mc.player);
+							mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 1, SlotActionType.THROW, mc.player);
 						}
 						slotsToThrow.clear();
 					} else {
-						mc.interactionManager.clickSlot(mc.player.container.syncId, slotsToThrow.get(0), 1, SlotActionType.THROW, mc.player);
+						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, slotsToThrow.get(0), 1, SlotActionType.THROW, mc.player);
 						slotsToThrow.remove(0);
 					}
 				} else {
@@ -152,7 +152,7 @@ public class AutoDonkeyDupe extends Module {
 					}
 				}
 			} else {
-				mc.player.closeContainer();
+				mc.player.closeHandledScreen();
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
 				firstFrameSneak = true;
 			}
@@ -162,18 +162,18 @@ public class AutoDonkeyDupe extends Module {
 			if (slotsToMove.isEmpty()) {
 				boolean empty = true;
 				for (int i = 2; i <= slots + 1; i++) {
-					if (mc.player.container.slots.get(i).hasStack()) {
+					if (mc.player.currentScreenHandler.slots.get(i).hasStack()) {
 						empty = false;
 						break;
 					}
 				}
 				
 				if (empty) {
-					for (int i = slots + 2; i < mc.player.container.slots.size(); i++) {
-						if (mc.player.container.slots.get(i).hasStack()) {
-							if (mc.player.container.slots.get(i).getStack().getItem() == Items.CHEST) continue;
-							if (!(mc.player.container.slots.get(i).getStack().getItem() instanceof BlockItem
-									&& ((BlockItem) mc.player.container.slots.get(i).getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
+					for (int i = slots + 2; i < mc.player.currentScreenHandler.slots.size(); i++) {
+						if (mc.player.currentScreenHandler.slots.get(i).hasStack()) {
+							if (mc.player.currentScreenHandler.slots.get(i).getStack().getItem() == Items.CHEST) continue;
+							if (!(mc.player.currentScreenHandler.slots.get(i).getStack().getItem() instanceof BlockItem
+									&& ((BlockItem) mc.player.currentScreenHandler.slots.get(i).getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
 									&& getSettings().get(2).toToggle().state) continue;
 							slotsToMove.add(i);
 							
@@ -184,7 +184,7 @@ public class AutoDonkeyDupe extends Module {
 					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
 					mc.player.networkHandler.sendPacket(
 							new PlayerInteractEntityC2SPacket(
-									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
+									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
 					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
 					return;
 				}
@@ -192,10 +192,10 @@ public class AutoDonkeyDupe extends Module {
 			
 			if (!slotsToMove.isEmpty()) {
 				if (instant) {
-					for (int i: slotsToMove) mc.interactionManager.clickSlot(mc.player.container.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
+					for (int i: slotsToMove) mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
 					slotsToMove.clear();
 				} else {
-					mc.interactionManager.clickSlot(mc.player.container.syncId, slotsToMove.get(0), 0, SlotActionType.QUICK_MOVE, mc.player);
+					mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, slotsToMove.get(0), 0, SlotActionType.QUICK_MOVE, mc.player);
 					slotsToMove.remove(0);
 				}
 			}
@@ -214,20 +214,20 @@ public class AutoDonkeyDupe extends Module {
 		if (!((AbstractDonkeyEntity)e).hasChest()) return 0;
 		
 		if (e instanceof LlamaEntity) {
-			return 3 * ((LlamaEntity) e).method_6702();
+			return 3 * ((LlamaEntity) e).getStrength();
 		}
 		
 		return 15;
 	}
 	
 	private boolean isDupeTime(AbstractDonkeyEntity e) {
-		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.container.slots.size() == 46) {
+		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.currentScreenHandler.slots.size() == 46) {
 			return false;
 		}
 		
-		if (mc.player.container.slots.size() > 38) {
+		if (mc.player.currentScreenHandler.slots.size() > 38) {
 			for (int i = 2; i < getDupeSize(e) + 1; i++) {
-				if (mc.player.container.getSlot(i).hasStack()) {
+				if (mc.player.currentScreenHandler.getSlot(i).hasStack()) {
 					return true;
 				}
 			}
@@ -237,11 +237,11 @@ public class AutoDonkeyDupe extends Module {
 	}
 	
 	private int getDupeSize(AbstractDonkeyEntity e) {
-		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.container.slots.size() == 46) {
+		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.currentScreenHandler.slots.size() == 46) {
 			return 0;
 		}
 		
-		return mc.player.container.slots.size() - 38;
+		return mc.player.currentScreenHandler.slots.size() - 38;
 	}
 
 }

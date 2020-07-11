@@ -38,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
 
 @Mixin(AbstractContainerScreen.class)
@@ -61,6 +62,10 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 		
 		AbstractDonkeyEntity entity = (AbstractDonkeyEntity) MinecraftClient.getInstance().player.getVehicle();
 	    
+		addButton(new ButtonWidget(left + 82, top + 4, 44, 12, "AutoDupe", button -> {
+			ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
+		}));
+		
 		addButton(new ButtonWidget(left + 130, top + 4, 39, 12, "Dupe", button -> {
 			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
 			

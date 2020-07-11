@@ -31,6 +31,7 @@ public class ModuleManager {
 			new Ambience(),
 			new AntiChunkBan(),
 			new ArrowJuke(),
+			new AutoDonkeyDupe(),
 			new AutoReconnect(),
 			new AutoRespawn(),
 			new AutoSign(),
