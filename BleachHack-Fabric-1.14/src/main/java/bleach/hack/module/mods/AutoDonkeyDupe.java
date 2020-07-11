@@ -107,7 +107,7 @@ public class AutoDonkeyDupe extends Module {
 		if (entity == null) return;
 		
 		if (firstFrameSneak) {
-			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));
 			firstFrameSneak = false;
 			return;
 		}
