@@ -36,8 +36,6 @@ public class ModuleManager {
 			new AutoRespawn(),
 			new AutoSign(),
 			new AutoWalk(),
-			new MaintainAltitude(),
-			new ElytraReplace(),
 			new AutoTotem(),
 			new BlockParty(),
 			new BookCrash(),
@@ -50,6 +48,7 @@ public class ModuleManager {
 			new DiscordRPCMod(),
 			new Dispenser32k(),
 			new ElytraFly(),
+			new ElytraReplace(),
 			new EntityControl(),
 			new ESP(),
 			new FakeLag(),
@@ -60,6 +59,7 @@ public class ModuleManager {
 			new Ghosthand(),
 			new Jesus(),
 			new Killaura(),
+			new MaintainAltitude(),
 			new MountBypass(),
 			new MouseFriend(),
 			new Nametags(),
@@ -86,7 +86,7 @@ public class ModuleManager {
 			new Trail(),
 			new UI(),
 			new Xray());
-	
+
 	public static List<Module> getModules() {
 		return mods;
 	}

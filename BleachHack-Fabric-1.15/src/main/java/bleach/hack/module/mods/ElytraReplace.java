@@ -18,10 +18,6 @@ public class ElytraReplace extends Module {
         super("ElytraReplace", KEY_UNBOUND, Category.PLAYER, "Automatically replaces broken elytra and continues flying");
     }
 
-    public void onDisable() {
-        super.onDisable();
-    }
-
     @Subscribe
     public void onTick(EventTick event) {
         int chestSlot = 38;
@@ -34,10 +30,8 @@ public class ElytraReplace extends Module {
                 ItemStack stack = mc.player.inventory.getInvStack(slot);
                 if (stack.isEmpty() || !(stack.getItem() instanceof ElytraItem) || stack.getDamage() == (Items.ELYTRA.getMaxDamage() - 1))
                     continue;
-                else {
-                    elytraSlot = slot;
-                    break;
-                }
+                elytraSlot = slot;
+                break;
             }
 
             if (elytraSlot == null) {
