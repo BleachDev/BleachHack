@@ -34,6 +34,7 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
@@ -67,6 +68,10 @@ public class Freecam extends Module {
 		if (mc.player.getVehicle() != null) {
 			riding = mc.player.getVehicle();
 			mc.player.getVehicle().removeAllPassengers();
+		}
+		
+		if (mc.player.isSprinting()) {
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 		}
 		
 		prevFlying = mc.player.abilities.flying;
@@ -116,9 +121,9 @@ public class Freecam extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		mc.player.setVelocity(Vec3d.ZERO);
 		mc.player.setSprinting(true);
-		mc.player.setOnGround(true);
+		mc.player.setVelocity(Vec3d.ZERO);
+		mc.player.setOnGround(false);
 		mc.player.abilities.setFlySpeed((float) getSettings().get(0).toSlider().getValue());
 		mc.player.abilities.flying = true;
 		

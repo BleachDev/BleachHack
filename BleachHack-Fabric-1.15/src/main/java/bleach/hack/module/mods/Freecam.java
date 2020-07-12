@@ -70,6 +70,10 @@ public class Freecam extends Module {
 			mc.player.getVehicle().removeAllPassengers();
 		}
 		
+		if (riding != null && mc.world.getEntityById(riding.getEntityId()) != null) {
+			mc.player.startRiding(riding);
+		}
+		
 		prevFlying = mc.player.abilities.flying;
 		prevFlySpeed = mc.player.abilities.getFlySpeed();
 		
@@ -97,8 +101,6 @@ public class Freecam extends Module {
     public void sendPacket(EventSendPacket event) {
         if (event.getPacket() instanceof ClientCommandC2SPacket || event.getPacket() instanceof PlayerMoveC2SPacket) {
         	event.setCancelled(true);
-        } else {
-        	System.out.println(event.getPacket());
         }
     }
 	
@@ -119,8 +121,8 @@ public class Freecam extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		mc.player.setVelocity(Vec3d.ZERO);
 		mc.player.setSprinting(true);
+		mc.player.setVelocity(Vec3d.ZERO);
 		mc.player.onGround = false;
 		mc.player.abilities.setFlySpeed((float) getSettings().get(0).toSlider().getValue());
 		mc.player.abilities.flying = true;

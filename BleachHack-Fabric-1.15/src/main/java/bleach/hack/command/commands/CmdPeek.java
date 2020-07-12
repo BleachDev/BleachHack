@@ -29,9 +29,11 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen;
 import net.minecraft.container.ShulkerBoxContainer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 
 public class CmdPeek extends Command {
 
@@ -72,11 +74,21 @@ public class CmdPeek extends Command {
 		BasicInventory inv = new BasicInventory(items.toArray(new ItemStack[27]));
 		
 		BleachQueue.add(() -> {
-			mc.openScreen(new ShulkerBoxScreen(
+			mc.openScreen(new PeekShulkerScreen(
 					new ShulkerBoxContainer(420, mc.player.inventory, inv),
 					mc.player.inventory,
 					item.getName()));
 		});
 	}
 
+	class PeekShulkerScreen extends ShulkerBoxScreen {
+
+		public PeekShulkerScreen(ShulkerBoxContainer shulkerBoxContainer_1, PlayerInventory playerInventory_1, Text text_1) {
+			super(shulkerBoxContainer_1, playerInventory_1, text_1);
+		}
+		
+		public boolean mouseClicked(double double_1, double double_2, int int_1) {
+			return false;
+		}
+	}
 }
