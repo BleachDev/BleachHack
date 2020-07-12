@@ -13,7 +13,6 @@ import net.minecraft.item.Items;
 public class ElytraReplace extends Module {
 
     private boolean jump = false;
-    private boolean jump2 = false;
 
     public ElytraReplace() {
         super("ElytraReplace", KEY_UNBOUND, Category.PLAYER, "Automatically replaces broken elytra and continues flying");
@@ -49,7 +48,7 @@ public class ElytraReplace extends Module {
 
             mc.options.keyJump.setPressed(true);  // Make them fly again
             jump = true;
-        } else if (jump == true) {
+        } else if (jump) {
             mc.options.keyJump.setPressed(false); // Make them fly again
             jump = false;
         }

@@ -7,10 +7,9 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 public class Decrypter {
-    static String passPhrase = null;
-    Cipher dcipher;
-    SecretKey key;
-    byte[] iv;
+    private static String passPhrase = null;
+    private Cipher dcipher;
+    private SecretKey key;
 
     public Decrypter(String passPhrase) throws Exception {
         byte[] pass = passPhrase.getBytes("UTF-8");
