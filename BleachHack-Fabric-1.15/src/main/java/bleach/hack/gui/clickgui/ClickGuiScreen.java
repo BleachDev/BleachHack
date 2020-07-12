@@ -138,7 +138,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 						while(mat.find()) {
 							fill(x+len+3, y-1+(count*12)-(c2 * 10)+(c3 * 10),
 									x+len+6+font.getStringWidth(mat.group().trim()), y+(count*12)-(c2 * 10)+(c3 * 10)+9,
-									0x90000000);
+									0xff000000);
 							font.drawWithShadow(mat.group(), x+len+5, y+(count*12)-(c2 * 10)+(c3 * 10), -1);
 							c3++;
 						}
