@@ -5,6 +5,7 @@
   "mixins": [
   ],
   "client": [
+    "IChatMessageC2SPacket",
     "MixinBlock",
     "MixinBlockModelRenderer",
     "MixinChunkOcclusionGraphBuilder",
