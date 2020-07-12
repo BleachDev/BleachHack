@@ -19,7 +19,7 @@
     "MixinLlamaEntity",
     "MixinMinecraftClient",
     "MixinPacketInflater",
-    "MixinPlayerEntity",
+    "MixinClientPlayerEntity",
     "MixinPlayerInventory",
     "MixinRenderTickCounter",
     "MixinScreen",

@@ -72,6 +72,7 @@ public class ModuleManager {
 			new PacketFly(),
 			new Peek(),
 			new PlayerCrash(),
+			new SafeWalk(),
 			new Scaffold(),
 			new Spammer(),
 			new SpeedHack(),
