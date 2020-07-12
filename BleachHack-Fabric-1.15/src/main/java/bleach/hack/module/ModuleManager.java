@@ -37,6 +37,7 @@ public class ModuleManager {
 			new AutoSign(),
 			new AutoWalk(),
 			new AutoTotem(),
+			new AutoTool(),
 			new BlockParty(),
 			new BookCrash(),
 			new BowBot(),
