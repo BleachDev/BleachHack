@@ -17,17 +17,10 @@
  */
 package bleach.hack.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
-import net.fabricmc.loader.api.FabricLoader;
-import org.lwjgl.opengl.GL11;
-
 import bleach.hack.BleachHack;
 import bleach.hack.gui.particle.ParticleManager;
 import bleach.hack.gui.widget.BleachCheckbox;
+import bleach.hack.gui.widget.BleachPassField;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
@@ -35,7 +28,7 @@ import bleach.hack.module.mods.UI;
 import bleach.hack.utils.LoginManager;
 import bleach.hack.utils.file.BleachFileMang;
 import bleach.hack.utils.file.BleachGithubReader;
-import net.minecraft.SharedConstants;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -48,6 +41,14 @@ import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import static net.minecraft.SharedConstants.getGameVersion;
 
 public class BleachMainMenu extends AbstractWindowScreen {
 	
@@ -59,7 +60,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	
 	/* login manager variables */
 	public TextFieldWidget userField;
-	public TextFieldWidget passField;
+	public BleachPassField passField;
 	public BleachCheckbox checkBox;
 	
 	public String loginResult = "";
@@ -122,7 +123,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		h = height - height / 2;
 		
 		if (userField == null) userField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4, 196, 18, "");
-		if (passField == null) passField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4 + 30, 196, 18, "");
+		if (passField == null) passField = new BleachPassField(font, x + w / 2 - 98, y + h / 4 + 30, 196, 18, "");
 		userField.x = x + w / 2 - 98;
 		userField.y = y + h / 4 ;
 		passField.x = x + w / 2 - 98;
@@ -186,7 +187,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		
 		font.drawWithShadow("Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 24, -1);
 		font.drawWithShadow("Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(), 4, height - 44, -1);
-		font.drawWithShadow("Minecraft " + SharedConstants.getGameVersion().getName(), 4, height - 34, -1);
+		font.drawWithShadow("Minecraft " + getGameVersion().getName(), 4, height - 34, -1);
 		font.drawWithShadow("Logged in as: §a" + minecraft.getSession().getUsername(), 4, height - 24, -1);
 		
 		try {
@@ -258,7 +259,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					y = windows.get(1).y1 - 10,
 					w = width - width / 2,
 					h = height - height / 2;
-			
+
 			drawString(font, "Email: ", x + w / 2 - 130, y + h / 4 + 15, 0xC0C0C0);
 			drawString(font, "Password: ", x + w / 2 - 154, y + h / 4 + 45, 0xC0C0C0);
 			
