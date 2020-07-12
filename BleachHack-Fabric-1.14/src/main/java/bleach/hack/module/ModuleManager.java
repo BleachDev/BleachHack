@@ -18,6 +18,7 @@
 package bleach.hack.module;
 
 import java.util.Arrays;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ public class ModuleManager {
 			new ClickGui(),
 			new Criticals(),
 			new CrystalAura(),
+			new CustomChat(),
 			new DiscordRPCMod(),
 			new Dispenser32k(),
 			new ElytraFly(),
