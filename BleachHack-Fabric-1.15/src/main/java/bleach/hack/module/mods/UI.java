@@ -142,7 +142,7 @@ public class UI extends Module {
 			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 		}
 
-        if (getSettings().get(7).toToggle().state && !mc.world.getServer().isSinglePlayer()) {
+		if (getSettings().get(7).toToggle().state && !(mc.world.getServer() == null || mc.world.getServer().isSinglePlayer())) {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
@@ -150,7 +150,7 @@ public class UI extends Module {
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), 0xd0d0d0);
 			}
 		}
-		
+
 		if (getSettings().get(8).toToggle().state) {
 			String server = "";
 			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
