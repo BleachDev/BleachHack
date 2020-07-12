@@ -84,6 +84,7 @@ public class ModuleManager {
 			new Step(),
 			new Timer(),
 			new Tracers(),
+			new Trajectories(),
 			new Trail(),
 			new UI(),
 			new Xray());

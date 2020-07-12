@@ -17,22 +17,100 @@
  */
 package bleach.hack.utils;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 public class RenderUtils {
-	
+    private static final Box DEFAULT_AABB = new Box(0, 0, 0, 0.5, 0.5, 0.5);
+
+    public static void drawSolidBox() {
+        drawSolidBox(DEFAULT_AABB);
+    }
+
+    public static void drawSolidBox(Box bb) {
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z2);
+
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z1);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z2);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z2);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z1);
+
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z1);
+
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z2);
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z2);
+
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z2);
+
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z1);
+        GL11.glEnd();
+    }
+
+    public static void drawOutlinedBox() {
+        drawOutlinedBox(DEFAULT_AABB);
+    }
+
+    public static void drawOutlinedBox(Box bb) {
+        GL11.glBegin(GL11.GL_LINES);
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z1);
+
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z2);
+
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z2);
+
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z1);
+
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z1);
+
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z1);
+
+        GL11.glVertex3d(bb.x2, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z2);
+
+        GL11.glVertex3d(bb.x1, bb.y1, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z2);
+
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z1);
+
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z1);
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z2);
+
+        GL11.glVertex3d(bb.x2, bb.y2, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z2);
+
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z2);
+        GL11.glVertex3d(bb.x1, bb.y2, bb.z1);
+        GL11.glEnd();
+    }
+    
 	public static void drawFilledBox(BlockPos blockPos, float r, float g, float b, float a) {
 		drawFilledBox(new Box(blockPos), r, g, b, a);
 	}

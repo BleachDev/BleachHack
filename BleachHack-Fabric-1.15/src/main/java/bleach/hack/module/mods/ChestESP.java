@@ -17,28 +17,15 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventRender;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.RenderUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.eventbus.Subscribe;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.block.entity.BarrelBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BrewingStandBlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.block.entity.DispenserBlockEntity;
-import net.minecraft.block.entity.EnderChestBlockEntity;
-import net.minecraft.block.entity.HopperBlockEntity;
-import net.minecraft.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.block.entity.*;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -50,6 +37,9 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChestESP extends Module {
 	
@@ -70,7 +60,7 @@ public class ChestESP extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event) {
+	public void onRender(EventRender event) {
 		List<BlockPos> linkedChests = new ArrayList<>();
 		
 		for (BlockEntity e: mc.world.blockEntities) {
