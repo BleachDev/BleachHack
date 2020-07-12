@@ -36,6 +36,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
+import net.minecraft.server.network.packet.VehicleMoveC2SPacket;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.math.Vec3d;
 
@@ -69,6 +70,8 @@ public class Freecam extends Module {
 		if (mc.player.getVehicle() != null) {
 			riding = mc.player.getVehicle();
 			mc.player.getVehicle().removeAllPassengers();
+		} else {
+			riding = null;
 		}
 		
 		if (mc.player.isSprinting()) {
@@ -100,7 +103,8 @@ public class Freecam extends Module {
 
 	@Subscribe
     public void sendPacket(EventSendPacket event) {
-        if (event.getPacket() instanceof ClientCommandC2SPacket || event.getPacket() instanceof PlayerMoveC2SPacket) {
+        if (event.getPacket() instanceof ClientCommandC2SPacket || event.getPacket() instanceof PlayerMoveC2SPacket
+        		|| event.getPacket() instanceof VehicleMoveC2SPacket) {
         	event.setCancelled(true);
         }
     }
