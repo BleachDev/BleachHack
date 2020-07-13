@@ -17,19 +17,7 @@
  */
 package bleach.hack.module.mods;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -46,6 +34,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Notebot extends Module {
 	
@@ -114,7 +110,7 @@ public class Notebot extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event) {
+    public void onRender(EventRender event) {
 		for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
 				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);

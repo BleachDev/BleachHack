@@ -22,9 +22,6 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.WorldUtils;
-
-import org.lwjgl.glfw.GLFW;
-
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -32,6 +29,7 @@ import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.glfw.GLFW;
 
 public class NoSlow extends Module {
 	
@@ -85,8 +83,8 @@ public class NoSlow extends Module {
 				mc.player.setVelocity(mc.player.getVelocity().add(m2));
 			}
 		}
-		
-		// Items handled in MixinPlayerEntity:sendMovementPackets_isUsingItem
+
+        // Items handled in MixinClientPlayerEntity:sendMovementPackets_isUsingItem
 		
 		/* Inventory */
 		if (getSettings().get(5).toToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
