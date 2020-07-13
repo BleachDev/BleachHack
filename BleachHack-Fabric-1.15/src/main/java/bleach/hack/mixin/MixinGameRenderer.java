@@ -30,13 +30,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-	@Inject(
-			at = {@At(value = "FIELD",
-					target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z",
-					opcode = Opcodes.GETFIELD,
-					ordinal = 0)},
-			method = {
-					"renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V"})
+	@Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0),
+			method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V")
 	private void onRenderWorld(float partialTicks, long finishTimeNano, MatrixStack matrixStack, CallbackInfo info) {
 		EventRender event = new EventRender(partialTicks);
 		BleachHack.eventBus.post(event);

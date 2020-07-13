@@ -29,7 +29,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +64,7 @@ public class Trail extends Module {
 
 	@Subscribe
     public void onRender(EventRender event) {
-		Color clr = new Color(0, 0, 0);
+		Color clr = Color.BLACK;
 		if (getSettings().get(2).toMode().mode == 0) clr = new Color(200, 50, 50);
 		else if (getSettings().get(2).toMode().mode == 1) clr = new Color(50, 200, 50);
 		else if (getSettings().get(2).toMode().mode == 2) clr = new Color(50, 50, 200);
