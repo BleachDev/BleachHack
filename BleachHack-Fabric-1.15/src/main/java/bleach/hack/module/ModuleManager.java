@@ -60,7 +60,6 @@ public class ModuleManager {
 			new Ghosthand(),
 			new Jesus(),
 			new Killaura(),
-			new MaintainAltitude(),
 			new MountBypass(),
 			new MouseFriend(),
 			new Nametags(),
@@ -84,7 +83,6 @@ public class ModuleManager {
 			new Step(),
 			new Timer(),
 			new Tracers(),
-			new Trajectories(),
 			new Trail(),
 			new UI(),
 			new Xray());

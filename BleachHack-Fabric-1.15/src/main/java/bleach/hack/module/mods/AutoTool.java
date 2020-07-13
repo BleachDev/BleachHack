@@ -86,8 +86,4 @@ public class AutoTool extends Module {
 
         return speed;
     }
-
-    private boolean isDamageable(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem().isDamageable();
-    }
 }
