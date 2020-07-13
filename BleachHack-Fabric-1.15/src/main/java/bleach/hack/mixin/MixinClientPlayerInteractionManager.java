@@ -68,9 +68,10 @@ public class MixinClientPlayerInteractionManager {
     }
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getEntityId()I", ordinal = 0),
-            method = "updateBlockBreakingProgress(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Z")
+            method = "updateBlockBreakingProgress(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Z", cancellable = true)
     private void onPlayerDamageBlock(BlockPos blockPos_1, Direction direction_1, CallbackInfoReturnable<Boolean> info) {
         EventBlockBreakingProgress event = new EventBlockBreakingProgress(blockPos_1, direction_1);
         BleachHack.eventBus.post(event);
+        if (event.isCancelled()) info.cancel();
     }
 }
