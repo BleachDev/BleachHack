@@ -20,7 +20,7 @@ package bleach.hack.gui;
 import bleach.hack.BleachHack;
 import bleach.hack.gui.particle.ParticleManager;
 import bleach.hack.gui.widget.BleachCheckbox;
-import bleach.hack.gui.widget.BleachPassField;
+import bleach.hack.gui.widget.TextPassFieldWidget;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
@@ -60,7 +60,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	
 	/* login manager variables */
 	public TextFieldWidget userField;
-	public BleachPassField passField;
+	public TextPassFieldWidget passField;
 	public BleachCheckbox checkBox;
 	
 	public String loginResult = "";
@@ -123,7 +123,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		h = height - height / 2;
 		
 		if (userField == null) userField = new TextFieldWidget(font, x + w / 2 - 98, y + h / 4, 196, 18, "");
-		if (passField == null) passField = new BleachPassField(font, x + w / 2 - 98, y + h / 4 + 30, 196, 18, "");
+		if (passField == null) passField = new TextPassFieldWidget(font, x + w / 2 - 98, y + h / 4 + 30, 196, 18, "");
 		userField.x = x + w / 2 - 98;
 		userField.y = y + h / 4 ;
 		passField.x = x + w / 2 - 98;
