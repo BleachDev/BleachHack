@@ -42,7 +42,8 @@ public class AutoTool extends Module {
 					&& stack.getMaxDamage() - stack.getDamage() < 2) continue;
 
 			float speed = getMiningSpeed(stack, state);
-			if (speed > bestSpeed || (speed == bestSpeed && !stack.isDamageable() && mc.player.getMainHandStack().isDamageable())) {
+			if (speed > bestSpeed
+					|| (speed == bestSpeed && !stack.isDamageable() && mc.player.inventory.getInvStack(bestSlot).isDamageable())) {
 				bestSpeed = speed;
 				bestSlot = slot;
 			}
