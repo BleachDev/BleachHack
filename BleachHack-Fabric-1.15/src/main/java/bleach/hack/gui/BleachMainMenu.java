@@ -232,9 +232,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					w = width - width / 4,
 					h = height - height / 4;
 
-            GL11.glPushMatrix();
-            GL11.glScaled(3, 3, 0);
 			/* Main Text */
+			GL11.glPushMatrix();
+            GL11.glScaled(3, 3, 0);
+            
 			//drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3, 0xffc0e0);
 			int[] intarray = {7, 13, 16, 22, 28, 34, 40, 46, 52, 58};
 			String[] bruh = { "B", "l", "e", "a", "c", "h", "H", "a", "c", "k" };
@@ -242,12 +243,12 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				drawString(this.font, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, UI.getRainbowFromSettings(i * 25));
 			}
 			
-			GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
+			GL11.glScaled(1d/3d, 1d/3d, 1);
 			
 			/* Version Text */
-			GL11.glScaled(1.5, 1.5, 1.5);
+			GL11.glScaled(1.5, 1.5, 1);
 			drawCenteredString(this.font, BleachHack.VERSION, (int)((x + w/2)/1.5), (int)((y + h/4 + 6)/1.5), 0xffc050);
-			GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
+			GL11.glScaled(1/1.5, 1/1.5, 1);
 			
 			/* Splash Text */
 			GL11.glTranslated(x + w / 2 + 80, y + h/4 + 8, 0.0F);
@@ -287,9 +288,6 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					y = windows.get(2).y1 - 10,
 					w = width - width / 2,
 					h = height - height / 2;
-
-            GL11.glPushMatrix();
-            GL11.glScaled(1, 1, 2);
 			
 			drawCenteredString(font, "§cTemprary™ alt manager", x + w / 2, y + h / 4 - 30, -1);
 			drawCenteredString(font, "§4(accounts stored in plaintext for now)", x + w / 2, y + h / 4 - 20, -1);
@@ -307,7 +305,6 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				drawCenteredString(font, text, x + w / 2, y + h / 4 + c, -1);
 				c += 14;
 			}
-            GL11.glPopMatrix();
 		}
 	}
 	

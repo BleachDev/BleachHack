@@ -40,13 +40,13 @@ public class MixinServerScreen extends Screen {
 
 	@Inject(at = @At("HEAD"), method = "init()V")
 	private void init(CallbackInfo info) {
-		addButton(new ButtonWidget(5, 7, 50, 18, "Scraper", button -> {
+		addButton(new ButtonWidget(5, 7, 50, 20, "Scraper", button -> {
 			minecraft.openScreen(new ServerScraperScreen((MultiplayerScreen) minecraft.currentScreen));
 		}));
-		addButton(new ButtonWidget(58, 7, 50, 18, "Cleanup", button -> {
+		addButton(new ButtonWidget(58, 7, 50, 20, "Cleanup", button -> {
 			minecraft.openScreen(new CleanUpScreen((MultiplayerScreen) minecraft.currentScreen));
 		}));
-		addButton(new ButtonWidget(111, 7, 50, 18, "Protocol", button -> {
+		addButton(new ButtonWidget(111, 7, 50, 20, "Protocol", button -> {
 			minecraft.openScreen(new ProtocolScreen((MultiplayerScreen) minecraft.currentScreen));
 		}));
 	}

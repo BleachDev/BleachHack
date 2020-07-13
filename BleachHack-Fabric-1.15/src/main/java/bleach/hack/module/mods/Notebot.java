@@ -17,7 +17,7 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventRender;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -114,7 +114,7 @@ public class Notebot extends Module {
 	}
 
 	@Subscribe
-    public void onRender(EventRender event) {
+    public void onRender(EventWorldRender event) {
 		for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
 				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);

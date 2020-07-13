@@ -18,7 +18,7 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -49,7 +49,7 @@ public class Tracers extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event) {
+	public void onRender(EventWorldRender event) {
 		final float thick = (float) getSettings().get(6).toSlider().getValue();
 		
 		for (Entity e: mc.world.getEntities()) {

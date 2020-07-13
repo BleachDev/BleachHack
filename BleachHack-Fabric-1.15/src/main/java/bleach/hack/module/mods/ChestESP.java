@@ -17,7 +17,7 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventRender;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -68,7 +68,7 @@ public class ChestESP extends Module {
 	}
 
 	@Subscribe
-	public void onRender(EventRender event) {
+	public void onRender(EventWorldRender event) {
 		List<BlockPos> linkedChests = new ArrayList<>();
 		
 		for (BlockEntity e: mc.world.blockEntities) {
