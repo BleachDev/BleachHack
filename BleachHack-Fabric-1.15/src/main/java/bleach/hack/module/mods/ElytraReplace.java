@@ -5,6 +5,9 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
+
+import net.minecraft.client.gui.screen.ingame.ContainerScreen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
@@ -20,6 +23,8 @@ public class ElytraReplace extends Module {
 
     @Subscribe
     public void onTick(EventTick event) {
+    	if((mc.currentScreen instanceof ContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
+    	
         int chestSlot = 38;
         ItemStack chest = mc.player.inventory.getInvStack(chestSlot);
         if (chest.getItem() instanceof ElytraItem && chest.getDamage() == (Items.ELYTRA.getMaxDamage() - 1)) {

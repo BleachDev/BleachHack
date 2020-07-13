@@ -1,93 +1,67 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventBlockBreakingProgress;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShapes;
 
 public class AutoTool extends Module {
 
-    private int prevSelectedSlot;
+	public AutoTool() {
+		super("AutoTool", KEY_UNBOUND, Category.PLAYER, "Automatically uses best tool",
+				new SettingToggle("Anti Break", false));
+	}
 
-    public AutoTool() {
-        super("AutoTool", KEY_UNBOUND, Category.PLAYER, "Automatically uses best tool");
-    }
+	@Subscribe
+	public void onBlockBreak(EventBlockBreakingProgress event) {
+		if (mc.player.abilities.creativeMode) return;
 
-    @Subscribe
-    public void onBlockBreak(EventBlockBreakingProgress event) {
-        System.out.println("Fire!");
-        BlockPos pos = event.getBlockPos();
-        if (mc.world.getBlockState(pos).getOutlineShape(MinecraftClient.getInstance().world, pos) == VoxelShapes.empty())
-            return;
+		int bestSlot = getBestSlot(event.getPos());
+		if (bestSlot == -1) {
+			return;
+		}
 
-        if (prevSelectedSlot == -1)
-            prevSelectedSlot = mc.player.inventory.selectedSlot;
+		mc.player.inventory.selectedSlot = bestSlot;
+	}
 
-        equipBestTool(pos);
-    }
+	private int getBestSlot(BlockPos pos) {
+		BlockState state = mc.world.getBlockState(pos);
+		float bestSpeed = 0;
+		int bestSlot = -1;
 
-    public void equipBestTool(BlockPos pos) {
-        ClientPlayerEntity player = mc.player;
-        if (player.abilities.creativeMode)
-            return;
+		for (int slot = 0; slot < 9; slot++) {
+			ItemStack stack = mc.player.inventory.getInvStack(slot);
 
-        int bestSlot = getBestSlot(pos);
-        if (bestSlot == -1) {
-            return;
-        }
+			if (getSettings().get(0).toToggle().state && !stack.isEmpty() && stack.isDamageable()
+					&& stack.getMaxDamage() - stack.getDamage() < 2) continue;
 
-        player.inventory.selectedSlot = bestSlot;
-    }
+			float speed = getMiningSpeed(stack, state);
+			if (speed > bestSpeed
+					|| (speed == bestSpeed && !stack.isDamageable() && mc.player.inventory.getInvStack(bestSlot).isDamageable())) {
+				bestSpeed = speed;
+				bestSlot = slot;
+			}
+		}
 
-    private int getBestSlot(BlockPos pos) {
-        ClientPlayerEntity player = mc.player;
-        PlayerInventory inventory = player.inventory;
-        ItemStack heldItem = mc.player.getMainHandStack();
+		return bestSlot;
+	}
 
-        BlockState state = mc.world.getBlockState(pos);
-        float bestSpeed = getMiningSpeed(heldItem, state);
-        int bestSlot = -1;
+	private float getMiningSpeed(ItemStack stack, BlockState state) {
+		float speed = stack.getMiningSpeed(state);
 
-        for (int slot = 0; slot < 9; slot++) {
-            if (slot == inventory.selectedSlot)
-                continue;
+		if (speed > 1) {
+			int efficiency =
+					EnchantmentHelper.getLevel(Enchantments.EFFICIENCY, stack);
+			if (efficiency > 0 && !stack.isEmpty())
+				speed += efficiency * efficiency + 1;
+		}
 
-            ItemStack stack = inventory.getInvStack(slot);
-
-            float speed = getMiningSpeed(stack, state);
-            if (speed <= bestSpeed)
-                continue;
-
-            bestSpeed = speed;
-            bestSlot = slot;
-        }
-
-        return bestSlot;
-    }
-
-    private float getMiningSpeed(ItemStack stack, BlockState state) {
-        float speed = stack.getMiningSpeed(state);
-
-        if (speed > 1) {
-            int efficiency =
-                    EnchantmentHelper.getLevel(Enchantments.EFFICIENCY, stack);
-            if (efficiency > 0 && !stack.isEmpty())
-                speed += efficiency * efficiency + 1;
-        }
-
-        return speed;
-    }
-
-    private boolean isDamageable(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem().isDamageable();
-    }
+		return speed;
+	}
 }
