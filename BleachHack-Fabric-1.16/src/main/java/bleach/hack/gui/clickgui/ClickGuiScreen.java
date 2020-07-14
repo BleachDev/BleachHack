@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.lwjgl.glfw.GLFW;
+
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.modulewindow.ClickGuiWindow;
@@ -29,8 +31,11 @@ import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Category;
+import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -43,13 +48,15 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	private boolean rmDown = false;
 	private boolean lmHeld = false;
 	
+	private TextFieldWidget searchField;
+	
 	public ClickGuiScreen() {
 		super(new LiteralText("ClickGui"));
 	}
 
 	public void initWindows() {
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue();
-		
+		System.out.println("INIT");
 		int i = 10;
 		for (Category c: Category.values()) {
 			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
@@ -74,6 +81,13 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		textRenderer.draw(matrix, "BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height-20, 0x99ff99);
 		textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui" , 2, height-10, 0x9999ff);
+		
+		if(!searchField.getText().equals("")) 
+			searchField.setSuggestion(null);
+		
+			try {
+				ModuleWindow.setModule(ModuleManager.getModule(ModuleManager.getModuleByName(searchField.getText()).getClass()));}
+			catch (Exception e) {ModuleWindow.setModule(null);}
 		
 		for (Window w: windows) {
 			if (w instanceof ClickGuiWindow) ((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
@@ -142,5 +156,13 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 			m.y2 = 35;
 			x += (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue() + 5;
 		}
+	}
+	
+	public void start() {
+		searchField = new TextFieldWidget(textRenderer, 2, 14, 100, 12, new LiteralText(""));
+		searchField.setMaxLength(20);
+		searchField.setSuggestion("Search here");
+		buttons.add(searchField);
+		children.add(searchField);
 	}
 }
