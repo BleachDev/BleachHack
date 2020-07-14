@@ -6,6 +6,9 @@ dist: trusty
 jdk: oraclejdk8
 
 script:
-  - bash BleachHack-Fabric-1.14/gradlew clean build
-  - bash BleachHack-Fabric-1.15/gradlew clean build
-  - bash BleachHack-Fabric-1.16/gradlew clean build
+  - cd BleachHack-Fabric-1.14
+  - bash gradlew build
+  - cd ../BleachHack-Fabric-1.15
+  - bash gradlew build
+  - cd ../BleachHack-Fabric-1.16
+  - bash gradlew build
