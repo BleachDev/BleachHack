@@ -26,6 +26,7 @@ import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 
@@ -62,5 +63,21 @@ public class EntityUtils {
 			
 		mc.player.yaw += MathHelper.wrapDegrees(yaw - mc.player.yaw);
 		mc.player.pitch += MathHelper.wrapDegrees(pitch - mc.player.pitch);
+	}
+	
+	public static void facePosPacket(double x, double y, double z) {
+		double diffX = x - mc.player.x;
+		double diffY = y - (mc.player.y + mc.player.getEyeHeight(mc.player.getPose()));
+		double diffZ = z - mc.player.z;
+			
+		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+			
+		float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
+		float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
+		
+		mc.player.networkHandler.sendPacket(
+				new PlayerMoveC2SPacket.LookOnly(
+						mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),
+						mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch), mc.player.onGround));
 	}
 }
