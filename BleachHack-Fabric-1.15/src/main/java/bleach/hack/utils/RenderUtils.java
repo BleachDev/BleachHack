@@ -17,9 +17,6 @@
  */
 package bleach.hack.utils;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.Tessellator;
@@ -30,9 +27,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 public class RenderUtils {
-	
+    
 	public static void drawFilledBox(BlockPos blockPos, float r, float g, float b, float a) {
 		drawFilledBox(new Box(blockPos), r, g, b, a);
 	}
@@ -51,22 +50,22 @@ public class RenderUtils {
         
         // Outline
         buffer.begin(3, VertexFormats.POSITION_COLOR);
-        buffer.vertex(box.x1, box.y1, box.z1).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x1, box.y1, box.z2).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x2, box.y1, box.z2).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x2, box.y1, box.z1).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x1, box.y1, box.z1).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x1, box.y2, box.z1).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x2, box.y2, box.z1).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x2, box.y2, box.z2).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x1, box.y2, box.z2).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x1, box.y2, box.z1).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x1, box.y1, box.z2).color(r, b, b, 0f).next();
-        buffer.vertex(box.x1, box.y2, box.z2).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x2, box.y1, box.z2).color(r, b, b, 0f).next();
-        buffer.vertex(box.x2, box.y2, box.z2).color(r, b, b, a/2f).next();
-        buffer.vertex(box.x2, box.y1, box.z1).color(r, b, b, 0f).next();
-        buffer.vertex(box.x2, box.y2, box.z1).color(r, b, b, a/2f).next();
+        buffer.vertex(box.x1, box.y1, box.z1).color(r, g, b, a).next();
+        buffer.vertex(box.x1, box.y1, box.z2).color(r, g, b, a).next();
+        buffer.vertex(box.x2, box.y1, box.z2).color(r, g, b, a).next();
+        buffer.vertex(box.x2, box.y1, box.z1).color(r, g, b, a).next();
+        buffer.vertex(box.x1, box.y1, box.z1).color(r, g, b, a).next();
+        buffer.vertex(box.x1, box.y2, box.z1).color(r, g, b, a).next();
+        buffer.vertex(box.x2, box.y2, box.z1).color(r, g, b, a).next();
+        buffer.vertex(box.x2, box.y2, box.z2).color(r, g, b, a).next();
+        buffer.vertex(box.x1, box.y2, box.z2).color(r, g, b, a).next();
+        buffer.vertex(box.x1, box.y2, box.z1).color(r, g, b, a).next();
+        buffer.vertex(box.x1, box.y1, box.z2).color(r, g, b, 0f).next();
+        buffer.vertex(box.x1, box.y2, box.z2).color(r, g, b, a).next();
+        buffer.vertex(box.x2, box.y1, box.z2).color(r, g, b, 0f).next();
+        buffer.vertex(box.x2, box.y2, box.z2).color(r, g, b, a).next();
+        buffer.vertex(box.x2, box.y1, box.z1).color(r, g, b, 0f).next();
+        buffer.vertex(box.x2, box.y2, box.z1).color(r, g, b, a).next();
         tessellator.draw();
         
         gl11Cleanup();

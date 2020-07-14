@@ -17,13 +17,13 @@
  */
 package bleach.hack.module;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
 import com.google.common.eventbus.Subscribe;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModuleManager {
 
@@ -31,10 +31,13 @@ public class ModuleManager {
 			new Ambience(),
 			new AntiChunkBan(),
 			new ArrowJuke(),
+			new AutoDonkeyDupe(),
 			new AutoReconnect(),
 			new AutoRespawn(),
 			new AutoSign(),
+			new AutoWalk(),
 			new AutoTotem(),
+			new AutoTool(),
 			new BlockParty(),
 			new BookCrash(),
 			new BowBot(),
@@ -46,6 +49,7 @@ public class ModuleManager {
 			new DiscordRPCMod(),
 			new Dispenser32k(),
 			new ElytraFly(),
+			new ElytraReplace(),
 			new EntityControl(),
 			new ESP(),
 			new FakeLag(),
@@ -69,6 +73,7 @@ public class ModuleManager {
 			new PacketFly(),
 			new Peek(),
 			new PlayerCrash(),
+			new SafeWalk(),
 			new Scaffold(),
 			new Spammer(),
 			new SpeedHack(),
@@ -81,7 +86,7 @@ public class ModuleManager {
 			new Trail(),
 			new UI(),
 			new Xray());
-	
+
 	public static List<Module> getModules() {
 		return mods;
 	}

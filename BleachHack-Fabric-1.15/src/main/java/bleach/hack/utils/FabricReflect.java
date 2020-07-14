@@ -94,7 +94,9 @@ public class FabricReflect {
 		/* i just gave up here */
 		Object o = null;
         try { o = MethodUtils.invokeMethod(target, true, obfName, args); } catch (Exception e) {
-        	try { o = MethodUtils.invokeMethod(target, true, deobfName, args); } catch (Exception e1) {}}
+        	try { o = MethodUtils.invokeMethod(target, true, deobfName, args); } catch (Exception e1) {
+        		System.err.println("Error reflecting method: " + deobfName + "/" + obfName);
+        	}}
         return o;
     }
 }

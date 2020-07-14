@@ -10,6 +10,7 @@
     "MixinBlockModelRenderer",
     "MixinChunkOcclusionGraphBuilder",
   	"MixinClientConnection",
+  	"MixinClientPlayerEntity",
   	"MixinClientPlayerInteractionManager",
   	"MixinContainerScreen",
   	"MixinEntityRenderer",
@@ -20,9 +21,9 @@
     "MixinLlamaEntity",
     "MixinMinecraftClient",
     "MixinPacketInflater",
-    "MixinPlayerEntity",
     "MixinPlayerInventory",
     "MixinRenderTickCounter",
+    "MixinScreen",
     "MixinServerScreen",
     "MixinTitleScreen"
   ],

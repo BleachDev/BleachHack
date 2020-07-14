@@ -29,7 +29,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -114,7 +114,7 @@ public class Notebot extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event) {
+	public void onRender(EventWorldRender event) {
 		for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
 				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);

@@ -17,27 +17,17 @@
  */
 package bleach.hack.module.mods;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.Calendar;
-import java.util.TimeZone;
-
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.eventbus.Subscribe;
-
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.SettingMode;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.FabricReflect;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.Entity;
@@ -48,6 +38,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.DimensionType;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 public class UI extends Module {
 	
@@ -143,8 +141,8 @@ public class UI extends Module {
 			
 			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 		}
-		
-		if (getSettings().get(7).toToggle().state) {
+
+		if (getSettings().get(7).toToggle().state && !(mc.world.getServer() == null || mc.world.getServer().isSinglePlayer())) {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
@@ -152,7 +150,7 @@ public class UI extends Module {
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), 0xd0d0d0);
 			}
 		}
-		
+
 		if (getSettings().get(8).toToggle().state) {
 			String server = "";
 			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}

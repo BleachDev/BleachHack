@@ -44,7 +44,8 @@ public class NoSlow extends Module {
 				new SettingToggle("Slime Blocks", true),
 				new SettingToggle("Webs", true),
 				new SettingToggle("Items", true),
-				new SettingToggle("Inventory", false));
+				new SettingToggle("Inventory", false),
+				new SettingToggle("Inv Shift", false));
 	}
 
 	@Subscribe
@@ -89,19 +90,19 @@ public class NoSlow extends Module {
 
 		/* Inventory */
 		if (getSettings().get(5).toToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
-			for (KeyBinding k: new KeyBinding[] {
-					mc.options.keyForward, mc.options.keyBack, mc.options.keyLeft,
-					mc.options.keyRight, mc.options.keyJump, mc.options.keySneak}) {
+			for (KeyBinding k: new KeyBinding[] { mc.options.keyForward, mc.options.keyBack, mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump }) {
 				k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
 			}
-
-			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) {
-				mc.player.yaw -= 3.5f;
+			
+			if (getSettings().get(6).toToggle().state) {
+				mc.options.keySneak.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
+						InputUtil.fromTranslationKey(mc.options.keySneak.getBoundKeyTranslationKey()).getCode()));
 			}
-
-			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) {
-				mc.player.yaw += 3.5f;
-			}
+			
+			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) mc.player.yaw -= 3.5f;
+			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) mc.player.yaw += 3.5f;
+			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP)) mc.player.pitch -= 3.5f;
+			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN)) mc.player.pitch += 3.5f;
 		}
 	}
 }

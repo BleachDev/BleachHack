@@ -19,6 +19,11 @@ package bleach.hack.event.events;
 
 import bleach.hack.event.Event;
 
-public class Event3DRender extends Event {
-    //Partial ticks coming soon
+public class EventWorldRender extends Event {
+	
+    public final float partialTicks;
+
+    public EventWorldRender(float partialTicks) {
+        this.partialTicks = partialTicks;
+    }
 }

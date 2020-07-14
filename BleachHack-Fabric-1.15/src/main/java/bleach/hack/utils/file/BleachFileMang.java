@@ -17,15 +17,16 @@
  */
 package bleach.hack.utils.file;
 
+import net.minecraft.client.MinecraftClient;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.MinecraftClient;
 
 public class BleachFileMang {
 
@@ -33,7 +34,10 @@ public class BleachFileMang {
 	
 	public static void init() {
 		dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/");
-		if (!dir.toFile().exists()) dir.toFile().mkdirs();
+		if (!dir.toFile().exists()) {
+			dir.toFile().mkdirs();
+			BleachFileHelper.saveSettings();
+		}
 	}
 	
 	/** Gets the bleach directory in your minecraft folder. **/
@@ -44,7 +48,12 @@ public class BleachFileMang {
 	/** Reads a file and returns a list of the lines. **/
 	public static List<String> readFileLines(String... file) {
 		try { return Files.readAllLines(stringsToPath(file));
-		} catch (IOException e) { System.out.println("Error Reading File: " + stringsToPath(file)); e.printStackTrace(); } 
+		} catch (NoSuchFileException e) {
+
+		} catch (IOException e) {
+			System.out.println("Error Reading File: " + stringsToPath(file));
+			e.printStackTrace();
+		}
 		
 		return new ArrayList<String>();
 	}

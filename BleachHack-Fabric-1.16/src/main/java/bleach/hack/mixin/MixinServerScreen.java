@@ -41,13 +41,13 @@ public class MixinServerScreen extends Screen {
 
 	@Inject(at = @At("HEAD"), method = "init()V")
 	private void init(CallbackInfo info) {
-		addButton(new ButtonWidget(5, 7, 50, 18, new LiteralText("Scraper"), button -> {
+		addButton(new ButtonWidget(5, 7, 50, 20, new LiteralText("Scraper"), button -> {
 			client.openScreen(new ServerScraperScreen((MultiplayerScreen) client.currentScreen));
 		}));
-		addButton(new ButtonWidget(58, 7, 50, 18, new LiteralText("Cleanup"), button -> {
+		addButton(new ButtonWidget(58, 7, 50, 20, new LiteralText("Cleanup"), button -> {
 			client.openScreen(new CleanUpScreen((MultiplayerScreen) client.currentScreen));
 		}));
-		addButton(new ButtonWidget(111, 7, 50, 18, new LiteralText("Protocol"), button -> {
+		addButton(new ButtonWidget(111, 7, 50, 20, new LiteralText("Protocol"), button -> {
 			client.openScreen(new ProtocolScreen((MultiplayerScreen) client.currentScreen));
 		}));
 	}

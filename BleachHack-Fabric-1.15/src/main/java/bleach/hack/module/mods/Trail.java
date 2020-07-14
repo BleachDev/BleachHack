@@ -17,23 +17,22 @@
  */
 package bleach.hack.module.mods;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.event.events.EventTick;
-import com.google.common.collect.Iterables;
-
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.RenderUtils;
+import com.google.common.collect.Iterables;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Trail extends Module {
 	
@@ -64,8 +63,8 @@ public class Trail extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event) {
-		Color clr = new Color(0, 0, 0);
+    public void onRender(EventWorldRender event) {
+		Color clr = Color.BLACK;
 		if (getSettings().get(2).toMode().mode == 0) clr = new Color(200, 50, 50);
 		else if (getSettings().get(2).toMode().mode == 1) clr = new Color(50, 200, 50);
 		else if (getSettings().get(2).toMode().mode == 2) clr = new Color(50, 50, 200);

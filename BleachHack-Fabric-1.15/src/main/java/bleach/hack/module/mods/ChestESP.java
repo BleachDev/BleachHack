@@ -17,17 +17,12 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.Event3DRender;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.RenderUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.eventbus.Subscribe;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
@@ -51,6 +46,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChestESP extends Module {
 	
 	public ChestESP() {
@@ -70,7 +68,7 @@ public class ChestESP extends Module {
 	}
 
 	@Subscribe
-	public void onRender(Event3DRender event) {
+	public void onRender(EventWorldRender event) {
 		List<BlockPos> linkedChests = new ArrayList<>();
 		
 		for (BlockEntity e: mc.world.blockEntities) {
