@@ -17,7 +17,7 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventRender;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -63,7 +63,7 @@ public class Trail extends Module {
 	}
 
 	@Subscribe
-    public void onRender(EventRender event) {
+    public void onRender(EventWorldRender event) {
 		Color clr = Color.BLACK;
 		if (getSettings().get(2).toMode().mode == 0) clr = new Color(200, 50, 50);
 		else if (getSettings().get(2).toMode().mode == 1) clr = new Color(50, 200, 50);

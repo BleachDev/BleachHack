@@ -39,14 +39,14 @@ public class AutoTool extends Module {
 		int bestSlot = -1;
 
 		for (int slot = 0; slot < 9; slot++) {
-			ItemStack stack = mc.player.inventory.getInvStack(slot);
+			ItemStack stack = mc.player.inventory.getStack(slot);
 
 			if (getSettings().get(0).toToggle().state && !stack.isEmpty() && stack.isDamageable()
 					&& stack.getMaxDamage() - stack.getDamage() < 2) continue;
 
 			float speed = getMiningSpeed(stack, state);
 			if (speed > bestSpeed
-					|| (speed == bestSpeed && !stack.isDamageable() && mc.player.inventory.getInvStack(bestSlot).isDamageable())) {
+					|| (speed == bestSpeed && !stack.isDamageable() && mc.player.inventory.getStack(bestSlot).isDamageable())) {
 				bestSpeed = speed;
 				bestSlot = slot;
 			}
@@ -56,7 +56,7 @@ public class AutoTool extends Module {
 	}
 
 	private float getMiningSpeed(ItemStack stack, BlockState state) {
-		float speed = stack.getMiningSpeed(state);
+		float speed = stack.getMiningSpeedMultiplier(state);
 
 		if (speed > 1) {
 			int efficiency =

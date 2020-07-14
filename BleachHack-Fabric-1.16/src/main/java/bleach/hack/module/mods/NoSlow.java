@@ -91,12 +91,12 @@ public class NoSlow extends Module {
 		/* Inventory */
 		if (getSettings().get(5).toToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
 			for (KeyBinding k: new KeyBinding[] { mc.options.keyForward, mc.options.keyBack, mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump }) {
-				k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(k.getTranslationKey()).getCode()));
+				k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
 			}
 			
 			if (getSettings().get(6).toToggle().state) {
 				mc.options.keySneak.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
-						InputUtil.fromTranslationKey(mc.options.keySneak.getTranslationKey()).getCode()));
+						InputUtil.fromTranslationKey(mc.options.keySneak.getBoundKeyTranslationKey()).getCode()));
 			}
 			
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) mc.player.yaw -= 3.5f;

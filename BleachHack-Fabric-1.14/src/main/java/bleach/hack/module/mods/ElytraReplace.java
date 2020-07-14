@@ -5,8 +5,10 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
 
-import net.minecraft.client.gui.screen.ingame.ContainerScreen;
+import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
@@ -22,7 +24,7 @@ public class ElytraReplace extends Module {
 
     @Subscribe
     public void onTick(EventTick event) {
-    	if((mc.currentScreen instanceof ContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
+    	if((mc.currentScreen instanceof AbstractContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
     	
         int chestSlot = 38;
         ItemStack chest = mc.player.inventory.getInvStack(chestSlot);
@@ -44,14 +46,14 @@ public class ElytraReplace extends Module {
                 return;
             }
 
-            mc.interactionManager.clickSlot(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
-            mc.interactionManager.clickSlot(mc.player.container.syncId, elytraSlot < 9 ? (elytraSlot + 36) : (elytraSlot), 0, SlotActionType.PICKUP, mc.player);
-            mc.interactionManager.clickSlot(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
+            mc.interactionManager.method_2906(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
+            mc.interactionManager.method_2906(mc.player.container.syncId, elytraSlot < 9 ? (elytraSlot + 36) : (elytraSlot), 0, SlotActionType.PICKUP, mc.player);
+            mc.interactionManager.method_2906(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
 
-            mc.options.keyJump.setPressed(true);  // Make them fly again
+            KeyBinding.setKeyPressed(InputUtil.fromName(mc.options.keyJump.getName()), true);  // Make them fly again
             jump = true;
         } else if (jump) {
-            mc.options.keyJump.setPressed(false); // Make them fly again
+        	KeyBinding.setKeyPressed(InputUtil.fromName(mc.options.keyJump.getName()), false); // Make them fly again
             jump = false;
         }
     }

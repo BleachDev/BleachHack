@@ -28,10 +28,12 @@ import org.lwjgl.opengl.GL11;
 import bleach.hack.BleachHack;
 import bleach.hack.gui.particle.ParticleManager;
 import bleach.hack.gui.widget.BleachCheckbox;
+import bleach.hack.gui.widget.TextPassFieldWidget;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.UI;
+import bleach.hack.utils.Decrypter;
 import bleach.hack.utils.LoginManager;
 import bleach.hack.utils.file.BleachFileMang;
 import bleach.hack.utils.file.BleachGithubReader;
@@ -61,7 +63,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	
 	/* login manager variables */
 	public TextFieldWidget userField;
-	public TextFieldWidget passField;
+	public TextPassFieldWidget passField;
 	public BleachCheckbox checkBox;
 	
 	public String loginResult = "";
@@ -124,7 +126,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		h = height - height / 2;
 		
 		if (userField == null) userField = new TextFieldWidget(textRenderer, x + w / 2 - 98, y + h / 4, 196, 18, LiteralText.EMPTY);
-		if (passField == null) passField = new TextFieldWidget(textRenderer, x + w / 2 - 98, y + h / 4 + 30, 196, 18, LiteralText.EMPTY);
+		if (passField == null) passField = new TextPassFieldWidget(textRenderer, x + w / 2 - 98, y + h / 4 + 30, 196, 18, LiteralText.EMPTY);
 		userField.x = x + w / 2 - 98;
 		userField.y = y + h / 4 ;
 		passField.x = x + w / 2 - 98;
@@ -152,13 +154,19 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					}
 					
 					loginResult = LoginManager.login(userField.getText(), passField.getText());
-					String text = userField.getText() + ":" + passField.getText();
-					if (checkBox.checked && (loginResult.equals("\u00a7aLogin Successful")
-							|| loginResult.equals("\u00a76Logged in as an unverified account"))
-							&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
-						entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
-						BleachFileMang.createFile("logins.txt");
-						BleachFileMang.appendFile(text, "logins.txt");
+					try {
+                        Decrypter decrypter = new Decrypter(Decrypter.getPassPhrase());
+                        String text = userField.getText() + ":" + decrypter.encrypt(passField.getText());
+
+                        if (checkBox.checked && (loginResult.equals("§aLogin Successful")
+                                || loginResult.equals("§6Logged in as an unverified account"))
+                                && !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
+                            entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
+                            BleachFileMang.createFile("logins.txt");
+                            BleachFileMang.appendFile(text, "logins.txt");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
 					}
 				}));
 		
@@ -229,7 +237,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			
 			/* Main Text */
 			GL11.glPushMatrix();
-			GL11.glScaled(3, 3, 3);
+			GL11.glScaled(3, 3, 0);
 			
 			//drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3, 0xffc0e0);
 			int[] intarray = {7, 13, 16, 22, 28, 34, 40, 46, 52, 58};
@@ -238,16 +246,14 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w/2 - 81)/3 + intarray[i] - 8, (y + h/4 - 15)/3, UI.getRainbowFromSettings(i * 25));
 			}
 			
-			GL11.glScaled(1d/3d, 1d/3d, 1d/3d);
+			GL11.glScaled(1d/3d, 1d/3d, 0);
 			
 			/* Version Text */
 			GL11.glScaled(1.5, 1.5, 1.5);
 			drawCenteredString(matrix, this.textRenderer, BleachHack.VERSION, (int)((x + w/2)/1.5), (int)((y + h/4 + 6)/1.5), 0xffc050);
-			GL11.glScaled(1d/1.5d, 1d/1.5d, 1d/1.5d);
-			GL11.glPopMatrix();
+			GL11.glScaled(1/1.5, 1/1.5, 1/1.5);
 			
 			/* Splash Text */
-			GL11.glPushMatrix();
 			GL11.glTranslated(x + w / 2 + 80, y + h/4 + 8, 0.0F);
 			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
 	        float float_4 = 1.8F - MathHelper.abs(MathHelper.sin((float)(Util.getMeasuringTimeMs() % 1000L) / 1000.0F * 6.2831855F) * 0.1F);
@@ -339,8 +345,13 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				if (double_1 > x + w/2-lenght/2-1 && double_1 < x + w/2+lenght/2+1 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
 					try{ userField.setText(e.get(0));
 					} catch (Exception e1) { userField.setText(""); }
-					try{ passField.setText(e.get(1));
-					} catch (Exception e1) { passField.setText(""); }
+					try {
+                        Decrypter decrypter = new Decrypter(Decrypter.getPassPhrase());
+                        passField.setText(decrypter.decrypt(e.get(1)));
+                    } catch (Exception e1) {
+                        passField.setText("");
+                        e1.printStackTrace();
+                    }
 					windows.get(2).closed = true;
 					windows.get(1).closed = false;
 					selectWindow(1);
