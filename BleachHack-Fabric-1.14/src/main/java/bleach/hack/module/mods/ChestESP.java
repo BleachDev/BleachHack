@@ -82,6 +82,7 @@ public class ChestESP extends Module {
 				BlockPos p = drawChest(e.getPos());
 				if (p != null) linkedChests.add(p);
 			} else if (e instanceof EnderChestBlockEntity && getSettings().get(1).toToggle().state) {
+				//System.out.println("asd");
 				RenderUtils.drawFilledBox(new Box(
 						e.getPos().getX() + 0.06, e.getPos().getY(), e.getPos().getZ() + 0.06,
 						e.getPos().getX() + 0.94, e.getPos().getY() + 0.875, e.getPos().getZ() + 0.94), 1F, 0.05F, 1F, 0.7F);
