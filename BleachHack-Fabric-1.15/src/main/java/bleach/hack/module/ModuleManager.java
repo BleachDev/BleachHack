@@ -64,6 +64,7 @@ public class ModuleManager {
 			new MouseFriend(),
 			new Nametags(),
 			new Nofall(),
+			new NoRender(),
 			new NoSlow(),
 			new Notebot(),
 			new NotebotStealer(),
