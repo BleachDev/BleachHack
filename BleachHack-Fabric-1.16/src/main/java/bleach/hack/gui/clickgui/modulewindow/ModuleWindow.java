@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
 
+import bleach.hack.gui.clickgui.ClickGuiScreen;
 import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -32,11 +33,13 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Module;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
 
 public class ModuleWindow extends ClickGuiWindow {
@@ -47,6 +50,8 @@ public class ModuleWindow extends ClickGuiWindow {
 	public boolean hiding;
 	
 	public int len;
+	
+	private static Module module;
 	
 	private Triple<Integer, Integer, String> tooltip = null;
 	
@@ -85,9 +90,15 @@ public class ModuleWindow extends ClickGuiWindow {
 		int count = 0;
 		for (Entry<Module, Boolean> m: new LinkedHashMap<>(mods).entrySet()) {
 			if (m.getValue()) fillReverseGrey(matrix, x, y+(count*12), x+len-1, y+12+(count*12));
-			Screen.fill(matrix, x, y+(count*12), x+len, y+12+(count*12),
-					mouseOver(x, y+(count*12), x+len, y+12+(count*12)) ? 0x70303070 : 0x00000000);
-
+			
+			if(m.getKey() == module)
+				Screen.fill(matrix, x, y+(count*12), x+len, y+12+(count*12),
+						mouseOver(x, y+(count*12), x+len, y+12+(count*12)) ? 0xFFCC0000 : 0xFFFF0000);
+			
+			else
+				Screen.fill(matrix, x, y+(count*12), x+len, y+12+(count*12),
+						mouseOver(x, y+(count*12), x+len, y+12+(count*12)) ? 0x70303070 : 0x00000000);
+			
 			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
 					x+2, y+2+(count*12), m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
 
@@ -116,6 +127,10 @@ public class ModuleWindow extends ClickGuiWindow {
 			}
 			count++;
 		}
+	}
+	
+	public static void setModule(Module mod){
+		module = mod;
 	}
 	
 	public void drawBindSetting(MatrixStack matrix, Module m, int key, int x, int y, TextRenderer textRend) {
