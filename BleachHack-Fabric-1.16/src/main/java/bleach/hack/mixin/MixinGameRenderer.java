@@ -19,10 +19,10 @@ package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,10 +31,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 	
-	@Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0),
-			method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V", cancellable = true)
-	private void onRenderWorld(float partialTicks, long finishTimeNano, MatrixStack matrixStack, CallbackInfo info) {
-		EventWorldRender event = new EventWorldRender(partialTicks);
+	@Inject(at = @At("HEAD"), method = "renderHand", cancellable = true)
+	private void renderHand(MatrixStack matrixStack_1, Camera camera, float tickDelta, CallbackInfo info) {
+		EventWorldRender event = new EventWorldRender(tickDelta);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}
