@@ -5,6 +5,7 @@
   "mixins": [
   ],
   "client": [
+    "FirstPersonRendererAccessor",
     "MixinBackgroundRenderer",
     "MixinBlock",
     "MixinBlockModelRenderer",

@@ -58,6 +58,7 @@ public class ModuleManager {
 			new Freecam(),
 			new Fullbright(),
 			new Ghosthand(),
+			new HandProgress(),
 			new Jesus(),
 			new Killaura(),
 			new MountBypass(),
