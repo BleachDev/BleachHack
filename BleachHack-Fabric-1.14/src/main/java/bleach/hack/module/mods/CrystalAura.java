@@ -100,93 +100,97 @@ public class CrystalAura extends Module {
 
 			if (!firstPlayer.isPresent()) return;
 
-			Optional<Entity> firstCrystal = Streams.stream(mc.world.getEntities())
-					.filter(e -> e instanceof EnderCrystalEntity
-							&& (!getSettings().get(3).toToggle().state || mc.player.canSee(e))
-							&& mc.player.distanceTo(e) <= getSettings().get(4).toSlider().getValue()
-							&& (getSettings().get(7).toSlider().getValue() >= getRatio(e, mc.player, (LivingEntity) firstPlayer.get()))
-							&& (!getSettings().get(8).toToggle().state || !willKill(e, mc.player))
-							&& (getSettings().get(9).toMode().mode != 0 || !(willPop(e, mc.player) && !willPop(e, (LivingEntity) firstPlayer.get()))
-							&& (getSettings().get(9).toMode().mode != 1 || !willPop(e, mc.player))))
-					.sorted((e1, e2) -> Float.compare(e1.distanceTo(mc.player), e2.distanceTo(mc.player)))
-					.findFirst();
-
-			if (firstCrystal.isPresent()) {
-				if (mc.player.hasStatusEffect(StatusEffects.WEAKNESS) && getSettings().get(10).toToggle().state) {
-					for (int i = 0; i < 9; i++) {
-						if (mc.player.inventory.getInvStack(i).getItem() instanceof SwordItem) {
-							mc.player.inventory.selectedSlot = i;
-							break;
+			if (getSettings().get(0).toToggle().state) {
+				Optional<Entity> firstCrystal = Streams.stream(mc.world.getEntities())
+						.filter(e -> e instanceof EnderCrystalEntity
+								&& (!getSettings().get(3).toToggle().state || mc.player.canSee(e))
+								&& mc.player.distanceTo(e) <= getSettings().get(4).toSlider().getValue()
+								&& (getSettings().get(7).toSlider().getValue() >= getRatio(e, mc.player, (LivingEntity) firstPlayer.get()))
+								&& (!getSettings().get(8).toToggle().state || !willKill(e, mc.player))
+								&& (getSettings().get(9).toMode().mode != 0 || !(willPop(e, mc.player) && !willPop(e, (LivingEntity) firstPlayer.get()))
+								&& (getSettings().get(9).toMode().mode != 1 || !willPop(e, mc.player))))
+						.sorted((e1, e2) -> Float.compare(e1.distanceTo(mc.player), e2.distanceTo(mc.player)))
+						.findFirst();
+	
+				if (firstCrystal.isPresent()) {
+					if (mc.player.hasStatusEffect(StatusEffects.WEAKNESS) && getSettings().get(10).toToggle().state) {
+						for (int i = 0; i < 9; i++) {
+							if (mc.player.inventory.getInvStack(i).getItem() instanceof SwordItem) {
+								mc.player.inventory.selectedSlot = i;
+								break;
+							}
 						}
 					}
-				}
-
-				if (getSettings().get(2).toToggle().state) {
-					EntityUtils.facePos(firstCrystal.get().x, firstCrystal.get().y + firstCrystal.get().getHeight() / 2, firstCrystal.get().z);
-				} else if (getSettings().get(1).toToggle().state) {
-					EntityUtils.facePosPacket(firstCrystal.get().x, firstCrystal.get().y + firstCrystal.get().getHeight() / 2, firstCrystal.get().z);
-				}
 	
-				if (getSettings().get(11).toToggle().state) {
-					BleachLogger.infoMessage("Predicted: " + getExplosionDamage(firstCrystal.get().getBlockPos().down(), mc.player)
-					+ " vs " + getExplosionDamage(firstCrystal.get().getBlockPos().down(), (LivingEntity) firstPlayer.get()) + " Damage \u00a7a[x"
-					+ getRatio(firstCrystal.get(), mc.player, (LivingEntity) firstPlayer.get()) + "]");
+					if (getSettings().get(2).toToggle().state) {
+						EntityUtils.facePos(firstCrystal.get().x, firstCrystal.get().y + firstCrystal.get().getHeight() / 2, firstCrystal.get().z);
+					} else if (getSettings().get(1).toToggle().state) {
+						EntityUtils.facePosPacket(firstCrystal.get().x, firstCrystal.get().y + firstCrystal.get().getHeight() / 2, firstCrystal.get().z);
+					}
+		
+					if (getSettings().get(11).toToggle().state) {
+						BleachLogger.infoMessage("Predicted: " + getExplosionDamage(firstCrystal.get().getBlockPos().down(), mc.player)
+						+ " vs " + getExplosionDamage(firstCrystal.get().getBlockPos().down(), (LivingEntity) firstPlayer.get()) + " Damage \u00a7a[x"
+						+ getRatio(firstCrystal.get(), mc.player, (LivingEntity) firstPlayer.get()) + "]");
+					}
+					
+					mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(firstCrystal.get()));
+					mc.player.attack(firstCrystal.get());
+					mc.player.swingHand(Hand.MAIN_HAND);
+					return;
+				}
+			}
+			
+			if (getSettings().get(6).toToggle().state) {
+				int crystalSlot = -1;
+				for (int i = 0; i < 9; i++) {
+					if (mc.player.inventory.getInvStack(i).getItem() == Items.END_CRYSTAL) {
+						crystalSlot = i;
+						break;
+					}
 				}
 				
-				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(firstCrystal.get()));
-				mc.player.attack(firstCrystal.get());
-				mc.player.swingHand(Hand.MAIN_HAND);
-				return;
-			}
-			
-			int crystalSlot = -1;
-			for (int i = 0; i < 9; i++) {
-				if (mc.player.inventory.getInvStack(i).getItem() == Items.END_CRYSTAL) {
-					crystalSlot = i;
-					break;
-				}
-			}
-			
-			if (crystalSlot == -1) return;
-			
-			BlockPos bestPos = null;
-			float bestRatio = -1f;
-			int range = (int) getSettings().get(4).toSlider().getValue() + 1;
-			for (int x = -range; x < range + 1; x++) {
-				for (int y = -range; y < range; y++) {
-					for (int z = -range; z < range + 1; z++) {
-						BlockPos basePos = mc.player.getBlockPos().add(x, y, z);
-						
-						if (!canPlace(basePos)) continue;
-						
-						if (mc.player.getPos().distanceTo(new Vec3d(basePos).add(0.5, 1, 0.5))
-								> getSettings().get(4).toSlider().getValue() + 0.25) continue;
-						
-						if (getSettings().get(7).toSlider().getValue() >= getRatio(basePos, mc.player, (LivingEntity) firstPlayer.get())
-							&& (!getSettings().get(8).toToggle().state || !willKill(basePos, mc.player))
-							&& (getSettings().get(9).toMode().mode != 0 || !(willPop(basePos, mc.player) && !willPop(basePos, (LivingEntity) firstPlayer.get()))
-							&& (getSettings().get(9).toMode().mode != 1 || !willPop(basePos, mc.player)))) {
+				if (crystalSlot == -1) return;
+				
+				BlockPos bestPos = null;
+				float bestRatio = -1f;
+				int range = (int) getSettings().get(4).toSlider().getValue() + 1;
+				for (int x = -range; x < range + 1; x++) {
+					for (int y = -range; y < range; y++) {
+						for (int z = -range; z < range + 1; z++) {
+							BlockPos basePos = mc.player.getBlockPos().add(x, y, z);
 							
-							float ratio = getRatio(basePos, mc.player, (LivingEntity) firstPlayer.get());
-							if (bestPos == null || ratio < bestRatio) {
-								bestPos = new BlockPos(basePos);
-								bestRatio = ratio;
+							if (!canPlace(basePos)) continue;
+							
+							if (mc.player.getPos().distanceTo(new Vec3d(basePos).add(0.5, 1, 0.5))
+									> getSettings().get(4).toSlider().getValue() + 0.25) continue;
+							
+							if (getSettings().get(7).toSlider().getValue() >= getRatio(basePos, mc.player, (LivingEntity) firstPlayer.get())
+								&& (!getSettings().get(8).toToggle().state || !willKill(basePos, mc.player))
+								&& (getSettings().get(9).toMode().mode != 0 || !(willPop(basePos, mc.player) && !willPop(basePos, (LivingEntity) firstPlayer.get()))
+								&& (getSettings().get(9).toMode().mode != 1 || !willPop(basePos, mc.player)))) {
+								
+								float ratio = getRatio(basePos, mc.player, (LivingEntity) firstPlayer.get());
+								if (bestPos == null || ratio < bestRatio) {
+									bestPos = new BlockPos(basePos);
+									bestRatio = ratio;
+								}
 							}
 						}
 					}
 				}
-			}
-
-			if (bestPos != null) {
-				mc.player.inventory.selectedSlot = crystalSlot;
-				if (getSettings().get(2).toToggle().state) {
-					EntityUtils.facePos(bestPos.getX() + 0.5, bestPos.getY() + 1, bestPos.getZ() + 0.5);
-				} else if (getSettings().get(1).toToggle().state) {
-					EntityUtils.facePosPacket(bestPos.getX() + 0.5, bestPos.getY() + 1, bestPos.getZ() + 0.5);
+	
+				if (bestPos != null) {
+					mc.player.inventory.selectedSlot = crystalSlot;
+					if (getSettings().get(2).toToggle().state) {
+						EntityUtils.facePos(bestPos.getX() + 0.5, bestPos.getY() + 1, bestPos.getZ() + 0.5);
+					} else if (getSettings().get(1).toToggle().state) {
+						EntityUtils.facePosPacket(bestPos.getX() + 0.5, bestPos.getY() + 1, bestPos.getZ() + 0.5);
+					}
+	
+					mc.interactionManager.interactBlock(
+							mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(bestPos), Direction.UP, bestPos, false));
 				}
-
-				mc.interactionManager.interactBlock(
-						mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(bestPos), Direction.UP, bestPos, false));
 			}
 		}
 	}
