@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(HeldItemRenderer.class)
 public interface FirstPersonRendererAccessor {
-    //#if MC>=10904
     @Accessor("mainHand")
     void setItemStackMainHand(ItemStack value);
     @Accessor("offHand")
@@ -20,14 +19,4 @@ public interface FirstPersonRendererAccessor {
     void setEquippedProgressOffHand(float value);
     @Accessor("prevEquipProgressOffHand")
     void setPrevEquippedProgressOffHand(float value);
-    //#else
-    //$$ @Accessor
-    //$$ void setItemToRender(ItemStack value);
-    //$$ @Accessor
-    //$$ void setEquippedItemSlot(int value);
-    //$$ @Accessor
-    //$$ void setEquippedProgress(float value);
-    //$$ @Accessor
-    //$$ void setPrevEquippedProgress(float value);
-    //#endif
 }

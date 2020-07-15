@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameOverlayRenderer.class)
 public class MixinInGameOverlayRenderer {
 
-    @Inject(at = {@At("HEAD")}, method = {"renderFireOverlay(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/util/math/MatrixStack;)V"}, cancellable = true)
+    @Inject(at = @At("HEAD"), method = "renderFireOverlay(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/util/math/MatrixStack;)V", cancellable = true)
     private static void onRenderFireOverlay(MinecraftClient minecraftClient,
                                             MatrixStack matrixStack, CallbackInfo ci)
     {
@@ -21,7 +21,7 @@ public class MixinInGameOverlayRenderer {
             ci.cancel();
     }
 
-    @Inject(at = {@At("HEAD")}, method = {"renderUnderwaterOverlay(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/util/math/MatrixStack;)V"}, cancellable = true)
+    @Inject(at = @At("HEAD"), method = "renderUnderwaterOverlay(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/util/math/MatrixStack;)V", cancellable = true)
     private static void onRenderUnderwaterOverlay(
             MinecraftClient minecraftClient, MatrixStack matrixStack,
             CallbackInfo ci)
