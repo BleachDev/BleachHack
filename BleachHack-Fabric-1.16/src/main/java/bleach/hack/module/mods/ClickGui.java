@@ -35,7 +35,7 @@ public class ClickGui extends Module {
 	
 	public void onEnable() {
 		mc.openScreen(clickGui);
-		clickGui.start();
+		clickGui.initTextField();
 		setToggled(false);
 	}
 
