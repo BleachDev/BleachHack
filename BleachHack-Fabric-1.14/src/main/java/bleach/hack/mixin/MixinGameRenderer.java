@@ -19,22 +19,39 @@ package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.math.MathHelper;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 	
-	@Inject(at = @At(value = "HEAD"),
-			method = "renderHand", cancellable = true)
+	@Inject(at = @At(value = "HEAD"), method = "renderHand", cancellable = true)
 	private void renderHand(Camera camera_1, float float_1, CallbackInfo info) {
 		EventWorldRender event = new EventWorldRender(float_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
+	}
+	
+	@Inject(at = {@At("HEAD")}, method = "bobViewWhenHurt(F)V", cancellable = true)
+	private void onBobViewWhenHurt(float f, CallbackInfo ci) {
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).toToggle().state)
+			ci.cancel();
+	}
+
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0), method = "applyCameraTransformations(F)V")
+	private float nauseaWobble(float delta, float first, float second) {
+		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(6).toToggle().state))
+			return MathHelper.lerp(delta, first, second);
+
+		return 0;
 	}
 }

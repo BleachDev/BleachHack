@@ -41,7 +41,7 @@ public class MixinGameRenderer {
 		if (event.isCancelled()) info.cancel();
 	}
 
-	@Inject(at = {@At("HEAD")}, method = "bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
 		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).toToggle().state)
 			ci.cancel();
