@@ -41,7 +41,7 @@ public class AutoTool extends Module {
 		for (int slot = 0; slot < 9; slot++) {
 			ItemStack stack = mc.player.inventory.getStack(slot);
 
-			if (getSettings().get(0).toToggle().state && !stack.isEmpty() && stack.isDamageable()
+			if (getSettings().get(0).asToggle().state && !stack.isEmpty() && stack.isDamageable()
 					&& stack.getMaxDamage() - stack.getDamage() < 2) continue;
 
 			float speed = getMiningSpeed(stack, state);

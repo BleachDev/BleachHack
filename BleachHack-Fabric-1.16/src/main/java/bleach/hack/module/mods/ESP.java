@@ -58,7 +58,7 @@ public class ESP extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		for (Entity e: mc.world.getEntities()) {
-			if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).toToggle().state) {
+			if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).asToggle().state) {
 				if (BleachHack.friendMang.has(e.getName().asString())) {
 					EntityUtils.setGlowing(e, Formatting.AQUA, "friends");
 				} else {
@@ -66,23 +66,23 @@ public class ESP extends Module {
 				}
 			}
 			
-			else if (e instanceof Monster && getSettings().get(1).toToggle().state) {
+			else if (e instanceof Monster && getSettings().get(1).asToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.DARK_BLUE, "mobs");
 			}
 			
-			else if (EntityUtils.isAnimal(e) && getSettings().get(2).toToggle().state) {
+			else if (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GREEN, "passive");
 			}
 			
-			else if (e instanceof ItemEntity && getSettings().get(3).toToggle().state) {
+			else if (e instanceof ItemEntity && getSettings().get(3).asToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GOLD, "items");
 			}
 			
-			else if (e instanceof EndCrystalEntity && getSettings().get(4).toToggle().state) {
+			else if (e instanceof EndCrystalEntity && getSettings().get(4).asToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.LIGHT_PURPLE, "crystals");
 			}
 			
-			else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).toToggle().state) {
+			else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state) {
 				EntityUtils.setGlowing(e, Formatting.GRAY, "vehicles");
 			}
 			else {

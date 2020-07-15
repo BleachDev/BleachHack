@@ -44,13 +44,13 @@ public class MixinGameRenderer {
 	
 	@Inject(at = @At("HEAD"), method = "bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).toToggle().state)
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).asToggle().state)
 			ci.cancel();
 	}
 
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0), method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V")
 	private float nauseaWobble(float delta, float first, float second) {
-		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(6).toToggle().state))
+		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(6).asToggle().state))
 			return MathHelper.lerp(delta, first, second);
 
 		return 0;

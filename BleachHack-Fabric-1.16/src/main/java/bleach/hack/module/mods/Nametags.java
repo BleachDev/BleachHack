@@ -62,13 +62,13 @@ public class Nametags extends Module {
 				? "\u00a7a" : e.isSneaking() ? "\u00a76" : e instanceof PlayerEntity ? "\u00a7c" : "\u00a7f";
 		
 		if (e == mc.player || e == mc.player.getVehicle() || color == "\u00a7f" || 
-				((color == "\u00a7c" || color == "\u00a76") && !getSettings().get(4).toToggle().state) ||
-				((color == "\u00a75" || color == "\u00a7a") && !getSettings().get(5).toToggle().state)) return;
+				((color == "\u00a7c" || color == "\u00a76") && !getSettings().get(4).asToggle().state) ||
+				((color == "\u00a75" || color == "\u00a7a") && !getSettings().get(5).asToggle().state)) return;
 		if (e.isInvisible()) color = "\u00a7e";
 		
 		double scale = (e instanceof PlayerEntity) ?
-				Math.max(getSettings().get(2).toSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
-				Math.max(getSettings().get(3).toSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
+				Math.max(getSettings().get(2).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
+				Math.max(getSettings().get(3).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 		
 		/* Health bar */
 		String health = "";
@@ -84,12 +84,12 @@ public class Nametags extends Module {
 		}
 		
 		/* Drawing Nametags */
-		if (getSettings().get(1).toMode().mode == 0) {
+		if (getSettings().get(1).asMode().mode == 0) {
 			RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
 					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-		} else if (getSettings().get(1).toMode().mode == 1) {
+		} else if (getSettings().get(1).asMode().mode == 1) {
 			RenderUtilsLiving.drawText(color + e.getName().getString(),
 					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
@@ -102,9 +102,9 @@ public class Nametags extends Module {
 		
 		/* Drawing Items */
 		double c = 0;
-		double higher = getSettings().get(1).toMode().mode == 1 ? 0.25 : 0;
+		double higher = getSettings().get(1).asMode().mode == 1 ? 0.25 : 0;
 		
-		if (getSettings().get(0).toMode().mode == 0) {
+		if (getSettings().get(0).asMode().mode == 0) {
 			RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
@@ -118,7 +118,7 @@ public class Nametags extends Module {
 						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), c+1.5, 0, scale, i);
 				c--;
 			}
-		} else if (getSettings().get(0).toMode().mode == 1) {
+		} else if (getSettings().get(0).asMode().mode == 1) {
 			RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));

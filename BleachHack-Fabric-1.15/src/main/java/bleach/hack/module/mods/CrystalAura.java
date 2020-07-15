@@ -87,7 +87,7 @@ public class CrystalAura extends Module {
 		if (mc.world.getDifficulty() == Difficulty.PEACEFUL) return;
 
 		delay++;
-		int reqDelay = (int) Math.round(20/getSettings().get(5).toSlider().getValue());
+		int reqDelay = (int) Math.round(20/getSettings().get(5).asSlider().getValue());
 
 		if (delay > reqDelay || reqDelay == 0) {
 			delay = 0;
@@ -100,20 +100,20 @@ public class CrystalAura extends Module {
 
 			if (!firstPlayer.isPresent()) return;
 
-			if (getSettings().get(0).toToggle().state) {
+			if (getSettings().get(0).asToggle().state) {
 				Optional<Entity> firstCrystal = Streams.stream(mc.world.getEntities())
 						.filter(e -> e instanceof EnderCrystalEntity
-								&& (!getSettings().get(3).toToggle().state || mc.player.canSee(e))
-								&& mc.player.distanceTo(e) <= getSettings().get(4).toSlider().getValue()
-								&& (getSettings().get(7).toSlider().getValue() >= getRatio(e, mc.player, (LivingEntity) firstPlayer.get()))
-								&& (!getSettings().get(8).toToggle().state || !willKill(e, mc.player))
-								&& (getSettings().get(9).toMode().mode != 0 || !(willPop(e, mc.player) && !willPop(e, (LivingEntity) firstPlayer.get()))
-								&& (getSettings().get(9).toMode().mode != 1 || !willPop(e, mc.player))))
+								&& (!getSettings().get(3).asToggle().state || mc.player.canSee(e))
+								&& mc.player.distanceTo(e) <= getSettings().get(4).asSlider().getValue()
+								&& (getSettings().get(7).asSlider().getValue() >= getRatio(e, mc.player, (LivingEntity) firstPlayer.get()))
+								&& (!getSettings().get(8).asToggle().state || !willKill(e, mc.player))
+								&& (getSettings().get(9).asMode().mode != 0 || !(willPop(e, mc.player) && !willPop(e, (LivingEntity) firstPlayer.get()))
+								&& (getSettings().get(9).asMode().mode != 1 || !willPop(e, mc.player))))
 						.sorted((e1, e2) -> Float.compare(e1.distanceTo(mc.player), e2.distanceTo(mc.player)))
 						.findFirst();
 	
 				if (firstCrystal.isPresent()) {
-					if (mc.player.hasStatusEffect(StatusEffects.WEAKNESS) && getSettings().get(10).toToggle().state) {
+					if (mc.player.hasStatusEffect(StatusEffects.WEAKNESS) && getSettings().get(10).asToggle().state) {
 						for (int i = 0; i < 9; i++) {
 							if (mc.player.inventory.getInvStack(i).getItem() instanceof SwordItem) {
 								mc.player.inventory.selectedSlot = i;
@@ -122,13 +122,13 @@ public class CrystalAura extends Module {
 						}
 					}
 	
-					if (getSettings().get(2).toToggle().state) {
+					if (getSettings().get(2).asToggle().state) {
 						EntityUtils.facePos(firstCrystal.get().getX(), firstCrystal.get().getY() + firstCrystal.get().getHeight() / 2, firstCrystal.get().getZ());
-					} else if (getSettings().get(1).toToggle().state) {
+					} else if (getSettings().get(1).asToggle().state) {
 						EntityUtils.facePosPacket(firstCrystal.get().getX(), firstCrystal.get().getY() + firstCrystal.get().getHeight() / 2, firstCrystal.get().getZ());
 					}
 		
-					if (getSettings().get(11).toToggle().state) {
+					if (getSettings().get(11).asToggle().state) {
 						BleachLogger.infoMessage("Predicted: " + getExplosionDamage(firstCrystal.get().getBlockPos().down(), mc.player)
 						+ " vs " + getExplosionDamage(firstCrystal.get().getBlockPos().down(), (LivingEntity) firstPlayer.get()) + " Damage \u00a7a[x"
 						+ getRatio(firstCrystal.get(), mc.player, (LivingEntity) firstPlayer.get()) + "]");
@@ -141,7 +141,7 @@ public class CrystalAura extends Module {
 				}
 			}
 			
-			if (getSettings().get(6).toToggle().state) {
+			if (getSettings().get(6).asToggle().state) {
 				int crystalSlot = -1;
 				for (int i = 0; i < 9; i++) {
 					if (mc.player.inventory.getInvStack(i).getItem() == Items.END_CRYSTAL) {
@@ -154,7 +154,7 @@ public class CrystalAura extends Module {
 				
 				BlockPos bestPos = null;
 				float bestRatio = -1f;
-				int range = (int) getSettings().get(4).toSlider().getValue() + 1;
+				int range = (int) getSettings().get(4).asSlider().getValue() + 1;
 				for (int x = -range; x < range + 1; x++) {
 					for (int y = -range; y < range; y++) {
 						for (int z = -range; z < range + 1; z++) {
@@ -163,12 +163,12 @@ public class CrystalAura extends Module {
 							if (!canPlace(basePos)) continue;
 							
 							if (mc.player.getPos().distanceTo(new Vec3d(basePos).add(0.5, 1, 0.5))
-									> getSettings().get(4).toSlider().getValue() + 0.25) continue;
+									> getSettings().get(4).asSlider().getValue() + 0.25) continue;
 							
-							if (getSettings().get(7).toSlider().getValue() >= getRatio(basePos, mc.player, (LivingEntity) firstPlayer.get())
-								&& (!getSettings().get(8).toToggle().state || !willKill(basePos, mc.player))
-								&& (getSettings().get(9).toMode().mode != 0 || !(willPop(basePos, mc.player) && !willPop(basePos, (LivingEntity) firstPlayer.get()))
-								&& (getSettings().get(9).toMode().mode != 1 || !willPop(basePos, mc.player)))) {
+							if (getSettings().get(7).asSlider().getValue() >= getRatio(basePos, mc.player, (LivingEntity) firstPlayer.get())
+								&& (!getSettings().get(8).asToggle().state || !willKill(basePos, mc.player))
+								&& (getSettings().get(9).asMode().mode != 0 || !(willPop(basePos, mc.player) && !willPop(basePos, (LivingEntity) firstPlayer.get()))
+								&& (getSettings().get(9).asMode().mode != 1 || !willPop(basePos, mc.player)))) {
 								
 								float ratio = getRatio(basePos, mc.player, (LivingEntity) firstPlayer.get());
 								if (bestPos == null || ratio < bestRatio) {
@@ -182,9 +182,9 @@ public class CrystalAura extends Module {
 	
 				if (bestPos != null) {
 					mc.player.inventory.selectedSlot = crystalSlot;
-					if (getSettings().get(2).toToggle().state) {
+					if (getSettings().get(2).asToggle().state) {
 						EntityUtils.facePos(bestPos.getX() + 0.5, bestPos.getY() + 1, bestPos.getZ() + 0.5);
-					} else if (getSettings().get(1).toToggle().state) {
+					} else if (getSettings().get(1).asToggle().state) {
 						EntityUtils.facePosPacket(bestPos.getX() + 0.5, bestPos.getY() + 1, bestPos.getZ() + 0.5);
 					}
 	

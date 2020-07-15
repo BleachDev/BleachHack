@@ -19,7 +19,7 @@ package bleach.hack.gui.clickgui;
 
 public class SettingBase {
 
-	public SettingMode toMode() {
+	public SettingMode asMode() {
 		try {
 			return (SettingMode) this;
 		} catch (Exception e) {
@@ -27,7 +27,7 @@ public class SettingBase {
 		}
 	}
 	
-	public SettingToggle toToggle() {
+	public SettingToggle asToggle() {
 		try {
 			return (SettingToggle) this;
 		} catch (Exception e) {
@@ -35,7 +35,7 @@ public class SettingBase {
 		}
 	}
 	
-	public SettingSlider toSlider() {
+	public SettingSlider asSlider() {
 		try {
 			return (SettingSlider) this;
 		} catch (Exception e) {

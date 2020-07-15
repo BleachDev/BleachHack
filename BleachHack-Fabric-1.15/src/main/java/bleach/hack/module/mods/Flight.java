@@ -49,21 +49,21 @@ public class Flight extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		float speed = (float) getSettings().get(1).toSlider().getValue();
+		float speed = (float) getSettings().get(1).asSlider().getValue();
 		
-		if (mc.player.age % 20 == 0 && getSettings().get(2).toMode().mode == 3 && !(getSettings().get(0).toMode().mode == 2)) {
+		if (mc.player.age % 20 == 0 && getSettings().get(2).asMode().mode == 3 && !(getSettings().get(0).asMode().mode == 2)) {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() - 0.06, mc.player.getZ(), false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getZ() + 0.06, mc.player.getZ(), true));
 		}
 		
-		if (getSettings().get(0).toMode().mode == 0) {
+		if (getSettings().get(0).asMode().mode == 0) {
 			mc.player.abilities.setFlySpeed(speed / 10);
 			mc.player.abilities.allowFlying = true;
 			mc.player.abilities.flying = true;
-		} else if (getSettings().get(0).toMode().mode == 1) {
-			if (getSettings().get(2).toMode().mode == 0 || getSettings().get(2).toMode().mode == 3) mc.player.setVelocity(0, 0, 0);
-			else if (getSettings().get(2).toMode().mode == 1 && WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.069, mc.player.getPosVector().getZ())).getBlock())) mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
-			else if (getSettings().get(2).toMode().mode == 2) mc.player.setVelocity(0, mc.player.age % 40 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() + 1.15, mc.player.getPosVector().getZ())).getBlock()) ? 0.15 : 0) : mc.player.age % 20 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.15, mc.player.getPosVector().getZ())).getBlock()) ? -0.15 : 0) : 0, 0);
+		} else if (getSettings().get(0).asMode().mode == 1) {
+			if (getSettings().get(2).asMode().mode == 0 || getSettings().get(2).asMode().mode == 3) mc.player.setVelocity(0, 0, 0);
+			else if (getSettings().get(2).asMode().mode == 1 && WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.069, mc.player.getPosVector().getZ())).getBlock())) mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
+			else if (getSettings().get(2).asMode().mode == 2) mc.player.setVelocity(0, mc.player.age % 40 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() + 1.15, mc.player.getPosVector().getZ())).getBlock()) ? 0.15 : 0) : mc.player.age % 20 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.15, mc.player.getPosVector().getZ())).getBlock()) ? -0.15 : 0) : 0, 0);
 			Vec3d forward = new Vec3d(0, 0, speed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 			
@@ -74,7 +74,7 @@ public class Flight extends Module {
 			if (mc.options.keyLeft.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(strafe.x, 0, strafe.z));
 			if (mc.options.keyRight.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(-strafe.x, 0, -strafe.z));
 
-		} else if (getSettings().get(0).toMode().mode == 2) {
+		} else if (getSettings().get(0).asMode().mode == 2) {
 			if (!mc.options.keyJump.isPressed()) return;
 			mc.player.setVelocity(mc.player.getVelocity().x, speed / 3, mc.player.getVelocity().z);
 		}
