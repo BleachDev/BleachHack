@@ -20,11 +20,16 @@ package bleach.hack.mixin;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
 import net.minecraft.client.render.Camera;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
@@ -35,5 +40,19 @@ public class MixinGameRenderer {
 		EventWorldRender event = new EventWorldRender(float_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
+	}
+
+	@Inject(at = {@At("HEAD")}, method = {"bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V"}, cancellable = true)
+	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).toToggle().state)
+			ci.cancel();
+	}
+
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0), method = {"renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V"})
+	private float nauseaWobble(float delta, float first, float second) {
+		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(6).toToggle().state))
+			return MathHelper.lerp(delta, first, second);
+
+		return 0;
 	}
 }
