@@ -27,6 +27,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.NoRender;
 
 @Mixin(InGameHud.class)
 public class MixinIngameHud {
@@ -36,5 +38,11 @@ public class MixinIngameHud {
 		EventDrawOverlay event = new EventDrawOverlay(matrixStack);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
+	}
+	
+	@Inject(at = @At("HEAD"), method = "renderPumpkinOverlay()V", cancellable = true)
+	private void onRenderPumpkinOverlay(CallbackInfo ci) {
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(4).asToggle().state)
+			ci.cancel();
 	}
 }

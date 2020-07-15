@@ -104,9 +104,9 @@ public class ModuleWindow extends ClickGuiWindow {
 			if (m.getValue()) {
 				for (SettingBase s: m.getKey().getSettings()) {
 					count++;
-					if (s instanceof SettingMode) drawModeSetting(s.toMode(), x, y+(count*12), textRend);
-					if (s instanceof SettingToggle) drawToggleSetting(s.toToggle(), x, y+(count*12), textRend);
-					if (s instanceof SettingSlider) drawSliderSetting(s.toSlider(), x, y+(count*12), textRend);
+					if (s instanceof SettingMode) drawModeSetting(s.asMode(), x, y+(count*12), textRend);
+					if (s instanceof SettingToggle) drawToggleSetting(s.asToggle(), x, y+(count*12), textRend);
+					if (s instanceof SettingSlider) drawSliderSetting(s.asSlider(), x, y+(count*12), textRend);
 					//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
 				}
 				count++;

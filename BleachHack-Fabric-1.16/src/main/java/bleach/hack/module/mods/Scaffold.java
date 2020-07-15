@@ -70,8 +70,8 @@ public class Scaffold extends Module {
 		if (slot == -1) return;
 		
 		mc.player.inventory.selectedSlot = slot;
-		double range = getSettings().get(0).toSlider().getValue();
-		int mode = getSettings().get(1).toMode().mode;
+		double range = getSettings().get(0).asSlider().getValue();
+		int mode = getSettings().get(1).asMode().mode;
 		
 		if (mode == 0) {
 			for (int r = 0; r < 5; r++) {

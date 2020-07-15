@@ -68,21 +68,21 @@ public class PacketFly extends Module {
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
 		if (mc.world == null || mc.player == null) return;
-		if (event.getPacket() instanceof PlayerPositionLookS2CPacket && getSettings().get(4).toToggle().state) {
+		if (event.getPacket() instanceof PlayerPositionLookS2CPacket && getSettings().get(4).asToggle().state) {
 			event.setCancelled(true);
 		}
 	}
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		double hspeed = getSettings().get(1).toSlider().getValue();
-		double vspeed = getSettings().get(2).toSlider().getValue();
+		double hspeed = getSettings().get(1).asSlider().getValue();
+		double vspeed = getSettings().get(2).asSlider().getValue();
 		
 		if (!mc.player.isAlive()) return;
 		timer++;
 		
 		Entity target = mc.player.getVehicle() == null ? mc.player : mc.player.getVehicle();
-		if (getSettings().get(0).toMode().mode == 0) {
+		if (getSettings().get(0).asMode().mode == 0) {
 			if (mc.options.keyJump.isPressed()) posY += vspeed;
 			if (mc.options.keySneak.isPressed()) posY -= vspeed;
 			
@@ -93,7 +93,7 @@ public class PacketFly extends Module {
 			if (mc.options.keyLeft.isPressed()) { posX += strafe.x; posZ += strafe.z; }
 			if (mc.options.keyRight.isPressed()) { posX -= strafe.x; posZ -= strafe.z; }
 			
-			if (timer > getSettings().get(3).toSlider().getValue()) {
+			if (timer > getSettings().get(3).asSlider().getValue()) {
 				posY -= 0.2;
 				timer = 0;
 			}
@@ -105,7 +105,7 @@ public class PacketFly extends Module {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(posX, posY - 0.01, posZ, true));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket(timer));
 			
-		} else if (getSettings().get(0).toMode().mode == 1) {
+		} else if (getSettings().get(0).asMode().mode == 1) {
 			double mX = 0; double mY = 0; double mZ = 0;
 			if (mc.player.headYaw != mc.player.yaw) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
@@ -123,7 +123,7 @@ public class PacketFly extends Module {
 				if (mc.player.getMovementDirection().equals(Direction.WEST)) mX = -0.275;
 			}
 			
-			if (timer > getSettings().get(3).toSlider().getValue()) {
+			if (timer > getSettings().get(3).asSlider().getValue()) {
 				mX = 0;
 				mZ = 0;
 				mY = -0.062;

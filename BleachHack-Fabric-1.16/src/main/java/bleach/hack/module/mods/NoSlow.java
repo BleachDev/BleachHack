@@ -53,7 +53,7 @@ public class NoSlow extends Module {
 		if (!isToggled()) return;
 			
 		/* Slowness */
-		if (getSettings().get(0).toToggle().state && (mc.player.getStatusEffect(StatusEffects.SLOWNESS) != null || mc.player.getStatusEffect(StatusEffects.BLINDNESS) != null)) {
+		if (getSettings().get(0).asToggle().state && (mc.player.getStatusEffect(StatusEffects.SLOWNESS) != null || mc.player.getStatusEffect(StatusEffects.BLINDNESS) != null)) {
 			if (mc.options.keyForward.isPressed() 
 					&& mc.player.getVelocity().x > -0.15 && mc.player.getVelocity().x < 0.15
 					&& mc.player.getVelocity().z > -0.15 && mc.player.getVelocity().z < 0.15) {
@@ -63,7 +63,7 @@ public class NoSlow extends Module {
 		}
 		
 		/* Soul Sand */
-		if (getSettings().get(1).toToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.SOUL_SAND)) {
+		if (getSettings().get(1).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.SOUL_SAND)) {
 			Vec3d m = new Vec3d(0, 0, 0.125).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			if (!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m));
@@ -71,7 +71,7 @@ public class NoSlow extends Module {
 		}
 		
 		/* Slime Block */
-		if (getSettings().get(2).toToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox().offset(0,-0.02,0), Blocks.SLIME_BLOCK)) {
+		if (getSettings().get(2).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox().offset(0,-0.02,0), Blocks.SLIME_BLOCK)) {
 			Vec3d m1 = new Vec3d(0, 0, 0.1).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			if (!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m1));
@@ -79,7 +79,7 @@ public class NoSlow extends Module {
 		}
 		
 		/* Web */
-		if (getSettings().get(3).toToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
+		if (getSettings().get(3).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
 			Vec3d m2 = new Vec3d(0, -1, 0.9).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			if (!mc.player.abilities.flying && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(mc.player.getVelocity().add(m2));
@@ -89,12 +89,12 @@ public class NoSlow extends Module {
 		// Items handled in MixinPlayerEntity:sendMovementPackets_isUsingItem
 
 		/* Inventory */
-		if (getSettings().get(5).toToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
+		if (getSettings().get(5).asToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
 			for (KeyBinding k: new KeyBinding[] { mc.options.keyForward, mc.options.keyBack, mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump }) {
 				k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
 			}
 			
-			if (getSettings().get(6).toToggle().state) {
+			if (getSettings().get(6).asToggle().state) {
 				mc.options.keySneak.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
 						InputUtil.fromTranslationKey(mc.options.keySneak.getBoundKeyTranslationKey()).getCode()));
 			}

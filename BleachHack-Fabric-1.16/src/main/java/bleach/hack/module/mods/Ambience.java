@@ -41,13 +41,13 @@ public class Ambience extends Module {
 	
 	@Subscribe
 	public void onPreTick(EventMovementTick event) {
-		if (getSettings().get(0).toToggle().state) {
-			if (getSettings().get(2).toMode().mode == 0) mc.world.setRainGradient(0f);
-			else mc.world.setRainGradient((float) getSettings().get(3).toSlider().getValue());
+		if (getSettings().get(0).asToggle().state) {
+			if (getSettings().get(2).asMode().mode == 0) mc.world.setRainGradient(0f);
+			else mc.world.setRainGradient((float) getSettings().get(3).asSlider().getValue());
 		}
-		if (getSettings().get(1).toToggle().state) {
-			mc.world.setTimeOfDay((long) getSettings().get(4).toSlider().getValue());
-			mc.world.setTimeOfDay((long) getSettings().get(4).toSlider().getValue());
+		if (getSettings().get(1).asToggle().state) {
+			mc.world.setTimeOfDay((long) getSettings().get(4).asSlider().getValue());
+			mc.world.setTimeOfDay((long) getSettings().get(4).asSlider().getValue());
 		}
 	}
 	

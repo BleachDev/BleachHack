@@ -71,12 +71,12 @@ public class Nuker extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		double range = getSettings().get(1).toSlider().getValue();
+		double range = getSettings().get(1).asSlider().getValue();
 		List<BlockPos> blocks = new ArrayList<>();
 		
 		/* Add blocks around player */
 		for (int x = (int) range; x >= (int) -range; x--) {
-			for (int y = (int) range; y >= (getSettings().get(4).toToggle().state ? 0 : (int) -range); y--) {
+			for (int y = (int) range; y >= (getSettings().get(4).asToggle().state ? 0 : (int) -range); y--) {
 				for (int z = (int) range; z >= (int) -range; z--) {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
 					if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos)) continue;
@@ -87,10 +87,10 @@ public class Nuker extends Module {
 		
 		if (blocks.isEmpty()) return;
 		
-		if (getSettings().get(6).toToggle().state) FabricReflect.writeField(
+		if (getSettings().get(6).asToggle().state) FabricReflect.writeField(
 				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
 		
-		if (getSettings().get(7).toMode().mode == 1) blocks.sort((a, b) -> Float.compare(
+		if (getSettings().get(7).asMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 		
 		/* Move the block under the player to last so it doesn't mine itself down without clearing everything above first */
@@ -101,7 +101,7 @@ public class Nuker extends Module {
 		
 		int broken = 0;
 		for (BlockPos pos: blocks) {
-			if (!getSettings().get(3).toToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
+			if (!getSettings().get(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 			
 			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 			
@@ -118,7 +118,7 @@ public class Nuker extends Module {
 			
 			if (dir == null) continue;
 			
-			if (getSettings().get(5).toToggle().state) {
+			if (getSettings().get(5).asToggle().state) {
 				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
 				EntityUtils.facePos(vec.x, vec.y, vec.z);
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
@@ -127,14 +127,14 @@ public class Nuker extends Module {
 				mc.player.pitch = prevRot[1];
 			}
 			
-			if (getSettings().get(0).toMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
+			if (getSettings().get(0).asMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
 			else mc.interactionManager.updateBlockBreakingProgress(pos, dir);
 			
 			mc.player.swingHand(Hand.MAIN_HAND);
 			
 			broken++;
-			if (getSettings().get(0).toMode().mode == 0
-					|| (getSettings().get(0).toMode().mode == 1 && broken >= (int) getSettings().get(8).toSlider().getValue())) return;
+			if (getSettings().get(0).asMode().mode == 0
+					|| (getSettings().get(0).asMode().mode == 1 && broken >= (int) getSettings().get(8).asSlider().getValue())) return;
 		}
 	}
 	

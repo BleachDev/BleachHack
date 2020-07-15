@@ -67,9 +67,9 @@ public class Peek extends Module {
 		
 		slotPos = new int[] {slot.xPosition, slot.yPosition};
 		
-		if (getSettings().get(0).toToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
-		if (getSettings().get(2).toToggle().state) drawBookToolTip(slot, event.mX, event.mY);
-		if (getSettings().get(3).toToggle().state) drawMapToolTip(slot, event.mX, event.mY);
+		if (getSettings().get(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
+		if (getSettings().get(2).asToggle().state) drawBookToolTip(slot, event.mX, event.mY);
+		if (getSettings().get(3).asToggle().state) drawMapToolTip(slot, event.mX, event.mY);
 	}
 	
 	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mX, int mY) {
@@ -95,13 +95,13 @@ public class Peek extends Module {
 		
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 		
-		if (getSettings().get(1).toMode().mode == 2) {
+		if (getSettings().get(1).asMode().mode == 2) {
 			event.setCancelled(true);
-		} else if (getSettings().get(1).toMode().mode == 1) {
+		} else if (getSettings().get(1).asMode().mode == 1) {
 			event.text = Arrays.asList(slot.getStack().getName().asString());
 		}
 		
-		int realY = getSettings().get(1).toMode().mode == 2 ? mY + 24 : mY;
+		int realY = getSettings().get(1).asMode().mode == 2 ? mY + 24 : mY;
 		
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
 		
@@ -160,7 +160,7 @@ public class Peek extends Module {
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
 		byte[] colors = data.colors;
 		
-		double size = getSettings().get(4).toSlider().getValue();
+		double size = getSettings().get(4).asSlider().getValue();
 		
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
