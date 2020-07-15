@@ -53,7 +53,6 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 	public void initWindows() {
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue();
-		System.out.println("INIT");
 		int i = 10;
 		for (Category c : Category.values()) {
 			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
