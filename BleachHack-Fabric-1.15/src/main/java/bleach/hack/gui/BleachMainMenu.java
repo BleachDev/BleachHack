@@ -201,7 +201,6 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
 				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
 				drawCenteredString(this.font,"§4§n[Update]", width/2, 11, -1);
-				//drawCenteredString(this.font, "§aUpdate §l[HERE]", width/2, 20, -1);
 			}
 		} catch (Exception e) { }
 		
@@ -316,9 +315,6 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				if (double_1 > width/2 - 80 && double_1 < width/2 + 80 && double_2 > 0 && double_2 < 20) {
 					Util.getOperatingSystem().open(new URI("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
 				}
-				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
-				drawCenteredString(this.font,"§4§n[Update]", width/2, 11, -1);
-				//drawCenteredString(this.font, "§aUpdate §l[HERE]", width/2, 20, -1);
 			}
 		} catch (Exception e) { }
 		
