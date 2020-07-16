@@ -45,6 +45,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -199,7 +200,8 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		try {
 			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
 				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
-				drawCenteredString(this.font,"§4[" + versions.get(0) + " > " + BleachHack.VERSION + "]", width/2, 11, -1);
+				drawCenteredString(this.font,"§4§n[Update]", width/2, 11, -1);
+				//drawCenteredString(this.font, "§aUpdate §l[HERE]", width/2, 20, -1);
 			}
 		} catch (Exception e) { }
 		
@@ -309,6 +311,17 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	}
 	
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
+		try {
+			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
+				if (double_1 > width/2 - 80 && double_1 < width/2 + 80 && double_2 > 0 && double_2 < 20) {
+					Util.getOperatingSystem().open(new URI("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
+				}
+				drawCenteredString(this.font, "§cOutdated BleachHack Version!", width/2, 2, -1);
+				drawCenteredString(this.font,"§4§n[Update]", width/2, 11, -1);
+				//drawCenteredString(this.font, "§aUpdate §l[HERE]", width/2, 20, -1);
+			}
+		} catch (Exception e) { }
+		
 		if (double_1 > 0 && double_1 < 20 && double_2 > height - 14 && double_2 < height) {
 			minecraft.openScreen(this);
 		}
