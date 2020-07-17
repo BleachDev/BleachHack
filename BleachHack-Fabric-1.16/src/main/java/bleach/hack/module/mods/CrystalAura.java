@@ -203,7 +203,7 @@ public class CrystalAura extends Module {
 		BlockPos placePos = basePos.up();
 		if (!mc.world.isAir(placePos)) return false;
 	
-		return mc.world.getEntities(null, new Box(placePos).stretch(0, 1, 0)).isEmpty();
+		return mc.world.getOtherEntities(null, new Box(placePos).stretch(0, 1, 0)).isEmpty();
 	}
 	
 	private boolean willPop(Entity crystal, LivingEntity target) {
@@ -258,7 +258,7 @@ public class CrystalAura extends Module {
 		int int_8 = MathHelper.floor(crystalPos.y + power + 1.0);
 		int int_9 = MathHelper.floor(crystalPos.z - power - 1.0);
 		int int_10 = MathHelper.floor(crystalPos.z + power + 1.0);
-		List<Entity> list_1 = mc.world.getEntities(null, new Box(int_3, int_7, int_9, int_4, int_8, int_10));
+		List<Entity> list_1 = mc.world.getOtherEntities(null, new Box(int_3, int_7, int_9, int_4, int_8, int_10));
 	
 		for (int int_11 = 0; int_11 < list_1.size(); ++int_11) {
 			if (!list_1.get(int_11).equals(target)) continue;
