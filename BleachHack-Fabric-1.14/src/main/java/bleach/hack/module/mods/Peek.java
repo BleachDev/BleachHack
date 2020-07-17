@@ -160,7 +160,7 @@ public class Peek extends Module {
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
 		byte[] colors = data.colors;
 		
-		double size = getSettings().get(3).asSlider().getValue();
+		double size = getSettings().get(4).asSlider().getValue();
 		
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
