@@ -47,13 +47,14 @@ public class BleachFileMang {
 	
 	/** Reads a file and returns a list of the lines. **/
 	public static List<String> readFileLines(String... file) {
-		try { return Files.readAllLines(stringsToPath(file));
+		try { 
+			return Files.readAllLines(stringsToPath(file));
 		} catch (NoSuchFileException e) {
-
+			
 		} catch (IOException e) {
 			System.out.println("Error Reading File: " + stringsToPath(file));
 			e.printStackTrace();
-		}
+		} 
 		
 		return new ArrayList<String>();
 	}
@@ -64,18 +65,24 @@ public class BleachFileMang {
 			if (fileExists(file)) return;
 			dir.toFile().mkdirs();
 			Files.createFile(stringsToPath(file));
-		} catch (IOException e) { System.out.println("Error Creating File: " + file); e.printStackTrace(); } 
+		} catch (IOException e) {
+			System.out.println("Error Creating File: " + file);
+			e.printStackTrace();
+		} 
 	}
 	
 	/** Creates a file, clears it if it already exists **/
 	public static void createEmptyFile(String... file) {
 		try { 
-			dir.toFile().mkdirs();
-			if (!fileExists(file)) Files.createFile(stringsToPath(file));
+			createFile(file);
+			
 			FileWriter writer = new FileWriter(stringsToPath(file).toFile());
 			writer.write("");
 			writer.close();
-		} catch (IOException e) { System.out.println("Error Clearing/Creating File: " + file); e.printStackTrace(); } 
+		} catch (IOException e) {
+			System.out.println("Error Clearing/Creating File: " + file);
+			e.printStackTrace();
+		} 
 	}
 	
 	/** Adds a line to a file. **/
@@ -84,20 +91,29 @@ public class BleachFileMang {
 			FileWriter writer = new FileWriter(stringsToPath(file).toFile(), true);
 			writer.write(content + "\n");
 			writer.close();
-		} catch (IOException e) { System.out.println("Error Appending File: " + file); e.printStackTrace(); } 
+		} catch (IOException e) {
+			System.out.println("Error Appending File: " + file);
+			e.printStackTrace();
+		} 
 	}
 	
 	/** Returns true if a file exists, returns false otherwise **/
 	public static boolean fileExists(String... file) {
-		try { return stringsToPath(file).toFile().exists();
-		} catch (Exception e) { return false; }
+		try {
+			return stringsToPath(file).toFile().exists();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	/** Deletes a file if it exists. **/
 	public static void deleteFile(String... file) {
 		try {
 			Files.deleteIfExists(stringsToPath(file));
-		} catch (Exception e) { System.out.println("Error Deleting File: " + file); e.printStackTrace(); } 
+		} catch (Exception e) { 
+			System.out.println("Error Deleting File: " + file);
+			e.printStackTrace(); 
+		} 
 	}
 	
 	/** Gets a file by walking down all of the parameters (starts at .minecraft/bleach/). **/
