@@ -11,6 +11,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.DiscordRPCManager;
+import bleach.hack.utils.file.BleachFileHelper;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import net.minecraft.SharedConstants;
@@ -19,8 +20,8 @@ import net.minecraft.item.Items;
 
 public class DiscordRPCMod extends Module {
 
-	public static String customText1 = "top text";
-	public static String customText2 = "bottom text";
+	private String customText1 = "top text";
+	private String customText2 = "bottom text";
 	
 	private int tick = 0;
 	
@@ -32,6 +33,14 @@ public class DiscordRPCMod extends Module {
 				new SettingMode("Text 2: ", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
 				new SettingMode("Elapsed: ", "Normal", "Random", "Backwards", "None"),
 				new SettingToggle("Silent", false));
+	}
+	
+	public void init() {
+		String t1 = BleachFileHelper.readMiscSetting("discordrpc_top_text");
+		String t2 = BleachFileHelper.readMiscSetting("discordrpc_bottom_text");
+		
+		if (t1 != null) customText1 = t1;
+		if (t2 != null) customText2 = t2;
 	}
 	
 	public void onEnable() {
@@ -136,5 +145,10 @@ public class DiscordRPCMod extends Module {
 		}
 		
 		tick++;
+	}
+	
+	public void setText(String t1, String t2) {
+		customText1 = t1;
+		customText2 = t2;
 	}
 }

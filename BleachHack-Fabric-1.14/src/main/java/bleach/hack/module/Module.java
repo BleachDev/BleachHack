@@ -74,6 +74,8 @@ public class Module {
 			}
 		} catch (Exception this_didnt_get_registered_hmm_weird) { this_didnt_get_registered_hmm_weird.printStackTrace(); } 
 	}
+	
+	public void init() {}
 
 	public String getName() {
 		return name;

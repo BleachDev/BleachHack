@@ -1,8 +1,10 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.DiscordRPCMod;
 import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.file.BleachFileHelper;
 
 public class CmdRpc extends Command {
 
@@ -27,10 +29,12 @@ public class CmdRpc extends Command {
 			BleachLogger.errorMessage(getSyntax());
 		}
 		
-		DiscordRPCMod.customText1 = args[0];
-		DiscordRPCMod.customText2 = args[1];
+		((DiscordRPCMod) ModuleManager.getModule(DiscordRPCMod.class)).setText(args[0], args[1]);
 		
 		BleachLogger.infoMessage("Set RPC to " + args[0] + ", " + args[1]);
+		
+		BleachFileHelper.saveMiscSetting("discordrpc_top_text", args[0]);
+		BleachFileHelper.saveMiscSetting("discordrpc_bottom_text", args[1]);
 	}
 
 }

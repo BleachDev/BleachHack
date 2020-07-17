@@ -32,7 +32,7 @@ public class CommandManager {
 			new CmdEnchant(),
 			new CmdEntityStats(),
 			new CmdFriends(),
- 			new CmdGamemode(),
+			new CmdGamemode(),
 			new CmdGive(),
 			new CmdGuiReset(),
 			new CmdHelp(),

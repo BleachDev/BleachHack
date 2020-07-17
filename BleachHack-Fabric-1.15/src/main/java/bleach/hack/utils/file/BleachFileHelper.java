@@ -19,6 +19,14 @@ package bleach.hack.utils.file;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.SettingBase;
@@ -33,6 +41,8 @@ import bleach.hack.utils.FriendManager;
 import net.minecraft.util.math.MathHelper;
 
 public class BleachFileHelper {
+	
+	private static Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
 
 	public static void saveModules() {
 		BleachFileMang.createEmptyFile("modules.txt");
@@ -62,7 +72,7 @@ public class BleachFileHelper {
 		}
 	}
 	
-	public static void saveSettings() {
+	public static void saveModSettings() {
 		BleachFileMang.createEmptyFile("settings.txt");
 		
 		String lines = "";
@@ -166,6 +176,69 @@ public class BleachFileHelper {
 		
 		BleachFileMang.createEmptyFile("friends.txt");
 		BleachFileMang.appendFile(toWrite, "friends.txt");
+	}
+	
+	public static String readMiscSetting(String key) {
+		List<String> lines = BleachFileMang.readFileLines("misc.json");
+		
+		if (lines.isEmpty()) return null;
+		
+		String merged = String.join("\n", lines);
+		
+		String value = null;
+		
+		try {
+			JsonElement mainJE = new JsonParser().parse(merged);
+			
+			if (mainJE.isJsonObject()) {
+				JsonObject mainJO = mainJE.getAsJsonObject();
+				
+				value = mainJO.get(key).getAsString();
+			}
+		} catch (JsonParseException e) {
+			System.err.println("Json error Trying to read misc settings! DELETING ENTIRE FILE!");
+			e.printStackTrace();
+			
+			BleachFileMang.deleteFile("misc.json");
+		}
+		
+		return value;
+	}
+	
+	public static void saveMiscSetting(String key, String value) {
+		JsonObject file = null;
+		boolean overwrite = false;
+		
+		if (!BleachFileMang.fileExists("misc.json")) {
+			overwrite = true;
+		} else {
+			List<String> lines = BleachFileMang.readFileLines("misc.json");
+			
+			if (lines.isEmpty()) {
+				overwrite = true;
+			} else {
+				String merged = String.join("\n", lines);
+				
+				try {
+					file = new JsonParser().parse(merged).getAsJsonObject();
+				} catch (Exception e) {
+					e.printStackTrace();
+					overwrite = true;
+				}
+			}
+		}
+		
+		BleachFileMang.createEmptyFile("misc.json");
+		if (overwrite) {
+			JsonObject mainJO = new JsonObject();
+			mainJO.add(key, new JsonPrimitive(value));
+			
+			BleachFileMang.appendFile(jsonWriter.toJson(mainJO), "misc.json");
+		} else {
+			file.add(key, new JsonPrimitive(value));
+			
+			BleachFileMang.appendFile(jsonWriter.toJson(file), "misc.json");
+		}
 	}
 	
 }

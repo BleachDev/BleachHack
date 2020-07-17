@@ -36,7 +36,6 @@ public class BleachFileMang {
 		dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/");
 		if (!dir.toFile().exists()) {
 			dir.toFile().mkdirs();
-			BleachFileHelper.saveSettings();
 		}
 	}
 	
