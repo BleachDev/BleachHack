@@ -21,6 +21,7 @@ import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
 import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 
@@ -30,7 +31,8 @@ public class ClickGui extends Module {
 	
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
-				new SettingSlider("Length: ", 70, 85, 70, 0));
+				new SettingSlider("Length: ", 70, 85, 70, 0),
+				new SettingToggle("Search bar", false));
 	}
 	
 	public void onEnable() {

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
@@ -50,7 +51,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	public int len;
 
-	private static Module module;
+	private Set<Module> searchedModules;
 
 	private Triple<Integer, Integer, String> tooltip = null;
 
@@ -92,15 +93,14 @@ public class ModuleWindow extends ClickGuiWindow {
 			if (m.getValue())
 				fillReverseGrey(matrix, x, y + (count * 12), x + len - 1, y + 12 + (count * 12));
 
+			Screen.fill(matrix, x, y + (count * 12), x + len, y + 12 + (count * 12),
+					mouseOver(x, y + (count * 12), x + len, y + 12 + (count * 12)) ? 0x70303070 : 0x00000000);
+			
 			//If they match: Module gets marked red
-			if (m.getKey() == module && ModuleManager.getModule(ClickGui.class).getSettings().get(1).toToggle().state)
-				Screen.fill(matrix, x, y + (count * 12), x + len, y + 12 + (count * 12),
-						mouseOver(x, y + (count * 12), x + len, y + 12 + (count * 12)) ? 0xFFCC0000 : 0xFFFF0000);
-
-			//The normal behavior
-			else
-				Screen.fill(matrix, x, y + (count * 12), x + len, y + 12 + (count * 12),
-						mouseOver(x, y + (count * 12), x + len, y + 12 + (count * 12)) ? 0x70303070 : 0x00000000);
+			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
+				Screen.fill(matrix, m.getValue() ? x + 1 : x, y + (count * 12) + (m.getValue() ? 1 : 0),
+						m.getValue() ? x + len - 3 : x + len, y + 12 + (count * 12), 0x50ff0000);
+			}
 
 			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len), x + 2,
 					y + 2 + (count * 12), m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
@@ -122,11 +122,11 @@ public class ModuleWindow extends ClickGuiWindow {
 				for (SettingBase s : m.getKey().getSettings()) {
 					count++;
 					if (s instanceof SettingMode)
-						drawModeSetting(matrix, s.toMode(), x, y + (count * 12), textRend);
+						drawModeSetting(matrix, s.asMode(), x, y + (count * 12), textRend);
 					if (s instanceof SettingToggle)
-						drawToggleSetting(matrix, s.toToggle(), x, y + (count * 12), textRend);
+						drawToggleSetting(matrix, s.asToggle(), x, y + (count * 12), textRend);
 					if (s instanceof SettingSlider)
-						drawSliderSetting(matrix, s.toSlider(), x, y + (count * 12), textRend);
+						drawSliderSetting(matrix, s.asSlider(), x, y + (count * 12), textRend);
 					// fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
 				}
 				count++;
@@ -135,10 +135,6 @@ public class ModuleWindow extends ClickGuiWindow {
 			}
 			count++;
 		}
-	}
-
-	public static void setModule(Module mod) {
-		module = mod;
 	}
 
 	public void drawBindSetting(MatrixStack matrix, Module m, int key, int x, int y, TextRenderer textRend) {
@@ -225,6 +221,10 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	public Triple<Integer, Integer, String> getTooltip() {
 		return tooltip;
+	}
+	
+	public void setSearchedModule(Set<Module> mods) {
+		searchedModules = mods;
 	}
 
 	public int getHeight() {

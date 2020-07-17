@@ -20,6 +20,7 @@ package bleach.hack.gui.clickgui.modulewindow;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -30,6 +31,8 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ClickGui;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -46,6 +49,8 @@ public class ModuleWindow extends ClickGuiWindow {
 	public boolean hiding;
 	
 	public int len;
+	
+	private Set<Module> searchedModules;
 	
 	private Triple<Integer, Integer, String> tooltip = null;
 	
@@ -90,6 +95,11 @@ public class ModuleWindow extends ClickGuiWindow {
 			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len),
 					x+2, y+2+(count*12), m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
 
+			//If they match: Module gets marked red
+			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
+				Screen.fill(m.getValue() ? x + 1 : x, y + (count * 12) + (m.getValue() ? 1 : 0),
+						m.getValue() ? x + len - 3 : x + len, y + 12 + (count * 12), 0x50ff0000);
+			}
 
 			/* Set which module settings show on */
 			if (mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
@@ -185,6 +195,10 @@ public class ModuleWindow extends ClickGuiWindow {
 	
 	public Triple<Integer, Integer, String> getTooltip() {
 		return tooltip;
+	}
+	
+	public void setSearchedModule(Set<Module> mods) {
+		searchedModules = mods;
 	}
 	
 	public int getHeight() {

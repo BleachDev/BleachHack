@@ -17,6 +17,8 @@
  */
 package bleach.hack.gui.clickgui;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +32,7 @@ import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Category;
+import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -37,7 +40,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text.Serializer;
 
 public class ClickGuiScreen extends AbstractWindowScreen {
 
@@ -51,9 +53,18 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	public ClickGuiScreen() {
 		super(new LiteralText("ClickGui"));
 	}
+	
+	public void init() {
+		searchField = new TextFieldWidget(textRenderer, 2, 14, 100, 12, LiteralText.EMPTY /* @LasnikProgram is author lol*/);
+		searchField.visible = false;
+		searchField.setMaxLength(20);
+		searchField.setSuggestion("Search here");
+		addButton(searchField);
+	}
 
 	public void initWindows() {
-		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue();
+		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).asSlider().getValue();
+		
 		int i = 10;
 		for (Category c : Category.values()) {
 			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
@@ -73,33 +84,32 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void render(MatrixStack matrix, int mX, int mY, float float_1) {
-		if(ModuleManager.getModule(ClickGui.class).getSettings().get(1).toToggle().state)
-			searchField.visible = true;
-		else
-			searchField.visible = false;
+		searchField.visible = ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state;
 		
 		this.renderBackground(matrix);
-		textRenderer.draw(matrix, "BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
-		textRenderer.draw(matrix, "BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
+		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 3, 3, 0x305090);
+		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		textRenderer.drawWithShadow(matrix,
 				"Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
 		textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
 				0x9999ff);
 		
-		if(ModuleManager.getModule(ClickGui.class).getSettings().get(1).toToggle().state) {
-			//Deletes the suggestion if something is typed
-			if (!searchField.getText().equals(""))
-				searchField.setSuggestion(null);
-	
-			//Throws and catches errors until typed text and module name are the same
-			try {
-				ModuleWindow.setModule(
-						ModuleManager.getModule(
-								ModuleManager.getModuleByName(
-										searchField.getText().replaceAll(" ", "")).getClass()));
-			} catch (Exception e) {
-				//Resetting the module -> color
-				ModuleWindow.setModule(null);
+		if (ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
+			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
+			
+			Set<Module> seachMods = new HashSet<>();
+			if (!searchField.getText().isEmpty()) {
+				for (Module m: ModuleManager.getModules()) {
+					if (m.getName().toLowerCase().contains(searchField.getText().toLowerCase().replace(" ", ""))) {
+						seachMods.add(m);
+					}
+				}
+			}
+			
+			for (Window w: windows) {
+				if (w instanceof ModuleWindow) {
+					((ModuleWindow) w).setSearchedModule(seachMods);
+				}
 			}
 		}
 
@@ -175,17 +185,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		for (Window m : windows) {
 			m.x1 = x;
 			m.y2 = 35;
-			x += (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).toSlider().getValue() + 5;
+			x += (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).asSlider().getValue() + 5;
 		}
-	}
-
-	//Init the text field
-	public void initTextField() {
-		searchField = new TextFieldWidget(textRenderer, 2, 14, 100, 12, new LiteralText("@LasnikProgram is author lol"));
-		searchField.visible = false;
-		searchField.setMaxLength(20);
-		searchField.setSuggestion("Search here");
-		buttons.add(searchField);
-		children.add(searchField);
 	}
 }

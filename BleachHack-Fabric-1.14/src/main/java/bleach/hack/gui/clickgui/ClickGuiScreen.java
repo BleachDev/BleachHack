@@ -17,6 +17,8 @@
  */
 package bleach.hack.gui.clickgui;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,8 +31,10 @@ import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Category;
+import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
@@ -42,8 +46,18 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	private boolean rmDown = false;
 	private boolean lmHeld = false;
 	
+	private TextFieldWidget searchField;
+	
 	public ClickGuiScreen() {
 		super(new LiteralText("ClickGui"));
+	}
+
+	public void init() {
+		searchField = new TextFieldWidget(font, 2, 14, 100, 12, "" /* @LasnikProgram is author lol*/);
+		searchField.visible = false;
+		searchField.setMaxLength(20);
+		searchField.setSuggestion("Search here");
+		addButton(searchField);
 	}
 
 	public void initWindows() {
@@ -68,11 +82,32 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void render(int mX, int mY, float float_1) {
+		searchField.visible = ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state;
+		
 		this.renderBackground();
 		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height-20, 0x99ff99);
 		font.drawWithShadow("Use " + Command.PREFIX + "guireset to reset the gui" , 2, height-10, 0x9999ff);
+		
+		if (ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
+			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
+			
+			Set<Module> seachMods = new HashSet<>();
+			if (!searchField.getText().isEmpty()) {
+				for (Module m: ModuleManager.getModules()) {
+					if (m.getName().toLowerCase().contains(searchField.getText().toLowerCase().replace(" ", ""))) {
+						seachMods.add(m);
+					}
+				}
+			}
+			
+			for (Window w: windows) {
+				if (w instanceof ModuleWindow) {
+					((ModuleWindow) w).setSearchedModule(seachMods);
+				}
+			}
+		}
 		
 		for (Window w: windows) {
 			if (w instanceof ClickGuiWindow) ((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);

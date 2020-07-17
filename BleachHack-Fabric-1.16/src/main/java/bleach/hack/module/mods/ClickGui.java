@@ -32,12 +32,11 @@ public class ClickGui extends Module {
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
 				new SettingSlider("Length: ", 70, 85, 70, 0),
-				new SettingToggle("Searchfunction", true));
+				new SettingToggle("Search bar", false));
 	}
 	
 	public void onEnable() {
 		mc.openScreen(clickGui);
 		setToggled(false);
-		clickGui.initTextField();
 	}
 }
