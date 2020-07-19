@@ -118,8 +118,12 @@ public class ModuleWindow extends ClickGuiWindow {
 					if (s instanceof SettingMode) drawModeSetting(s.asMode(), x, y+(count*12), textRend);
 					if (s instanceof SettingToggle) drawToggleSetting(s.asToggle(), x, y+(count*12), textRend);
 					if (s instanceof SettingSlider) drawSliderSetting(s.asSlider(), x, y+(count*12), textRend);
-					//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
+
+					if (!s.getDesc().isEmpty() && mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
+						tooltip = Triple.of(x + len + 2, y + count * 12, s.getDesc());
+					}
 				}
+				
 				count++;
 				drawBindSetting(m.getKey(), keyDown, x, y+(count*12), textRend);
 				//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);

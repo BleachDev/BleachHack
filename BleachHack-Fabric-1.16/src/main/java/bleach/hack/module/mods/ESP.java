@@ -37,12 +37,12 @@ public class ESP extends Module {
 	
 	public ESP() {
 		super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
-				new SettingToggle("Players", true),
-				new SettingToggle("Mobs", false),
-				new SettingToggle("Animals", false),
-				new SettingToggle("Items", true),
-				new SettingToggle("Crystals", true),
-				new SettingToggle("Vehicles", false));
+				new SettingToggle("Players", true).withDesc("Show Players"),
+				new SettingToggle("Mobs", false).withDesc("Show Mobs"),
+				new SettingToggle("Animals", false).withDesc("Show Animals"),
+				new SettingToggle("Items", true).withDesc("Show Items"),
+				new SettingToggle("Crystals", true).withDesc("Show End Crystals"),
+				new SettingToggle("Vehicles", false).withDesc("Show Vehicles"));
 	}
 
 	@Override

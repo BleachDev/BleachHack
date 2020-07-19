@@ -17,7 +17,9 @@
  */
 package bleach.hack.gui.clickgui;
 
-public class SettingBase {
+public abstract class SettingBase {
+	
+	protected String description = "";
 
 	public SettingMode asMode() {
 		try {
@@ -41,5 +43,14 @@ public class SettingBase {
 		} catch (Exception e) {
 			throw new IllegalStateException("Execption parsing setting: " + this);
 		}
+	}
+	
+	public String getDesc() {
+		return description;
+	}
+	
+	public SettingBase withDesc(String desc) {
+		description = desc;
+		return this;
 	}
 }

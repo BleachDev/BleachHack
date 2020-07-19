@@ -127,8 +127,12 @@ public class ModuleWindow extends ClickGuiWindow {
 						drawToggleSetting(matrix, s.asToggle(), x, y + (count * 12), textRend);
 					if (s instanceof SettingSlider)
 						drawSliderSetting(matrix, s.asSlider(), x, y + (count * 12), textRend);
-					// fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
+					
+					if (!s.getDesc().isEmpty() && mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
+						tooltip = Triple.of(x + len + 2, y + count * 12, s.getDesc());
+					}
 				}
+				
 				count++;
 				drawBindSetting(matrix, m.getKey(), keyDown, x, y + (count * 12), textRend);
 				// fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
