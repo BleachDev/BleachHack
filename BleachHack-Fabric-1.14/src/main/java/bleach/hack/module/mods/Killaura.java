@@ -33,13 +33,12 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
+import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
-import net.minecraft.util.Hand;
 
 public class Killaura extends Module {
 
@@ -76,7 +75,7 @@ public class Killaura extends Module {
 					|| ((LivingEntity)e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
 					|| (!mc.player.canSee(e) && !getSettings().get(5).asToggle().state)) continue;
 
-			if (getSettings().get(4).asToggle().state) EntityUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
+			if (getSettings().get(4).asToggle().state) WorldUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
 
 			if (((delay > reqDelay || reqDelay == 0) && !getSettings().get(6).asToggle().state) ||
 					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSettings().get(6).asToggle().state)) {
@@ -84,9 +83,7 @@ public class Killaura extends Module {
 
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
 
-				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(e));
-				mc.player.attack(e);
-				mc.player.swingHand(Hand.MAIN_HAND);
+				mc.interactionManager.attackEntity(mc.player, e);
 
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
 

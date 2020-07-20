@@ -38,8 +38,8 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
+import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -137,7 +137,7 @@ public class CrystalAura extends Module {
 				}
 			}
 
-			EntityUtils.facePosPacket(crystal.x, crystal.y, crystal.z);
+			WorldUtils.facePosPacket(crystal.x, crystal.y, crystal.z);
 			mc.interactionManager.attackEntity(mc.player, crystal);
 			mc.player.swingHand(Hand.MAIN_HAND);
 			++this.breaks;
@@ -233,7 +233,7 @@ public class CrystalAura extends Module {
 									return;
 								}
 
-								EntityUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
+								WorldUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
 								Direction f;
 								if (!getSettings().get(9).asToggle().state) {
 									f = Direction.UP;

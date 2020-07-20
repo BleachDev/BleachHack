@@ -29,7 +29,6 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import bleach.hack.utils.file.BleachFileMang;
@@ -120,7 +119,7 @@ public class Nuker extends Module {
 
 			if (getSettings().get(5).asToggle().state) {
 				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
-				EntityUtils.facePos(vec.x, vec.y, vec.z);
+				WorldUtils.facePos(vec.x, vec.y, vec.z);
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
 						mc.player.yaw, mc.player.pitch, mc.player.isOnGround()));
 				mc.player.yaw = prevRot[0];
