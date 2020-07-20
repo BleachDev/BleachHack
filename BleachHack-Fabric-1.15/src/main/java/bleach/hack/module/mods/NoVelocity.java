@@ -48,9 +48,9 @@ public class NoVelocity extends Module {
 				FabricReflect.writeField(packet, 0, "field_12561", "velocityZ");
 			}
 		} else if (event.getPacket() instanceof ExplosionS2CPacket) {
-			FabricReflect.writeField(event.getPacket(), 0,"field_12176", "velocityX");
-			FabricReflect.writeField(event.getPacket(), 0, "field_12182","velocityY");
-			FabricReflect.writeField(event.getPacket(), 0, "field_12183", "velocityZ");
+			FabricReflect.writeField(event.getPacket(), 0,"field_12176", "playerVelocityX");
+			FabricReflect.writeField(event.getPacket(), 0, "field_12182","playerVelocityY");
+			FabricReflect.writeField(event.getPacket(), 0, "field_12183", "playerVelocityZ");
 		}
 	}
 }
