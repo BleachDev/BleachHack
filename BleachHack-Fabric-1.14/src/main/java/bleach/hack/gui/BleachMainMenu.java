@@ -36,6 +36,7 @@ import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.UI;
 import bleach.hack.utils.Decrypter;
 import bleach.hack.utils.LoginManager;
+import bleach.hack.utils.file.BleachFileHelper;
 import bleach.hack.utils.file.BleachFileMang;
 import bleach.hack.utils.file.BleachGithubReader;
 import net.minecraft.SharedConstants;
@@ -103,6 +104,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		windows.get(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 - 2, h / 4 + 106, "MC Menu", () -> {
 					customTitleScreen = !customTitleScreen;
+					BleachFileHelper.saveMiscSetting("customTitleScreen", "false");
 					minecraft.openScreen(new TitleScreen(false));
 				}));
 		windows.get(0).buttons.add(

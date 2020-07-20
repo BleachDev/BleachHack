@@ -191,7 +191,9 @@ public class BleachFileHelper {
 			if (mainJE.isJsonObject()) {
 				JsonObject mainJO = mainJE.getAsJsonObject();
 
-				value = mainJO.get(key).getAsString();
+				if (mainJO.has(key)) {
+					value = mainJO.get(key).getAsString();
+				}
 			}
 		} catch (JsonParseException e) {
 			System.err.println("Json error Trying to read misc settings! DELETING ENTIRE FILE!");

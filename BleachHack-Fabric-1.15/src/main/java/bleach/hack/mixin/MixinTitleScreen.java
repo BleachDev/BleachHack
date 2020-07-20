@@ -29,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.gui.BleachMainMenu;
+import bleach.hack.utils.file.BleachFileHelper;
 
 @Mixin(TitleScreen.class)
 public class MixinTitleScreen extends Screen {
@@ -44,6 +45,7 @@ public class MixinTitleScreen extends Screen {
 		} else {
 			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, "BH", button -> {
 				BleachMainMenu.customTitleScreen = !BleachMainMenu.customTitleScreen;
+				BleachFileHelper.saveMiscSetting("customTitleScreen", "true");
 				minecraft.openScreen(new TitleScreen(false));
 			}));
 		}

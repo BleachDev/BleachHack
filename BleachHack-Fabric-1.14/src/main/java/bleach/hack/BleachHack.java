@@ -19,6 +19,7 @@ package bleach.hack;
 
 import com.google.common.eventbus.EventBus;
 
+import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -55,5 +56,10 @@ public class BleachHack implements ClientModInitializer {
 		eventBus.register(new ModuleManager());
 		// wait why do we need this ^?
 		// Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
+		
+		String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
+		if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
+			BleachMainMenu.customTitleScreen = false;
+		}
 	}
 }

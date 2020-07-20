@@ -36,8 +36,8 @@ public class DiscordRPCMod extends Module {
 	}
 
 	public void init() {
-		String t1 = BleachFileHelper.readMiscSetting("discordrpc_top_text");
-		String t2 = BleachFileHelper.readMiscSetting("discordrpc_bottom_text");
+		String t1 = BleachFileHelper.readMiscSetting("discordRPCTopText");
+		String t2 = BleachFileHelper.readMiscSetting("discordRPCBottomText");
 
 		if (t1 != null) customText1 = t1;
 		if (t2 != null) customText2 = t2;
