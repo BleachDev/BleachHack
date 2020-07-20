@@ -51,7 +51,7 @@ public class BowBot extends Module {
 	public void onTick(EventTick event) {
 		if (!(mc.player.getMainHandStack().getItem() instanceof RangedWeaponItem) || !mc.player.isUsingItem()) return;
 
-		if (getSettings().get(0).asToggle().state && BowItem.getPullProgress(mc.player.getItemUseTime()) > getSettings().get(1).asSlider().getValue()) {
+		if (getSettings().get(0).asToggle().state && BowItem.getPullProgress(mc.player.getItemUseTime()) >= getSettings().get(1).asSlider().getValue()) {
 			mc.player.stopUsingItem();
 			mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.UP));
 		}
