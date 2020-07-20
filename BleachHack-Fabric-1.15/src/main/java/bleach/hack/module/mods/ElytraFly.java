@@ -64,7 +64,7 @@ public class ElytraFly extends Module {
 		//if (getSettings().get(0).toMode().mode == 1) vec3d = new Vec3d(vec3d.x, 0, vec3d.z);
 
 		if (mc.player.isFallFlying()) {
-			if (getSettings().get(0).asMode().mode == 0) {
+			if (getSettings().get(0).asMode().mode == 0 && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(
 						mc.player.getVelocity().x + vec3d.x + (vec3d.x - mc.player.getVelocity().x),
 						mc.player.getVelocity().y + vec3d.y + (vec3d.y - mc.player.getVelocity().y),
