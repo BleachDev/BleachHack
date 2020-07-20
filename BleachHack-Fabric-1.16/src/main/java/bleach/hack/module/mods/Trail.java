@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,9 +36,9 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
 
 public class Trail extends Module {
-	
+
 	private List<List<Vec3d>> trails = new ArrayList<>();
-	
+
 	public Trail() {
 		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
 				new SettingToggle("Trail", true),
@@ -56,7 +56,7 @@ public class Trail extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (!getSettings().get(0).asToggle().state) return;
-		
+
 		if (trails.isEmpty()) trails.add(Arrays.asList(mc.player.getPos().add(0, 0.1, 0), mc.player.getPos()));
 		else if (mc.player.getPos().add(0, 0.1, 0).distanceTo(Iterables.getLast(trails).get(1)) > 0.15) {
 			trails.add(Arrays.asList(Iterables.getLast(trails).get(1), mc.player.getPos().add(0, 0.1, 0)));
@@ -69,7 +69,7 @@ public class Trail extends Module {
 		if (getSettings().get(2).asMode().mode == 0) clr = new Color(200, 50, 50);
 		else if (getSettings().get(2).asMode().mode == 1) clr = new Color(50, 200, 50);
 		else if (getSettings().get(2).asMode().mode == 2) clr = new Color(50, 50, 200);
-		
+
 		int count = 250;
 		boolean rev = false;
 		for (List<Vec3d> e: trails) {

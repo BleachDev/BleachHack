@@ -17,9 +17,9 @@ public class AutoRespawn extends Module {
 				new SettingToggle("Delay", false),
 				new SettingSlider("Delay: ", 1, 15, 5, 0));
 	}
-	
+
 	@Subscribe
-    public void onOpenScreen(EventOpenScreen event) {
+	public void onOpenScreen(EventOpenScreen event) {
 		if (event.getScreen() instanceof DeathScreen) {
 			if (getSettings().get(0).asToggle().state) {
 				for (int i = 0; i <= (int) getSettings().get(1).asSlider().getValue(); i++) BleachQueue.add("autorespawn", () -> {});
@@ -27,6 +27,6 @@ public class AutoRespawn extends Module {
 			} else {
 				mc.player.requestRespawn();
 			}
-        }
-    }
+		}
+	}
 }

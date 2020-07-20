@@ -15,13 +15,13 @@ public class MixinRenderTickCounter {
 
 	@Shadow
 	public float lastFrameDuration;
-	
+
 	@Shadow
 	public float tickDelta;
-	
+
 	@Shadow
 	private long prevTimeMillis;
-	
+
 	@Shadow
 	private float tickTime;
 
@@ -31,11 +31,11 @@ public class MixinRenderTickCounter {
 			this.lastFrameDuration = (float) (((timeMillis - this.prevTimeMillis) / this.tickTime)
 					* ModuleManager.getModule(Timer.class).getSettings().get(0).asSlider().getValue());
 			this.prevTimeMillis = timeMillis;
-		    this.tickDelta += this.lastFrameDuration;
-		    int i = (int) this.tickDelta;
-		    this.tickDelta -= (float) i;
-		    
-		    ci.setReturnValue(i);
+			this.tickDelta += this.lastFrameDuration;
+			int i = (int) this.tickDelta;
+			this.tickDelta -= i;
+
+			ci.setReturnValue(i);
 			ci.cancel();
 		}
 	}

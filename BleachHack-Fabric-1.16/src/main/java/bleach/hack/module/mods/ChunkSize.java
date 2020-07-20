@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -127,13 +127,13 @@ public class ChunkSize extends Module {
 		CompoundTag compoundTag7;
 		for (int i = -1; i < 17; ++i) {
 			final int finalI = i;
-			ChunkSection chunkSection = (ChunkSection) Arrays.stream(chunkSections).filter((chunkSectionx) -> {
+			ChunkSection chunkSection = Arrays.stream(chunkSections).filter((chunkSectionx) -> {
 				return chunkSectionx != null && chunkSectionx.getYOffset() >> 4 == finalI;
 			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
 			ChunkNibbleArray chunkNibbleArray = lightingProvider.get(LightType.BLOCK)
-					.getLightArray(ChunkSectionPos.from(chunkPos, i));
+					.getLightSection(ChunkSectionPos.from(chunkPos, i));
 			ChunkNibbleArray chunkNibbleArray2 = lightingProvider.get(LightType.SKY)
-					.getLightArray(ChunkSectionPos.from(chunkPos, i));
+					.getLightSection(ChunkSectionPos.from(chunkPos, i));
 			if (chunkSection != WorldChunk.EMPTY_SECTION || chunkNibbleArray != null || chunkNibbleArray2 != null) {
 				compoundTag7 = new CompoundTag();
 				compoundTag7.putByte("Y", (byte) (i & 255));
@@ -168,7 +168,7 @@ public class ChunkSize extends Module {
 
 		CompoundTag compoundTag6;
 		while (var21.hasNext()) {
-			BlockPos blockPos = (BlockPos) var21.next();
+			BlockPos blockPos = var21.next();
 			compoundTag6 = chunk.getPackedBlockEntityTag(blockPos);
 			if (compoundTag6 != null) {
 				listTag2.add(compoundTag6);
@@ -185,7 +185,7 @@ public class ChunkSize extends Module {
 				Iterator<Entity> var29 = worldChunk.getEntitySectionArray()[k].iterator();
 
 				while (var29.hasNext()) {
-					Entity entity = (Entity) var29.next();
+					Entity entity = var29.next();
 					CompoundTag compoundTag5 = new CompoundTag();
 					if (entity.saveToTag(compoundTag5)) {
 						worldChunk.setUnsaved(true);
@@ -232,10 +232,10 @@ public class ChunkSize extends Module {
 		Iterator<Entry<Type, Heightmap>> var33 = chunk.getHeightmaps().iterator();
 
 		while (var33.hasNext()) {
-			Entry<Heightmap.Type, Heightmap> entry = (Entry<Type, Heightmap>) var33.next();
+			Entry<Heightmap.Type, Heightmap> entry = var33.next();
 			if (chunk.getStatus().getHeightmapTypes().contains(entry.getKey())) {
-				compoundTag7.put(((Heightmap.Type) entry.getKey()).getName(),
-						new LongArrayTag(((Heightmap) entry.getValue()).asLongArray()));
+				compoundTag7.put(entry.getKey().getName(),
+						new LongArrayTag(entry.getValue().asLongArray()));
 			}
 		}
 
@@ -252,7 +252,7 @@ public class ChunkSize extends Module {
 		Iterator<Entry<StructureFeature<?>, StructureStart<?>>> var5 = structureStarts.entrySet().iterator();
 
 		while (var5.hasNext()) {
-			Entry<StructureFeature<?>, StructureStart<?>> entry = (Entry<StructureFeature<?>, StructureStart<?>>) var5
+			Entry<StructureFeature<?>, StructureStart<?>> entry = var5
 					.next();
 			compoundTag2.put(((StructureFeature<?>) entry.getKey()).getName(),
 					((StructureStart<?>) entry.getValue()).toTag(pos.x, pos.z));
@@ -263,9 +263,9 @@ public class ChunkSize extends Module {
 		Iterator<Entry<StructureFeature<?>, LongSet>> var9 = structureReferences.entrySet().iterator();
 
 		while (var9.hasNext()) {
-			Entry<StructureFeature<?>, LongSet> entry2 = (Entry<StructureFeature<?>, LongSet>) var9.next();
+			Entry<StructureFeature<?>, LongSet> entry2 = var9.next();
 			compoundTag3.put(((StructureFeature<?>) entry2.getKey()).getName(),
-					new LongArrayTag((LongSet) entry2.getValue()));
+					new LongArrayTag(entry2.getValue()));
 		}
 
 		compoundTag.put("References", compoundTag3);

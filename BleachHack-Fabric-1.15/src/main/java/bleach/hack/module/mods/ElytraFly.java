@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,13 +33,13 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class ElytraFly extends Module {
-			
+
 	public ElytraFly() {
 		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
 				new SettingMode("Mode: ", "Normal", "Control", "Bruh Momentum"),
 				new SettingSlider("Speed: ", 0, 5, 0.8, 2));
 	}
-	
+
 	@Subscribe
 	public void onClientMove(EventClientMove event) {
 		/* Cancel the retarded auto elytra movement */
@@ -47,7 +47,7 @@ public class ElytraFly extends Module {
 			if (!mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
 				event.vec3d = new Vec3d(event.vec3d.x, 0, event.vec3d.z);
 			}
-			
+
 			if (!mc.options.keyBack.isPressed() && !mc.options.keyLeft.isPressed()
 					&& !mc.options.keyRight.isPressed() && !mc.options.keyForward.isPressed()) {
 				event.vec3d = new Vec3d(0, event.vec3d.y, 0);
@@ -60,11 +60,11 @@ public class ElytraFly extends Module {
 		Vec3d vec3d = new Vec3d(0,0,getSettings().get(1).asSlider().getValue())
 				.rotateX(getSettings().get(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch))
 				.rotateY(-(float) Math.toRadians(mc.player.yaw));
-		
+
 		//if (getSettings().get(0).toMode().mode == 1) vec3d = new Vec3d(vec3d.x, 0, vec3d.z);
-		
+
 		if (mc.player.isFallFlying()) {
-			if (getSettings().get(0).asMode().mode == 0) {
+			if (getSettings().get(0).asMode().mode == 0 && mc.options.keyForward.isPressed()) {
 				mc.player.setVelocity(
 						mc.player.getVelocity().x + vec3d.x + (vec3d.x - mc.player.getVelocity().x),
 						mc.player.getVelocity().y + vec3d.y + (vec3d.y - mc.player.getVelocity().y),
@@ -80,7 +80,7 @@ public class ElytraFly extends Module {
 						&& !mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) vec3d = Vec3d.ZERO;
 				mc.player.setVelocity(vec3d.multiply(2));
 			}
-		} else if (getSettings().get(0).asMode().mode == 2 && !mc.player.onGround 
+		} else if (getSettings().get(0).asMode().mode == 2 && !mc.player.onGround
 				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA && mc.player.fallDistance > 0.5) {
 			/* I tried packet mode and got whatever the fuck **i mean frick** this is */
 			if (mc.options.keySneak.isPressed()) return;

@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +31,7 @@ import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class Flight extends Module {
-	
+
 	public Flight() {
 		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
 				new SettingMode("Mode: ", "Normal","Static","Jetpack"),
@@ -49,12 +49,12 @@ public class Flight extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		float speed = (float) getSettings().get(1).asSlider().getValue();
-		
+
 		if (mc.player.age % 20 == 0 && getSettings().get(2).asMode().mode == 3 && !(getSettings().get(0).asMode().mode == 2)) {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y - 0.06, mc.player.z, false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y + 0.06, mc.player.z, true));
 		}
-		
+
 		if (getSettings().get(0).asMode().mode == 0) {
 			mc.player.abilities.setFlySpeed(speed / 10);
 			mc.player.abilities.allowFlying = true;
@@ -65,7 +65,7 @@ public class Flight extends Module {
 			else if (getSettings().get(2).asMode().mode == 2) mc.player.setVelocity(0, mc.player.age % 40 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() + 1.15, mc.player.getPosVector().getZ())).getBlock()) ? 0.15 : 0) : mc.player.age % 20 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.15, mc.player.getPosVector().getZ())).getBlock()) ? -0.15 : 0) : 0, 0);
 			Vec3d forward = new Vec3d(0, 0, speed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
-			
+
 			if (mc.options.keyJump.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, speed, 0));
 			if (mc.options.keySneak.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, -speed, 0));
 			if (mc.options.keyBack.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(-forward.x, 0, -forward.z));

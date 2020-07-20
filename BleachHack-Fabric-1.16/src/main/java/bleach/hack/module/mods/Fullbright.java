@@ -12,28 +12,28 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 
 public class Fullbright extends Module {
-			
+
 	public Fullbright() {
 		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.",
 				new SettingMode("Mode: ", "Gamma", "Potion"));
 	}
 
 	// table setting [B]roke
-	
+
 	@Override
 	public void onDisable() {
 		super.onDisable();
 
 		if (mc.options.gamma > 1) {
 			double g = mc.options.gamma;
-			
+
 			while (g > 1) {
 				double nextStep = Math.max(g - 2, 1);
 				BleachQueue.add("fullbright", () -> mc.options.gamma = nextStep);
 				g -= 2;
 			}
 		}
-		
+
 		mc.player.removeStatusEffect(StatusEffects.NIGHT_VISION);
 		//Vanilla code to remap light level table.
 		/*for (int i = 0; i <= 15; ++i) {
@@ -41,10 +41,10 @@ public class Fullbright extends Module {
 			mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) / (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F;
 		}*/
 	}
-	
+
 	public void onEnable() {
 		super.onEnable();
-		
+
 		BleachQueue.cancelQueue("fullbright");
 	}
 

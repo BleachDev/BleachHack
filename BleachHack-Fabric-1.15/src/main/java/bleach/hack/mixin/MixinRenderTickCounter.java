@@ -15,28 +15,28 @@ public class MixinRenderTickCounter {
 
 	@Shadow
 	public float lastFrameDuration;
-	
+
 	@Shadow
 	public int ticksThisFrame;
-	
+
 	@Shadow
 	public float tickDelta;
-	
+
 	@Shadow
 	private long prevTimeMillis;
-	
+
 	@Shadow
 	private float tickTime;
 
 	@Inject(at = @At("HEAD"), method = "beginRenderTick", cancellable = true)
 	public void beginRenderTick(long long_1, CallbackInfo ci) {
 		if (ModuleManager.getModule(Timer.class).isToggled()) {
-			this.lastFrameDuration = (float)(long_1 - this.prevTimeMillis) / this.tickTime;
+			this.lastFrameDuration = (long_1 - this.prevTimeMillis) / this.tickTime;
 			lastFrameDuration *= (float) ModuleManager.getModule(Timer.class).getSettings().get(0).asSlider().getValue();
 			this.prevTimeMillis = long_1;
 			this.tickDelta += this.lastFrameDuration;
 			this.ticksThisFrame = (int)this.tickDelta;
-			this.tickDelta -= (float)this.ticksThisFrame;
+			this.tickDelta -= this.ticksThisFrame;
 
 			ci.cancel();
 		}

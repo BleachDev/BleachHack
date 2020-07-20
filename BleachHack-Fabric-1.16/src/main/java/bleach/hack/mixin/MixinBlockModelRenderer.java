@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,18 +39,18 @@ import java.util.Random;
  */
 @Mixin(BlockModelRenderer.class)
 public class MixinBlockModelRenderer {
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void render(BlockRenderView blockRenderView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, MatrixStack matrixStack_1, VertexConsumer vertexConsumer_1, boolean boolean_1, Random random_1, long long_1, int int_1, CallbackInfoReturnable<Boolean> ci) {
-        try {
-            Xray xray = (Xray) ModuleManager.getModule(Xray.class);
-            if (!xray.isVisible(blockState_1.getBlock())) {
-                ci.setReturnValue(false);
-                ci.cancel();
-            }
-        } catch (Exception ignored) {}
-    }
+	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
+	private void render(BlockRenderView blockRenderView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, MatrixStack matrixStack_1, VertexConsumer vertexConsumer_1, boolean boolean_1, Random random_1, long long_1, int int_1, CallbackInfoReturnable<Boolean> ci) {
+		try {
+			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+			if (!xray.isVisible(blockState_1.getBlock())) {
+				ci.setReturnValue(false);
+				ci.cancel();
+			}
+		} catch (Exception ignored) {}
+	}
 
-    /*@ModifyArg(method = "render", at = @At(value = "HEAD", target = "Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;ZLjava/util/Random;JI)Z"))
+	/*@ModifyArg(method = "render", at = @At(value = "HEAD", target = "Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;ZLjava/util/Random;JI)Z"))
     private boolean renderSmooth(boolean boolean_1) {
         try {
             if (ModuleManager.getModule(Xray.class).isToggled()) return false;
@@ -66,5 +66,5 @@ public class MixinBlockModelRenderer {
 
         return boolean_1;
     }*/
-	
+
 }
