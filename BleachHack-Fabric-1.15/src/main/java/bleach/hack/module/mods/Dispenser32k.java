@@ -24,21 +24,15 @@ import net.minecraft.container.SlotActionType;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AirBlockItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
-import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class Dispenser32k extends Module {
@@ -113,12 +107,12 @@ public class Dispenser32k extends Module {
 
 			rot = Math.abs(x) > Math.abs(z) ? x > 0 ? new int[] {-1, 0} : new int[] {1, 0} : z > 0 ? new int[] {0, -1} : new int[] {0, 1};
 
-			if (!(canPlaceBlock(pos) /*|| canPlaceBlock(pos.add(rot[0], 0, rot[1]))*/)
-					|| !isBlockEmpty(pos)
-					|| !isBlockEmpty(pos.add(rot[0], 0, rot[1]))
-					|| !isBlockEmpty(pos.add(0, 1, 0))
-					|| !isBlockEmpty(pos.add(0, 2, 0))
-					|| !isBlockEmpty(pos.add(rot[0], 1, rot[1]))) {
+			if (!(WorldUtils.canPlaceBlock(pos) /*|| canPlaceBlock(pos.add(rot[0], 0, rot[1]))*/)
+					|| !WorldUtils.isBlockEmpty(pos)
+					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))
+					|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
+					|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
+					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1]))) {
 				BleachLogger.errorMessage("Unable to place 32k");
 				setToggled(false);
 				return;
@@ -126,11 +120,11 @@ public class Dispenser32k extends Module {
 
 			boolean rotate = getSettings().get(0).asToggle().state;
 
-			placeBlock(pos, block, rotate, false);
+			WorldUtils.placeBlock(pos, block, rotate, false);
 
-			rotatePacket(
+			WorldUtils.facePosPacket(
 					pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
-			placeBlock(pos.add(0, 1, 0), dispenser, false, false);
+			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false);
 			return;
 
 		} else {
@@ -145,16 +139,16 @@ public class Dispenser32k extends Module {
 								mc.player.getPos().add(x - rot[0] / 2, y + 0.5, z + rot[1] / 2)) > 4.5
 								|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 										mc.player.getPos().add(x + 0.5, y + 2.5, z + 0.5)) > 4.5
-								|| !(canPlaceBlock(pos) /*|| canPlaceBlock(pos.add(rot[0], 0, rot[1]))*/)
-								|| !isBlockEmpty(pos)
-								|| !isBlockEmpty(pos.add(rot[0], 0, rot[1]))
-								|| !isBlockEmpty(pos.add(0, 1, 0))
-								|| !isBlockEmpty(pos.add(0, 2, 0))
-								|| !isBlockEmpty(pos.add(rot[0], 1, rot[1]))) continue;
+								|| !(WorldUtils.canPlaceBlock(pos) /*|| canPlaceBlock(pos.add(rot[0], 0, rot[1]))*/)
+								|| !WorldUtils.isBlockEmpty(pos)
+								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))
+								|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
+								|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
+								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1]))) continue;
 
 						startRot = new float[] {mc.player.yaw, mc.player.pitch};
-						rotateClient(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
-						rotatePacket(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
+						WorldUtils.facePos(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
+						WorldUtils.facePosPacket(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
 						return;
 					}
 				}
@@ -175,8 +169,8 @@ public class Dispenser32k extends Module {
 		if (ticksPassed == 1) {
 			//boolean rotate = getSettings().get(0).toToggle().state;
 
-			placeBlock(pos, block, false, false);
-			placeBlock(pos.add(0, 1, 0), dispenser, false, false);
+			WorldUtils.placeBlock(pos, block, false, false);
+			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false);
 			mc.player.yaw = startRot[0];
 			mc.player.pitch = startRot[1];
 
@@ -245,12 +239,12 @@ public class Dispenser32k extends Module {
 
 		if (dispenserTicks == 1) {
 			mc.openScreen(null);
-			placeBlock(pos.add(0, 2, 0), redstone, getSettings().get(0).asToggle().state, false);
+			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSettings().get(0).asToggle().state, false);
 		}
 
 		if (mc.world.getBlockState(pos.add(rot[0], 1, rot[1])).getBlock() instanceof ShulkerBoxBlock
 				&& mc.world.getBlockState(pos.add(rot[0], 0, rot[1])).getBlock() != Blocks.HOPPER) {
-			placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSettings().get(0).asToggle().state, false);
+			WorldUtils.placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSettings().get(0).asToggle().state, false);
 			openBlock(pos.add(rot[0], 0, rot[1]));
 		}
 
@@ -273,11 +267,10 @@ public class Dispenser32k extends Module {
 				return;
 			}
 
-			rotateClient(target.getPos().x, target.getPos().y + 1, target.getPos().z);
+			WorldUtils.facePos(target.getPos().x, target.getPos().y + 1, target.getPos().z);
 
 			if (target.getPos().distanceTo(mc.player.getPos()) > 6) return;
 			mc.interactionManager.attackEntity(mc.player, target);
-			mc.player.swingHand(Hand.MAIN_HAND);
 		}
 	}
 
@@ -290,84 +283,5 @@ public class Dispenser32k extends Module {
 					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos, false));
 			return;
 		}
-	}
-
-	private boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack) {
-		if (!isBlockEmpty(pos)) return false;
-
-		if (slot != mc.player.inventory.selectedSlot) mc.player.inventory.selectedSlot = slot;
-
-		for (Direction d: Direction.values()) {
-			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-
-			Vec3d vec = new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
-					pos.getY() + 0.5 + d.getOffsetY() * 0.5,
-					pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
-
-			if (WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock)
-					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.25) continue;
-
-			float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
-
-			if (rotate) rotatePacket(vec.x, vec.y, vec.z);
-			if (WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
-			mc.interactionManager.interactBlock(
-					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos, false));
-			if (WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
-			if (rotateBack) mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(rot[0], rot[1], mc.player.onGround));
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isBlockEmpty(BlockPos pos) {
-		if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) return false;
-
-		Box box = new Box(pos);
-		for (Entity e: mc.world.getEntities()) {
-			if (e instanceof LivingEntity && box.intersects(e.getBoundingBox())) return false;
-		}
-
-		return true;
-	}
-
-	private boolean canPlaceBlock(BlockPos pos) {
-		if (!isBlockEmpty(pos)) return false;
-		for (Direction d: Direction.values()) {
-			if (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
-					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
-							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
-									pos.getY() + 0.5 + d.getOffsetY() * 0.5,
-									pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.25) continue;
-			return true;
-		}
-		return false;
-	}
-
-	private void rotateClient(double x, double y, double z) {
-		double diffX = x - mc.player.getPos().x;
-		double diffY = y - (mc.player.getPos().y + mc.player.getEyeHeight(mc.player.getPose()));
-		double diffZ = z - mc.player.getPos().z;
-
-		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-		float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
-		float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
-
-		mc.player.yaw += MathHelper.wrapDegrees(yaw - mc.player.yaw);
-		mc.player.pitch += MathHelper.wrapDegrees(pitch - mc.player.pitch);
-	}
-
-	private void rotatePacket(double x, double y, double z) {
-		double diffX = x - mc.player.getPos().x;
-		double diffY = y - (mc.player.getPos().y + mc.player.getEyeHeight(mc.player.getPose()));
-		double diffZ = z - mc.player.getPos().z;
-
-		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-		float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
-		float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
-
-		mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(yaw, pitch, mc.player.onGround));
 	}
 }

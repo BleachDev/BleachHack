@@ -28,7 +28,7 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.utils.EntityUtils;
+import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BowItem;
@@ -97,7 +97,7 @@ public class BowBot extends Module {
 					/ (g * hDistance)));
 
 			// set pitch
-			if (Float.isNaN(neededPitch)) EntityUtils.facePos(target.getX(), target.getY() + target.getHeight() / 2, target.getZ());
+			if (Float.isNaN(neededPitch)) WorldUtils.facePos(target.getX(), target.getY() + target.getHeight() / 2, target.getZ());
 			else mc.player.pitch = neededPitch;
 		}
 	}
