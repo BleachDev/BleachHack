@@ -256,7 +256,7 @@ public class CrystalAura extends Module {
 								}
 
 								mc.interactionManager.interactBlock(mc.player, mc.world, offhand ? Hand.OFF_HAND : Hand.MAIN_HAND,
-										new BlockHitResult(Vec3d.of(q), f, q.offset(f), false));
+										new BlockHitResult(Vec3d.of(q), f, q, false));
 							}
 
 							if (isSpoofingAngles) {
@@ -311,7 +311,7 @@ public class CrystalAura extends Module {
 	@Subscribe
 	public void onRenderWorld(EventWorldRender event) {
 		if (this.render != null) {
-			RenderUtils.drawFilledBox(render, 0.8f, 0.8f, 1f, 0.4f);
+			RenderUtils.drawFilledBox(render, 0.7f, 0.7f, 1f, 0.7f);
 		}
 	}
 
