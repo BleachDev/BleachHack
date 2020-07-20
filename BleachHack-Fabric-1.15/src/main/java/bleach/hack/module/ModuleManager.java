@@ -19,11 +19,16 @@ package bleach.hack.module;
 
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
+
 import com.google.common.eventbus.Subscribe;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.lwjgl.glfw.GLFW;
 
 public class ModuleManager {
 
@@ -116,6 +121,8 @@ public class ModuleManager {
 
 	@Subscribe
 	public static void handleKeyPress(EventKeyPress eventKeyPress) {
+		if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) return;
+		
 		mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(m -> m.toggle());
 	}
 }
