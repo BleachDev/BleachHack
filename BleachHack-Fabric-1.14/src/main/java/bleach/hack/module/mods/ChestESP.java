@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -52,7 +52,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 
 public class ChestESP extends Module {
-	
+
 	public ChestESP() {
 		super("ChestESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.",
 				new SettingToggle("Chests", true),
@@ -72,12 +72,12 @@ public class ChestESP extends Module {
 	@Subscribe
 	public void onRender(EventWorldRender event) {
 		List<BlockPos> linkedChests = new ArrayList<>();
-		
+
 		for (BlockEntity e: mc.world.blockEntities) {
 			if (linkedChests.contains(e.getPos())) {
 				continue;
 			}
-			
+
 			if ((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity) && getSettings().get(0).asToggle().state) {
 				BlockPos p = drawChest(e.getPos());
 				if (p != null) linkedChests.add(p);
@@ -97,7 +97,7 @@ public class ChestESP extends Module {
 				RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.4F, 0.2F, 0.7F);
 			}
 		}
-		
+
 		for (Entity e: mc.world.getEntities()) {
 			if (e instanceof ChestMinecartEntity && getSettings().get(7).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getBoundingBox(), 1.9F, 1.5F, 0.3F, 0.7F);
@@ -114,31 +114,31 @@ public class ChestESP extends Module {
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.45F, 0.1F, 0.7F);
 				}
 			}
-			
+
 			if (e instanceof ArmorStandEntity && getSettings().get(11).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getBoundingBox(), 0.5F, 0.4F, 0.1F, 0.7F);
 			}
 		}
 	}
-	
+
 	/** returns the other chest if its linked, othwise null **/
 	private BlockPos drawChest(BlockPos pos) {
 		BlockState state = mc.world.getBlockState(pos);
-		
+
 		if (!(state.getBlock() instanceof ChestBlock)) {
 			RenderUtils.drawFilledBox(pos, 1F, 0.6F, 0.3F, 0.7F);
 			return null;
 		}
-		
+
 		if (state.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE) {
 			RenderUtils.drawFilledBox(new Box(
 					pos.getX() + 0.06, pos.getY(), pos.getZ() + 0.06,
 					pos.getX() + 0.94, pos.getY() + 0.875, pos.getZ() + 0.94), 1F, 0.6F, 0.3F, 0.7F);
 			return null;
 		}
-		
+
 		boolean north = false, east = false, south = false, west = false;
-		
+
 		Direction dir = ChestBlock.getFacing(state);
 		if (dir == Direction.NORTH) {
 			north = true;
@@ -149,16 +149,16 @@ public class ChestESP extends Module {
 		} else if (dir == Direction.WEST) {
 			west = true;
 		}
-		
+
 		RenderUtils.drawFilledBox(new Box(
 				west ? pos.getX() - 0.94 : pos.getX() + 0.06,
-				pos.getY(),
-				north ? pos.getZ() - 0.94 : pos.getZ() + 0.06,
-				east ? pos.getX() + 1.94 : pos.getX() + 0.94,
-				pos.getY() + 0.875,
-				south ? pos.getZ() + 1.94 : pos.getZ() + 0.94),
+						pos.getY(),
+						north ? pos.getZ() - 0.94 : pos.getZ() + 0.06,
+								east ? pos.getX() + 1.94 : pos.getX() + 0.94,
+										pos.getY() + 0.875,
+										south ? pos.getZ() + 1.94 : pos.getZ() + 0.94),
 				1F, 0.6F, 0.3F, 0.7F);
-		
+
 		return north ? pos.north() : east ? pos.east() : south ? pos.south() : west ? pos.west() : null;
 	}
 

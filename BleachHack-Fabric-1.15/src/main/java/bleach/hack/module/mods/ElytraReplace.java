@@ -14,46 +14,46 @@ import net.minecraft.item.Items;
 
 public class ElytraReplace extends Module {
 
-    private boolean jump = false;
+	private boolean jump = false;
 
-    public ElytraReplace() {
-        super("ElytraReplace", KEY_UNBOUND, Category.PLAYER, "Automatically replaces broken elytra and continues flying");
-    }
+	public ElytraReplace() {
+		super("ElytraReplace", KEY_UNBOUND, Category.PLAYER, "Automatically replaces broken elytra and continues flying");
+	}
 
-    @Subscribe
-    public void onTick(EventTick event) {
-    	if((mc.currentScreen instanceof ContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
-    	
-        int chestSlot = 38;
-        ItemStack chest = mc.player.inventory.getInvStack(chestSlot);
-        if (chest.getItem() instanceof ElytraItem && chest.getDamage() == (Items.ELYTRA.getMaxDamage() - 1)) {
-            // search inventory for elytra
+	@Subscribe
+	public void onTick(EventTick event) {
+		if((mc.currentScreen instanceof ContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
 
-            Integer elytraSlot = null;
-            for (int slot = 0; slot < 36; slot++) {
-                ItemStack stack = mc.player.inventory.getInvStack(slot);
-                if (stack.isEmpty() || !(stack.getItem() instanceof ElytraItem) || stack.getDamage() == (Items.ELYTRA.getMaxDamage() - 1))
-                    continue;
-                else {
-                    elytraSlot = slot;
-                    break;
-                }
-            }
+		int chestSlot = 38;
+		ItemStack chest = mc.player.inventory.getInvStack(chestSlot);
+		if (chest.getItem() instanceof ElytraItem && chest.getDamage() == (Items.ELYTRA.getMaxDamage() - 1)) {
+			// search inventory for elytra
 
-            if (elytraSlot == null) {
-                return;
-            }
+			Integer elytraSlot = null;
+			for (int slot = 0; slot < 36; slot++) {
+				ItemStack stack = mc.player.inventory.getInvStack(slot);
+				if (stack.isEmpty() || !(stack.getItem() instanceof ElytraItem) || stack.getDamage() == (Items.ELYTRA.getMaxDamage() - 1))
+					continue;
+				else {
+					elytraSlot = slot;
+					break;
+				}
+			}
 
-            mc.interactionManager.clickSlot(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
-            mc.interactionManager.clickSlot(mc.player.container.syncId, elytraSlot < 9 ? (elytraSlot + 36) : (elytraSlot), 0, SlotActionType.PICKUP, mc.player);
-            mc.interactionManager.clickSlot(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
+			if (elytraSlot == null) {
+				return;
+			}
 
-            mc.options.keyJump.setPressed(true);  // Make them fly again
-            jump = true;
-        } else if (jump) {
-            mc.options.keyJump.setPressed(false); // Make them fly again
-            jump = false;
-        }
-    }
+			mc.interactionManager.clickSlot(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
+			mc.interactionManager.clickSlot(mc.player.container.syncId, elytraSlot < 9 ? (elytraSlot + 36) : (elytraSlot), 0, SlotActionType.PICKUP, mc.player);
+			mc.interactionManager.clickSlot(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
+
+			mc.options.keyJump.setPressed(true);  // Make them fly again
+			jump = true;
+		} else if (jump) {
+			mc.options.keyJump.setPressed(false); // Make them fly again
+			jump = false;
+		}
+	}
 }
 

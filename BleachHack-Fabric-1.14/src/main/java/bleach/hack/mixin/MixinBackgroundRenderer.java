@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(BackgroundRenderer.class)
 public class MixinBackgroundRenderer {
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"), method = {"renderBackground(Lnet/minecraft/client/render/Camera;F)V", "applyFog(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/BackgroundRenderer$FogType;FZ)V"})
-    public boolean hasStatusEffect(LivingEntity entity, StatusEffect effect) {
-        if(effect == StatusEffects.BLINDNESS && ModuleManager.getModule(NoRender.class).isToggled()
-        		&& ModuleManager.getModule(NoRender.class).getSettings().get(0).asToggle().state)
-            return false;
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"), method = {"renderBackground(Lnet/minecraft/client/render/Camera;F)V", "applyFog(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/BackgroundRenderer$FogType;FZ)V"})
+	public boolean hasStatusEffect(LivingEntity entity, StatusEffect effect) {
+		if(effect == StatusEffects.BLINDNESS && ModuleManager.getModule(NoRender.class).isToggled()
+				&& ModuleManager.getModule(NoRender.class).getSettings().get(0).asToggle().state)
+			return false;
 
-        return entity.hasStatusEffect(effect);
-    }
+		return entity.hasStatusEffect(effect);
+	}
 }

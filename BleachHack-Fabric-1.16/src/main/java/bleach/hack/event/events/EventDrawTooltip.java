@@ -9,7 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.StringRenderable;
 
 public class EventDrawTooltip extends Event {
-	
+
 	public Screen screen;
 	public MatrixStack matrix;
 	public List<? extends StringRenderable> text;
@@ -17,7 +17,7 @@ public class EventDrawTooltip extends Event {
 	public int y;
 	public int mX;
 	public int mY;
-	
+
 	public EventDrawTooltip(MatrixStack matrix, List<? extends StringRenderable> text, int x, int y, int mX, int mY) {
 		this.matrix = matrix;
 		screen = MinecraftClient.getInstance().currentScreen;

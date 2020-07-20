@@ -9,18 +9,18 @@ import com.google.common.eventbus.Subscribe;
 
 public class HandProgress extends Module {
 
-    public HandProgress() {
-        super("HandProgress-WIP", KEY_UNBOUND, Category.RENDER, "Smaller view of mainhand/offhand",
-                new SettingSlider("Mainhand: ", 0.1, 1.0, 1.0, 1), // 0
-                new SettingSlider("Offhand: ", 0.1, 1.0, 1.0, 1) // 1
-        );
-    }
+	public HandProgress() {
+		super("HandProgress-WIP", KEY_UNBOUND, Category.RENDER, "Smaller view of mainhand/offhand",
+				new SettingSlider("Mainhand: ", 0.1, 1.0, 1.0, 1), // 0
+				new SettingSlider("Offhand: ", 0.1, 1.0, 1.0, 1) // 1
+				);
+	}
 
-    @Subscribe
-    public void tick(EventTick event){
-        // this kinda works, but changing item doesn't update..
-        FirstPersonRendererAccessor accessor = (FirstPersonRendererAccessor) mc.gameRenderer.firstPersonRenderer;
-        accessor.setEquippedProgressMainHand((float) this.getSettings().get(0).asSlider().getValue());
-        accessor.setEquippedProgressOffHand((float) this.getSettings().get(1).asSlider().getValue());
-    }
+	@Subscribe
+	public void tick(EventTick event){
+		// this kinda works, but changing item doesn't update..
+		FirstPersonRendererAccessor accessor = (FirstPersonRendererAccessor) mc.gameRenderer.firstPersonRenderer;
+		accessor.setEquippedProgressMainHand((float) this.getSettings().get(0).asSlider().getValue());
+		accessor.setEquippedProgressOffHand((float) this.getSettings().get(1).asSlider().getValue());
+	}
 }

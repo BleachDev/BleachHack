@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,13 +45,13 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	private boolean lmDown = false;
 	private boolean rmDown = false;
 	private boolean lmHeld = false;
-	
+
 	private TextFieldWidget searchField;
-	
+
 	public ClickGuiScreen() {
 		super(new LiteralText("ClickGui"));
 	}
-	
+
 	public void init() {
 		searchField = new TextFieldWidget(font, 2, 14, 100, 12, "" /* @LasnikProgram is author lol*/);
 		searchField.visible = false;
@@ -62,7 +62,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 	public void initWindows() {
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).asSlider().getValue();
-		
+
 		int i = 10;
 		for (Category c: Category.values()) {
 			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
@@ -83,16 +83,16 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 	public void render(int mX, int mY, float float_1) {
 		searchField.visible = ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state;
-		
+
 		this.renderBackground();
 		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height-20, 0x99ff99);
 		font.drawWithShadow("Use " + Command.PREFIX + "guireset to reset the gui" , 2, height-10, 0x9999ff);
-		
+
 		if (ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
-			
+
 			Set<Module> seachMods = new HashSet<>();
 			if (!searchField.getText().isEmpty()) {
 				for (Module m: ModuleManager.getModules()) {
@@ -101,20 +101,20 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 					}
 				}
 			}
-			
+
 			for (Window w: windows) {
 				if (w instanceof ModuleWindow) {
 					((ModuleWindow) w).setSearchedModule(seachMods);
 				}
 			}
 		}
-		
+
 		for (Window w: windows) {
 			if (w instanceof ClickGuiWindow) ((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
 		}
-		
+
 		super.render(mX, mY, float_1);
-		
+
 		for (Window w: windows) {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();

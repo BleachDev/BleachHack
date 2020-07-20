@@ -13,10 +13,10 @@ import net.minecraft.client.gui.screen.Screen;
 
 @Mixin(Screen.class)
 public class MixinScreen {
-	
+
 	private int lastMX = 0;
 	private int lastMY = 0;
-	
+
 	@Inject(at = @At("HEAD"), method = "render(IIF)V")
 	public void render(int int_1, int int_2, float float_1, CallbackInfo info) {
 		lastMX = int_1;
@@ -27,7 +27,7 @@ public class MixinScreen {
 	public void renderTooltip(List<String> text, int x, int y, CallbackInfo info) {
 		EventDrawTooltip event = new EventDrawTooltip(text, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
-		
+
 		if (event.isCancelled()) {
 			info.cancel();
 		} else if (!event.text.equals(text) || event.x != x || event.y != y) {

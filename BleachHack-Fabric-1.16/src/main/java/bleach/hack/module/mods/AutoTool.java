@@ -32,9 +32,9 @@ public class AutoTool extends Module {
 
 	private int getBestSlot(BlockPos pos) {
 		BlockState state = mc.world.getBlockState(pos);
-		
+
 		if (state.isAir()) return -1;
-		
+
 		float bestSpeed = 0;
 		int bestSlot = -1;
 

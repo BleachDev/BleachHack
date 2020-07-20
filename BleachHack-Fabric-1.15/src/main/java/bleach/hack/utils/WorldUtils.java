@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,7 +34,7 @@ public class WorldUtils {
 			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
 			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
 			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE);
-	
+
 	public static final List<Block> RIGHTCLICKABLE_BLOCKS = Arrays.asList(
 			Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
 			Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX,
@@ -59,13 +59,13 @@ public class WorldUtils {
 			Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.CRAFTING_TABLE,
 			Blocks.ACACIA_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR,
 			Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR);
-		
+
 	public static boolean isFluid(BlockPos pos) {
 		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
 
-        return fluids.contains(MinecraftClient.getInstance().world.getBlockState(pos).getMaterial());
-    }
-	
+		return fluids.contains(MinecraftClient.getInstance().world.getBlockState(pos).getMaterial());
+	}
+
 	public static boolean doesBoxTouchBlock(Box box, Block block) {
 		for (int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
 			for (int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
@@ -78,7 +78,7 @@ public class WorldUtils {
 		}
 		return false;
 	}
-	
+
 	public static boolean isBoxEmpty(Box box) {
 		for (int x = (int) Math.floor(box.x1); x < Math.ceil(box.x2); x++) {
 			for (int y = (int) Math.floor(box.y1); y < Math.ceil(box.y2); y++) {
@@ -91,7 +91,7 @@ public class WorldUtils {
 		}
 		return true;
 	}
-	
+
 	public static Box moveBox(Box box, double x, double y, double z) {
 		return new Box(new Vec3d(box.x1, box.y1, box.z1).add(x, y, z), new Vec3d(box.x2, box.y2, box.z2).add(x, y, z));
 	}

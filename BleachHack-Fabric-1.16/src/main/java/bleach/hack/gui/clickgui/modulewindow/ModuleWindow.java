@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,7 +34,7 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
@@ -93,12 +93,12 @@ public class ModuleWindow extends ClickGuiWindow {
 			if (m.getValue())
 				fillReverseGrey(matrix, x, y + (count * 12), x + len - 1, y + 12 + (count * 12));
 
-			Screen.fill(matrix, x, y + (count * 12), x + len, y + 12 + (count * 12),
+			DrawableHelper.fill(matrix, x, y + (count * 12), x + len, y + 12 + (count * 12),
 					mouseOver(x, y + (count * 12), x + len, y + 12 + (count * 12)) ? 0x70303070 : 0x00000000);
-			
+
 			//If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
-				Screen.fill(matrix, m.getValue() ? x + 1 : x, y + (count * 12) + (m.getValue() ? 1 : 0),
+				DrawableHelper.fill(matrix, m.getValue() ? x + 1 : x, y + (count * 12) + (m.getValue() ? 1 : 0),
 						m.getValue() ? x + len - 3 : x + len, y + 12 + (count * 12), 0x50ff0000);
 			}
 
@@ -127,12 +127,12 @@ public class ModuleWindow extends ClickGuiWindow {
 						drawToggleSetting(matrix, s.asToggle(), x, y + (count * 12), textRend);
 					if (s instanceof SettingSlider)
 						drawSliderSetting(matrix, s.asSlider(), x, y + (count * 12), textRend);
-					
+
 					if (!s.getDesc().isEmpty() && mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
 						tooltip = Triple.of(x + len + 2, y + count * 12, s.getDesc());
 					}
 				}
-				
+
 				count++;
 				drawBindSetting(matrix, m.getKey(), keyDown, x, y + (count * 12), textRend);
 				// fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
@@ -142,9 +142,9 @@ public class ModuleWindow extends ClickGuiWindow {
 	}
 
 	public void drawBindSetting(MatrixStack matrix, Module m, int key, int x, int y, TextRenderer textRend) {
-		Screen.fill(matrix, x, y + 11, x + len - 2, y + 12, 0x90b0b0b0);
-		Screen.fill(matrix, x + len - 2, y, x + len - 1, y + 12, 0x90b0b0b0);
-		Screen.fill(matrix, x, y - 1, x + 1, y + 11, 0x90000000);
+		DrawableHelper.fill(matrix, x, y + 11, x + len - 2, y + 12, 0x90b0b0b0);
+		DrawableHelper.fill(matrix, x + len - 2, y, x + len - 1, y + 12, 0x90b0b0b0);
+		DrawableHelper.fill(matrix, x, y - 1, x + 1, y + 11, 0x90000000);
 
 		if (key >= 0 && mouseOver(x, y, x + len, y + 12))
 			m.setKey((key != GLFW.GLFW_KEY_DELETE && key != GLFW.GLFW_KEY_ESCAPE) ? key : Module.KEY_UNBOUND);
@@ -208,14 +208,14 @@ public class ModuleWindow extends ClickGuiWindow {
 	}
 
 	protected void fillReverseGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		Screen.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		Screen.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
-		Screen.fill(matrix, x2 - 2, y1 + 1, x2, y2, 0x90b0b0b0);
+		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
+		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
+		DrawableHelper.fill(matrix, x2 - 2, y1 + 1, x2, y2, 0x90b0b0b0);
 	}
 
 	protected void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		Screen.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		Screen.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
+		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
+		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
 	}
 
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
@@ -226,7 +226,7 @@ public class ModuleWindow extends ClickGuiWindow {
 	public Triple<Integer, Integer, String> getTooltip() {
 		return tooltip;
 	}
-	
+
 	public void setSearchedModule(Set<Module> mods) {
 		searchedModules = mods;
 	}

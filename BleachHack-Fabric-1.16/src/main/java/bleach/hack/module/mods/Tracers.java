@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,7 +36,7 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class Tracers extends Module {
-	
+
 	public Tracers() {
 		super("Tracers", KEY_UNBOUND, Category.RENDER, "Shows lines to entities you select.",
 				new SettingToggle("Players", true),
@@ -51,14 +51,14 @@ public class Tracers extends Module {
 	@Subscribe
 	public void onRender(EventWorldRender event) {
 		final float thick = (float) getSettings().get(6).asSlider().getValue();
-		
+
 		for (Entity e: mc.world.getEntities()) {
 			Vec3d vec = e.getPos();
-			
+
 			Vec3d vec2 = new Vec3d(0, 0, 75).rotateX(-(float) Math.toRadians(mc.cameraEntity.pitch))
 					.rotateY(-(float) Math.toRadians(mc.cameraEntity.yaw))
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
-			
+
 			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).asToggle().state) {
 				boolean friend = BleachHack.friendMang.has(e.getName().asString());
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z, friend ? 0.35f : 1f, friend ? 1f : 0f, friend ? 1f : 0f,thick);

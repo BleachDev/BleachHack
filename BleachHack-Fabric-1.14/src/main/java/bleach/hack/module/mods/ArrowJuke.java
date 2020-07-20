@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,37 +35,37 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 public class ArrowJuke extends Module {
-	
+
 	public ArrowJuke() {
 		super("ArrowJuke", KEY_UNBOUND, Category.COMBAT, "Tries to dodge arrows coming at you",
 				new SettingMode("Move: ", "Client", "Packet"),
 				new SettingSlider("Speed: ", 0.01, 2, 1, 2));
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick envent) {
 		for (Entity e: mc.world.getEntities()) {
 			if (!(e instanceof ArrowEntity) || e.age > 50) continue;
-			
+
 			Box pBox = mc.player.getBoundingBox().expand(0.555);
 			List<Box> boxes = new ArrayList<>();
-			
+
 			for (int i = 0; i < 100; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i/5));
 				boxes.add(new Box(
-						nextPos.subtract(e.getBoundingBox().getXSize()/2, 0, e.getBoundingBox().getZSize()/2), 
+						nextPos.subtract(e.getBoundingBox().getXSize()/2, 0, e.getBoundingBox().getZSize()/2),
 						nextPos.add(e.getBoundingBox().getXSize()/2, e.getBoundingBox().getYSize(), e.getBoundingBox().getZSize()/2)));
 			}
-			
+
 			int mode = getSettings().get(0).asMode().mode;
 			double speed = getSettings().get(1).asSlider().getValue();
-			
+
 			for (int i = 0; i < 75; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i/5));
 				Box nextBox = new Box(
-						nextPos.subtract(e.getBoundingBox().getXSize()/2, 0, e.getBoundingBox().getZSize()/2), 
+						nextPos.subtract(e.getBoundingBox().getXSize()/2, 0, e.getBoundingBox().getZSize()/2),
 						nextPos.add(e.getBoundingBox().getXSize()/2, e.getBoundingBox().getYSize(), e.getBoundingBox().getZSize()/2));
-				
+
 				if (pBox.intersects(nextBox)) {
 					for (Vec3d vel: new Vec3d[] {new Vec3d(1,0,0), new Vec3d(-1,0,0), new Vec3d(0,0,1)}) {
 						boolean contains = false;
@@ -82,7 +82,7 @@ public class ArrowJuke extends Module {
 							return;
 						}
 					}
-					
+
 					if (mode == 0) {
 						mc.player.setVelocity(0, 0, -speed);
 					} else if (mode == 1) {

@@ -16,9 +16,9 @@ import net.minecraft.world.BlockView;
 public class MixinAbstractBlock {
 
 	@Inject(method = "getAmbientOcclusionLightLevel", at = @At("HEAD"), cancellable = true)
-    public void getAmbientOcclusionLightLevel(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, CallbackInfoReturnable<Float> callbackInfoReturnable) {
-        if (ModuleManager.getModule(Xray.class).isToggled()) {
-            callbackInfoReturnable.setReturnValue(1.0F);
-        }
-    }
+	public void getAmbientOcclusionLightLevel(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, CallbackInfoReturnable<Float> callbackInfoReturnable) {
+		if (ModuleManager.getModule(Xray.class).isToggled()) {
+			callbackInfoReturnable.setReturnValue(1.0F);
+		}
+	}
 }

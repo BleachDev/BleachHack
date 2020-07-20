@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -56,21 +56,21 @@ public class CmdEnchant extends Command {
 					+ "§5[Sharpness/Sharp] §d[Silk_Touch/Silk] §5[Smite] §d[Sweeping_Edge/Sweep] §5[Thorns] §d[Unbreaking]");
 			return;
 		}
-		
+
 		if (!mc.player.abilities.creativeMode) {
 			BleachLogger.errorMessage("Not In Creative Mode!");
 			return;
 		}
-		
+
 		int level = Integer.parseInt(args[1]);
 		ItemStack item = mc.player.inventory.getMainHandStack();
-		
+
 		if (args[0].equalsIgnoreCase("all")) {
 			for (Enchantment e: Registry.ENCHANTMENT) {
 				enchant(item, e, level);
 			}
 		}
-		
+
 		if (equals(args[0], "Aqua_Affinity", "Aqua")) enchant(item, Enchantments.AQUA_AFFINITY, level);
 		if (equals(args[0], "Arthropods")) enchant(item, Enchantments.BANE_OF_ARTHROPODS, level);
 		if (equals(args[0], "Blast", "Blast_Prot")) enchant(item, Enchantments.BLAST_PROTECTION, level);
@@ -109,25 +109,25 @@ public class CmdEnchant extends Command {
 		if (equals(args[0], "Thorns")) enchant(item, Enchantments.THORNS, level);
 		if (equals(args[0], "Unbreaking")) enchant(item, Enchantments.UNBREAKING, level);
 	}
-	
+
 	public boolean equals(String a, String... b) {
 		for (int i = 0; i < b.length; i++) {
 			if (a.equalsIgnoreCase(b[i])) return true;
 		}
 		return false;
 	}
-	
+
 	public void enchant(ItemStack item, Enchantment e, int level) {
 		if (item.getTag() == null) item.setTag(new CompoundTag());
 		if (!item.getTag().containsKey("Enchantments", 9)) {
 			item.getTag().put("Enchantments", new ListTag());
-	    }
+		}
 
-	    ListTag listnbt = item.getTag().getList("Enchantments", 10);
-	    CompoundTag compoundnbt = new CompoundTag();
-	    compoundnbt.putString("id", String.valueOf(Registry.ENCHANTMENT.getId(e)));
-	    compoundnbt.putInt("lvl", level);
-	    listnbt.add(compoundnbt);
+		ListTag listnbt = item.getTag().getList("Enchantments", 10);
+		CompoundTag compoundnbt = new CompoundTag();
+		compoundnbt.putString("id", String.valueOf(Registry.ENCHANTMENT.getId(e)));
+		compoundnbt.putInt("lvl", level);
+		listnbt.add(compoundnbt);
 	}
 
 }

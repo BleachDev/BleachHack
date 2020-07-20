@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Camera.class)
 public class MixinCamera {
 
-    @Inject(at = @At("HEAD"), method = "getSubmergedFluidState()Lnet/minecraft/fluid/FluidState;", cancellable = true)
-    private void getSubmergedFluidState(CallbackInfoReturnable<FluidState> cir) {
-        if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(3).asToggle().state) {
-        	cir.setReturnValue(Fluids.EMPTY.getDefaultState());
-        }
-    }
+	@Inject(at = @At("HEAD"), method = "getSubmergedFluidState()Lnet/minecraft/fluid/FluidState;", cancellable = true)
+	private void getSubmergedFluidState(CallbackInfoReturnable<FluidState> cir) {
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(3).asToggle().state) {
+			cir.setReturnValue(Fluids.EMPTY.getDefaultState());
+		}
+	}
 }

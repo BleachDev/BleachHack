@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,14 +33,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
-	
+
 	@Inject(at = @At(value = "HEAD"), method = "renderHand", cancellable = true)
 	private void renderHand(Camera camera_1, float float_1, CallbackInfo info) {
 		EventWorldRender event = new EventWorldRender(float_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}
-	
+
 	@Inject(at = {@At("HEAD")}, method = "bobViewWhenHurt(F)V", cancellable = true)
 	private void onBobViewWhenHurt(float f, CallbackInfo ci) {
 		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).asToggle().state)

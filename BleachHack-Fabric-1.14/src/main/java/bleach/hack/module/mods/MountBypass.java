@@ -10,7 +10,7 @@ import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
 import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket.InteractionType;
 
 public class MountBypass extends Module {
-	
+
 	public boolean dontCancel = false;
 
 	public MountBypass() {
@@ -20,7 +20,7 @@ public class MountBypass extends Module {
 	@Subscribe
 	public void onPacket(EventSendPacket event) {
 		if (dontCancel) return;
-		
+
 		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket
 				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getType() == InteractionType.INTERACT_AT
 				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getEntity(mc.world) instanceof AbstractDonkeyEntity) {

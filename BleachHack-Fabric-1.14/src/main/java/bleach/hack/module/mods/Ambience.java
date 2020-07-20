@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,7 +29,7 @@ import bleach.hack.module.Module;
 import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
 
 public class Ambience extends Module {
-	
+
 	public Ambience() {
 		super("Ambience", KEY_UNBOUND, Category.WORLD, "Changes The World Time/Weather",
 				new SettingToggle("Weather", true),
@@ -38,7 +38,7 @@ public class Ambience extends Module {
 				new SettingSlider("Rain: ", 0, 2, 0, 2),
 				new SettingSlider("Time: ", 0, 24000, 12500, 0));
 	}
-	
+
 	@Subscribe
 	public void onPreTick(EventMovementTick event) {
 		if (getSettings().get(0).asToggle().state) {
@@ -50,7 +50,7 @@ public class Ambience extends Module {
 			mc.world.setTimeOfDay((long) getSettings().get(4).asSlider().getValue());
 		}
 	}
-	
+
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {

@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,7 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityControl extends Module {
-	
+
 	public EntityControl() {
 		super("EntityControl", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Manipulate Entities.",
 				new SettingToggle("EntitySpeed", true),
@@ -60,11 +60,11 @@ public class EntityControl extends Module {
 			h.setTame(true);
 			h.setAiDisabled(true);
 		}
-		
+
 		if (e instanceof LlamaEntity) {
 			((LlamaEntity) e).headYaw = mc.player.headYaw;
 		}
-		
+
 		double forward = mc.player.forwardSpeed;
 		double strafe = mc.player.sidewaysSpeed;
 		float yaw = mc.player.yaw;
@@ -90,7 +90,7 @@ public class EntityControl extends Module {
 				}
 			}
 		}
-		
+
 		if (getSettings().get(2).asToggle().state) {
 			if (mc.options.keyJump.isPressed()) {
 				e.setVelocity(e.getVelocity().x, getSettings().get(3).asSlider().getValue(), e.getVelocity().z);
@@ -98,14 +98,14 @@ public class EntityControl extends Module {
 				e.setVelocity(e.getVelocity().x, -getSettings().get(4).asSlider().getValue(), e.getVelocity().z);
 			}
 		}
-		
+
 		if (getSettings().get(5).asToggle().state) {
 			BlockPos p = new BlockPos(e.getPos());
 			if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
 				e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}
-		
+
 		if (getSettings().get(6).asToggle().state) {
 			Vec3d vel = e.getVelocity().multiply(2);
 			if (!WorldUtils.isBoxEmpty(WorldUtils.moveBox(e.getBoundingBox(), vel.x, 0, vel.z))) {
