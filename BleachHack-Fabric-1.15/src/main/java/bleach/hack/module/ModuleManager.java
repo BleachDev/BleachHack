@@ -51,6 +51,7 @@ public class ModuleManager {
 			new ClickGui(),
 			new Criticals(),
 			new CrystalAura(),
+			new CustomChat(),
 			new DiscordRPCMod(),
 			new Dispenser32k(),
 			new ElytraFly(),
