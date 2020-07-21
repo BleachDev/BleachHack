@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.json.ModelTransformation.Mode;
@@ -44,7 +45,7 @@ public class RenderUtilsLiving {
 	public static void drawText(String str, double x, double y, double z, double scale) {
 		glSetup(x, y, z);
 
-		GL11.glScaled(-0.025*scale, -0.025*scale, 0.025*scale);
+		GL11.glScaled(-0.025*scale, -0.025*scale, -1);
 
 		int i = mc.textRenderer.getStringWidth(str) / 2;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -59,8 +60,7 @@ public class RenderUtilsLiving {
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-		mc.textRenderer.draw(str, -i, 0, 553648127);
-		mc.textRenderer.draw(str, -i, 0, -1);
+		mc.textRenderer.drawWithShadow(str, -i, 0, -1);
 
 		glCleanup();
 	}
@@ -71,13 +71,13 @@ public class RenderUtilsLiving {
 		GL11.glScaled(0.4*scale, 0.4*scale, 0);
 
 		GL11.glTranslated(offX, offY, 0);
+		
 		if (item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
 		mc.getItemRenderer().renderItem(new ItemStack(
-				item.getItem()), Mode.GUI, 0, 0, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
+				item.getItem()), Mode.GUI, 0, OverlayTexture.DEFAULT_UV, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
 		if (item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
-		GL11.glDisable(GL11.GL_LIGHTING);
 
-		GL11.glScalef(-0.05F, -0.05F, 0);
+		GL11.glScalef(-0.05F, -0.05F, -1F);
 
 		if (item.getCount() > 0) {
 			int w = mc.textRenderer.getStringWidth("x" + item.getCount()) / 2;

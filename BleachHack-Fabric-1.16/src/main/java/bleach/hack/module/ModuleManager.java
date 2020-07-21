@@ -88,6 +88,7 @@ public class ModuleManager {
 			new Sprint(),
 			new StarGithub(),
 			new Step(),
+			new Surround(),
 			new Timer(),
 			new Tracers(),
 			new Trail(),
