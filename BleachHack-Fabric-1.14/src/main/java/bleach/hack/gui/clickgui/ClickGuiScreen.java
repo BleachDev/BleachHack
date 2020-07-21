@@ -85,8 +85,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		searchField.visible = ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state;
 
 		this.renderBackground();
-		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
-		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 2, 2, 0x6090d0);
+		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
+		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 		font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height-20, 0x99ff99);
 		font.drawWithShadow("Use " + Command.PREFIX + "guireset to reset the gui" , 2, height-10, 0x9999ff);
 
