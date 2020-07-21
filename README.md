@@ -46,7 +46,13 @@ Generate the needed files for your preferred IDE.
   Click File > Import... > Gradle > Gradle Project  
   Select the BleachHack-Fabric-(*Version*) folder  
   
-***Other IDEÂ´s:***
+***Other IDE´s:***
 
   Use [this link](https://fabricmc.net/wiki/tutorial:setup) for more information.
   It should be pretty similar to the eclipse setup.
+  
+--------------
+
+**For skidders:**
+
+If you are making a custom version of BleachHack, you are **required** to disclose the source code, state changes, use the same license, and follow the [licence terms](https://github.com/BleachDrinker420/bleachhack-1.14/blob/master/LICENSE)
