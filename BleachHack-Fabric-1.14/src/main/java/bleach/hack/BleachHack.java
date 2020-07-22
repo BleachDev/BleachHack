@@ -32,6 +32,11 @@ public class BleachHack implements ClientModInitializer {
 
 	public static String VERSION = "B13.2";
 	public static int INTVERSION = 21;
+	
+	/* This changes some mixins so they don't crash mc when being overinjected by another mod in non-dev workspaces
+	 * Change this to 0 in release builds, and -1 in dev builds */
+	public static final int MIXIN_REQUIRE = -1;
+	
 	public static EventBus eventBus;
 
 	public static FriendManager friendMang;
