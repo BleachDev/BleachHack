@@ -26,7 +26,7 @@
     "MixinLlamaEntity",
     "MixinMinecraftClient",
     "MixinPacketInflater",
-    "MixinPlayerInventory",
+    "MixinPlayerEntity",
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinServerScreen",

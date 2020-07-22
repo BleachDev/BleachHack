@@ -48,7 +48,7 @@ public class SpeedMine extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (this.getSettings().get(0).asMode().mode == 0) {
-			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, (int) getSettings().get(1).asSlider().getValue()));
+			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, (int) getSettings().get(1).asSlider().getValue() - 1));
 		}
 	}
 }
