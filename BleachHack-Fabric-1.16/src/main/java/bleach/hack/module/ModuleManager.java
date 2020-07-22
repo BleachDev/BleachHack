@@ -35,6 +35,7 @@ public class ModuleManager {
 	private static List<Module> mods = Arrays.asList(
 			new Ambience(),
 			new AntiChunkBan(),
+			new AntiHunger(),
 			new ArrowJuke(),
 			new AutoDonkeyDupe(),
 			new AutoReconnect(),
