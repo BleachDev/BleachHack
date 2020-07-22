@@ -30,6 +30,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
+
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
 public class Peek extends Module {
@@ -100,7 +103,7 @@ public class Peek extends Module {
 		if (getSettings().get(1).asMode().mode == 2) {
 			event.setCancelled(true);
 		} else if (getSettings().get(1).asMode().mode == 1) {
-			event.text = Arrays.asList(slot.getStack().getName());
+			event.text = Lists.transform(Arrays.asList(slot.getStack().getName()), Text::method_30937);
 		}
 
 		int realY = getSettings().get(1).asMode().mode == 2 ? mY + 24 : mY;

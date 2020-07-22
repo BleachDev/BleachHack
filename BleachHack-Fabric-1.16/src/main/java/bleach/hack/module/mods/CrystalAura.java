@@ -340,10 +340,10 @@ public class CrystalAura extends Module {
 
 		if (baseState.getBlock() != Blocks.BEDROCK && baseState.getBlock() != Blocks.OBSIDIAN) return false;
 
-		BlockPos placePos = basePos.up();
+		BlockPos placePos = basePos.method_30931();
 		if (!mc.world.isAir(placePos)) return false;
 
-		return mc.world.getEntities((Entity) null, new Box(placePos).stretch(0, 1, 0)).isEmpty();
+		return mc.world.getOtherEntities((Entity) null, new Box(placePos).stretch(0, 1, 0)).isEmpty();
 	}
 
 	private float getExplosionDamage(BlockPos basePos, LivingEntity target) {
@@ -356,7 +356,7 @@ public class CrystalAura extends Module {
 		Explosion explosion = new Explosion(mc.world, null, crystalPos.x, crystalPos.y, crystalPos.z, 6f, false, Explosion.DestructionType.DESTROY);
 
 		double power = 12;
-		if (!mc.world.getEntities((Entity) null, new Box(
+		if (!mc.world.getOtherEntities((Entity) null, new Box(
 				MathHelper.floor(crystalPos.x - power - 1.0),
 				MathHelper.floor(crystalPos.y - power - 1.0),
 				MathHelper.floor(crystalPos.z - power - 1.0),
