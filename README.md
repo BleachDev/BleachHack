@@ -53,6 +53,6 @@ Generate the needed files for your preferred IDE.
   
 --------------
 
-**For skidders:**
+### For skidders:
 
 If you are porting features of BleachHack to another mod or making a custom version of BleachHack, you are **required** to disclose the source code, state changes, use the same license, and follow the [licence terms](https://github.com/BleachDrinker420/bleachhack-1.14/blob/master/LICENSE)
