@@ -23,10 +23,6 @@ import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FilledMapItem;
@@ -34,10 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.math.Matrix4f;
-
 import com.google.common.eventbus.Subscribe;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 public class Peek extends Module {
 
@@ -70,10 +63,15 @@ public class Peek extends Module {
 		}
 
 		slotPos = new int[] {slot.x, slot.y};
+		
+		event.matrix.push();
+		event.matrix.translate(0, 0, 300);
 
 		if (getSettings().get(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
 		if (getSettings().get(2).asToggle().state) drawBookToolTip(event.matrix, slot, event.mX, event.mY);
 		if (getSettings().get(3).asToggle().state) drawMapToolTip(event.matrix, slot, event.mX, event.mY);
+		
+		event.matrix.pop();
 	}
 
 	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mX, int mY) {
@@ -166,7 +164,7 @@ public class Peek extends Module {
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
 		byte[] colors = data.colors;
 
-		double size = getSettings().get(3).asSlider().getValue();
+		double size = getSettings().get(4).asSlider().getValue();
 
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
@@ -204,31 +202,14 @@ public class Peek extends Module {
 			if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
 		}
 
-		matrix.push();
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
-		buffer.begin(7, VertexFormats.POSITION_COLOR);
-		Matrix4f matrix4f = matrix.peek().getModel();
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, 400, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 - 3, int_6 + x2 + 3, int_5 + y2 + 3, int_6 + x2 + 4, 400, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 + x2 + 3, 400, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 - 4, int_6 - 3, int_5 - 3, int_6 + x2 + 3, 400, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 + y2 + 3, int_6 - 3, int_5 + y2 + 4, int_6 + x2 + 3, 400, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 - 3, int_6 - 3 + 1, int_5 - 3 + 1, int_6 + x2 + 3 - 1, 400, 1347420415, 1344798847);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 400, 1347420415, 1344798847);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 400, 1347420415, 1347420415);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix4f, buffer, int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 400, 1344798847, 1344798847);
-
-		RenderSystem.enableDepthTest();
-		RenderSystem.disableTexture();
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		RenderSystem.shadeModel(7425);
-		buffer.end();
-		BufferRenderer.draw(buffer);
-		RenderSystem.shadeModel(7424);
-		RenderSystem.disableBlend();
-		RenderSystem.enableTexture();
-		matrix.pop();
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 - 3, int_6 + x2 + 3, int_5 + y2 + 3, int_6 + x2 + 4, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 + x2 + 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 - 4, int_6 - 3, int_5 - 3, int_6 + x2 + 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 + y2 + 3, int_6 - 3, int_5 + y2 + 4, int_6 + x2 + 3, -267386864, -267386864);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 - 3, int_6 - 3 + 1, int_5 - 3 + 1, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 1347420415, 1347420415);
+		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", matrix, int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 1344798847, 1344798847);
 	}
 }
