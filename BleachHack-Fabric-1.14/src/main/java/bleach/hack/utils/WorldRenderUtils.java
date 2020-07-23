@@ -127,7 +127,7 @@ public class WorldRenderUtils {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LEQUAL);
 		GL11.glTranslatef(-.5f, 0, 0);
 		GL11.glPopMatrix();
 	}
