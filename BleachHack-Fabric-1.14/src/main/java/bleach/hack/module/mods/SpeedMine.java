@@ -20,6 +20,7 @@ package bleach.hack.module.mods;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
@@ -33,19 +34,21 @@ public class SpeedMine extends Module {
 				new SettingMode("Mode: ", "Haste", "OG"),
 				new SettingSlider("Haste Lvl: ", 1, 3, 1, 0),
 				new SettingSlider("Cooldown: ", 0, 4, 1, 0),
-				new SettingSlider("Multiplier: ", 1, 3, 1.3, 1));
+				new SettingSlider("Multiplier: ", 1, 3, 1.3, 1),
+				new SettingToggle("AntiFatigue", true),
+				new SettingToggle("AntiOffGround", true));
 	}
 
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		mc.player.removePotionEffect(StatusEffects.HASTE);
+		mc.player.removeStatusEffect(StatusEffects.HASTE);
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (this.getSettings().get(0).asMode().mode == 0) {
-			mc.player.addPotionEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, (int) getSettings().get(1).asSlider().getValue()));
+			mc.player.addPotionEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, (int) getSettings().get(1).asSlider().getValue() - 1));
 		}
 	}
 }

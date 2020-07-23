@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawTooltip;
+import net.minecraft.class_5481;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.StringRenderable;
 
 @Mixin(Screen.class)
 public class MixinScreen {
@@ -26,7 +26,7 @@ public class MixinScreen {
 	}
 
 	@Inject(at = @At("HEAD"), method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;II)V", cancellable = true)
-	public void renderTooltip(MatrixStack matrix, List<? extends StringRenderable> text, int x, int y, CallbackInfo info) {
+	public void renderTooltip(MatrixStack matrix, List<? extends class_5481> text, int x, int y, CallbackInfo info) {
 		EventDrawTooltip event = new EventDrawTooltip(matrix, text, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
 

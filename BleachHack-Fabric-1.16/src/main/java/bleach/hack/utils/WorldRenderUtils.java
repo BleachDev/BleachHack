@@ -37,7 +37,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderUtilsLiving {
+public class WorldRenderUtils {
 
 	private static MinecraftClient mc = MinecraftClient.getInstance();
 
@@ -46,7 +46,7 @@ public class RenderUtilsLiving {
 
 		GL11.glScaled(-0.025*scale, -0.025*scale, 0.025*scale);
 
-		int i = mc.textRenderer.getStringWidth(str) / 2;
+		int i = mc.textRenderer.getWidth(str) / 2;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -59,8 +59,8 @@ public class RenderUtilsLiving {
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-		mc.textRenderer.draw(str, -i, 0, 553648127);
-		mc.textRenderer.draw(str, -i, 0, -1);
+		mc.textRenderer.draw(new MatrixStack(), str, -i, 0, 553648127);
+		mc.textRenderer.draw(new MatrixStack(), str, -i, 0, -1);
 
 		glCleanup();
 	}
@@ -80,17 +80,23 @@ public class RenderUtilsLiving {
 		GL11.glScalef(-0.05F, -0.05F, 0);
 
 		if (item.getCount() > 0) {
-			int w = mc.textRenderer.getStringWidth("x" + item.getCount()) / 2;
-			mc.textRenderer.drawWithShadow("x" + item.getCount(), 7 - w, 5, 0xffffff);
+			int w = mc.textRenderer.getWidth("x" + item.getCount()) / 2;
+			mc.textRenderer.drawWithShadow(new MatrixStack(), "x" + item.getCount(), 7 - w, 5, 0xffffff);
 		}
 
 		GL11.glScalef(0.85F, 0.85F, 0.85F);
 
 		int c = 0;
-		for (Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
-			int w1 = mc.textRenderer.getStringWidth(I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue()) / 2;
-			mc.textRenderer.drawWithShadow(
-					I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue(), -4 - w1, c*10-1,
+		for (Entry<Enchantment, Integer> m: EnchantmentHelper.get(item).entrySet()) {
+			String text = I18n.translate(m.getKey().getName(2).getString());
+			
+			if (text.isEmpty()) continue;
+			
+			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
+			
+			int w1 = mc.textRenderer.getWidth(subText) / 2;
+			mc.textRenderer.drawWithShadow(new MatrixStack(),
+					subText, -4 - w1, c*10-1,
 					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
 					? 0xff5050 : 0xffb0e0);
 			c--;
@@ -100,7 +106,7 @@ public class RenderUtilsLiving {
 		String dur = item.getMaxDamage() - item.getDamage() + "";
 		int color = 0x000000;
 		try{ color = MathHelper.hsvToRgb(((float) (item.getMaxDamage() - item.getDamage()) / item.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
-		if (item.isDamageable()) mc.textRenderer.drawWithShadow(dur, -8 - dur.length() * 3, 15,
+		if (item.isDamageable()) mc.textRenderer.drawWithShadow(new MatrixStack(), dur, -8 - dur.length() * 3, 15,
 				new Color(color >> 16 & 255, color >> 8 & 255, color & 255).getRGB());
 
 		glCleanup();
@@ -113,7 +119,7 @@ public class RenderUtilsLiving {
 		GL11.glNormal3f(0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
-		//GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDepthFunc(GL11.GL_ALWAYS); 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		GL11.glEnable(GL11.GL_BLEND);
@@ -122,10 +128,9 @@ public class RenderUtilsLiving {
 	}
 
 	public static void glCleanup() {
-		//GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDepthFunc(GL11.GL_LESS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glPopMatrix();
 	}
 }

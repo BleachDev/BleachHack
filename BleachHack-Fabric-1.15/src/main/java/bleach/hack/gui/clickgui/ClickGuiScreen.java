@@ -120,7 +120,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
 				if (tooltip != null) {
 					/* Match lines to end of words */
-					Matcher mat = Pattern.compile("\\b.{1,22}\\b\\W?").matcher(tooltip.getRight());
+					Matcher mat = Pattern.compile(".{1,22}\\b\\W*").matcher(tooltip.getRight());
 
 					int c2 = 0;
 					int c3 = 0;

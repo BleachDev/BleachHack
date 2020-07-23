@@ -28,6 +28,7 @@ public class CommandManager {
 	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
 			new CmdCI(),
+			new CmdCustomChat(),
 			new CmdDupe(),
 			new CmdEnchant(),
 			new CmdEntityStats(),
@@ -54,7 +55,7 @@ public class CommandManager {
 	}
 
 	public static void callCommand(String input) {
-		String[] split = input.split(" ");
+		String[] split = input.split(" ", -1);
 		System.out.println(Arrays.asList(split));
 		String command = split[0];
 		String args = input.substring(command.length()).trim();

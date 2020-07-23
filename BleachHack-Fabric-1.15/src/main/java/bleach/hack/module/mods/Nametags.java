@@ -24,7 +24,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
-import bleach.hack.utils.RenderUtilsLiving;
+import bleach.hack.utils.WorldRenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
@@ -34,7 +34,7 @@ import net.minecraft.util.math.MathHelper;
 public class Nametags extends Module {
 
 	public Nametags() {
-		super("Nametags", KEY_UNBOUND, Category.RENDER, "BROKEN!!! BROKEN!!! BROKEN!!! BROKEN!!! Shows bigger/cooler nametags above entities.",
+		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor: ", "H", "V", "None"),
 				new SettingMode("Health: ", "Number", "Bar"),
 				new SettingSlider("Size Players: ", 0.5, 5, 2, 1),
@@ -67,31 +67,31 @@ public class Nametags extends Module {
 				Math.max(getSettings().get(2).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
 					Math.max(getSettings().get(3).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 
-				/* Health bar */
+				// Health bar
 				String health = "";
-				/* - Add Green Normal Health */
+				// - Add Green Normal Health
 				for (int i = 0; i < e.getHealth(); i++) health += "§a|";
-				/* - Add Red Empty Health (Remove Based on absorption amount) */
+				// - Add Red Empty Health (Remove Based on absorption amount)
 				for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaximumHealth() - e.getHealth()); i++) health += "§e|";
-				/* Add Yellow Absorption Health */
+				// Add Yellow Absorption Health
 				for (int i = 0; i < e.getMaximumHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
-				/* Add "+??" to the end if the entity has extra hearts */
+				// Add "+??" to the end if the entity has extra hearts
 				if (e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()) > 0) {
 					health += " §e+" + (int)(e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
 				}
 
-				/* Drawing Nametags */
+				// Drawing Nametags
 				if (getSettings().get(1).asMode().mode == 0) {
-					RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaximumHealth() + "]",
+					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaximumHealth() + "]",
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 				} else if (getSettings().get(1).asMode().mode == 1) {
-					RenderUtilsLiving.drawText(color + e.getName().getString(),
+					WorldRenderUtils.drawText(color + e.getName().getString(),
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-					RenderUtilsLiving.drawText(health,
+					WorldRenderUtils.drawText(health,
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
@@ -132,6 +132,6 @@ public class Nametags extends Module {
 				//			}
 				//		}
 
-				event.setCancelled(true);
+				//event.setCancelled(true);
 	}
 }

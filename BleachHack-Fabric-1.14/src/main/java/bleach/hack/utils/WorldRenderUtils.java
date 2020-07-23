@@ -36,7 +36,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderUtilsLiving {
+public class WorldRenderUtils {
 
 	private static MinecraftClient mc = MinecraftClient.getInstance();
 
@@ -86,9 +86,15 @@ public class RenderUtilsLiving {
 
 		int c = 0;
 		for (Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
-			int w1 = mc.textRenderer.getStringWidth(I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue()) / 2;
+			String text = I18n.translate(m.getKey().getName(2).getString());
+			
+			if (text.isEmpty()) continue;
+			
+			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
+			
+			int w1 = mc.textRenderer.getStringWidth(subText) / 2;
 			mc.textRenderer.drawWithShadow(
-					I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue(), -4 - w1, c*10-1,
+					subText, -4 - w1, c*10-1,
 					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
 					? 0xff5050 : 0xffb0e0);
 			c--;

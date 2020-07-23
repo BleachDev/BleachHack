@@ -35,6 +35,7 @@ public class ModuleManager {
 	private static List<Module> mods = Arrays.asList(
 			new Ambience(),
 			new AntiChunkBan(),
+			new AntiHunger(),
 			new ArrowJuke(),
 			new AutoDonkeyDupe(),
 			new AutoReconnect(),
@@ -51,6 +52,7 @@ public class ModuleManager {
 			new ClickGui(),
 			new Criticals(),
 			new CrystalAura(),
+			new CustomChat(),
 			new DiscordRPCMod(),
 			new Dispenser32k(),
 			new ElytraFly(),
@@ -88,6 +90,7 @@ public class ModuleManager {
 			new Sprint(),
 			new StarGithub(),
 			new Step(),
+			new Surround(),
 			new Timer(),
 			new Tracers(),
 			new Trail(),

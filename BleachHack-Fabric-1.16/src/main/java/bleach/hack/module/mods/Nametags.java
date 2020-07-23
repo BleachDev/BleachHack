@@ -26,18 +26,16 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
-import bleach.hack.utils.RenderUtilsLiving;
-import net.minecraft.entity.EquipmentSlot;
+import bleach.hack.utils.WorldRenderUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
 public class Nametags extends Module {
 
 	public Nametags() {
-		super("Nametags", KEY_UNBOUND, Category.RENDER, "BROKEN!!! BROKEN!!! BROKEN!!! BROKEN!!! Shows bigger/cooler nametags above entities.",
+		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor: ", "H", "V", "None"),
 				new SettingMode("Health: ", "Number", "Bar"),
 				new SettingSlider("Size Players: ", 0.5, 5, 2, 1),
@@ -85,23 +83,23 @@ public class Nametags extends Module {
 
 				/* Drawing Nametags */
 				if (getSettings().get(1).asMode().mode == 0) {
-					RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
+					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 				} else if (getSettings().get(1).asMode().mode == 1) {
-					RenderUtilsLiving.drawText(color + e.getName().getString(),
+					WorldRenderUtils.drawText(color + e.getName().getString(),
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-					RenderUtilsLiving.drawText(health,
+					WorldRenderUtils.drawText(health,
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 				}
 
 				/* Drawing Items */
-				double c = 0;
+				/*double c = 0;
 				double higher = getSettings().get(1).asMode().mode == 1 ? 0.25 : 0;
 
 				if (getSettings().get(0).asMode().mode == 0) {
@@ -135,6 +133,6 @@ public class Nametags extends Module {
 					}
 				}
 
-				event.setCancelled(true);
+				event.setCancelled(true);*/
 	}
 }

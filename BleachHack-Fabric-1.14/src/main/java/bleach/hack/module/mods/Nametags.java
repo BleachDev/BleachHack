@@ -26,7 +26,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
-import bleach.hack.utils.RenderUtilsLiving;
+import bleach.hack.utils.WorldRenderUtils;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
@@ -78,11 +78,11 @@ public class Nametags extends Module {
 
 				/* Drawing Nametags */
 				if (getSettings().get(1).asMode().mode == 0) {
-					RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getHealthMaximum() + "]",
+					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getHealthMaximum() + "]",
 							e.x,e.y + e.getHeight() + (0.5f * scale), e.z, scale);
 				} else if (getSettings().get(1).asMode().mode == 1) {
-					RenderUtilsLiving.drawText(color + e.getName().getString(), e.x, e.y + e.getHeight() + (0.5f * scale), e.z, scale);
-					RenderUtilsLiving.drawText(health, e.x, e.y + e.getHeight() + (0.75f * scale), e.z, scale);
+					WorldRenderUtils.drawText(color + e.getName().getString(), e.x, e.y + e.getHeight() + (0.5f * scale), e.z, scale);
+					WorldRenderUtils.drawText(health, e.x, e.y + e.getHeight() + (0.75f * scale), e.z, scale);
 				}
 
 				/* Drawing Items */
@@ -90,20 +90,20 @@ public class Nametags extends Module {
 				double higher = getSettings().get(1).asMode().mode == 1 ? 0.25 : 0;
 
 				if (getSettings().get(0).asMode().mode == 0) {
-					RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-					RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 
 					for (ItemStack i: e.getArmorItems()) {
-						RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
+						WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
 						c--;
 					}
 				} else if (getSettings().get(0).asMode().mode == 1) {
-					RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-					RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 
 					for (ItemStack i: e.getArmorItems()) {
 						if (i.getCount() < 1) continue;
-						RenderUtilsLiving.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 0, c, scale, i);
+						WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 0, c, scale, i);
 						c++;
 					}
 				}

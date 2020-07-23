@@ -23,15 +23,12 @@ import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.ContainerScreen;
-import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
-
-import org.lwjgl.opengl.GL12;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -66,10 +63,15 @@ public class Peek extends Module {
 		}
 
 		slotPos = new int[] {slot.xPosition, slot.yPosition};
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0f, 0f, 500f);
 
 		if (getSettings().get(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
 		if (getSettings().get(2).asToggle().state) drawBookToolTip(slot, event.mX, event.mY);
 		if (getSettings().get(3).asToggle().state) drawMapToolTip(slot, event.mX, event.mY);
+		
+		GL11.glPopMatrix();
 	}
 
 	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mX, int mY) {
@@ -191,13 +193,6 @@ public class Peek extends Module {
 	}
 
 	public void renderTooltipBox(int x1, int y1, int x2, int y2, boolean wrap) {
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		DiffuseLighting.disable();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDepthMask(false);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
-
 		int int_5 = x1 + 12;
 		int int_6 = y1 - 12;
 		if (wrap) {
@@ -215,11 +210,5 @@ public class Peek extends Module {
 		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
 		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 1347420415, 1347420415);
 		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 1344798847, 1344798847);
-
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDepthMask(true);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		DiffuseLighting.enable();
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 }
