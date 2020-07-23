@@ -26,7 +26,7 @@ import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
-import bleach.hack.utils.RenderUtilsLiving;
+import bleach.hack.utils.WorldRenderUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
@@ -83,16 +83,16 @@ public class Nametags extends Module {
 
 				/* Drawing Nametags */
 				if (getSettings().get(1).asMode().mode == 0) {
-					RenderUtilsLiving.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
+					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 				} else if (getSettings().get(1).asMode().mode == 1) {
-					RenderUtilsLiving.drawText(color + e.getName().getString(),
+					WorldRenderUtils.drawText(color + e.getName().getString(),
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-					RenderUtilsLiving.drawText(health,
+					WorldRenderUtils.drawText(health,
 							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
