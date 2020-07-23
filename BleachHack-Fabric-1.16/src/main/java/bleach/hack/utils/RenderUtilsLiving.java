@@ -88,9 +88,15 @@ public class RenderUtilsLiving {
 
 		int c = 0;
 		for (Entry<Enchantment, Integer> m: EnchantmentHelper.get(item).entrySet()) {
-			int w1 = mc.textRenderer.getWidth(I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue()) / 2;
+			String text = I18n.translate(m.getKey().getName(2).getString());
+			
+			if (text.isEmpty()) continue;
+			
+			String subText = text.substring(0, Math.min(Math.max(0, text.length() - 1), 2)) + m.getValue();
+			
+			int w1 = mc.textRenderer.getWidth(subText) / 2;
 			mc.textRenderer.drawWithShadow(new MatrixStack(),
-					I18n.translate(m.getKey().getName(2).asString()).substring(0, 2) + m.getValue(), -4 - w1, c*10-1,
+					subText, -4 - w1, c*10-1,
 					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
 					? 0xff5050 : 0xffb0e0);
 			c--;
@@ -113,7 +119,7 @@ public class RenderUtilsLiving {
 		GL11.glNormal3f(0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
-		//GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDepthFunc(GL11.GL_ALWAYS); 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		GL11.glEnable(GL11.GL_BLEND);
@@ -122,10 +128,9 @@ public class RenderUtilsLiving {
 	}
 
 	public static void glCleanup() {
-		//GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDepthFunc(GL11.GL_LESS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glPopMatrix();
 	}
 }

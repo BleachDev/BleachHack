@@ -45,7 +45,7 @@ public class RenderUtilsLiving {
 	public static void drawText(String str, double x, double y, double z, double scale) {
 		glSetup(x, y, z);
 
-		GL11.glScaled(-0.025*scale, -0.025*scale, -1);
+		GL11.glScaled(-0.025*scale, -0.025*scale, 1);
 
 		int i = mc.textRenderer.getStringWidth(str) / 2;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -59,8 +59,8 @@ public class RenderUtilsLiving {
 		bufferbuilder.vertex(i + 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, f).next();
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-
-		mc.textRenderer.drawWithShadow(str, -i, 0, -1);
+		
+		mc.textRenderer.draw(str, -i, 0, -1);
 
 		glCleanup();
 	}
@@ -113,8 +113,7 @@ public class RenderUtilsLiving {
 		GL11.glNormal3f(0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
-		//GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthFunc(GL11.GL_ALWAYS); 
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
@@ -122,10 +121,9 @@ public class RenderUtilsLiving {
 	}
 
 	public static void glCleanup() {
-		//GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDepthFunc(GL11.GL_LESS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glPopMatrix();
 	}
 }

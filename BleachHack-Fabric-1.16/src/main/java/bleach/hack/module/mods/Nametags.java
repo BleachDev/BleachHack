@@ -27,11 +27,9 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtilsLiving;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
 public class Nametags extends Module {
@@ -101,7 +99,7 @@ public class Nametags extends Module {
 				}
 
 				/* Drawing Items */
-				double c = 0;
+				/*double c = 0;
 				double higher = getSettings().get(1).asMode().mode == 1 ? 0.25 : 0;
 
 				if (getSettings().get(0).asMode().mode == 0) {
@@ -135,6 +133,6 @@ public class Nametags extends Module {
 					}
 				}
 
-				event.setCancelled(true);
+				event.setCancelled(true);*/
 	}
 }
