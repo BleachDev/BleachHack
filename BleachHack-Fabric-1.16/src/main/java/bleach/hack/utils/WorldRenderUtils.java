@@ -120,7 +120,6 @@ public class WorldRenderUtils {
 		GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
 		GL11.glDepthFunc(GL11.GL_ALWAYS); 
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);

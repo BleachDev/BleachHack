@@ -20,6 +20,9 @@ package bleach.hack.gui.clickgui;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+
 public class SettingSlider extends SettingBase {
 
 	public double min;
@@ -48,5 +51,19 @@ public class SettingSlider extends SettingBase {
 		BigDecimal bd = new BigDecimal(value);
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		return bd.doubleValue();
+	}
+	
+	public String getName() {
+		return text;
+	}
+	
+	public void readSettings(JsonElement settings) {
+		if (settings.isJsonPrimitive()) {
+			setValue(settings.getAsDouble());
+		}
+	}
+
+	public JsonElement saveSettings() {
+		return new JsonPrimitive(getValue());
 	}
 }

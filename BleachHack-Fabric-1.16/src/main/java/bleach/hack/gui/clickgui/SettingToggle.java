@@ -17,6 +17,9 @@
  */
 package bleach.hack.gui.clickgui;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+
 public class SettingToggle extends SettingBase {
 
 	public boolean state;
@@ -25,5 +28,19 @@ public class SettingToggle extends SettingBase {
 	public SettingToggle(String text, boolean state) {
 		this.state = state;
 		this.text = text;
+	}
+	
+	public String getName() {
+		return text;
+	}
+	
+	public void readSettings(JsonElement settings) {
+		if (settings.isJsonPrimitive()) {
+			state = settings.getAsBoolean();
+		}
+	}
+
+	public JsonElement saveSettings() {
+		return new JsonPrimitive(state);
 	}
 }

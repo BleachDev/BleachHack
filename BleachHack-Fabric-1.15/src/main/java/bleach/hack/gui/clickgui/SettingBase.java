@@ -17,6 +17,8 @@
  */
 package bleach.hack.gui.clickgui;
 
+import com.google.gson.JsonElement;
+
 public abstract class SettingBase {
 
 	protected String description = "";
@@ -44,6 +46,8 @@ public abstract class SettingBase {
 			throw new IllegalStateException("Execption parsing setting: " + this);
 		}
 	}
+	
+	public abstract String getName();
 
 	public String getDesc() {
 		return description;
@@ -53,4 +57,7 @@ public abstract class SettingBase {
 		description = desc;
 		return this;
 	}
+	
+	public abstract void readSettings(JsonElement settings);
+	public abstract JsonElement saveSettings();
 }

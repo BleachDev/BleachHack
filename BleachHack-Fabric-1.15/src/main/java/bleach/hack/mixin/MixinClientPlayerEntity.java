@@ -55,8 +55,6 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		try {
 			if (MinecraftClient.getInstance().player.age % 100 == 0) {
 				BleachFileHelper.saveModules();
-				BleachFileHelper.saveModSettings();
-				BleachFileHelper.saveBinds();
 				BleachFileHelper.saveClickGui();
 				BleachFileHelper.saveFriends();
 			}

@@ -17,6 +17,11 @@
  */
 package bleach.hack.gui.clickgui;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+
+import net.minecraft.util.math.MathHelper;
+
 public class SettingMode extends SettingBase {
 
 	public String[] modes;
@@ -32,6 +37,21 @@ public class SettingMode extends SettingBase {
 		if (mode + 1 >= modes.length) {
 			return 0;
 		}
-		return mode+1;
+
+		return mode + 1;
+	}
+	
+	public String getName() {
+		return text;
+	}
+	
+	public void readSettings(JsonElement settings) {
+		if (settings.isJsonPrimitive()) {
+			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.length);
+		}
+	}
+
+	public JsonElement saveSettings() {
+		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length));
 	}
 }
