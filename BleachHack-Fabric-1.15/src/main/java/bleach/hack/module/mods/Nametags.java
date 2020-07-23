@@ -34,7 +34,7 @@ import net.minecraft.util.math.MathHelper;
 public class Nametags extends Module {
 
 	public Nametags() {
-		super("Nametags", KEY_UNBOUND, Category.RENDER, "BROKEN!!! BROKEN!!! BROKEN!!! BROKEN!!! Shows bigger/cooler nametags above entities.",
+		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor: ", "H", "V", "None"),
 				new SettingMode("Health: ", "Number", "Bar"),
 				new SettingSlider("Size Players: ", 0.5, 5, 2, 1),

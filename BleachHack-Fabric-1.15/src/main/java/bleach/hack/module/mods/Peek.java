@@ -123,7 +123,7 @@ public class Peek extends Module {
 			int y = realY - 69 + (17 * (count / 9));
 
 			mc.getItemRenderer().renderGuiItem(i, x, y);
-			//mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, i, x, y, i.getCount() > 1 ? i.getCount() + "" : "");
+			mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, i, x, y, i.getCount() > 1 ? i.getCount() + "" : "");
 			count++;
 		}
 	}
