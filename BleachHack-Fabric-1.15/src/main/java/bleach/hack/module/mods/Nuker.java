@@ -34,7 +34,6 @@ import bleach.hack.utils.WorldUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -97,6 +96,8 @@ public class Nuker extends Module {
 			blocks.remove(mc.player.getBlockPos().down());
 			blocks.add(mc.player.getBlockPos().down());
 		}
+		
+		Vec3d eyePos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0);
 
 		int broken = 0;
 		for (BlockPos pos: blocks) {
@@ -104,12 +105,12 @@ public class Nuker extends Module {
 
 			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 
-			if (mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
+			if (eyePos.distanceTo(vec) > range + 0.5) continue;
 
 			Direction dir = null;
 			double dist = Double.MAX_VALUE;
 			for (Direction d: Direction.values()) {
-				double dist2 = mc.player.getPos().distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
+				double dist2 = eyePos.distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
 				if (dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
 				dist = dist2;
 				dir = d;
@@ -118,12 +119,7 @@ public class Nuker extends Module {
 			if (dir == null) continue;
 
 			if (getSettings().get(5).asToggle().state) {
-				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
-				WorldUtils.facePos(vec.x, vec.y, vec.z);
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
-						mc.player.yaw, mc.player.pitch, mc.player.onGround));
-				mc.player.yaw = prevRot[0];
-				mc.player.pitch = prevRot[1];
+				WorldUtils.facePosPacket(vec.x, vec.y, vec.z);
 			}
 
 			if (getSettings().get(0).asMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
