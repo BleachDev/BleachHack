@@ -65,6 +65,8 @@ public class Dispenser32k extends Module {
 	}
 
 	public void onEnable() {
+		if (mc.world == null) return;
+		
 		super.onEnable();
 
 		ticksPassed = 0;

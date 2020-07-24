@@ -150,7 +150,7 @@ public class Window {
 		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
 	}
 
-	protected void fillGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
+	public void fillGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
 		float float_1 = (color1 >> 24 & 255) / 255.0F;
 		float float_2 = (color1 >> 16 & 255) / 255.0F;
 		float float_3 = (color1 >> 8 & 255) / 255.0F;

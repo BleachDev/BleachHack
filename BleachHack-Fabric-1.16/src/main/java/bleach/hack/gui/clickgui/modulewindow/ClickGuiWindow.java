@@ -44,7 +44,7 @@ public abstract class ClickGuiWindow extends Window {
 		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
 	}
 
-	protected boolean mouseOver(int minX, int minY, int maxX, int maxY) {
+	public boolean mouseOver(int minX, int minY, int maxX, int maxY) {
 		return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY < maxY;
 	}
 

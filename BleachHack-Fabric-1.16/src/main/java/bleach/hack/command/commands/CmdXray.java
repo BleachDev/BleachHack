@@ -101,7 +101,7 @@ public class CmdXray extends Command {
 		} else if (args[0].equalsIgnoreCase("list")) {
 			String s = "";
 			for (String l: lines) {
-				s += "\n§6" + l;
+				s += "\n\u00a76" + l;
 			}
 
 			BleachLogger.infoMessage(s);

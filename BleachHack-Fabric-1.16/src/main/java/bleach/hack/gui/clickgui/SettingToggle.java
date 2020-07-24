@@ -20,6 +20,10 @@ package bleach.hack.gui.clickgui;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
+
 public class SettingToggle extends SettingBase {
 
 	public boolean state;
@@ -32,6 +36,23 @@ public class SettingToggle extends SettingBase {
 	
 	public String getName() {
 		return text;
+	}
+	
+	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len, int mouseX, int mouseY, boolean lmDown, boolean rmDown, boolean lmHeld) {
+		String color2;
+
+		if (state) { 
+			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a72";
+			else color2 = "\u00a7a";
+		} else {
+			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a74";
+			else color2 = "\u00a7c";
+		}
+
+		window.fillGreySides(matrix, x, y-1, x+len-1, y+12);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, color2 + text, x + 3, y + 2, 0xffffff);
+
+		if (window.mouseOver(x, y, x+len, y+12) && lmDown) state = !state;
 	}
 	
 	public int getHeight(int len) {

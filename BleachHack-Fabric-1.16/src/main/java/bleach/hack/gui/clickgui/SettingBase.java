@@ -19,6 +19,9 @@ package bleach.hack.gui.clickgui;
 
 import com.google.gson.JsonElement;
 
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import net.minecraft.client.util.math.MatrixStack;
+
 public abstract class SettingBase {
 
 	protected String description = "";
@@ -65,6 +68,8 @@ public abstract class SettingBase {
 		description = desc;
 		return this;
 	}
+	
+	public abstract void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len, int mouseX, int mouseY, boolean lmDown, boolean rmDown, boolean lmHeld);
 	
 	public abstract int getHeight(int len);
 	

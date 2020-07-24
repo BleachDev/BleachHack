@@ -23,6 +23,10 @@ import java.math.RoundingMode;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.MathHelper;
+
 public class SettingSlider extends SettingBase {
 
 	public double min;
@@ -55,6 +59,21 @@ public class SettingSlider extends SettingBase {
 	
 	public String getName() {
 		return text;
+	}
+	
+	public void render(ModuleWindow window, int x, int y, int len, int mouseX, int mouseY, boolean lmDown, boolean rmDown, boolean lmHeld) {
+		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((getValue() - min) / (max - min)), 0, len-2));
+		window.fillGreySides(x, y-1, x+len-1, y+12);
+		window.fillGradient(x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
+
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + (round == 0  && getValue() > 100 ? Integer.toString((int)getValue()) : getValue()),
+				x+2, y+2, window.mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
+
+		if (window.mouseOver(x+1, y, x+len-2, y+12) && lmHeld) {
+			int percent = ((mouseX - x) * 100) / (len - 2);
+
+			setValue(round(percent*((max - min) / 100) + min, round));
+		}
 	}
 	
 	public int getHeight(int len) {
