@@ -109,8 +109,15 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 			}
 		}
 
+		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).asSlider().getValue();
 		for (Window w: windows) {
-			if (w instanceof ClickGuiWindow) ((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
+			if (w instanceof ClickGuiWindow) {
+				if (w instanceof ModuleWindow) {
+					((ModuleWindow) w).len = len;
+				}
+				
+				((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
+			}
 		}
 
 		super.render(mX, mY, float_1);
