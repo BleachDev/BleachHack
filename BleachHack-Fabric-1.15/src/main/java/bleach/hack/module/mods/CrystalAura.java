@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
 
+import bleach.hack.gui.clickgui.SettingColor;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -91,7 +92,8 @@ public class CrystalAura extends Module {
 				new SettingToggle("Slow", false).withDesc("Hits crystals slower"),
 				new SettingToggle("Rotate", false).withDesc("Face crystals serverside"),
 				new SettingToggle("RayTrace", false).withDesc("Click on the most \"legit\" side of a block when possible"),
-				new SettingSlider("Range: ", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"));
+				new SettingSlider("Range: ", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"),
+				new SettingColor("Place Color", 0.7f, 0.7f, 1f, false));
 	}
 
 	@Subscribe
@@ -311,7 +313,8 @@ public class CrystalAura extends Module {
 	@Subscribe
 	public void onRenderWorld(EventWorldRender event) {
 		if (this.render != null) {
-			RenderUtils.drawFilledBox(render, 0.7f, 0.7f, 1f, 0.7f);
+			float[] col = getSettings().get(11).asColor().getRGBFloat();
+			RenderUtils.drawFilledBox(render, col[0], col[1], col[2], 0.7f);
 		}
 	}
 
