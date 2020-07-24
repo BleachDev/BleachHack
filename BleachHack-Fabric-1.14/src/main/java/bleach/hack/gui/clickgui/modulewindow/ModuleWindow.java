@@ -17,6 +17,7 @@
  */
 package bleach.hack.gui.clickgui.modulewindow;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,8 +26,9 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
-
+import org.lwjgl.opengl.GL11;
 import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingColor;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -86,49 +88,60 @@ public class ModuleWindow extends ClickGuiWindow {
 			y2 = y + getHeight();
 		}
 
-		int count = 0;
+		int curY = 0;
 		for (Entry<Module, Boolean> m: new LinkedHashMap<>(mods).entrySet()) {
-			if (m.getValue()) fillReverseGrey(x, y+(count*12), x+len-1, y+12+(count*12));
-			DrawableHelper.fill(x, y+(count*12), x+len, y+12+(count*12),
-					mouseOver(x, y+(count*12), x+len, y+12+(count*12)) ? 0x70303070 : 0x00000000);
+			if (m.getValue()) {
+				//fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
+				fillGreySides(x, y + curY, x+len-1, y + 12 + curY);
+				DrawableHelper.fill(x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
+				DrawableHelper.fill(x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
+			}
+			
+			DrawableHelper.fill(x, y + curY, x+len, y + 12 + curY,
+					mouseOver(x, y + curY, x+len, y + 12 + curY) ? 0x70303070 : 0x00000000);
+
+			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len),
+					x+2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
 
 			//If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
-				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + (count * 12) + (m.getValue() ? 1 : 0),
-						m.getValue() ? x + len - 3 : x + len, y + 12 + (count * 12), 0x50ff0000);
+				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0),
+						m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
 			}
 
-			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len),
-					x+2, y+2+(count*12), m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
-
-
 			/* Set which module settings show on */
-			if (mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
-				tooltip = Triple.of(x + len + 2, y + count * 12, m.getKey().getDesc());
+			if (mouseOver(x, y + curY, x+len, y + 12 + curY)) {
+				tooltip = Triple.of(x + len + 2, y + curY, m.getKey().getDesc());
 
 				if (lmDown) m.getKey().toggle();
 				if (rmDown) mods.replace(m.getKey(), !m.getValue());
 				if (lmDown || rmDown) mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
+			
+			curY += 12;
 
 			/* draw settings */
 			if (m.getValue()) {
 				for (SettingBase s: m.getKey().getSettings()) {
-					count++;
-					if (s instanceof SettingMode) drawModeSetting(s.asMode(), x, y+(count*12), textRend);
-					if (s instanceof SettingToggle) drawToggleSetting(s.asToggle(), x, y+(count*12), textRend);
-					if (s instanceof SettingSlider) drawSliderSetting(s.asSlider(), x, y+(count*12), textRend);
-
-					if (!s.getDesc().isEmpty() && mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
-						tooltip = Triple.of(x + len + 2, y + count * 12, s.getDesc());
+					if (s instanceof SettingMode) drawModeSetting(s.asMode(), x, y + curY, textRend);
+					else if (s instanceof SettingToggle) drawToggleSetting(s.asToggle(), x, y + curY, textRend);
+					else if (s instanceof SettingSlider) drawSliderSetting(s.asSlider(), x, y + curY, textRend);
+					else if (s instanceof SettingColor) {
+						//System.out.println(s.getHeight(len));
+						drawColorSetting(s.asColor(), x, y + curY, textRend);
 					}
+
+					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x+len, y + s.getHeight(len) + curY)) {
+						tooltip = Triple.of(x + len + 2, y + curY, s.getDesc());
+					}
+					
+					curY += s.getHeight(len);
 				}
 
-				count++;
-				drawBindSetting(m.getKey(), keyDown, x, y+(count*12), textRend);
+				drawBindSetting(m.getKey(), keyDown, x, y + curY, textRend);
+				curY += 12;
 				//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
 			}
-			count++;
 		}
 	}
 
@@ -181,11 +194,69 @@ public class ModuleWindow extends ClickGuiWindow {
 			s.setValue(s.round(percent*((s.max - s.min) / 100) + s.min, s.round));
 		}
 	}
+	
+	public void drawColorSetting(SettingColor s, int x, int y, TextRenderer textRend) {
+		fillGreySides(x, y - 1, x + len - 1, y + s.getHeight(len));
+		
+		int sx = x + 3,
+			sy = y + 2,
+			ex = x + len - 18,
+			ey = y + s.getHeight(len) - 2;
+		
+		fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
+		
+		DrawableHelper.fill(sx, sy, ex, ey, -1);
+		
+		// opengl workaround because mc is rarted with <10% transparency
+		for (int i = sy; i < ey; i++) {
+			float bri = 1f - 1f / ((float) (ey - sy) / (i - sy));
+			fillGradient(sx, i, ex, i + 1, Color.getHSBColor(s.hue, 0f, bri).getRGB(), Color.getHSBColor(s.hue, 1f, bri).getRGB());
+		}
+		
+		if (mouseOver(sx, sy, ex, ey) && lmHeld) {
+			s.bri = 1f - 1f / ((float) (ey - sy) / (mouseY - sy));
+			s.sat = 1f / ((float) (ex - sx) / (mouseX - sx));
+		}
+		
+		int briY = (int) (ey - (ey - sy) * s.bri);
+		int satX = (int) (sx + (ex - sx) * s.sat);
+		
+		DrawableHelper.fill(satX - 2, briY, satX, briY + 1, 0xffd0d0d0);
+		DrawableHelper.fill(satX + 1, briY, satX + 3, briY + 1, 0xffd0d0d0);
+		DrawableHelper.fill(satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
+		DrawableHelper.fill(satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
+		
+		GL11.glPushMatrix();
+		GL11.glScaled(0.75, 0.75, 1);
+		textRend.draw(s.text, (int) ((sx + 1) * 1/0.75), (int) ((sy + 1) * 1/0.75), 0x000000);
+		GL11.glPopMatrix();
+		
+		sx = ex + 5;
+		ex = ex + 12;
+		fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
+		
+		for (int i = sy; i < ey; i++) {
+			float curHue = 1f / ((float) (ey - sy) / (i - sy));
+			DrawableHelper.fill(sx, i, ex, i + 1, Color.getHSBColor(curHue, 1f, 1f).getRGB());
+		}
+		
+		if (mouseOver(sx, sy, ex, ey) && lmHeld) {
+			s.hue = 1f / ((float) (ey - sy) / (mouseY - sy));
+		}
+		
+		int hueY = (int) (sy + (ey - sy) * s.hue);
+		DrawableHelper.fill(sx, hueY - 1, sx + 1, hueY + 2, 0xffa0a0a0);
+		DrawableHelper.fill(ex - 1, hueY - 1, ex, hueY + 2, 0xffa0a0a0);
+		DrawableHelper.fill(sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
+		DrawableHelper.fill(ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
+	}
 
 	protected void fillReverseGrey(int x1, int y1, int x2, int y2) {
 		DrawableHelper.fill(x1, y1, x1 + 1, y2 - 1, 0x90000000);
 		DrawableHelper.fill(x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
-		DrawableHelper.fill(x2 - 2, y1 + 1, x2, y2, 0x90b0b0b0);
+		DrawableHelper.fill(x1 + 1, y2 - 1, x2, y2, 0x90b0b0b0);
+		DrawableHelper.fill(x2 - 1, y1 + 1, x2, y2 - 1, 0x90b0b0b0);
+		DrawableHelper.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
 	}
 
 	protected void fillGreySides(int x1, int y1, int x2, int y2) {
@@ -212,7 +283,11 @@ public class ModuleWindow extends ClickGuiWindow {
 			h += 12;
 
 			if (e.getValue()) {
-				h += (12 * (e.getKey().getSettings().size() + 1));
+				for (SettingBase s: e.getKey().getSettings()) {
+					h += s.getHeight(len);
+				}
+
+				h += 12;
 			}
 		}
 

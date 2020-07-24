@@ -57,6 +57,10 @@ public class SettingSlider extends SettingBase {
 		return text;
 	}
 	
+	public int getHeight(int len) {
+		return 12;
+	}
+	
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
 			setValue(settings.getAsDouble());

@@ -45,6 +45,10 @@ public class SettingMode extends SettingBase {
 		return text;
 	}
 	
+	public int getHeight(int len) {
+		return 12;
+	}
+	
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
 			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.length);

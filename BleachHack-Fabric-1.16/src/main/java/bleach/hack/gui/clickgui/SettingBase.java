@@ -47,6 +47,14 @@ public abstract class SettingBase {
 		}
 	}
 	
+	public SettingColor asColor() {
+		try {
+			return (SettingColor) this;
+		} catch (Exception e) {
+			throw new IllegalStateException("Execption parsing setting: " + this);
+		}
+	}
+	
 	public abstract String getName();
 
 	public String getDesc() {
@@ -57,6 +65,8 @@ public abstract class SettingBase {
 		description = desc;
 		return this;
 	}
+	
+	public abstract int getHeight(int len);
 	
 	public abstract void readSettings(JsonElement settings);
 	public abstract JsonElement saveSettings();
