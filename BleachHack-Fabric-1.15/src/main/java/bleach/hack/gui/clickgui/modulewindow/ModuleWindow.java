@@ -122,6 +122,8 @@ public class ModuleWindow extends ClickGuiWindow {
 						tooltip = Triple.of(x + len + 2, y + curY, s.getDesc());
 					}
 					
+					fillGreySides(x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
+					
 					curY += s.getHeight(len);
 				}
 

@@ -48,7 +48,6 @@ public class SettingMode extends SettingBase {
 	}
 	
 	public void render(ModuleWindow window, int x, int y, int len) {
-		window.fillGreySides(x, y - 1, x + len - 1, y + 12);
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + modes[mode],x+2, y+2,
 				window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
 
