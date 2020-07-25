@@ -17,11 +17,18 @@
  */
 package bleach.hack.gui.clickgui;
 
+import java.util.Arrays;
+import java.util.Map.Entry;
+
+import org.lwjgl.opengl.GL11;
+
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 
 public class SettingToggle extends SettingBase {
 
@@ -47,24 +54,98 @@ public class SettingToggle extends SettingBase {
 			if (window.mouseOver(x, y, x+len, y+12)) color2 = "§4";
 			else color2 = "§c";
 		}
+		
+		if (!children.isEmpty()) {
+			if (window.rmDown && window.mouseOver(x, y, x+len, y+12)) expanded = !expanded;
 
-		window.fillGreySides(x, y-1, x+len-1, y+12);
+			/*if (expanded) {
+				window.fillGreySides(x + 1, y, x + len - 2, y + 12);
+				window.fillGreySides(x, y + 11, x + len - 1, y + getHeight(len));
+				DrawableHelper.fill(x, y, x + len - 3, y + 1, 0x90000000);
+				DrawableHelper.fill(x + 1, y + getHeight(len) - 2, x + 2, y + getHeight(len) - 1, 0x90000000);
+				DrawableHelper.fill(x + 2, y + getHeight(len) - 1, x + len - 2, y + getHeight(len), 0x90b0b0b0);
+				
+				int h = y + 12;
+				for (SettingBase s: children) {
+					s.render(window, x + 1, h, len - 2);
+					
+					h += s.getHeight(len - 2);
+				}
+			}*/
+			if (expanded) {
+				DrawableHelper.fill(x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
+
+				int h = y + 12;
+				for (SettingBase s: children) {
+					s.render(window, x + 2, h, len - 2);
+
+					h += s.getHeight(len - 2);
+				}
+			}
+
+			GL11.glPushMatrix();
+			GL11.glScaled(0.65, 0.65, 1);
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(
+					color2 + (expanded ? "[§lv" + color2 + "]" : "[§l>" + color2 + "]"), (int) ((x + len - 13) * 1/0.65), (int) ((y + 4) * 1/0.65), -1);
+			GL11.glPopMatrix();
+		}
+
+
+
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(color2 + text, x + 3, y + 2, 0xffffff);
 
 		if (window.mouseOver(x, y, x+len, y+12) && window.lmDown) state = !state;
 	}
 	
 	public int getHeight(int len) {
-		return 12;
+		int h = 12;
+
+		if (expanded) {
+			h += 1;
+			for (SettingBase s: children) h += s.getHeight(len - 2);
+		}
+
+		return h;
 	}
 	
+	public SettingToggle withChildren(SettingBase... children) {
+		this.children.addAll(Arrays.asList(children));
+		return this;
+	}
+
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
 			state = settings.getAsBoolean();
+		} else if (settings.isJsonObject()) {
+			JsonObject jo = settings.getAsJsonObject();
+			if (!jo.has("toggled")) return;
+
+			state = jo.get("toggled").getAsBoolean();
+
+			for (Entry<String, JsonElement> e: jo.get("children").getAsJsonObject().entrySet()) {
+				for (SettingBase s: children) {
+					if (s.getName().equals(e.getKey())) {
+						s.readSettings(e.getValue());
+					}
+				}
+			}
 		}
 	}
 
 	public JsonElement saveSettings() {
-		return new JsonPrimitive(state);
+		if (children.isEmpty()) {
+			return new JsonPrimitive(state);
+		} else {
+			JsonObject jo = new JsonObject();
+			jo.add("toggled", new JsonPrimitive(state));
+
+			JsonObject subJo = new JsonObject();
+			for (SettingBase s: children) {
+				subJo.add(s.getName(), s.saveSettings());
+			}
+
+			jo.add("children", subJo);
+			return jo;
+		}
 	}
 }

@@ -18,7 +18,9 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventOutlineColor;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.gui.clickgui.SettingColor;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -31,18 +33,35 @@ import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.util.Formatting;
 
 public class ESP extends Module {
 
 	public ESP() {
 		super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
-				new SettingToggle("Players", true).withDesc("Show Players"),
-				new SettingToggle("Mobs", false).withDesc("Show Mobs"),
-				new SettingToggle("Animals", false).withDesc("Show Animals"),
-				new SettingToggle("Items", true).withDesc("Show Items"),
-				new SettingToggle("Crystals", true).withDesc("Show End Crystals"),
-				new SettingToggle("Vehicles", false).withDesc("Show Vehicles"));
+				new SettingToggle("Players", true).withChildren(
+						new SettingColor("Player Color", 1f, 0.5f, 0.5f, false),
+						new SettingColor("Friend Color", 0f, 1f, 1f, false))
+				.withDesc("Show Players"),
+
+				new SettingToggle("Mobs", false).withChildren(
+						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false))
+				.withDesc("Show Mobs"),
+
+				new SettingToggle("Animals", false).withChildren(
+						new SettingColor("Color", 0.3f, 1f, 0.3f, false))
+				.withDesc("Show Animals"),
+
+				new SettingToggle("Items", true).withChildren(
+						new SettingColor("Color", 1f, 0.8f, 0.2f, false))
+				.withDesc("Show Items"),
+
+				new SettingToggle("Crystals", true).withChildren(
+						new SettingColor("Color", 1f, 0.2f, 1f, false))
+				.withDesc("Show End Crystals"),
+
+				new SettingToggle("Vehicles", false).withChildren(
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false))
+				.withDesc("Show Vehicles"));
 	}
 
 	@Override
@@ -54,40 +73,47 @@ public class ESP extends Module {
 			}
 		}
 	}
-
+	
 	@Subscribe
 	public void onTick(EventTick event) {
 		for (Entity e: mc.world.getEntities()) {
+			if ((e instanceof PlayerEntity && getSettings().get(0).asToggle().state)
+					|| (e instanceof Monster && getSettings().get(1).asToggle().state)
+					|| (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state)
+					|| (e instanceof ItemEntity && getSettings().get(3).asToggle().state)
+					|| (e instanceof EnderCrystalEntity && getSettings().get(4).asToggle().state)
+					|| ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state)) {
+				e.setGlowing(true);
+			}
+		}
+	}
+
+	@Subscribe
+	public void onOutlineColor(EventOutlineColor event) {
+		for (Entity e: mc.world.getEntities()) {
+			boolean glow = true;
+			
 			if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).asToggle().state) {
 				if (BleachHack.friendMang.has(e.getName().asString())) {
-					EntityUtils.setGlowing(e, Formatting.AQUA, "friends");
+					event.color = getSettings().get(0).getChild(1).asColor().getRGB();
 				} else {
-					EntityUtils.setGlowing(e, Formatting.RED, "players");
+					event.color = getSettings().get(0).getChild(0).asColor().getRGB();
 				}
+			} else if (e instanceof Monster && getSettings().get(1).asToggle().state) {
+				event.color = getSettings().get(1).getChild(0).asColor().getRGB();
+			} else if (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state) {
+				event.color = getSettings().get(2).getChild(0).asColor().getRGB();
+			} else if (e instanceof ItemEntity && getSettings().get(3).asToggle().state) {
+				event.color = getSettings().get(3).getChild(0).asColor().getRGB();
+			}else if (e instanceof EnderCrystalEntity && getSettings().get(4).asToggle().state) {
+				event.color = getSettings().get(4).getChild(0).asColor().getRGB();
+			} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state) {
+				event.color = getSettings().get(5).getChild(0).asColor().getRGB();
+			} else {
+				glow = false;
 			}
-
-			else if (e instanceof Monster && getSettings().get(1).asToggle().state) {
-				EntityUtils.setGlowing(e, Formatting.DARK_BLUE, "mobs");
-			}
-
-			else if (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state) {
-				EntityUtils.setGlowing(e, Formatting.GREEN, "passive");
-			}
-
-			else if (e instanceof ItemEntity && getSettings().get(3).asToggle().state) {
-				EntityUtils.setGlowing(e, Formatting.GOLD, "items");
-			}
-
-			else if (e instanceof EnderCrystalEntity && getSettings().get(4).asToggle().state) {
-				EntityUtils.setGlowing(e, Formatting.LIGHT_PURPLE, "crystals");
-			}
-
-			else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state) {
-				EntityUtils.setGlowing(e, Formatting.GRAY, "vehicles");
-			}
-			else {
-				e.setGlowing(false);
-			}
+			
+			if (glow) e.setGlowing(true);
 		}
 	}
 }

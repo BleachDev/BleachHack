@@ -74,8 +74,6 @@ public class SettingToggle extends SettingBase {
 			}*/
 			if (expanded) {
 				DrawableHelper.fill(x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
-				//DrawableHelper.fill(x + 1, y + 12, x + 2, y + 13, 0x90000000);
-				//DrawableHelper.fill(x + 1, y + getHeight(len) - 2, x + 2, y + getHeight(len) - 1, 0x90000000);
 				
 				int h = y + 12;
 				for (SettingBase s: children) {
@@ -112,16 +110,16 @@ public class SettingToggle extends SettingBase {
 		this.children.addAll(Arrays.asList(children));
 		return this;
 	}
-	
+
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
 			state = settings.getAsBoolean();
 		} else if (settings.isJsonObject()) {
 			JsonObject jo = settings.getAsJsonObject();
 			if (!jo.has("toggled")) return;
-			
+
 			state = jo.get("toggled").getAsBoolean();
-			
+
 			for (Entry<String, JsonElement> e: jo.get("children").getAsJsonObject().entrySet()) {
 				for (SettingBase s: children) {
 					if (s.getName().equals(e.getKey())) {
@@ -138,12 +136,12 @@ public class SettingToggle extends SettingBase {
 		} else {
 			JsonObject jo = new JsonObject();
 			jo.add("toggled", new JsonPrimitive(state));
-			
+
 			JsonObject subJo = new JsonObject();
 			for (SettingBase s: children) {
 				subJo.add(s.getName(), s.saveSettings());
 			}
-			
+
 			jo.add("children", subJo);
 			return jo;
 		}

@@ -124,6 +124,8 @@ public class ModuleWindow extends ClickGuiWindow {
 						tooltip = Triple.of(x + len + 2, y + curY, s.getDesc());
 					}
 					
+					fillGreySides(matrix, x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
+					
 					curY += s.getHeight(len);
 				}
 
@@ -160,7 +162,7 @@ public class ModuleWindow extends ClickGuiWindow {
 		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
 	}
 
-	public void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+	private void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
 		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
 		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
 	}

@@ -64,7 +64,6 @@ public class SettingSlider extends SettingBase {
 	
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
 		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((getValue() - min) / (max - min)), 0, len-2));
-		window.fillGreySides(matrix, x, y-1, x+len-1, y+12);
 		window.fillGradient(matrix, x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text + (round == 0  && getValue() > 100 ? Integer.toString((int)getValue()) : getValue()),

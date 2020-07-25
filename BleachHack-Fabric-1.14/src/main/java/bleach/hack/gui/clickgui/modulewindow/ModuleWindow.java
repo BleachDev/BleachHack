@@ -118,6 +118,8 @@ public class ModuleWindow extends ClickGuiWindow {
 				for (SettingBase s: m.getKey().getSettings()) {
 					s.render(this, x, y + curY, len);
 					
+					fillGreySides(x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
+					
 					curY += s.getHeight(len);
 				}
 
@@ -151,7 +153,7 @@ public class ModuleWindow extends ClickGuiWindow {
 		DrawableHelper.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
 	}
 
-	public void fillGreySides(int x1, int y1, int x2, int y2) {
+	private void fillGreySides(int x1, int y1, int x2, int y2) {
 		DrawableHelper.fill(x1, y1, x1 + 1, y2 - 1, 0x90000000);
 		DrawableHelper.fill(x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
 	}

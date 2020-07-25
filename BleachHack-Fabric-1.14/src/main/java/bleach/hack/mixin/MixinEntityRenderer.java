@@ -17,31 +17,42 @@
  */
 package bleach.hack.mixin;
 
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.scoreboard.Team;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventLivingRender;
+import bleach.hack.event.events.EventEntityRender;
+import bleach.hack.event.events.EventOutlineColor;
 
-@Mixin(LivingEntityRenderer.class)
-public abstract class MixinEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
+@Mixin(EntityRenderer.class)
+public abstract class MixinEntityRenderer<T extends Entity> {
 
-	protected MixinEntityRenderer(EntityRenderDispatcher entityRenderDispatcher_1) {
-		super(entityRenderDispatcher_1);
+	@Inject(at = @At("HEAD"), method = "getOutlineColor", cancellable = true)
+	protected void getOutlineColor(T entity_1, CallbackInfoReturnable<Integer> ci) {
+		Team team_1 = (Team) (entity_1).getScoreboardTeam();
+		int col = team_1 != null && team_1.getColor().getColorValue() != null ? team_1.getColor().getColorValue() : 16777215;
+		
+		EventOutlineColor event = new EventOutlineColor(entity_1, col);
+		BleachHack.eventBus.post(event);
+		if (event.isCancelled()) {
+			ci.setReturnValue(16777215);
+			ci.cancel();
+		} else if (event.color != col) {
+			ci.setReturnValue(event.color);
+			ci.cancel();
+		}
 	}
 
-	@Inject(at = @At("HEAD"), method = "method_4041(Lnet/minecraft/entity/LivingEntity;DDD)V", cancellable = true)
-	public void render(T livingEntity_1, double double_1, double double_2, double double_3, CallbackInfo info) {
-		EventLivingRender event = new EventLivingRender(livingEntity_1);
+	@Inject(at = @At("HEAD"), method = "render", cancellable = true)
+	public void render(T entity_1, double double_1, double double_2, double double_3, float float_1, float float_2, CallbackInfo info) {
+		EventEntityRender event = new EventEntityRender(entity_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
 	}

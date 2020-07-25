@@ -37,12 +37,10 @@ public class SettingColor extends SettingBase {
 	}
 	
 	public void render(ModuleWindow window, int x, int y, int len) {
-		window.fillGreySides(x, y - 1, x + len - 1, y + getHeight(len));
-		
 		int sx = x + 3,
 			sy = y + 2,
 			ex = x + len - 18,
-			ey = y + getHeight(len) - 2;
+			ey = y + getHeight(len) - 3;
 		
 		window.fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
 		

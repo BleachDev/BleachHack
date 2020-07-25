@@ -19,7 +19,7 @@ package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventLivingRender;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -47,8 +47,10 @@ public class Nametags extends Module {
 	}
 
 	@Subscribe
-	public void onLivingRender(EventLivingRender event) {
-		LivingEntity e = event.getEntity();
+	public void onLivingRender(EventEntityRender event) {
+		if (!(event.getEntity() instanceof LivingEntity)) return;
+		
+		LivingEntity e = (LivingEntity) event.getEntity();
 
 		/* Color before name */
 		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
