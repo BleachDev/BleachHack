@@ -117,7 +117,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		for (Window w: windows) {
 			if (w instanceof ClickGuiWindow) {
 				if (w instanceof ModuleWindow) {
-					((ModuleWindow) w).len = len;
+					((ModuleWindow) w).setLen(len);
 				}
 				
 				((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);

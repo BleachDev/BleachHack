@@ -37,7 +37,7 @@ public class SettingToggle extends SettingBase {
 		return text;
 	}
 	
-	public void render(ModuleWindow window, int x, int y, int len, int mouseX, int mouseY, boolean lmDown, boolean rmDown, boolean lmHeld) {
+	public void render(ModuleWindow window, int x, int y, int len) {
 		String color2;
 
 		if (state) { 
@@ -51,7 +51,7 @@ public class SettingToggle extends SettingBase {
 		window.fillGreySides(x, y-1, x+len-1, y+12);
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(color2 + text, x + 3, y + 2, 0xffffff);
 
-		if (window.mouseOver(x, y, x+len, y+12) && lmDown) state = !state;
+		if (window.mouseOver(x, y, x+len, y+12) && window.lmDown) state = !state;
 	}
 	
 	public int getHeight(int len) {

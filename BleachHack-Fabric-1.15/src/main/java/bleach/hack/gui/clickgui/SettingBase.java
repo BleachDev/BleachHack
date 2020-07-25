@@ -68,7 +68,7 @@ public abstract class SettingBase {
 		return this;
 	}
 	
-	public abstract void render(ModuleWindow window, int x, int y, int len, int mouseX, int mouseY, boolean lmDown, boolean rmDown, boolean lmHeld);
+	public abstract void render(ModuleWindow window, int x, int y, int len);
 	
 	public abstract int getHeight(int len);
 	

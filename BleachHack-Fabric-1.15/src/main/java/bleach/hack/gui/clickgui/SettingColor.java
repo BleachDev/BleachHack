@@ -41,7 +41,7 @@ public class SettingColor extends SettingBase {
 		return text;
 	}
 	
-	public void render(ModuleWindow window, int x, int y, int len, int mouseX, int mouseY, boolean lmDown, boolean rmDown, boolean lmHeld) {
+	public void render(ModuleWindow window, int x, int y, int len) {
 		window.fillGreySides(x, y - 1, x + len - 1, y + getHeight(len));
 		
 		int sx = x + 3,
@@ -77,9 +77,9 @@ public class SettingColor extends SettingBase {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
-		if (window.mouseOver(sx, sy, ex, ey) && lmHeld) {
-			bri = 1f - 1f / ((float) (ey - sy) / (mouseY - sy));
-			sat = 1f / ((float) (ex - sx) / (mouseX - sx));
+		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
+			bri = 1f - 1f / ((float) (ey - sy) / (window.mouseY - sy));
+			sat = 1f / ((float) (ex - sx) / (window.mouseX - sx));
 		}
 		
 		int briY = (int) (ey - (ey - sy) * bri);
@@ -104,8 +104,8 @@ public class SettingColor extends SettingBase {
 			DrawableHelper.fill(sx, i, ex, i + 1, Color.getHSBColor(curHue, 1f, 1f).getRGB());
 		}
 		
-		if (window.mouseOver(sx, sy, ex, ey) && lmHeld) {
-			hue = 1f / ((float) (ey - sy) / (mouseY - sy));
+		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
+			hue = 1f / ((float) (ey - sy) / (window.mouseY - sy));
 		}
 		
 		int hueY = (int) (sy + (ey - sy) * hue);

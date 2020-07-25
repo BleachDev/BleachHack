@@ -43,7 +43,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	public boolean hiding;
 
-	public int len;
+	private int len;
 
 	private Set<Module> searchedModules;
 
@@ -116,7 +116,7 @@ public class ModuleWindow extends ClickGuiWindow {
 			/* draw settings */
 			if (m.getValue()) {
 				for (SettingBase s: m.getKey().getSettings()) {
-					s.render(this, x, y + curY, len, mouseX, mouseY, lmDown, rmDown, lmHeld);
+					s.render(this, x, y + curY, len);
 					
 					curY += s.getHeight(len);
 				}
@@ -167,6 +167,10 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	public Triple<Integer, Integer, String> getTooltip() {
 		return tooltip;
+	}
+	
+	public void setLen(int len) {
+		this.len = len;
 	}
 
 	public int getHeight() {

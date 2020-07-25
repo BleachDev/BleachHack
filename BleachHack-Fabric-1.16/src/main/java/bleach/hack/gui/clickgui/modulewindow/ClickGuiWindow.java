@@ -13,13 +13,13 @@ public abstract class ClickGuiWindow extends Window {
 
 	protected MinecraftClient mc;
 
-	protected int mouseX;
-	protected int mouseY;
+	public int mouseX;
+	public int mouseY;
 
-	protected int keyDown = -1;
-	protected boolean lmDown = false;
-	protected boolean rmDown = false;
-	protected boolean lmHeld = false;
+	public int keyDown = -1;
+	public boolean lmDown = false;
+	public boolean rmDown = false;
+	public boolean lmHeld = false;
 
 	public ClickGuiWindow(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
 		super(x1, y1, x2, y2, title, icon);
