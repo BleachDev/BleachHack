@@ -77,7 +77,7 @@ public class ESP extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		for (Entity e: mc.world.getEntities()) {
-			if ((e instanceof PlayerEntity && getSettings().get(0).asToggle().state)
+			if ((e instanceof PlayerEntity && e != mc.player && getSettings().get(0).asToggle().state)
 					|| (e instanceof Monster && getSettings().get(1).asToggle().state)
 					|| (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state)
 					|| (e instanceof ItemEntity && getSettings().get(3).asToggle().state)
@@ -90,30 +90,22 @@ public class ESP extends Module {
 
 	@Subscribe
 	public void onOutlineColor(EventOutlineColor event) {
-		for (Entity e: mc.world.getEntities()) {
-			boolean glow = true;
-			
-			if (e instanceof PlayerEntity && e != mc.player && getSettings().get(0).asToggle().state) {
-				if (BleachHack.friendMang.has(e.getName().asString())) {
-					event.color = getSettings().get(0).getChild(1).asColor().getRGB();
-				} else {
-					event.color = getSettings().get(0).getChild(0).asColor().getRGB();
-				}
-			} else if (e instanceof Monster && getSettings().get(1).asToggle().state) {
-				event.color = getSettings().get(1).getChild(0).asColor().getRGB();
-			} else if (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state) {
-				event.color = getSettings().get(2).getChild(0).asColor().getRGB();
-			} else if (e instanceof ItemEntity && getSettings().get(3).asToggle().state) {
-				event.color = getSettings().get(3).getChild(0).asColor().getRGB();
-			}else if (e instanceof EnderCrystalEntity && getSettings().get(4).asToggle().state) {
-				event.color = getSettings().get(4).getChild(0).asColor().getRGB();
-			} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state) {
-				event.color = getSettings().get(5).getChild(0).asColor().getRGB();
+		if (event.entity instanceof PlayerEntity && event.entity != mc.player && getSettings().get(0).asToggle().state) {
+			if (BleachHack.friendMang.has(event.entity.getName().asString())) {
+				event.color = getSettings().get(0).getChild(1).asColor().getRGB();
 			} else {
-				glow = false;
+				event.color = getSettings().get(0).getChild(0).asColor().getRGB();
 			}
-			
-			if (glow) e.setGlowing(true);
+		} else if (event.entity instanceof Monster && getSettings().get(1).asToggle().state) {
+			event.color = getSettings().get(1).getChild(0).asColor().getRGB();
+		} else if (EntityUtils.isAnimal(event.entity) && getSettings().get(2).asToggle().state) {
+			event.color = getSettings().get(2).getChild(0).asColor().getRGB();
+		} else if (event.entity instanceof ItemEntity && getSettings().get(3).asToggle().state) {
+			event.color = getSettings().get(3).getChild(0).asColor().getRGB();
+		}else if (event.entity instanceof EnderCrystalEntity && getSettings().get(4).asToggle().state) {
+			event.color = getSettings().get(4).getChild(0).asColor().getRGB();
+		} else if ((event.entity instanceof BoatEntity || event.entity instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state) {
+			event.color = getSettings().get(5).getChild(0).asColor().getRGB();
 		}
 	}
 }

@@ -45,11 +45,11 @@ public class Nametags extends Module {
 				new SettingToggle("Players", true),
 				new SettingToggle("Mobs", false));
 	}
-
+	
 	@Subscribe
-	public void onLivingRender(EventEntityRender event) {
+	public void onLivingLabelRender(EventEntityRender.Label event) {
 		if (!(event.getEntity() instanceof LivingEntity)) return;
-		
+
 		LivingEntity e = (LivingEntity) event.getEntity();
 
 		/* Color before name */
@@ -65,20 +65,20 @@ public class Nametags extends Module {
 				Math.max(getSettings().get(2).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
 					Math.max(getSettings().get(3).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 
-				/* Health bar */
+				// Health bar
 				String health = "";
-				/* - Add Green Normal Health */
+				// - Add Green Normal Health
 				for (int i = 0; i < e.getHealth(); i++) health += "§a|";
-				/* - Add Red Empty Health (Remove Based on absorption amount) */
+				// - Add Red Empty Health (Remove Based on absorption amount)
 				for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getHealthMaximum() - e.getHealth()); i++) health += "§e|";
-				/* Add Yellow Absorption Health */
+				// Add Yellow Absorption Health
 				for (int i = 0; i < e.getHealthMaximum() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
-				/* Add "+??" to the end if the entity has extra hearts */
+				// Add "+??" to the end if the entity has extra hearts
 				if (e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()) > 0) {
 					health +=  " §e+" + (int)(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()));
 				}
 
-				/* Drawing Nametags */
+				// Drawing Nametags
 				if (getSettings().get(1).asMode().mode == 0) {
 					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getHealthMaximum() + "]",
 							e.x,e.y + e.getHeight() + (0.5f * scale), e.z, scale);
@@ -87,7 +87,7 @@ public class Nametags extends Module {
 					WorldRenderUtils.drawText(health, e.x, e.y + e.getHeight() + (0.75f * scale), e.z, scale);
 				}
 
-				/* Drawing Items */
+				// Drawing Items
 				double c = 0;
 				double higher = getSettings().get(1).asMode().mode == 1 ? 0.25 : 0;
 
@@ -109,7 +109,7 @@ public class Nametags extends Module {
 						c++;
 					}
 				}
-
+				
 				event.setCancelled(true);
 	}
 }
