@@ -39,6 +39,7 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.BlockState;
@@ -48,9 +49,10 @@ import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.decoration.EnderCrystalEntity;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -79,21 +81,25 @@ public class CrystalAura extends Module {
 	private int newSlot;
 	private int breaks;
 	private boolean isSpoofingAngles;
+	
+	private HashMap<BlockPos, Integer> blackList = new HashMap<>();
 
 	public CrystalAura() {
 		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.",
-				new SettingToggle("AutoSwitch", true).withDesc("Automatically switches to crystal when in combat"),
 				new SettingToggle("Players", true).withDesc("Target players"),
 				new SettingToggle("Mobs", false).withDesc("Target mobs"),
 				new SettingToggle("Animals", false).withDesc("Target animals"),
-				new SettingToggle("Place", true).withDesc("Place crystals"),
-				new SettingToggle("Explode", true).withDesc("Hit/explode crystals"),
-				new SettingToggle("Anti Weakness", false).withDesc("Hit with sword when you have weakness"),
-				new SettingToggle("Slow", false).withDesc("Hits crystals slower"),
+				new SettingToggle("Explode", true).withDesc("Hit/explode crystals").withChildren(
+						new SettingToggle("Anti Weakness", true).withDesc("Hit with sword when you have weakness"),
+						new SettingToggle("Slow", false).withDesc("Hits crystals slower")),
+				new SettingToggle("Place", true).withDesc("Place crystals").withChildren(
+						new SettingToggle("AutoSwitch", true).withDesc("Automatically switches to crystal when in combat"),
+						new SettingToggle("RayTrace", true).withDesc("Click on the most \"legit\" side of a block when possible"),
+						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
+						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
 				new SettingToggle("Rotate", false).withDesc("Face crystals serverside"),
-				new SettingToggle("RayTrace", false).withDesc("Click on the most \"legit\" side of a block when possible"),
 				new SettingSlider("Range: ", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"),
-				new SettingColor("Place Color", 0.7f, 0.7f, 1f, false));
+				new SettingToggle("Old Calcs", true).withDesc("Uses the old damage caclulations"));
 	}
 
 	@Subscribe
@@ -104,13 +110,20 @@ public class CrystalAura extends Module {
 		EnderCrystalEntity crystal = Streams.stream(mc.world.getEntities()).filter((entityx) -> {
 			return entityx instanceof EnderCrystalEntity;
 		}).map((entityx) -> {
+			BlockPos p = entityx.getBlockPos().down();
+			if (blackList.containsKey(p)) {
+				if (blackList.get(p) > 0) blackList.replace(p, blackList.get(p) - 1);
+				else blackList.remove(p);
+			}
+			
 			return (EnderCrystalEntity) entityx;
 		}).min(Comparator.comparing((c) -> {
 			return mc.player.distanceTo(c);
 		})).orElse(null);
+		
 		int crystalSlot;
-		if (getSetting(5).asToggle().state && crystal != null && mc.player.distanceTo(crystal) <= getSetting(10).asSlider().getValue()) {
-			if (getSetting(6).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
+		if (getSetting(3).asToggle().state && crystal != null && mc.player.distanceTo(crystal) <= getSetting(6).asSlider().getValue()) {
+			if (getSetting(3).asToggle().getChild(0).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
 				if (!this.isAttacking) {
 					this.oldSlot = mc.player.inventory.selectedSlot;
 					this.isAttacking = true;
@@ -139,12 +152,12 @@ public class CrystalAura extends Module {
 				}
 			}
 
-			WorldUtils.facePosPacket(crystal.x, crystal.y, crystal.z);
+			if (getSetting(5).asToggle().state) WorldUtils.facePosPacket(crystal.x, crystal.y, crystal.z);
 			mc.interactionManager.attackEntity(mc.player, crystal);
 			mc.player.swingHand(Hand.MAIN_HAND);
 			++this.breaks;
-			if (this.breaks == 2 && !getSetting(7).asToggle().state) {
-				if (getSetting(8).asToggle().state) {
+			if (this.breaks == 2 && !getSetting(3).asToggle().getChild(1).asToggle().state) {
+				if (getSetting(5).asToggle().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -152,8 +165,8 @@ public class CrystalAura extends Module {
 				return;
 			}
 
-			if (getSetting(7).asToggle().state&& this.breaks == 1) {
-				if (getSetting(8).asToggle().state) {
+			if (getSetting(3).asToggle().getChild(1).asToggle().state && this.breaks == 1) {
+				if (getSetting(5).asToggle().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -161,7 +174,7 @@ public class CrystalAura extends Module {
 				return;
 			}
 		} else {
-			if (getSetting(8).asToggle().state) {
+			if (getSetting(5).asToggle().state) {
 				isSpoofingAngles = false;
 			}
 
@@ -192,12 +205,11 @@ public class CrystalAura extends Module {
 
 		Set<BlockPos> blocks = getCrystalPoses();
 		List<Entity> entities = new ArrayList<>();
-		if (getSetting(1).asToggle().state) {
-			entities.addAll(mc.world.getPlayers());
-		}
 
-		entities.addAll(Streams.stream(mc.world.getEntities()).filter((entityx) -> {
-			return entityx instanceof LivingEntity && entityx instanceof AnimalEntity ? getSetting(3).asToggle().state : getSetting(2).asToggle().state;
+		entities.addAll(Streams.stream(mc.world.getEntities()).filter((e) -> {
+			return (e instanceof PlayerEntity && getSetting(0).asToggle().state)
+					|| (e instanceof MobEntity && getSetting(1).asToggle().state)
+					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state);
 		}).collect(Collectors.toList()));
 
 		// TODO: not this
@@ -213,7 +225,7 @@ public class CrystalAura extends Module {
 						if (!var9.hasNext()) {
 							if (damage == 0.5D) {
 								this.render = null;
-								if (getSetting(8).asToggle().state) {
+								if (getSetting(5).asToggle().state) {
 									isSpoofingAngles = false;
 								}
 
@@ -223,9 +235,9 @@ public class CrystalAura extends Module {
 							this.render = q;
 							if (getSetting(4).asToggle().state) {
 								if (!offhand && mc.player.inventory.selectedSlot != crystalSlot) {
-									if (getSetting(0).asToggle().state) {
+									if (getSetting(4).asToggle().getChild(0).asToggle().state) {
 										mc.player.inventory.selectedSlot = crystalSlot;
-										if (getSetting(8).asToggle().state) {
+										if (getSetting(5).asToggle().state) {
 											isSpoofingAngles = false;
 										}
 
@@ -235,9 +247,12 @@ public class CrystalAura extends Module {
 									return;
 								}
 
-								WorldUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
+								if (getSetting(5).asToggle().state) {
+									WorldUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
+								}
+								
 								Direction f;
-								if (!getSetting(9).asToggle().state) {
+								if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
 									f = Direction.UP;
 								} else {
 									BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
@@ -259,6 +274,8 @@ public class CrystalAura extends Module {
 
 								mc.interactionManager.interactBlock(mc.player, mc.world, offhand ? Hand.OFF_HAND : Hand.MAIN_HAND,
 										new BlockHitResult(new Vec3d(q), f, q, false));
+								
+								blackList.put(q, 5);
 							}
 
 							if (isSpoofingAngles) {
@@ -296,10 +313,12 @@ public class CrystalAura extends Module {
 								b = entity.getBlockPos().getSquaredDistance(blockPos);
 							} while (b >= 169.0D);
 
-							d = getExplosionDamage(blockPos, (LivingEntity) entity);
+							d = getSetting(7).asToggle().state 
+									? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, (LivingEntity) entity);
 						} while (d <= damage);
 
-						self = getExplosionDamage(blockPos, mc.player);
+						self = getSetting(7).asToggle().state 
+								? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, mc.player);
 					} while (self > d && d >= ((LivingEntity) entity).getHealth());
 
 					if (self - 0.5D <= mc.player.getHealth()) {
@@ -313,24 +332,24 @@ public class CrystalAura extends Module {
 	@Subscribe
 	public void onRenderWorld(EventWorldRender event) {
 		if (this.render != null) {
-			float[] col = getSetting(11).asColor().getRGBFloat();
-			RenderUtils.drawFilledBox(render, col[0], col[1], col[2], 0.7f);
+			float[] col = getSetting(4).asToggle().getChild(3).asColor().getRGBFloat();
+			RenderUtils.drawFilledBox(render, col[0], col[1], col[2], 0.4f);
 		}
 	}
 
 	public Set<BlockPos> getCrystalPoses() {
 		Set<BlockPos> poses = new HashSet<>();
 
-		int range = (int) Math.ceil(getSetting(10).asSlider().getValue());
+		int range = (int) Math.ceil(getSetting(6).asSlider().getValue());
 		for (int x = -range; x < range + 1; x++) {
 			for (int y = -range; y < range; y++) {
 				for (int z = -range; z < range + 1; z++) {
 					BlockPos basePos = mc.player.getBlockPos().add(x, y, z);
 
-					if (!canPlace(basePos)) continue;
+					if (!canPlace(basePos) || (blackList.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().state)) continue;
 
 					if (mc.player.getPos().distanceTo(new Vec3d(basePos).add(0.5, 1, 0.5))
-							<= getSetting(10).asSlider().getValue() + 0.25) poses.add(basePos);
+							<= getSetting(6).asSlider().getValue() + 0.25) poses.add(basePos);
 				}
 			}
 		}
@@ -422,4 +441,52 @@ public class CrystalAura extends Module {
 		damageCache.put(target, 0f);
 		return 0;
 	}
+
+	private float getExplosionDamage_old(BlockPos basePos, LivingEntity target) {
+		if (mc.world.getDifficulty() == Difficulty.PEACEFUL) return 0f;
+		
+		Vec3d crystalVec = new Vec3d(basePos.getX() + 0.5, basePos.getY() + 1.0, basePos.getZ() + 0.5);
+		
+		float doubleExplosionSize = 12.0F;
+		double distancedsize = target.getPos().distanceTo(crystalVec) / (double) doubleExplosionSize;
+
+		double blockDensity = Explosion.getExposure(crystalVec, target);
+		double v = (1.0D - distancedsize) * blockDensity;
+		
+		float damage = (float) ((int) ((v * v + v) / 2.0D * 9.0D * (double) doubleExplosionSize + 1.0D));
+		double finald = 1.0D;
+		
+		damage *= (mc.world.getDifficulty() == Difficulty.HARD ? 1.5f : mc.world.getDifficulty() == Difficulty.EASY ? 0.5f : 1f);
+
+		finald = this.getBlastReduction(target, damage,
+				new Explosion(this.mc.world, null, crystalVec.x, crystalVec.y, crystalVec.z, 6.0F, false, Explosion.DestructionType.DESTROY));
+
+		return (float) finald;
+	}
+	
+	private float getBlastReduction(LivingEntity entity, float damage, Explosion explosion) {
+        if (entity instanceof PlayerEntity) {
+            PlayerEntity ep = (PlayerEntity) entity;
+            DamageSource ds = DamageSource.explosion(explosion);
+            
+            damage = DamageUtil.getDamageLeft(damage, entity.getArmor(), (float) entity.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
+
+            int k = EnchantmentHelper.getProtectionAmount(ep.getArmorItems(), ds);
+            float f = MathHelper.clamp((float) k, 0.0F, 20.0F);
+
+            damage *= 1.0F - f / 25.0F;
+
+            if (entity.hasStatusEffect(StatusEffects.RESISTANCE)) {
+                damage -= damage / 4.0F;
+            }
+
+            damage = Math.max(damage - ep.getAbsorptionAmount(), 0.0F);
+
+            return damage;
+        } else {
+            damage = DamageUtil.getDamageLeft(damage, entity.getArmor(), (float) entity.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
+
+            return damage;
+        }
+    }
 }
