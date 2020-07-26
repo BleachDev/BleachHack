@@ -45,52 +45,8 @@ public class Nametags extends Module {
 
 	@Subscribe
 	public void onLivingLabelRender(EventEntityRender.Label event) {
-		if (event.getEntity() instanceof LivingEntity) event.setCancelled(true);
-		
-		LivingEntity e = (LivingEntity) event.getEntity();
-
-		/* Color before name */
-		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
-				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
-
-		if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||
-				((color == "§c" || color == "§6") && !getSettings().get(4).asToggle().state) ||
-				((color == "§5" || color == "§a") && !getSettings().get(5).asToggle().state)) return;
-		if (e.isInvisible()) color = "§e";
-
-		double scale = (e instanceof PlayerEntity) ?
-				Math.max(getSettings().get(2).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
-					Math.max(getSettings().get(3).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
-
-				// Health bar
-				String health = "";
-				// - Add Green Normal Health
-				for (int i = 0; i < e.getHealth(); i++) health += "§a|";
-				// - Add Red Empty Health (Remove Based on absorption amount)
-				for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaximumHealth() - e.getHealth()); i++) health += "§e|";
-				// Add Yellow Absorption Health
-				for (int i = 0; i < e.getMaximumHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
-				// Add "+??" to the end if the entity has extra hearts
-				if (e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()) > 0) {
-					health += " §e+" + (int)(e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
-				}
-
-				// Drawing Nametags
-				if (getSettings().get(1).asMode().mode == 0) {
-					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaximumHealth() + "]",
-							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
-							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-				} else if (getSettings().get(1).asMode().mode == 1) {
-					WorldRenderUtils.drawText(color + e.getName().getString(),
-							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
-							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-					WorldRenderUtils.drawText(health,
-							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
-							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-				}
+		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSettings().get(5).asToggle().state)
+				|| (event.getEntity() instanceof PlayerEntity && getSettings().get(4).asToggle().state)) event.setCancelled(true);
 	}
 
 	@Subscribe
@@ -99,7 +55,7 @@ public class Nametags extends Module {
 
 		LivingEntity e = (LivingEntity) event.getEntity();
 
-		/* Color before name */
+		// Color before name
 		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
 				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 

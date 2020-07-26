@@ -46,7 +46,8 @@ public class Nametags extends Module {
 
 	@Subscribe
 	public void onLivingLabelRender(EventEntityRender.Label event) {
-		if (event.getEntity() instanceof LivingEntity) event.setCancelled(true);
+		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSettings().get(5).asToggle().state)
+				|| (event.getEntity() instanceof PlayerEntity && getSettings().get(4).asToggle().state)) event.setCancelled(true);
 	}
 
 	@Subscribe
