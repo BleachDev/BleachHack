@@ -16,6 +16,7 @@
   	"MixinClientConnection",
   	"MixinClientPlayerEntity",
   	"MixinClientPlayerInteractionManager",
+  	"MixinClientWorld",
   	"MixinContainerScreen",
   	"MixinEntityRenderer",
     "MixinFluidRenderer",
@@ -31,6 +32,7 @@
     "MixinScreen",
     "MixinServerScreen",
     "MixinSignBlockEntityRenderer",
+    "MixinSkyProperties",
     "MixinTitleScreen",
     "MixinWorldRenderer"
   ],

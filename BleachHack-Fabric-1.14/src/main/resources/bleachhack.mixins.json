@@ -31,7 +31,8 @@
     "MixinScreen",
     "MixinServerScreen",
     "MixinSignBlockEntityRenderer",
-    "MixinTitleScreen"
+    "MixinTitleScreen",
+    "MixinWorld"
   ],
   "injectors": {
     "defaultRequire": 1

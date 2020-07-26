@@ -21,6 +21,8 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventReadPacket;
+import bleach.hack.event.events.EventSkyColor;
+import bleach.hack.gui.clickgui.SettingColor;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -36,7 +38,15 @@ public class Ambience extends Module {
 				new SettingToggle("Time", false),
 				new SettingMode("Weather: ", "Clear", "Rain"),
 				new SettingSlider("Rain: ", 0, 2, 0, 2),
-				new SettingSlider("Time: ", 0, 24000, 12500, 0));
+				new SettingSlider("Time: ", 0, 24000, 12500, 0),
+				
+				new SettingToggle("Sky Color", false).withChildren(
+						new SettingColor("Sky Color", 0.6f, 0.1f, 0.7f, false).withDesc("Color for the sky"))
+				.withDesc("Custom color for the sky (broken in 1.16)"),
+				
+				new SettingToggle("Cloud Color", false).withChildren(
+						new SettingColor("Cloud Color", 0.8f, 0.2f, 1f, false).withDesc("Color for clouds"))
+				.withDesc("Custom color for clouds"));
 	}
 
 	@Subscribe
@@ -57,5 +67,13 @@ public class Ambience extends Module {
 			event.setCancelled(true);
 		}
 	}
-
+	
+	@Subscribe
+	public void onSkyColor(EventSkyColor event) {
+		if (event instanceof EventSkyColor.CloudColor && getSettings().get(6).asToggle().state) {
+			event.setColor(getSettings().get(6).getChild(0).asColor().getRGBFloat());
+		} else if (getSettings().get(5).asToggle().state) {
+			event.setColor(getSettings().get(5).getChild(0).asColor().getRGBFloat());
+		}
+	}
 }

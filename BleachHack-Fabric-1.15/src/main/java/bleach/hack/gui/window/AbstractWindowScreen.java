@@ -27,7 +27,6 @@ import net.minecraft.text.Text;
 public abstract class AbstractWindowScreen extends Screen {
 
 	public List<Window> windows = new ArrayList<>();
-	private int lastSelected = -1;
 
 	public AbstractWindowScreen(Text text_1) {
 		super(text_1);
@@ -60,7 +59,7 @@ public abstract class AbstractWindowScreen extends Screen {
 		if (noneSelected >= 0) windows.get(noneSelected).selected = true;
 		if (close) this.onClose();
 		
-		lastSelected = -1;
+		//lastSelected = -1;
 
 		super.render(int_1, int_2, float_1);
 	}
@@ -84,16 +83,9 @@ public abstract class AbstractWindowScreen extends Screen {
 			w.selected = (count == window);
 			count++;
 		}
-		
-		lastSelected = window;
 	}
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		if (lastSelected != -1) {
-			lastSelected = -1;
-			return super.mouseClicked(double_1, double_2, int_1);
-		}
-		
 		/* Handle what window will be selected when clicking */
 		int count = 0;
 		int nextSelected = -1;

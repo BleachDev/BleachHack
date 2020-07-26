@@ -15,6 +15,7 @@
     "MixinClientConnection",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
+    "MixinClientWorld",
     "MixinContainerScreen",
     "MixinEntityRenderer",
     "MixinFluidRenderer",

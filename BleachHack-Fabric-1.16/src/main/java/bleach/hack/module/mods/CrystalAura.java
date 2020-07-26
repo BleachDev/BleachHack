@@ -343,7 +343,7 @@ public class CrystalAura extends Module {
 
 		if (baseState.getBlock() != Blocks.BEDROCK && baseState.getBlock() != Blocks.OBSIDIAN) return false;
 
-		BlockPos placePos = basePos.method_30931();
+		BlockPos placePos = basePos.up();
 		if (!mc.world.isAir(placePos)) return false;
 
 		return mc.world.getOtherEntities((Entity) null, new Box(placePos).stretch(0, 1, 0)).isEmpty();
