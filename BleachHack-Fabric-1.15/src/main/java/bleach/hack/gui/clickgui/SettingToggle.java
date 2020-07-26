@@ -17,7 +17,9 @@
  */
 package bleach.hack.gui.clickgui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL11;
@@ -34,6 +36,9 @@ public class SettingToggle extends SettingBase {
 
 	public boolean state;
 	public String text;
+	
+	protected List<SettingBase> children = new ArrayList<>();
+	protected boolean expanded = false;
 
 	public SettingToggle(String text, boolean state) {
 		this.state = state;
@@ -48,16 +53,16 @@ public class SettingToggle extends SettingBase {
 		String color2;
 
 		if (state) { 
-			if (window.mouseOver(x, y, x+len, y+12)) color2 = "§2";
-			else color2 = "§a";
+			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a72";
+			else color2 = "\u00a7a";
 		} else {
-			if (window.mouseOver(x, y, x+len, y+12)) color2 = "§4";
-			else color2 = "§c";
+			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a74";
+			else color2 = "\u00a7c";
 		}
 		
 		if (!children.isEmpty()) {
 			if (window.rmDown && window.mouseOver(x, y, x+len, y+12)) expanded = !expanded;
-			
+
 			/*if (expanded) {
 				window.fillGreySides(x + 1, y, x + len - 2, y + 12);
 				window.fillGreySides(x, y + 11, x + len - 1, y + getHeight(len));
@@ -74,21 +79,23 @@ public class SettingToggle extends SettingBase {
 			}*/
 			if (expanded) {
 				DrawableHelper.fill(x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
-				
+
 				int h = y + 12;
 				for (SettingBase s: children) {
 					s.render(window, x + 2, h, len - 2);
-					
+
 					h += s.getHeight(len - 2);
 				}
 			}
-			
+
 			GL11.glPushMatrix();
 			GL11.glScaled(0.65, 0.65, 1);
 			MinecraftClient.getInstance().textRenderer.drawWithShadow(
 					color2 + (expanded ? "[§lv" + color2 + "]" : "[§l>" + color2 + "]"), (int) ((x + len - 13) * 1/0.65), (int) ((y + 4) * 1/0.65), -1);
 			GL11.glPopMatrix();
 		}
+
+
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(color2 + text, x + 3, y + 2, 0xffffff);
 
@@ -97,17 +104,26 @@ public class SettingToggle extends SettingBase {
 	
 	public int getHeight(int len) {
 		int h = 12;
-		
+
 		if (expanded) {
 			h += 1;
 			for (SettingBase s: children) h += s.getHeight(len - 2);
 		}
-		
+
 		return h;
+	}
+	
+	public SettingBase getChild(int c) {
+		return children.get(c);
 	}
 	
 	public SettingToggle withChildren(SettingBase... children) {
 		this.children.addAll(Arrays.asList(children));
+		return this;
+	}
+	
+	public SettingToggle withDesc(String desc) {
+		description = desc;
 		return this;
 	}
 

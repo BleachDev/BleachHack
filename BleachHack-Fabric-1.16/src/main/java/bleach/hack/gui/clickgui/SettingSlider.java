@@ -76,6 +76,11 @@ public class SettingSlider extends SettingBase {
 		}
 	}
 	
+	public SettingSlider withDesc(String desc) {
+		description = desc;
+		return this;
+	}
+	
 	public int getHeight(int len) {
 		return 12;
 	}

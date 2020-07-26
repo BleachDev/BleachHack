@@ -39,25 +39,21 @@ public class Ambience extends Module {
 				new SettingMode("Weather: ", "Clear", "Rain"),
 				new SettingSlider("Rain: ", 0, 2, 0, 2),
 				new SettingSlider("Time: ", 0, 24000, 12500, 0),
-				
-				new SettingToggle("Sky Color", false).withChildren(
-						new SettingColor("Sky Color", 0.6f, 0.1f, 0.7f, false).withDesc("Color for the sky"))
-				.withDesc("Custom color for the sky"),
-				
-				new SettingToggle("Cloud Color", false).withChildren(
-						new SettingColor("Cloud Color", 0.8f, 0.2f, 1f, false).withDesc("Color for clouds"))
-				.withDesc("Custom color for clouds"));
+				new SettingToggle("Sky Color", false).withDesc("Custom color for the sky").withChildren(
+						new SettingColor("Sky Color", 0.6f, 0.1f, 0.7f, false).withDesc("Color for the sky")),
+				new SettingToggle("Cloud Color", false).withDesc("Custom color for clouds").withChildren(
+						new SettingColor("Cloud Color", 0.8f, 0.2f, 1f, false).withDesc("Color for clouds")));
 	}
 
 	@Subscribe
 	public void onPreTick(EventMovementTick event) {
-		if (getSettings().get(0).asToggle().state) {
-			if (getSettings().get(2).asMode().mode == 0) mc.world.setRainGradient(0f);
-			else mc.world.setRainGradient((float) getSettings().get(3).asSlider().getValue());
+		if (getSetting(0).asToggle().state) {
+			if (getSetting(2).asMode().mode == 0) mc.world.setRainGradient(0f);
+			else mc.world.setRainGradient((float) getSetting(3).asSlider().getValue());
 		}
-		if (getSettings().get(1).asToggle().state) {
-			mc.world.setTime((long) getSettings().get(4).asSlider().getValue());
-			mc.world.setTimeOfDay((long) getSettings().get(4).asSlider().getValue());
+		if (getSetting(1).asToggle().state) {
+			mc.world.setTime((long) getSetting(4).asSlider().getValue());
+			mc.world.setTimeOfDay((long) getSetting(4).asSlider().getValue());
 		}
 	}
 
@@ -70,10 +66,10 @@ public class Ambience extends Module {
 	
 	@Subscribe
 	public void onSkyColor(EventSkyColor event) {
-		if (event instanceof EventSkyColor.CloudColor && getSettings().get(6).asToggle().state) {
-			event.setColor(getSettings().get(6).getChild(0).asColor().getRGBFloat());
-		} else if (getSettings().get(5).asToggle().state) {
-			event.setColor(getSettings().get(5).getChild(0).asColor().getRGBFloat());
+		if (event instanceof EventSkyColor.CloudColor && getSetting(6).asToggle().state) {
+			event.setColor(getSetting(6).asToggle().getChild(0).asColor().getRGBFloat());
+		} else if (getSetting(5).asToggle().state) {
+			event.setColor(getSetting(5).asToggle().getChild(0).asColor().getRGBFloat());
 		}
 	}
 }

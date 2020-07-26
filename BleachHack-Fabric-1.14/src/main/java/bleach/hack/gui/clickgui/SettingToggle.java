@@ -17,7 +17,9 @@
  */
 package bleach.hack.gui.clickgui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL11;
@@ -34,6 +36,9 @@ public class SettingToggle extends SettingBase {
 
 	public boolean state;
 	public String text;
+	
+	protected List<SettingBase> children = new ArrayList<>();
+	protected boolean expanded = false;
 
 	public SettingToggle(String text, boolean state) {
 		this.state = state;
@@ -48,11 +53,11 @@ public class SettingToggle extends SettingBase {
 		String color2;
 
 		if (state) { 
-			if (window.mouseOver(x, y, x+len, y+12)) color2 = "§2";
-			else color2 = "§a";
+			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a72";
+			else color2 = "\u00a7a";
 		} else {
-			if (window.mouseOver(x, y, x+len, y+12)) color2 = "§4";
-			else color2 = "§c";
+			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a74";
+			else color2 = "\u00a7c";
 		}
 		
 		if (!children.isEmpty()) {
@@ -108,8 +113,17 @@ public class SettingToggle extends SettingBase {
 		return h;
 	}
 	
+	public SettingBase getChild(int c) {
+		return children.get(c);
+	}
+	
 	public SettingToggle withChildren(SettingBase... children) {
 		this.children.addAll(Arrays.asList(children));
+		return this;
+	}
+	
+	public SettingToggle withDesc(String desc) {
+		description = desc;
 		return this;
 	}
 

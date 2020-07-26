@@ -25,6 +25,6 @@ public class NoRender extends Module {
 
 	@Subscribe
 	public void signRender(EventSignBlockEntityRender event) {
-		if (this.getSettings().get(5).asToggle().state) event.setCancelled(true);
+		if (this.getSetting(5).asToggle().state) event.setCancelled(true);
 	}
 }

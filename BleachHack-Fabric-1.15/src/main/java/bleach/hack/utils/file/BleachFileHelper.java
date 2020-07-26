@@ -134,9 +134,9 @@ public class BleachFileHelper {
 			int count = 0;
 
 			for (SettingBase set: m.getSettings()) {
-				if (set instanceof SettingSlider) line += ":" + m.getSettings().get(count).asSlider().getValue();
-				if (set instanceof SettingMode) line += ":" + m.getSettings().get(count).asMode().mode;
-				if (set instanceof SettingToggle) line += ":" + m.getSettings().get(count).asToggle().state;
+				if (set instanceof SettingSlider) line += ":" + m.getSetting(count).asSlider().getValue();
+				if (set instanceof SettingMode) line += ":" + m.getSetting(count).asMode().mode;
+				if (set instanceof SettingToggle) line += ":" + m.getSetting(count).asToggle().state;
 				count++;
 			}
 			lines += line + "\n";
@@ -157,12 +157,12 @@ public class BleachFileHelper {
 				for (SettingBase set: m.getSettings()) {
 					try {
 						if (set instanceof SettingSlider) {
-							m.getSettings().get(count).asSlider().setValue(Double.parseDouble(line[count+1]));}
+							m.getSetting(count).asSlider().setValue(Double.parseDouble(line[count+1]));}
 						if (set instanceof SettingMode) {
-							m.getSettings().get(count).asMode().mode = MathHelper.clamp(Integer.parseInt(line[count+1]),
-									0, m.getSettings().get(count).asMode().modes.length - 1);}
+							m.getSetting(count).asMode().mode = MathHelper.clamp(Integer.parseInt(line[count+1]),
+									0, m.getSetting(count).asMode().modes.length - 1);}
 						if (set instanceof SettingToggle) {
-							m.getSettings().get(count).asToggle().state = Boolean.parseBoolean(line[count+1]);}
+							m.getSetting(count).asToggle().state = Boolean.parseBoolean(line[count+1]);}
 					} catch (Exception e) {}
 					count++;
 				}

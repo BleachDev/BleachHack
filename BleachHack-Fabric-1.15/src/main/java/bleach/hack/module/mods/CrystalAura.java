@@ -109,8 +109,8 @@ public class CrystalAura extends Module {
 			return mc.player.distanceTo(c);
 		})).orElse(null);
 		int crystalSlot;
-		if (getSettings().get(5).asToggle().state && crystal != null && mc.player.distanceTo(crystal) <= getSettings().get(10).asSlider().getValue()) {
-			if (getSettings().get(6).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
+		if (getSetting(5).asToggle().state && crystal != null && mc.player.distanceTo(crystal) <= getSetting(10).asSlider().getValue()) {
+			if (getSetting(6).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
 				if (!this.isAttacking) {
 					this.oldSlot = mc.player.inventory.selectedSlot;
 					this.isAttacking = true;
@@ -143,8 +143,8 @@ public class CrystalAura extends Module {
 			mc.interactionManager.attackEntity(mc.player, crystal);
 			mc.player.swingHand(Hand.MAIN_HAND);
 			++this.breaks;
-			if (this.breaks == 2 && !getSettings().get(7).asToggle().state) {
-				if (getSettings().get(8).asToggle().state) {
+			if (this.breaks == 2 && !getSetting(7).asToggle().state) {
+				if (getSetting(8).asToggle().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -152,8 +152,8 @@ public class CrystalAura extends Module {
 				return;
 			}
 
-			if (getSettings().get(7).asToggle().state&& this.breaks == 1) {
-				if (getSettings().get(8).asToggle().state) {
+			if (getSetting(7).asToggle().state&& this.breaks == 1) {
+				if (getSetting(8).asToggle().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -161,7 +161,7 @@ public class CrystalAura extends Module {
 				return;
 			}
 		} else {
-			if (getSettings().get(8).asToggle().state) {
+			if (getSetting(8).asToggle().state) {
 				isSpoofingAngles = false;
 			}
 
@@ -192,12 +192,12 @@ public class CrystalAura extends Module {
 
 		Set<BlockPos> blocks = getCrystalPoses();
 		List<Entity> entities = new ArrayList<>();
-		if (getSettings().get(1).asToggle().state) {
+		if (getSetting(1).asToggle().state) {
 			entities.addAll(mc.world.getPlayers());
 		}
 
 		entities.addAll(Streams.stream(mc.world.getEntities()).filter((entityx) -> {
-			return entityx instanceof LivingEntity && entityx instanceof AnimalEntity ? getSettings().get(3).asToggle().state : getSettings().get(2).asToggle().state;
+			return entityx instanceof LivingEntity && entityx instanceof AnimalEntity ? getSetting(3).asToggle().state : getSetting(2).asToggle().state;
 		}).collect(Collectors.toList()));
 
 		// TODO: not this
@@ -213,7 +213,7 @@ public class CrystalAura extends Module {
 						if (!var9.hasNext()) {
 							if (damage == 0.5D) {
 								this.render = null;
-								if (getSettings().get(8).asToggle().state) {
+								if (getSetting(8).asToggle().state) {
 									isSpoofingAngles = false;
 								}
 
@@ -221,11 +221,11 @@ public class CrystalAura extends Module {
 							}
 
 							this.render = q;
-							if (getSettings().get(4).asToggle().state) {
+							if (getSetting(4).asToggle().state) {
 								if (!offhand && mc.player.inventory.selectedSlot != crystalSlot) {
-									if (getSettings().get(0).asToggle().state) {
+									if (getSetting(0).asToggle().state) {
 										mc.player.inventory.selectedSlot = crystalSlot;
-										if (getSettings().get(8).asToggle().state) {
+										if (getSetting(8).asToggle().state) {
 											isSpoofingAngles = false;
 										}
 
@@ -237,7 +237,7 @@ public class CrystalAura extends Module {
 
 								WorldUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
 								Direction f;
-								if (!getSettings().get(9).asToggle().state) {
+								if (!getSetting(9).asToggle().state) {
 									f = Direction.UP;
 								} else {
 									BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
@@ -313,7 +313,7 @@ public class CrystalAura extends Module {
 	@Subscribe
 	public void onRenderWorld(EventWorldRender event) {
 		if (this.render != null) {
-			float[] col = getSettings().get(11).asColor().getRGBFloat();
+			float[] col = getSetting(11).asColor().getRGBFloat();
 			RenderUtils.drawFilledBox(render, col[0], col[1], col[2], 0.7f);
 		}
 	}
@@ -321,7 +321,7 @@ public class CrystalAura extends Module {
 	public Set<BlockPos> getCrystalPoses() {
 		Set<BlockPos> poses = new HashSet<>();
 
-		int range = (int) Math.ceil(getSettings().get(10).asSlider().getValue());
+		int range = (int) Math.ceil(getSetting(10).asSlider().getValue());
 		for (int x = -range; x < range + 1; x++) {
 			for (int y = -range; y < range; y++) {
 				for (int z = -range; z < range + 1; z++) {
@@ -330,7 +330,7 @@ public class CrystalAura extends Module {
 					if (!canPlace(basePos)) continue;
 
 					if (mc.player.getPos().distanceTo(new Vec3d(basePos).add(0.5, 1, 0.5))
-							<= getSettings().get(10).asSlider().getValue() + 0.25) poses.add(basePos);
+							<= getSetting(10).asSlider().getValue() + 0.25) poses.add(basePos);
 				}
 			}
 		}

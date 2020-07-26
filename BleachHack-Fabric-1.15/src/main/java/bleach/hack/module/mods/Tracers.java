@@ -40,36 +40,25 @@ public class Tracers extends Module {
 
 	public Tracers() {
 		super("Tracers", KEY_UNBOUND, Category.RENDER, "Shows lines to entities you select.",
-				new SettingToggle("Players", true).withChildren(
+				new SettingToggle("Players", true).withDesc("Show Player Tracers").withChildren(
 						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players"),
-						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Tracer color for friends"))
-				.withDesc("Show Player Tracers"),
-				
-				new SettingToggle("Mobs", false).withChildren(
-						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Tracer color for mobs"))
-				.withDesc("Show Mob Tracers"),
-				
-				new SettingToggle("Animals", false).withChildren(
-						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Tracer color for animals"))
-				.withDesc("Show Animal Tracers"),
-				
-				new SettingToggle("Items", true).withChildren(
-						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Tracer color for items"))
-				.withDesc("Show Item Tracers"),
-				
-				new SettingToggle("Crystals", true).withChildren(
-						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals"))
-				.withDesc("Show End Crystal Tracers"),
-				
-				new SettingToggle("Vehicles", false).withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles (minecarts/boats)"))
-				.withDesc("Show Vehicle Tracers"),
+						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Tracer color for friends")),
+				new SettingToggle("Mobs", false).withDesc("Show Mob Tracers").withChildren(
+						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Tracer color for mobs")),
+				new SettingToggle("Animals", false).withDesc("Show Animal Tracers").withChildren(
+						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Tracer color for animals")),
+				new SettingToggle("Items", true).withDesc("Show Item Tracers").withChildren(
+						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Tracer color for items")),
+				new SettingToggle("Crystals", true).withDesc("Show End Crystal Tracers").withChildren(
+						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals")),
+				new SettingToggle("Vehicles", false).withDesc("Show Vehicle Tracers").withChildren(
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles (minecarts/boats)")),
 				new SettingSlider("Thick: ", 0.1, 5, 1.5, 1));
 	}
 
 	@Subscribe
 	public void onRender(EventWorldRender event) {
-		final float thick = (float) getSettings().get(6).asSlider().getValue();
+		final float thick = (float) getSetting(6).asSlider().getValue();
 
 		for (Entity e: mc.world.getEntities()) {
 			Vec3d vec = e.getPos();
@@ -80,18 +69,18 @@ public class Tracers extends Module {
 			
 			float[] col = null;
 
-			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).asToggle().state) {
-				col = getSettings().get(0).getChild(BleachHack.friendMang.has(e.getName().asString()) ? 1 : 0).asColor().getRGBFloat();
-			} else if (e instanceof Monster && getSettings().get(1).asToggle().state) {
-				col = getSettings().get(1).getChild(0).asColor().getRGBFloat();
-			} else if (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state) {
-				col = getSettings().get(2).getChild(0).asColor().getRGBFloat();
-			} else if (e instanceof ItemEntity && getSettings().get(3).asToggle().state) {
-				col = getSettings().get(3).getChild(0).asColor().getRGBFloat();
-			} else if (e instanceof EnderCrystalEntity && getSettings().get(4).asToggle().state) {
-				col = getSettings().get(4).getChild(0).asColor().getRGBFloat();
-			} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state) {
-				col = getSettings().get(5).getChild(0).asColor().getRGBFloat();
+			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSetting(0).asToggle().state) {
+				col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(e.getName().asString()) ? 1 : 0).asColor().getRGBFloat();
+			} else if (e instanceof Monster && getSetting(1).asToggle().state) {
+				col = getSetting(1).asToggle().getChild(0).asColor().getRGBFloat();
+			} else if (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state) {
+				col = getSetting(2).asToggle().getChild(0).asColor().getRGBFloat();
+			} else if (e instanceof ItemEntity && getSetting(3).asToggle().state) {
+				col = getSetting(3).asToggle().getChild(0).asColor().getRGBFloat();
+			} else if (e instanceof EnderCrystalEntity && getSetting(4).asToggle().state) {
+				col = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
+			} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
+				col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
 			}
 			
 			if (col != null) {

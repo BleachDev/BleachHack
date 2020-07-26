@@ -79,17 +79,17 @@ public class UI extends Module {
 	public void onDrawOverlay(EventDrawOverlay event) {
 		infoList.clear();
 
-		if (getSettings().get(0).asToggle().state && !mc.options.debugEnabled) {
+		if (getSetting(0).asToggle().state && !mc.options.debugEnabled) {
 			List<String> lines = new ArrayList<>();
 			for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
 
 			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
-			if (getSettings().get(2).asToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
+			if (getSetting(2).asToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 
 			//new colors
 			int color = getRainbowFromSettings(0);
 			count = 0;
-			int extra = getSettings().get(1).asToggle().state ? 1 : 0;
+			int extra = getSetting(1).asToggle().state ? 1 : 0;
 			for (String s: lines) {
 				color = getRainbowFromSettings(count);
 				DrawableHelper.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
@@ -106,11 +106,11 @@ public class UI extends Module {
 			DrawableHelper.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
 		}
 
-		if (getSettings().get(11).asToggle().state) {
+		if (getSetting(11).asToggle().state) {
 			infoList.add("§7Time: §e" + Calendar.getInstance(TimeZone.getDefault()).getTime().toString());
 		}
 
-		if (getSettings().get(5).asToggle().state) {
+		if (getSetting(5).asToggle().state) {
 			boolean nether = mc.player.dimension == DimensionType.THE_NETHER;
 			BlockPos pos = mc.player.getBlockPos();
 			Vec3d vec = mc.player.getPos();
@@ -121,18 +121,18 @@ public class UI extends Module {
 			+ " §7[" + (nether ? "§b" : "§4") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "§7]");
 		}
 
-		if (getSettings().get(3).asToggle().state) {
+		if (getSetting(3).asToggle().state) {
 			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
 			infoList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
 		}
 
-		if (getSettings().get(4).asToggle().state) {
+		if (getSetting(4).asToggle().state) {
 			int ping = 0;
 			try{ ping = mc.getNetworkHandler().getPlayerListEntry(mc.player.getGameProfile().getId()).getLatency(); } catch (Exception e) {}
 			infoList.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
 		}
 
-		if (getSettings().get(6).asToggle().state) {
+		if (getSetting(6).asToggle().state) {
 			String suffix = "§7";
 			if (lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
 			else if (lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
@@ -142,7 +142,7 @@ public class UI extends Module {
 			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 		}
 
-		if (getSettings().get(7).asToggle().state && !(mc.world.getServer() == null || mc.world.getServer().isSinglePlayer())) {
+		if (getSetting(7).asToggle().state && !(mc.world.getServer() == null || mc.world.getServer().isSinglePlayer())) {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
@@ -151,14 +151,14 @@ public class UI extends Module {
 			}
 		}
 
-		if (getSettings().get(8).asToggle().state) {
+		if (getSetting(8).asToggle().state) {
 			String server = "";
 			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
 			DrawableHelper.fill(mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.getWindow().getScaledWidth() - 3, 12, 0xa0000000);
 			mc.textRenderer.drawWithShadow(server, mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
 		}
 
-		if (getSettings().get(9).asToggle().state && !mc.options.debugEnabled) {
+		if (getSetting(9).asToggle().state && !mc.options.debugEnabled) {
 			DrawableHelper.fill(0, 3+(count*10), mc.textRenderer.getStringWidth("Players:")+4, 13+(count*10), 0x40000000);
 			mc.textRenderer.drawWithShadow("Players:", 2, 4+count*10, 0xff0000);
 			count++;
@@ -179,7 +179,7 @@ public class UI extends Module {
 			}
 		}
 
-		if (getSettings().get(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
+		if (getSetting(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -220,7 +220,7 @@ public class UI extends Module {
 
 
 		int count2 = 0;
-		int infoMode = getSettings().get(15).asMode().mode;
+		int infoMode = getSetting(15).asMode().mode;
 		for (String s: infoList) {
 			mc.textRenderer.drawWithShadow(s,
 					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
@@ -261,9 +261,9 @@ public class UI extends Module {
 
 		if (ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
 
-		return getRainbow((float) ui.getSettings().get(13).asSlider().getValue(),
-				(float) ui.getSettings().get(12).asSlider().getValue(),
-				ui.getSettings().get(14).asSlider().getValue(),
+		return getRainbow((float) ui.getSetting(13).asSlider().getValue(),
+				(float) ui.getSetting(12).asSlider().getValue(),
+				ui.getSetting(14).asSlider().getValue(),
 				offset);
 	}
 }

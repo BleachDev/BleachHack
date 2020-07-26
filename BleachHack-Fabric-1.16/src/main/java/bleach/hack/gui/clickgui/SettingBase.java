@@ -17,9 +17,6 @@
  */
 package bleach.hack.gui.clickgui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonElement;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
@@ -28,9 +25,6 @@ import net.minecraft.client.util.math.MatrixStack;
 public abstract class SettingBase {
 
 	protected String description = "";
-	
-	protected List<SettingBase> children = new ArrayList<>();
-	protected boolean expanded = false;
 
 	public SettingMode asMode() {
 		try {
@@ -64,19 +58,10 @@ public abstract class SettingBase {
 		}
 	}
 	
-	public SettingBase getChild(int c) {
-		return children.get(c);
-	}
-	
 	public abstract String getName();
 
 	public String getDesc() {
 		return description;
-	}
-
-	public SettingBase withDesc(String desc) {
-		description = desc;
-		return this;
 	}
 	
 	public abstract void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len);

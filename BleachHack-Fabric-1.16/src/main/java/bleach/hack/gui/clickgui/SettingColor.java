@@ -113,6 +113,11 @@ public class SettingColor extends SettingBase {
 		DrawableHelper.fill(matrix, sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
 		DrawableHelper.fill(matrix, ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
 	}
+	
+	public SettingColor withDesc(String desc) {
+		description = desc;
+		return this;
+	}
 
 	public int getHeight(int len) {
 		return len - len / 4;

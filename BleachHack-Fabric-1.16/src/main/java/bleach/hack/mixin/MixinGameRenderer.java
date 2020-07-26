@@ -47,7 +47,7 @@ public class MixinGameRenderer {
 			method = "bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V",
 			cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).asToggle().state)
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(2).asToggle().state)
 			ci.cancel();
 	}
 
@@ -56,7 +56,7 @@ public class MixinGameRenderer {
 			method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V",
 			require = BleachHack.MIXIN_REQUIRE)
 	private float nauseaWobble(float delta, float first, float second) {
-		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(6).asToggle().state))
+		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state))
 			return MathHelper.lerp(delta, first, second);
 
 		return 0;

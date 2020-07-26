@@ -61,7 +61,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void initWindows() {
-		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).asSlider().getValue();
+		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
 
 		int i = 10;
 		for (Category c: Category.values()) {
@@ -82,7 +82,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void render(int mX, int mY, float float_1) {
-		searchField.visible = ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state;
+		searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
 		this.renderBackground();
 		font.draw("BleachHack-1.15-" + BleachHack.VERSION, 3, 3, 0x305090);
@@ -90,7 +90,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height-20, 0x99ff99);
 		font.drawWithShadow("Use " + Command.PREFIX + "guireset to reset the gui" , 2, height-10, 0x9999ff);
 
-		if (ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
+		if (ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
 
 			Set<Module> seachMods = new HashSet<>();
@@ -109,7 +109,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 			}
 		}
 
-		int len = (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).asSlider().getValue();
+		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
 		for (Window w: windows) {
 			if (w instanceof ClickGuiWindow) {
 				if (w instanceof ModuleWindow) {
@@ -181,7 +181,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		for (Window m: windows) {
 			m.x1 = x;
 			m.y2 = 35;
-			x += (int) ModuleManager.getModule(ClickGui.class).getSettings().get(0).asSlider().getValue() + 5;
+			x += (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue() + 5;
 		}
 	}
 }

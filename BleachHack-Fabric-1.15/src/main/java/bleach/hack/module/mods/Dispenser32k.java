@@ -100,7 +100,7 @@ public class Dispenser32k extends Module {
 			return;
 		}
 
-		if (getSettings().get(5).asMode().mode == 1) {
+		if (getSetting(5).asMode().mode == 1) {
 			HitResult ray = mc.player.rayTrace(5, mc.getTickDelta(), false);
 			pos = new BlockPos(ray.getPos()).up();
 
@@ -120,7 +120,7 @@ public class Dispenser32k extends Module {
 				return;
 			}
 
-			boolean rotate = getSettings().get(0).asToggle().state;
+			boolean rotate = getSetting(0).asToggle().state;
 
 			WorldUtils.placeBlock(pos, block, rotate, false);
 
@@ -163,13 +163,13 @@ public class Dispenser32k extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if ((getSettings().get(4).asToggle().state && !active && ticksPassed > 25) || (active && !(mc.currentScreen instanceof HopperScreen))) {
+		if ((getSetting(4).asToggle().state && !active && ticksPassed > 25) || (active && !(mc.currentScreen instanceof HopperScreen))) {
 			setToggled(false);
 			return;
 		}
 
 		if (ticksPassed == 1) {
-			//boolean rotate = getSettings().get(0).toToggle().state;
+			//boolean rotate = getSetting(0).toToggle().state;
 
 			WorldUtils.placeBlock(pos, block, false, false);
 			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false);
@@ -180,7 +180,7 @@ public class Dispenser32k extends Module {
 			return;
 		}
 
-		if (active && getSettings().get(1).asToggle().state && timer == 0) killAura();
+		if (active && getSetting(1).asToggle().state && timer == 0) killAura();
 
 		if (mc.currentScreen instanceof Generic3x3ContainerScreen) {
 			openedDispenser = true;
@@ -200,12 +200,12 @@ public class Dispenser32k extends Module {
 			active = true;
 
 			if (active) {
-				if (getSettings().get(3).asMode().mode == 0) {
-					timer = timer >= Math.round(20/getSettings().get(2).asSlider().getValue()) ? 0 : timer + 1;
-				} else if (getSettings().get(3).asMode().mode == 1) {
+				if (getSetting(3).asMode().mode == 0) {
+					timer = timer >= Math.round(20/getSetting(2).asSlider().getValue()) ? 0 : timer + 1;
+				} else if (getSetting(3).asMode().mode == 1) {
 					timer = 0;
-				} else if (getSettings().get(3).asMode().mode == 2) {
-					timer = timer >= getSettings().get(2).asSlider().getValue() ? 0 : timer + 1;
+				} else if (getSetting(3).asMode().mode == 2) {
+					timer = timer >= getSetting(2).asSlider().getValue() ? 0 : timer + 1;
 				}
 			}
 
@@ -241,12 +241,12 @@ public class Dispenser32k extends Module {
 
 		if (dispenserTicks == 1) {
 			mc.openScreen(null);
-			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSettings().get(0).asToggle().state, false);
+			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSetting(0).asToggle().state, false);
 		}
 
 		if (mc.world.getBlockState(pos.add(rot[0], 1, rot[1])).getBlock() instanceof ShulkerBoxBlock
 				&& mc.world.getBlockState(pos.add(rot[0], 0, rot[1])).getBlock() != Blocks.HOPPER) {
-			WorldUtils.placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSettings().get(0).asToggle().state, false);
+			WorldUtils.placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSetting(0).asToggle().state, false);
 			openBlock(pos.add(rot[0], 0, rot[1]));
 		}
 
@@ -255,7 +255,7 @@ public class Dispenser32k extends Module {
 	}
 
 	private void killAura() {
-		for (int i = 0; i < (getSettings().get(3).asMode().mode == 1 ? getSettings().get(2).asSlider().getValue() : 1); i++) {
+		for (int i = 0; i < (getSetting(3).asMode().mode == 1 ? getSetting(2).asSlider().getValue() : 1); i++) {
 			Entity target = null;
 
 			List<Entity> players = Streams.stream(mc.world.getEntities())

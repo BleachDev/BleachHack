@@ -100,6 +100,10 @@ public class Module {
 	public List<SettingBase> getSettings() {
 		return settings;
 	}
+	
+	public SettingBase getSetting(int s) {
+		return settings.get(s);
+	}
 
 	public void setKey(int key) {
 		this.key = key;

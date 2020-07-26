@@ -48,8 +48,8 @@ public class Nametags extends Module {
 	
 	@Subscribe
 	public void onLivingLabelRender(EventEntityRender.Label event) {
-		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSettings().get(5).asToggle().state)
-				|| (event.getEntity() instanceof PlayerEntity && getSettings().get(4).asToggle().state)) return;
+		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSetting(5).asToggle().state)
+				|| (event.getEntity() instanceof PlayerEntity && getSetting(4).asToggle().state)) return;
 
 		LivingEntity e = (LivingEntity) event.getEntity();
 
@@ -58,13 +58,13 @@ public class Nametags extends Module {
 				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 
 		if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||
-				((color == "§c" || color == "§6") && !getSettings().get(4).asToggle().state) ||
-				((color == "§5" || color == "§a") && !getSettings().get(5).asToggle().state)) return;
+				((color == "§c" || color == "§6") && !getSetting(4).asToggle().state) ||
+				((color == "§5" || color == "§a") && !getSetting(5).asToggle().state)) return;
 		if (e.isInvisible()) color = "§e";
 
 		double scale = (e instanceof PlayerEntity) ?
-				Math.max(getSettings().get(2).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
-					Math.max(getSettings().get(3).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
+				Math.max(getSetting(2).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
+					Math.max(getSetting(3).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 
 				// Health bar
 				String health = "";
@@ -80,19 +80,19 @@ public class Nametags extends Module {
 				}
 
 				// Drawing Nametags
-				if (getSettings().get(1).asMode().mode == 0) {
+				if (getSetting(1).asMode().mode == 0) {
 					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getHealthMaximum() + "]",
 							e.x,e.y + e.getHeight() + (0.5f * scale), e.z, scale);
-				} else if (getSettings().get(1).asMode().mode == 1) {
+				} else if (getSetting(1).asMode().mode == 1) {
 					WorldRenderUtils.drawText(color + e.getName().getString(), e.x, e.y + e.getHeight() + (0.5f * scale), e.z, scale);
 					WorldRenderUtils.drawText(health, e.x, e.y + e.getHeight() + (0.75f * scale), e.z, scale);
 				}
 
 				// Drawing Items
 				double c = 0;
-				double higher = getSettings().get(1).asMode().mode == 1 ? 0.25 : 0;
+				double higher = getSetting(1).asMode().mode == 1 ? 0.25 : 0;
 
-				if (getSettings().get(0).asMode().mode == 0) {
+				if (getSetting(0).asMode().mode == 0) {
 					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
 					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 
@@ -100,7 +100,7 @@ public class Nametags extends Module {
 						WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
 						c--;
 					}
-				} else if (getSettings().get(0).asMode().mode == 1) {
+				} else if (getSetting(0).asMode().mode == 1) {
 					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
 					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 

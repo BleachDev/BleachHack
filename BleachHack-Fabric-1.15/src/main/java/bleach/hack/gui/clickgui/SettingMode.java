@@ -54,6 +54,11 @@ public class SettingMode extends SettingBase {
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) mode = getNextMode();
 	}
 	
+	public SettingMode withDesc(String desc) {
+		description = desc;
+		return this;
+	}
+	
 	public int getHeight(int len) {
 		return 12;
 	}
