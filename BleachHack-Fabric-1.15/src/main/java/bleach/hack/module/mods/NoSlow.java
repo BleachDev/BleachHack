@@ -17,6 +17,7 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -28,6 +29,10 @@ import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.network.packet.c2s.play.ClickWindowC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
@@ -42,8 +47,14 @@ public class NoSlow extends Module {
 				new SettingToggle("Slime Blocks", true),
 				new SettingToggle("Webs", true),
 				new SettingToggle("Items", true),
-				new SettingToggle("Inventory", false),
-				new SettingToggle("Inv Shift", false));
+				new SettingToggle("Inventory", true).withChildren(
+						new SettingToggle("Sneaking", false).withDesc("Enabled the sneak key while in a inventory"),
+						new SettingToggle("NCP Bypass", false).withDesc("Allows you to move items around while running on NCP"),
+						new SettingToggle("Rotate", true).withChildren(
+								new SettingToggle("Limit Pitch", true).withDesc("Prevents you from being able to do a 360 pitch spin"),
+								new SettingToggle("Anti-Spinbot", true).withDesc("Adds a random amount of rotation when spinning to prevent spinbot detects"))
+						.withDesc("Allows you to use the arrow keys to rotate"))
+				.withDesc("Allows you to move in inventories"));
 	}
 
 	@Subscribe
@@ -88,18 +99,47 @@ public class NoSlow extends Module {
 
 		/* Inventory */
 		if (getSettings().get(5).asToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
-			for (KeyBinding k: new KeyBinding[] { mc.options.keyForward, mc.options.keyBack, mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump }) {
+			for (KeyBinding k: new KeyBinding[] { mc.options.keyForward, mc.options.keyBack,
+					mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump, mc.options.keySprint }) {
 				k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromName(k.getName()).getKeyCode()));
 			}
 
-			if (getSettings().get(6).asToggle().state) {
+			if (getSettings().get(5).asToggle().getChild(0).asToggle().state) {
 				mc.options.keySneak.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromName(mc.options.keySneak.getName()).getKeyCode()));
 			}
-
-			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) mc.player.yaw -= 3.5f;
-			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) mc.player.yaw += 3.5f;
-			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP)) mc.player.pitch -= 3.5f;
-			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN)) mc.player.pitch += 3.5f;
+			
+			if (getSettings().get(5).asToggle().getChild(2).asToggle().state) {
+				float yaw = 0f;
+				float pitch = 0f;
+				
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) yaw -= 0.5f;
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) yaw += 0.5f;
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP)) pitch -= 0.5f;
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN)) pitch += 0.5f;
+				
+				if (getSettings().get(5).asToggle().getChild(2).getChild(1).asToggle().state) {
+					if (yaw == 0f && pitch != 0f) yaw += -0.1 + Math.random() / 5f;
+					else yaw *= 0.75f + Math.random() / 2f;
+					
+					if (pitch == 0f && yaw != 0f) pitch += -0.1 + Math.random() / 5f;
+					else pitch *= 0.75f + Math.random() / 2f;
+				}
+				
+				mc.player.yaw += yaw;
+				
+				if (getSettings().get(5).asToggle().getChild(2).getChild(0).asToggle().state) {
+					mc.player.pitch = MathHelper.clamp(mc.player.pitch + pitch, -90f, 90f);
+				} else {
+					mc.player.pitch += pitch;
+				}
+			}
+		}
+	}
+	
+	@Subscribe
+	public void onSendPacket(EventSendPacket event) {
+		if (event.getPacket() instanceof ClickWindowC2SPacket && getSettings().get(5).asToggle().getChild(1).asToggle().state) {
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 		}
 	}
 }
