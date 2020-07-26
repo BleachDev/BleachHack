@@ -42,28 +42,28 @@ public class ESP extends Module {
 	public ESP() {
 		super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
 				new SettingToggle("Players", true).withChildren(
-						new SettingColor("Player Color", 1f, 0.5f, 0.5f, false),
-						new SettingColor("Friend Color", 0f, 1f, 1f, false))
+						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players"),
+						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Outline color for friends"))
 				.withDesc("Show Players"),
-
+				
 				new SettingToggle("Mobs", false).withChildren(
-						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false))
+						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Outline color for mobs"))
 				.withDesc("Show Mobs"),
-
+				
 				new SettingToggle("Animals", false).withChildren(
-						new SettingColor("Color", 0.3f, 1f, 0.3f, false))
+						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals"))
 				.withDesc("Show Animals"),
-
+				
 				new SettingToggle("Items", true).withChildren(
-						new SettingColor("Color", 1f, 0.8f, 0.2f, false))
+						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items"))
 				.withDesc("Show Items"),
-
+				
 				new SettingToggle("Crystals", true).withChildren(
-						new SettingColor("Color", 1f, 0.2f, 1f, false))
+						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals"))
 				.withDesc("Show End Crystals"),
-
+				
 				new SettingToggle("Vehicles", false).withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false))
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)"))
 				.withDesc("Show Vehicles"));
 	}
 

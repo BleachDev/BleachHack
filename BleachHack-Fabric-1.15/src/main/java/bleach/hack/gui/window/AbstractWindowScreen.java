@@ -59,6 +59,8 @@ public abstract class AbstractWindowScreen extends Screen {
 		if (selected >= 0) onRenderWindow(selected, int_1, int_2);
 		if (noneSelected >= 0) windows.get(noneSelected).selected = true;
 		if (close) this.onClose();
+		
+		lastSelected = -1;
 
 		super.render(int_1, int_2, float_1);
 	}
