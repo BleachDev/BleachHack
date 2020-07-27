@@ -102,10 +102,12 @@ public class RenderUtils {
 		GL11.glLineWidth(2.5F);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
+		//GL11.glDisable(GL11.GL_DEPTH_TEST);
 		offsetRender();
 	}
 
 	public static void gl11Cleanup() {
+		//GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);

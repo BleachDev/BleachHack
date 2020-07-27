@@ -94,6 +94,7 @@ public class ModuleManager {
 			new Timer(),
 			new Tracers(),
 			new Trail(),
+			new Trajectories(),
 			new UI(),
 			new Xray());
 
