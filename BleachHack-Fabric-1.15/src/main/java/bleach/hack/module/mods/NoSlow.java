@@ -110,10 +110,10 @@ public class NoSlow extends Module {
 				float yaw = 0f;
 				float pitch = 0f;
 				
-				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) yaw -= 0.5f;
-				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) yaw += 0.5f;
-				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP)) pitch -= 0.5f;
-				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN)) pitch += 0.5f;
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) yaw -= 4f;
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) yaw += 4f;
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP)) pitch -= 4f;
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN)) pitch += 4f;
 				
 				if (getSetting(5).asToggle().asToggle().getChild(2).asToggle().getChild(1).asToggle().state) {
 					if (yaw == 0f && pitch != 0f) yaw += -0.1 + Math.random() / 5f;
