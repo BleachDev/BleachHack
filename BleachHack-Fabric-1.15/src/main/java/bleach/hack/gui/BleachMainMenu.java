@@ -312,6 +312,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	}
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
+		
 		try {
 			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
 				if (double_1 > width/2 - 80 && double_1 < width/2 + 80 && double_2 > 0 && double_2 < 20) {
