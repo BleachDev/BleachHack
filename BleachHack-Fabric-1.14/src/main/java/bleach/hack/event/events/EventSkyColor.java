@@ -1,9 +1,10 @@
 package bleach.hack.event.events;
 
+import bleach.hack.event.Event;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EventSkyColor extends EventTick {
+public class EventSkyColor extends Event {
 	
 	private float tickDelta;
 	private Vec3d color = null;

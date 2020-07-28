@@ -45,7 +45,7 @@ import bleach.hack.utils.file.BleachFileHelper;
 
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
-
+	
 	public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
 		super(world, profile);
 	}
