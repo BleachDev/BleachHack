@@ -160,6 +160,8 @@ public class Peek extends Module {
 		if (slot.getStack().getItem() != Items.FILLED_MAP) return;
 
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
+		if (data == null || data.colors == null) return;
+		
 		byte[] colors = data.colors;
 
 		double size = getSetting(4).asSlider().getValue();
