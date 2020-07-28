@@ -24,6 +24,8 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket;
+import net.minecraft.util.Hand;
+
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
@@ -84,6 +86,7 @@ public class Killaura extends Module {
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
 
 				mc.interactionManager.attackEntity(mc.player, e);
+				mc.player.swingHand(Hand.MAIN_HAND);
 
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
 

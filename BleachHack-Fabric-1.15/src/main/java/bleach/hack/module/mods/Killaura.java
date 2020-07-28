@@ -40,6 +40,7 @@ import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.util.Hand;
 
 public class Killaura extends Module {
 
@@ -85,6 +86,7 @@ public class Killaura extends Module {
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 
 				mc.interactionManager.attackEntity(mc.player, e);
+				mc.player.swingHand(Hand.MAIN_HAND);
 
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
 
