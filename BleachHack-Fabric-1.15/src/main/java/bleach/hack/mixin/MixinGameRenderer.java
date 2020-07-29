@@ -50,7 +50,7 @@ public class MixinGameRenderer {
 	}
 	
 	@Inject(at = @At("HEAD"), method = "showFloatingItem", cancellable = true)
-	private void onBobViewWhenHurt(ItemStack itemStack_1, CallbackInfo ci) {
+	private void showFloatingItem(ItemStack itemStack_1, CallbackInfo ci) {
 		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(8).asToggle().state
 				&& itemStack_1.getItem() == Items.TOTEM_OF_UNDYING)
 			ci.cancel();
