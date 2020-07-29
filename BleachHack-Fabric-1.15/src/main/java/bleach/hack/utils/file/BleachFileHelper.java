@@ -36,19 +36,11 @@ import bleach.hack.utils.FriendManager;
 public class BleachFileHelper {
 
 	public static void saveModules() {
-		BleachFileMang.createEmptyFile("modules.txt");
-
-		String lines = "";
-		for (Module m: ModuleManager.getModules()) {
-			if (m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
-			lines += m.getName() + ":" + m.isToggled() + "\n";
-		}
-
-		BleachFileMang.appendFile(lines, "modules.txt");
-		
 		JsonObject jo = new JsonObject();
 		
 		for (Module m: ModuleManager.getModules()) {
+			if (m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
+			
 			JsonObject mo = new JsonObject();
 			
 			if (m.isToggled()) {
