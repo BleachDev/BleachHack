@@ -17,10 +17,13 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import com.google.common.eventbus.Subscribe;
 
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.glfw.GLFW;
@@ -32,10 +35,12 @@ import bleach.hack.module.Module;
 import net.minecraft.util.math.Vec3d;
 
 public class Flight extends Module {
+	
+	private boolean flyTick = false;
 
 	public Flight() {
 		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
-				new SettingMode("Mode: ", "Normal","Static","Jetpack"),
+				new SettingMode("Mode: ", "Normal","Static","Jetpack", "ec.me"),
 				new SettingSlider("Speed: ", 0, 5, 1, 1),
 				new SettingMode("AntiKick: ", "Off","Fall","Bob","Packet"));
 	}
@@ -77,6 +82,29 @@ public class Flight extends Module {
 		} else if (getSetting(0).asMode().mode == 2) {
 			if (!mc.options.keyJump.isPressed()) return;
 			mc.player.setVelocity(mc.player.getVelocity().x, speed / 3, mc.player.getVelocity().z);
+		} else if (getSetting(0).asMode().mode == 3) {
+			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
+				mc.player.jump();
+			} else {
+				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
+					mc.player.updatePosition(mc.player.getX(), mc.player.getY() - speed / 10f, mc.player.getZ());
+				}
+			}
+		}
+	}
+	
+	@Subscribe
+	public void onSendPacket(EventSendPacket event) {
+		if (getSetting(0).asMode().mode == 3 && event.getPacket() instanceof PlayerMoveC2SPacket) {
+			if (!flyTick) {
+				boolean onGround = true;//mc.player.fallDistance >= 0.1f;
+				mc.player.setOnGround(onGround);
+				FabricReflect.writeField(event.getPacket(), onGround, "field_12891", "onGround");
+				
+				flyTick = true;
+			} else {
+				flyTick = false;
+			}
 		}
 	}
 }
