@@ -22,8 +22,10 @@ import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.BetterPortal;
 import bleach.hack.module.mods.NoSlow;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -49,8 +51,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		super(clientWorld_1, gameProfile_1);
 	}
 
-	@Shadow
-	protected void method_3148(float float_1, float float_2) {}
+	@Shadow protected MinecraftClient client;
+	@Shadow protected void method_3148(float float_1, float float_2) {}
 
 	@Inject(at = @At("RETURN"), method = "tick()V", cancellable = true)
 	public void tick(CallbackInfo info) {
@@ -98,5 +100,20 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 			info.cancel();
 		}
 	}
+	
+	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "closeContainer", ordinal = 0))
+	private void updateNausea_closeContianer(ClientPlayerEntity player) {
+		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+			closeContainer();
+		}
+	}
+	
+	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "openScreen"/*"Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V"*/, ordinal = 0))
+	private void updateNausea_openScreen(MinecraftClient player, Screen screen_1) {
+		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+			client.openScreen(screen_1);
+		}
+	}
+
 }
 

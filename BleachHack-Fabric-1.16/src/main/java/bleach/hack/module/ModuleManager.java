@@ -44,6 +44,7 @@ public class ModuleManager {
 			new AutoTool(),
 			new AutoTotem(),
 			new AutoWalk(),
+			new BetterPortal(),
 			new BlockParty(),
 			new BookCrash(),
 			new BowBot(),
