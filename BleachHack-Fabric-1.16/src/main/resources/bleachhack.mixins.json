@@ -27,6 +27,7 @@
     "MixinLlamaEntity",
     "MixinMinecraftClient",
     "MixinPacketInflater",
+    "MixinParticleManager",
     "MixinPlayerEntity",
     "MixinRenderTickCounter",
     "MixinScreen",

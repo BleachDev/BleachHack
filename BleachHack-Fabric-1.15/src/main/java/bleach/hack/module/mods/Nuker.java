@@ -20,7 +20,6 @@ package bleach.hack.module.mods;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
@@ -29,7 +28,6 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.Block;
@@ -85,9 +83,6 @@ public class Nuker extends Module {
 
 		if (blocks.isEmpty()) return;
 
-		if (getSetting(6).asToggle().state) FabricReflect.writeField(
-				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
-
 		if (getSetting(7).asMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 
@@ -122,8 +117,10 @@ public class Nuker extends Module {
 				WorldUtils.facePosPacket(vec.x, vec.y, vec.z);
 			}
 
-			if (getSetting(0).asMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
-			else mc.interactionManager.updateBlockBreakingProgress(pos, dir);
+			/*if (getSetting(0).asMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
+			else */
+			mc.interactionManager.updateBlockBreakingProgress(pos, dir);
+			//mc.particleManager.addBlockBreakingParticles(pos, dir);
 
 			mc.player.swingHand(Hand.MAIN_HAND);
 
