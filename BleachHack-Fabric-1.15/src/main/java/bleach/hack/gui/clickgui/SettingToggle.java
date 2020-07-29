@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.opengl.GL11;
 
 import com.google.gson.JsonElement;
@@ -125,6 +126,23 @@ public class SettingToggle extends SettingBase {
 	public SettingToggle withDesc(String desc) {
 		description = desc;
 		return this;
+	}
+	
+	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
+		if (!expanded || window.mouseY - y <= 12) return super.getGuiDesc(window, x, y, len);
+		
+		Triple<Integer, Integer, String> triple = null;
+		
+		int h = y + 12;
+		for (SettingBase s: children) {
+			if (window.mouseOver(x + 2, h, x + len, h + s.getHeight(len))) {
+				triple = s.getGuiDesc(window, x + 2, h, len - 2);
+			}
+			
+			h += s.getHeight(len - 2);
+		}
+		
+		return triple;
 	}
 
 	public void readSettings(JsonElement settings) {

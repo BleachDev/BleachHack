@@ -17,6 +17,8 @@
  */
 package bleach.hack.gui.clickgui;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import com.google.gson.JsonElement;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
@@ -62,6 +64,10 @@ public abstract class SettingBase {
 
 	public String getDesc() {
 		return description;
+	}
+	
+	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
+		return Triple.of(x + len + 2, y, description);
 	}
 	
 	public abstract void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len);

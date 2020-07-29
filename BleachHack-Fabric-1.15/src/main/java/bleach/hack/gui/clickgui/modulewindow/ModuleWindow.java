@@ -119,7 +119,7 @@ public class ModuleWindow extends ClickGuiWindow {
 					s.render(this, x, y + curY, len);
 
 					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x+len, y + s.getHeight(len) + curY)) {
-						tooltip = Triple.of(x + len + 2, y + curY, s.getDesc());
+						tooltip = s.getGuiDesc(this, x, y + curY, len);
 					}
 					
 					fillGreySides(x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
