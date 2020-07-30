@@ -55,22 +55,25 @@ public class UI extends Module {
 
 	public UI() {
 		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle("Arraylist", true), // 0
-				new SettingToggle("Extra Line", false), // 1
-				new SettingToggle("Watermark", true), // 2
-				new SettingToggle("FPS", true), // 3
-				new SettingToggle("Ping", true), // 4
-				new SettingToggle("Coords", true), // 5
-				new SettingToggle("TPS", true), // 6
-				new SettingToggle("Lag-Meter", true), // 7
-				new SettingToggle("Server", false), // 8
-				new SettingToggle("Players", false), // 9
-				new SettingToggle("Armor", true), // 10
-				new SettingToggle("TimeStamp", false), // 11
-				new SettingSlider("HueBright: ", 0, 1, 1, 2), // 12
-				new SettingSlider("HueSat: ", 0, 1, 0.5, 2), // 13
-				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1), // 14
-				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right")); // 15
+				new SettingToggle("Arraylist", true).withDesc("Shows the module list"), // 0
+				new SettingToggle("Extra Line", false).withDesc("Adds a extra line to the front of the arralist"), // 1
+				new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist"), // 2
+				new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 3
+				new SettingToggle("Ping", true).withDesc("Shows your ping"), // 4
+				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 5
+				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 6
+				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server is lagging"), // 7
+				new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 8
+				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), // 9
+				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 10
+						new SettingMode("Damage: ", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
+				new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 11
+						new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"),
+						new SettingToggle("Year", false).withDesc("Shows the current year in the time")),
+				new SettingSlider("HueBright: ", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 12
+				new SettingSlider("HueSat: ", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 13
+				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 14
+				new SettingMode("Info: ", "BL", "TR", "BR").withDesc("Where on the screan to show the info")); // 15
 	}
 
 	@Subscribe
@@ -134,7 +137,9 @@ public class UI extends Module {
 		}
 
 		if (getSetting(11).asToggle().state) {
-			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss zzz").format(new Date()));
+			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
+					+ (getSetting(11).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+					+ (getSetting(11).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
 		}
 
 		if (getSetting(5).asToggle().state) {
@@ -186,7 +191,7 @@ public class UI extends Module {
 
 		if (getSetting(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			GL11.glPushMatrix();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			//GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 			int count = 0;
 			int x1 = mc.getWindow().getScaledWidth() / 2;
@@ -199,26 +204,32 @@ public class UI extends Module {
 
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 				mc.getItemRenderer().zOffset = 200F;
-				mc.getItemRenderer().renderGuiItemIcon(is, x, y);
+				
+				if (getSetting(10).asToggle().getChild(0).asMode().mode > 0) {
+					mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, is, x, y);
+				}
+				
 				mc.getItemRenderer().zOffset = 0F;
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-				GL11.glPushMatrix();
-				GL11.glScaled(0.75, 0.75, 0.75);
-				String s = is.getCount() > 1 ? "x" + is.getCount() : "";
-				mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
-
-				if (is.isDamageable()) {
-					String dur = is.getMaxDamage() - is.getDamage() + "";
-					int durcolor = 0x000000;
-					try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
-
-					mc.textRenderer.drawWithShadow(event.matrix, dur + "", (x + 10 - mc.textRenderer.getWidth(dur + "") / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
+				if (getSetting(10).asToggle().getChild(0).asMode().mode != 1) {
+					GL11.glPushMatrix();
+					GL11.glScaled(0.75, 0.75, 0.75);
+					String s = is.getCount() > 1 ? "x" + is.getCount() : "";
+					mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
+	
+					if (is.isDamageable()) {
+						String dur = is.getMaxDamage() - is.getDamage() + "";
+						int durcolor = 0x000000;
+						try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
+	
+						mc.textRenderer.drawWithShadow(event.matrix, dur, (x + 10 - mc.textRenderer.getWidth(dur) / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
+					}
+	
+					GL11.glPopMatrix();
 				}
-
-				GL11.glPopMatrix();
 			}
+			
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
 		}
