@@ -93,7 +93,7 @@ public class SettingToggle extends SettingBase {
 			GL11.glPushMatrix();
 			GL11.glScaled(0.65, 0.65, 1);
 			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
-					color2 + (expanded ? "[§lv" + color2 + "]" : "[§l>" + color2 + "]"), (int) ((x + len - 13) * 1/0.65), (int) ((y + 4) * 1/0.65), -1);
+					color2 + (expanded ? "[\u00a7lv" + color2 + "]" : "[\u00a7l>" + color2 + "]"), (int) ((x + len - 13) * 1/0.65), (int) ((y + 4) * 1/0.65), -1);
 			GL11.glPopMatrix();
 		}
 
