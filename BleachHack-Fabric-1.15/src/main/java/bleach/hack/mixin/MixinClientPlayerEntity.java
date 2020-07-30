@@ -102,7 +102,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 	
-	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;closeContainer()V", ordinal = 0))
+	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeContainer()V", ordinal = 0))
 	private void updateNausea_closeContianer(ClientPlayerEntity player) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
 			closeContainer();
