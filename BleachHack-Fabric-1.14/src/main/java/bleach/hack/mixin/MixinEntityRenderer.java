@@ -34,6 +34,13 @@ import bleach.hack.event.events.EventOutlineColor;
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer<T extends Entity> {
 
+	/**
+	 * fuck javadoc
+	 * @param entity_1
+	 * @reason fuck
+	 * @author bleach
+	 * @return
+	 */
 	@Overwrite
 	public int getOutlineColor(T entity_1) {
 		Team team_1 = (Team) (entity_1).getScoreboardTeam();
