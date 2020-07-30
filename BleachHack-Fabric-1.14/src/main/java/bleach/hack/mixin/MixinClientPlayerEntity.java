@@ -23,6 +23,7 @@ import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.BetterPortal;
+import bleach.hack.module.mods.Freecam;
 import bleach.hack.module.mods.NoSlow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -92,12 +93,13 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) {
 			info.cancel();
-		} else if (!movementType_1.equals(event.type) || !vec3d_1.equals(event.vec3d)) {
-			double double_1 = this.x;
-			double double_2 = this.z;
-			super.move(event.type, event.vec3d);
-			this.method_3148((float)(this.x - double_1), (float)(this.z - double_2));
-			info.cancel();
+		}
+	}
+	
+	@Inject(at = @At("HEAD"), method = "pushOutOfBlocks", cancellable = true)
+	protected void pushOutOfBlocks(double double_1, double double_2, double double_3, CallbackInfo ci) {
+		if (ModuleManager.getModule(Freecam.class).isToggled()) {
+			ci.cancel();
 		}
 	}
 	
