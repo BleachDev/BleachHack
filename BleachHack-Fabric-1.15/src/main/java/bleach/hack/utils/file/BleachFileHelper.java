@@ -34,8 +34,14 @@ import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.FriendManager;
 
 public class BleachFileHelper {
+	
+	public static boolean SCHEDULE_SAVE_MODULES = false;
+	public static boolean SCHEDULE_SAVE_FRIENDS = false;
+	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
 
 	public static void saveModules() {
+		SCHEDULE_SAVE_MODULES = false;
+		
 		JsonObject jo = new JsonObject();
 		
 		for (Module m: ModuleManager.getModules()) {
@@ -117,75 +123,9 @@ public class BleachFileHelper {
 		}
 	}
 
-	/*public static void saveModSettings() {
-		BleachFileMang.createEmptyFile("settings.txt");
-
-		String lines = "";
-		for (Module m: ModuleManager.getModules()) {
-			String line = m.getName();
-			int count = 0;
-
-			for (SettingBase set: m.getSettings()) {
-				if (set instanceof SettingSlider) line += ":" + m.getSetting(count).asSlider().getValue();
-				if (set instanceof SettingMode) line += ":" + m.getSetting(count).asMode().mode;
-				if (set instanceof SettingToggle) line += ":" + m.getSetting(count).asToggle().state;
-				count++;
-			}
-			lines += line + "\n";
-		}
-
-		BleachFileMang.appendFile(lines, "settings.txt");
-	}
-
-	public static void readSettings() {
-		List<String> lines = BleachFileMang.readFileLines("settings.txt");
-
-		for (Module m: ModuleManager.getModules()) {
-			for (String s: lines) {
-				String[] line = s.split(":");
-				if (!line[0].startsWith(m.getName())) continue;
-				int count = 0;
-
-				for (SettingBase set: m.getSettings()) {
-					try {
-						if (set instanceof SettingSlider) {
-							m.getSetting(count).asSlider().setValue(Double.parseDouble(line[count+1]));}
-						if (set instanceof SettingMode) {
-							m.getSetting(count).asMode().mode = MathHelper.clamp(Integer.parseInt(line[count+1]),
-									0, m.getSetting(count).asMode().modes.length - 1);}
-						if (set instanceof SettingToggle) {
-							m.getSetting(count).asToggle().state = Boolean.parseBoolean(line[count+1]);}
-					} catch (Exception e) {}
-					count++;
-				}
-			}
-		}
-	}
-
-	public static void saveBinds() {
-		BleachFileMang.createEmptyFile("binds.txt");
-
-		String lines = "";
-		for (Module m: ModuleManager.getModules()) {
-			lines += m.getName() + ":" + m.getKey() + "\n";
-		}
-
-		BleachFileMang.appendFile(lines, "binds.txt");
-	}
-
-	public static void readBinds() {
-		List<String> lines = BleachFileMang.readFileLines("binds.txt");
-
-		for (Module m: ModuleManager.getModules()) {
-			for (String s: lines) {
-				String[] line = s.split(":");
-				if (!line[0].startsWith(m.getName())) continue;
-				try { m.setKey(Integer.parseInt(line[line.length - 1])); } catch (Exception e) {}
-			}
-		}
-	}*/
-
 	public static void saveClickGui() {
+		SCHEDULE_SAVE_CLICKGUI = false;
+		
 		BleachFileMang.createEmptyFile("clickgui.txt");
 
 		String text = "";
@@ -216,6 +156,8 @@ public class BleachFileHelper {
 	}
 
 	public static void saveFriends() {
+		SCHEDULE_SAVE_FRIENDS = false;
+		
 		String toWrite = "";
 		for (String s: BleachHack.friendMang.getFriends()) toWrite += s + "\n";
 

@@ -34,8 +34,14 @@ import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.FriendManager;
 
 public class BleachFileHelper {
+	
+	public static boolean SCHEDULE_SAVE_MODULES = false;
+	public static boolean SCHEDULE_SAVE_FRIENDS = false;
+	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
 
 	public static void saveModules() {
+		SCHEDULE_SAVE_MODULES = false;
+		
 		JsonObject jo = new JsonObject();
 		
 		for (Module m: ModuleManager.getModules()) {
@@ -83,8 +89,6 @@ public class BleachFileHelper {
 		if (jo == null) return;
 		
 		for (Entry<String, JsonElement> e: jo.entrySet()) {
-			if (e.getKey().equalsIgnoreCase("ClickGui") || e.getKey().equalsIgnoreCase("Freecam")) continue;
-			
 			Module mod = ModuleManager.getModuleByName(e.getKey());
 			
 			if (mod == null) continue;
@@ -120,6 +124,8 @@ public class BleachFileHelper {
 	}
 
 	public static void saveClickGui() {
+		SCHEDULE_SAVE_CLICKGUI = false;
+		
 		BleachFileMang.createEmptyFile("clickgui.txt");
 
 		String text = "";
@@ -150,6 +156,8 @@ public class BleachFileHelper {
 	}
 
 	public static void saveFriends() {
+		SCHEDULE_SAVE_FRIENDS = false;
+		
 		String toWrite = "";
 		for (String s: BleachHack.friendMang.getFriends()) toWrite += s + "\n";
 

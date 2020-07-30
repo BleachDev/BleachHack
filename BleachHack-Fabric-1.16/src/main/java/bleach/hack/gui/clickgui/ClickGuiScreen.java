@@ -35,6 +35,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.utils.file.BleachFileHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -84,6 +85,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void render(MatrixStack matrix, int mX, int mY, float float_1) {
+		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
+		
 		searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
 		this.renderBackground(matrix);
