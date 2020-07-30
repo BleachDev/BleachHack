@@ -18,12 +18,11 @@
 package bleach.hack.module.mods;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Calendar;
-import java.util.TimeZone;
-
+import java.util.Date;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.eventbus.Subscribe;
@@ -82,7 +81,7 @@ public class UI extends Module {
 		if ((getSetting(0).asToggle().state || getSetting(2).asToggle().state) && !mc.options.debugEnabled) {
 			List<String> lines = new ArrayList<>();
 
-			if (getSetting(2).asToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
+			if (getSetting(2).asToggle().state) lines.add(0, "\u00a7a> BleachHack " + BleachHack.VERSION);
 
 			if (getSetting(0).asToggle().state) {
 				for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
@@ -124,7 +123,7 @@ public class UI extends Module {
 				
 				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
-				String text = "" + e.getDisplayName().getString() + " §7|§r " +
+				String text = "" + e.getDisplayName().getString() + " \u00a77|\u00a7r " +
 						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
 						+ " (" + dist + "m)";
 
@@ -135,7 +134,7 @@ public class UI extends Module {
 		}
 
 		if (getSetting(11).asToggle().state) {
-			infoList.add("\u00a77Time: \u00a7e" + Calendar.getInstance(TimeZone.getDefault()).getTime().toString());
+			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss zzz").format(new Date()));
 		}
 
 		if (getSetting(5).asToggle().state) {
@@ -147,6 +146,12 @@ public class UI extends Module {
 
 			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
+		}
+		
+		if (getSetting(8).asToggle().state) {
+			String server = "Singleplayer";
+			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
+			infoList.add("\u00a77Server: \u00a7d" + server);
 		}
 
 		if (getSetting(3).asToggle().state) {
@@ -177,13 +182,6 @@ public class UI extends Module {
 				mc.textRenderer.drawWithShadow(event.matrix, text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getWidth(text) / 2,
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), 0xd0d0d0);
 			}
-		}
-
-		if (getSetting(8).asToggle().state) {
-			String server = "";
-			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
-			DrawableHelper.fill(event.matrix, mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(server) - 4, 2, mc.getWindow().getScaledWidth() - 3, 12, 0xa0000000);
-			mc.textRenderer.drawWithShadow(event.matrix, server, mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(server) - 3, 3, 0xb0b0b0);
 		}
 
 		if (getSetting(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {

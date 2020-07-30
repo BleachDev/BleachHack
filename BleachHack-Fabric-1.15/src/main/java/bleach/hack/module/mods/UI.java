@@ -41,10 +41,10 @@ import net.minecraft.world.dimension.DimensionType;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 public class UI extends Module {
@@ -135,7 +135,7 @@ public class UI extends Module {
 		}
 
 		if (getSetting(11).asToggle().state) {
-			infoList.add("§7Time: §e" + Calendar.getInstance(TimeZone.getDefault()).getTime().toString());
+			infoList.add("§7Time: §e" + new SimpleDateFormat("MMM dd HH:mm:ss zzz").format(new Date()));
 		}
 
 		if (getSetting(5).asToggle().state) {
@@ -147,6 +147,12 @@ public class UI extends Module {
 
 			infoList.add("XYZ: " + (nether ? "§4" : "§b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 			+ " §7[" + (nether ? "§b" : "§4") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "§7]");
+		}
+		
+		if (getSetting(8).asToggle().state) {
+			String server = "Singleplayer";
+			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
+			infoList.add("§7Server: §d" + server);
 		}
 
 		if (getSetting(3).asToggle().state) {
@@ -177,13 +183,6 @@ public class UI extends Module {
 				mc.textRenderer.drawWithShadow(text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getStringWidth(text) / 2,
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), 0xd0d0d0);
 			}
-		}
-
-		if (getSetting(8).asToggle().state) {
-			String server = "";
-			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
-			DrawableHelper.fill(mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.getWindow().getScaledWidth() - 3, 12, 0xa0000000);
-			mc.textRenderer.drawWithShadow(server, mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
 		}
 
 		if (getSetting(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
