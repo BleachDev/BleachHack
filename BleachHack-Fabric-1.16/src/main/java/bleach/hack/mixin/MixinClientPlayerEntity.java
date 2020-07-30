@@ -98,13 +98,13 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 	
 	@Inject(at = @At("HEAD"), method = "method_30673", cancellable = true)
-	protected void method_30673(double double_1, double double_2, double double_3, CallbackInfo ci) {
+	protected void method_30673(double double_1, double double_2, CallbackInfo ci) {
 		if (ModuleManager.getModule(Freecam.class).isToggled()) {
 			ci.cancel();
 		}
 	}
 	
-	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "closeContainer", ordinal = 0))
+	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "closeHandledScreen", ordinal = 0))
 	private void updateNausea_closeContianer(ClientPlayerEntity player) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
 			closeHandledScreen();
