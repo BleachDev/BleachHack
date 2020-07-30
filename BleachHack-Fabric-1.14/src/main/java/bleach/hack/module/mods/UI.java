@@ -51,7 +51,6 @@ import net.minecraft.world.dimension.DimensionType;
 public class UI extends Module {
 
 	public List<String> infoList = new ArrayList<>();
-	private int count = 0;
 	private long prevTime = 0;
 	private double tps = 20;
 	private long lastPacket = 0;
@@ -80,32 +79,60 @@ public class UI extends Module {
 	public void onDrawOverlay(EventDrawOverlay event) {
 		infoList.clear();
 
-		if (getSetting(0).asToggle().state && !mc.options.debugEnabled) {
+		int arrayCount = 0;
+		if ((getSetting(0).asToggle().state || getSetting(2).asToggle().state) && !mc.options.debugEnabled) {
 			List<String> lines = new ArrayList<>();
 
-			for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
-
-			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
 			if (getSetting(2).asToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
+
+			if (getSetting(0).asToggle().state) {
+				for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
+
+				lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
+			}
 
 			//new colors
 			int color = getRainbowFromSettings(0);
-			count = 0;
 			int extra = getSetting(1).asToggle().state ? 1 : 0;
 			for (String s: lines) {
-				color = getRainbowFromSettings(count);
-				DrawableHelper.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
-				DrawableHelper.fill(0, count*10, extra, 10+(count*10), color);
-				DrawableHelper.fill(mc.textRenderer.getStringWidth(s)+3+extra, (count*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(count*10), color);
-				if (count + 1 < lines.size()) {
-					DrawableHelper.fill(mc.textRenderer.getStringWidth(lines.get(count + 1))+4+extra, 10+(count*10),
-							mc.textRenderer.getStringWidth(s)+4+extra, 11+(count*10), color);
+				color = getRainbowFromSettings(arrayCount);
+				DrawableHelper.fill(0, arrayCount*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(arrayCount*10), 0x70003030);
+				DrawableHelper.fill(0, arrayCount*10, extra, 10+(arrayCount*10), color);
+				DrawableHelper.fill(mc.textRenderer.getStringWidth(s)+3+extra, (arrayCount*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(arrayCount*10), color);
+
+				if (arrayCount + 1 < lines.size()) {
+					DrawableHelper.fill(mc.textRenderer.getStringWidth(lines.get(arrayCount + 1))+4+extra, 10+(arrayCount*10),
+							mc.textRenderer.getStringWidth(s)+4+extra, 11+(arrayCount*10), color);
 				}
-				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(count*10), color);
-				count++;
+
+				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(arrayCount*10), color);
+				arrayCount++;
 			}
 
-			DrawableHelper.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
+			if (!lines.isEmpty()) {
+				DrawableHelper.fill(0, (arrayCount*10), mc.textRenderer.getStringWidth(lines.get(arrayCount-1))+4+extra, 1+(arrayCount*10), color);
+			}
+		}
+		
+		if (getSetting(9).asToggle().state && !mc.options.debugEnabled) {
+			mc.textRenderer.drawWithShadow("Players:", 2, 4+arrayCount*10, 0xff0000);
+			arrayCount++;
+
+			for (Entity e: mc.world.getPlayers().stream().sorted(
+					(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
+					.collect(Collectors.toList())) {
+				if (e == mc.player) continue;
+				
+				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
+
+				String text = "" + e.getDisplayName().getString() + " §7|§r " +
+						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
+						+ " (" + dist + "m)";
+
+				mc.textRenderer.drawWithShadow(text, 2, 4+arrayCount*10,
+						new Color(255 - Math.min(dist * 3, 255), Math.min(dist * 3, 255), 0).brighter().getRGB());
+				arrayCount++;
+			}
 		}
 
 		if (getSetting(11).asToggle().state) {
@@ -158,27 +185,6 @@ public class UI extends Module {
 			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
 			DrawableHelper.fill(mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.window.getScaledWidth() - 3, 12, 0xa0000000);
 			mc.textRenderer.drawWithShadow(server, mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
-		}
-
-		if (getSetting(9).asToggle().state && !mc.options.debugEnabled) {
-			DrawableHelper.fill(0, 3+(count*10), mc.textRenderer.getStringWidth("Players:")+4, 13+(count*10), 0x40000000);
-			mc.textRenderer.drawWithShadow("Players:", 2, 4+count*10, 0xff0000);
-			count++;
-
-			for (Entity e: mc.world.getPlayers().stream().sorted(
-					(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
-					.collect(Collectors.toList())) {
-				if (e == mc.player) continue;
-
-				String text = e.getDisplayName().asFormattedString() + " | " +
-						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
-						+ " (" + Math.round(mc.player.getPos().distanceTo(e.getPos())) + "m)";
-
-				DrawableHelper.fill(0, 3+(count*10), mc.textRenderer.getStringWidth(text)+4, 13+(count*10), 0x40000000);
-				mc.textRenderer.drawWithShadow(text, 2, 4+count*10,
-						0xf00000 + (int) Math.min(mc.player.getPos().distanceTo(e.getPos()) * 3, 255));
-				count++;
-			}
 		}
 
 		if (getSetting(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
