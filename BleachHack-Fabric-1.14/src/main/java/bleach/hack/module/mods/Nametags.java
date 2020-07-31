@@ -60,7 +60,7 @@ public class Nametags extends Module {
 			ItemEntity e = (ItemEntity) event.getEntity();
 
 			double scale = Math.max(getSetting(4).asToggle().getChild(1).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
-			if (e.getName().getString() != e.getStack().getName().getString() && getSetting(4).asToggle().getChild(0).asToggle().state) {
+			if (!e.getName().getString().equals(e.getStack().getName().getString()) && getSetting(4).asToggle().getChild(0).asToggle().state) {
 				WorldRenderUtils.drawText("§6\"" + e.getStack().getName().getString() + "\"",
 						e.prevX + (e.x - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.y - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
