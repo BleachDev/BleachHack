@@ -107,7 +107,11 @@ public class ChestESP extends Module {
 				if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.AIR) {
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.1F, 0.1F, 0.7F);
 				} else if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {
-					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.1F, 0.5F, 0.7F);
+					int axis = e.getBoundingBox().x2 - e.getBoundingBox().x1 < e.getBoundingBox().y2 - e.getBoundingBox().y1
+							? 0 : e.getBoundingBox().y2 - e.getBoundingBox().y1 < e.getBoundingBox().z2 - e.getBoundingBox().z1
+									? 1 : 2;
+					
+					RenderUtils.drawFilledBox(e.getBoundingBox().expand(axis == 0 ? 0 : 0.12, axis == 1 ? 0 : 0.12, axis == 2 ? 0 : 0.12), 0.1F, 0.1F, 0.5F, 0.7F);
 				} else {
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.45F, 0.1F, 0.7F);
 				}
