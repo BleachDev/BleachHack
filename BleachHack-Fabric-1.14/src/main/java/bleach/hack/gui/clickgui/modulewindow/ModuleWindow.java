@@ -25,7 +25,11 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
+
 import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingMode;
+import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -35,6 +39,7 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 
 public class ModuleWindow extends ClickGuiWindow {
 
@@ -43,7 +48,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	public boolean hiding;
 
-	private int len;
+	public int len;
 
 	private Set<Module> searchedModules;
 
@@ -81,56 +86,49 @@ public class ModuleWindow extends ClickGuiWindow {
 			y2 = y + getHeight();
 		}
 
-		int curY = 0;
+		int count = 0;
 		for (Entry<Module, Boolean> m: new LinkedHashMap<>(mods).entrySet()) {
-			if (m.getValue()) {
-				//fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
-				fillGreySides(x, y + curY, x+len-1, y + 12 + curY);
-				DrawableHelper.fill(x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
-				DrawableHelper.fill(x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
-			}
-			
-			DrawableHelper.fill(x, y + curY, x+len, y + 12 + curY,
-					mouseOver(x, y + curY, x+len, y + 12 + curY) ? 0x70303070 : 0x00000000);
-
-			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len),
-					x+2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
+			if (m.getValue()) fillReverseGrey(x, y+(count*12), x+len-1, y+12+(count*12));
+			DrawableHelper.fill(x, y+(count*12), x+len, y+12+(count*12),
+					mouseOver(x, y+(count*12), x+len, y+12+(count*12)) ? 0x70303070 : 0x00000000);
 
 			//If they match: Module gets marked red
-			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
-				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0),
-						m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
+			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSettings().get(1).asToggle().state) {
+				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + (count * 12) + (m.getValue() ? 1 : 0),
+						m.getValue() ? x + len - 3 : x + len, y + 12 + (count * 12), 0x50ff0000);
 			}
 
+			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len),
+					x+2, y+2+(count*12), m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
+
+
 			/* Set which module settings show on */
-			if (mouseOver(x, y + curY, x+len, y + 12 + curY)) {
-				tooltip = Triple.of(x + len + 2, y + curY, m.getKey().getDesc());
+			if (mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
+				tooltip = Triple.of(x + len + 2, y + count * 12, m.getKey().getDesc());
 
 				if (lmDown) m.getKey().toggle();
 				if (rmDown) mods.replace(m.getKey(), !m.getValue());
 				if (lmDown || rmDown) mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
-			
-			curY += 12;
 
 			/* draw settings */
 			if (m.getValue()) {
 				for (SettingBase s: m.getKey().getSettings()) {
-					s.render(this, x, y + curY, len);
-					
-					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x+len, y + s.getHeight(len) + curY)) {
-						tooltip = s.getGuiDesc(this, x, y + curY, len);
+					count++;
+					if (s instanceof SettingMode) drawModeSetting(s.asMode(), x, y+(count*12), textRend);
+					if (s instanceof SettingToggle) drawToggleSetting(s.asToggle(), x, y+(count*12), textRend);
+					if (s instanceof SettingSlider) drawSliderSetting(s.asSlider(), x, y+(count*12), textRend);
+
+					if (!s.getDesc().isEmpty() && mouseOver(x, y+(count*12), x+len, y+12+(count*12))) {
+						tooltip = Triple.of(x + len + 2, y + count * 12, s.getDesc());
 					}
-					
-					fillGreySides(x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
-					
-					curY += s.getHeight(len);
 				}
 
-				drawBindSetting(m.getKey(), keyDown, x, y + curY, textRend);
-				curY += 12;
+				count++;
+				drawBindSetting(m.getKey(), keyDown, x, y+(count*12), textRend);
 				//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
 			}
+			count++;
 		}
 	}
 
@@ -149,15 +147,48 @@ public class ModuleWindow extends ClickGuiWindow {
 				, x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 	}
 
-	public void fillReverseGrey(int x1, int y1, int x2, int y2) {
-		DrawableHelper.fill(x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		DrawableHelper.fill(x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
-		DrawableHelper.fill(x1 + 1, y2 - 1, x2, y2, 0x90b0b0b0);
-		DrawableHelper.fill(x2 - 1, y1 + 1, x2, y2 - 1, 0x90b0b0b0);
-		DrawableHelper.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
+	public void drawModeSetting(SettingMode s, int x, int y, TextRenderer textRend) {
+		fillGreySides(x, y-1, x+len-1, y+12);
+		textRend.drawWithShadow(s.text + s.modes[s.mode],x+2, y+2,
+				mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
+
+		if (mouseOver(x, y, x+len, y+12) && lmDown) s.mode = s.getNextMode();
 	}
 
-	private void fillGreySides(int x1, int y1, int x2, int y2) {
+	public void drawToggleSetting(SettingToggle s, int x, int y, TextRenderer textRend) {
+		String color2;
+
+		if (s.state) { if (mouseOver(x, y, x+len, y+12)) color2 = "§2"; else color2 = "§a";
+		} else { if (mouseOver(x, y, x+len, y+12)) color2 = "§4"; else color2 = "§c"; }
+
+		fillGreySides(x, y-1, x+len-1, y+12);
+		textRend.drawWithShadow(color2 + s.text, x+3, y+2, -1);
+
+		if (mouseOver(x, y, x+len, y+12) && lmDown) s.state = !s.state;
+	}
+
+	public void drawSliderSetting(SettingSlider s, int x, int y, TextRenderer textRend) {
+		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((s.getValue() - s.min) / (s.max - s.min)), 0, len-2));
+		fillGreySides(x, y-1, x+len-1, y+12);
+		fillGradient(x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
+
+		textRend.drawWithShadow(s.text + (s.round == 0  && s.getValue() > 100 ? Integer.toString((int)s.getValue()) : s.getValue()),
+				x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
+
+		if (mouseOver(x+1, y, x+len-2, y+12) && lmHeld) {
+			int percent = ((mouseX - x) * 100) / (len - 2);
+
+			s.setValue(s.round(percent*((s.max - s.min) / 100) + s.min, s.round));
+		}
+	}
+
+	protected void fillReverseGrey(int x1, int y1, int x2, int y2) {
+		DrawableHelper.fill(x1, y1, x1 + 1, y2 - 1, 0x90000000);
+		DrawableHelper.fill(x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
+		DrawableHelper.fill(x2 - 2, y1 + 1, x2, y2, 0x90b0b0b0);
+	}
+
+	protected void fillGreySides(int x1, int y1, int x2, int y2) {
 		DrawableHelper.fill(x1, y1, x1 + 1, y2 - 1, 0x90000000);
 		DrawableHelper.fill(x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
 	}
@@ -174,10 +205,6 @@ public class ModuleWindow extends ClickGuiWindow {
 	public Triple<Integer, Integer, String> getTooltip() {
 		return tooltip;
 	}
-	
-	public void setLen(int len) {
-		this.len = len;
-	}
 
 	public int getHeight() {
 		int h = 1;
@@ -185,11 +212,7 @@ public class ModuleWindow extends ClickGuiWindow {
 			h += 12;
 
 			if (e.getValue()) {
-				for (SettingBase s: e.getKey().getSettings()) {
-					h += s.getHeight(len);
-				}
-
-				h += 12;
+				h += (12 * (e.getKey().getSettings().size() + 1));
 			}
 		}
 

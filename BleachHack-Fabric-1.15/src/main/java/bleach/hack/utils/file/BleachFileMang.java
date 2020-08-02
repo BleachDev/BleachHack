@@ -87,12 +87,8 @@ public class BleachFileMang {
 	/** Adds a line to a file. **/
 	public static void appendFile(String content, String... file) {
 		try {
-			String fileContent = new String(Files.readAllBytes(stringsToPath(file)));
 			FileWriter writer = new FileWriter(stringsToPath(file).toFile(), true);
-			writer.write(
-					(fileContent.endsWith("\n") || !fileContent.contains("\n") ? "" : "\n")
-					+ content
-					+ (content.endsWith("\n") ? "" : "\n"));
+			writer.write(content + "\n");
 			writer.close();
 		} catch (IOException e) {
 			System.out.println("Error Appending File: " + file);

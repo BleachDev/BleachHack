@@ -24,8 +24,6 @@ import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -49,14 +47,7 @@ public class MixinGameRenderer {
 			method = "bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V",
 			cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(2).asToggle().state)
-			ci.cancel();
-	}
-	
-	@Inject(at = @At("HEAD"), method = "showFloatingItem", cancellable = true)
-	private void showFloatingItem(ItemStack itemStack_1, CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(8).asToggle().state
-				&& itemStack_1.getItem() == Items.TOTEM_OF_UNDYING)
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(2).asToggle().state)
 			ci.cancel();
 	}
 
@@ -65,7 +56,7 @@ public class MixinGameRenderer {
 			method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V",
 			require = BleachHack.MIXIN_REQUIRE)
 	private float nauseaWobble(float delta, float first, float second) {
-		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state))
+		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(6).asToggle().state))
 			return MathHelper.lerp(delta, first, second);
 
 		return 0;

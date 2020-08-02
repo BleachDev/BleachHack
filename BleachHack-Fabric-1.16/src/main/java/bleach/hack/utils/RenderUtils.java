@@ -97,19 +97,23 @@ public class RenderUtils {
 	}
 
 	public static void gl11Setup() {
-		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GL11.glLineWidth(2.5F);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glMatrixMode(5889);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
+		GL11.glPushMatrix();
 		offsetRender();
 	}
 
 	public static void gl11Cleanup() {
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
+		GL11.glPopMatrix();
+		GL11.glMatrixMode(5888);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
 	}
 }

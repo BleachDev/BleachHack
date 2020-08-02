@@ -61,7 +61,7 @@ public class AutoSign extends Module {
 		if (event.getScreen() instanceof SignEditScreen) {
 			event.setCancelled(true);
 
-			if (getSetting(0).asToggle().state) {
+			if (getSettings().get(0).asToggle().state) {
 				text =  new String[] {};
 				while(text.length < 4) {
 					IntStream chars = new Random().ints(0, 0x10FFFF);

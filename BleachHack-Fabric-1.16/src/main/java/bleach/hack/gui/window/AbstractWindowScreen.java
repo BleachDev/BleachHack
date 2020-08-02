@@ -79,10 +79,6 @@ public abstract class AbstractWindowScreen extends Screen {
 	public void selectWindow(int window) {
 		int count = 0;
 		for (Window w: windows) {
-			if (w.selected) {
-				w.inactiveTime = 2;
-			}
-			
 			w.selected = (count == window);
 			count++;
 		}
@@ -99,7 +95,7 @@ public abstract class AbstractWindowScreen extends Screen {
 
 			if (w.shouldClose((int) double_1, (int) double_2)) w.closed = true;
 
-			if (w.inactiveTime <= 0 && double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
+			if (double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
 				if (w.selected) {
 					nextSelected = -1;
 					break;

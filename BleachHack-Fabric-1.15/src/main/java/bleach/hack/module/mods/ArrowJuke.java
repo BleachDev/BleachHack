@@ -57,8 +57,8 @@ public class ArrowJuke extends Module {
 						nextPos.add(e.getBoundingBox().getXLength()/2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength()/2)));
 			}
 
-			int mode = getSetting(0).asMode().mode;
-			double speed = getSetting(1).asSlider().getValue();
+			int mode = getSettings().get(0).asMode().mode;
+			double speed = getSettings().get(1).asSlider().getValue();
 
 			for (int i = 0; i < 75; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i/5));

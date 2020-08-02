@@ -46,7 +46,7 @@ public class Surround extends Module {
 			return;
 		}
 		
-		if (getSetting(1).asToggle().state) {
+		if (getSettings().get(1).asToggle().state) {
 			Vec3d centerPos = new Vec3d(mc.player.getBlockPos()).add(0.5, 0.5, 0.5);
 			mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.onGround));
@@ -57,7 +57,7 @@ public class Surround extends Module {
 	
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (getSetting(3).asToggle().state && mc.options.keyJump.isPressed()) {
+		if (getSettings().get(3).asToggle().state && mc.options.keyJump.isPressed()) {
 			setToggled(false);
 			return;
 		}
@@ -82,16 +82,16 @@ public class Surround extends Module {
 	private void placeTick(int obsidian) {
 		int cap = 0;
 		
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSettings().get(0).asMode().mode == 0) {
 			for (BlockPos b: new BlockPos[] {
 					mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
 					mc.player.getBlockPos().south(), mc.player.getBlockPos().west()}) {
 				
-				if (cap >= (int) getSetting(4).asSlider().getValue()) {
+				if (cap >= (int) getSettings().get(4).asSlider().getValue()) {
 					return;
 				}
 				
-				if (WorldUtils.placeBlock(b, obsidian, getSetting(5).asToggle().state, false)) {
+				if (WorldUtils.placeBlock(b, obsidian, getSettings().get(5).asToggle().state, false)) {
 					cap++;
 				}
 			}
@@ -103,17 +103,17 @@ public class Surround extends Module {
 					new BlockPos(box.x1 - 1, box.y1, box.z2), new BlockPos(box.x1, box.y1, box.z2 + 1),
 					new BlockPos(box.x2 + 1, box.y1, box.z2), new BlockPos(box.x2, box.y1, box.z2 + 1))) {
 				
-				if (cap >= (int) getSetting(4).asSlider().getValue()) {
+				if (cap >= (int) getSettings().get(4).asSlider().getValue()) {
 					return;
 				}
 				
-				if (WorldUtils.placeBlock(b, obsidian, getSetting(5).asToggle().state, false)) {
+				if (WorldUtils.placeBlock(b, obsidian, getSettings().get(5).asToggle().state, false)) {
 					cap++;
 				}
 			}
 		}
 		
-		if (!getSetting(2).asToggle().state) {
+		if (!getSettings().get(2).asToggle().state) {
 			setToggled(false);
 		}
 	}

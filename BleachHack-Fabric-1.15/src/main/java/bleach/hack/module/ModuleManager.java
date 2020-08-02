@@ -44,7 +44,6 @@ public class ModuleManager {
 			new AutoWalk(),
 			new AutoTotem(),
 			new AutoTool(),
-			new BetterPortal(),
 			new BlockParty(),
 			new BookCrash(),
 			new BowBot(),
@@ -95,7 +94,6 @@ public class ModuleManager {
 			new Timer(),
 			new Tracers(),
 			new Trail(),
-			new Trajectories(),
 			new UI(),
 			new Xray());
 

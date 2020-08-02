@@ -161,8 +161,8 @@ public class BleachMainMenu extends AbstractWindowScreen {
 						Decrypter decrypter = new Decrypter(Decrypter.getPassPhrase());
 						String text = userField.getText() + ":" + decrypter.encrypt(passField.getText());
 
-						if (checkBox.checked && (loginResult.equals("\u00a7aLogin Successful")
-								|| loginResult.equals("\u00a76Logged in as an unverified account"))
+						if (checkBox.checked && (loginResult.equals("§aLogin Successful")
+								|| loginResult.equals("§6Logged in as an unverified account"))
 								&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
 							entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
 							BleachFileMang.createFile("logins.txt");

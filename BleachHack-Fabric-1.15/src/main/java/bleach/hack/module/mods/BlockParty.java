@@ -87,7 +87,7 @@ public class BlockParty extends Module {
 			//mc.player.setPosition(mc.player.getX(), mc.player.y + 0.02, mc.player.getZ());
 		}
 
-		if (getSetting(1).asToggle().state && mc.player.fallDistance < 0.25) {
+		if (getSettings().get(1).asToggle().state && mc.player.fallDistance < 0.25) {
 			if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
 				mc.player.setPos(mc.player.getX(), mc.player.prevY, mc.player.getZ());

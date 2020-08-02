@@ -24,8 +24,6 @@ import java.util.List;
 
 import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.SettingBase;
-import bleach.hack.utils.file.BleachFileHelper;
-
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 
@@ -58,8 +56,6 @@ public class Module {
 	}
 
 	public void onEnable() {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
-		
 		for (Method method : getClass().getMethods()) {
 			if (method.isAnnotationPresent(Subscribe.class)) {
 				BleachHack.eventBus.register(this);
@@ -69,8 +65,6 @@ public class Module {
 	}
 
 	public void onDisable() {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
-		
 		try{
 			for (Method method : getClass().getMethods()) {
 				if (method.isAnnotationPresent(Subscribe.class)) {
@@ -105,10 +99,6 @@ public class Module {
 
 	public List<SettingBase> getSettings() {
 		return settings;
-	}
-	
-	public SettingBase getSetting(int s) {
-		return settings.get(s);
 	}
 
 	public void setKey(int key) {

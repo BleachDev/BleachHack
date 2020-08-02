@@ -70,9 +70,9 @@ public class Peek extends Module {
 		event.matrix.push();
 		event.matrix.translate(0, 0, 300);
 
-		if (getSetting(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
-		if (getSetting(2).asToggle().state) drawBookToolTip(event.matrix, slot, event.mX, event.mY);
-		if (getSetting(3).asToggle().state) drawMapToolTip(event.matrix, slot, event.mX, event.mY);
+		if (getSettings().get(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
+		if (getSettings().get(2).asToggle().state) drawBookToolTip(event.matrix, slot, event.mX, event.mY);
+		if (getSettings().get(3).asToggle().state) drawMapToolTip(event.matrix, slot, event.mX, event.mY);
 		
 		event.matrix.pop();
 	}
@@ -100,13 +100,13 @@ public class Peek extends Module {
 
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 
-		if (getSetting(1).asMode().mode == 2) {
+		if (getSettings().get(1).asMode().mode == 2) {
 			event.setCancelled(true);
-		} else if (getSetting(1).asMode().mode == 1) {
+		} else if (getSettings().get(1).asMode().mode == 1) {
 			event.text = Lists.transform(Arrays.asList(slot.getStack().getName()), Text::method_30937);
 		}
 
-		int realY = getSetting(1).asMode().mode == 2 ? mY + 24 : mY;
+		int realY = getSettings().get(1).asMode().mode == 2 ? mY + 24 : mY;
 
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
 
@@ -165,11 +165,9 @@ public class Peek extends Module {
 		if (slot.getStack().getItem() != Items.FILLED_MAP) return;
 
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
-		if (data == null || data.colors == null) return;
-		
 		byte[] colors = data.colors;
 
-		double size = getSetting(4).asSlider().getValue();
+		double size = getSettings().get(4).asSlider().getValue();
 
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
