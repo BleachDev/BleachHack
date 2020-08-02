@@ -12,6 +12,7 @@
     "MixinBossBarHud",
     "MixinCamera",
     "MixinChunkOcclusionGraphBuilder",
+    "MixinChunkSkylightProvider",
   	"MixinClientConnection",
   	"MixinClientPlayerEntity",
   	"MixinClientPlayerInteractionManager",
@@ -24,14 +25,18 @@
     "MixinIngameHud",
     "MixinKeyboard",
     "MixinLlamaEntity",
+    "MixinMapRenderer",
     "MixinMinecraftClient",
     "MixinPacketInflater",
+    "MixinParticleManager",
     "MixinPlayerEntity",
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinServerScreen",
     "MixinSignBlockEntityRenderer",
-    "MixinTitleScreen"
+    "MixinSoundSystem",
+    "MixinTitleScreen",
+    "MixinWorld"
   ],
   "injectors": {
     "defaultRequire": 1

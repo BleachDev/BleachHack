@@ -69,11 +69,11 @@ public class FakeLag extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (getSettings().get(0).asMode().mode == 0) {
-			if (getSettings().get(1).asToggle().state &&
-					System.currentTimeMillis() - startTime > getSettings().get(2).asSlider().getValue() * 1000) setToggled(false);
-		} else if (getSettings().get(0).asMode().mode == 1) {
-			if (System.currentTimeMillis() - startTime > getSettings().get(3).asSlider().getValue() * 1000) {
+		if (getSetting(0).asMode().mode == 0) {
+			if (getSetting(1).asToggle().state &&
+					System.currentTimeMillis() - startTime > getSetting(2).asSlider().getValue() * 1000) setToggled(false);
+		} else if (getSetting(0).asMode().mode == 1) {
+			if (System.currentTimeMillis() - startTime > getSetting(3).asSlider().getValue() * 1000) {
 				setToggled(false);
 				setToggled(true);
 			}

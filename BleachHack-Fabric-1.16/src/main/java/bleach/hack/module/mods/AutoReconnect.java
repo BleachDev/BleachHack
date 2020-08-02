@@ -93,10 +93,10 @@ public class AutoReconnect extends Module {
 				if (server != null) client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
 			}));
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
-					new LiteralText((getSettings().get(0).asToggle().state ? "\u00a7a" : "\u00a7c") + "AutoReconnect ["
-							+ ((reconnectTime + getSettings().get(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
+					new LiteralText((getSetting(0).asToggle().state ? "\u00a7a" : "\u00a7c") + "AutoReconnect ["
+							+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
 							+ "]"), (button) -> {
-								getSettings().get(0).asToggle().state = !getSettings().get(0).asToggle().state;
+								getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
 								reconnectTime = System.currentTimeMillis();
 							}));
 		}
@@ -104,11 +104,11 @@ public class AutoReconnect extends Module {
 		public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 			super.render(matrix, mouseX, mouseY, delta);
 
-			buttons.get(2).setMessage(new LiteralText((getSettings().get(0).asToggle().state ? "\u00a7aAutoReconnect ["
-					+ ((reconnectTime + getSettings().get(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
-					+ "]" : "\u00a7cAutoReconnect [" + getSettings().get(1).asSlider().getValue() * 1000 + "]")));
+			buttons.get(2).setMessage(new LiteralText((getSetting(0).asToggle().state ? "\u00a7aAutoReconnect ["
+					+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
+					+ "]" : "\u00a7cAutoReconnect [" + getSetting(1).asSlider().getValue() * 1000 + "]")));
 
-			if (reconnectTime + getSettings().get(1).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSettings().get(0).asToggle().state) {
+			if (reconnectTime + getSetting(1).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSetting(0).asToggle().state) {
 				if (server != null) client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
 				reconnectTime = System.currentTimeMillis();
 			}

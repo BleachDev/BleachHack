@@ -186,6 +186,8 @@ public class WorldUtils {
 		float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
 		float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
 
+		mc.player.headYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
+		mc.player.renderPitch = mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch);
 		mc.player.networkHandler.sendPacket(
 				new PlayerMoveC2SPacket.LookOnly(
 						mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),

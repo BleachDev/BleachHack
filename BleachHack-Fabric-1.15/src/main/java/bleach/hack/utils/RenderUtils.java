@@ -17,12 +17,12 @@
  */
 package bleach.hack.utils;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -88,7 +88,7 @@ public class RenderUtils {
 	}
 
 	public static void offsetRender() {
-		Camera camera = BlockEntityRenderDispatcher.INSTANCE.camera;
+		Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
 		Vec3d camPos = camera.getPos();
 		GL11.glRotated(MathHelper.wrapDegrees(camera.getPitch()), 1, 0, 0);
 		GL11.glRotated(MathHelper.wrapDegrees(camera.getYaw() + 180.0), 0, 1, 0);
@@ -96,23 +96,21 @@ public class RenderUtils {
 	}
 
 	public static void gl11Setup() {
+		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GL11.glLineWidth(2.5F);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glMatrixMode(5889);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glPushMatrix();
+		//GL11.glDisable(GL11.GL_DEPTH_TEST);
 		offsetRender();
 	}
 
 	public static void gl11Cleanup() {
+		//GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
-		GL11.glPopMatrix();
-		GL11.glMatrixMode(5888);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopMatrix();
 	}
 }

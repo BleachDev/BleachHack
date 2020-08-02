@@ -20,7 +20,7 @@ public class HandProgress extends Module {
 	public void tick(EventTick event){
 		// this kinda works, but changing item doesn't update..
 		FirstPersonRendererAccessor accessor = (FirstPersonRendererAccessor) mc.gameRenderer.firstPersonRenderer;
-		accessor.setEquippedProgressMainHand((float) this.getSettings().get(0).asSlider().getValue());
-		accessor.setEquippedProgressOffHand((float) this.getSettings().get(1).asSlider().getValue());
+		accessor.setEquippedProgressMainHand((float) this.getSetting(0).asSlider().getValue());
+		accessor.setEquippedProgressOffHand((float) this.getSetting(1).asSlider().getValue());
 	}
 }
