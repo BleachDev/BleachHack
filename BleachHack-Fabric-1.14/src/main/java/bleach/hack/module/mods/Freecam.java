@@ -111,7 +111,7 @@ public class Freecam extends Module {
 
 	@Subscribe
 	public void onOpenScreen(EventOpenScreen event) {
-		if (getSetting(1).asToggle().state && riding instanceof HorseBaseEntity) {
+		if (getSettings().get(1).asToggle().state && riding instanceof HorseBaseEntity) {
 			if (event.getScreen() instanceof InventoryScreen) {
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.OPEN_INVENTORY));
 				event.setCancelled(true);
@@ -126,11 +126,13 @@ public class Freecam extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		//mc.player.setSprinting(false);
-		//mc.player.setVelocity(Vec3d.ZERO);
+		mc.player.setSprinting(true);
+		mc.player.setVelocity(Vec3d.ZERO);
 		mc.player.onGround = false;
-		mc.player.abilities.setFlySpeed((float) (getSetting(0).asSlider().getValue() / 5));
+		mc.player.abilities.setFlySpeed((float) getSettings().get(0).asSlider().getValue());
 		mc.player.abilities.flying = true;
+
+		mc.player.setVelocity(mc.player.getVelocity().multiply(1, 0.85, 1));
 	}
 
 }

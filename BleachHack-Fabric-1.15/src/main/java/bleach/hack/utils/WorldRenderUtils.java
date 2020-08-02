@@ -128,7 +128,7 @@ public class WorldRenderUtils {
 
 	public static void glCleanup() {
 		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glDepthFunc(GL11.GL_LESS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glPopMatrix();
 	}

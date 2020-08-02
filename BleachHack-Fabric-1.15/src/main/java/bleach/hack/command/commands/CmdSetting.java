@@ -51,7 +51,7 @@ public class CmdSetting extends Command {
 		}
 
 		Module m = ModuleManager.getModuleByName(args[0]);
-		SettingBase s = m.getSetting(Integer.parseInt(args[1]));
+		SettingBase s = m.getSettings().get(Integer.parseInt(args[1]));
 
 		if (s instanceof SettingSlider) s.asSlider().setValue(Double.parseDouble(args[2]));
 		else if (s instanceof SettingToggle) s.asToggle().state = Boolean.valueOf(args[2]);

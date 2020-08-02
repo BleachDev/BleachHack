@@ -20,13 +20,6 @@ package bleach.hack.gui.clickgui;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.MathHelper;
-
 public class SettingSlider extends SettingBase {
 
 	public double min;
@@ -55,42 +48,5 @@ public class SettingSlider extends SettingBase {
 		BigDecimal bd = new BigDecimal(value);
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		return bd.doubleValue();
-	}
-	
-	public String getName() {
-		return text;
-	}
-	
-	public void render(ModuleWindow window, int x, int y, int len) {
-		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((getValue() - min) / (max - min)), 0, len-2));
-		window.fillGradient(x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
-
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + (round == 0  && getValue() > 100 ? Integer.toString((int)getValue()) : getValue()),
-				x+2, y+2, window.mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
-
-		if (window.mouseOver(x+1, y, x+len-2, y+12) && window.lmHeld) {
-			int percent = ((window.mouseX - x) * 100) / (len - 2);
-
-			setValue(round(percent*((max - min) / 100) + min, round));
-		}
-	}
-	
-	public SettingSlider withDesc(String desc) {
-		description = desc;
-		return this;
-	}
-	
-	public int getHeight(int len) {
-		return 12;
-	}
-	
-	public void readSettings(JsonElement settings) {
-		if (settings.isJsonPrimitive()) {
-			setValue(settings.getAsDouble());
-		}
-	}
-
-	public JsonElement saveSettings() {
-		return new JsonPrimitive(getValue());
 	}
 }

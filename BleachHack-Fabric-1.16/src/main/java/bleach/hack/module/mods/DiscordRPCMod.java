@@ -44,7 +44,7 @@ public class DiscordRPCMod extends Module {
 	}
 
 	public void onEnable() {
-		silent = getSetting(3).asToggle().state;
+		silent = getSettings().get(3).asToggle().state;
 
 		tick = 0;
 		DiscordRPCManager.start(silent ? "727434331089272903" : "725237549563379724");
@@ -60,7 +60,7 @@ public class DiscordRPCMod extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (silent != getSetting(3).asToggle().state) {
+		if (silent != getSettings().get(3).asToggle().state) {
 			onDisable();
 			onEnable();
 		}
@@ -70,7 +70,7 @@ public class DiscordRPCMod extends Module {
 			String text2 = customText2;
 			long start = 0;
 
-			switch (getSetting(0).asMode().mode) {
+			switch (getSettings().get(0).asMode().mode) {
 			case 0:
 				if (mc.getCurrentServerEntry() != null) text1 = "Playing " + mc.getCurrentServerEntry().address;
 				else text1 = "Playing Singleplayer";
@@ -104,7 +104,7 @@ public class DiscordRPCMod extends Module {
 			String itemName = currentItem.getItem() == Items.AIR ? "Nothing" :
 				(currentItem.getCount() > 1 ? currentItem.getCount() + " " : "") + currentItem.getItem().getName().getString();
 
-			switch (getSetting(1).asMode().mode) {
+			switch (getSettings().get(1).asMode().mode) {
 			case 0:
 				text2 = (int) mc.player.getHealth() + " hp - Holding " + itemName;
 				break;
@@ -122,7 +122,7 @@ public class DiscordRPCMod extends Module {
 				break;
 			}
 
-			switch (getSetting(2).asMode().mode) {
+			switch (getSettings().get(2).asMode().mode) {
 			case 0:
 				start = System.currentTimeMillis() - tick * 50;
 				break;

@@ -3,7 +3,6 @@ package bleach.hack.command.commands;
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.file.BleachFileHelper;
 
 public class CmdFriends extends Command {
 
@@ -54,11 +53,7 @@ public class CmdFriends extends Command {
 			BleachHack.friendMang.getFriends().clear();
 
 			BleachLogger.infoMessage("Cleared Friend list");
-		} else {
-			BleachLogger.errorMessage("Invalid Syntax!\n" + getSyntax());
 		}
-		
-		BleachFileHelper.SCHEDULE_SAVE_FRIENDS = true;
 	}
 
 }

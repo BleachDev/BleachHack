@@ -17,12 +17,6 @@
  */
 package bleach.hack.gui.clickgui;
 
-import org.apache.commons.lang3.tuple.Triple;
-
-import com.google.gson.JsonElement;
-
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
-
 public abstract class SettingBase {
 
 	protected String description = "";
@@ -50,29 +44,13 @@ public abstract class SettingBase {
 			throw new IllegalStateException("Execption parsing setting: " + this);
 		}
 	}
-	
-	public SettingColor asColor() {
-		try {
-			return (SettingColor) this;
-		} catch (Exception e) {
-			throw new IllegalStateException("Execption parsing setting: " + this);
-		}
-	}
-	
-	public abstract String getName();
 
 	public String getDesc() {
 		return description;
 	}
-	
-	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
-		return Triple.of(x + len + 2, y, description);
+
+	public SettingBase withDesc(String desc) {
+		description = desc;
+		return this;
 	}
-	
-	public abstract void render(ModuleWindow window, int x, int y, int len);
-	
-	public abstract int getHeight(int len);
-	
-	public abstract void readSettings(JsonElement settings);
-	public abstract JsonElement saveSettings();
 }

@@ -31,8 +31,12 @@ import net.minecraft.util.math.Vec3d;
 
 public class RenderUtils {
 
+	private static MinecraftClient mc = MinecraftClient.getInstance();
+
 	public static void drawFilledBox(BlockPos blockPos, float r, float g, float b, float a) {
-		drawFilledBox(new Box(blockPos), r, g, b, a);
+		drawFilledBox(new Box(
+				blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+				blockPos.getX()+1, blockPos.getY()+1, blockPos.getZ()+1), r, g, b, a);
 	}
 
 	public static void drawFilledBox(Box box, float r, float g, float b, float a) {
@@ -76,22 +80,26 @@ public class RenderUtils {
 	}
 
 	public static Vec3d renderPos() {
-		return MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
+		return mc.gameRenderer.getCamera().getPos();
 	}
 
 	public static void gl11Setup() {
-		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GL11.glLineWidth(2.5F);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glMatrixMode(5889);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
+		GL11.glPushMatrix();
 	}
 
 	public static void gl11Cleanup() {
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
+		GL11.glPopMatrix();
+		GL11.glMatrixMode(5888);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
 	}
 }

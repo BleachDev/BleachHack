@@ -78,48 +78,44 @@ public class ChestESP extends Module {
 				continue;
 			}
 
-			if ((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity) && getSetting(0).asToggle().state) {
+			if ((e instanceof ChestBlockEntity || e instanceof BarrelBlockEntity) && getSettings().get(0).asToggle().state) {
 				BlockPos p = drawChest(e.getPos());
 				if (p != null) linkedChests.add(p);
-			} else if (e instanceof EnderChestBlockEntity && getSetting(1).asToggle().state) {
+			} else if (e instanceof EnderChestBlockEntity && getSettings().get(1).asToggle().state) {
 				RenderUtils.drawFilledBox(new Box(
 						e.getPos().getX() + 0.06, e.getPos().getY(), e.getPos().getZ() + 0.06,
 						e.getPos().getX() + 0.94, e.getPos().getY() + 0.875, e.getPos().getZ() + 0.94), 1F, 0.05F, 1F, 0.7F);
-			} else if (e instanceof AbstractFurnaceBlockEntity && getSetting(2).asToggle().state) {
+			} else if (e instanceof AbstractFurnaceBlockEntity && getSettings().get(2).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.5F, 0.5F, 0.7F);
-			} else if (e instanceof DispenserBlockEntity && getSetting(3).asToggle().state) {
+			} else if (e instanceof DispenserBlockEntity && getSettings().get(3).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getPos(), 0.55F, 0.55F, 0.7F, 0.7F);
-			} else if (e instanceof HopperBlockEntity && getSetting(4).asToggle().state) {
+			} else if (e instanceof HopperBlockEntity && getSettings().get(4).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getPos(), 0.45F, 0.45F, 0.6F, 0.7F);
-			} else if (e instanceof ShulkerBoxBlockEntity && getSetting(5).asToggle().state) {
+			} else if (e instanceof ShulkerBoxBlockEntity && getSettings().get(5).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.2F, 1F, 0.7F);
-			} else if (e instanceof BrewingStandBlockEntity && getSetting(6).asToggle().state) {
+			} else if (e instanceof BrewingStandBlockEntity && getSettings().get(6).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.4F, 0.2F, 0.7F);
 			}
 		}
 
 		for (Entity e: mc.world.getEntities()) {
-			if (e instanceof ChestMinecartEntity && getSetting(7).asToggle().state) {
+			if (e instanceof ChestMinecartEntity && getSettings().get(7).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getBoundingBox(), 1.9F, 1.5F, 0.3F, 0.7F);
-			} else if (e instanceof FurnaceMinecartEntity && getSetting(8).asToggle().state) {
+			} else if (e instanceof FurnaceMinecartEntity && getSettings().get(8).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getBoundingBox(), 0.5F, 0.5F, 0.5F, 0.7F);}
-			else if (e instanceof HopperMinecartEntity && getSetting(9).asToggle().state) {
+			else if (e instanceof HopperMinecartEntity && getSettings().get(9).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.45F, 0.6F, 0.7F);
-			} else if (e instanceof ItemFrameEntity && getSetting(10).asToggle().state) {
+			} else if (e instanceof ItemFrameEntity && getSettings().get(10).asToggle().state) {
 				if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.AIR) {
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.1F, 0.1F, 0.7F);
 				} else if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {
-					int axis = e.getBoundingBox().maxX - e.getBoundingBox().minX < e.getBoundingBox().maxY - e.getBoundingBox().minY
-							? 0 : e.getBoundingBox().maxY - e.getBoundingBox().minY < e.getBoundingBox().maxZ - e.getBoundingBox().minZ
-									? 1 : 2;
-					
-					RenderUtils.drawFilledBox(e.getBoundingBox().expand(axis == 0 ? 0 : 0.12, axis == 1 ? 0 : 0.12, axis == 2 ? 0 : 0.12), 0.1F, 0.1F, 0.5F, 0.7F);
+					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.1F, 0.5F, 0.7F);
 				} else {
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.45F, 0.1F, 0.7F);
 				}
 			}
 
-			if (e instanceof ArmorStandEntity && getSetting(11).asToggle().state) {
+			if (e instanceof ArmorStandEntity && getSettings().get(11).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getBoundingBox(), 0.5F, 0.4F, 0.1F, 0.7F);
 			}
 		}

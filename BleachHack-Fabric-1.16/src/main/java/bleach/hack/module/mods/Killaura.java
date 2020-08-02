@@ -40,7 +40,6 @@ import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
-import net.minecraft.util.Hand;
 
 public class Killaura extends Module {
 
@@ -62,31 +61,30 @@ public class Killaura extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		delay++;
-		int reqDelay = (int) Math.round(20/getSetting(8).asSlider().getValue());
+		int reqDelay = (int) Math.round(20/getSettings().get(8).asSlider().getValue());
 
 		List<Entity> targets = Streams.stream(mc.world.getEntities())
-				.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state
+				.filter(e -> (e instanceof PlayerEntity && getSettings().get(0).asToggle().state
 						&& !BleachHack.friendMang.has(e.getName().asString()))
-						|| (e instanceof Monster && getSetting(1).asToggle().state)
-						|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state)
-						|| (e instanceof ArmorStandEntity && getSetting(3).asToggle().state))
+						|| (e instanceof Monster && getSettings().get(1).asToggle().state)
+						|| (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state)
+						|| (e instanceof ArmorStandEntity && getSettings().get(3).asToggle().state))
 				.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
 
 		for (Entity e: targets) {
-			if (mc.player.distanceTo(e) > getSetting(7).asSlider().getValue()
+			if (mc.player.distanceTo(e) > getSettings().get(7).asSlider().getValue()
 					|| ((LivingEntity)e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
-					|| (!mc.player.canSee(e) && !getSetting(5).asToggle().state)) continue;
+					|| (!mc.player.canSee(e) && !getSettings().get(5).asToggle().state)) continue;
 
-			if (getSetting(4).asToggle().state) WorldUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
+			if (getSettings().get(4).asToggle().state) WorldUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
 
-			if (((delay > reqDelay || reqDelay == 0) && !getSetting(6).asToggle().state) ||
-					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSetting(6).asToggle().state)) {
+			if (((delay > reqDelay || reqDelay == 0) && !getSettings().get(6).asToggle().state) ||
+					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSettings().get(6).asToggle().state)) {
 				boolean wasSprinting = mc.player.isSprinting();
 
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 
 				mc.interactionManager.attackEntity(mc.player, e);
-				mc.player.swingHand(Hand.MAIN_HAND);
 
 				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
 

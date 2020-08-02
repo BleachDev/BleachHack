@@ -73,7 +73,7 @@ public class WorldRenderUtils {
 		if (item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
 		mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), Type.GUI);
 		if (item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
-		//GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_LIGHTING);
 
 		GL11.glScalef(-0.05F, -0.05F, 0);
 
@@ -116,7 +116,7 @@ public class WorldRenderUtils {
 		GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDepthFunc(GL11.GL_ALWAYS); 
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
@@ -127,7 +127,8 @@ public class WorldRenderUtils {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDepthFunc(GL11.GL_LEQUAL); 
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glTranslatef(-.5f, 0, 0);
 		GL11.glPopMatrix();
 	}
 }

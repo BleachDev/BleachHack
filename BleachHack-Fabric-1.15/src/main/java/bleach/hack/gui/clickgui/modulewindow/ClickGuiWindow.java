@@ -12,13 +12,13 @@ public abstract class ClickGuiWindow extends Window {
 
 	protected MinecraftClient mc;
 
-	public int mouseX;
-	public int mouseY;
+	protected int mouseX;
+	protected int mouseY;
 
-	public int keyDown = -1;
-	public boolean lmDown = false;
-	public boolean rmDown = false;
-	public boolean lmHeld = false;
+	protected int keyDown = -1;
+	protected boolean lmDown = false;
+	protected boolean rmDown = false;
+	protected boolean lmHeld = false;
 
 	public ClickGuiWindow(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
 		super(x1, y1, x2, y2, title, icon);
@@ -43,7 +43,7 @@ public abstract class ClickGuiWindow extends Window {
 		DrawableHelper.fill(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
 	}
 
-	public boolean mouseOver(int minX, int minY, int maxX, int maxY) {
+	protected boolean mouseOver(int minX, int minY, int maxX, int maxY) {
 		return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY < maxY;
 	}
 

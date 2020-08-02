@@ -51,11 +51,11 @@ public class Fullbright extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSettings().get(0).asMode().mode == 0) {
 			if (mc.options.gamma < 16) mc.options.gamma += 1.2;
-		} else if (getSetting(0).asMode().mode == 1) {
+		} else if (getSettings().get(0).asMode().mode == 1) {
 			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 1, 5));
-		}/* else if (getSetting(0).toMode().mode == 2) {
+		}/* else if (getSettings().get(0).toMode().mode == 2) {
 			for (int i = 0; i < 16; i++) {
 				if (mc.world.dimension.getLightLevelToBrightness()[i] != 1) {
 					mc.world.dimension.getLightLevelToBrightness()[i] = 1;

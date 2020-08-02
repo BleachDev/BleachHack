@@ -68,9 +68,9 @@ public class Scaffold extends Module {
 		if (slot == -1) return;
 
 		mc.player.inventory.selectedSlot = slot;
-		double range = getSetting(0).asSlider().getValue();
-		int mode = getSetting(1).asMode().mode;
-		boolean rotate = getSetting(2).asToggle().state;
+		double range = getSettings().get(0).asSlider().getValue();
+		int mode = getSettings().get(1).asMode().mode;
+		boolean rotate = getSettings().get(2).asToggle().state;
 
 		if (mode == 0) {
 			for (int r = 0; r < 5; r++) {
@@ -92,7 +92,7 @@ public class Scaffold extends Module {
 						cap++;
 					}
 
-					if (cap > getSetting(3).asSlider().getValue()) return;
+					if (cap > getSettings().get(3).asSlider().getValue()) return;
 				}
 			}
 		}

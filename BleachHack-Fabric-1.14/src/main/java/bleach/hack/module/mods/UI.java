@@ -18,10 +18,10 @@
 package bleach.hack.module.mods;
 
 import java.awt.Color;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
@@ -51,100 +51,68 @@ import net.minecraft.world.dimension.DimensionType;
 public class UI extends Module {
 
 	public List<String> infoList = new ArrayList<>();
+	private int count = 0;
 	private long prevTime = 0;
 	private double tps = 20;
 	private long lastPacket = 0;
 
 	public UI() {
 		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle("Arraylist", true).withDesc("Shows the module list"), // 0
-				new SettingToggle("Extra Line", false).withDesc("Adds a extra line to the front of the arralist"), // 1
-				new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist"), // 2
-				new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 3
-				new SettingToggle("Ping", true).withDesc("Shows your ping"), // 4
-				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 5
-				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 6
-				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server is lagging"), // 7
-				new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 8
-				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), // 9
-				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 10
-						new SettingMode("Damage: ", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
-				new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 11
-						new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"),
-						new SettingToggle("Year", false).withDesc("Shows the current year in the time")),
-				new SettingSlider("HueBright: ", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 12
-				new SettingSlider("HueSat: ", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 13
-				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 14
-				new SettingMode("Info: ", "BL", "TR", "BR").withDesc("Where on the screan to show the info")); // 15
+				new SettingToggle("Arraylist", true), // 0
+				new SettingToggle("Extra Line", false), // 1
+				new SettingToggle("Watermark", true), // 2
+				new SettingToggle("FPS", true), // 3
+				new SettingToggle("Ping", true), // 4
+				new SettingToggle("Coords", true), // 5
+				new SettingToggle("TPS", true), // 6
+				new SettingToggle("Lag-Meter", true), // 7
+				new SettingToggle("Server", false), // 8
+				new SettingToggle("Players", false), // 9
+				new SettingToggle("Armor", true), // 10
+				new SettingToggle("TimeStamp", false), // 11
+				new SettingSlider("HueBright: ", 0, 1, 1, 2), // 12
+				new SettingSlider("HueSat: ", 0, 1, 0.5, 2), // 13
+				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1), // 14
+				new SettingMode("Info: ", "Down Left", "Top Right", "Down Right")); // 15
 	}
 
 	@Subscribe
 	public void onDrawOverlay(EventDrawOverlay event) {
 		infoList.clear();
 
-		int arrayCount = 0;
-		if ((getSetting(0).asToggle().state || getSetting(2).asToggle().state) && !mc.options.debugEnabled) {
+		if (getSettings().get(0).asToggle().state && !mc.options.debugEnabled) {
 			List<String> lines = new ArrayList<>();
 
-			if (getSetting(2).asToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
+			for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
 
-			if (getSetting(0).asToggle().state) {
-				for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
-
-				lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
-			}
+			lines.sort((a, b) -> Integer.compare(mc.textRenderer.getStringWidth(b), mc.textRenderer.getStringWidth(a)));
+			if (getSettings().get(2).asToggle().state) lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 
 			//new colors
 			int color = getRainbowFromSettings(0);
-			int extra = getSetting(1).asToggle().state ? 1 : 0;
+			count = 0;
+			int extra = getSettings().get(1).asToggle().state ? 1 : 0;
 			for (String s: lines) {
-				color = getRainbowFromSettings(arrayCount);
-				DrawableHelper.fill(0, arrayCount*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(arrayCount*10), 0x70003030);
-				DrawableHelper.fill(0, arrayCount*10, extra, 10+(arrayCount*10), color);
-				DrawableHelper.fill(mc.textRenderer.getStringWidth(s)+3+extra, (arrayCount*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(arrayCount*10), color);
-
-				if (arrayCount + 1 < lines.size()) {
-					DrawableHelper.fill(mc.textRenderer.getStringWidth(lines.get(arrayCount + 1))+4+extra, 10+(arrayCount*10),
-							mc.textRenderer.getStringWidth(s)+4+extra, 11+(arrayCount*10), color);
+				color = getRainbowFromSettings(count);
+				DrawableHelper.fill(0, count*10, mc.textRenderer.getStringWidth(s)+3+extra, 10+(count*10), 0x70003030);
+				DrawableHelper.fill(0, count*10, extra, 10+(count*10), color);
+				DrawableHelper.fill(mc.textRenderer.getStringWidth(s)+3+extra, (count*10), mc.textRenderer.getStringWidth(s)+4+extra, 10+(count*10), color);
+				if (count + 1 < lines.size()) {
+					DrawableHelper.fill(mc.textRenderer.getStringWidth(lines.get(count + 1))+4+extra, 10+(count*10),
+							mc.textRenderer.getStringWidth(s)+4+extra, 11+(count*10), color);
 				}
-
-				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(arrayCount*10), color);
-				arrayCount++;
+				mc.textRenderer.drawWithShadow(s, 2+extra, 1+(count*10), color);
+				count++;
 			}
 
-			if (!lines.isEmpty()) {
-				DrawableHelper.fill(0, (arrayCount*10), mc.textRenderer.getStringWidth(lines.get(arrayCount-1))+4+extra, 1+(arrayCount*10), color);
-			}
-		}
-		
-		if (getSetting(9).asToggle().state && !mc.options.debugEnabled) {
-			mc.textRenderer.drawWithShadow("Players:", 2, 4+arrayCount*10, 0xff0000);
-			arrayCount++;
-
-			for (Entity e: mc.world.getPlayers().stream().sorted(
-					(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
-					.collect(Collectors.toList())) {
-				if (e == mc.player) continue;
-				
-				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
-
-				String text = "" + e.getDisplayName().getString() + " §7|§r " +
-						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
-						+ " (" + dist + "m)";
-
-				mc.textRenderer.drawWithShadow(text, 2, 4+arrayCount*10,
-						new Color(255 - Math.min(dist * 3, 255), Math.min(dist * 3, 255), 0).brighter().getRGB());
-				arrayCount++;
-			}
+			DrawableHelper.fill(0, (count*10), mc.textRenderer.getStringWidth(lines.get(count-1))+4+extra, 1+(count*10), color);
 		}
 
-		if (getSetting(11).asToggle().state) {
-			infoList.add("§7Time: §e" + new SimpleDateFormat("MMM dd HH:mm:ss"
-					+ (getSetting(11).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-					+ (getSetting(11).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
+		if (getSettings().get(11).asToggle().state) {
+			infoList.add("§7Time: §e" + Calendar.getInstance(TimeZone.getDefault()).getTime().toString());
 		}
 
-		if (getSetting(5).asToggle().state) {
+		if (getSettings().get(5).asToggle().state) {
 			boolean nether = mc.player.dimension == DimensionType.THE_NETHER;
 			BlockPos pos = mc.player.getBlockPos();
 			Vec3d vec = mc.player.getPos();
@@ -154,25 +122,19 @@ public class UI extends Module {
 			infoList.add("XYZ: " + (nether ? "§4" : "§b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 			+ " §7[" + (nether ? "§b" : "§4") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "§7]");
 		}
-		
-		if (getSetting(8).asToggle().state) {
-			String server = "Singleplayer";
-			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
-			infoList.add("§7Server: §d" + server);
-		}
 
-		if (getSetting(3).asToggle().state) {
+		if (getSettings().get(3).asToggle().state) {
 			int fps = MinecraftClient.getCurrentFps();
 			infoList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
 		}
 
-		if (getSetting(4).asToggle().state) {
+		if (getSettings().get(4).asToggle().state) {
 			int ping = 0;
 			try{ mc.getNetworkHandler().getPlayerListEntry(mc.player.getGameProfile().getId()).getLatency(); } catch (Exception e) {}
 			infoList.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
 		}
 
-		if (getSetting(6).asToggle().state) {
+		if (getSettings().get(6).asToggle().state) {
 			String suffix = "§7";
 			if (lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
 			else if (lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
@@ -182,7 +144,7 @@ public class UI extends Module {
 			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 		}
 
-		if (getSetting(7).asToggle().state) {
+		if (getSettings().get(7).asToggle().state) {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
@@ -191,7 +153,35 @@ public class UI extends Module {
 			}
 		}
 
-		if (getSetting(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
+		if (getSettings().get(8).asToggle().state) {
+			String server = "";
+			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
+			DrawableHelper.fill(mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 4, 2, mc.window.getScaledWidth() - 3, 12, 0xa0000000);
+			mc.textRenderer.drawWithShadow(server, mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(server) - 3, 3, 0xb0b0b0);
+		}
+
+		if (getSettings().get(9).asToggle().state && !mc.options.debugEnabled) {
+			DrawableHelper.fill(0, 3+(count*10), mc.textRenderer.getStringWidth("Players:")+4, 13+(count*10), 0x40000000);
+			mc.textRenderer.drawWithShadow("Players:", 2, 4+count*10, 0xff0000);
+			count++;
+
+			for (Entity e: mc.world.getPlayers().stream().sorted(
+					(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
+					.collect(Collectors.toList())) {
+				if (e == mc.player) continue;
+
+				String text = e.getDisplayName().asFormattedString() + " | " +
+						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
+						+ " (" + Math.round(mc.player.getPos().distanceTo(e.getPos())) + "m)";
+
+				DrawableHelper.fill(0, 3+(count*10), mc.textRenderer.getStringWidth(text)+4, 13+(count*10), 0x40000000);
+				mc.textRenderer.drawWithShadow(text, 2, 4+count*10,
+						0xf00000 + (int) Math.min(mc.player.getPos().distanceTo(e.getPos()) * 3, 255));
+				count++;
+			}
+		}
+
+		if (getSettings().get(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -206,38 +196,32 @@ public class UI extends Module {
 
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 				mc.getItemRenderer().zOffset = 200F;
-				
-				if (getSetting(10).asToggle().getChild(0).asMode().mode > 0) {
-					mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, is, x, y);
-				}
-				
+				mc.getItemRenderer().renderGuiItemIcon(is, x, y);
 				mc.getItemRenderer().zOffset = 0F;
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-				if (getSetting(10).asToggle().getChild(0).asMode().mode != 1) {
-					GL11.glPushMatrix();
-					GL11.glScaled(0.75, 0.75, 0.75);
-					String s = is.getCount() > 1 ? "x" + is.getCount() : "";
-					mc.textRenderer.drawWithShadow(s, (x + 19 - mc.textRenderer.getStringWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
-	
-					if (is.isDamageable()) {
-						String dur = is.getMaxDamage() - is.getDamage() + "";
-						int durcolor = 0x000000;
-						try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
-	
-						mc.textRenderer.drawWithShadow(dur, (x + 10 - mc.textRenderer.getStringWidth(dur) / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
-					}
-	
-					GL11.glPopMatrix();
+				GL11.glPushMatrix();
+				GL11.glScaled(0.75, 0.75, 0.75);
+				String s = is.getCount() > 1 ? "x" + is.getCount() : "";
+				mc.textRenderer.drawWithShadow(s, (x + 19 - mc.textRenderer.getStringWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
+
+				if (is.isDamageable()) {
+					String dur = is.getMaxDamage() - is.getDamage() + "";
+					int durcolor = 0x000000;
+					try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
+
+					mc.textRenderer.drawWithShadow(dur + "", (x + 10 - mc.textRenderer.getStringWidth(dur + "") / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
 				}
+
+				GL11.glPopMatrix();
 			}
-			
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
 		}
 
 		int count2 = 0;
-		int infoMode = getSetting(15).asMode().mode;
+		int infoMode = getSettings().get(15).asMode().mode;
 		for (String s: infoList) {
 			mc.textRenderer.drawWithShadow(s,
 					infoMode == 0 ? 2 : mc.window.getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
@@ -278,9 +262,9 @@ public class UI extends Module {
 
 		if (ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
 
-		return getRainbow((float) ui.getSetting(13).asSlider().getValue(),
-				(float) ui.getSetting(12).asSlider().getValue(),
-				ui.getSetting(14).asSlider().getValue(),
+		return getRainbow((float) ui.getSettings().get(13).asSlider().getValue(),
+				(float) ui.getSettings().get(12).asSlider().getValue(),
+				ui.getSettings().get(14).asSlider().getValue(),
 				offset);
 	}
 

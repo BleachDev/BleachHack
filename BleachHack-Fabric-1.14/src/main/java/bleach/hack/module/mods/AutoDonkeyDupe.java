@@ -94,8 +94,8 @@ public class AutoDonkeyDupe extends Module {
 			return;
 		}
 
-		int slots = getSetting(0).asSlider().getValue() <= 0 ? getInvSize(mc.player.getVehicle())
-				: Math.min((int) getSetting(0).asSlider().getValue(), getInvSize(mc.player.getVehicle()));
+		int slots = getSettings().get(0).asSlider().getValue() <= 0 ? getInvSize(mc.player.getVehicle())
+				: Math.min((int) getSettings().get(0).asSlider().getValue(), getInvSize(mc.player.getVehicle()));
 
 		for (Entity e: mc.world.getEntities()) {
 			if (e.getPos().distanceTo(mc.player.getPos()) < 6
@@ -112,7 +112,7 @@ public class AutoDonkeyDupe extends Module {
 			return;
 		}
 
-		boolean instant = getSetting(1).asMode().mode == 0;
+		boolean instant = getSettings().get(1).asMode().mode == 0;
 
 		if (slots == -1) {
 			if (entity.hasChest() || mc.player.inventory.getMainHandStack().getItem() == Items.CHEST) {
@@ -174,7 +174,7 @@ public class AutoDonkeyDupe extends Module {
 							if (mc.player.container.slotList.get(i).getStack().getItem() == Items.CHEST) continue;
 							if (!(mc.player.container.slotList.get(i).getStack().getItem() instanceof BlockItem
 									&& ((BlockItem) mc.player.container.slotList.get(i).getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
-									&& getSetting(2).asToggle().state) continue;
+									&& getSettings().get(2).asToggle().state) continue;
 							slotsToMove.add(i);
 
 							if (slotsToMove.size() >= slots) break;

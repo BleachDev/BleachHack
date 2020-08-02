@@ -26,7 +26,7 @@ public class MouseFriend extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		int setting = getSetting(0).asMode().mode;
+		int setting = getSettings().get(0).asMode().mode;
 		int button = setting == 0 ? GLFW.GLFW_MOUSE_BUTTON_MIDDLE : setting == 1 ? GLFW.GLFW_MOUSE_BUTTON_RIGHT : setting + 2;
 
 		if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), button) == 1 && !antiSpamClick) {

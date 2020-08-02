@@ -19,7 +19,6 @@ package bleach.hack.module.mods;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.gui.clickgui.SettingColor;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
@@ -40,25 +39,18 @@ public class Tracers extends Module {
 
 	public Tracers() {
 		super("Tracers", KEY_UNBOUND, Category.RENDER, "Shows lines to entities you select.",
-				new SettingToggle("Players", true).withDesc("Show Player Tracers").withChildren(
-						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players"),
-						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Tracer color for friends")),
-				new SettingToggle("Mobs", false).withDesc("Show Mob Tracers").withChildren(
-						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Tracer color for mobs")),
-				new SettingToggle("Animals", false).withDesc("Show Animal Tracers").withChildren(
-						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Tracer color for animals")),
-				new SettingToggle("Items", true).withDesc("Show Item Tracers").withChildren(
-						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Tracer color for items")),
-				new SettingToggle("Crystals", true).withDesc("Show End Crystal Tracers").withChildren(
-						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals")),
-				new SettingToggle("Vehicles", false).withDesc("Show Vehicle Tracers").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles (minecarts/boats)")),
+				new SettingToggle("Players", true),
+				new SettingToggle("Mobs", false),
+				new SettingToggle("Animals", false),
+				new SettingToggle("Items", false),
+				new SettingToggle("Crystals", false),
+				new SettingToggle("Vehicles", false),
 				new SettingSlider("Thick: ", 0.1, 5, 1.5, 1));
 	}
 
 	@Subscribe
 	public void onRender(EventWorldRender event) {
-		final float thick = (float) getSetting(6).asSlider().getValue();
+		final float thick = (float) getSettings().get(6).asSlider().getValue();
 
 		for (Entity e: mc.world.getEntities()) {
 			Vec3d vec = e.getPos();
@@ -66,26 +58,31 @@ public class Tracers extends Module {
 			Vec3d vec2 = new Vec3d(0, 0, 75).rotateX(-(float) Math.toRadians(mc.cameraEntity.pitch))
 					.rotateY(-(float) Math.toRadians(mc.cameraEntity.yaw))
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
-			
-			float[] col = null;
 
-			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSetting(0).asToggle().state) {
-				col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(e.getName().asString()) ? 1 : 0).asColor().getRGBFloat();
-			} else if (e instanceof Monster && getSetting(1).asToggle().state) {
-				col = getSetting(1).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state) {
-				col = getSetting(2).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if (e instanceof ItemEntity && getSetting(3).asToggle().state) {
-				col = getSetting(3).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if (e instanceof EnderCrystalEntity && getSetting(4).asToggle().state) {
-				col = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
-				col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
+			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSettings().get(0).asToggle().state) {
+				boolean friend = BleachHack.friendMang.has(e.getName().asString());
+				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z, friend ? 0.35f : 1f, friend ? 1f : 0f, friend ? 1f : 0f,thick);
+				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z, friend ? 0.35f : 1f, friend ? 1f : 0f, friend ? 1f : 0f,thick);
 			}
-			
-			if (col != null) {
-				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z, col[0], col[1], col[2],thick);
-				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z, col[0], col[1], col[2],thick);
+			else if (e instanceof Monster && getSettings().get(1).asToggle().state) {
+				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0f,0f,0f,thick);
+				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0f,0f,0f,thick);
+			}
+			else if (EntityUtils.isAnimal(e) && getSettings().get(2).asToggle().state) {
+				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0f,1f,0f,thick);
+				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0f,1f,0f,thick);
+			}
+			else if (e instanceof ItemEntity && getSettings().get(3).asToggle().state) {
+				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f,0.7f,0f,thick);
+				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f,0.7f,0f,thick);
+			}
+			else if (e instanceof EnderCrystalEntity && getSettings().get(4).asToggle().state) {
+				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,1f, 0f, 1f,thick);
+				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,1f, 0f, 1f,thick);
+			}
+			else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSettings().get(5).asToggle().state) {
+				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z,0.5f, 0.5f, 0.5f,thick);
+				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z,0.5f, 0.5f, 0.5f,thick);
 			}
 		}
 	}

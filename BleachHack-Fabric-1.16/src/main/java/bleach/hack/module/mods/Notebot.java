@@ -93,7 +93,7 @@ public class Notebot extends Module {
 					for (int z = -4; z <= 4; z++) {
 						BlockPos pos = mc.player.getBlockPos().add(x, y, z);
 						if (!isNoteblock(pos)) continue;
-						if (getSetting(3).asToggle().state) {
+						if (getSettings().get(3).asToggle().state) {
 							if (blockTunes.get(pos) != null) if (!blockTunes.get(pos).equals(i.get(0))) continue;
 							blockTunes.put(pos, i.get(0));
 							break loop;
@@ -108,7 +108,7 @@ public class Notebot extends Module {
 			if (found != null) blockTunes.put(found, i.get(0));
 		}
 
-		if (tunes.size() > blockTunes.size() && !getSetting(3).asToggle().state) {
+		if (tunes.size() > blockTunes.size() && !getSettings().get(3).asToggle().state) {
 			BleachLogger.warningMessage("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
 		}
 	}
@@ -127,25 +127,25 @@ public class Notebot extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		/* Tune Noteblocks */
-		if (getSetting(0).asToggle().state) {
+		if (getSettings().get(0).asToggle().state) {
 			for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 				if (getNote(e.getKey()) != e.getValue()) {
-					if (getSetting(1).asMode().mode <= 2) {
-						if (getSetting(1).asMode().mode >= 1) {
+					if (getSettings().get(1).asMode().mode <= 2) {
+						if (getSettings().get(1).asMode().mode >= 1) {
 							if (mc.player.age % 2 == 0 ||
-									(mc.player.age % 3 == 0 && getSetting(1).asMode().mode == 2)) return;
+									(mc.player.age % 3 == 0 && getSettings().get(1).asMode().mode == 2)) return;
 						}
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
 								new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
-					} else if (getSetting(1).asMode().mode >= 3) {
-						if (tuneDelay < (getSetting(1).asMode().mode == 3 ? 3 : 5)) {
+					} else if (getSettings().get(1).asMode().mode >= 3) {
+						if (tuneDelay < (getSettings().get(1).asMode().mode == 3 ? 3 : 5)) {
 							tuneDelay++;
 							return;
 						}
 
 						int tunes = getNote(e.getKey());
 						int reqTunes = 0;
-						for (int i = 0; i < (getSetting(1).asMode().mode == 3 ? 5 : 25); i++) {
+						for (int i = 0; i < (getSettings().get(1).asMode().mode == 3 ? 5 : 25); i++) {
 							if (tunes == 25) tunes = 0;
 							if (tunes == e.getValue()) break;
 							tunes++;
@@ -164,7 +164,7 @@ public class Notebot extends Module {
 		/* Loop */
 		boolean loopityloop = true;
 		for (List<Integer> n: notes) if (timer - 10 < n.get(0)) loopityloop = false;
-		if (getSetting(4).asToggle().state && loopityloop) {
+		if (getSettings().get(4).asToggle().state && loopityloop) {
 			try {
 				List<String> files = new ArrayList<>();
 				Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
@@ -175,7 +175,7 @@ public class Notebot extends Module {
 				setToggled(true);
 				BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
 			} catch (IOException e) {}
-		} else if (getSetting(2).asToggle().state && loopityloop) {
+		} else if (getSettings().get(2).asToggle().state && loopityloop) {
 			if (loopityloop) timer = -10;
 		}
 
@@ -189,7 +189,7 @@ public class Notebot extends Module {
 		for (Entry<BlockPos, Integer> e: blockTunes.entrySet()) {
 			for (List<Integer> i: curNotes) {
 				if (isNoteblock(e.getKey()) && (i.get(1) == (getNote(e.getKey()))
-						&& (getSetting(3).asToggle().state
+						&& (getSettings().get(3).asToggle().state
 								|| i.get(2) == (getInstrument(e.getKey()).ordinal())))) playBlock(e.getKey());
 			}
 		}
@@ -210,7 +210,7 @@ public class Notebot extends Module {
 	public boolean isNoteblock(BlockPos pos) {
 		/* Checks if this block is a noteblock and the noteblock can be played */
 		if (mc.world.getBlockState(pos).getBlock() instanceof NoteBlock) {
-			return mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
+			return mc.world.getBlockState(pos.method_30931()).getBlock() == Blocks.AIR;
 		}
 		return false;
 	}
