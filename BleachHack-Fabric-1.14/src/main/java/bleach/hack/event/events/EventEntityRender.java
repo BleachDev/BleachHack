@@ -18,17 +18,25 @@
 package bleach.hack.event.events;
 
 import bleach.hack.event.Event;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 
-public class EventLivingRender extends Event {
+public class EventEntityRender extends Event {
 
-	private LivingEntity entity;
+	protected Entity entity;
 
-	public EventLivingRender(LivingEntity entity) {
-		this.entity = entity;
+	public Entity getEntity() {
+		return entity;
 	}
 
-	public LivingEntity getEntity() {
-		return entity;
+	public static class Render extends EventEntityRender {
+		public Render(Entity entity) {
+			this.entity = entity;
+		}
+	}
+
+	public static class Label extends EventEntityRender {
+		public Label(Entity entity) {
+			this.entity = entity;
+		}
 	}
 }

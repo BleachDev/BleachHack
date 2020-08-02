@@ -17,130 +17,115 @@
  */
 package bleach.hack.utils.file;
 
+import java.util.HashMap;
 import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.Map.Entry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.SettingBase;
-import bleach.hack.gui.clickgui.SettingMode;
-import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.FriendManager;
-import net.minecraft.util.math.MathHelper;
 
 public class BleachFileHelper {
-
-	private static Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
+	
+	public static boolean SCHEDULE_SAVE_MODULES = false;
+	public static boolean SCHEDULE_SAVE_FRIENDS = false;
+	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
 
 	public static void saveModules() {
-		BleachFileMang.createEmptyFile("modules.txt");
-
-		String lines = "";
+		SCHEDULE_SAVE_MODULES = false;
+		
+		JsonObject jo = new JsonObject();
+		
 		for (Module m: ModuleManager.getModules()) {
 			if (m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
-			lines += m.getName() + ":" + m.isToggled() + "\n";
+			
+			JsonObject mo = new JsonObject();
+			
+			if (m.isToggled()) {
+				mo.add("toggled", new JsonPrimitive(true));
+			}
+			
+			if (m.getKey() >= 0) {
+				mo.add("bind", new JsonPrimitive(m.getKey()));
+			}
+			
+			if (!m.getSettings().isEmpty()) {
+				JsonObject so = new JsonObject();
+				
+				for (SettingBase s: m.getSettings()) {
+					String name = s.getName();
+					
+					int extra = 0;
+					while (so.has(name)) {
+						extra++;
+						name = s.getName() + extra;
+					}
+					
+					so.add(name, s.saveSettings());
+				}
+				
+				mo.add("settings", so);
+			}
+			
+			if (mo.size() != 0) {
+				jo.add(m.getName(), mo);
+			}
 		}
-
-		BleachFileMang.appendFile(lines, "modules.txt");
+		
+		BleachJsonHelper.setJsonFile(jo, "modules.json");
 	}
 
 	public static void readModules() {
-		List<String> lines = BleachFileMang.readFileLines("modules.txt");
-
-		for (Module m: ModuleManager.getModules()) {
-			for (String s: lines) {
-				String[] line = s.split(":");
-				try {
-					if (line[0].contains(m.getName()) && line[1].contains("true")) {
-						m.toggle();
-						break;
+		JsonObject jo = BleachJsonHelper.readJsonFile("modules.json");
+		
+		if (jo == null) return;
+		
+		for (Entry<String, JsonElement> e: jo.entrySet()) {
+			Module mod = ModuleManager.getModuleByName(e.getKey());
+			
+			if (mod == null) continue;
+			
+			if (e.getValue().isJsonObject()) {
+				JsonObject mo = e.getValue().getAsJsonObject();
+				if (mo.has("toggled")) {
+					mod.setToggled(true);
+				}
+				
+				if (mo.has("bind") && mo.get("bind").isJsonPrimitive() && mo.get("bind").getAsJsonPrimitive().isNumber()) {
+					mod.setKey(mo.get("bind").getAsInt());
+				}
+				
+				if (mo.has("settings") && mo.get("settings").isJsonObject()) {
+					// Map to keep track if there are multiple settings with the same name
+					HashMap<String, Integer> sNames = new HashMap<>();
+					
+					for (Entry<String, JsonElement> se: mo.get("settings").getAsJsonObject().entrySet()) {
+						for (SettingBase sb: mod.getSettings()) {
+							String name = sNames.containsKey(sb.getName()) ? sb.getName() + sNames.get(sb.getName()) : sb.getName();
+							
+							if (name.equals(se.getKey())) {
+								sb.readSettings(se.getValue());
+								sNames.put(sb.getName(), sNames.containsKey(sb.getName()) ? sNames.get(sb.getName()) + 1 : 1);
+								break;
+							}
+						}
 					}
-				} catch (Exception e) {}
-			}
-		}
-	}
-
-	public static void saveModSettings() {
-		BleachFileMang.createEmptyFile("settings.txt");
-
-		String lines = "";
-		for (Module m: ModuleManager.getModules()) {
-			String line = m.getName();
-			int count = 0;
-
-			for (SettingBase set: m.getSettings()) {
-				if (set instanceof SettingSlider) line += ":" + m.getSettings().get(count).asSlider().getValue();
-				if (set instanceof SettingMode) line += ":" + m.getSettings().get(count).asMode().mode;
-				if (set instanceof SettingToggle) line += ":" + m.getSettings().get(count).asToggle().state;
-				count++;
-			}
-			lines += line + "\n";
-		}
-
-		BleachFileMang.appendFile(lines, "settings.txt");
-	}
-
-	public static void readSettings() {
-		List<String> lines = BleachFileMang.readFileLines("settings.txt");
-
-		for (Module m: ModuleManager.getModules()) {
-			for (String s: lines) {
-				String[] line = s.split(":");
-				if (!line[0].startsWith(m.getName())) continue;
-				int count = 0;
-
-				for (SettingBase set: m.getSettings()) {
-					try {
-						if (set instanceof SettingSlider) {
-							m.getSettings().get(count).asSlider().setValue(Double.parseDouble(line[count+1]));}
-						if (set instanceof SettingMode) {
-							m.getSettings().get(count).asMode().mode = MathHelper.clamp(Integer.parseInt(line[count+1]),
-									0, m.getSettings().get(count).asMode().modes.length - 1);}
-						if (set instanceof SettingToggle) {
-							m.getSettings().get(count).asToggle().state = Boolean.parseBoolean(line[count+1]);}
-					} catch (Exception e) {}
-					count++;
 				}
 			}
 		}
 	}
 
-	public static void saveBinds() {
-		BleachFileMang.createEmptyFile("binds.txt");
-
-		String lines = "";
-		for (Module m: ModuleManager.getModules()) {
-			lines += m.getName() + ":" + m.getKey() + "\n";
-		}
-
-		BleachFileMang.appendFile(lines, "binds.txt");
-	}
-
-	public static void readBinds() {
-		List<String> lines = BleachFileMang.readFileLines("binds.txt");
-
-		for (Module m: ModuleManager.getModules()) {
-			for (String s: lines) {
-				String[] line = s.split(":");
-				if (!line[0].startsWith(m.getName())) continue;
-				try { m.setKey(Integer.parseInt(line[line.length - 1])); } catch (Exception e) {}
-			}
-		}
-	}
-
 	public static void saveClickGui() {
+		SCHEDULE_SAVE_CLICKGUI = false;
+		
 		BleachFileMang.createEmptyFile("clickgui.txt");
 
 		String text = "";
@@ -171,6 +156,8 @@ public class BleachFileHelper {
 	}
 
 	public static void saveFriends() {
+		SCHEDULE_SAVE_FRIENDS = false;
+		
 		String toWrite = "";
 		for (String s: BleachHack.friendMang.getFriends()) toWrite += s + "\n";
 
@@ -179,68 +166,17 @@ public class BleachFileHelper {
 	}
 
 	public static String readMiscSetting(String key) {
-		List<String> lines = BleachFileMang.readFileLines("misc.json");
-
-		if (lines.isEmpty()) return null;
-
-		String merged = String.join("\n", lines);
-
-		String value = null;
+		JsonElement element = BleachJsonHelper.readJsonElement(key, "misc.json");
 
 		try {
-			JsonElement mainJE = new JsonParser().parse(merged);
-
-			if (mainJE.isJsonObject()) {
-				JsonObject mainJO = mainJE.getAsJsonObject();
-
-				if (mainJO.has(key)) {
-					value = mainJO.get(key).getAsString();
-				}
-			}
-		} catch (JsonParseException e) {
-			System.err.println("Json error Trying to read misc settings! DELETING ENTIRE FILE!");
-			e.printStackTrace();
-
-			BleachFileMang.deleteFile("misc.json");
+			return element.getAsString();
+		} catch (Exception e) {
+			return null;
 		}
-
-		return value;
 	}
 
 	public static void saveMiscSetting(String key, String value) {
-		JsonObject file = null;
-		boolean overwrite = false;
-
-		if (!BleachFileMang.fileExists("misc.json")) {
-			overwrite = true;
-		} else {
-			List<String> lines = BleachFileMang.readFileLines("misc.json");
-
-			if (lines.isEmpty()) {
-				overwrite = true;
-			} else {
-				String merged = String.join("\n", lines);
-
-				try {
-					file = new JsonParser().parse(merged).getAsJsonObject();
-				} catch (Exception e) {
-					e.printStackTrace();
-					overwrite = true;
-				}
-			}
-		}
-
-		BleachFileMang.createEmptyFile("misc.json");
-		if (overwrite) {
-			JsonObject mainJO = new JsonObject();
-			mainJO.add(key, new JsonPrimitive(value));
-
-			BleachFileMang.appendFile(jsonWriter.toJson(mainJO), "misc.json");
-		} else {
-			file.add(key, new JsonPrimitive(value));
-
-			BleachFileMang.appendFile(jsonWriter.toJson(file), "misc.json");
-		}
+		BleachJsonHelper.addJsonElement(key, new JsonPrimitive(value), "misc.json");
 	}
 
 }

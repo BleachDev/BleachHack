@@ -17,7 +17,9 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.BlockPos;
@@ -27,14 +29,17 @@ import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class Flight extends Module {
+	
+	private boolean flyTick = false;
 
 	public Flight() {
 		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
-				new SettingMode("Mode: ", "Normal","Static","Jetpack"),
+				new SettingMode("Mode: ", "Normal","Static","Jetpack", "ec.me"),
 				new SettingSlider("Speed: ", 0, 5, 1, 1),
 				new SettingMode("AntiKick: ", "Off","Fall","Bob","Packet"));
 	}
@@ -48,21 +53,21 @@ public class Flight extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		float speed = (float) getSettings().get(1).asSlider().getValue();
+		float speed = (float) getSetting(1).asSlider().getValue();
 
-		if (mc.player.age % 20 == 0 && getSettings().get(2).asMode().mode == 3 && !(getSettings().get(0).asMode().mode == 2)) {
+		if (mc.player.age % 20 == 0 && getSetting(2).asMode().mode == 3 && !(getSetting(0).asMode().mode == 2)) {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y - 0.06, mc.player.z, false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.x, mc.player.y + 0.06, mc.player.z, true));
 		}
 
-		if (getSettings().get(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().mode == 0) {
 			mc.player.abilities.setFlySpeed(speed / 10);
 			mc.player.abilities.allowFlying = true;
 			mc.player.abilities.flying = true;
-		} else if (getSettings().get(0).asMode().mode == 1) {
-			if (getSettings().get(2).asMode().mode == 0 || getSettings().get(2).asMode().mode == 3) mc.player.setVelocity(0, 0, 0);
-			else if (getSettings().get(2).asMode().mode == 1 && WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.069, mc.player.getPosVector().getZ())).getBlock())) mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
-			else if (getSettings().get(2).asMode().mode == 2) mc.player.setVelocity(0, mc.player.age % 40 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() + 1.15, mc.player.getPosVector().getZ())).getBlock()) ? 0.15 : 0) : mc.player.age % 20 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.15, mc.player.getPosVector().getZ())).getBlock()) ? -0.15 : 0) : 0, 0);
+		} else if (getSetting(0).asMode().mode == 1) {
+			if (getSetting(2).asMode().mode == 0 || getSetting(2).asMode().mode == 3) mc.player.setVelocity(0, 0, 0);
+			else if (getSetting(2).asMode().mode == 1 && WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.069, mc.player.getPosVector().getZ())).getBlock())) mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
+			else if (getSetting(2).asMode().mode == 2) mc.player.setVelocity(0, mc.player.age % 40 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() + 1.15, mc.player.getPosVector().getZ())).getBlock()) ? 0.15 : 0) : mc.player.age % 20 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() - 0.15, mc.player.getPosVector().getZ())).getBlock()) ? -0.15 : 0) : 0, 0);
 			Vec3d forward = new Vec3d(0, 0, speed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 
@@ -73,9 +78,32 @@ public class Flight extends Module {
 			if (mc.options.keyLeft.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(strafe.x, 0, strafe.z));
 			if (mc.options.keyRight.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(-strafe.x, 0, -strafe.z));
 
-		} else if (getSettings().get(0).asMode().mode == 2) {
+		} else if (getSetting(0).asMode().mode == 2) {
 			if (!mc.options.keyJump.isPressed()) return;
 			mc.player.setVelocity(mc.player.getVelocity().x, speed / 3, mc.player.getVelocity().z);
+		} else if (getSetting(0).asMode().mode == 3) {
+			if (InputUtil.isKeyPressed(mc.window.getHandle(), InputUtil.fromName(mc.options.keyJump.getName()).getKeyCode())) {
+				mc.player.jump();
+			} else {
+				if (InputUtil.isKeyPressed(mc.window.getHandle(), InputUtil.fromName(mc.options.keySneak.getName()).getKeyCode())) {
+					mc.player.setPosition(mc.player.x, mc.player.y - speed / 10f, mc.player.z);
+				}
+			}
+		}
+	}
+	
+	@Subscribe
+	public void onSendPacket(EventSendPacket event) {
+		if (getSetting(0).asMode().mode == 3 && event.getPacket() instanceof PlayerMoveC2SPacket) {
+			if (!flyTick) {
+				boolean onGround = true;//mc.player.fallDistance >= 0.1f;
+				mc.player.onGround = onGround;
+				FabricReflect.writeField(event.getPacket(), onGround, "field_12891", "onGround");
+				
+				flyTick = true;
+			} else {
+				flyTick = false;
+			}
 		}
 	}
 }

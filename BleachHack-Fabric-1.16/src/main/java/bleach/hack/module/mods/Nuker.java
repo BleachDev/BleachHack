@@ -20,7 +20,6 @@ package bleach.hack.module.mods;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
@@ -29,12 +28,10 @@ import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -70,12 +67,12 @@ public class Nuker extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		double range = getSettings().get(1).asSlider().getValue();
+		double range = getSetting(1).asSlider().getValue();
 		List<BlockPos> blocks = new ArrayList<>();
 
 		/* Add blocks around player */
 		for (int x = (int) range; x >= (int) -range; x--) {
-			for (int y = (int) range; y >= (getSettings().get(4).asToggle().state ? 0 : (int) -range); y--) {
+			for (int y = (int) range; y >= (getSetting(4).asToggle().state ? 0 : (int) -range); y--) {
 				for (int z = (int) range; z >= (int) -range; z--) {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
 					if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos)) continue;
@@ -86,10 +83,7 @@ public class Nuker extends Module {
 
 		if (blocks.isEmpty()) return;
 
-		if (getSettings().get(6).asToggle().state) FabricReflect.writeField(
-				mc.particleManager, Maps.newIdentityHashMap(), "field_3830", "particles");
-
-		if (getSettings().get(7).asMode().mode == 1) blocks.sort((a, b) -> Float.compare(
+		if (getSetting(7).asMode().mode == 1) blocks.sort((a, b) -> Float.compare(
 				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 
 		/* Move the block under the player to last so it doesn't mine itself down without clearing everything above first */
@@ -98,18 +92,20 @@ public class Nuker extends Module {
 			blocks.add(mc.player.getBlockPos().down());
 		}
 
+		Vec3d eyePos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0);
+
 		int broken = 0;
 		for (BlockPos pos: blocks) {
-			if (!getSettings().get(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
+			if (!getSetting(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
 
 			Vec3d vec = Vec3d.of(pos).add(0.5, 0.5, 0.5);
 
-			if (mc.player.getPos().distanceTo(vec) > range + 0.5) continue;
+			if (eyePos.distanceTo(vec) > range + 0.5) continue;
 
 			Direction dir = null;
 			double dist = Double.MAX_VALUE;
 			for (Direction d: Direction.values()) {
-				double dist2 = mc.player.getPos().distanceTo(Vec3d.of(pos.offset(d)).add(0.5, 0.5, 0.5));
+				double dist2 = eyePos.distanceTo(Vec3d.of(pos.offset(d)).add(0.5, 0.5, 0.5));
 				if (dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
 				dist = dist2;
 				dir = d;
@@ -117,23 +113,17 @@ public class Nuker extends Module {
 
 			if (dir == null) continue;
 
-			if (getSettings().get(5).asToggle().state) {
-				float[] prevRot = new float[] {mc.player.yaw, mc.player.pitch};
-				WorldUtils.facePos(vec.x, vec.y, vec.z);
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
-						mc.player.yaw, mc.player.pitch, mc.player.isOnGround()));
-				mc.player.yaw = prevRot[0];
-				mc.player.pitch = prevRot[1];
+			if (getSetting(5).asToggle().state) {
+				WorldUtils.facePosPacket(vec.x, vec.y, vec.z);
 			}
 
-			if (getSettings().get(0).asMode().mode == 1) mc.interactionManager.attackBlock(pos, dir);
-			else mc.interactionManager.updateBlockBreakingProgress(pos, dir);
+			mc.interactionManager.updateBlockBreakingProgress(pos, dir);
 
 			mc.player.swingHand(Hand.MAIN_HAND);
 
 			broken++;
-			if (getSettings().get(0).asMode().mode == 0
-					|| (getSettings().get(0).asMode().mode == 1 && broken >= (int) getSettings().get(8).asSlider().getValue())) return;
+			if (getSetting(0).asMode().mode == 0
+					|| (getSetting(0).asMode().mode == 1 && broken >= (int) getSetting(8).asSlider().getValue())) return;
 		}
 	}
 

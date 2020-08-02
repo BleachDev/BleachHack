@@ -48,7 +48,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				float_1 *= 1.0F + (float)(StatusEffectUtil.getHasteAmplifier(this) + 1) * 0.2F;
 			}
 
-			if (!mod.getSettings().get(4).asToggle().state) {
+			if (!mod.getSetting(4).asToggle().state) {
 				if (this.hasStatusEffect(StatusEffects.MINING_FATIGUE)) {
 					float float_5;
 					switch(this.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
@@ -70,7 +70,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				}
 			}
 
-			if (!mod.getSettings().get(5).asToggle().state) {
+			if (!mod.getSetting(5).asToggle().state) {
 				if (this.isInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
 					float_1 /= 5.0F;
 				}
@@ -80,7 +80,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				}
 			}
 			
-			if (mod.getSettings().get(0).asMode().mode == 1) float_1 *= (float) mod.getSettings().get(3).asSlider().getValue();
+			if (mod.getSetting(0).asMode().mode == 1) float_1 *= (float) mod.getSetting(3).asSlider().getValue();
 
 			ci.setReturnValue(float_1);
 			ci.cancel();

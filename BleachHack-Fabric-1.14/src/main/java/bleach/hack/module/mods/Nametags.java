@@ -19,7 +19,7 @@ package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventLivingRender;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
@@ -28,6 +28,7 @@ import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.WorldRenderUtils;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,76 +39,100 @@ public class Nametags extends Module {
 
 	public Nametags() {
 		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
-				new SettingMode("Armor: ", "H", "V", "None"),
-				new SettingMode("Health: ", "Number", "Bar"),
-				new SettingSlider("Size Players: ", 0.5, 5, 2, 1),
-				new SettingSlider("Size Mobs: ", 0.5, 5, 1, 1),
-				new SettingToggle("Players", true),
-				new SettingToggle("Mobs", false));
+				new SettingMode("Armor: ", "H", "V", "None").withDesc("How to show items/armor"),
+				new SettingMode("Health: ", "Number", "Bar").withDesc("How to show health"),
+				new SettingToggle("Players", true).withDesc("show player nametags").withChildren(
+						new SettingSlider("Size: ", 0.5, 5, 2, 1).withDesc("Size of the nametags")),
+				new SettingToggle("Mobs", false).withDesc("show mobs/animal nametags").withChildren(
+						new SettingSlider("Size: ", 0.5, 5, 1, 1).withDesc("Size of the nametags")),
+				new SettingToggle("Items", true).withDesc("Shows nametags for items").withChildren(
+						new SettingToggle("Custom Name", true).withDesc("Shows the items custom name if it has it"),
+						new SettingSlider("Size: ", 0.5, 5, 1, 1).withDesc("Size of the nametags")));
 	}
 
 	@Subscribe
-	public void onLivingRender(EventLivingRender event) {
-		LivingEntity e = event.getEntity();
+	public void onLivingLabelRender(EventEntityRender.Label event) {
+		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSetting(3).asToggle().state)
+				|| (event.getEntity() instanceof PlayerEntity && getSetting(2).asToggle().state)
+				|| (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state)) event.setCancelled(true);
 
-		/* Color before name */
-		String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
-				? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
+		if (event.getEntity() instanceof ItemEntity) {
+			ItemEntity e = (ItemEntity) event.getEntity();
 
-		if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||
-				((color == "§c" || color == "§6") && !getSettings().get(4).asToggle().state) ||
-				((color == "§5" || color == "§a") && !getSettings().get(5).asToggle().state)) return;
-		if (e.isInvisible()) color = "§e";
+			double scale = Math.max(getSetting(4).asToggle().getChild(1).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
+			if (!e.getName().getString().equals(e.getStack().getName().getString()) && getSetting(4).asToggle().getChild(0).asToggle().state) {
+				WorldRenderUtils.drawText("§6\"" + e.getStack().getName().getString() + "\"",
+						e.prevX + (e.x - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.y - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
+						e.prevZ + (e.z - e.prevZ) * mc.getTickDelta(), scale);
+			}
 
-		double scale = (e instanceof PlayerEntity) ?
-				Math.max(getSettings().get(2).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1):
-					Math.max(getSettings().get(3).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
+			WorldRenderUtils.drawText("§6" + e.getName().getString() + " §e[x" + e.getStack().getCount() + "]",
+					e.prevX + (e.x - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.y - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+					e.prevZ + (e.z - e.prevZ) * mc.getTickDelta(), scale);
+		} else if (event.getEntity() instanceof LivingEntity) {
+			LivingEntity e = (LivingEntity) event.getEntity();
 
-				/* Health bar */
-				String health = "";
-				/* - Add Green Normal Health */
-				for (int i = 0; i < e.getHealth(); i++) health += "§a|";
-				/* - Add Red Empty Health (Remove Based on absorption amount) */
-				for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getHealthMaximum() - e.getHealth()); i++) health += "§e|";
-				/* Add Yellow Absorption Health */
-				for (int i = 0; i < e.getHealthMaximum() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
-				/* Add "+??" to the end if the entity has extra hearts */
-				if (e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()) > 0) {
-					health +=  " §e+" + (int)(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()));
+			/* Color before name */
+			String color = e instanceof Monster ? "§5" : EntityUtils.isAnimal(e)
+					? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
+
+			if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||
+					((color == "§c" || color == "§6") && !getSetting(4).asToggle().state) ||
+					((color == "§5" || color == "§a") && !getSetting(5).asToggle().state)) return;
+			if (e.isInvisible()) color = "§e";
+
+			double scale = (e instanceof PlayerEntity ?
+					Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1) :
+						Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
+
+			// Health bar
+			String health = "";
+			// - Add Green Normal Health
+			for (int i = 0; i < e.getHealth(); i++) health += "§a|";
+			// - Add Red Empty Health (Remove Based on absorption amount)
+			for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getHealthMaximum() - e.getHealth()); i++) health += "§e|";
+			// Add Yellow Absorption Health
+			for (int i = 0; i < e.getHealthMaximum() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "§c|";
+			// Add "+??" to the end if the entity has extra hearts
+			if (e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()) > 0) {
+				health +=  " §e+" + (int)(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()));
+			}
+
+			// Drawing Nametags
+			if (getSetting(1).asMode().mode == 0) {
+				WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getHealthMaximum() + "]",
+						e.x,e.y + e.getHeight() + (0.5f * scale), e.z, scale);
+			} else if (getSetting(1).asMode().mode == 1) {
+				WorldRenderUtils.drawText(color + e.getName().getString(), e.x, e.y + e.getHeight() + (0.5f * scale), e.z, scale);
+				WorldRenderUtils.drawText(health, e.x, e.y + e.getHeight() + (0.75f * scale), e.z, scale);
+			}
+
+			// Drawing Items
+			double c = 0;
+			double higher = getSetting(1).asMode().mode == 1 ? 0.25 : 0;
+
+			if (getSetting(0).asMode().mode == 0) {
+				WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+				WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+
+				for (ItemStack i: e.getArmorItems()) {
+					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
+					c--;
 				}
+			} else if (getSetting(0).asMode().mode == 1) {
+				WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+				WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 
-				/* Drawing Nametags */
-				if (getSettings().get(1).asMode().mode == 0) {
-					WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getHealthMaximum() + "]",
-							e.x,e.y + e.getHeight() + (0.5f * scale), e.z, scale);
-				} else if (getSettings().get(1).asMode().mode == 1) {
-					WorldRenderUtils.drawText(color + e.getName().getString(), e.x, e.y + e.getHeight() + (0.5f * scale), e.z, scale);
-					WorldRenderUtils.drawText(health, e.x, e.y + e.getHeight() + (0.75f * scale), e.z, scale);
+				for (ItemStack i: e.getArmorItems()) {
+					if (i.getCount() < 1) continue;
+					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 0, c, scale, i);
+					c++;
 				}
+			}
 
-				/* Drawing Items */
-				double c = 0;
-				double higher = getSettings().get(1).asMode().mode == 1 ? 0.25 : 0;
-
-				if (getSettings().get(0).asMode().mode == 0) {
-					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
-
-					for (ItemStack i: e.getArmorItems()) {
-						WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, c+1.5, 0, scale, i);
-						c--;
-					}
-				} else if (getSettings().get(0).asMode().mode == 1) {
-					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-					WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
-
-					for (ItemStack i: e.getArmorItems()) {
-						if (i.getCount() < 1) continue;
-						WorldRenderUtils.drawItem(e.x, e.y + e.getHeight() + ((0.75 + higher) * scale), e.z, 0, c, scale, i);
-						c++;
-					}
-				}
-
-				event.setCancelled(true);
+			event.setCancelled(true);
+		}
 	}
 }

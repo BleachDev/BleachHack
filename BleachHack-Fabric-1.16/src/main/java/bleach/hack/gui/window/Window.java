@@ -54,6 +54,8 @@ public class Window {
 	private boolean dragging = false;
 	private int dragOffX;
 	private int dragOffY;
+	
+	public int inactiveTime = 0;
 
 	public Window(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
 		this(x1, y1, x2, y2, title, icon, false);
@@ -106,6 +108,10 @@ public class Window {
 
 		/* window title */
 		textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, -1);
+		
+		if (inactiveTime >= 0) {
+			inactiveTime--;
+		}
 	}
 
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
@@ -126,6 +132,10 @@ public class Window {
 	}
 
 	public void onMousePressed(int x, int y) {
+		if (inactiveTime > 0) {
+			return;
+		}
+		
 		if (x > x1 + 2 && x < x2 - 2 && y > y1 + 2 && y < y1 + 12) {
 			dragging = true;
 			dragOffX = x - x1;
@@ -150,7 +160,7 @@ public class Window {
 		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
 	}
 
-	protected void fillGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
+	public void fillGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
 		float float_1 = (color1 >> 24 & 255) / 255.0F;
 		float float_2 = (color1 >> 16 & 255) / 255.0F;
 		float float_3 = (color1 >> 8 & 255) / 255.0F;

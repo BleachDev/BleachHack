@@ -17,35 +17,17 @@
  */
 package bleach.hack.utils;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.util.Formatting;
 
 public class EntityUtils {
-
-	private static MinecraftClient mc = MinecraftClient.getInstance();
 
 	public static boolean isAnimal(Entity e) {
 		return e instanceof AnimalEntity || e instanceof AmbientEntity || e instanceof WaterCreatureEntity ||
 				e instanceof GolemEntity || e instanceof VillagerEntity;
-	}
-
-	public static void setGlowing(Entity entity, Formatting color, String teamName) {
-		Team team = mc.world.getScoreboard().getTeamNames().contains(teamName) ?
-				mc.world.getScoreboard().getTeam(teamName) :
-					mc.world.getScoreboard().addTeam(teamName);
-
-				mc.world.getScoreboard().addPlayerToTeam(
-						entity instanceof PlayerEntity ? entity.getEntityName() : entity.getUuidAsString(), team);
-				mc.world.getScoreboard().getTeam(teamName).setColor(color);
-
-				entity.setGlowing(true);
 	}
 }

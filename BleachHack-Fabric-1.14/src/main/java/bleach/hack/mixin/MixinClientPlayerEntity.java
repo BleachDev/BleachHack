@@ -22,8 +22,11 @@ import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.BetterPortal;
+import bleach.hack.module.mods.Freecam;
 import bleach.hack.module.mods.NoSlow;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -49,22 +52,21 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		super(clientWorld_1, gameProfile_1);
 	}
 
-	@Shadow
-	protected void method_3148(float float_1, float float_2) {}
+	@Shadow protected MinecraftClient client;
+	@Shadow protected void method_3148(float float_1, float float_2) {}
 
 	@Inject(at = @At("RETURN"), method = "tick()V", cancellable = true)
 	public void tick(CallbackInfo info) {
 		try {
 			if (MinecraftClient.getInstance().player.age % 100 == 0) {
-				BleachFileHelper.saveModules();
-				BleachFileHelper.saveModSettings();
-				BleachFileHelper.saveBinds();
-				BleachFileHelper.saveClickGui();
-				BleachFileHelper.saveFriends();
+				if (BleachFileHelper.SCHEDULE_SAVE_MODULES) BleachFileHelper.saveModules();
+				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
+				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
 			}
 
 			BleachQueue.nextQueue();
 		} catch (Exception e) {}
+		
 		EventTick event = new EventTick();
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
@@ -79,7 +81,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
 	@Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
 	private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
-		if (ModuleManager.getModule(NoSlow.class).isToggled() && ModuleManager.getModule(NoSlow.class).getSettings().get(4).asToggle().state) {
+		if (ModuleManager.getModule(NoSlow.class).isToggled() && ModuleManager.getModule(NoSlow.class).getSetting(4).asToggle().state) {
 			return false;
 		}
 
@@ -92,13 +94,29 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) {
 			info.cancel();
-		} else if (!movementType_1.equals(event.type) || !vec3d_1.equals(event.vec3d)) {
-			double double_1 = this.x;
-			double double_2 = this.z;
-			super.move(event.type, event.vec3d);
-			this.method_3148((float)(this.x - double_1), (float)(this.z - double_2));
-			info.cancel();
 		}
 	}
+	
+	@Inject(at = @At("HEAD"), method = "pushOutOfBlocks", cancellable = true)
+	protected void pushOutOfBlocks(double double_1, double double_2, double double_3, CallbackInfo ci) {
+		if (ModuleManager.getModule(Freecam.class).isToggled()) {
+			ci.cancel();
+		}
+	}
+	
+	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeContainer()V", ordinal = 0))
+	private void updateNausea_closeContianer(ClientPlayerEntity player) {
+		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+			closeContainer();
+		}
+	}
+	
+	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0))
+	private void updateNausea_openScreen(MinecraftClient player, Screen screen_1) {
+		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+			client.openScreen(screen_1);
+		}
+	}
+
 }
 
