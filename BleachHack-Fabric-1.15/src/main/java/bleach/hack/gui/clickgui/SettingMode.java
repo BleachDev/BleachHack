@@ -17,6 +17,13 @@
  */
 package bleach.hack.gui.clickgui;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.MathHelper;
+
 public class SettingMode extends SettingBase {
 
 	public String[] modes;
@@ -34,5 +41,35 @@ public class SettingMode extends SettingBase {
 		}
 
 		return mode + 1;
+	}
+	
+	public String getName() {
+		return text;
+	}
+	
+	public void render(ModuleWindow window, int x, int y, int len) {
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + modes[mode],x+2, y+2,
+				window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
+
+		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) mode = getNextMode();
+	}
+	
+	public SettingMode withDesc(String desc) {
+		description = desc;
+		return this;
+	}
+	
+	public int getHeight(int len) {
+		return 12;
+	}
+	
+	public void readSettings(JsonElement settings) {
+		if (settings.isJsonPrimitive()) {
+			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.length);
+		}
+	}
+
+	public JsonElement saveSettings() {
+		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length));
 	}
 }

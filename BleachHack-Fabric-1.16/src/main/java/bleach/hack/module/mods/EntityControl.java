@@ -52,9 +52,9 @@ public class EntityControl extends Module {
 
 		Entity e = mc.player.getVehicle();
 		e.yaw = mc.player.yaw;
-		double speed = getSettings().get(1).asSlider().getValue();
+		double speed = getSetting(1).asSlider().getValue();
 
-		if (getSettings().get(6).asToggle().state && e instanceof HorseBaseEntity) {
+		if (getSetting(6).asToggle().state && e instanceof HorseBaseEntity) {
 			HorseBaseEntity h = (HorseBaseEntity) e;
 			h.saddle(null);
 			h.setTame(true);
@@ -69,7 +69,7 @@ public class EntityControl extends Module {
 		double strafe = mc.player.sidewaysSpeed;
 		float yaw = mc.player.yaw;
 
-		if (getSettings().get(0).asToggle().state) {
+		if (getSetting(0).asToggle().state) {
 			if ((forward == 0.0D) && (strafe == 0.0D)) {
 				e.setVelocity(0, e.getVelocity().y, 0);
 			} else {
@@ -91,22 +91,22 @@ public class EntityControl extends Module {
 			}
 		}
 
-		if (getSettings().get(2).asToggle().state) {
+		if (getSetting(2).asToggle().state) {
 			if (mc.options.keyJump.isPressed()) {
-				e.setVelocity(e.getVelocity().x, getSettings().get(3).asSlider().getValue(), e.getVelocity().z);
+				e.setVelocity(e.getVelocity().x, getSetting(3).asSlider().getValue(), e.getVelocity().z);
 			} else {
-				e.setVelocity(e.getVelocity().x, -getSettings().get(4).asSlider().getValue(), e.getVelocity().z);
+				e.setVelocity(e.getVelocity().x, -getSetting(4).asSlider().getValue(), e.getVelocity().z);
 			}
 		}
 
-		if (getSettings().get(5).asToggle().state) {
+		if (getSetting(5).asToggle().state) {
 			BlockPos p = new BlockPos(e.getPos());
 			if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
 				e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}
 
-		if (getSettings().get(6).asToggle().state) {
+		if (getSetting(6).asToggle().state) {
 			Vec3d vel = e.getVelocity().multiply(2);
 			if (!WorldUtils.isBoxEmpty(WorldUtils.moveBox(e.getBoundingBox(), vel.x, 0, vel.z))) {
 				for (int i = 2; i < 10; i++) {

@@ -14,13 +14,13 @@ public class MixinFirstPersonRenderer {
 
 	@Inject(at = @At("HEAD"), method = "renderFireOverlay", cancellable = true)
 	private void onRenderFireOverlay(CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(1).asToggle().state)
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(1).asToggle().state)
 			ci.cancel();
 	}
 
 	@Inject(at = @At("HEAD"), method = "renderWaterOverlay", cancellable = true)
 	private void onRenderWaterOverlay(float float_1, CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSettings().get(3).asToggle().state)
+		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(3).asToggle().state)
 			ci.cancel();
 	}
 }

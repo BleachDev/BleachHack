@@ -85,15 +85,15 @@ public class CustomChat extends Module {
 			
 			if (text.startsWith("/")) return;
 			
-			if (getSettings().get(0).asToggle().state) {
-				text = fonts.get(getSettings().get(1).asMode().mode).replace(text);
+			if (getSetting(0).asToggle().state) {
+				text = fonts.get(getSetting(1).asMode().mode).replace(text);
 			}
 			
-			if (getSettings().get(2).asToggle().state) {
+			if (getSetting(2).asToggle().state) {
 				text = prefix + text;
 			}
 			
-			if (getSettings().get(3).asToggle().state) {
+			if (getSetting(3).asToggle().state) {
 				text = text + suffix;
 			}
 			
@@ -105,7 +105,7 @@ public class CustomChat extends Module {
 	
 	@Subscribe
 	public void onPacketRead(EventReadPacket event) {
-		if (getSettings().get(4).asMode().mode != 0 && event.getPacket() instanceof GameMessageS2CPacket) {
+		if (getSetting(4).asMode().mode != 0 && event.getPacket() instanceof GameMessageS2CPacket) {
 			
 			String msg = ((GameMessageS2CPacket) event.getPacket()).getMessage().asString();
 			if (msg.contains(mc.player.getName().asString()) && msg.contains("by")) {
@@ -114,7 +114,7 @@ public class CustomChat extends Module {
 					
 					if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().asString())
 							&& !msg.contains("<" + e.getName().asString() + ">") && !msg.contains("<" + mc.player.getName().asString() + ">")) {
-						if (getSettings().get(4).asMode().mode == 1) {
+						if (getSetting(4).asMode().mode == 1) {
 							mc.player.sendChatMessage(e.getName().asString() + " Just got EZed using the power of BleachHack " + BleachHack.VERSION);
 						} else {
 							mc.player.sendChatMessage("GG, " + e.getName().asString() + ", but BleachHack " + BleachHack.VERSION + " is ontop!");
