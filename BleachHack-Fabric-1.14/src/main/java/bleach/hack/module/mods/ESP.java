@@ -30,6 +30,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EnderCrystalEntity;
 import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
@@ -50,7 +51,9 @@ public class ESP extends Module {
 				new SettingToggle("Crystals", true).withDesc("Show End Crystals").withChildren(
 						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
 				new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")));
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
+		     		new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
+						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
 	@Override
@@ -71,7 +74,8 @@ public class ESP extends Module {
 					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state)
 					|| (e instanceof ItemEntity && getSetting(3).asToggle().state)
 					|| (e instanceof EnderCrystalEntity && getSetting(4).asToggle().state)
-					|| ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state)) {
+					|| ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state)
+			   		|| (e instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state)) {
 				e.setGlowing(true);
 			}
 		}
@@ -91,10 +95,12 @@ public class ESP extends Module {
 			event.color = getSetting(2).asToggle().getChild(0).asColor().getRGB();
 		} else if (event.entity instanceof ItemEntity && getSetting(3).asToggle().state) {
 			event.color = getSetting(3).asToggle().getChild(0).asColor().getRGB();
-		}else if (event.entity instanceof EnderCrystalEntity && getSetting(4).asToggle().state) {
+		} else if (event.entity instanceof EnderCrystalEntity && getSetting(4).asToggle().state) {
 			event.color = getSetting(4).asToggle().getChild(0).asColor().getRGB();
 		} else if ((event.entity instanceof BoatEntity || event.entity instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
 			event.color = getSetting(5).asToggle().getChild(0).asColor().getRGB();
+		} else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
+			event.color = getSetting(6).asToggle().getChild(0).asColor().getRGB();
 		}
 	}
 }
