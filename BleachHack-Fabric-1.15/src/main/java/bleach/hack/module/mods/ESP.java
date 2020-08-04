@@ -35,6 +35,7 @@ import net.minecraft.entity.decoration.EnderCrystalEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 
 public class ESP extends Module {
@@ -53,7 +54,9 @@ public class ESP extends Module {
 				new SettingToggle("Crystals", true).withDesc("Show End Crystals").withChildren(
 						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
 				new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")));
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
+				new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
+						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
 	@Override
@@ -92,6 +95,9 @@ public class ESP extends Module {
 			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
 		} else if ((event.entity instanceof BoatEntity || event.entity instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
 			float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
+			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+		} else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
+			float[] col = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
 			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
 		} else {
 			glow = false;
