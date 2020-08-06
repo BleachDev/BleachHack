@@ -37,24 +37,66 @@ public class CmdBind extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "bind add [Module] [Key] | bind del [Module]";
+		return "bind set [Module] [Key] | bind del [Module] | bind clear";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		for (Module m: ModuleManager.getModules()) {
-			if (m.getName().equalsIgnoreCase(args[1])) {
-				if (args[0].equalsIgnoreCase("add")) {
-					m.setKey(InputUtil.fromName("key.keyboard." + args[2].toLowerCase()).getKeyCode());
-					BleachLogger.infoMessage("Bound " + m.getName() + " To " + args[2]);
-				} else if (args[0].equalsIgnoreCase("del")) {
-					m.setKey(-1);
-					BleachLogger.infoMessage("Removed Bind For " + m.getName());
+		if (args[0].equalsIgnoreCase("clear")) {
+			int c = 0;
+			for (Module m: ModuleManager.getModules()) {
+				if (m.getKey() != Module.KEY_UNBOUND) {
+					m.setKey(Module.KEY_UNBOUND);
+					c++;
 				}
-				return;
 			}
+			
+			BleachLogger.infoMessage("Cleared " + c + " Binds");
+		} else if (args.length >= 2 && (args.length >= 3 || !args[1].equalsIgnoreCase("set"))) {
+			for (Module m: ModuleManager.getModules()) {
+				if (m.getName().equalsIgnoreCase(args[1])) {
+					if (args[0].equalsIgnoreCase("set")) {
+						int key = -1;
+						
+						// Special cases for rshift/rcontrol and that shit
+						try {
+							key = InputUtil.fromName("key.keyboard." + args[2].toLowerCase()).getKeyCode();
+						} catch (IllegalArgumentException e) {
+							if (args[2].toLowerCase().startsWith("right")) {
+								try {
+									key = InputUtil.fromName("key.keyboard." + args[2].toLowerCase().replaceFirst("right", "right.")).getKeyCode();
+								} catch (IllegalArgumentException e1) {
+									BleachLogger.errorMessage("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("right", "right."));
+									return;
+								}
+							} else if (args[2].toLowerCase().startsWith("r")) {
+								try {
+									key = InputUtil.fromName("key.keyboard." + args[2].toLowerCase().replaceFirst("r", "right.")).getKeyCode();
+								} catch (IllegalArgumentException e1) {
+									BleachLogger.errorMessage("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("r", "right."));
+									return;
+								}
+							} else {
+								BleachLogger.errorMessage("Unknown key: " + args[2]);
+								return;
+							}
+						}
+						
+						m.setKey(key);
+						BleachLogger.infoMessage("Bound " + m.getName() + " To " + args[2] + " (KEY" + key + ")");
+					} else if (args[0].equalsIgnoreCase("del")) {
+						m.setKey(Module.KEY_UNBOUND);
+						BleachLogger.infoMessage("Removed Bind For " + m.getName());
+					}
+					
+					return;
+				}
+			}
+			
+			BleachLogger.errorMessage("Could Not Find Module \"" + args[1] + "\"");
+		} else {
+			BleachLogger.errorMessage("Invalid Syntax!");
+			BleachLogger.infoMessage(getSyntax());
 		}
-		BleachLogger.errorMessage("Could Not Find Module \"" + args[1] + "\"");
 	}
-
 }
