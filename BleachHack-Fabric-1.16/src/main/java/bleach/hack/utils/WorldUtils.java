@@ -69,7 +69,10 @@ public class WorldUtils {
 			Blocks.DRAGON_EGG, Blocks.HOPPER, Blocks.REPEATING_COMMAND_BLOCK,
 			Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.CRAFTING_TABLE,
 			Blocks.ACACIA_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR,
-			Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR);
+			Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.CAKE, Blocks.ACACIA_SIGN, Blocks.ACACIA_WALL_SIGN,
+			Blocks.BIRCH_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.DARK_OAK_SIGN, Blocks.DARK_OAK_WALL_SIGN,
+			Blocks.JUNGLE_SIGN, Blocks.JUNGLE_WALL_SIGN, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN,
+			Blocks.SPRUCE_SIGN, Blocks.SPRUCE_WALL_SIGN);
 
 	public static boolean isFluid(BlockPos pos) {
 		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
