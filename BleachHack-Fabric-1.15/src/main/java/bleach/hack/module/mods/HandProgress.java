@@ -10,7 +10,7 @@ import com.google.common.eventbus.Subscribe;
 public class HandProgress extends Module {
 
 	public HandProgress() {
-		super("HandProgress-WIP", KEY_UNBOUND, Category.RENDER, "Smaller view of mainhand/offhand",
+		super("HandProgress", KEY_UNBOUND, Category.RENDER, "Smaller view of mainhand/offhand",
 				new SettingSlider("Mainhand: ", 0.1, 1.0, 1.0, 1), // 0
 				new SettingSlider("Offhand: ", 0.1, 1.0, 1.0, 1) // 1
 				);
@@ -18,9 +18,14 @@ public class HandProgress extends Module {
 
 	@Subscribe
 	public void tick(EventTick event){
-		// this kinda works, but changing item doesn't update..
 		FirstPersonRendererAccessor accessor = (FirstPersonRendererAccessor) mc.gameRenderer.firstPersonRenderer;
-		accessor.setEquippedProgressMainHand((float) this.getSetting(0).asSlider().getValue());
-		accessor.setEquippedProgressOffHand((float) this.getSetting(1).asSlider().getValue());
+		
+		// Refresh the item held in hand every tick
+        accessor.setItemStackMainHand(mc.player.getMainHandStack());
+        accessor.setItemStackOffHand(mc.player.getOffHandStack());
+
+        // Set the item render height
+        accessor.setEquippedProgressMainHand((float) this.getSetting(0).asSlider().getValue());
+        accessor.setEquippedProgressOffHand((float) this.getSetting(1).asSlider().getValue());
 	}
 }
