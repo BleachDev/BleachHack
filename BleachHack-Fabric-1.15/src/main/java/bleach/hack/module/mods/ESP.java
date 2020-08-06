@@ -84,6 +84,11 @@ public class ESP extends Module {
 		} else if (event.entity instanceof Monster && getSetting(1).asToggle().state) {
 			float[] col = getSetting(1).asToggle().getChild(0).asColor().getRGBFloat();
 			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+		}
+		// Before animals to prevent animals from overlapping donkeys
+		else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
+			float[] col = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
+			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
 		} else if (EntityUtils.isAnimal(event.entity) && getSetting(2).asToggle().state) {
 			float[] col = getSetting(2).asToggle().getChild(0).asColor().getRGBFloat();
 			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
@@ -96,14 +101,11 @@ public class ESP extends Module {
 		} else if ((event.entity instanceof BoatEntity || event.entity instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
 			float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
 			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
-		} else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
-			float[] col = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
-			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
 		} else {
 			glow = false;
 		}
 		
-		if (glow) event.entity.setGlowing(true);
+		event.entity.setGlowing(glow);
 	}
 	
 	private VertexConsumerProvider getOutline(BufferBuilderStorage buffers, float r, float g, float b) {

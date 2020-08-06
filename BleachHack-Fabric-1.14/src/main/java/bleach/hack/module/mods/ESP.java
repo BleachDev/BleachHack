@@ -91,6 +91,10 @@ public class ESP extends Module {
 			}
 		} else if (event.entity instanceof Monster && getSetting(1).asToggle().state) {
 			event.color = getSetting(1).asToggle().getChild(0).asColor().getRGB();
+		}
+		// Before animals to prevent animals from overlapping donkeys
+		else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
+			event.color = getSetting(6).asToggle().getChild(0).asColor().getRGB();
 		} else if (EntityUtils.isAnimal(event.entity) && getSetting(2).asToggle().state) {
 			event.color = getSetting(2).asToggle().getChild(0).asColor().getRGB();
 		} else if (event.entity instanceof ItemEntity && getSetting(3).asToggle().state) {
@@ -99,8 +103,6 @@ public class ESP extends Module {
 			event.color = getSetting(4).asToggle().getChild(0).asColor().getRGB();
 		} else if ((event.entity instanceof BoatEntity || event.entity instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
 			event.color = getSetting(5).asToggle().getChild(0).asColor().getRGB();
-		} else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
-			event.color = getSetting(6).asToggle().getChild(0).asColor().getRGB();
 		}
 	}
 }
