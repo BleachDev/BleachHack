@@ -20,6 +20,8 @@ package bleach.hack.utils.file;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -44,18 +46,25 @@ public class BleachFileHelper {
 		
 		JsonObject jo = new JsonObject();
 		
+		System.out.println("Saving Modules!");
 		for (Module m: ModuleManager.getModules()) {
 			JsonObject mo = new JsonObject();
 			
+			System.out.println("Saving: " + m.getName());
 			if (m.isToggled() && !m.getName().equals("ClickGui") && !m.getName().equals("Freecam")) {
 				mo.add("toggled", new JsonPrimitive(true));
+				System.out.println(".. Module Is Enabled");
+			} else if (m.isToggled()) {
+				System.out.println(".. Module Is Enabled [SKIPPED]");
 			}
 			
 			if (m.getKey() >= 0) {
 				mo.add("bind", new JsonPrimitive(m.getKey()));
+				System.out.println(".. Saving Bind: KEY" + m.getKey());
 			}
 			
 			if (!m.getSettings().isEmpty()) {
+				System.out.println(".. Saving Settings");
 				JsonObject so = new JsonObject();
 				
 				for (SettingBase s: m.getSettings()) {
@@ -68,40 +77,58 @@ public class BleachFileHelper {
 					}
 					
 					so.add(name, s.saveSettings());
+					System.out.println("... Saving " + name);
 				}
 				
 				mo.add("settings", so);
 			}
 			
 			if (mo.size() != 0) {
+				System.out.println(".. Adding " + mo.size() + " Elements To Config");
 				jo.add(m.getName(), mo);
+			} else {
+				System.out.println(".. Module is empty! Not saving");
 			}
 		}
 		
+		System.out.println("Writing!");
 		BleachJsonHelper.setJsonFile(jo, "modules.json");
+		System.out.println("Done Writing!");
 	}
 
 	public static void readModules() {
 		JsonObject jo = BleachJsonHelper.readJsonFile("modules.json");
 		
-		if (jo == null) return;
+		if (jo == null) {
+			System.out.println("Null json found! Returning");
+			return;
+		}
 		
+		System.out.println("Module config found:\n" + new GsonBuilder().setPrettyPrinting().create().toJson(jo));
 		for (Entry<String, JsonElement> e: jo.entrySet()) {
 			Module mod = ModuleManager.getModuleByName(e.getKey());
+			System.out.println("Initing Mod: " + e.getKey());
 			
-			if (mod == null) continue;
+			if (mod == null) {
+				System.out.println(".. Null module found! Continuing");
+				continue;
+			}
 			
 			if (e.getValue().isJsonObject()) {
 				JsonObject mo = e.getValue().getAsJsonObject();
 				if (mo.has("toggled")) {
+					System.out.println(".. Enabling");
 					mod.setToggled(true);
 				}
 				
 				if (mo.has("bind") && mo.get("bind").isJsonPrimitive() && mo.get("bind").getAsJsonPrimitive().isNumber()) {
+					System.out.println(".. Binding To: KEY" + mo.get("bind").getAsInt());
 					mod.setKey(mo.get("bind").getAsInt());
 				}
 				
 				if (mo.has("settings") && mo.get("settings").isJsonObject()) {
+					System.out.println(".. Setting Settings");
+					
 					// Map to keep track if there are multiple settings with the same name
 					HashMap<String, Integer> sNames = new HashMap<>();
 					
@@ -110,13 +137,18 @@ public class BleachFileHelper {
 							String name = sNames.containsKey(sb.getName()) ? sb.getName() + sNames.get(sb.getName()) : sb.getName();
 							
 							if (name.equals(se.getKey())) {
+								System.out.println(".... Reading Setting: \"" + name + "\"");
 								sb.readSettings(se.getValue());
 								sNames.put(sb.getName(), sNames.containsKey(sb.getName()) ? sNames.get(sb.getName()) + 1 : 1);
 								break;
 							}
 						}
 					}
+					
+					System.out.println(".. Done Initing Mod: " + mod.getName() + " / Toggled: " + mod.isToggled() + " / Bind: " + mod.getKey());
 				}
+			} else {
+				System.out.println(".. Config is not a JsonObject! Its a " + e.getValue().getClass().getSimpleName());
 			}
 		}
 	}
