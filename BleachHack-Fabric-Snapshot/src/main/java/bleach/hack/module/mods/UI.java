@@ -204,6 +204,7 @@ public class UI extends Module {
 
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 				mc.getItemRenderer().zOffset = 200F;
+				mc.getItemRenderer().renderGuiItemIcon(is, x, y);
 				
 				if (getSetting(10).asToggle().getChild(0).asMode().mode > 0) {
 					mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, is, x, y);
