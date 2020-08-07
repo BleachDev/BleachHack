@@ -97,7 +97,8 @@ public class ModuleManager {
 			new Trail(),
 			new Trajectories(),
 			new UI(),
-			new Xray());
+			new Xray(),
+			new Zoom());
 
 	public static List<Module> getModules() {
 		return mods;
