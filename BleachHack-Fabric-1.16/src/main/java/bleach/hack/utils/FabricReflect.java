@@ -30,20 +30,24 @@ public class FabricReflect {
 
 		Field field = null;
 		for (Class<?> cls1 = cls; cls1 != null; cls1 = cls1.getSuperclass()) {
-			try { field = cls1.getDeclaredField(obfName); } catch (Exception e) {}
-			try { field = cls1.getDeclaredField(deobfName); } catch (Exception e) {}
-
-			if (field == null) continue;
+			try { field = cls1.getDeclaredField(obfName); } catch (Exception e) {
+				try { field = cls1.getDeclaredField(deobfName); } catch (Exception e1) {
+					continue;
+				}
+			}
 
 			if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
 			return field;
 		}
 
 		for (final Class<?> class1 : ClassUtils.getAllInterfaces(cls)) {
-			try { field = class1.getField(obfName); } catch (Exception e) {}
-			try { field = class1.getField(deobfName); } catch (Exception e) {}
+			try { field = class1.getField(obfName); } catch (Exception e) {
+				try { field = class1.getField(deobfName); } catch (Exception e1) {
+					continue;
+				}
+			}
 
-			if (field != null) break;
+			break;
 		}
 		
 		if (field == null) {
@@ -59,10 +63,11 @@ public class FabricReflect {
 		Class<?> cls = target.getClass();
 		Field field = null;
 		for (Class<?> cls1 = cls; cls1 != null; cls1 = cls1.getSuperclass()) {
-			try { field = cls1.getDeclaredField(obfName); } catch (Exception e) {}
-			try { field = cls1.getDeclaredField(deobfName); } catch (Exception e) {}
-
-			if (field == null) continue;
+			try { field = cls1.getDeclaredField(obfName); } catch (Exception e) {
+				try { field = cls1.getDeclaredField(deobfName); } catch (Exception e1) {
+					continue;
+				}
+			}
 
 			if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
 			
@@ -74,10 +79,13 @@ public class FabricReflect {
 		}
 
 		for (final Class<?> class1 : ClassUtils.getAllInterfaces(cls)) {
-			try { field = class1.getField(obfName); } catch (Exception e) {}
-			try { field = class1.getField(deobfName); } catch (Exception e) {}
+			try { field = class1.getField(obfName); } catch (Exception e) {
+				try { field = class1.getField(deobfName); } catch (Exception e1) {
+					continue;
+				}
+			}
 
-			if (field != null) break;
+			break;
 		}
 		
 		try {
