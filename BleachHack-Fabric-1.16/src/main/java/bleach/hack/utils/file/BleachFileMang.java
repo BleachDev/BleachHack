@@ -24,6 +24,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.MinecraftClient;
@@ -63,7 +64,7 @@ public class BleachFileMang {
 			dir.toFile().mkdirs();
 			Files.createFile(stringsToPath(file));
 		} catch (IOException e) {
-			System.out.println("Error Creating File: " + file);
+			System.out.println("Error Creating File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}
@@ -77,7 +78,7 @@ public class BleachFileMang {
 			writer.write("");
 			writer.close();
 		} catch (IOException e) {
-			System.out.println("Error Clearing/Creating File: " + file);
+			System.out.println("Error Clearing/Creating File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}
@@ -93,7 +94,7 @@ public class BleachFileMang {
 					+ (content.endsWith("\n") ? "" : "\n"));
 			writer.close();
 		} catch (IOException e) {
-			System.out.println("Error Appending File: " + file);
+			System.out.println("Error Appending File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}
@@ -112,7 +113,7 @@ public class BleachFileMang {
 		try {
 			Files.deleteIfExists(stringsToPath(file));
 		} catch (Exception e) {
-			System.out.println("Error Deleting File: " + file);
+			System.out.println("Error Deleting File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}
