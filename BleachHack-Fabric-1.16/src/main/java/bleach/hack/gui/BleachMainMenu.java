@@ -262,7 +262,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			float float_4 = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
 			float_4 = float_4 * 60.0F / (textRenderer.getWidth(splash) + 32);
 			GL11.glScalef(float_4, float_4, float_4);
-			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
+			drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
 			GL11.glPopMatrix();
 		} else if (window == 1) {
 			int x = windows.get(1).x1,
