@@ -40,45 +40,45 @@ public class ProjectileSimulator {
 	private static MinecraftClient mc = MinecraftClient.getInstance();
 
 	public static Entity summonProjectile(PlayerEntity thrower, boolean allowThrowables, boolean allowXp, boolean allowPotions) {
-		ItemStack hand = isThrowable(thrower.inventory.getMainHandStack().getItem(), allowThrowables, allowXp, allowPotions)
+		ItemStack hand = (isThrowable(thrower.inventory.getMainHandStack().getItem(), allowThrowables, allowXp, allowPotions)
 				? thrower.inventory.getMainHandStack() : isThrowable(thrower.inventory.offHand.get(0).getItem(), allowThrowables, allowXp, allowPotions)
-						? thrower.inventory.offHand.get(0) : null;
+						? thrower.inventory.offHand.get(0) : null);
 
-						if (hand == null) return null;
+		if (hand == null) return null;
 
-						Vec3d spawnVec = new Vec3d(
-								thrower.getX() - Math.cos(Math.toRadians(thrower.yaw)) * 0.05,
-								thrower.getEyeY() - 0.1000000015,
-								thrower.getZ() - Math.sin(Math.toRadians(thrower.yaw)) * 0.05);
+		Vec3d spawnVec = new Vec3d(
+				thrower.getX() - Math.cos(Math.toRadians(thrower.yaw)) * 0.05,
+				thrower.getEyeY() - 0.1000000015,
+				thrower.getZ() - Math.sin(Math.toRadians(thrower.yaw)) * 0.05);
 
-						if (hand.getItem() instanceof RangedWeaponItem) {
-							float charged = hand.getItem() == Items.CROSSBOW && CrossbowItem.isCharged(hand) ? 1f
-									: hand.getItem() == Items.CROSSBOW ? 0f : BowItem.getPullProgress(thrower.getItemUseTime());
+		if (hand.getItem() instanceof RangedWeaponItem) {
+			float charged = hand.getItem() == Items.CROSSBOW && CrossbowItem.isCharged(hand) ? 1f
+					: hand.getItem() == Items.CROSSBOW ? 0f : BowItem.getPullProgress(thrower.getItemUseTime());
 
-							if (charged > 0f) {
-								Entity e = new ArrowEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
-								initProjectile(e, thrower, 0f, charged * 3);
-								return e;
-							}
-						} else if (hand.getItem() instanceof SnowballItem || hand.getItem() instanceof EggItem || hand.getItem() instanceof EnderPearlItem) {
-							Entity e = new SnowballEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
-							initProjectile(e, thrower, 0f, 1.5f);
-							return e;
-						} else if (hand.getItem() instanceof ExperienceBottleItem) {
-							Entity e = new ExperienceBottleEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
-							initProjectile(e, thrower, -20f, 0.7f);
-							return e;
-						} else if (hand.getItem() instanceof ThrowablePotionItem) {
-							Entity e = new PotionEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
-							initProjectile(e, thrower, -20f, 0.5f);
-							return e;
-						} else if (hand.getItem() instanceof TridentItem) {
-							Entity e = new TridentEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
-							initProjectile(e, thrower, 0f, 2.5f);
-							return e;
-						}
+			if (charged > 0f) {
+				Entity e = new ArrowEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
+				initProjectile(e, thrower, 0f, charged * 3);
+				return e;
+			}
+		} else if (hand.getItem() instanceof SnowballItem || hand.getItem() instanceof EggItem || hand.getItem() instanceof EnderPearlItem) {
+			Entity e = new SnowballEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
+			initProjectile(e, thrower, 0f, 1.5f);
+			return e;
+		} else if (hand.getItem() instanceof ExperienceBottleItem) {
+			Entity e = new ExperienceBottleEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
+			initProjectile(e, thrower, -20f, 0.7f);
+			return e;
+		} else if (hand.getItem() instanceof ThrowablePotionItem) {
+			Entity e = new PotionEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
+			initProjectile(e, thrower, -20f, 0.5f);
+			return e;
+		} else if (hand.getItem() instanceof TridentItem) {
+			Entity e = new TridentEntity(mc.world, spawnVec.x, spawnVec.y, spawnVec.z);
+			initProjectile(e, thrower, 0f, 2.5f);
+			return e;
+		}
 
-						return null;
+		return null;
 	}
 
 	public static boolean isThrowable(Item item) {
