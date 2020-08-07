@@ -97,7 +97,7 @@ public class CustomChat extends Module {
 				text = text + suffix;
 			}
 			
-			if (text != ((ChatMessageC2SPacket) event.getPacket()).getChatMessage()) {
+			if (!text.equals(((ChatMessageC2SPacket) event.getPacket()).getChatMessage())) {
 				FabricReflect.writeField(event.getPacket(), text, "field_12764", "chatMessage");
 			}
 		}

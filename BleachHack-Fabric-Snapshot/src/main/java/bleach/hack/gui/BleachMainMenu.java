@@ -178,7 +178,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			versions.addAll(BleachGithubReader.readFileLines("latestversion.txt"));
 		}
 
-		if (splash == "") {
+		if (splash.isEmpty()) {
 			List<String> sp = BleachGithubReader.readFileLines("splashes.txt");
 			splash = !sp.isEmpty() ? sp.get(new Random().nextInt(sp.size())) : "";
 		}
@@ -273,7 +273,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			drawStringWithShadow(matrix, textRenderer, "Email: ", x + w / 2 - 130, y + h / 4 + 15, 0xC0C0C0);
 			drawStringWithShadow(matrix, textRenderer, "Password: ", x + w / 2 - 154, y + h / 4 + 45, 0xC0C0C0);
 
-			drawStringWithShadow(matrix, textRenderer, loginResult == "" ? "" : "|  " + loginResult, x + w / 2 - 24, y + h / 4 + 65, 0xC0C0C0);
+			drawStringWithShadow(matrix, textRenderer, loginResult.isEmpty() ? "" : "|  " + loginResult, x + w / 2 - 24, y + h / 4 + 65, 0xC0C0C0);
 
 			userField.x = x + w / 2 - 98;
 			userField.y = y + h / 4 + 10;
