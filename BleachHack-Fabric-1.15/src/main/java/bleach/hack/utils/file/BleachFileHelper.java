@@ -45,11 +45,9 @@ public class BleachFileHelper {
 		JsonObject jo = new JsonObject();
 		
 		for (Module m: ModuleManager.getModules()) {
-			if (m.getName() == "ClickGui" || m.getName() == "Freecam") continue;
-			
 			JsonObject mo = new JsonObject();
 			
-			if (m.isToggled()) {
+			if (m.isToggled() && !m.getName().equals("ClickGui") && !m.getName().equals("Freecam")) {
 				mo.add("toggled", new JsonPrimitive(true));
 			}
 			
