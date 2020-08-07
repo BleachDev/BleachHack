@@ -18,42 +18,50 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
+import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.gui.clickgui.SettingMode;
+import bleach.hack.gui.clickgui.SettingSlider;
+import bleach.hack.gui.clickgui.SettingToggle;
+import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
 
-public class CmdHelp extends Command {
+public class CmdSetting extends Command {
 
 	@Override
 	public String getAlias() {
-		return "help";
+		return "setting";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Displays all the commands";
+		return "Changes a setting in a module";
 	}
 
 	@Override
 	public String getSyntax() {
-		return "help | help [Command]";
+		return "setting [Module] [Setting number (starts at 0)] [value]";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		String cmd = null;
-		try { cmd = args[0]; } catch (Exception e) {}
-
-		for (Command c: CommandManager.getCommands()) {
-			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
-
-			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
-			text.setStyle(text.getStyle().setHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
-			BleachLogger.noPrefixMessage(text);
+		if (args.length < 2) {
+			BleachLogger.errorMessage(getSyntax());
+			return;
 		}
+
+		Module m = ModuleManager.getModuleByName(args[0]);
+		SettingBase s = m.getSetting(Integer.parseInt(args[1]));
+
+		if (s instanceof SettingSlider) s.asSlider().setValue(Double.parseDouble(args[2]));
+		else if (s instanceof SettingToggle) s.asToggle().state = Boolean.valueOf(args[2]);
+		else if (s instanceof SettingMode) s.asMode().mode = Integer.parseInt(args[2]);
+		else {
+			BleachLogger.errorMessage("Invalid Command");
+			return;
+		}
+
+		BleachLogger.infoMessage("Set Setting " + args[1] + " Of " + m.getName() + " To " + args[2]);
 	}
 
 }

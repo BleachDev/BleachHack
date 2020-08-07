@@ -17,42 +17,45 @@
  */
 package bleach.hack.command.commands;
 
-import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
-import bleach.hack.utils.BleachLogger;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+import java.util.List;
 
-public class CmdHelp extends Command {
+import bleach.hack.command.Command;
+import bleach.hack.gui.NotebotScreen;
+import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.BleachQueue;
+import bleach.hack.utils.Midi2Notebot;
+import bleach.hack.utils.file.BleachFileMang;
+
+public class CmdNotebot extends Command {
 
 	@Override
 	public String getAlias() {
-		return "help";
+		return "notebot";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Displays all the commands";
+		return "Shows the notebot gui";
 	}
 
 	@Override
 	public String getSyntax() {
-		return "help | help [Command]";
+		return "notebot | notebot convert (file in .minecraft/bleach/)";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		String cmd = null;
-		try { cmd = args[0]; } catch (Exception e) {}
+		if (args.length >= 2 && args[0].equalsIgnoreCase("convert")) {
+			int i = 0;
+			String s = "";
+			List<List<Integer>> notes = Midi2Notebot.convert(BleachFileMang.stringsToPath(args[1]));
 
-		for (Command c: CommandManager.getCommands()) {
-			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
-
-			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
-			text.setStyle(text.getStyle().setHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
-			BleachLogger.noPrefixMessage(text);
+			while(BleachFileMang.fileExists("notebot", "notebot" + i + ".txt")) i++;
+			for (List<Integer> i1: notes) s += i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
+			BleachFileMang.appendFile(s, "notebot", "notebot" + i + ".txt");
+			BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
+		} else {
+			BleachQueue.add(() -> mc.openScreen(new NotebotScreen()));
 		}
 	}
 

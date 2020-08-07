@@ -17,43 +17,46 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.Base64;
+import java.util.UUID;
 import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
-import bleach.hack.utils.BleachLogger;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringNbtReader;
 
-public class CmdHelp extends Command {
+public class CmdSkull extends Command {
 
 	@Override
 	public String getAlias() {
-		return "help";
+		return "skull";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Displays all the commands";
+		return "Gives you a player skull";
 	}
 
 	@Override
 	public String getSyntax() {
-		return "help | help [Command]";
+		return "skull [Player] | skull img [Image url]";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		String cmd = null;
-		try { cmd = args[0]; } catch (Exception e) {}
+		ItemStack item = new ItemStack(Items.PLAYER_HEAD, 64);
 
-		for (Command c: CommandManager.getCommands()) {
-			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
-
-			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
-			text.setStyle(text.getStyle().setHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
-			BleachLogger.noPrefixMessage(text);
+		if (args.length < 2) {
+			item.setTag(StringNbtReader.parse("{SkullOwner:{Name:\"" + args[0] + "\"}}"));
+		} else if (args[0].equalsIgnoreCase("img")) {
+			CompoundTag tag = StringNbtReader.parse("{SkullOwner:{Id:\"" + UUID.randomUUID() + "\",Properties:{textures:[{Value:\""
+					+ Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + args[1] + "\"}}}").getBytes())
+					+ "\"}]}}}");
+			item.setTag(tag);
+			System.out.println(tag);
 		}
+
+		mc.player.inventory.addPickBlock(item);
 	}
 
 }

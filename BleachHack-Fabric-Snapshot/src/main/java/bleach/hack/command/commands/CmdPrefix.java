@@ -18,42 +18,37 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
 import bleach.hack.utils.BleachLogger;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+import bleach.hack.utils.file.BleachFileMang;
 
-public class CmdHelp extends Command {
+public class CmdPrefix extends Command {
 
 	@Override
 	public String getAlias() {
-		return "help";
+		return "prefix";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Displays all the commands";
+		return "Sets the command prefix";
 	}
 
 	@Override
 	public String getSyntax() {
-		return "help | help [Command]";
+		return "prefix [Char]";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		String cmd = null;
-		try { cmd = args[0]; } catch (Exception e) {}
-
-		for (Command c: CommandManager.getCommands()) {
-			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
-
-			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
-			text.setStyle(text.getStyle().setHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
-			BleachLogger.noPrefixMessage(text);
+		if (args[0].isEmpty()) {
+			BleachLogger.errorMessage("Prefix Cannot Be Empty");
+			return;
 		}
+
+		BleachFileMang.createEmptyFile("prefix.txt");
+		BleachFileMang.appendFile(args[0], "prefix.txt");
+		PREFIX = args[0];
+		BleachLogger.infoMessage("Set Prefix To: \"" + args[0] + "\"");
 	}
 
 }

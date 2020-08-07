@@ -18,41 +18,55 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
 import bleach.hack.utils.BleachLogger;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+import net.minecraft.world.GameMode;
 
-public class CmdHelp extends Command {
+public class CmdGamemode extends Command {
 
 	@Override
 	public String getAlias() {
-		return "help";
+		return "gm";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Displays all the commands";
+		return "Sets clientside gamemode.";
 	}
 
 	@Override
 	public String getSyntax() {
-		return "help | help [Command]";
+		return "gm [0-3]";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		String cmd = null;
-		try { cmd = args[0]; } catch (Exception e) {}
+		int gm;
 
-		for (Command c: CommandManager.getCommands()) {
-			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
+		try {
+			gm = Integer.parseInt(args[0]);
+		} catch (Exception e) {
+			BleachLogger.errorMessage("Unable to parse gamemode.");
+			return;
+		}
 
-			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
-			text.setStyle(text.getStyle().setHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
-			BleachLogger.noPrefixMessage(text);
+		if (gm == 0) {
+			mc.player.setGameMode(GameMode.SURVIVAL);
+			mc.interactionManager.setGameMode(GameMode.SURVIVAL);
+			BleachLogger.infoMessage("Set gamemode to survival.");
+		} else if (gm == 1) {
+			mc.player.setGameMode(GameMode.CREATIVE);
+			mc.interactionManager.setGameMode(GameMode.CREATIVE);
+			BleachLogger.infoMessage("Set gamemode to creative.");
+		} else if (gm == 2) {
+			mc.player.setGameMode(GameMode.ADVENTURE);
+			mc.interactionManager.setGameMode(GameMode.ADVENTURE);
+			BleachLogger.infoMessage("Set gamemode to adventure.");
+		} else if (gm == 3) {
+			mc.player.setGameMode(GameMode.SPECTATOR);
+			mc.interactionManager.setGameMode(GameMode.SPECTATOR);
+			BleachLogger.infoMessage("Set gamemode to spectator.");
+		} else {
+			BleachLogger.warningMessage("Unknown Gamemode Number.");
 		}
 	}
 

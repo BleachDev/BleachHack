@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "bleachhack",
+  "version": "${version}",
+
+  "name": "BleachHack",
+  "description": "gamer hack",
+  "authors": [
+    "Bleach#0136"
+  ],
+  "contact": {
+    "homepage": "https://github.com/BleachDrinker420/",
+    "sources": "https://github.com/BleachDrinker420/bleachhack-1.14"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/bleachhack/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "bleach.hack.BleachHack"
+    ]
+  },
+  "mixins": [
+    "bleachhack.mixins.json"
+  ]
+}
