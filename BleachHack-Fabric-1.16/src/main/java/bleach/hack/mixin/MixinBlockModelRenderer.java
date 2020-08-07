@@ -57,13 +57,11 @@ public class MixinBlockModelRenderer {
         } catch (Exception ignored) {}
         return boolean_1;
     }
-
     @ModifyArg(method = "render", at = @At(value = "HEAD", target = "Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;ZLjava/util/Random;JI)Z"))
     private boolean renderFlat(boolean boolean_1) {
         try {
             if (ModuleManager.getModule(Xray.class).isToggled()) return false;
         } catch (Exception ignored) {}
-
         return boolean_1;
     }*/
 
