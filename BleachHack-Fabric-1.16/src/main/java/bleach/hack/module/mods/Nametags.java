@@ -38,7 +38,7 @@ public class Nametags extends Module {
 	public Nametags() {
 		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor: ", "H", "V", "None").withDesc("How to show items/armor"),
-				new SettingMode("Health: ", "Number", "Bar").withDesc("How to show health"),
+				new SettingMode("Health: ", "Number", "Bar", "Percent").withDesc("How to show health"),
 				new SettingToggle("Players", true).withDesc("show player nametags").withChildren(
 						new SettingSlider("Size: ", 0.5, 5, 2, 1).withDesc("Size of the nametags")),
 				new SettingToggle("Mobs", false).withDesc("show mobs/animal nametags").withChildren(
@@ -88,26 +88,27 @@ public class Nametags extends Module {
 					Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1) :
 						Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
 
-			/* Health bar */
-			String health = "";
-			/* - Add Green Normal Health */
-			for (int i = 0; i < e.getHealth(); i++) health += "\u00a7a|";
-			/* - Add Red Empty Health (Remove Based on absorption amount) */
-			for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaxHealth() - e.getHealth()); i++) health += "\u00a7e|";
-			/* Add Yellow Absorption Health */
-			for (int i = 0; i < e.getMaxHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "\u00a7c|";
-			/* Add "+??" to the end if the entity has extra hearts */
-			if (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
-				health += " \u00a7e+" + (int)(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
-			}
-
 			/* Drawing Nametags */
 			if (getSetting(1).asMode().mode == 0) {
-				WorldRenderUtils.drawText(color + e.getName().getString() + " [" + (int) (e.getHealth() + e.getAbsorptionAmount()) + "/" + (int) e.getMaxHealth() + "]",
+				WorldRenderUtils.drawText(color + e.getName().getString()
+						+ " \u00a7a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a7a/" + (int) e.getMaxHealth() + "]",
 						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			} else if (getSetting(1).asMode().mode == 1) {
+				/* Health bar */
+				String health = "";
+				/* - Add Green Normal Health */
+				for (int i = 0; i < e.getHealth(); i++) health += "\u00a7a|";
+				/* - Add Red Empty Health (Remove Based on absorption amount) */
+				for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaxHealth() - e.getHealth()); i++) health += "\u00a7e|";
+				/* Add Yellow Absorption Health */
+				for (int i = 0; i < e.getMaxHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++) health += "\u00a7c|";
+				/* Add "+??" to the end if the entity has extra hearts */
+				if (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
+					health += " \u00a7e+" + (int)(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
+				}
+				
 				WorldRenderUtils.drawText(color + e.getName().getString(),
 						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
@@ -115,6 +116,12 @@ public class Nametags extends Module {
 				WorldRenderUtils.drawText(health,
 						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
+						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
+			} else if (getSetting(1).asMode().mode == 2) {
+				WorldRenderUtils.drawText(color + e.getName().getString()
+						+ getHealthColor(e) + " [" + (int) ((e.getHealth() + e.getAbsorptionAmount()) / e.getMaxHealth() * 100) + "%]",
+						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			}
 
@@ -154,6 +161,20 @@ public class Nametags extends Module {
 				}
 
 				event.setCancelled(true);*/
+		}
+	}
+	
+	private String getHealthColor(LivingEntity entity) {
+		if (entity.getHealth() + entity.getAbsorptionAmount() > entity.getMaxHealth()) {
+			return "\u00a7e";
+		} else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.7) {
+			return "\u00a7a";
+		} else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.4) {
+			return "\u00a76";
+		} else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.1) {
+			return "\u00a7c";
+		} else {
+			return "\u00a74";
 		}
 	}
 }
