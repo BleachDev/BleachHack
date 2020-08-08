@@ -39,6 +39,7 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.FabricReflect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
@@ -154,8 +155,7 @@ public class UI extends Module {
 		}
 		
 		if (getSetting(8).asToggle().state) {
-			String server = "Singleplayer";
-			try{ server = mc.getCurrentServerEntry().address; } catch (Exception e) {}
+			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
 			infoList.add("\u00a77Server: \u00a7d" + server);
 		}
 
@@ -165,8 +165,8 @@ public class UI extends Module {
 		}
 
 		if (getSetting(4).asToggle().state) {
-			int ping = 0;
-			try{ ping = mc.getNetworkHandler().getPlayerListEntry(mc.player.getGameProfile().getId()).getLatency(); } catch (Exception e) {}
+			PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
+			int ping = playerEntry == null ? 0 : playerEntry.getLatency();
 			infoList.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
 		}
 

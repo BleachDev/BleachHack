@@ -37,14 +37,12 @@ public class BleachHack implements ClientModInitializer {
 	 * Change this to 0 in release builds, and -1 in dev builds */
 	public static final int MIXIN_REQUIRE = -1;
 	
-	public static EventBus eventBus;
+	public static EventBus eventBus = new EventBus();
 
 	public static FriendManager friendMang;
 
 	@Override
 	public void onInitializeClient() {
-		eventBus = new EventBus();
-
 		BleachFileMang.init();
 		BleachFileHelper.readModules();
 

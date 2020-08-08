@@ -21,6 +21,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
 import net.minecraft.item.ItemStack;
@@ -56,14 +58,10 @@ public class CmdRbook extends Command {
 			return;
 		}
 
-		int pages = 100;
-		int startChar = 0x0;
-		int endChar = 0x10FFFF;
-		int pageChars = 210;
-		try { pages = Math.min(Integer.parseInt(args[0]), 100); } catch (Exception e) {}
-		try { startChar = Integer.parseInt(args[1]); } catch (Exception e) {}
-		try { endChar = Integer.parseInt(args[2]); } catch (Exception e) {}
-		try { pageChars = Integer.parseInt(args[3]); } catch (Exception e) {}
+		int pages = args.length >= 1 ? Math.min(NumberUtils.toInt(args[0], 100), 100) : 100;
+		int startChar = args.length >= 2 ? NumberUtils.toInt(args[1]) : 0;
+		int endChar = args.length >= 3 ? NumberUtils.toInt(args[2], 0x10FFFF) : 0x10FFFF;
+		int pageChars = args.length >= 4 ? NumberUtils.toInt(args[3], 210) : 210;
 
 		IntStream chars = new Random().ints(startChar, endChar + 1);
 		String text = chars.limit(pageChars*100).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());

@@ -19,6 +19,10 @@ package bleach.hack.command.commands;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
 import net.minecraft.item.AirBlockItem;
@@ -80,10 +84,10 @@ public class CmdGive extends Command {
 				Registry.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase())));
 
 		if (item.getItem() instanceof AirBlockItem) throw new Exception();
-
-		try { item.setCount(Integer.parseInt(args[1])); } catch (Exception e) {}
-		try { item.setDamage(Integer.parseInt(args[2])); } catch (Exception e) {}
-		try { item.setTag(StringNbtReader.parse(args[3])); } catch (Exception e) {}
+		
+		if (args.length >= 2 && NumberUtils.isCreatable(args[1])) item.setCount(NumberUtils.createNumber(args[1]).intValue());
+		if (args.length >= 3 && NumberUtils.isCreatable(args[2])) item.setDamage(NumberUtils.createNumber(args[2]).intValue());
+		if (args.length >= 4) try { item.setTag(StringNbtReader.parse(args[3])); } catch (CommandSyntaxException e) {}
 
 		mc.player.inventory.addPickBlock(item);
 	}
