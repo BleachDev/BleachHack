@@ -33,6 +33,7 @@
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinServerScreen",
+    "MixinSharedConstants",
     "MixinSignBlockEntityRenderer",
     "MixinSoundSystem",
     "MixinTitleScreen",

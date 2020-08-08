@@ -34,6 +34,7 @@
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinServerScreen",
+    "MixinSharedConstants",
     "MixinSignBlockEntityRenderer",
     "MixinSkyProperties",
     "MixinSoundSystem",

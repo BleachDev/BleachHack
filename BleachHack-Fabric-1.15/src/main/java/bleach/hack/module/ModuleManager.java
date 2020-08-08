@@ -17,18 +17,18 @@
  */
 package bleach.hack.module;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.lwjgl.glfw.GLFW;
+
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
 import com.google.common.eventbus.Subscribe;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.lwjgl.glfw.GLFW;
 
 public class ModuleManager {
 
@@ -41,9 +41,9 @@ public class ModuleManager {
 			new AutoReconnect(),
 			new AutoRespawn(),
 			new AutoSign(),
-			new AutoWalk(),
-			new AutoTotem(),
 			new AutoTool(),
+			new AutoTotem(),
+			new AutoWalk(),
 			new BetterPortal(),
 			new BlockParty(),
 			new BookCrash(),
@@ -57,8 +57,8 @@ public class ModuleManager {
 			new DiscordRPCMod(),
 			new Dispenser32k(),
 			new ElytraFly(),
-			new ElytraReplace(),
 			new EntityControl(),
+			new ElytraReplace(),
 			new ESP(),
 			new FakeLag(),
 			new FastUse(),
@@ -73,6 +73,7 @@ public class ModuleManager {
 			new MouseFriend(),
 			new Nametags(),
 			new Nofall(),
+			new NoKeyBlock(),
 			new NoRender(),
 			new NoSlow(),
 			new Notebot(),
