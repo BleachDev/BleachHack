@@ -104,8 +104,7 @@ public class WorldRenderUtils {
 
 		GL11.glScalef(0.6F, 0.6F, 0.6F);
 		String dur = item.getMaxDamage() - item.getDamage() + "";
-		int color = 0x000000;
-		try{ color = MathHelper.hsvToRgb(((float) (item.getMaxDamage() - item.getDamage()) / item.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
+		int color = MathHelper.hsvToRgb((float) MathHelper.clamp(item.getMaxDamage() - item.getDamage() / item.getMaxDamage(), 0f, 1f) / 3.0F, 1.0F, 1.0F);
 		if (item.isDamageable()) mc.textRenderer.drawWithShadow(dur, -8 - dur.length() * 3, 15,
 				new Color(color >> 16 & 255, color >> 8 & 255, color & 255).getRGB());
 
