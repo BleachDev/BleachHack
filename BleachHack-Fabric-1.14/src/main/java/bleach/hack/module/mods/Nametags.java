@@ -18,7 +18,6 @@
 package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
-
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
@@ -49,13 +48,20 @@ public class Nametags extends Module {
 						new SettingToggle("Custom Name", true).withDesc("Shows the items custom name if it has it"),
 						new SettingSlider("Size: ", 0.5, 5, 1, 1).withDesc("Size of the nametags")));
 	}
+	
+	@Subscribe
+	public void onEntityRender(EventEntityRender.Render event) {
+		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSetting(3).asToggle().state)
+				|| (event.getEntity() instanceof PlayerEntity && getSetting(2).asToggle().state)
+				|| (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state)) event.getEntity().setCustomNameVisible(true);
+	}
 
 	@Subscribe
-	public void onLivingLabelRender(EventEntityRender.Label event) {
+	public void onEntityLabelRender(EventEntityRender.Label event) {
 		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSetting(3).asToggle().state)
 				|| (event.getEntity() instanceof PlayerEntity && getSetting(2).asToggle().state)
 				|| (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state)) event.setCancelled(true);
-
+		
 		if (event.getEntity() instanceof ItemEntity) {
 			ItemEntity e = (ItemEntity) event.getEntity();
 
@@ -79,8 +85,8 @@ public class Nametags extends Module {
 					? "§a" : e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 
 			if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||
-					((color == "§c" || color == "§6") && !getSetting(4).asToggle().state) ||
-					((color == "§5" || color == "§a") && !getSetting(5).asToggle().state)) return;
+					((color == "§c" || color == "§6") && !getSetting(2).asToggle().state) ||
+					((color == "§5" || color == "§a") && !getSetting(3).asToggle().state)) return;
 			if (e.isInvisible()) color = "§e";
 
 			double scale = (e instanceof PlayerEntity ?
@@ -131,8 +137,6 @@ public class Nametags extends Module {
 					c++;
 				}
 			}
-
-			event.setCancelled(true);
 		}
 	}
 }
