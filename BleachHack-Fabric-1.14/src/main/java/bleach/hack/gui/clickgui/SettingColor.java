@@ -18,6 +18,10 @@ public class SettingColor extends SettingBase {
 	public float sat;
 	public float bri;
 	
+	protected float defaultHue;
+	protected float defaultSat;
+	protected float defaultBri;
+	
 	public SettingColor(String text, float r, float g, float b, boolean hsb) {
 		this.text = text;
 		if (hsb) {
@@ -30,6 +34,10 @@ public class SettingColor extends SettingBase {
 			this.sat = vals[1];
 			this.bri = vals[2];
 		}
+		
+		defaultHue = hue;
+		defaultSat = sat;
+		defaultBri = bri;
 	}
 
 	public String getName() {
@@ -124,5 +132,10 @@ public class SettingColor extends SettingBase {
 	public float[] getRGBFloat() {
 		Color col = Color.getHSBColor(hue, sat, bri);
 		return new float[] { col.getRed() / 255f, col.getGreen() / 255f, col.getBlue() / 255f };
+	}
+	
+	@Override
+	public boolean isDefault() {
+		return hue == defaultHue && sat == defaultSat && bri == defaultBri;
 	}
 }

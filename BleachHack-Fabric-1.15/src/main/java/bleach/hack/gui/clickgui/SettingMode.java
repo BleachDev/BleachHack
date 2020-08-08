@@ -72,4 +72,9 @@ public class SettingMode extends SettingBase {
 	public JsonElement saveSettings() {
 		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length));
 	}
+	
+	@Override
+	public boolean isDefault() {
+		return mode == 0;
+	}
 }

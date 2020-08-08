@@ -20,6 +20,7 @@ package bleach.hack.utils.file;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -57,20 +58,26 @@ public class BleachFileHelper {
 			
 			if (!m.getSettings().isEmpty()) {
 				JsonObject so = new JsonObject();
+				// Seperate JsonObject with all the settings to keep the extra number so when it reads, it doesn't mess up the order
+				JsonObject fullSo = new JsonObject();
 				
 				for (SettingBase s: m.getSettings()) {
 					String name = s.getName();
 					
 					int extra = 0;
-					while (so.has(name)) {
+					while (fullSo.has(name)) {
 						extra++;
 						name = s.getName() + extra;
 					}
 					
-					so.add(name, s.saveSettings());
+					fullSo.add(name, s.saveSettings());
+					if (!s.isDefault()) so.add(name, s.saveSettings());
 				}
 				
-				mo.add("settings", so);
+				if (so.size() != 0) {
+					mo.add("settings", so);
+				}
+				
 			}
 			
 			if (mo.size() != 0) {
@@ -102,17 +109,18 @@ public class BleachFileHelper {
 				}
 				
 				if (mo.has("settings") && mo.get("settings").isJsonObject()) {
-					// Map to keep track if there are multiple settings with the same name
-					HashMap<String, Integer> sNames = new HashMap<>();
-					
 					for (Entry<String, JsonElement> se: mo.get("settings").getAsJsonObject().entrySet()) {
+						// Map to keep track if there are multiple settings with the same name
+						HashMap<String, Integer> sNames = new HashMap<>();
+						
 						for (SettingBase sb: mod.getSettings()) {
 							String name = sNames.containsKey(sb.getName()) ? sb.getName() + sNames.get(sb.getName()) : sb.getName();
 							
 							if (name.equals(se.getKey())) {
 								sb.readSettings(se.getValue());
-								sNames.put(sb.getName(), sNames.containsKey(sb.getName()) ? sNames.get(sb.getName()) + 1 : 1);
 								break;
+							} else {
+								sNames.put(sb.getName(), sNames.containsKey(sb.getName()) ? sNames.get(sb.getName()) + 1 : 1);
 							}
 						}
 					}
@@ -146,7 +154,8 @@ public class BleachFileHelper {
 	}
 
 	public static void readPrefix() {
-		try{ Command.PREFIX = BleachFileMang.readFileLines("prefix.txt").get(0); } catch (Exception e) {}
+		List<String> lines = BleachFileMang.readFileLines("prefix.txt");
+		if (!lines.isEmpty()) Command.PREFIX = lines.get(0);
 	}
 
 	public static void readFriends() {

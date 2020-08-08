@@ -39,12 +39,16 @@ public class SettingToggle extends SettingBase {
 	public boolean state;
 	public String text;
 	
+	protected boolean defaultState;
+	
 	protected List<SettingBase> children = new ArrayList<>();
 	protected boolean expanded = false;
 
 	public SettingToggle(String text, boolean state) {
 		this.state = state;
 		this.text = text;
+		
+		defaultState = state;
 	}
 	
 	public String getName() {
@@ -180,5 +184,16 @@ public class SettingToggle extends SettingBase {
 			jo.add("children", subJo);
 			return jo;
 		}
+	}
+
+	@Override
+	public boolean isDefault() {
+		if (state != defaultState) return false;
+		
+		for (SettingBase s: children) {
+			if (!s.isDefault()) return false;
+		}
+		
+		return true;
 	}
 }

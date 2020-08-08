@@ -35,6 +35,8 @@ public class SettingSlider extends SettingBase {
 	private double value;
 	public int round;
 	public String text;
+	
+	protected double defaultValue;
 
 	public SettingSlider(String text, double min, double max, double value, int round) {
 		this.min = min;
@@ -42,6 +44,8 @@ public class SettingSlider extends SettingBase {
 		this.value = value;
 		this.round = round;
 		this.text = text;
+		
+		defaultValue = value;
 	}
 
 	public double getValue() {
@@ -93,5 +97,13 @@ public class SettingSlider extends SettingBase {
 
 	public JsonElement saveSettings() {
 		return new JsonPrimitive(getValue());
+	}
+
+	@Override
+	public boolean isDefault() {
+		BigDecimal bd = new BigDecimal(defaultValue);
+		bd = bd.setScale(round, RoundingMode.HALF_UP);
+		
+		return bd.doubleValue() == getValue();
 	}
 }

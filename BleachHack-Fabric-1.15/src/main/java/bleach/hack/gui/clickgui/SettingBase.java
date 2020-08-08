@@ -75,4 +75,6 @@ public abstract class SettingBase {
 	
 	public abstract void readSettings(JsonElement settings);
 	public abstract JsonElement saveSettings();
+	
+	public abstract boolean isDefault();
 }
