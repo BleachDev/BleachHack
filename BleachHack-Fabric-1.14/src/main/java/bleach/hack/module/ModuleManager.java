@@ -51,6 +51,7 @@ public class ModuleManager {
 			new ChestESP(),
 			new ChunkSize(),
 			new ClickGui(),
+			new ColorSigns(),
 			new Criticals(),
 			new CrystalAura(),
 			new CustomChat(),
