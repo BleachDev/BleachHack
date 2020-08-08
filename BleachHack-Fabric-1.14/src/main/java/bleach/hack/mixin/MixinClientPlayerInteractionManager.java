@@ -31,7 +31,7 @@ public class MixinClientPlayerInteractionManager {
 	
 	@Shadow private int field_3716;
 
-	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;field_3716:I", ordinal = 3))
+	@Redirect(method = "method_2902", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;field_3716:I", ordinal = 3))
 	public void updateBlockBreakingProgress(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
 		i = (ModuleManager.getModule(Nuker.class).isToggled() ?
 				(int) ModuleManager.getModule(Nuker.class).getSetting(2).asSlider().getValue()
@@ -42,7 +42,7 @@ public class MixinClientPlayerInteractionManager {
 		this.field_3716 = i;
 	}
 
-	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;field_3716:I", ordinal = 4))
+	@Redirect(method = "method_2902", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;field_3716:I", ordinal = 4))
 	public void updateBlockBreakingProgress2(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
 		i = (ModuleManager.getModule(Nuker.class).isToggled()
 				? (int) ModuleManager.getModule(Nuker.class).getSetting(2).asSlider().getValue()
