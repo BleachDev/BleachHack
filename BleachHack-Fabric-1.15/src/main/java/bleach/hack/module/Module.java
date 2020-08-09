@@ -36,6 +36,7 @@ public class Module {
 	protected MinecraftClient mc = MinecraftClient.getInstance();
 	private String name;
 	private int key;
+	private int defaultKey;
 	private boolean toggled;
 	private Category category;
 	private String desc;
@@ -44,6 +45,7 @@ public class Module {
 	public Module(String nm, int k, Category c, String d, SettingBase... s) {
 		name = nm;
 		setKey(k);
+		defaultKey = getKey();
 		category = c;
 		desc = d;
 		settings = Arrays.asList(s);
@@ -101,6 +103,10 @@ public class Module {
 
 	public int getKey() {
 		return key;
+	}
+	
+	public int getDefaultKey() {
+		return defaultKey;
 	}
 
 	public List<SettingBase> getSettings() {
