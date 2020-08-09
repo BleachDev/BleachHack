@@ -180,7 +180,7 @@ public class Notebot extends Module {
 					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
 					setToggled(false);
 					setToggled(true);
-					BleachLogger.infoMessage("Now Playing: §a" + filePath);
+					BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
 				} catch (IOException e) {}
 			} else if (getSetting(2).asToggle().state) {
 				timer = -10;
