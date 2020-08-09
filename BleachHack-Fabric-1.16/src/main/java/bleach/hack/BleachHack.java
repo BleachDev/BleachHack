@@ -44,7 +44,6 @@ public class BleachHack implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		BleachFileMang.init();
-		BleachFileHelper.initModuleConfig();
 		BleachFileHelper.readModules();
 
 		ClickGui.clickGui.initWindows();

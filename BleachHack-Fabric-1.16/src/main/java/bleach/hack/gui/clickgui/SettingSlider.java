@@ -20,8 +20,6 @@ package bleach.hack.gui.clickgui;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -99,16 +97,6 @@ public class SettingSlider extends SettingBase {
 
 	public JsonElement saveSettings() {
 		return new JsonPrimitive(getValue());
-	}
-	
-	@Override
-	public void readOldSettings(String settings) {
-		setValue(NumberUtils.toDouble(settings, defaultValue));
-	}
-
-	@Override
-	public String saveOldSettings() {
-		return getValue() + "";
 	}
 
 	@Override

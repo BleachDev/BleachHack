@@ -71,15 +71,11 @@ public class CustomChat extends Module {
 	}
 	
 	public void init() {
-		System.out.println("Reading prefix...");
 		String pfx = BleachFileHelper.readMiscSetting("customChatPrefix");
 		if (pfx != null) prefix = pfx;
-		System.out.println("- " + pfx);
 		
-		System.out.println("Reading suffix...");
 		String sfx = BleachFileHelper.readMiscSetting("customChatSuffix");
 		if (sfx != null) suffix = sfx;
-		System.out.println("- " + sfx);
 	}
 
 	@Subscribe

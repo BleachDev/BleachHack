@@ -28,7 +28,6 @@ public class CommandManager {
 	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
 			new CmdCI(),
-			new CmdConfigSettings(),
 			new CmdCustomChat(),
 			new CmdDupe(),
 			new CmdEnchant(),
