@@ -30,7 +30,7 @@ import net.fabricmc.api.ClientModInitializer;
 
 public class BleachHack implements ClientModInitializer {
 
-	public static final String VERSION = "B14.01";
+	public static final String VERSION = "B14.1";
 	public static final int INTVERSION = 23;
 	
 	/* This changes some mixins so they don't crash mc when being overinjected by another mod in non-dev workspaces
