@@ -25,7 +25,7 @@ public class MixinScreen {
 		lastMY = int_2;
 	}
 
-	@Inject(at = @At("HEAD"), method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;II)V", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "renderOrderedTooltip", cancellable = true)
 	public void renderTooltip(MatrixStack matrix, List<? extends OrderedText> text, int x, int y, CallbackInfo info) {
 		EventDrawTooltip event = new EventDrawTooltip(matrix, text, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
@@ -33,7 +33,7 @@ public class MixinScreen {
 		if (event.isCancelled()) {
 			info.cancel();
 		} else if (!event.text.equals(text) || event.x != x || event.y != y) {
-			event.screen.renderTooltip(matrix, event.text, event.x, event.y);
+			event.screen.renderOrderedTooltip(matrix, event.text, event.x, event.y);
 			info.cancel();
 		}
 	}
