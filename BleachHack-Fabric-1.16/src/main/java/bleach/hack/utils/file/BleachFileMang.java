@@ -18,7 +18,6 @@
 package bleach.hack.utils.file;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -49,7 +48,7 @@ public class BleachFileMang {
 			return Files.readAllLines(stringsToPath(file));
 		} catch (NoSuchFileException e) {
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Error Reading File: " + stringsToPath(file));
 			e.printStackTrace();
 		}
@@ -63,7 +62,7 @@ public class BleachFileMang {
 			if (fileExists(file)) return;
 			dir.toFile().mkdirs();
 			Files.createFile(stringsToPath(file));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Error Creating File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
@@ -77,7 +76,7 @@ public class BleachFileMang {
 			FileWriter writer = new FileWriter(stringsToPath(file).toFile());
 			writer.write("");
 			writer.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Error Clearing/Creating File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
@@ -93,7 +92,7 @@ public class BleachFileMang {
 					+ content
 					+ (content.endsWith("\n") ? "" : "\n"));
 			writer.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Error Appending File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
