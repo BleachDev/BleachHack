@@ -17,7 +17,6 @@
  */
 package bleach.hack.mixin;
 
-import bleach.hack.BleachHack;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.Xray;
 import net.minecraft.block.BlockState;
@@ -52,8 +51,7 @@ public class MixinBlockModelRenderer {
 
 	@ModifyArg(
 			method = "tesselate",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateSmooth(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"),
-			require = BleachHack.MIXIN_REQUIRE)
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateSmooth(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
 	private boolean tesselateSmooth(boolean checkSides) {
 		try {
 			if (ModuleManager.getModule(Xray.class).isToggled()) return false;
@@ -63,8 +61,7 @@ public class MixinBlockModelRenderer {
 
 	@ModifyArg(
 			method = "tesselate",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateFlat(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"),
-			require = BleachHack.MIXIN_REQUIRE)
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateFlat(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
 	private boolean tesselateFlat(boolean checkSides) {
 		try {
 			if (ModuleManager.getModule(Xray.class).isToggled()) return false;

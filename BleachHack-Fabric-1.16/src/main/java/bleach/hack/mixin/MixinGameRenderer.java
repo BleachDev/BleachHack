@@ -62,8 +62,7 @@ public class MixinGameRenderer {
 
 	@Redirect(
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0),
-			method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V",
-			require = BleachHack.MIXIN_REQUIRE)
+			method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V")
 	private float nauseaWobble(float delta, float first, float second) {
 		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state))
 			return MathHelper.lerp(delta, first, second);

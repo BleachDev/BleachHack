@@ -33,10 +33,6 @@ public class BleachHack implements ModInitializer {
 	public static final String VERSION = "B14.1";
 	public static final int INTVERSION = 23;
 	
-	/* This changes some mixins so they don't crash mc when being overinjected by another mod in non-dev workspaces
-	 * Change this to 0 in release builds, and -1 in dev builds */
-	public static final int MIXIN_REQUIRE = -1;
-	
 	public static EventBus eventBus = new EventBus();
 
 	public static FriendManager friendMang;
