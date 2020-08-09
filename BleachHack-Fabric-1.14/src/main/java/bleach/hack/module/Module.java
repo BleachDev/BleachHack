@@ -112,6 +112,7 @@ public class Module {
 	}
 
 	public void setKey(int key) {
+		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 		this.key = key;
 	}
 
