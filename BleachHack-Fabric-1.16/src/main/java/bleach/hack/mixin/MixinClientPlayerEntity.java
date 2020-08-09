@@ -60,9 +60,9 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	public void tick(CallbackInfo info) {
 		try {
 			if (MinecraftClient.getInstance().player.age % 100 == 0) {
-				if (BleachFileHelper.SCHEDULE_SAVE_MODULES) BleachFileHelper.saveModules();
-				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
-				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
+				if (BleachFileHelper.SCHEDULE_SAVE_MODULES || !BleachFileHelper.SCHEDULE_SAVE) BleachFileHelper.saveModules();
+				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI || !BleachFileHelper.SCHEDULE_SAVE) BleachFileHelper.saveClickGui();
+				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS || !BleachFileHelper.SCHEDULE_SAVE) BleachFileHelper.saveFriends();
 			}
 
 			BleachQueue.nextQueue();

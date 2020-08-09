@@ -77,5 +77,8 @@ public abstract class SettingBase {
 	public abstract void readSettings(JsonElement settings);
 	public abstract JsonElement saveSettings();
 	
+	public abstract void readOldSettings(String settings);
+	public abstract String saveOldSettings();
+	
 	public abstract boolean isDefault();
 }

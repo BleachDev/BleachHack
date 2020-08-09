@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -39,8 +41,32 @@ public class BleachFileHelper {
 	public static boolean SCHEDULE_SAVE_MODULES = false;
 	public static boolean SCHEDULE_SAVE_FRIENDS = false;
 	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
+	
+	public static boolean SCHEDULE_SAVE = true;
+	public static boolean OLD_MODULE_FORMAT = false;
+	public static boolean MERGE_OLD_MODULE_FORMAT = false;
+	
+	public static void initModuleConfig() {
+		String s = readMiscSetting("configSchedule");
+		String s1 = readMiscSetting("configOldModFormat");
+		String s2 = readMiscSetting("configMergeOldModFormat");
+		
+		if (s != null && !Boolean.parseBoolean(s)) SCHEDULE_SAVE = false;
+		OLD_MODULE_FORMAT = Boolean.parseBoolean(s1);
+		MERGE_OLD_MODULE_FORMAT = Boolean.parseBoolean(s2);
+	}
 
 	public static void saveModules() {
+		if (OLD_MODULE_FORMAT) saveOldModules(MERGE_OLD_MODULE_FORMAT);
+		else saveNewModules();
+	}
+	
+	public static void readModules() {
+		if (OLD_MODULE_FORMAT) readOldModules(MERGE_OLD_MODULE_FORMAT);
+		else readNewModules();
+	}
+	
+	private static void saveNewModules() {
 		SCHEDULE_SAVE_MODULES = false;
 		
 		JsonObject jo = new JsonObject();
@@ -88,7 +114,7 @@ public class BleachFileHelper {
 		BleachJsonHelper.setJsonFile(jo, "modules.json");
 	}
 
-	public static void readModules() {
+	private static void readNewModules() {
 		JsonObject jo = BleachJsonHelper.readJsonFile("modules.json");
 		
 		if (jo == null) return;
@@ -125,6 +151,123 @@ public class BleachFileHelper {
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	private static void saveOldModules(boolean merged) {
+		if (merged) {
+			BleachFileMang.createEmptyFile("modules_merged.txt");
+			
+			String settings = "";
+			for (Module m: ModuleManager.getModules()) {
+				String s = m.getName() + "`" + (m.getName().equals("ClickGui") || m.getName().equals("Freecam") ? "false" : m.isToggled()) + "`" + m.getKey() + "`";
+				
+				for (SettingBase sb: m.getSettings()) {
+					s += sb.saveOldSettings() + "~";
+				}
+				
+				settings += s.substring(0, s.length() - 1) + "\n";
+			}
+			
+			//System.out.println(settings.substring(0, 1000));
+			BleachFileMang.appendFile(settings, "modules_merged.txt");
+		} else {
+			BleachFileMang.createEmptyFile("binds.txt");
+			BleachFileMang.createEmptyFile("modules.txt");
+			BleachFileMang.createEmptyFile("settings.txt");
+			
+			String settings = "";
+			String settings1 = "";
+			String settings2 = "";
+			for (Module m: ModuleManager.getModules()) {
+				if (m.getName().equals("ClickGui") || m.getName().equals("Freecam")) continue;
+				settings += m.getName() + "`" + m.isToggled() + "\n";
+				
+				if (!m.getSettings().isEmpty()) {
+					settings1 += m.getName();
+					for (SettingBase sb: m.getSettings()) {
+						settings1 += "~" + sb.saveOldSettings();
+					}
+					
+					settings1 += "\n";
+				}
+				
+				settings2 += m.getName() + "`" + m.getKey() + "\n";
+			}
+			
+			BleachFileMang.appendFile(settings, "modules.txt");
+			BleachFileMang.appendFile(settings1, "settings.txt");
+			BleachFileMang.appendFile(settings2, "binds.txt");
+		}
+	}
+	
+	private static void readOldModules(boolean merged) {
+		if (merged) {
+			BleachFileMang.createFile("modules_merged.txt");
+			
+			for (String s: BleachFileMang.readFileLines("modules_merged.txt")) {
+				try {
+					String[] split = s.split("`");
+					if (split.length < 3) continue;
+					
+					Module m = ModuleManager.getModuleByName(split[0]);
+					if (m != null) {
+						if (Boolean.parseBoolean(split[1])) m.setToggled(true);
+						if (NumberUtils.isCreatable(split[2])) m.setKey(Integer.parseInt(split[2]));
+						
+						if (split.length >= 4) {
+							String[] split1 = split[3].split("~");
+							int i = 0;
+							for (SettingBase sb: m.getSettings()) {
+								if (i == split1.length) break;
+								
+								sb.readOldSettings(split1[i]);
+								i++;
+							}
+						}
+					}
+				} catch (Exception e) { e.printStackTrace(); }
+			}
+		} else {
+			BleachFileMang.createFile("binds.txt");
+			BleachFileMang.createFile("modules.txt");
+			BleachFileMang.createFile("settings.txt");
+			
+			for (String s: BleachFileMang.readFileLines("binds.txt")) {
+				try {
+					String[] split = s.split("`");
+					
+					Module m = ModuleManager.getModuleByName(split[0]);
+					if (m != null && NumberUtils.isDigits(split[1])) m.setKey(Integer.parseInt(split[1]));
+				} catch (Exception e) { e.printStackTrace(); }
+			}
+			
+			for (String s: BleachFileMang.readFileLines("modules.txt")) {
+				try {
+					String[] split = s.split("`");
+					
+					Module m = ModuleManager.getModuleByName(split[0]);
+					if (m != null) m.setToggled(Boolean.parseBoolean(split[1]));
+				} catch (Exception e) { e.printStackTrace(); }
+			}
+			
+			for (String s: BleachFileMang.readFileLines("settings.txt")) {
+				try {
+					String[] split = s.split("`");
+					
+					Module m = ModuleManager.getModuleByName(split[0]);
+					if (m != null) {
+						String[] split1 = split[1].split("~");
+						int i = 0;
+						for (SettingBase sb: m.getSettings()) {
+							if (i == split1.length) break;
+							
+							sb.readOldSettings(split1[i]);
+							i++;
+						}
+					}
+				} catch (Exception e) { e.printStackTrace(); }
 			}
 		}
 	}

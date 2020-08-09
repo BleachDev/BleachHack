@@ -2,6 +2,7 @@ package bleach.hack.gui.clickgui;
 
 import java.awt.Color;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -156,6 +157,22 @@ public class SettingColor extends SettingBase {
 	public float[] getRGBFloat() {
 		Color col = Color.getHSBColor(hue, sat, bri);
 		return new float[] { col.getRed() / 255f, col.getGreen() / 255f, col.getBlue() / 255f };
+	}
+	
+	@Override
+	public void readOldSettings(String settings) {
+		String[] s = settings.split(":");
+
+		if (s.length == 3 && NumberUtils.isCreatable(s[0]) && NumberUtils.isCreatable(s[1]) && NumberUtils.isCreatable(s[2])) {
+			hue = NumberUtils.toFloat(s[0]);
+			sat = NumberUtils.toFloat(s[1]);
+			bri = NumberUtils.toFloat(s[2]);
+		}
+	}
+
+	@Override
+	public String saveOldSettings() {
+		return hue + ":" + sat + ":" + bri;
 	}
 
 	@Override

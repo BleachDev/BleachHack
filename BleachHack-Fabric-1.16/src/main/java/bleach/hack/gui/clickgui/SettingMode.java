@@ -17,6 +17,8 @@
  */
 package bleach.hack.gui.clickgui;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -72,6 +74,16 @@ public class SettingMode extends SettingBase {
 
 	public JsonElement saveSettings() {
 		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length));
+	}
+	
+	@Override
+	public void readOldSettings(String settings) {
+		mode = MathHelper.clamp(NumberUtils.toInt(settings), 0, modes.length);
+	}
+
+	@Override
+	public String saveOldSettings() {
+		return mode + "";
 	}
 
 	@Override
