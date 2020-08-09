@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import bleach.hack.event.events.EventDrawTooltip;
 import bleach.hack.gui.clickgui.SettingMode;
@@ -23,6 +24,9 @@ import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.container.Slot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FilledMapItem;
@@ -194,7 +198,7 @@ public class Peek extends Module {
 		return -16777216 | r << 16 | g << 8 | b;
 	}
 
-	public void renderTooltipBox(int x1, int y1, int x2, int y2, boolean wrap) {
+	private void renderTooltipBox(int x1, int y1, int x2, int y2, boolean wrap) {
 		int int_5 = x1 + 12;
 		int int_6 = y1 - 12;
 		if (wrap) {
@@ -202,15 +206,42 @@ public class Peek extends Module {
 			if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
 		}
 
-		/* why the fork is this private? */
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 + x2 + 3, int_5 + y2 + 3, int_6 + x2 + 4, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 + x2 + 3, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 4, int_6 - 3, int_5 - 3, int_6 + x2 + 3, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 + y2 + 3, int_6 - 3, int_5 + y2 + 4, int_6 + x2 + 3, -267386864, -267386864);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3 + 1, int_5 - 3 + 1, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 1347420415, 1347420415);
-		FabricReflect.invokeMethod(mc.currentScreen, "", "fillGradient", int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 1344798847, 1344798847);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GL11.glShadeModel(7425);
+		fillGradient(int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, -267386864, -267386864);
+		fillGradient(int_5 - 3, int_6 + x2 + 3, int_5 + y2 + 3, int_6 + x2 + 4, -267386864, -267386864);
+		fillGradient(int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 + x2 + 3, -267386864, -267386864);
+		fillGradient(int_5 - 4, int_6 - 3, int_5 - 3, int_6 + x2 + 3, -267386864, -267386864);
+		fillGradient(int_5 + y2 + 3, int_6 - 3, int_5 + y2 + 4, int_6 + x2 + 3, -267386864, -267386864);
+		fillGradient(int_5 - 3, int_6 - 3 + 1, int_5 - 3 + 1, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
+		fillGradient(int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
+		fillGradient(int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 1347420415, 1347420415);
+		fillGradient(int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 1344798847, 1344798847);
+		GL11.glShadeModel(7424);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	private void fillGradient(int x1, int y1, int x2, int y2, int color1, int color2) {
+		float float_1 = (color1 >> 24 & 255) / 255.0F;
+		float float_2 = (color1 >> 16 & 255) / 255.0F;
+		float float_3 = (color1 >> 8 & 255) / 255.0F;
+		float float_4 = (color1 & 255) / 255.0F;
+		float float_5 = (color2 >> 24 & 255) / 255.0F;
+		float float_6 = (color2 >> 16 & 255) / 255.0F;
+		float float_7 = (color2 >> 8 & 255) / 255.0F;
+		float float_8 = (color2 & 255) / 255.0F;
+		Tessellator tessellator_1 = Tessellator.getInstance();
+		BufferBuilder bufferBuilder_1 = tessellator_1.getBufferBuilder();
+		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder_1.vertex(x1, y1, 0).color(float_2, float_3, float_4, float_1).next();
+		bufferBuilder_1.vertex(x1, y2, 0).color(float_2, float_3, float_4, float_1).next();
+		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
+		bufferBuilder_1.vertex(x2, y1, 0).color(float_6, float_7, float_8, float_5).next();
+		tessellator_1.draw();
 	}
 }
