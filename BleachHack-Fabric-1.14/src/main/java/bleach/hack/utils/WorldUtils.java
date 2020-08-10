@@ -122,18 +122,18 @@ public class WorldUtils {
 					pos.getY() + 0.5 + d.getOffsetY() * 0.5,
 					pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
 
-			if (WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock)
+			if (NONSOLID_BLOCKS.contains(neighborBlock)
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.25) continue;
 
 			float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
 
 			if (rotate) facePosPacket(vec.x, vec.y, vec.z);
-			if (WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));
+			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));
 			
 			mc.interactionManager.interactBlock(
 					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos.offset(d), false));
 			
-			if (WorldUtils.RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));
+			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));
 			if (rotateBack) mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(rot[0], rot[1], mc.player.onGround));
 			return true;
 		}
@@ -141,7 +141,7 @@ public class WorldUtils {
 	}
 
 	public static boolean isBlockEmpty(BlockPos pos) {
-		if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) return false;
+		if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) return false;
 
 		Box box = new Box(pos);
 		for (Entity e: mc.world.getEntities()) {
@@ -154,7 +154,7 @@ public class WorldUtils {
 	public static boolean canPlaceBlock(BlockPos pos) {
 		if (!isBlockEmpty(pos)) return false;
 		for (Direction d: Direction.values()) {
-			if (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
+			if (NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 									pos.getY() + 0.5 + d.getOffsetY() * 0.5,
