@@ -35,6 +35,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -48,6 +49,7 @@ public class Scaffold extends Module {
 				new SettingSlider("Range: ", 0, 1, 0.3, 1),
 				new SettingMode("Mode: ", "Normal", "3x3", "5x5", "7x7"),
 				new SettingToggle("Rotate", false).withDesc("Rotate serverside"),
+				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier"),
 				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
 						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight"),
@@ -76,7 +78,6 @@ public class Scaffold extends Module {
 		mc.player.inventory.selectedSlot = slot;
 		double range = getSetting(0).asSlider().getValue();
 		int mode = getSetting(1).asMode().mode;
-		boolean rotate = getSetting(2).asToggle().state;
 
 		Vec3d placeVec = mc.player.getPos().add(0, -0.85, 0);
 		Set<BlockPos> blocks = (mode == 0
@@ -84,9 +85,31 @@ public class Scaffold extends Module {
 						new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))
 						: getSpiral(mode, new BlockPos(placeVec)));
 		
-		if (getSetting(4).asToggle().state) {
+		// Don't bother doing anything if there aren't any blocks to place on
+		boolean empty = true;
+		for (BlockPos bp: blocks) {
+			if (WorldUtils.canPlaceBlock(bp)) {
+				empty = false;
+				break;
+			}
+		}
+		
+		if (empty) return;
+		
+		if (getSetting(3).asToggle().state
+				&& WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock())
+				&& !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down(2)).getBlock())) {
+			double toBlock = (int) mc.player.getY() - mc.player.getY();
+			
+			if (toBlock < 0.05 && InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromName(mc.options.keyJump.getName()).getKeyCode())) {
+				mc.player.setVelocity(mc.player.getVelocity().x, -toBlock, mc.player.getVelocity().z);
+				mc.player.jump();
+			}
+		}
+		
+		if (getSetting(5).asToggle().state) {
 			for (BlockPos bp: blocks) {
-				if (getSetting(4).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
+				if (getSetting(5).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
 					renderBlocks.add(bp);
 				}
 			}
@@ -94,9 +117,9 @@ public class Scaffold extends Module {
 
 		int cap = 0;
 		for (BlockPos bp: blocks) {
-			if (WorldUtils.placeBlock(bp, -1, rotate, false)) {
+			if (WorldUtils.placeBlock(bp, -1, getSetting(2).asToggle().state, false)) {
 				cap++;
-				if (cap >= (int) getSetting(5).asSlider().getValue()) return;
+				if (cap >= (int) getSetting(6).asSlider().getValue()) return;
 			}
 		}
 
@@ -105,8 +128,8 @@ public class Scaffold extends Module {
 	
 	@Subscribe
 	public void onWorldRender(EventWorldRender event) {
-		if (getSetting(4).asToggle().state) {
-			float[] col = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
+		if (getSetting(5).asToggle().state) {
+			float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
 			for (BlockPos bp: renderBlocks) {
 				RenderUtils.drawFilledBox(bp, col[0], col[1], col[2], 0.7f);
 				
