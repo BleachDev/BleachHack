@@ -26,6 +26,7 @@ import bleach.hack.module.mods.BetterPortal;
 import bleach.hack.module.mods.Freecam;
 import bleach.hack.module.mods.NoSlow;
 import bleach.hack.module.mods.SafeWalk;
+import bleach.hack.module.mods.Scaffold;
 import bleach.hack.utils.BleachQueue;
 import bleach.hack.utils.file.BleachFileHelper;
 import com.mojang.authlib.GameProfile;
@@ -124,7 +125,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
 	@Override
 	protected boolean clipAtLedge() {
-		return super.clipAtLedge() || ModuleManager.getModule(SafeWalk.class).isToggled();
+		return super.clipAtLedge() || ModuleManager.getModule(SafeWalk.class).isToggled()
+				|| (ModuleManager.getModule(Scaffold.class).isToggled() && ModuleManager.getModule(Scaffold.class).getSetting(3).asToggle().state);
 	}
 
 }

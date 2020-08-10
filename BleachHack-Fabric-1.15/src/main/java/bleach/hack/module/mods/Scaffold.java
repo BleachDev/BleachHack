@@ -17,42 +17,48 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
+
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
+import bleach.hack.gui.clickgui.SettingColor;
 import bleach.hack.gui.clickgui.SettingMode;
 import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class Scaffold extends Module {
-
-	private HashMap<BlockPos, Integer> lastPlaced = new HashMap<>();
+	
+	private Set<BlockPos> renderBlocks = new LinkedHashSet<>();
 
 	public Scaffold() {
 		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
 				new SettingSlider("Range: ", 0, 1, 0.3, 1),
-				new SettingMode("Mode: ", "Normal", "3x3", "5x5"),
+				new SettingMode("Mode: ", "Normal", "3x3", "5x5", "7x7"),
 				new SettingToggle("Rotate", false).withDesc("Rotate serverside"),
+				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
+				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
+						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight"),
+						new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed")),
 				new SettingSlider("BPT: ", 1, 10, 2, 0).withDesc("Blocks Per Tick, how many blocks to place per tick"));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		for (Entry<BlockPos, Integer> e: new HashMap<>(lastPlaced).entrySet()) {
-			if (e.getValue() > 0) lastPlaced.replace(e.getKey(), e.getValue() - 1);
-			else lastPlaced.remove(e.getKey());
-		}
-
+		renderBlocks.clear();
+		
 		int slot = -1;
 		int prevSlot = mc.player.inventory.selectedSlot;
 
@@ -72,32 +78,68 @@ public class Scaffold extends Module {
 		int mode = getSetting(1).asMode().mode;
 		boolean rotate = getSetting(2).asToggle().state;
 
-		if (mode == 0) {
-			for (int r = 0; r < 5; r++) {
-				Vec3d r1 = new Vec3d(0,-0.85,0);
-				if (r == 1) r1 = r1.add(range, 0, 0);
-				if (r == 2) r1 = r1.add(-range, 0, 0);
-				if (r == 3) r1 = r1.add(0, 0, range);
-				if (r == 4) r1 = r1.add(0, 0, -range);
-
-				if (WorldUtils.placeBlock(new BlockPos(mc.player.getPos().add(r1)), -1, rotate, false)) {
-					return;
+		Vec3d placeVec = mc.player.getPos().add(0, -0.85, 0);
+		Set<BlockPos> blocks = (mode == 0
+				? new LinkedHashSet<>(Arrays.asList(new BlockPos(placeVec), new BlockPos(placeVec.add(range, 0, 0)), new BlockPos(placeVec.add(-range, 0, 0)),
+						new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))
+						: getSpiral(mode, new BlockPos(placeVec)));
+		
+		if (getSetting(4).asToggle().state) {
+			for (BlockPos bp: blocks) {
+				if (getSetting(4).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
+					renderBlocks.add(bp);
 				}
 			}
-		} else {
-			int cap = 1;
-			for (int x = (mode == 1 ? -1 : -2); x <= (mode == 1 ? 1 : 2); x++) {
-				for (int z = (mode == 1 ? -1 : -2); z <= (mode == 1 ? 1 : 2); z++) {
-					if (WorldUtils.placeBlock(new BlockPos(mc.player.getPos().add(x, -0.85, z)), -1, rotate, false)) {
-						cap++;
-					}
-					
-					if (cap > getSetting(3).asSlider().getValue()) return;
-				}
+		}
+
+		int cap = 0;
+		for (BlockPos bp: blocks) {
+			if (WorldUtils.placeBlock(bp, -1, rotate, false)) {
+				cap++;
+				if (cap >= (int) getSetting(5).asSlider().getValue()) return;
 			}
 		}
 
 		mc.player.inventory.selectedSlot = prevSlot;
 	}
+	
+	@Subscribe
+	public void onWorldRender(EventWorldRender event) {
+		if (getSetting(4).asToggle().state) {
+			float[] col = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
+			for (BlockPos bp: renderBlocks) {
+				RenderUtils.drawFilledBox(bp, col[0], col[1], col[2], 0.7f);
+				
+				col[0] = Math.max(0f, col[0] - 0.01f);
+				col[2] = Math.min(1f, col[2] + 0.01f);
+			}
+		}
+	}
 
+	private Set<BlockPos> getSpiral(int size, BlockPos center) {
+		Set<BlockPos> set = new LinkedHashSet<>(Arrays.asList(center));
+
+		if (size == 0) return set;
+
+		int step = 1;
+		int neededSteps = size * 4;
+		BlockPos currentPos = center;
+		for (int i = 0; i <= neededSteps; i++) {
+			// Do 1 less step on the last side to not overshoot the spiral
+			if (i == neededSteps) step--;
+
+			for (int j = 0; j < step; j++) {
+				if (i % 4 == 0) currentPos = currentPos.add(-1, 0, 0);
+				else if (i % 4 == 1) currentPos = currentPos.add(0, 0, -1);
+				else if (i % 4 == 2) currentPos = currentPos.add(1, 0, 0);
+				else currentPos = currentPos.add(0, 0, 1);
+
+				set.add(currentPos);
+			}
+
+			if (i % 2 != 0) step++;
+		}
+
+		return set;
+	}
 }
