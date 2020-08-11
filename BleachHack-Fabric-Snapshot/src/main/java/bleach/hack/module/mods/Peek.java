@@ -48,11 +48,11 @@ public class Peek extends Module {
 
 	public Peek() {
 		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
-				new SettingToggle("Containers", true),
-				new SettingMode("Info: ", "All", "Name", "None"),
-				new SettingToggle("Books", true),
-				new SettingToggle("Maps", true),
-				new SettingSlider("Map Size: ", 0.25, 1.5, 0.5, 2));
+				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers").withChildren(
+						new SettingMode("Info: ", "All", "Name", "None").withDesc("How to show the old tooltip")),
+				new SettingToggle("Books", true).withDesc("Show tooltips for books"),
+				new SettingToggle("Maps", true).withDesc("Show tooltips for maps").withChildren(
+						new SettingSlider("Map Size: ", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
 	}
 
 	@Subscribe
@@ -75,8 +75,8 @@ public class Peek extends Module {
 		event.matrix.translate(0, 0, 300);
 
 		if (getSetting(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
-		if (getSetting(2).asToggle().state) drawBookToolTip(event.matrix, slot, event.mX, event.mY);
-		if (getSetting(3).asToggle().state) drawMapToolTip(event.matrix, slot, event.mX, event.mY);
+		if (getSetting(1).asToggle().state) drawBookToolTip(event.matrix, slot, event.mX, event.mY);
+		if (getSetting(2).asToggle().state) drawMapToolTip(event.matrix, slot, event.mX, event.mY);
 		
 		event.matrix.pop();
 	}
@@ -104,13 +104,13 @@ public class Peek extends Module {
 
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 
-		if (getSetting(1).asMode().mode == 2) {
+		if (getSetting(0).asToggle().getChild(0).asMode().mode == 2) {
 			event.setCancelled(true);
-		} else if (getSetting(1).asMode().mode == 1) {
+		} else if (getSetting(0).asToggle().getChild(0).asMode().mode == 1) {
 			event.text = Lists.transform(Arrays.asList(slot.getStack().getName()), Text::asOrderedText);
 		}
 
-		int realY = getSetting(1).asMode().mode == 2 ? mY + 24 : mY;
+		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mY + 24 : mY;
 
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
 
@@ -173,7 +173,7 @@ public class Peek extends Module {
 		
 		byte[] colors = data.colors;
 
-		double size = getSetting(4).asSlider().getValue();
+		double size = getSetting(3).asToggle().getChild(0).asSlider().getValue();
 
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
