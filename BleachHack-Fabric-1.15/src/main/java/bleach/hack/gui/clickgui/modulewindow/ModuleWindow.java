@@ -25,10 +25,11 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
-import bleach.hack.gui.clickgui.SettingBase;
+
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.setting.base.SettingBase;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;

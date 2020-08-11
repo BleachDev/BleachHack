@@ -7,11 +7,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
 import bleach.hack.event.events.EventDrawTooltip;
-import bleach.hack.gui.clickgui.SettingMode;
-import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.ItemContentUtils;
 import net.minecraft.block.AbstractFurnaceBlock;

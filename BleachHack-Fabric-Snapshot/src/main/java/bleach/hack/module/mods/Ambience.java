@@ -22,12 +22,12 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSkyColor;
-import bleach.hack.gui.clickgui.SettingColor;
-import bleach.hack.gui.clickgui.SettingMode;
-import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingColor;
+import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 
 public class Ambience extends Module {

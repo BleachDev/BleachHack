@@ -27,11 +27,11 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
-import bleach.hack.gui.clickgui.SettingBase;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.setting.base.SettingBase;
 import bleach.hack.utils.FriendManager;
 
 public class BleachFileHelper {

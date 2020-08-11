@@ -22,10 +22,10 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingSlider;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.LlamaEntity;

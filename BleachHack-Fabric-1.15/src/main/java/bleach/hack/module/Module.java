@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.BleachHack;
-import bleach.hack.gui.clickgui.SettingBase;
+import bleach.hack.setting.base.SettingBase;
 import bleach.hack.utils.file.BleachFileHelper;
 
 import com.google.common.eventbus.Subscribe;

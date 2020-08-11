@@ -3,9 +3,9 @@ package bleach.hack.module.mods;
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.event.events.EventSignBlockEntityRender;
 import bleach.hack.event.events.EventSoundPlay;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.particle.ParticleTypes;
 

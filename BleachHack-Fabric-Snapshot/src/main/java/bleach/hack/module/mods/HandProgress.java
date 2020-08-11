@@ -1,10 +1,11 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.mixin.FirstPersonRendererAccessor;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
+
 import com.google.common.eventbus.Subscribe;
 
 public class HandProgress extends Module {

@@ -15,13 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bleach.hack.gui.clickgui;
+package bleach.hack.setting.base;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 public class SettingMode extends SettingBase {
@@ -47,8 +48,8 @@ public class SettingMode extends SettingBase {
 		return text;
 	}
 	
-	public void render(ModuleWindow window, int x, int y, int len) {
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + modes[mode],x+2, y+2,
+	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text + modes[mode],x+2, y+2,
 				window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) mode = getNextMode();
@@ -72,7 +73,7 @@ public class SettingMode extends SettingBase {
 	public JsonElement saveSettings() {
 		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length));
 	}
-	
+
 	@Override
 	public boolean isDefault() {
 		return mode == 0;

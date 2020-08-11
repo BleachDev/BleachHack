@@ -3,9 +3,9 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.gui.clickgui.SettingToggle;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.FabricReflect;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 

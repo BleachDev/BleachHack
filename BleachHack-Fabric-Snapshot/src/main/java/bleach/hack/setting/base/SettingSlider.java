@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bleach.hack.gui.clickgui;
+package bleach.hack.setting.base;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,6 +25,7 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 public class SettingSlider extends SettingBase {
@@ -65,11 +66,11 @@ public class SettingSlider extends SettingBase {
 		return text;
 	}
 	
-	public void render(ModuleWindow window, int x, int y, int len) {
+	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
 		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((getValue() - min) / (max - min)), 0, len-2));
-		window.fillGradient(x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
+		window.fillGradient(matrix, x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + (round == 0  && getValue() > 100 ? Integer.toString((int)getValue()) : getValue()),
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text + (round == 0  && getValue() > 100 ? Integer.toString((int)getValue()) : getValue()),
 				x+2, y+2, window.mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 
 		if (window.mouseOver(x+1, y, x+len-2, y+12) && window.lmHeld) {
@@ -97,7 +98,7 @@ public class SettingSlider extends SettingBase {
 	public JsonElement saveSettings() {
 		return new JsonPrimitive(getValue());
 	}
-	
+
 	@Override
 	public boolean isDefault() {
 		BigDecimal bd = new BigDecimal(defaultValue);

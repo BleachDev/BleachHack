@@ -1,8 +1,8 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 
 public class Timer extends Module {
 

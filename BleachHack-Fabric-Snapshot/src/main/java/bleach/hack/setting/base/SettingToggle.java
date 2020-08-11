@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bleach.hack.gui.clickgui;
+package bleach.hack.setting.base;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +32,7 @@ import com.google.gson.JsonPrimitive;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class SettingToggle extends SettingBase {
 
@@ -54,7 +55,7 @@ public class SettingToggle extends SettingBase {
 		return text;
 	}
 	
-	public void render(ModuleWindow window, int x, int y, int len) {
+	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
 		String color2;
 
 		if (state) { 
@@ -83,11 +84,11 @@ public class SettingToggle extends SettingBase {
 				}
 			}*/
 			if (expanded) {
-				DrawableHelper.fill(x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
+				DrawableHelper.fill(matrix, x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
 
 				int h = y + 12;
 				for (SettingBase s: children) {
-					s.render(window, x + 2, h, len - 2);
+					s.render(window, matrix, x + 2, h, len - 2);
 
 					h += s.getHeight(len - 2);
 				}
@@ -95,14 +96,14 @@ public class SettingToggle extends SettingBase {
 
 			GL11.glPushMatrix();
 			GL11.glScaled(0.65, 0.65, 1);
-			MinecraftClient.getInstance().textRenderer.drawWithShadow(
-					color2 + (expanded ? "[§lv" + color2 + "]" : "[§l>" + color2 + "]"), (int) ((x + len - 13) * 1/0.65), (int) ((y + 4) * 1/0.65), -1);
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
+					color2 + (expanded ? "[\u00a7lv" + color2 + "]" : "[\u00a7l>" + color2 + "]"), (int) ((x + len - 13) * 1/0.65), (int) ((y + 4) * 1/0.65), -1);
 			GL11.glPopMatrix();
 		}
 
 
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(color2 + text, x + 3, y + 2, 0xffffff);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, color2 + text, x + 3, y + 2, 0xffffff);
 
 		if (window.mouseOver(x, y, x+len, y+12) && window.lmDown) state = !state;
 	}
@@ -184,7 +185,7 @@ public class SettingToggle extends SettingBase {
 			return jo;
 		}
 	}
-	
+
 	@Override
 	public boolean isDefault() {
 		if (state != defaultState) return false;

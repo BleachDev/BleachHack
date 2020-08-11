@@ -1,8 +1,10 @@
-package bleach.hack.gui.clickgui;
+package bleach.hack.setting.base;
 
 import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -10,6 +12,9 @@ import com.google.gson.JsonPrimitive;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 
 public class SettingColor extends SettingBase {
 	
@@ -53,13 +58,31 @@ public class SettingColor extends SettingBase {
 		window.fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
 		
 		DrawableHelper.fill(sx, sy, ex, ey, -1);
+		Color satColor = Color.getHSBColor(1f - hue, 1f, 1f);
 		
-		// opengl workaround because mc is rarted with <10% transparency
-		for (int i = sy; i < ey; i++) {
-			float bri = 1f - 1f / ((float) (ey - sy) / (i - sy));
-			window.fillGradient(sx, i, ex, i + 1, Color.getHSBColor(hue, 0f, bri).getRGB(), Color.getHSBColor(hue, 1f, bri).getRGB());
-		}
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GL11.glShadeModel(7425);
+		Tessellator tessellator_1 = Tessellator.getInstance();
+		BufferBuilder bufferBuilder_1 = Tessellator.getInstance().getBuffer();
+		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder_1.vertex(ex, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
+		bufferBuilder_1.vertex(sx, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
+		bufferBuilder_1.vertex(sx, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
+		bufferBuilder_1.vertex(ex, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
+		tessellator_1.draw();
 
+		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder_1.vertex(ex, sy, 0).color(0, 0, 0, 0).next();
+		bufferBuilder_1.vertex(sx, sy, 0).color(0, 0, 0, 0).next();
+		bufferBuilder_1.vertex(sx, ey, 0).color(0, 0, 0, 255).next();
+		bufferBuilder_1.vertex(ex, ey, 0).color(0, 0, 0, 255).next();
+		tessellator_1.draw();
+		GL11.glShadeModel(7424);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
 			bri = 1f - 1f / ((float) (ey - sy) / (window.mouseY - sy));
 			sat = 1f / ((float) (ex - sx) / (window.mouseX - sx));

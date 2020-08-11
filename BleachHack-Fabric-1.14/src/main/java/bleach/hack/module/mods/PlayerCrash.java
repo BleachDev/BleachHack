@@ -20,9 +20,9 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 import net.minecraft.server.network.packet.KeepAliveC2SPacket;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 

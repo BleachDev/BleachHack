@@ -25,10 +25,10 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.SettingMode;
-import bleach.hack.gui.clickgui.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingSlider;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;

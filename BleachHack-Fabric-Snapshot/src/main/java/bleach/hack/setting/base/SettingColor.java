@@ -1,4 +1,4 @@
-package bleach.hack.gui.clickgui;
+package bleach.hack.setting.base;
 
 import java.awt.Color;
 

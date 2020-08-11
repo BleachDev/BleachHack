@@ -1,10 +1,8 @@
-package bleach.hack.gui.clickgui;
+package bleach.hack.setting.base;
 
 import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -12,10 +10,6 @@ import com.google.gson.JsonPrimitive;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class SettingColor extends SettingBase {
 	
@@ -50,40 +44,22 @@ public class SettingColor extends SettingBase {
 		return text;
 	}
 	
-	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
+	public void render(ModuleWindow window, int x, int y, int len) {
 		int sx = x + 3,
 			sy = y + 2,
 			ex = x + len - 18,
 			ey = y + getHeight(len) - 3;
 		
-		window.fillReverseGrey(matrix, sx - 1, sy - 1, ex + 1, ey + 1);
+		window.fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
 		
-		DrawableHelper.fill(matrix, sx, sy, ex, ey, -1);
-		Color satColor = Color.getHSBColor(1f - hue, 1f, 1f);
+		DrawableHelper.fill(sx, sy, ex, ey, -1);
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(7425);
-		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = Tessellator.getInstance().getBuffer();
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(ex, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
-		bufferBuilder_1.vertex(sx, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
-		bufferBuilder_1.vertex(sx, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
-		bufferBuilder_1.vertex(ex, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
-		tessellator_1.draw();
+		// opengl workaround because mc is rarted with <10% transparency
+		for (int i = sy; i < ey; i++) {
+			float bri = 1f - 1f / ((float) (ey - sy) / (i - sy));
+			window.fillGradient(sx, i, ex, i + 1, Color.getHSBColor(hue, 0f, bri).getRGB(), Color.getHSBColor(hue, 1f, bri).getRGB());
+		}
 
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(ex, sy, 0).color(0, 0, 0, 0).next();
-		bufferBuilder_1.vertex(sx, sy, 0).color(0, 0, 0, 0).next();
-		bufferBuilder_1.vertex(sx, ey, 0).color(0, 0, 0, 255).next();
-		bufferBuilder_1.vertex(ex, ey, 0).color(0, 0, 0, 255).next();
-		tessellator_1.draw();
-		GL11.glShadeModel(7424);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
 			bri = 1f - 1f / ((float) (ey - sy) / (window.mouseY - sy));
 			sat = 1f / ((float) (ex - sx) / (window.mouseX - sx));
@@ -92,23 +68,23 @@ public class SettingColor extends SettingBase {
 		int briY = (int) (ey - (ey - sy) * bri);
 		int satX = (int) (sx + (ex - sx) * sat);
 		
-		DrawableHelper.fill(matrix, satX - 2, briY, satX, briY + 1, 0xffd0d0d0);
-		DrawableHelper.fill(matrix, satX + 1, briY, satX + 3, briY + 1, 0xffd0d0d0);
-		DrawableHelper.fill(matrix, satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
-		DrawableHelper.fill(matrix, satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
+		DrawableHelper.fill(satX - 2, briY, satX, briY + 1, 0xffd0d0d0);
+		DrawableHelper.fill(satX + 1, briY, satX + 3, briY + 1, 0xffd0d0d0);
+		DrawableHelper.fill(satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
+		DrawableHelper.fill(satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
 		
 		GL11.glPushMatrix();
 		GL11.glScaled(0.75, 0.75, 1);
-		MinecraftClient.getInstance().textRenderer.draw(matrix, text, (int) ((sx + 1) * 1/0.75), (int) ((sy + 1) * 1/0.75), 0x000000);
+		MinecraftClient.getInstance().textRenderer.draw(text, (int) ((sx + 1) * 1/0.75), (int) ((sy + 1) * 1/0.75), 0x000000);
 		GL11.glPopMatrix();
 		
 		sx = ex + 5;
 		ex = ex + 12;
-		window.fillReverseGrey(matrix, sx - 1, sy - 1, ex + 1, ey + 1);
+		window.fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
 		
 		for (int i = sy; i < ey; i++) {
 			float curHue = 1f / ((float) (ey - sy) / (i - sy));
-			DrawableHelper.fill(matrix, sx, i, ex, i + 1, Color.getHSBColor(curHue, 1f, 1f).getRGB());
+			DrawableHelper.fill(sx, i, ex, i + 1, Color.getHSBColor(curHue, 1f, 1f).getRGB());
 		}
 		
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
@@ -116,10 +92,10 @@ public class SettingColor extends SettingBase {
 		}
 		
 		int hueY = (int) (sy + (ey - sy) * hue);
-		DrawableHelper.fill(matrix, sx, hueY - 1, sx + 1, hueY + 2, 0xffa0a0a0);
-		DrawableHelper.fill(matrix, ex - 1, hueY - 1, ex, hueY + 2, 0xffa0a0a0);
-		DrawableHelper.fill(matrix, sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
-		DrawableHelper.fill(matrix, ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
+		DrawableHelper.fill(sx, hueY - 1, sx + 1, hueY + 2, 0xffa0a0a0);
+		DrawableHelper.fill(ex - 1, hueY - 1, ex, hueY + 2, 0xffa0a0a0);
+		DrawableHelper.fill(sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
+		DrawableHelper.fill(ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
 	}
 	
 	public SettingColor withDesc(String desc) {
@@ -157,7 +133,7 @@ public class SettingColor extends SettingBase {
 		Color col = Color.getHSBColor(hue, sat, bri);
 		return new float[] { col.getRed() / 255f, col.getGreen() / 255f, col.getBlue() / 255f };
 	}
-
+	
 	@Override
 	public boolean isDefault() {
 		return hue == defaultHue && sat == defaultSat && bri == defaultBri;
