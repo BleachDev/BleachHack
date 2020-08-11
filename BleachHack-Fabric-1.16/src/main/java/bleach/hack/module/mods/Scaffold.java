@@ -120,8 +120,7 @@ public class Scaffold extends Module {
 		int cap = 0;
 		for (BlockPos bp: blocks) {
 			if (getSetting(2).asRotate().state) {
-				if (getSetting(2).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5);
-				else WorldUtils.facePos(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5);
+				WorldUtils.facePosAuto(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5, getSetting(2).asRotate());
 			}
 			
 			if (WorldUtils.placeBlock(bp, -1, false, false)) {

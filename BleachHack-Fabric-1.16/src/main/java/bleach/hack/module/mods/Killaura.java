@@ -79,8 +79,7 @@ public class Killaura extends Module {
 					|| (!mc.player.canSee(e) && !getSetting(5).asToggle().state)) continue;
 
 			if (getSetting(4).asRotate().state) {
-				if (getSetting(4).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
-				else WorldUtils.facePos(e.getX(), e.getY() + e.getHeight()/2, e.getZ());
+				WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight()/2, e.getZ(), getSetting(4).asRotate());
 			}
 
 			if (((delay > reqDelay || reqDelay == 0) && !getSetting(6).asToggle().state) ||

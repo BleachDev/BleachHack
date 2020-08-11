@@ -115,8 +115,7 @@ public class Nuker extends Module {
 			if (dir == null) continue;
 
 			if (getSetting(5).asRotate().state) {
-				if (getSetting(5).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(vec.x, vec.y, vec.z);
-				else WorldUtils.facePos(vec.x, vec.y, vec.z);
+				WorldUtils.facePosAuto(vec.x, vec.y, vec.z, getSetting(5).asRotate());
 			}
 
 			mc.interactionManager.updateBlockBreakingProgress(pos, dir);

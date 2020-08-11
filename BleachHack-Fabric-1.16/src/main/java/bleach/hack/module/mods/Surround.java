@@ -114,8 +114,7 @@ public class Surround extends Module {
 				}
 				
 				if (getSetting(5).asRotate().state) {
-					if (getSetting(5).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
-					else WorldUtils.facePos(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
+					WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 				}
 				
 				if (WorldUtils.placeBlock(b, obsidian, false, false)) {

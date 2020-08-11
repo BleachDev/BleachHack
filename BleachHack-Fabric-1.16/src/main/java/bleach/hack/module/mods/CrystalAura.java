@@ -154,8 +154,7 @@ public class CrystalAura extends Module {
 			}
 
 			if (getSetting(5).asRotate().state) {
-				if (getSetting(5).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(crystal.getX(), crystal.getY(), crystal.getZ());
-				else WorldUtils.facePos(crystal.getX(), crystal.getY(), crystal.getZ());
+				WorldUtils.facePosAuto(crystal.getX(), crystal.getY(), crystal.getZ(), getSetting(5).asRotate());
 			}
 			
 			mc.interactionManager.attackEntity(mc.player, crystal);
@@ -253,8 +252,7 @@ public class CrystalAura extends Module {
 								}
 
 								if (getSetting(5).asRotate().state) {
-									if (getSetting(5).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
-									else WorldUtils.facePos(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
+									WorldUtils.facePosAuto(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D, getSetting(5).asRotate());
 								}
 								
 								Direction f;
