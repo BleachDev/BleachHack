@@ -123,7 +123,7 @@ public class Freecam extends Module {
 	public void onTick(EventTick event) {
 		//mc.player.setSprinting(false);
 		//mc.player.setVelocity(Vec3d.ZERO);
-		mc.player.setOnGround(true);
+		mc.player.setOnGround(false);
 		mc.player.abilities.setFlySpeed((float) (getSetting(0).asSlider().getValue() / 5));
 		mc.player.abilities.flying = true;
 	}
