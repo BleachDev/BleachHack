@@ -131,9 +131,9 @@ public class ChunkSize extends Module {
 				return chunkSectionx != null && chunkSectionx.getYOffset() >> 4 == finalI;
 			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
 			ChunkNibbleArray chunkNibbleArray = lightingProvider.get(LightType.BLOCK)
-					.getLightArray(ChunkSectionPos.from(chunkPos, i));
+					.getLightSection(ChunkSectionPos.from(chunkPos, i));
 			ChunkNibbleArray chunkNibbleArray2 = lightingProvider.get(LightType.SKY)
-					.getLightArray(ChunkSectionPos.from(chunkPos, i));
+					.getLightSection(ChunkSectionPos.from(chunkPos, i));
 			if (chunkSection != WorldChunk.EMPTY_SECTION || chunkNibbleArray != null || chunkNibbleArray2 != null) {
 				compoundTag7 = new CompoundTag();
 				compoundTag7.putByte("Y", (byte) (i & 255));

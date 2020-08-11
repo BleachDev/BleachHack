@@ -116,7 +116,7 @@ public class ProjectileSimulator {
 			Vec3d vel = spoofE.velocity;
 			Vec3d newVec = spoofE.getPos().add(vel);
 			//EntityHitResult entityHit = ProjectileUtil.rayTrace(mc.player, e.getPos(), newVec, e.getBoundingBox(), null, 1f);
-			List<Entity> entities = mc.world.getEntities(null, spoofE.getBoundingBox().expand(0.15));
+			List<Entity> entities = mc.world.getOtherEntities(null, spoofE.getBoundingBox().expand(0.15));
 			entities.removeAll(Arrays.asList(mc.player, e, spoofE));
 			if (!entities.isEmpty()) {
 				return Triple.of(vecs, entities.get(0), null);

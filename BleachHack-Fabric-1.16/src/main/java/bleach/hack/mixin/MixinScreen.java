@@ -11,7 +11,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawTooltip;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.StringRenderable;
+import net.minecraft.text.OrderedText;
 
 @Mixin(Screen.class)
 public class MixinScreen {
@@ -25,15 +25,15 @@ public class MixinScreen {
 		lastMY = int_2;
 	}
 
-	@Inject(at = @At("HEAD"), method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;II)V", cancellable = true)
-	public void renderTooltip(MatrixStack matrix, List<? extends StringRenderable> text, int x, int y, CallbackInfo info) {
+	@Inject(at = @At("HEAD"), method = "renderOrderedTooltip", cancellable = true)
+	public void renderTooltip(MatrixStack matrix, List<? extends OrderedText> text, int x, int y, CallbackInfo info) {
 		EventDrawTooltip event = new EventDrawTooltip(matrix, text, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
 			info.cancel();
 		} else if (!event.text.equals(text) || event.x != x || event.y != y) {
-			event.screen.renderTooltip(matrix, event.text, event.x, event.y);
+			event.screen.renderOrderedTooltip(matrix, event.text, event.x, event.y);
 			info.cancel();
 		}
 	}

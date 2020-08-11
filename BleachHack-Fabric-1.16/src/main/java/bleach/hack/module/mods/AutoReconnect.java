@@ -81,7 +81,7 @@ public class AutoReconnect extends Module {
 		public int reasonH = 0;
 
 		public newDisconnectScreen(DisconnectedScreen screen) {
-			super((Screen) FabricReflect.getFieldValue(screen, "field_2456", "parent"), "Disconnect",
+			super((Screen) FabricReflect.getFieldValue(screen, "field_2456", "parent"), new LiteralText("Disconnect"),
 					(Text) FabricReflect.getFieldValue(screen, "field_2457", "reason"));
 			reasonH = (int) FabricReflect.getFieldValue(screen, "field_2454", "reasonHeight");
 		}
