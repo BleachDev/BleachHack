@@ -28,6 +28,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.WorldUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.Block;
@@ -52,7 +53,7 @@ public class Nuker extends Module {
 				new SettingSlider("Cooldown", 0, 4, 0, 0),
 				new SettingToggle("All Blocks", true),
 				new SettingToggle("Flatten", false),
-				new SettingToggle("Rotate", false),
+				new SettingRotate(false),
 				new SettingToggle("NoParticles", false),
 				new SettingMode("Sort", "Normal", "Hardness"),
 				new SettingSlider("Multi", 1, 10, 2, 0));
@@ -113,8 +114,9 @@ public class Nuker extends Module {
 
 			if (dir == null) continue;
 
-			if (getSetting(5).asToggle().state) {
-				WorldUtils.facePosPacket(vec.x, vec.y, vec.z);
+			if (getSetting(5).asRotate().state) {
+				if (getSetting(5).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(vec.x, vec.y, vec.z);
+				else WorldUtils.facePos(vec.x, vec.y, vec.z);
 			}
 
 			mc.interactionManager.updateBlockBreakingProgress(pos, dir);

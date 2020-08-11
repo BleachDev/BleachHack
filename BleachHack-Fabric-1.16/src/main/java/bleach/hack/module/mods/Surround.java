@@ -9,6 +9,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.item.Items;
@@ -26,7 +27,7 @@ public class Surround extends Module {
 				new SettingToggle("Keep on", true).withDesc("Keeps the module on after placing the obsidian"),
 				new SettingToggle("Jump disable", true).withDesc("Disables the module if you jump"),
 				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
-				new SettingToggle("Rotate", false).withDesc("Rotates serverside when placing"));
+				new SettingRotate(false).withDesc("Rotates when placing"));
 	}
 	
 	public void onEnable() {
@@ -91,6 +92,11 @@ public class Surround extends Module {
 					return;
 				}
 				
+				if (getSetting(5).asRotate().state) {
+					if (getSetting(5).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
+					else WorldUtils.facePos(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
+				}
+				
 				if (WorldUtils.placeBlock(b, obsidian, getSetting(5).asToggle().state, false)) {
 					cap++;
 				}
@@ -107,7 +113,12 @@ public class Surround extends Module {
 					return;
 				}
 				
-				if (WorldUtils.placeBlock(b, obsidian, getSetting(5).asToggle().state, false)) {
+				if (getSetting(5).asRotate().state) {
+					if (getSetting(5).asRotate().getRotateMode() == 0) WorldUtils.facePosPacket(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
+					else WorldUtils.facePos(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
+				}
+				
+				if (WorldUtils.placeBlock(b, obsidian, false, false)) {
 					cap++;
 				}
 			}

@@ -22,6 +22,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import com.google.gson.JsonElement;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.setting.other.SettingRotate;
 import net.minecraft.client.util.math.MatrixStack;
 
 public abstract class SettingBase {
@@ -32,7 +33,7 @@ public abstract class SettingBase {
 		try {
 			return (SettingMode) this;
 		} catch (Exception e) {
-			throw new IllegalStateException("Execption parsing setting: " + this);
+			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
 
@@ -40,7 +41,7 @@ public abstract class SettingBase {
 		try {
 			return (SettingToggle) this;
 		} catch (Exception e) {
-			throw new IllegalStateException("Execption parsing setting: " + this);
+			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
 
@@ -48,7 +49,7 @@ public abstract class SettingBase {
 		try {
 			return (SettingSlider) this;
 		} catch (Exception e) {
-			throw new IllegalStateException("Execption parsing setting: " + this);
+			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
 	
@@ -56,7 +57,15 @@ public abstract class SettingBase {
 		try {
 			return (SettingColor) this;
 		} catch (Exception e) {
-			throw new IllegalStateException("Execption parsing setting: " + this);
+			throw new ClassCastException("Execption parsing setting: " + this);
+		}
+	}
+	
+	public SettingRotate asRotate() {
+		try {
+			return (SettingRotate) this;
+		} catch (Exception e) {
+			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
 	
