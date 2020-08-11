@@ -58,10 +58,10 @@ public class CmdRbook extends Command {
 			return;
 		}
 
-		int pages = args.length >= 1 ? Math.min(NumberUtils.toInt(args[0], 100), 100) : 100;
-		int startChar = args.length >= 2 ? NumberUtils.toInt(args[1]) : 0;
-		int endChar = args.length >= 3 ? NumberUtils.toInt(args[2], 0x10FFFF) : 0x10FFFF;
-		int pageChars = args.length >= 4 ? NumberUtils.toInt(args[3], 210) : 210;
+		int pages = args.length >= 1 && NumberUtils.isCreatable(args[0]) ? NumberUtils.createNumber(args[0]).intValue() : 100;
+		int startChar = args.length >= 2 && NumberUtils.isCreatable(args[1]) ? NumberUtils.createNumber(args[1]).intValue() : 0;
+		int endChar = args.length >= 3 && NumberUtils.isCreatable(args[2]) ? NumberUtils.createNumber(args[2]).intValue() : 0x10FFFF;
+		int pageChars = args.length >= 4 && NumberUtils.isCreatable(args[3]) ? NumberUtils.createNumber(args[3]).intValue() : 210;
 
 		IntStream chars = new Random().ints(startChar, endChar + 1);
 		String text = chars.limit(pageChars*100).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
