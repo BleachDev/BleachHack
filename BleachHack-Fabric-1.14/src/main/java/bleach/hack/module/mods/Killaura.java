@@ -34,6 +34,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
@@ -52,7 +53,7 @@ public class Killaura extends Module {
 				new SettingToggle("Mobs", true),
 				new SettingToggle("Animals", false),
 				new SettingToggle("Armor Stands", false),
-				new SettingToggle("Aimbot", true),
+				new SettingRotate(true),
 				new SettingToggle("Thru Walls", false),
 				new SettingToggle("1.9 Delay", false),
 				new SettingSlider("Range", 0, 6, 4.25, 2),
@@ -77,7 +78,9 @@ public class Killaura extends Module {
 					|| ((LivingEntity)e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
 					|| (!mc.player.canSee(e) && !getSetting(5).asToggle().state)) continue;
 
-			if (getSetting(4).asToggle().state) WorldUtils.facePos(e.x, e.y + e.getHeight()/2, e.z);
+			if (getSetting(4).asRotate().state) {
+				WorldUtils.facePosAuto(e.x, e.y + e.getHeight()/2, e.z, getSetting(4).asRotate());
+			}
 
 			if (((delay > reqDelay || reqDelay == 0) && !getSetting(6).asToggle().state) ||
 					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSetting(6).asToggle().state)) {

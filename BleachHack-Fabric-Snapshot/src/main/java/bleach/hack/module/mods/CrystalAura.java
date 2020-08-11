@@ -39,6 +39,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
@@ -97,7 +98,7 @@ public class CrystalAura extends Module {
 						new SettingToggle("RayTrace", true).withDesc("Click on the most \"legit\" side of a block when possible"),
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
-				new SettingToggle("Rotate", false).withDesc("Face crystals serverside"),
+				new SettingRotate(false).withDesc("Rotates to crystals"),
 				new SettingSlider("Range", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"),
 				new SettingToggle("Old Calcs", true).withDesc("Uses the old damage caclulations"));
 	}
@@ -152,12 +153,15 @@ public class CrystalAura extends Module {
 				}
 			}
 
-			if (getSetting(5).asToggle().state) WorldUtils.facePosPacket(crystal.getX(), crystal.getY(), crystal.getZ());
+			if (getSetting(5).asRotate().state) {
+				WorldUtils.facePosAuto(crystal.getX(), crystal.getY(), crystal.getZ(), getSetting(5).asRotate());
+			}
+			
 			mc.interactionManager.attackEntity(mc.player, crystal);
 			mc.player.swingHand(Hand.MAIN_HAND);
 			++this.breaks;
 			if (this.breaks == 2 && !getSetting(3).asToggle().getChild(1).asToggle().state) {
-				if (getSetting(5).asToggle().state) {
+				if (getSetting(5).asRotate().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -166,7 +170,7 @@ public class CrystalAura extends Module {
 			}
 
 			if (getSetting(3).asToggle().getChild(1).asToggle().state && this.breaks == 1) {
-				if (getSetting(5).asToggle().state) {
+				if (getSetting(5).asRotate().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -174,7 +178,7 @@ public class CrystalAura extends Module {
 				return;
 			}
 		} else {
-			if (getSetting(5).asToggle().state) {
+			if (getSetting(5).asRotate().state) {
 				isSpoofingAngles = false;
 			}
 
@@ -225,7 +229,7 @@ public class CrystalAura extends Module {
 						if (!var9.hasNext()) {
 							if (damage == 0.5D) {
 								this.render = null;
-								if (getSetting(5).asToggle().state) {
+								if (getSetting(5).asRotate().state) {
 									isSpoofingAngles = false;
 								}
 
@@ -237,7 +241,7 @@ public class CrystalAura extends Module {
 								if (!offhand && mc.player.inventory.selectedSlot != crystalSlot) {
 									if (getSetting(4).asToggle().getChild(0).asToggle().state) {
 										mc.player.inventory.selectedSlot = crystalSlot;
-										if (getSetting(5).asToggle().state) {
+										if (getSetting(5).asRotate().state) {
 											isSpoofingAngles = false;
 										}
 
@@ -247,8 +251,8 @@ public class CrystalAura extends Module {
 									return;
 								}
 
-								if (getSetting(5).asToggle().state) {
-									WorldUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
+								if (getSetting(5).asRotate().state) {
+									WorldUtils.facePosAuto(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D, getSetting(5).asRotate());
 								}
 								
 								Direction f;

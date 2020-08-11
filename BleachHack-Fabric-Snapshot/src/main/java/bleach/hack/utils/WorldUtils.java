@@ -20,6 +20,7 @@ package bleach.hack.utils;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.setting.other.SettingRotate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
@@ -163,6 +164,11 @@ public class WorldUtils {
 			return true;
 		}
 		return false;
+	}
+	
+	public static void facePosAuto(double x, double y, double z, SettingRotate sr) {
+		if (sr.getRotateMode() == 0) facePosPacket(x, y, z);
+		else facePos(x, y, z);
 	}
 	
 	public static void facePos(double x, double y, double z) {

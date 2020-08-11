@@ -152,12 +152,15 @@ public class CrystalAura extends Module {
 				}
 			}
 
-			if (getSetting(5).asToggle().state) WorldUtils.facePosPacket(crystal.getX(), crystal.getY(), crystal.getZ());
+			if (getSetting(5).asRotate().state) {
+				WorldUtils.facePosAuto(crystal.getX(), crystal.getY(), crystal.getZ(), getSetting(5).asRotate());
+			}
+			
 			mc.interactionManager.attackEntity(mc.player, crystal);
 			mc.player.swingHand(Hand.MAIN_HAND);
 			++this.breaks;
 			if (this.breaks == 2 && !getSetting(3).asToggle().getChild(1).asToggle().state) {
-				if (getSetting(5).asToggle().state) {
+				if (getSetting(5).asRotate().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -166,7 +169,7 @@ public class CrystalAura extends Module {
 			}
 
 			if (getSetting(3).asToggle().getChild(1).asToggle().state && this.breaks == 1) {
-				if (getSetting(5).asToggle().state) {
+				if (getSetting(5).asRotate().state) {
 					isSpoofingAngles = false;
 				}
 
@@ -174,7 +177,7 @@ public class CrystalAura extends Module {
 				return;
 			}
 		} else {
-			if (getSetting(5).asToggle().state) {
+			if (getSetting(5).asRotate().state) {
 				isSpoofingAngles = false;
 			}
 
@@ -225,7 +228,7 @@ public class CrystalAura extends Module {
 						if (!var9.hasNext()) {
 							if (damage == 0.5D) {
 								this.render = null;
-								if (getSetting(5).asToggle().state) {
+								if (getSetting(5).asRotate().state) {
 									isSpoofingAngles = false;
 								}
 
@@ -237,7 +240,7 @@ public class CrystalAura extends Module {
 								if (!offhand && mc.player.inventory.selectedSlot != crystalSlot) {
 									if (getSetting(4).asToggle().getChild(0).asToggle().state) {
 										mc.player.inventory.selectedSlot = crystalSlot;
-										if (getSetting(5).asToggle().state) {
+										if (getSetting(5).asRotate().state) {
 											isSpoofingAngles = false;
 										}
 
@@ -247,8 +250,8 @@ public class CrystalAura extends Module {
 									return;
 								}
 
-								if (getSetting(5).asToggle().state) {
-									WorldUtils.facePosPacket(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D);
+								if (getSetting(5).asRotate().state) {
+									WorldUtils.facePosAuto(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D, getSetting(5).asRotate());
 								}
 								
 								Direction f;

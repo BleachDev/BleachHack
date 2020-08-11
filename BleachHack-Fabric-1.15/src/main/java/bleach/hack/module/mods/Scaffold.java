@@ -33,6 +33,7 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.client.util.InputUtil;
@@ -48,7 +49,7 @@ public class Scaffold extends Module {
 		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
 				new SettingSlider("Range", 0, 1, 0.3, 1),
 				new SettingMode("Mode", "Normal", "3x3", "5x5", "7x7"),
-				new SettingToggle("Rotate", false).withDesc("Rotate serverside"),
+				new SettingRotate(false).withDesc("Rotates when placing blocks"),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier"),
 				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
@@ -117,7 +118,11 @@ public class Scaffold extends Module {
 
 		int cap = 0;
 		for (BlockPos bp: blocks) {
-			if (WorldUtils.placeBlock(bp, -1, getSetting(2).asToggle().state, false)) {
+			if (getSetting(2).asRotate().state) {
+				WorldUtils.facePosAuto(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5, getSetting(2).asRotate());
+			}
+			
+			if (WorldUtils.placeBlock(bp, -1, false, false)) {
 				cap++;
 				if (cap >= (int) getSetting(6).asSlider().getValue()) return;
 			}
