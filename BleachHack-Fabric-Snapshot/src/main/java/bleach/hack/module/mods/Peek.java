@@ -150,12 +150,12 @@ public class Peek extends Module {
 			else pageCount++;
 		} else if (mc.player.age % 80 != 0) shown = false;
 
-		int lenght = mc.textRenderer.getWidth("Page: " + (pageCount + 1) + "/" + pages.size());
+		int length = mc.textRenderer.getWidth("Page: " + (pageCount + 1) + "/" + pages.size());
 
-		renderTooltipBox(matrix, mX + 56 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, lenght, true);
+		renderTooltipBox(matrix, mX + 56 - length / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, length, true);
 		renderTooltipBox(matrix, mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
 		mc.textRenderer.drawWithShadow(matrix, "Page: " + (pageCount + 1) + "/" + pages.size(),
-				mX + 68 - lenght / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
+				mX + 68 - length / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
 
 		int count = 0;
 		for (String s: pages.get(pageCount)) {

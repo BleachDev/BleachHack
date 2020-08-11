@@ -354,9 +354,9 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			int c = 0;
 			for (List<String> e: new ArrayList<>(entries)) {
 				String text = (e.size() > 1 ? "§a" + e.get(0) + ":***" : "§6" + e.get(0));
-				int lenght = minecraft.textRenderer.getStringWidth(text);
+				int length = minecraft.textRenderer.getStringWidth(text);
 
-				if (double_1 > x + w/2-lenght/2-1 && double_1 < x + w/2+lenght/2+1 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
+				if (double_1 > x + w/2-length/2-1 && double_1 < x + w/2+length/2+1 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
 					try{ userField.setText(e.get(0));
 					} catch (Exception e1) { userField.setText(""); }
 					try {
@@ -371,7 +371,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 					selectWindow(1);
 				}
 
-				if (double_1 > x + w/2+lenght/2+4 && double_1 < x + w/2+lenght/2+14 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
+				if (double_1 > x + w/2+length/2+4 && double_1 < x + w/2+length/2+14 && double_2 > y + h/4+c*14-2 && double_2 < y + h/4+c*14+11) {
 					int c1 = 0;
 					String lines = "";
 					for (String l: BleachFileMang.readFileLines("logins.txt")) {
