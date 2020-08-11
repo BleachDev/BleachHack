@@ -32,10 +32,10 @@ public class SpeedMine extends Module {
 
 	public SpeedMine() {
 		super("SpeedMine", KEY_UNBOUND, Category.EXPLOITS, "Allows you to mine at sanic speeds",
-				new SettingMode("Mode: ", "Haste", "OG"),
-				new SettingSlider("Haste Lvl: ", 1, 3, 1, 0),
-				new SettingSlider("Cooldown: ", 0, 4, 1, 0),
-				new SettingSlider("Multiplier: ", 1, 3, 1.3, 1),
+				new SettingMode("Mode", "Haste", "OG"),
+				new SettingSlider("Haste Lvl", 1, 3, 1, 0),
+				new SettingSlider("Cooldown", 0, 4, 1, 0),
+				new SettingSlider("Multiplier", 1, 3, 1.3, 1),
 				new SettingToggle("AntiFatigue", true),
 				new SettingToggle("AntiOffGround", true));
 	}

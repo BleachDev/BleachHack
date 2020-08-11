@@ -37,15 +37,15 @@ public class Nametags extends Module {
 
 	public Nametags() {
 		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
-				new SettingMode("Armor: ", "H", "V", "None").withDesc("How to show items/armor"),
-				new SettingMode("Health: ", "Number", "Bar", "Percent").withDesc("How to show health"),
+				new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor"),
+				new SettingMode("Health", "Number", "Bar", "Percent").withDesc("How to show health"),
 				new SettingToggle("Players", true).withDesc("show player nametags").withChildren(
-						new SettingSlider("Size: ", 0.5, 5, 2, 1).withDesc("Size of the nametags")),
+						new SettingSlider("Size", 0.5, 5, 2, 1).withDesc("Size of the nametags")),
 				new SettingToggle("Mobs", false).withDesc("show mobs/animal nametags").withChildren(
-						new SettingSlider("Size: ", 0.5, 5, 1, 1).withDesc("Size of the nametags")),
+						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags")),
 				new SettingToggle("Items", true).withDesc("Shows nametags for items").withChildren(
 						new SettingToggle("Custom Name", true).withDesc("Shows the items custom name if it has it"),
-						new SettingSlider("Size: ", 0.5, 5, 1, 1).withDesc("Size of the nametags")));
+						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags")));
 	}
 
 	@Subscribe

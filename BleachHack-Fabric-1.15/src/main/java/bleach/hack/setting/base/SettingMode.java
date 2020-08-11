@@ -48,7 +48,7 @@ public class SettingMode extends SettingBase {
 	}
 	
 	public void render(ModuleWindow window, int x, int y, int len) {
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + modes[mode],x+2, y+2,
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(text + ": " + modes[mode],x+2, y+2,
 				window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) mode = getNextMode();

@@ -68,14 +68,14 @@ public class UI extends Module {
 				new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 8
 				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), // 9
 				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 10
-						new SettingMode("Damage: ", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
+						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
 				new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 11
 						new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"),
 						new SettingToggle("Year", false).withDesc("Shows the current year in the time")),
-				new SettingSlider("HueBright: ", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 12
-				new SettingSlider("HueSat: ", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 13
-				new SettingSlider("HueSpeed: ", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 14
-				new SettingMode("Info: ", "BL", "TR", "BR").withDesc("Where on the screan to show the info")); // 15
+				new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 12
+				new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 13
+				new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 14
+				new SettingMode("Info", "BL", "TR", "BR").withDesc("Where on the screan to show the info")); // 15
 	}
 
 	@Subscribe

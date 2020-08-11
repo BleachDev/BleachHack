@@ -46,10 +46,10 @@ public class Peek extends Module {
 	public Peek() {
 		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
 				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers").withChildren(
-						new SettingMode("Info: ", "All", "Name", "None").withDesc("How to show the old tooltip")),
+						new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
 				new SettingToggle("Books", true).withDesc("Show tooltips for books"),
 				new SettingToggle("Maps", true).withDesc("Show tooltips for maps").withChildren(
-						new SettingSlider("Map Size: ", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
+						new SettingSlider("Map Size", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
 	}
 
 	@Subscribe
@@ -74,7 +74,7 @@ public class Peek extends Module {
 		if (getSetting(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
 		if (getSetting(2).asToggle().state) drawBookToolTip(slot, event.mX, event.mY);
 		if (getSetting(3).asToggle().state) drawMapToolTip(slot, event.mX, event.mY);
-		
+
 		GL11.glPopMatrix();
 	}
 

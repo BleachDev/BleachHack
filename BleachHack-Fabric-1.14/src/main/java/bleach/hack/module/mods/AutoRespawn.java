@@ -15,7 +15,7 @@ public class AutoRespawn extends Module {
 	public AutoRespawn() {
 		super("AutoRespawn", KEY_UNBOUND, Category.PLAYER, "Automatically respawn when you die",
 				new SettingToggle("Delay", false),
-				new SettingSlider("Delay: ", 1, 15, 5, 0));
+				new SettingSlider("Delay", 1, 15, 5, 0));
 	}
 
 	@Subscribe

@@ -30,7 +30,7 @@ public class PlayerCrash extends Module {
 
 	public PlayerCrash() {
 		super("PacketCrash", KEY_UNBOUND, Category.EXPLOITS, "Uses cpacketplayer packets to packetify the server so it packets your packet and packs enough to crash",
-				new SettingSlider("Uses: ", 1,1000,100,0));
+				new SettingSlider("Uses", 1,1000,100,0));
 	}
 
 	@Subscribe

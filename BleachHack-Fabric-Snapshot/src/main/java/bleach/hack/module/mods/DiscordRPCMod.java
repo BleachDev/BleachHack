@@ -29,9 +29,9 @@ public class DiscordRPCMod extends Module {
 
 	public DiscordRPCMod() {
 		super("DiscordRPC", KEY_UNBOUND, Category.MISC, "Dicord RPC, use the \"rpc\" command to set a custom status",
-				new SettingMode("Text 1: ", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%"),
-				new SettingMode("Text 2: ", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
-				new SettingMode("Elapsed: ", "Normal", "Random", "Backwards", "None"),
+				new SettingMode("Text 1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%"),
+				new SettingMode("Text 2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
+				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None"),
 				new SettingToggle("Silent", false));
 	}
 

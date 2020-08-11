@@ -38,10 +38,10 @@ public class FakeLag extends Module {
 
 	public FakeLag() {
 		super("FakeLag", KEY_UNBOUND, Category.MOVEMENT, "Stores up movement packets",
-				new SettingMode("Mode: ", "Always", "Pulse"),
+				new SettingMode("Mode", "Always", "Pulse"),
 				new SettingToggle("Limit", false),
-				new SettingSlider("Limit: ", 0, 15, 5, 1),
-				new SettingSlider("Pulse: ", 0, 5, 1, 1));
+				new SettingSlider("Limit", 0, 15, 5, 1),
+				new SettingSlider("Pulse", 0, 5, 1, 1));
 	}
 
 	@Override

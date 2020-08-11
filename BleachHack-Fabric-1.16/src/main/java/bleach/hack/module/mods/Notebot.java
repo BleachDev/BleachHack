@@ -65,7 +65,7 @@ public class Notebot extends Module {
 	public Notebot() {
 		super("Notebot", KEY_UNBOUND, Category.MISC, "Plays those noteblocks nicely",
 				new SettingToggle("Tune", true),
-				new SettingMode("Tune: ", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
+				new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
 				new SettingToggle("Loop", false),
 				new SettingToggle("NoInstruments", false),
 				new SettingToggle("AutoPlay", false));

@@ -98,7 +98,7 @@ public class CrystalAura extends Module {
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
 				new SettingToggle("Rotate", false).withDesc("Face crystals serverside"),
-				new SettingSlider("Range: ", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"),
+				new SettingSlider("Range", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"),
 				new SettingToggle("Old Calcs", true).withDesc("Uses the old damage caclulations"));
 	}
 

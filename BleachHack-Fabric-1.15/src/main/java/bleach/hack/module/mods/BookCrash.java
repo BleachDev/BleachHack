@@ -51,11 +51,11 @@ public class BookCrash extends Module {
 
 	public BookCrash() {
 		super("BookCrash", KEY_UNBOUND, Category.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
-				new SettingMode("Mode: ", "Jessica", "Raion", "Sign"),
-				new SettingSlider("Uses: ", 1, 20, 5, 0),
-				new SettingSlider("Delay: ", 0, 5, 0, 0),
-				new SettingMode("Fill: ", "Ascii", "0xFFFF", "Random", "Old"),
-				new SettingSlider("Pages: ", 1,100,50,0),
+				new SettingMode("Mode", "Jessica", "Raion", "Sign"),
+				new SettingSlider("Uses", 1, 20, 5, 0),
+				new SettingSlider("Delay", 0, 5, 0, 0),
+				new SettingMode("Fill", "Ascii", "0xFFFF", "Random", "Old"),
+				new SettingSlider("Pages", 1,100,50,0),
 				new SettingToggle("Auto-Off", true));
 	}
 

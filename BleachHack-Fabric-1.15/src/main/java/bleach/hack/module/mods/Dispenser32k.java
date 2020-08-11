@@ -58,10 +58,10 @@ public class Dispenser32k extends Module {
 		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020",
 				new SettingToggle("Legit Place", true),
 				new SettingToggle("Killaura", true),
-				new SettingSlider("CPS: ", 0, 20, 20, 0),
-				new SettingMode("CPS: ", "Clicks/Sec", "Clicks/Tick", "Tick Delay"),
+				new SettingSlider("CPS", 0, 20, 20, 0),
+				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay"),
 				new SettingToggle("Timeout", false),
-				new SettingMode("Place: ", "Auto", "Looking"));
+				new SettingMode("Place", "Auto", "Looking"));
 	}
 
 	public void onEnable() {

@@ -32,7 +32,7 @@ public class Fullbright extends Module {
 
 	public Fullbright() {
 		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.",
-				new SettingMode("Mode: ", "Gamma", "Potion", "Table"));
+				new SettingMode("Mode", "Gamma", "Potion", "Table"));
 	}
 
 	@Override

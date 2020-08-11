@@ -38,8 +38,8 @@ public class ArrowJuke extends Module {
 
 	public ArrowJuke() {
 		super("ArrowJuke", KEY_UNBOUND, Category.COMBAT, "Tries to dodge arrows coming at you",
-				new SettingMode("Move: ", "Client", "Packet"),
-				new SettingSlider("Speed: ", 0.01, 2, 1, 2));
+				new SettingMode("Move", "Client", "Packet"),
+				new SettingSlider("Speed", 0.01, 2, 1, 2));
 	}
 
 	@Subscribe

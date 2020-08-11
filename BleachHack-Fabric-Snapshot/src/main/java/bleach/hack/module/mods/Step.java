@@ -33,7 +33,7 @@ public class Step extends Module {
 
 	public Step() {
 		super("Step", KEY_UNBOUND, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
-				new SettingMode("Mode: ", "Simple", "Spider", "Jump"));
+				new SettingMode("Mode", "Simple", "Spider", "Jump"));
 	}
 
 	@Override

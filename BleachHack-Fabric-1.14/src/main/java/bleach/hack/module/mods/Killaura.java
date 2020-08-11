@@ -55,8 +55,8 @@ public class Killaura extends Module {
 				new SettingToggle("Aimbot", true),
 				new SettingToggle("Thru Walls", false),
 				new SettingToggle("1.9 Delay", false),
-				new SettingSlider("Range: ", 0, 6, 4.25, 2),
-				new SettingSlider("CPS: ", 0, 20, 8, 0));
+				new SettingSlider("Range", 0, 6, 4.25, 2),
+				new SettingSlider("CPS", 0, 20, 8, 0));
 	}
 
 	@Subscribe

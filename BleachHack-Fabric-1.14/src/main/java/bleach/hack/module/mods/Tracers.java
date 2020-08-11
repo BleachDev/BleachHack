@@ -53,7 +53,7 @@ public class Tracers extends Module {
 						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals")),
 				new SettingToggle("Vehicles", false).withDesc("Show Vehicle Tracers").withChildren(
 						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles (minecarts/boats)")),
-				new SettingSlider("Thick: ", 0.1, 5, 1.5, 1));
+				new SettingSlider("Thick", 0.1, 5, 1.5, 1));
 	}
 
 	@Subscribe

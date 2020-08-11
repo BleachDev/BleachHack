@@ -21,11 +21,11 @@ public class Surround extends Module {
 
 	public Surround() {
 		super("Surround", KEY_UNBOUND, Category.COMBAT, "Surrounds yourself with obsidian",
-				new SettingMode("Mode: ", "1x1", "Fit").withDesc("Mode, 1x1 places 4 blocks around you, fit fits the blocks around you so it doesn't place inside of you"),
+				new SettingMode("Mode", "1x1", "Fit").withDesc("Mode, 1x1 places 4 blocks around you, fit fits the blocks around you so it doesn't place inside of you"),
 				new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block"),
 				new SettingToggle("Keep on", true).withDesc("Keeps the module on after placing the obsidian"),
 				new SettingToggle("Jump disable", true).withDesc("Disables the module if you jump"),
-				new SettingSlider("BPT: ", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
+				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
 				new SettingToggle("Rotate", false).withDesc("Rotates serverside when placing"));
 	}
 	

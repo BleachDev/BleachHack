@@ -41,8 +41,8 @@ public class AutoDonkeyDupe extends Module {
 
 	public AutoDonkeyDupe() {
 		super("AutoDonkeyDupe", KEY_UNBOUND, Category.EXPLOITS, "Automatically does the mountbypass dupe (PRESS ESCAPE TO CANCEL)",
-				new SettingSlider("Limit: ", 1, 15, 15, 0),
-				new SettingMode("Mode: ", "Instant", "Single"),
+				new SettingSlider("Limit", 1, 15, 15, 0),
+				new SettingMode("Mode", "Instant", "Single"),
 				new SettingToggle("Shulkers Only", true));
 	}
 

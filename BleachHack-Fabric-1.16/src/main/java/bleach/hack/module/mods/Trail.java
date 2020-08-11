@@ -43,8 +43,8 @@ public class Trail extends Module {
 		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
 				new SettingToggle("Trail", true),
 				new SettingToggle("Keep Trail", false),
-				new SettingMode("Color: ", "Red", "Green", "Blue", "B2G", "R2B"),
-				new SettingSlider("Thick: ", 0.1, 10, 3, 1));
+				new SettingMode("Color", "Red", "Green", "Blue", "B2G", "R2B"),
+				new SettingSlider("Thick", 0.1, 10, 3, 1));
 	}
 
 	@Override
