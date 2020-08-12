@@ -173,7 +173,7 @@ public class Peek extends Module {
 		
 		byte[] colors = data.colors;
 
-		double size = getSetting(3).asToggle().getChild(0).asSlider().getValue();
+		double size = getSetting(2).asToggle().getChild(0).asSlider().getValue();
 
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);

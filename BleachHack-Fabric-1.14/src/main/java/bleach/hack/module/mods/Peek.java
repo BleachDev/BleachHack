@@ -72,8 +72,8 @@ public class Peek extends Module {
 		GL11.glTranslatef(0f, 0f, 500f);
 
 		if (getSetting(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
-		if (getSetting(2).asToggle().state) drawBookToolTip(slot, event.mX, event.mY);
-		if (getSetting(3).asToggle().state) drawMapToolTip(slot, event.mX, event.mY);
+		if (getSetting(1).asToggle().state) drawBookToolTip(slot, event.mX, event.mY);
+		if (getSetting(2).asToggle().state) drawMapToolTip(slot, event.mX, event.mY);
 
 		GL11.glPopMatrix();
 	}
@@ -101,13 +101,13 @@ public class Peek extends Module {
 
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 
-		if (getSetting(1).asMode().mode == 2) {
+		if (getSetting(0).asToggle().getChild(0).asMode().mode == 2) {
 			event.setCancelled(true);
-		} else if (getSetting(1).asMode().mode == 1) {
+		} else if (getSetting(0).asToggle().getChild(0).asMode().mode == 1) {
 			event.text = Arrays.asList(slot.getStack().getName().asString());
 		}
 
-		int realY = getSetting(1).asMode().mode == 2 ? mY + 24 : mY;
+		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mY + 24 : mY;
 
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
 
@@ -168,7 +168,7 @@ public class Peek extends Module {
 		
 		byte[] colors = data.colors;
 
-		double size = getSetting(4).asSlider().getValue();
+		double size = getSetting(2).asToggle().getChild(0).asSlider().getValue();
 
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
