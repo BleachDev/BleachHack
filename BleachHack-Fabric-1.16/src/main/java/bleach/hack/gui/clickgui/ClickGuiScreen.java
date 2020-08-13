@@ -101,7 +101,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 			textRenderer.draw(matrix, "6. drawn modules command to unlist stuff in arraylist", 2, height - 70, 0x5555ff);
 			textRenderer.draw(matrix, "7. change hover module description colors to match theme", 2, height - 60, 0x5555ff);
 			textRenderer.draw(matrix, "8. make surround walk to center of block not tp", 2, height - 50, 0x5555ff);
-			textRenderer.draw(matrix, "9. replace color sliders in settings with a hex code input", 2, height - 40, 0x5555ff);
+			textRenderer.draw(matrix, "9. syncronize all the rgb in the gui color picker", 2, height - 40, 0x5555ff);
 		}
 		textRenderer.draw(matrix,
 				"Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x5555ff);

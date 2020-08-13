@@ -43,5 +43,5 @@ better crystal-aura module
 drawn modules command to unlist stuff in arraylist  
 change hover module description colors to match theme  
 make surround walk to center of block not tp  
-replace color sliders in settings with a hex code input  
+syncronize all the rgb in the gui color picker  
 other stuff i dont remember  
