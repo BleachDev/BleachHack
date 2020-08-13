@@ -62,7 +62,7 @@ public class Nametags extends Module {
 				|| (event.getEntity() instanceof PlayerEntity && getSetting(2).asToggle().state)
 				|| (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state)) event.setCancelled(true);
 		
-		if (event.getEntity() instanceof ItemEntity) {
+		if (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state) {
 			ItemEntity e = (ItemEntity) event.getEntity();
 
 			double scale = Math.max(getSetting(4).asToggle().getChild(1).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);

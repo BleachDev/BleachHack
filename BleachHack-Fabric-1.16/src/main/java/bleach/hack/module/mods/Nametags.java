@@ -57,7 +57,8 @@ public class Nametags extends Module {
 
 	@Subscribe
 	public void onLivingRender(EventEntityRender.Render event) {
-		if (event.getEntity() instanceof ItemEntity) {
+				
+		if (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state) {
 			ItemEntity e = (ItemEntity) event.getEntity();
 
 			double scale = Math.max(getSetting(4).asToggle().getChild(1).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
