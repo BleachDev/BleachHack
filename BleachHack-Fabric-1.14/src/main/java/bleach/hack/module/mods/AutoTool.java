@@ -8,6 +8,8 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.container.SlotActionType;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
@@ -44,8 +46,17 @@ public class AutoTool extends Module {
 				int slot = getBestSlot(p.getPos());
 
 				if (slot != mc.player.inventory.selectedSlot) {
-					mc.player.inventory.selectedSlot = slot;
-					mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
+					if (slot < 9) {
+						mc.player.inventory.selectedSlot = slot;
+						mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
+					} else if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
+						boolean itemInHand = !mc.player.inventory.getMainHandStack().isEmpty();
+						mc.interactionManager.method_2906(mc.player.container.syncId, slot, 0, SlotActionType.PICKUP, mc.player);
+						mc.interactionManager.method_2906(mc.player.container.syncId, 36 + mc.player.inventory.selectedSlot, 0, SlotActionType.PICKUP, mc.player);
+						
+						if (itemInHand)
+							mc.interactionManager.method_2906(mc.player.container.syncId, slot, 0, SlotActionType.PICKUP, mc.player);
+					}
 				}
 			} else if (p.getAction() == Action.STOP_DESTROY_BLOCK) {
 				if (getSetting(1).asToggle().state) {
@@ -85,7 +96,7 @@ public class AutoTool extends Module {
 
 		float bestSpeed = getMiningSpeed(mc.player.inventory.getInvStack(bestSlot), state);
 
-		for (int slot = 0; slot < 9; slot++) {
+		for (int slot = 0; slot < 36; slot++) {
 			if (slot == mc.player.inventory.selectedSlot || slot == bestSlot)
 				continue;
 
