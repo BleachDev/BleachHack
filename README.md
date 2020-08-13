@@ -34,9 +34,9 @@ other stuff i dont remember
 
 ## Plans
 
-custom blue rpc logo
-UI on by default
-add border to gui
-auto-trap module
-better crystal-aura module
-other stuff i dont remember
+custom blue rpc logo  
+UI on by default  
+add border to gui  
+auto-trap module  
+better crystal-aura module  
+other stuff i dont remember  
