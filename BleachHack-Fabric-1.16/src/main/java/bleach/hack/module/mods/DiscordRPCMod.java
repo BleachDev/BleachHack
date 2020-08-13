@@ -31,16 +31,17 @@ public class DiscordRPCMod extends Module {
 		super("DiscordRPC", KEY_UNBOUND, Category.MISC, "Dicord RPC, use the \"rpc\" command to set a custom status",
 				new SettingMode("Text 1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%"),
 				new SettingMode("Text 2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
-				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None"),
-				new SettingToggle("Silent", false));
+				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None"), new SettingToggle("Silent", false));
 	}
 
 	public void init() {
 		String t1 = BleachFileHelper.readMiscSetting("discordRPCTopText");
 		String t2 = BleachFileHelper.readMiscSetting("discordRPCBottomText");
 
-		if (t1 != null) customText1 = t1;
-		if (t2 != null) customText2 = t2;
+		if (t1 != null)
+			customText1 = t1;
+		if (t2 != null)
+			customText2 = t2;
 	}
 
 	public void onEnable() {
@@ -72,18 +73,24 @@ public class DiscordRPCMod extends Module {
 
 			switch (getSetting(0).asMode().mode) {
 				case 0:
-					if (mc.getCurrentServerEntry() != null) text1 = "Playing " + mc.getCurrentServerEntry().address;
-					else text1 = "Playing Singleplayer";
+					if (mc.getCurrentServerEntry() != null)
+						text1 = "Playing " + mc.getCurrentServerEntry().address;
+					else
+						text1 = "Playing Singleplayer";
 
 					break;
 				case 1:
-					if (mc.getCurrentServerEntry() != null) text1 = mc.getCurrentServerEntry().address;
-					else text1 = "Singleplayer";
+					if (mc.getCurrentServerEntry() != null)
+						text1 = mc.getCurrentServerEntry().address;
+					else
+						text1 = "Singleplayer";
 
 					break;
 				case 2:
-					if (mc.getCurrentServerEntry() != null) text1 = "Multiplayer";
-					else text1 = "Singleplayer";
+					if (mc.getCurrentServerEntry() != null)
+						text1 = "Multiplayer";
+					else
+						text1 = "Singleplayer";
 
 					break;
 				case 3:
@@ -101,8 +108,8 @@ public class DiscordRPCMod extends Module {
 			}
 
 			ItemStack currentItem = mc.player.inventory.getMainHandStack();
-			String itemName = currentItem.getItem() == Items.AIR ? "Nothing" :
-				(currentItem.getCount() > 1 ? currentItem.getCount() + " " : "") + currentItem.getItem().getName().getString();
+			String itemName = currentItem.getItem() == Items.AIR ? "Nothing"
+					: (currentItem.getCount() > 1 ? currentItem.getCount() + " " : "") + currentItem.getItem().getName().getString();
 
 			switch (getSetting(1).asMode().mode) {
 				case 0:
@@ -134,10 +141,9 @@ public class DiscordRPCMod extends Module {
 					break;
 			}
 
-			DiscordRPC.discordUpdatePresence(
-					new DiscordRichPresence.Builder(text2)
-					.setBigImage("bh14", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION)
-					.setDetails(text1).setStartTimestamps(start).build());
+			DiscordRPC.discordUpdatePresence(new DiscordRichPresence.Builder(text2)
+					.setBigImage("bh14", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION).setDetails(text1)
+					.setStartTimestamps(start).build());
 		}
 
 		if (tick % 200 == 0) {

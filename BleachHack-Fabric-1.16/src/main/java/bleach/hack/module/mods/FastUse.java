@@ -36,16 +36,12 @@ import net.minecraft.item.Items;
 
 public class FastUse extends Module {
 
-	private static final Set<Item> THROWABLE = Sets.newHashSet(
-			Items.SNOWBALL, Items.EGG, Items.EXPERIENCE_BOTTLE,
-			Items.ENDER_EYE, Items.ENDER_PEARL, Items.SPLASH_POTION, Items.LINGERING_POTION);
+	private static final Set<Item> THROWABLE = Sets.newHashSet(Items.SNOWBALL, Items.EGG, Items.EXPERIENCE_BOTTLE, Items.ENDER_EYE, Items.ENDER_PEARL,
+			Items.SPLASH_POTION, Items.LINGERING_POTION);
 
 	public FastUse() {
-		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster",
-				new SettingMode("Mode", "Single", "Multi"),
-				new SettingSlider("Multi", 1, 100, 20, 0),
-				new SettingToggle("Throwables Only", true),
-				new SettingToggle("XP Only", false));
+		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster", new SettingMode("Mode", "Single", "Multi"),
+				new SettingSlider("Multi", 1, 100, 20, 0), new SettingToggle("Throwables Only", true), new SettingToggle("XP Only", false));
 	}
 
 	@Subscribe

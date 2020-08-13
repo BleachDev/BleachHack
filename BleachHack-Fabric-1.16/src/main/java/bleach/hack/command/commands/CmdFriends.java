@@ -45,7 +45,7 @@ public class CmdFriends extends Command {
 		} else if (args[0].equalsIgnoreCase("list")) {
 			String text = "";
 
-			for (String f: BleachHack.friendMang.getFriends()) {
+			for (String f : BleachHack.friendMang.getFriends()) {
 				text += "\n\u00a72" + f;
 			}
 

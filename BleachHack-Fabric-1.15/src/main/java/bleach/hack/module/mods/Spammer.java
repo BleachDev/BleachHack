@@ -37,8 +37,7 @@ public class Spammer extends Module {
 	private int lineCount = 0;
 
 	public Spammer() {
-		super("Spammer", KEY_UNBOUND, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
-				new SettingMode("Read", "Random", "Order"),
+		super("Spammer", KEY_UNBOUND, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)", new SettingMode("Read", "Random", "Order"),
 				new SettingSlider("Delay", 1, 120, 20, 0));
 	}
 
@@ -52,7 +51,8 @@ public class Spammer extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (lines.isEmpty()) return;
+		if (lines.isEmpty())
+			return;
 
 		if (mc.player.age % (int) (getSetting(1).asSlider().getValue() * 20) == 0) {
 			if (getSetting(0).asMode().mode == 0) {
@@ -61,8 +61,10 @@ public class Spammer extends Module {
 				mc.player.sendChatMessage(lines.get(lineCount));
 			}
 
-			if (lineCount >= lines.size() -1) lineCount = 0;
-			else lineCount++;
+			if (lineCount >= lines.size() - 1)
+				lineCount = 0;
+			else
+				lineCount++;
 		}
 	}
 

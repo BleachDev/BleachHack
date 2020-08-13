@@ -51,10 +51,7 @@ public class SettingColor extends SettingBase {
 	}
 
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
-		int sx = x + 3,
-				sy = y + 2,
-				ex = x + len - 18,
-				ey = y + getHeight(len) - 3;
+		int sx = x + 3, sy = y + 2, ex = x + len - 18, ey = y + getHeight(len) - 3;
 
 		window.fillReverseGrey(matrix, sx - 1, sy - 1, ex + 1, ey + 1);
 
@@ -99,7 +96,7 @@ public class SettingColor extends SettingBase {
 
 		GL11.glPushMatrix();
 		GL11.glScaled(0.75, 0.75, 1);
-		MinecraftClient.getInstance().textRenderer.draw(matrix, text, (int) ((sx + 1) * 1/0.75), (int) ((sy + 1) * 1/0.75), 0x000000);
+		MinecraftClient.getInstance().textRenderer.draw(matrix, text, (int) ((sx + 1) * 1 / 0.75), (int) ((sy + 1) * 1 / 0.75), 0x000000);
 		GL11.glPopMatrix();
 
 		sx = ex + 5;

@@ -47,21 +47,15 @@ public class Nuker extends Module {
 	private List<Block> blockList = new ArrayList<>();
 
 	public Nuker() {
-		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
-				new SettingMode("Mode", "Normal", "Instant"),
-				new SettingSlider("Range", 1, 6, 4.2, 1),
-				new SettingSlider("Cooldown", 0, 4, 0, 0),
-				new SettingToggle("All Blocks", true),
-				new SettingToggle("Flatten", false),
-				new SettingRotate(false),
-				new SettingToggle("NoParticles", false),
-				new SettingMode("Sort", "Normal", "Hardness"),
-				new SettingSlider("Multi", 1, 10, 2, 0));
+		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you", new SettingMode("Mode", "Normal", "Instant"), new SettingSlider("Range", 1, 6, 4.2, 1),
+				new SettingSlider("Cooldown", 0, 4, 0, 0), new SettingToggle("All Blocks", true), new SettingToggle("Flatten", false), new SettingRotate(false),
+				new SettingToggle("NoParticles", false), new SettingMode("Sort", "Normal", "Hardness"), new SettingSlider("Multi", 1, 10, 2, 0));
 	}
 
 	public void onEnable() {
 		blockList.clear();
-		for (String s: BleachFileMang.readFileLines("nukerblocks.txt")) blockList.add(Registry.BLOCK.get(new Identifier(s)));
+		for (String s : BleachFileMang.readFileLines("nukerblocks.txt"))
+			blockList.add(Registry.BLOCK.get(new Identifier(s)));
 
 		super.onEnable();
 	}
@@ -76,18 +70,21 @@ public class Nuker extends Module {
 			for (int y = (int) range; y >= (getSetting(4).asToggle().state ? 0 : (int) -range); y--) {
 				for (int z = (int) range; z >= (int) -range; z--) {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
-					if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos)) continue;
+					if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos))
+						continue;
 					blocks.add(pos);
 				}
 			}
 		}
 
-		if (blocks.isEmpty()) return;
+		if (blocks.isEmpty())
+			return;
 
-		if (getSetting(7).asMode().mode == 1) blocks.sort((a, b) -> Float.compare(
-				mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
+		if (getSetting(7).asMode().mode == 1)
+			blocks.sort((a, b) -> Float.compare(mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
 
-		/* Move the block under the player to last so it doesn't mine itself down without clearing everything above first */
+		/* Move the block under the player to last so it doesn't mine itself down
+		 * without clearing everything above first */
 		if (blocks.contains(mc.player.getBlockPos().down())) {
 			blocks.remove(mc.player.getBlockPos().down());
 			blocks.add(mc.player.getBlockPos().down());
@@ -96,23 +93,27 @@ public class Nuker extends Module {
 		Vec3d eyePos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0);
 
 		int broken = 0;
-		for (BlockPos pos: blocks) {
-			if (!getSetting(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock())) continue;
+		for (BlockPos pos : blocks) {
+			if (!getSetting(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock()))
+				continue;
 
 			Vec3d vec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 
-			if (eyePos.distanceTo(vec) > range + 0.5) continue;
+			if (eyePos.distanceTo(vec) > range + 0.5)
+				continue;
 
 			Direction dir = null;
 			double dist = Double.MAX_VALUE;
-			for (Direction d: Direction.values()) {
+			for (Direction d : Direction.values()) {
 				double dist2 = eyePos.distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
-				if (dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist) continue;
+				if (dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist)
+					continue;
 				dist = dist2;
 				dir = d;
 			}
 
-			if (dir == null) continue;
+			if (dir == null)
+				continue;
 
 			if (getSetting(5).asRotate().state) {
 				WorldUtils.facePosAuto(vec.x, vec.y, vec.z, getSetting(5).asRotate());
@@ -123,8 +124,8 @@ public class Nuker extends Module {
 			mc.player.swingHand(Hand.MAIN_HAND);
 
 			broken++;
-			if (getSetting(0).asMode().mode == 0
-					|| (getSetting(0).asMode().mode == 1 && broken >= (int) getSetting(8).asSlider().getValue())) return;
+			if (getSetting(0).asMode().mode == 0 || (getSetting(0).asMode().mode == 1 && broken >= (int) getSetting(8).asSlider().getValue()))
+				return;
 		}
 	}
 
@@ -135,18 +136,15 @@ public class Nuker extends Module {
 
 		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
 
-		float yaw = mc.player.yaw + MathHelper.wrapDegrees((float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90 - mc.player.yaw);
-		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float)-Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
+		float yaw = mc.player.yaw + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90 - mc.player.yaw);
+		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
 
-		Vec3d rotation = new Vec3d(
-				MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F),
-				(-MathHelper.sin(pitch * 0.017453292F)),
+		Vec3d rotation = new Vec3d(MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F), (-MathHelper.sin(pitch * 0.017453292F)),
 				MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F));
 
 		Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
-		return mc.world.rayTrace(new RayTraceContext(mc.player.getCameraPosVec(mc.getTickDelta()),
-				rayVec, RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player))
-				.getBlockPos().equals(pos);
+		return mc.world.rayTrace(new RayTraceContext(mc.player.getCameraPosVec(mc.getTickDelta()), rayVec, RayTraceContext.ShapeType.OUTLINE,
+				RayTraceContext.FluidHandling.NONE, mc.player)).getBlockPos().equals(pos);
 	}
 
 }

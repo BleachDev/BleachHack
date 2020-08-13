@@ -43,15 +43,18 @@ public class CmdHelp extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		String cmd = null;
-		try { cmd = args[0]; } catch (Exception e) {}
+		try {
+			cmd = args[0];
+		} catch (Exception e) {
+		}
 
-		for (Command c: CommandManager.getCommands()) {
-			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
+		for (Command c : CommandManager.getCommands()) {
+			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias()))
+				continue;
 
 			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
-			text.setStyle(text.getStyle().withHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
+			text.setStyle(text.getStyle().withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+					new LiteralText("\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
 			BleachLogger.noPrefixMessage(text);
 		}
 	}

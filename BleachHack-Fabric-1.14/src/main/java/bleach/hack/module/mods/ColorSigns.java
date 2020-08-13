@@ -13,12 +13,12 @@ public class ColorSigns extends Module {
 		super("ColorSigns", KEY_UNBOUND, Category.EXPLOITS, "Allows you to use colors on signs on NON-PAPER servers (use \"&\" for color symbols)");
 	}
 
-	/*
-	 * This works because the code to strip invalid characters from signs is flawed because it uses a replaceAll for all the
-	 * formatting codes instead of matching all sections symbols, which means you can basically "stack" two formatting codes ontop of eachother
-	 * like "&&66", it will when search and find the middle one and remove it to leave "&6" left which is still a valid formatting code.
-	 * Paper has a patch for it to correct it so it doesn't work there
-	 */
+	/* This works because the code to strip invalid characters from signs is flawed
+	 * because it uses a replaceAll for all the formatting codes instead of matching
+	 * all sections symbols, which means you can basically "stack" two formatting
+	 * codes ontop of eachother like "&&66", it will when search and find the middle
+	 * one and remove it to leave "&6" left which is still a valid formatting code.
+	 * Paper has a patch for it to correct it so it doesn't work there */
 	@Subscribe
 	public void onPacketSend(EventSendPacket event) {
 		if (event.getPacket() instanceof UpdateSignC2SPacket) {

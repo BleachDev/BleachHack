@@ -44,7 +44,7 @@ public class WorldRenderUtils {
 	public static void drawText(String str, double x, double y, double z, double scale) {
 		glSetup(x, y, z);
 
-		GL11.glScaled(-0.025*scale, -0.025*scale, 0.025*scale);
+		GL11.glScaled(-0.025 * scale, -0.025 * scale, 0.025 * scale);
 
 		int i = mc.textRenderer.getWidth(str) / 2;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -68,13 +68,14 @@ public class WorldRenderUtils {
 	public static void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
 		glSetup(x, y, z);
 
-		GL11.glScaled(0.4*scale, 0.4*scale, 0);
+		GL11.glScaled(0.4 * scale, 0.4 * scale, 0);
 
 		GL11.glTranslated(offX, offY, 0);
-		if (item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
-		mc.getItemRenderer().renderItem(new ItemStack(
-				item.getItem()), Mode.GUI, 0, 0, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
-		if (item.getItem() instanceof BlockItem) GL11.glRotatef(-180F, -1F, -180F, -10F);
+		if (item.getItem() instanceof BlockItem)
+			GL11.glRotatef(180F, 1F, 180F, 10F);
+		mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), Mode.GUI, 0, 0, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
+		if (item.getItem() instanceof BlockItem)
+			GL11.glRotatef(-180F, -1F, -180F, -10F);
 		GL11.glDisable(GL11.GL_LIGHTING);
 
 		GL11.glScalef(-0.05F, -0.05F, 0);
@@ -87,18 +88,17 @@ public class WorldRenderUtils {
 		GL11.glScalef(0.85F, 0.85F, 0.85F);
 
 		int c = 0;
-		for (Entry<Enchantment, Integer> m: EnchantmentHelper.get(item).entrySet()) {
+		for (Entry<Enchantment, Integer> m : EnchantmentHelper.get(item).entrySet()) {
 			String text = I18n.translate(m.getKey().getName(2).getString());
 
-			if (text.isEmpty()) continue;
+			if (text.isEmpty())
+				continue;
 
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
 			int w1 = mc.textRenderer.getWidth(subText) / 2;
-			mc.textRenderer.drawWithShadow(new MatrixStack(),
-					subText, -4 - w1, c*10-1,
-					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
-					? 0xff5050 : 0xffb0e0);
+			mc.textRenderer.drawWithShadow(new MatrixStack(), subText, -4 - w1, c * 10 - 1,
+					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0);
 			c--;
 		}
 

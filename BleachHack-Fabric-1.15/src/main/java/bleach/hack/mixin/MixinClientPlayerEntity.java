@@ -53,31 +53,41 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		super(clientWorld_1, gameProfile_1);
 	}
 
-	@Shadow protected MinecraftClient client;
-	@Shadow protected void method_3148(float float_1, float float_2) {}
+	@Shadow
+	protected MinecraftClient client;
+
+	@Shadow
+	protected void method_3148(float float_1, float float_2) {
+	}
 
 	@Inject(at = @At("RETURN"), method = "tick()V", cancellable = true)
 	public void tick(CallbackInfo info) {
 		try {
 			if (MinecraftClient.getInstance().player.age % 100 == 0) {
-				if (BleachFileHelper.SCHEDULE_SAVE_MODULES) BleachFileHelper.saveModules();
-				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
-				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
+				if (BleachFileHelper.SCHEDULE_SAVE_MODULES)
+					BleachFileHelper.saveModules();
+				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI)
+					BleachFileHelper.saveClickGui();
+				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS)
+					BleachFileHelper.saveFriends();
 			}
 
 			BleachQueue.nextQueue();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 
 		EventTick event = new EventTick();
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 
 	@Inject(at = @At("HEAD"), method = "sendMovementPackets()V", cancellable = true)
 	public void sendMovementPackets(CallbackInfo info) {
 		EventMovementTick event = new EventMovementTick();
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 
 	@Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
@@ -99,7 +109,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 			double double_1 = this.getX();
 			double double_2 = this.getZ();
 			super.move(event.type, event.vec3d);
-			this.method_3148((float)(this.getX() - double_1), (float)(this.getZ() - double_2));
+			this.method_3148((float) (this.getX() - double_1), (float) (this.getZ() - double_2));
 			info.cancel();
 		}
 	}
@@ -132,4 +142,3 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 
 }
-

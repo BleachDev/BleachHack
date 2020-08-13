@@ -29,7 +29,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class CmdXray extends Command {
-	//brb stealing your nuker command
+	// brb stealing your nuker command
 	@Override
 	public String getAlias() {
 		return "xray";
@@ -80,7 +80,8 @@ public class CmdXray extends Command {
 					lines.remove(block);
 
 					String s = "";
-					for (String s1 : lines) s += s1 + "\n";
+					for (String s1 : lines)
+						s += s1 + "\n";
 
 					BleachFileMang.createEmptyFile("xrayblocks.txt");
 					BleachFileMang.appendFile(s, "xrayblocks.txt");
@@ -100,7 +101,7 @@ public class CmdXray extends Command {
 			BleachLogger.infoMessage("Cleared Xray Blocks");
 		} else if (args[0].equalsIgnoreCase("list")) {
 			String s = "";
-			for (String l: lines) {
+			for (String l : lines) {
 				s += "\n\u00a76" + l;
 			}
 
@@ -108,4 +109,3 @@ public class CmdXray extends Command {
 		}
 	}
 }
-

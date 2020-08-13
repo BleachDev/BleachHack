@@ -36,12 +36,10 @@ public class EntityUtils {
 	}
 
 	public static void setGlowing(Entity entity, Formatting color, String teamName) {
-		Team team = (mc.world.getScoreboard().getTeamNames().contains(teamName) ?
-				mc.world.getScoreboard().getTeam(teamName) :
-					mc.world.getScoreboard().addTeam(teamName));
+		Team team = (mc.world.getScoreboard().getTeamNames().contains(teamName) ? mc.world.getScoreboard().getTeam(teamName)
+				: mc.world.getScoreboard().addTeam(teamName));
 
-		mc.world.getScoreboard().addPlayerToTeam(
-				entity instanceof PlayerEntity ? entity.getEntityName() : entity.getUuidAsString(), team);
+		mc.world.getScoreboard().addPlayerToTeam(entity instanceof PlayerEntity ? entity.getEntityName() : entity.getUuidAsString(), team);
 		mc.world.getScoreboard().getTeam(teamName).setColor(color);
 
 		entity.setGlowing(true);

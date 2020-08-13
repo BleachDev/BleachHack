@@ -52,8 +52,10 @@ public class ServerScraperScreen extends Screen {
 	public void init() {
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, new LiteralText("Scrape"), button -> {
 			try {
-				if (pingers.size() > 0) return;
-				if (ipField.getText().split(":")[0].trim().isEmpty()) throw new Exception();
+				if (pingers.size() > 0)
+					return;
+				if (ipField.getText().split(":")[0].trim().isEmpty())
+					throw new Exception();
 				System.out.println("Starting scraper...");
 				InetAddress ip = InetAddress.getByName(ipField.getText().split(":")[0].trim());
 				checked = 0;
@@ -84,7 +86,8 @@ public class ServerScraperScreen extends Screen {
 
 		if (abort) {
 			result = "\u00a77Aborting.. [" + pingers.size() + "] Left";
-			if (pingers.size() == 0) client.openScreen(new MultiplayerScreen(new TitleScreen()));
+			if (pingers.size() == 0)
+				client.openScreen(new MultiplayerScreen(new TitleScreen()));
 		}
 
 		super.render(matrix, mouseX, mouseY, delta);
@@ -97,27 +100,28 @@ public class ServerScraperScreen extends Screen {
 	public void scrapeIp(InetAddress ip) {
 		result = "\u00a7eScraping...";
 		scrapeThread = new Thread(() -> {
-			for (int change : new int[] {0, -1, 1, -2, 2, -3, 3}) {
+			for (int change : new int[] { 0, -1, 1, -2, 2, -3, 3 }) {
 				for (int i = 0; i <= 255; i++) {
-					String newIp = (ip.getAddress()[0] & 255) + "." + (ip.getAddress()[1] & 255)
-							+ "." + (ip.getAddress()[2] + change & 255) + "." + i;
+					String newIp = (ip.getAddress()[0] & 255) + "." + (ip.getAddress()[1] & 255) + "." + (ip.getAddress()[2] + change & 255) + "." + i;
 
 					BleachServerPinger ping = new BleachServerPinger();
 					ping.ping(newIp, 25565);
 					pingers.add(ping);
 
-					while(pingers.size() >= 128 && !abort) updatePingers();
+					while (pingers.size() >= 128 && !abort)
+						updatePingers();
 				}
 			}
 
-			while(pingers.size() > 0) updatePingers();
+			while (pingers.size() > 0)
+				updatePingers();
 			result = "\u00a7aDone!";
 		});
 		scrapeThread.start();
 	}
 
 	public void updatePingers() {
-		for (BleachServerPinger ping: new ArrayList<>(pingers)) {
+		for (BleachServerPinger ping : new ArrayList<>(pingers)) {
 			if (ping.done) {
 				checked++;
 				if (!ping.failed && !abort) {
@@ -126,7 +130,8 @@ public class ServerScraperScreen extends Screen {
 						ServerList list = serverScreen.getServerList();
 						list.add(ping.server);
 						list.saveFile();
-					} catch (Exception e) {}
+					} catch (Exception e) {
+					}
 				}
 				pingers.remove(ping);
 			}
@@ -134,12 +139,14 @@ public class ServerScraperScreen extends Screen {
 	}
 
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
-		if (ipField.isFocused()) ipField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (ipField.isFocused())
+			ipField.charTyped(p_charTyped_1_, p_charTyped_2_);
 		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
 	}
 
 	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-		if (ipField.isFocused()) ipField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (ipField.isFocused())
+			ipField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 	}
 
@@ -161,7 +168,8 @@ class BleachServerPinger {
 		new Thread(() -> {
 			MultiplayerServerListPinger pinger = new MultiplayerServerListPinger();
 			try {
-				pinger.add(server, () -> {});
+				pinger.add(server, () -> {
+				});
 			} catch (Exception e) {
 				failed = true;
 			}

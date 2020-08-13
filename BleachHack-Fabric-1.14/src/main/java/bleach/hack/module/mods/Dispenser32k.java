@@ -55,17 +55,14 @@ public class Dispenser32k extends Module {
 	private int timer = 0;
 
 	public Dispenser32k() {
-		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020",
-				new SettingToggle("Legit Place", true),
-				new SettingToggle("Killaura", true),
-				new SettingSlider("CPS", 0, 20, 20, 0),
-				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay"),
-				new SettingToggle("Timeout", false),
-				new SettingMode("Place", "Auto", "Looking"));
+		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020", new SettingToggle("Legit Place", true),
+				new SettingToggle("Killaura", true), new SettingSlider("CPS", 0, 20, 20, 0), new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay"),
+				new SettingToggle("Timeout", false), new SettingMode("Place", "Auto", "Looking"));
 	}
 
 	public void onEnable() {
-		if (mc.world == null) return;
+		if (mc.world == null)
+			return;
 
 		super.onEnable();
 
@@ -82,18 +79,28 @@ public class Dispenser32k extends Module {
 
 		for (int i = 0; i <= 8; i++) {
 			Item item = mc.player.inventory.getInvStack(i).getItem();
-			if (item == Item.fromBlock(Blocks.HOPPER)) hopper = i;
-			else if (item == Item.fromBlock(Blocks.DISPENSER)) dispenser = i;
-			else if (item == Item.fromBlock(Blocks.REDSTONE_BLOCK)) redstone = i;
-			else if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof ShulkerBoxBlock) shulker = i;
-			else if (item instanceof BlockItem) block = i;
+			if (item == Item.fromBlock(Blocks.HOPPER))
+				hopper = i;
+			else if (item == Item.fromBlock(Blocks.DISPENSER))
+				dispenser = i;
+			else if (item == Item.fromBlock(Blocks.REDSTONE_BLOCK))
+				redstone = i;
+			else if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof ShulkerBoxBlock)
+				shulker = i;
+			else if (item instanceof BlockItem)
+				block = i;
 		}
 
-		if (hopper == -1) BleachLogger.errorMessage("Missing Hopper");
-		else if (dispenser == -1) BleachLogger.errorMessage("Missing Dispenser");
-		else if (redstone == -1) BleachLogger.errorMessage("Missing Redstone Block");
-		else if (shulker == -1) BleachLogger.errorMessage("Missing Shulker");
-		else if (block == -1) BleachLogger.errorMessage("Missing Generic Block");
+		if (hopper == -1)
+			BleachLogger.errorMessage("Missing Hopper");
+		else if (dispenser == -1)
+			BleachLogger.errorMessage("Missing Dispenser");
+		else if (redstone == -1)
+			BleachLogger.errorMessage("Missing Redstone Block");
+		else if (shulker == -1)
+			BleachLogger.errorMessage("Missing Shulker");
+		else if (block == -1)
+			BleachLogger.errorMessage("Missing Generic Block");
 
 		if (hopper == -1 || dispenser == -1 || redstone == -1 || shulker == -1 || block == -1) {
 			setToggled(false);
@@ -107,13 +114,10 @@ public class Dispenser32k extends Module {
 			double x = pos.getX() - mc.player.getPos().x;
 			double z = pos.getZ() - mc.player.getPos().z;
 
-			rot = Math.abs(x) > Math.abs(z) ? x > 0 ? new int[] {-1, 0} : new int[] {1, 0} : z > 0 ? new int[] {0, -1} : new int[] {0, 1};
+			rot = Math.abs(x) > Math.abs(z) ? x > 0 ? new int[] { -1, 0 } : new int[] { 1, 0 } : z > 0 ? new int[] { 0, -1 } : new int[] { 0, 1 };
 
-			if (!(WorldUtils.canPlaceBlock(pos) /*|| canPlaceBlock(pos.add(rot[0], 0, rot[1]))*/)
-					|| !WorldUtils.isBlockEmpty(pos)
-					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))
-					|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
-					|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
+			if (!(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */) || !WorldUtils.isBlockEmpty(pos)
+					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1])) || !WorldUtils.isBlockEmpty(pos.add(0, 1, 0)) || !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
 					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1]))) {
 				BleachLogger.errorMessage("Unable to place 32k");
 				setToggled(false);
@@ -124,8 +128,7 @@ public class Dispenser32k extends Module {
 
 			WorldUtils.placeBlock(pos, block, rotate, false);
 
-			WorldUtils.facePosPacket(
-					pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
+			WorldUtils.facePosPacket(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
 			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false);
 			return;
 
@@ -133,22 +136,20 @@ public class Dispenser32k extends Module {
 			for (int x = -2; x <= 2; x++) {
 				for (int y = -1; y <= 1; y++) {
 					for (int z = -2; z <= 2; z++) {
-						rot = Math.abs(x) > Math.abs(z) ? x > 0 ? new int[] {-1, 0} : new int[] {1, 0} : z > 0 ? new int[] {0, -1} : new int[] {0, 1};
+						rot = Math.abs(x) > Math.abs(z) ? x > 0 ? new int[] { -1, 0 } : new int[] { 1, 0 } : z > 0 ? new int[] { 0, -1 } : new int[] { 0, 1 };
 
 						pos = mc.player.getBlockPos().add(x, y, z);
 
-						if (mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
-								mc.player.getPos().add(x - rot[0] / 2, y + 0.5, z + rot[1] / 2)) > 4.5
-								|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
-										mc.player.getPos().add(x + 0.5, y + 2.5, z + 0.5)) > 4.5
-								|| !(WorldUtils.canPlaceBlock(pos) /*|| canPlaceBlock(pos.add(rot[0], 0, rot[1]))*/)
-								|| !WorldUtils.isBlockEmpty(pos)
-								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))
-								|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
-								|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
-								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1]))) continue;
+						if (mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
+								.distanceTo(mc.player.getPos().add(x - rot[0] / 2, y + 0.5, z + rot[1] / 2)) > 4.5
+								|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
+										.distanceTo(mc.player.getPos().add(x + 0.5, y + 2.5, z + 0.5)) > 4.5
+								|| !(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */) || !WorldUtils.isBlockEmpty(pos)
+								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1])) || !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
+								|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0)) || !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1])))
+							continue;
 
-						startRot = new float[] {mc.player.yaw, mc.player.pitch};
+						startRot = new float[] { mc.player.yaw, mc.player.pitch };
 						WorldUtils.facePos(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
 						WorldUtils.facePosPacket(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
 						return;
@@ -169,7 +170,7 @@ public class Dispenser32k extends Module {
 		}
 
 		if (ticksPassed == 1) {
-			//boolean rotate = getSetting(0).toToggle().state;
+			// boolean rotate = getSetting(0).toToggle().state;
 
 			WorldUtils.placeBlock(pos, block, false, false);
 			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false);
@@ -180,7 +181,8 @@ public class Dispenser32k extends Module {
 			return;
 		}
 
-		if (active && getSetting(1).asToggle().state && timer == 0) killAura();
+		if (active && getSetting(1).asToggle().state && timer == 0)
+			killAura();
 
 		if (mc.currentScreen instanceof ContainerScreen9) {
 			openedDispenser = true;
@@ -190,7 +192,8 @@ public class Dispenser32k extends Module {
 			HopperScreen gui = (HopperScreen) mc.currentScreen;
 
 			for (int i = 32; i <= 40; i++) {
-				//System.out.println(EnchantmentHelper.getEnchantmentLevel(Enchantments.SHARPNESS, gui.inventorySlots.getSlot(i).getStack()));
+				// System.out.println(EnchantmentHelper.getEnchantmentLevel(Enchantments.SHARPNESS,
+				// gui.inventorySlots.getSlot(i).getStack()));
 				if (EnchantmentHelper.getLevel(Enchantments.SHARPNESS, gui.getContainer().getSlot(i).getStack()) > 5) {
 					mc.player.inventory.selectedSlot = i - 32;
 					break;
@@ -201,7 +204,7 @@ public class Dispenser32k extends Module {
 
 			if (active) {
 				if (getSetting(3).asMode().mode == 0) {
-					timer = timer >= Math.round(20/getSetting(2).asSlider().getValue()) ? 0 : timer + 1;
+					timer = timer >= Math.round(20 / getSetting(2).asSlider().getValue()) ? 0 : timer + 1;
 				} else if (getSetting(3).asMode().mode == 1) {
 					timer = 0;
 				} else if (getSetting(3).asMode().mode == 2) {
@@ -209,7 +212,8 @@ public class Dispenser32k extends Module {
 				}
 			}
 
-			//System.out.println(EnchantmentHelper.getEnchantmentLevel(Enchantments.SHARPNESS, mc.player.inventory.getCurrentItem()));
+			// System.out.println(EnchantmentHelper.getEnchantmentLevel(Enchantments.SHARPNESS,
+			// mc.player.inventory.getCurrentItem()));
 			if (!(gui.getContainer().getSlot(0).getStack().getItem() instanceof AirBlockItem) && active) {
 				int slot = mc.player.inventory.selectedSlot;
 				boolean pull = false;
@@ -221,10 +225,13 @@ public class Dispenser32k extends Module {
 					}
 				}
 
-				//mc.playerController.windowClick(gui.inventorySlots.windowId, 0, 0, ClickType.QUICK_MOVE, mc.player);
+				// mc.playerController.windowClick(gui.inventorySlots.windowId, 0, 0,
+				// ClickType.QUICK_MOVE, mc.player);
 				if (pull) {
-					//mc.interactionManager.method_2906(gui.getContainer().syncId, 0, 0, SlotActionType.PICKUP, mc.player);
-					//mc.interactionManager.method_2906(gui.getContainer().syncId, slot, 0, SlotActionType.PICKUP, mc.player);
+					// mc.interactionManager.method_2906(gui.getContainer().syncId, 0, 0,
+					// SlotActionType.PICKUP, mc.player);
+					// mc.interactionManager.method_2906(gui.getContainer().syncId, slot, 0,
+					// SlotActionType.PICKUP, mc.player);
 					mc.interactionManager.method_2906(gui.getContainer().syncId, 0, 0, SlotActionType.QUICK_MOVE, mc.player);
 					mc.player.inventory.selectedSlot = slot - 32;
 				}
@@ -250,7 +257,8 @@ public class Dispenser32k extends Module {
 			openBlock(pos.add(rot[0], 0, rot[1]));
 		}
 
-		if (openedDispenser) dispenserTicks++;
+		if (openedDispenser)
+			dispenserTicks++;
 		ticksPassed++;
 	}
 
@@ -260,8 +268,7 @@ public class Dispenser32k extends Module {
 
 			List<Entity> players = Streams.stream(mc.world.getEntities())
 					.filter(e -> e instanceof PlayerEntity && e != mc.player && !(BleachHack.friendMang.has(e.getName().asString())))
-					.sorted((a,b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)))
-					.collect(Collectors.toList());
+					.sorted((a, b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player))).collect(Collectors.toList());
 
 			if (!players.isEmpty() && players.get(0).getPos().distanceTo(mc.player.getPos()) < 8) {
 				target = players.get(0);
@@ -271,18 +278,19 @@ public class Dispenser32k extends Module {
 
 			WorldUtils.facePos(target.getPos().x, target.getPos().y + 1, target.getPos().z);
 
-			if (target.getPos().distanceTo(mc.player.getPos()) > 6) return;
+			if (target.getPos().distanceTo(mc.player.getPos()) > 6)
+				return;
 			mc.interactionManager.attackEntity(mc.player, target);
 		}
 	}
 
 	private void openBlock(BlockPos pos) {
-		for (Direction d: Direction.values()) {
+		for (Direction d : Direction.values()) {
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-			if (!WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock)) continue;
+			if (!WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock))
+				continue;
 
-			mc.interactionManager.interactBlock(
-					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos, false));
+			mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos, false));
 			return;
 		}
 	}

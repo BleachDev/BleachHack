@@ -33,23 +33,21 @@ import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
 public class Ambience extends Module {
 
 	public Ambience() {
-		super("Ambience", KEY_UNBOUND, Category.WORLD, "Changes The World Time/Weather",
-				new SettingToggle("Weather", true),
-				new SettingToggle("Time", false),
-				new SettingMode("Weather", "Clear", "Rain"),
-				new SettingSlider("Rain", 0, 2, 0, 2),
-				new SettingSlider("Time", 0, 24000, 12500, 0),
-				new SettingToggle("Sky Color", false).withDesc("Custom color for the sky").withChildren(
-						new SettingColor("Sky Color", 0.6f, 0.1f, 0.7f, false).withDesc("Color for the sky")),
-				new SettingToggle("Cloud Color", false).withDesc("Custom color for clouds").withChildren(
-						new SettingColor("Cloud Color", 0.8f, 0.2f, 1f, false).withDesc("Color for clouds")));
+		super("Ambience", KEY_UNBOUND, Category.WORLD, "Changes The World Time/Weather", new SettingToggle("Weather", true), new SettingToggle("Time", false),
+				new SettingMode("Weather", "Clear", "Rain"), new SettingSlider("Rain", 0, 2, 0, 2), new SettingSlider("Time", 0, 24000, 12500, 0),
+				new SettingToggle("Sky Color", false).withDesc("Custom color for the sky")
+						.withChildren(new SettingColor("Sky Color", 0.6f, 0.1f, 0.7f, false).withDesc("Color for the sky")),
+				new SettingToggle("Cloud Color", false).withDesc("Custom color for clouds")
+						.withChildren(new SettingColor("Cloud Color", 0.8f, 0.2f, 1f, false).withDesc("Color for clouds")));
 	}
 
 	@Subscribe
 	public void onPreTick(EventMovementTick event) {
 		if (getSetting(0).asToggle().state) {
-			if (getSetting(2).asMode().mode == 0) mc.world.setRainGradient(0f);
-			else mc.world.setRainGradient((float) getSetting(3).asSlider().getValue());
+			if (getSetting(2).asMode().mode == 0)
+				mc.world.setRainGradient(0f);
+			else
+				mc.world.setRainGradient((float) getSetting(3).asSlider().getValue());
 		}
 		if (getSetting(1).asToggle().state) {
 			mc.world.setTime((long) getSetting(4).asSlider().getValue());

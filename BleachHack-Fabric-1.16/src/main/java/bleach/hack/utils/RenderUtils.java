@@ -44,9 +44,7 @@ public class RenderUtils {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(5, VertexFormats.POSITION_COLOR);
-		WorldRenderer.drawBox(buffer,
-				box.minX, box.minY, box.minZ,
-				box.maxX, box.maxY, box.maxZ, r, g, b, a/2f);
+		WorldRenderer.drawBox(buffer, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, r, g, b, a / 2f);
 		tessellator.draw();
 
 		// Outline
@@ -72,7 +70,7 @@ public class RenderUtils {
 		gl11Cleanup();
 	}
 
-	public static void drawLine(double x1,double y1,double z1,double x2,double y2,double z2, float r, float g, float b, float t) {
+	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float t) {
 		gl11Setup();
 		GL11.glLineWidth(t);
 

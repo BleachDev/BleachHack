@@ -19,8 +19,7 @@ public class MixinSharedConstants {
 			return chr != 167 && chr >= ' ' && chr != 127;
 		}
 
-		return (noKeyBlock.getSetting(0).asToggle().state || chr != 167)
-				&& (noKeyBlock.getSetting(1).asToggle().state || chr >= ' ')
+		return (noKeyBlock.getSetting(0).asToggle().state || chr != 167) && (noKeyBlock.getSetting(1).asToggle().state || chr >= ' ')
 				&& (noKeyBlock.getSetting(2).asToggle().state || chr != 127);
 	}
 }

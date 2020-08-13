@@ -44,9 +44,7 @@ public class RenderUtils {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(5, VertexFormats.POSITION_COLOR);
-		WorldRenderer.drawBox(buffer,
-				box.x1, box.y1, box.z1,
-				box.x2, box.y2, box.z2, r, g, b, a/2f);
+		WorldRenderer.drawBox(buffer, box.x1, box.y1, box.z1, box.x2, box.y2, box.z2, r, g, b, a / 2f);
 		tessellator.draw();
 
 		// Outline
@@ -72,7 +70,7 @@ public class RenderUtils {
 		gl11Cleanup();
 	}
 
-	public static void drawLine(double x1,double y1,double z1,double x2,double y2,double z2, float r, float g, float b, float t) {
+	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float t) {
 		gl11Setup();
 		GL11.glLineWidth(t);
 
@@ -103,12 +101,12 @@ public class RenderUtils {
 		GL11.glLineWidth(2.5F);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		//GL11.glDisable(GL11.GL_DEPTH_TEST);
+		// GL11.glDisable(GL11.GL_DEPTH_TEST);
 		offsetRender();
 	}
 
 	public static void gl11Cleanup() {
-		//GL11.glEnable(GL11.GL_DEPTH_TEST);
+		// GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);

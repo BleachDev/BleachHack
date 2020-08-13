@@ -35,6 +35,7 @@ public abstract class MixinEntityRenderer<T extends Entity> {
 
 	/**
 	 * fuck javadoc
+	 * 
 	 * @param entity_1
 	 * @reason fuck
 	 * @author bleach
@@ -58,13 +59,15 @@ public abstract class MixinEntityRenderer<T extends Entity> {
 	public void render(T entity_1, double double_1, double double_2, double double_3, float float_1, float float_2, CallbackInfo info) {
 		EventEntityRender.Render event = new EventEntityRender.Render(entity_1);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 
 	@Inject(at = @At("HEAD"), method = "renderLabel(Lnet/minecraft/entity/Entity;Ljava/lang/String;DDDI)V", cancellable = true)
 	public void renderLabel(T entity_1, String string_1, double double_1, double double_2, double double_3, int int_1, CallbackInfo info) {
 		EventEntityRender.Label event = new EventEntityRender.Label(entity_1);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 }

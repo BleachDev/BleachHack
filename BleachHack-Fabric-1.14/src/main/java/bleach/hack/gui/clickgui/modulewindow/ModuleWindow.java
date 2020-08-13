@@ -54,7 +54,8 @@ public class ModuleWindow extends ClickGuiWindow {
 		this.len = len;
 		modList = mods;
 
-		for (Module m: mods) this.mods.put(m, false);
+		for (Module m : mods)
+			this.mods.put(m, false);
 		y2 = getHeight();
 	}
 
@@ -68,7 +69,7 @@ public class ModuleWindow extends ClickGuiWindow {
 		int y = y1 + 13;
 		x2 = x + len + 1;
 
-		if (rmDown && mouseOver(x, y-12, x+len, y)) {
+		if (rmDown && mouseOver(x, y - 12, x + len, y)) {
 			mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			hiding = !hiding;
 		}
@@ -81,44 +82,44 @@ public class ModuleWindow extends ClickGuiWindow {
 		}
 
 		int curY = 0;
-		for (Entry<Module, Boolean> m: new LinkedHashMap<>(mods).entrySet()) {
+		for (Entry<Module, Boolean> m : new LinkedHashMap<>(mods).entrySet()) {
 			if (m.getValue()) {
-				//fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
-				fillGreySides(x, y + curY, x+len-1, y + 12 + curY);
+				// fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
+				fillGreySides(x, y + curY, x + len - 1, y + 12 + curY);
 				DrawableHelper.fill(x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
 				DrawableHelper.fill(x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
 			}
 
-			DrawableHelper.fill(x, y + curY, x+len, y + 12 + curY,
-					mouseOver(x, y + curY, x+len, y + 12 + curY) ? 0x70303070 : 0x00000000);
+			DrawableHelper.fill(x, y + curY, x + len, y + 12 + curY, mouseOver(x, y + curY, x + len, y + 12 + curY) ? 0x70303070 : 0x00000000);
 
-			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len),
-					x+2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
+			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len), x + 2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
 
-			//If they match: Module gets marked red
+			// If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
-				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0),
-						m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
+				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0), m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
 			}
 
 			/* Set which module settings show on */
-			if (mouseOver(x, y + curY, x+len, y + 12 + curY)) {
+			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
 				tooltip = Triple.of(x + len + 2, y + curY, m.getKey().getDesc());
 
-				if (lmDown) m.getKey().toggle();
-				if (rmDown) mods.replace(m.getKey(), !m.getValue());
+				if (lmDown)
+					m.getKey().toggle();
+				if (rmDown)
+					mods.replace(m.getKey(), !m.getValue());
 
-				if (lmDown || rmDown) mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				if (lmDown || rmDown)
+					mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
 
 			curY += 12;
 
 			/* draw settings */
 			if (m.getValue()) {
-				for (SettingBase s: m.getKey().getSettings()) {
+				for (SettingBase s : m.getKey().getSettings()) {
 					s.render(this, x, y + curY, len);
 
-					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x+len, y + s.getHeight(len) + curY)) {
+					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x + len, y + s.getHeight(len) + curY)) {
 						tooltip = s.getGuiDesc(this, x, y + curY, len);
 					}
 
@@ -127,7 +128,7 @@ public class ModuleWindow extends ClickGuiWindow {
 					curY += s.getHeight(len);
 				}
 
-				DrawableHelper.fill(x + 1, y + curY - 1, x+len-2, y + curY, 0x90b0b0b0);
+				DrawableHelper.fill(x + 1, y + curY - 1, x + len - 2, y + curY, 0x90b0b0b0);
 			}
 		}
 	}
@@ -164,11 +165,11 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	public int getHeight() {
 		int h = 1;
-		for (Entry<Module, Boolean> e: mods.entrySet()) {
+		for (Entry<Module, Boolean> e : mods.entrySet()) {
 			h += 12;
 
 			if (e.getValue()) {
-				for (SettingBase s: e.getKey().getSettings()) {
+				for (SettingBase s : e.getKey().getSettings()) {
 					h += s.getHeight(len);
 				}
 			}

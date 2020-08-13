@@ -8,7 +8,7 @@ public class EventSignBlockEntityRender extends Event {
 
 	private BlockEntity signBlockEntity;
 
-	public EventSignBlockEntityRender(SignBlockEntity signBlockEntity){
+	public EventSignBlockEntityRender(SignBlockEntity signBlockEntity) {
 		this.signBlockEntity = signBlockEntity;
 	}
 

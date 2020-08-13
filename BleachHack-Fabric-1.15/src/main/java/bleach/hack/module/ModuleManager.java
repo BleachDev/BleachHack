@@ -99,75 +99,14 @@ import net.minecraft.client.util.InputUtil;
 
 public class ModuleManager {
 
-	private static List<Module> mods = Arrays.asList(
-			new Ambience(),
-			new AntiChunkBan(),
-			new AntiHunger(),
-			new ArrowJuke(),
-			new AutoDonkeyDupe(),
-			new AutoReconnect(),
-			new AutoRespawn(),
-			new AutoSign(),
-			new AutoTool(),
-			new AutoTotem(),
-			new AutoWalk(),
-			new BetterPortal(),
-			new BlockParty(),
-			new BookCrash(),
-			new BowBot(),
-			new ChestESP(),
-			new ChunkSize(),
-			new ClickGui(),
-			new ColorSigns(),
-			new Criticals(),
-			new CrystalAura(),
-			new CustomChat(),
-			new DiscordRPCMod(),
-			new Dispenser32k(),
-			new ElytraFly(),
-			new EntityControl(),
-			new ElytraReplace(),
-			new ESP(),
-			new FakeLag(),
-			new FastUse(),
-			new Flight(),
-			new Freecam(),
-			new Fullbright(),
-			new Ghosthand(),
-			new HandProgress(),
-			new Jesus(),
-			new Killaura(),
-			new MountBypass(),
-			new MouseFriend(),
-			new Nametags(),
-			new Nofall(),
-			new NoKeyBlock(),
-			new NoRender(),
-			new NoSlow(),
-			new Notebot(),
-			new NotebotStealer(),
-			new NoVelocity(),
-			new Nuker(),
-			new OffhandCrash(),
-			new PacketFly(),
-			new Peek(),
-			new PlayerCrash(),
-			new SafeWalk(),
-			new Scaffold(),
-			new Spammer(),
-			new SpeedHack(),
-			new SpeedMine(),
-			new Sprint(),
-			new StarGithub(),
-			new Step(),
-			new Surround(),
-			new Timer(),
-			new Tracers(),
-			new Trail(),
-			new Trajectories(),
-			new UI(),
-			new Xray(),
-			new Zoom());
+	private static List<Module> mods = Arrays.asList(new Ambience(), new AntiChunkBan(), new AntiHunger(), new ArrowJuke(), new AutoDonkeyDupe(), new AutoReconnect(),
+			new AutoRespawn(), new AutoSign(), new AutoTool(), new AutoTotem(), new AutoWalk(), new BetterPortal(), new BlockParty(), new BookCrash(), new BowBot(),
+			new ChestESP(), new ChunkSize(), new ClickGui(), new ColorSigns(), new Criticals(), new CrystalAura(), new CustomChat(), new DiscordRPCMod(),
+			new Dispenser32k(), new ElytraFly(), new EntityControl(), new ElytraReplace(), new ESP(), new FakeLag(), new FastUse(), new Flight(), new Freecam(),
+			new Fullbright(), new Ghosthand(), new HandProgress(), new Jesus(), new Killaura(), new MountBypass(), new MouseFriend(), new Nametags(), new Nofall(),
+			new NoKeyBlock(), new NoRender(), new NoSlow(), new Notebot(), new NotebotStealer(), new NoVelocity(), new Nuker(), new OffhandCrash(), new PacketFly(),
+			new Peek(), new PlayerCrash(), new SafeWalk(), new Scaffold(), new Spammer(), new SpeedHack(), new SpeedMine(), new Sprint(), new StarGithub(), new Step(),
+			new Surround(), new Timer(), new Tracers(), new Trail(), new Trajectories(), new UI(), new Xray(), new Zoom());
 
 	public static List<Module> getModules() {
 		return mods;
@@ -184,8 +123,9 @@ public class ModuleManager {
 	}
 
 	public static Module getModuleByName(String name) {
-		for (Module m: mods) {
-			if (name.equalsIgnoreCase(m.getName())) return m;
+		for (Module m : mods) {
+			if (name.equalsIgnoreCase(m.getName()))
+				return m;
 		}
 		return null;
 	}
@@ -196,7 +136,8 @@ public class ModuleManager {
 
 	@Subscribe
 	public static void handleKeyPress(EventKeyPress eventKeyPress) {
-		if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) return;
+		if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3))
+			return;
 
 		mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(Module::toggle);
 	}

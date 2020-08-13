@@ -44,11 +44,8 @@ public class PacketFly extends Module {
 	private int timer = 0;
 
 	public PacketFly() {
-		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.",
-				new SettingMode("Mode", "Phase", "Packet"),
-				new SettingSlider("HSpeed", 0.05, 2, 0.5, 2),
-				new SettingSlider("VSpeed", 0.05, 2, 0.5, 2),
-				new SettingSlider("Fall", 0, 40, 20, 0),
+		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.", new SettingMode("Mode", "Phase", "Packet"),
+				new SettingSlider("HSpeed", 0.05, 2, 0.5, 2), new SettingSlider("VSpeed", 0.05, 2, 0.5, 2), new SettingSlider("Fall", 0, 40, 20, 0),
 				new SettingToggle("Packet Cancel", false));
 	}
 
@@ -68,7 +65,8 @@ public class PacketFly extends Module {
 
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
-		if (mc.world == null || mc.player == null) return;
+		if (mc.world == null || mc.player == null)
+			return;
 		if (event.getPacket() instanceof PlayerPositionLookS2CPacket && getSetting(4).asToggle().state) {
 			event.setCancelled(true);
 		}
@@ -79,26 +77,40 @@ public class PacketFly extends Module {
 		double hspeed = getSetting(1).asSlider().getValue();
 		double vspeed = getSetting(2).asSlider().getValue();
 
-		if (!mc.player.isAlive()) return;
+		if (!mc.player.isAlive())
+			return;
 		timer++;
 
 		Entity target = mc.player.getVehicle() == null ? mc.player : mc.player.getVehicle();
 		if (getSetting(0).asMode().mode == 0) {
-			if (mc.options.keyJump.isPressed()) posY += vspeed;
-			if (mc.options.keySneak.isPressed()) posY -= vspeed;
+			if (mc.options.keyJump.isPressed())
+				posY += vspeed;
+			if (mc.options.keySneak.isPressed())
+				posY -= vspeed;
 
-			Vec3d forward = new Vec3d(0,0,hspeed).rotateY(-(float) Math.toRadians(mc.player.yaw));
+			Vec3d forward = new Vec3d(0, 0, hspeed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
-			if (mc.options.keyForward.isPressed()) { posX += forward.x; posZ += forward.z; }
-			if (mc.options.keyBack.isPressed()) { posX -= forward.x; posZ -= forward.z; }
-			if (mc.options.keyLeft.isPressed()) { posX += strafe.x; posZ += strafe.z; }
-			if (mc.options.keyRight.isPressed()) { posX -= strafe.x; posZ -= strafe.z; }
+			if (mc.options.keyForward.isPressed()) {
+				posX += forward.x;
+				posZ += forward.z;
+			}
+			if (mc.options.keyBack.isPressed()) {
+				posX -= forward.x;
+				posZ -= forward.z;
+			}
+			if (mc.options.keyLeft.isPressed()) {
+				posX += strafe.x;
+				posZ += strafe.z;
+			}
+			if (mc.options.keyRight.isPressed()) {
+				posX -= strafe.x;
+				posZ -= strafe.z;
+			}
 
 			if (timer > getSetting(3).asSlider().getValue()) {
 				posY -= 0.2;
 				timer = 0;
 			}
-
 
 			target.noClip = true;
 			target.updatePositionAndAngles(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
@@ -107,21 +119,28 @@ public class PacketFly extends Module {
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket(timer));
 
 		} else if (getSetting(0).asMode().mode == 1) {
-			double mX = 0; double mY = 0; double mZ = 0;
+			double mX = 0;
+			double mY = 0;
+			double mZ = 0;
 			if (mc.player.headYaw != mc.player.yaw) {
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
-						mc.player.headYaw, mc.player.pitch, mc.player.onGround));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(mc.player.headYaw, mc.player.pitch, mc.player.onGround));
 				return;
 			}
 
-			if (mc.options.keyJump.isPressed()) mY = 0.062;
-			if (mc.options.keySneak.isPressed()) mY = -0.062;
+			if (mc.options.keyJump.isPressed())
+				mY = 0.062;
+			if (mc.options.keySneak.isPressed())
+				mY = -0.062;
 
 			if (mc.options.keyForward.isPressed()) {
-				if (mc.player.getMovementDirection().equals(Direction.NORTH)) mZ = -0.275;
-				if (mc.player.getMovementDirection().equals(Direction.EAST)) mX = 0.275;
-				if (mc.player.getMovementDirection().equals(Direction.SOUTH)) mZ = 0.275;
-				if (mc.player.getMovementDirection().equals(Direction.WEST)) mX = -0.275;
+				if (mc.player.getMovementDirection().equals(Direction.NORTH))
+					mZ = -0.275;
+				if (mc.player.getMovementDirection().equals(Direction.EAST))
+					mX = 0.275;
+				if (mc.player.getMovementDirection().equals(Direction.SOUTH))
+					mZ = 0.275;
+				if (mc.player.getMovementDirection().equals(Direction.WEST))
+					mX = -0.275;
 			}
 
 			if (timer > getSetting(3).asSlider().getValue()) {
@@ -131,10 +150,8 @@ public class PacketFly extends Module {
 				timer = 0;
 			}
 
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.getX() + mX, mc.player.getY() + mY, mc.player.getZ() + mZ, false));
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.getX() + mX, mc.player.getY() - 420.69, mc.player.getZ() + mZ, true));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX() + mX, mc.player.getY() + mY, mc.player.getZ() + mZ, false));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX() + mX, mc.player.getY() - 420.69, mc.player.getZ() + mZ, true));
 
 		}
 	}

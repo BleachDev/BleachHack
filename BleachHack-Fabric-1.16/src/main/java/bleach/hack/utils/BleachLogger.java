@@ -25,31 +25,43 @@ import net.minecraft.util.Formatting;
 public class BleachLogger {
 
 	public static void infoMessage(String s) {
-		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.BLUE) + "\u00a79\u00a7lINFO: \u00a79" + s));
-		} catch (Exception e) { System.out.println("[BH] INFO: " + s); }
+		try {
+			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(getBHText(Formatting.BLUE) + "\u00a79\u00a7lINFO: \u00a79" + s));
+		} catch (Exception e) {
+			System.out.println("[BH] INFO: " + s);
+		}
 	}
 
 	public static void warningMessage(String s) {
-		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e" + s));
-		} catch (Exception e) { System.out.println("[BH] WARN: " + s); }
+		try {
+			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e" + s));
+		} catch (Exception e) {
+			System.out.println("[BH] WARN: " + s);
+		}
 	}
 
 	public static void errorMessage(String s) {
-		try{ MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c" + s));
-		} catch (Exception e) { System.out.println("[BH] ERROR: " + s); }
+		try {
+			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c" + s));
+		} catch (Exception e) {
+			System.out.println("[BH] ERROR: " + s);
+		}
 	}
 
 	public static void noPrefixMessage(String s) {
-		try{ MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(s));
-		} catch (Exception e) { System.out.println(s); }
+		try {
+			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(s));
+		} catch (Exception e) {
+			System.out.println(s);
+		}
 	}
 
 	public static void noPrefixMessage(Text text) {
-		try{ MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
-		} catch (Exception e) { System.out.println(text.asString()); }
+		try {
+			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
+		} catch (Exception e) {
+			System.out.println(text.asString());
+		}
 	}
 
 	private static String getBHText(Formatting color) {

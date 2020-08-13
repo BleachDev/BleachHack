@@ -44,7 +44,8 @@ public class MixinPacketInflater {
 	@Inject(at = @At("HEAD"), method = "decode(Lio/netty/channel/ChannelHandlerContext;Lio/netty/buffer/ByteBuf;Ljava/util/List;)V", cancellable = true)
 	protected void decode(ChannelHandlerContext channelHandlerContext_1, ByteBuf byteBuf_1, List<Object> list_1, CallbackInfo info) throws Exception {
 
-		if (!ModuleManager.getModule(AntiChunkBan.class).isToggled()) return;
+		if (!ModuleManager.getModule(AntiChunkBan.class).isToggled())
+			return;
 
 		info.cancel();
 
@@ -70,9 +71,8 @@ public class MixinPacketInflater {
 		}
 	}
 
-	/*@Override
-	public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		// TODO Auto-generated method stub
-
-	}*/
+	/* @Override public void decode(ChannelHandlerContext ctx, ByteBuf in,
+	 * List<Object> out) throws Exception { // TODO Auto-generated method stub
+	 * 
+	 * } */
 }

@@ -34,12 +34,14 @@ import net.minecraft.client.util.InputUtil;
 public class MixinKeyboard {
 	@Inject(method = "onKey", at = @At(value = "INVOKE", target = "net/minecraft/client/util/InputUtil.isKeyPressed(JI)Z", ordinal = 5), cancellable = true)
 	private void onKeyEvent(long windowPointer, int key, int scanCode, int action, int modifiers, CallbackInfo callbackInfo) {
-		if (InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()) != null && InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()).equals(Command.PREFIX)) {
+		if (InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()) != null
+				&& InputUtil.getKeycodeName(InputUtil.getKeyCode(key, scanCode).getKeyCode()).equals(Command.PREFIX)) {
 			MinecraftClient.getInstance().openScreen(new ChatScreen(Command.PREFIX));
 		}
 
 		EventKeyPress event = new EventKeyPress(key, scanCode);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) callbackInfo.cancel();
+		if (event.isCancelled())
+			callbackInfo.cancel();
 	}
 }

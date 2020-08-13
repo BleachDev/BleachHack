@@ -41,20 +41,23 @@ public class BleachHack implements ModInitializer {
 	public void onInitialize() {
 		BleachFileMang.init();
 		BleachFileHelper.readModules();
-		//BleachFileHelper.readSettings();
-		//BleachFileHelper.readBinds();
+		// BleachFileHelper.readSettings();
+		// BleachFileHelper.readBinds();
 
 		ClickGui.clickGui.initWindows();
 		BleachFileHelper.readClickGui();
 		BleachFileHelper.readPrefix();
 		BleachFileHelper.readFriends();
 
-		for (Module m: ModuleManager.getModules()) m.init();
+		for (Module m : ModuleManager.getModules())
+			m.init();
 
-		//v This makes a scat fetishist look like housekeeping.
+		// v This makes a scat fetishist look like housekeeping.
 		eventBus.register(new ModuleManager());
 		// wait why do we need this ^?
-		// Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
+		// Because I was too lazy to implement a proper keybind system and I left the
+		// keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind
+		// System
 
 		String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {

@@ -49,7 +49,8 @@ public class CmdRename extends Command {
 		ItemStack i = mc.player.inventory.getMainHandStack();
 
 		String name = "";
-		for (int j = 0; j < args.length; j++) name += args[j] += " ";
+		for (int j = 0; j < args.length; j++)
+			name += args[j] += " ";
 
 		i.setCustomName(new LiteralText(name.replace("&", "§").replace("§§", "&")));
 		BleachLogger.infoMessage("Renamed Item");

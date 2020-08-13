@@ -82,7 +82,7 @@ public class Window {
 
 		drawBar(mX, mY, textRend);
 
-		for (WindowButton w: buttons) {
+		for (WindowButton w : buttons) {
 			int bx1 = x1 + w.x1;
 			int by1 = y1 + w.y1;
 			int bx2 = x1 + w.x2;
@@ -90,8 +90,7 @@ public class Window {
 
 			DrawableHelper.fill(bx1, by1, bx2 - 1, by2 - 1, 0xffb0b0b0);
 			DrawableHelper.fill(bx1 + 1, by1 + 1, bx2, by2, 0xff000000);
-			DrawableHelper.fill(bx1 + 1, by1 + 1, bx2 - 1, by2 - 1,
-					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0xff959595 : 0xff858585);
+			DrawableHelper.fill(bx1 + 1, by1 + 1, bx2 - 1, by2 - 1, selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0xff959595 : 0xff858585);
 			textRend.drawWithShadow(w.text, bx1 + (bx2 - bx1) / 2 - textRend.getStringWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 		}
 
@@ -100,7 +99,7 @@ public class Window {
 			GL11.glPushMatrix();
 			GL11.glScaled(0.55, 0.55, 1);
 			GuiLighting.enable();
-			MinecraftClient.getInstance().getItemRenderer().renderGuiItem(icon, (int)((x1 + 3) * 1/0.55), (int)((y1 + 3) * 1/0.55));
+			MinecraftClient.getInstance().getItemRenderer().renderGuiItem(icon, (int) ((x1 + 3) * 1 / 0.55), (int) ((y1 + 3) * 1 / 0.55));
 			GuiLighting.disable();
 			GL11.glPopMatrix();
 		}
@@ -141,7 +140,7 @@ public class Window {
 			dragOffY = y - y1;
 		}
 
-		for (WindowButton w: buttons) {
+		for (WindowButton w : buttons) {
 			if (x >= x1 + w.x1 && x <= x1 + w.x2 && y >= y1 + w.y1 && y <= y1 + w.y2) {
 				w.action.run();
 				MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));

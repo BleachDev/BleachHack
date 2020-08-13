@@ -50,15 +50,14 @@ public class Freecam extends Module {
 	private float prevFlySpeed;
 
 	public Freecam() {
-		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",
-				new SettingSlider("Speed", 0, 3, 0.5, 2),
+		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does", new SettingSlider("Speed", 0, 3, 0.5, 2),
 				new SettingToggle("Horse Inv", true));
 	}
 
 	@Override
 	public void onEnable() {
-		playerPos = new double[] {mc.player.x, mc.player.y, mc.player.z};
-		playerRot = new float[] {mc.player.yaw, mc.player.pitch};
+		playerPos = new double[] { mc.player.x, mc.player.y, mc.player.z };
+		playerRot = new float[] { mc.player.yaw, mc.player.pitch };
 
 		dummy = new PlayerCopyEntity();
 		dummy.copyPositionAndRotation(mc.player);
@@ -125,8 +124,8 @@ public class Freecam extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		//mc.player.setSprinting(false);
-		//mc.player.setVelocity(Vec3d.ZERO);
+		// mc.player.setSprinting(false);
+		// mc.player.setVelocity(Vec3d.ZERO);
 		mc.player.onGround = false;
 		mc.player.abilities.setFlySpeed((float) (getSetting(0).asSlider().getValue() / 5));
 		mc.player.abilities.flying = true;

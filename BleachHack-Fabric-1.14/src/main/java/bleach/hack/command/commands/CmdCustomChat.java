@@ -51,7 +51,7 @@ public class CmdCustomChat extends Command {
 			chat.suffix = " " + String.join(" ", Arrays.asList(args).subList(1, args.length)).trim();
 
 			BleachLogger.infoMessage("Set suffix to: \"" + chat.suffix + "\"");
-			BleachFileHelper.saveMiscSetting("customChatSuffix", chat.suffix );
+			BleachFileHelper.saveMiscSetting("customChatSuffix", chat.suffix);
 		} else {
 			BleachLogger.errorMessage(getSyntax());
 		}

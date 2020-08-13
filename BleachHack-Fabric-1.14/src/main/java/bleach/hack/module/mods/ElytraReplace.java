@@ -24,7 +24,8 @@ public class ElytraReplace extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if((mc.currentScreen instanceof AbstractContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
+		if ((mc.currentScreen instanceof AbstractContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null)
+			return;
 
 		int chestSlot = 38;
 		ItemStack chest = mc.player.inventory.getInvStack(chestSlot);
@@ -50,7 +51,7 @@ public class ElytraReplace extends Module {
 			mc.interactionManager.method_2906(mc.player.container.syncId, elytraSlot < 9 ? (elytraSlot + 36) : (elytraSlot), 0, SlotActionType.PICKUP, mc.player);
 			mc.interactionManager.method_2906(mc.player.container.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
 
-			KeyBinding.setKeyPressed(InputUtil.fromName(mc.options.keyJump.getName()), true);  // Make them fly again
+			KeyBinding.setKeyPressed(InputUtil.fromName(mc.options.keyJump.getName()), true); // Make them fly again
 			jump = true;
 		} else if (jump) {
 			KeyBinding.setKeyPressed(InputUtil.fromName(mc.options.keyJump.getName()), false); // Make them fly again
@@ -58,4 +59,3 @@ public class ElytraReplace extends Module {
 		}
 	}
 }
-

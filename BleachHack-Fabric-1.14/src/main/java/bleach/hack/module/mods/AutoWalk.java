@@ -1,6 +1,5 @@
 package bleach.hack.module.mods;
 
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
@@ -25,4 +24,3 @@ public class AutoWalk extends Module {
 		KeyBinding.setKeyPressed(InputUtil.fromName(mc.options.keyForward.getName()), true);
 	}
 }
-

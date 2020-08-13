@@ -33,16 +33,20 @@ import net.minecraft.entity.Entity;
 public abstract class MixinEntityRenderer<T extends Entity> {
 
 	@Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", cancellable = true)
-	public void render(T entity_1, float float_1, float float_2, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1, CallbackInfo info) {
+	public void render(T entity_1, float float_1, float float_2, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1,
+			CallbackInfo info) {
 		EventEntityRender.Render event = new EventEntityRender.Render(entity_1);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 
 	@Inject(at = @At("HEAD"), method = "renderLabelIfPresent(Lnet/minecraft/entity/Entity;Ljava/lang/String;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", cancellable = true)
-	public void renderLabelIfPresent(T entity_1, String string_1, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1, CallbackInfo info) {
+	public void renderLabelIfPresent(T entity_1, String string_1, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1,
+			CallbackInfo info) {
 		EventEntityRender.Label event = new EventEntityRender.Label(entity_1);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 }

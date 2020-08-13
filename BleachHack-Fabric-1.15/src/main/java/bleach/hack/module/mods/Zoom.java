@@ -18,7 +18,6 @@
 
 package bleach.hack.module.mods;
 
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
@@ -34,8 +33,7 @@ public class Zoom extends Module {
 	public double prevSens;
 
 	public Zoom() {
-		super("Zoom", KEY_UNBOUND, Category.RENDER, "ok zoomer",
-				new SettingSlider("Scale", 1, 10, 3, 2).withDesc("How much to zoom"),
+		super("Zoom", KEY_UNBOUND, Category.RENDER, "ok zoomer", new SettingSlider("Scale", 1, 10, 3, 2).withDesc("How much to zoom"),
 				new SettingToggle("Smooth", false).withDesc("Smooths the zoom when enabling and disabling"));
 	}
 

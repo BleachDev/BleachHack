@@ -34,6 +34,7 @@ public class MixinMinecraftClient {
 	public void openScreen(Screen screen, CallbackInfo info) {
 		EventOpenScreen event = new EventOpenScreen(screen);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 }

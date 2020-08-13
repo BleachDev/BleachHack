@@ -32,19 +32,20 @@ public class SpeedHack extends Module {
 	private boolean jumping;
 
 	public SpeedHack() {
-		super("SpeedHack", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
-				new SettingMode("Mode", "OnGround", "MiniHop", "Bhop"),
+		super("SpeedHack", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?", new SettingMode("Mode", "OnGround", "MiniHop", "Bhop"),
 				new SettingSlider("Speed", 0.1, 10, 2, 1));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (mc.options.keySneak.isPressed()) return;
+		if (mc.options.keySneak.isPressed())
+			return;
 		double speeds = getSetting(1).asSlider().getValue() / 30;
 
 		/* OnGround */
 		if (getSetting(0).asMode().mode == 0) {
-			if (mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25) return;
+			if (mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25)
+				return;
 
 			if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
@@ -69,8 +70,10 @@ public class SpeedHack extends Module {
 
 			/* MiniHop */
 		} else if (getSetting(0).asMode().mode == 1) {
-			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0) return;
-			if (mc.player.isOnGround()) mc.player.jump();
+			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0)
+				return;
+			if (mc.player.isOnGround())
+				mc.player.jump();
 			else if (mc.player.getVelocity().y > 0) {
 				mc.player.setVelocity(mc.player.getVelocity().x * (0.9 + speeds), -1, mc.player.getVelocity().z * (0.9 + speeds));
 				mc.player.input.movementSideways += 1.5F;

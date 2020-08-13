@@ -51,7 +51,8 @@ public class CmdEntityStats extends Command {
 	}
 
 	public static double round(double value, int places) {
-		if (places < 0) throw new IllegalArgumentException();
+		if (places < 0)
+			throw new IllegalArgumentException();
 
 		BigDecimal bd = BigDecimal.valueOf(value);
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
@@ -61,15 +62,15 @@ public class CmdEntityStats extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if (mc.player.getVehicle() != null) {
-			if     (mc.player.getVehicle() instanceof HorseEntity ||
-					mc.player.getVehicle() instanceof DonkeyEntity ||
-					mc.player.getVehicle() instanceof LlamaEntity ||
-					mc.player.getVehicle() instanceof MuleEntity) {
+			if (mc.player.getVehicle() instanceof HorseEntity || mc.player.getVehicle() instanceof DonkeyEntity || mc.player.getVehicle() instanceof LlamaEntity
+					|| mc.player.getVehicle() instanceof MuleEntity) {
 				HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
 				maxHealth = h.getMaxHealth() + " \u00a72HP";
 				speed = round(43.17 * h.getMovementSpeed(), 2) + " \u00a72m/s";
-				jumpHeight = round(-0.1817584952 * Math.pow(h.getJumpStrength(), 3) + 3.689713992 * Math.pow(h.getJumpStrength(), 2) + 2.128599134 * h.getJumpStrength() - 0.343930367, 4) + " \u00a72m";
-				BleachLogger.infoMessage("\n\u00a76Entity Stats:\n\u00a7cMax Health: \u00a7b" + maxHealth + "\n\u00a7cSpeed: \u00a7b" + speed + "\n\u00a7cJump: \u00a7b" + jumpHeight);
+				jumpHeight = round(-0.1817584952 * Math.pow(h.getJumpStrength(), 3) + 3.689713992 * Math.pow(h.getJumpStrength(), 2) + 2.128599134 * h.getJumpStrength()
+						- 0.343930367, 4) + " \u00a72m";
+				BleachLogger.infoMessage(
+						"\n\u00a76Entity Stats:\n\u00a7cMax Health: \u00a7b" + maxHealth + "\n\u00a7cSpeed: \u00a7b" + speed + "\n\u00a7cJump: \u00a7b" + jumpHeight);
 			} else if (mc.player.getVehicle() instanceof LivingEntity) {
 				LivingEntity l = (LivingEntity) mc.player.getVehicle();
 				maxHealth = l.getMaxHealth() + " \u00a72HP";

@@ -49,16 +49,18 @@ public class Criticals extends Module {
 				Entity e = packet.getEntity(mc.world);
 				Random r = new Random();
 				for (int i = 0; i < 10; i++) {
-					mc.particleManager.addParticle(ParticleTypes.CRIT, e.getX(), e.getY() + e.getHeight() / 2, e.getZ(),
-							r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5);
+					mc.particleManager.addParticle(ParticleTypes.CRIT, e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), r.nextDouble() - 0.5, r.nextDouble() - 0.5,
+							r.nextDouble() - 0.5);
 				}
 			}
 		}
 	}
 
 	private void doCritical() {
-		if (!mc.player.isOnGround()) return;
-		if (mc.player.isInLava() || mc.player.isTouchingWater()) return;
+		if (!mc.player.isOnGround())
+			return;
+		if (mc.player.isInLava() || mc.player.isTouchingWater())
+			return;
 		double posX = mc.player.getX();
 		double posY = mc.player.getY();
 		double posZ = mc.player.getZ();

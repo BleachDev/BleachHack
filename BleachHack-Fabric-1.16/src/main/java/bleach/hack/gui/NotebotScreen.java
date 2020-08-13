@@ -65,7 +65,8 @@ public class NotebotScreen extends AbstractWindowScreen {
 			paths.forEach(p -> files.add(p.getFileName().toString()));
 			paths.close();
 			files.remove(0);
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		}
 
 		windows.clear();
 		windows.add(new Window(width / 4, height / 4 - 10, width / 4 + width / 2, height / 4 + height / 2, "Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
@@ -80,15 +81,13 @@ public class NotebotScreen extends AbstractWindowScreen {
 		super.onRenderWindow(matrix, window, mX, mY);
 
 		if (window == 0) {
-			int x = windows.get(0).x1,
-					y = windows.get(0).y1 + 10,
-					w = width / 2,
-					h = height / 2;
+			int x = windows.get(0).x1, y = windows.get(0).y1 + 10, w = width / 2, h = height / 2;
 
 			drawCenteredString(matrix, textRenderer, "Tutorial..", x + w - 24, y + 4, 0x9090c0);
 
 			int pageEntries = 0;
-			for (int i = y + 20; i < y + h - 27; i += 10) pageEntries++;
+			for (int i = y + 20; i < y + h - 27; i += 10)
+				pageEntries++;
 
 			drawCenteredString(matrix, textRenderer, "<  Page " + (page + 1) + "  >", x + 55, y + 5, 0xc0c0ff);
 
@@ -96,15 +95,19 @@ public class NotebotScreen extends AbstractWindowScreen {
 			drawCenteredString(matrix, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 
 			int c = 0, c1 = -1;
-			for (String s: files) {
+			for (String s : files) {
 				c1++;
-				if (c1 < page * pageEntries) continue;
-				if (c1 > (page + 1) * pageEntries) break;
+				if (c1 < page * pageEntries)
+					continue;
+				if (c1 > (page + 1) * pageEntries)
+					break;
 
 				fillButton(matrix, x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10,
 						Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, mX, mY);
-				if (cutText(s, 105).equals(s)) drawCenteredString(matrix, textRenderer, s, x + 55, y + 16 + c * 10, -1);
-				else drawStringWithShadow(matrix, textRenderer, cutText(s, 105), x + 5, y + 16 + c * 10, -1);
+				if (cutText(s, 105).equals(s))
+					drawCenteredString(matrix, textRenderer, s, x + 55, y + 16 + c * 10, -1);
+				else
+					drawStringWithShadow(matrix, textRenderer, cutText(s, 105), x + 5, y + 16 + c * 10, -1);
 				c++;
 			}
 
@@ -114,28 +117,44 @@ public class NotebotScreen extends AbstractWindowScreen {
 				drawCenteredString(matrix, textRenderer, "Notes: ", x + w - w / 4, y + 38, 0x80f080);
 
 				int c2 = 0;
-				for (Entry<Instrument, Integer> e: entry.notes.entrySet()) {
+				for (Entry<Instrument, Integer> e : entry.notes.entrySet()) {
 					itemRenderer.zOffset = 500 - c2 * 20;
-					drawCenteredString(matrix, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(),
-							x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
+					drawCenteredString(matrix, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(), x + w - w / 4, y + 50 + c2 * 10,
+							0x50f050);
 					GL11.glPushMatrix();
 					DiffuseLighting.enableGuiDepthLighting();
-					if (e.getKey() == Instrument.HARP) itemRenderer.renderGuiItemIcon(new ItemStack(Items.DIRT), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BASEDRUM) itemRenderer.renderGuiItemIcon(new ItemStack(Items.STONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.SNARE) itemRenderer.renderGuiItemIcon(new ItemStack(Items.SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.HAT) itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLASS), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BASS) itemRenderer.renderGuiItemIcon(new ItemStack(Items.OAK_WOOD), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.FLUTE) itemRenderer.renderGuiItemIcon(new ItemStack(Items.CLAY), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BELL) itemRenderer.renderGuiItemIcon(new ItemStack(Items.GOLD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.GUITAR) itemRenderer.renderGuiItemIcon(new ItemStack(Items.WHITE_WOOL), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.CHIME) itemRenderer.renderGuiItemIcon(new ItemStack(Items.PACKED_ICE), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.XYLOPHONE) itemRenderer.renderGuiItemIcon(new ItemStack(Items.BONE_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.IRON_XYLOPHONE) itemRenderer.renderGuiItemIcon(new ItemStack(Items.IRON_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.COW_BELL) itemRenderer.renderGuiItemIcon(new ItemStack(Items.SOUL_SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.DIDGERIDOO) itemRenderer.renderGuiItemIcon(new ItemStack(Items.PUMPKIN), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BIT) itemRenderer.renderGuiItemIcon(new ItemStack(Items.EMERALD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BANJO) itemRenderer.renderGuiItemIcon(new ItemStack(Items.HAY_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.PLING) itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.HARP)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.DIRT), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.BASEDRUM)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.STONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.SNARE)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.HAT)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLASS), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.BASS)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.OAK_WOOD), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.FLUTE)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.CLAY), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.BELL)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GOLD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.GUITAR)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.WHITE_WOOL), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.CHIME)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PACKED_ICE), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.XYLOPHONE)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.BONE_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.IRON_XYLOPHONE)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.IRON_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.COW_BELL)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SOUL_SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.DIDGERIDOO)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PUMPKIN), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.BIT)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.EMERALD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.BANJO)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.HAY_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+					if (e.getKey() == Instrument.PLING)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
 					c2++;
 					GL11.glPopMatrix();
 				}
@@ -144,10 +163,10 @@ public class NotebotScreen extends AbstractWindowScreen {
 				fillButton(matrix, x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mX, mY);
 				fillButton(matrix, x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mX, mY);
 
-				int pixels = (int) Math.round(MathHelper.clamp((w / 4)*((double)entry.playTick / (double)entry.length), 0, w / 4));
+				int pixels = (int) Math.round(MathHelper.clamp((w / 4) * ((double) entry.playTick / (double) entry.length), 0, w / 4));
 				fill(matrix, x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
 
-				drawCenteredString(matrix, textRenderer, "Delete", (int)(x + w - w / 2.8), y + h - 14, 0xff0000);
+				drawCenteredString(matrix, textRenderer, "Delete", (int) (x + w - w / 2.8), y + h - 14, 0xff0000);
 				drawCenteredString(matrix, textRenderer, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
 				drawCenteredString(matrix, textRenderer, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x6060ff);
 			}
@@ -169,22 +188,26 @@ public class NotebotScreen extends AbstractWindowScreen {
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
 		if (!windows.get(0).closed) {
-			int x = windows.get(0).x1,
-					y = windows.get(0).y1 + 10,
-					w = width / 2,
-					h = height / 2;
+			int x = windows.get(0).x1, y = windows.get(0).y1 + 10, w = width / 2, h = height / 2;
 
-			if (double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15) if (page > 0) page--;
-			if (double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15) page++;
+			if (double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15)
+				if (page > 0)
+					page--;
+			if (double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15)
+				page++;
 			if (double_1 > x + w - 44 && double_1 < x + w && double_2 > y + 3 && double_2 < y + 15) {
-				try { Util.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=Z6O80jItoAk")); } catch (Exception e) {}
+				try {
+					Util.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=Z6O80jItoAk"));
+				} catch (Exception e) {
+				}
 			}
 			if (double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
 				NotebotUtils.downloadSongs(true);
 			}
 
 			if (entry != null) {
-				/* Pfft why use buttons when you can use meaningless rectangles with messy code */
+				/* Pfft why use buttons when you can use meaningless rectangles with messy
+				 * code */
 				if (double_1 > x + w - w / 2 + 10 && double_1 < x + w - w / 4 && double_2 > y + h - 15 && double_2 < y + h - 5) {
 					BleachFileMang.deleteFile("notebot", entry.fileName);
 					client.openScreen(this);
@@ -198,13 +221,15 @@ public class NotebotScreen extends AbstractWindowScreen {
 			}
 
 			int pageEntries = 0;
-			for (int i = y + 20; i < y + h - 27; i += 10) pageEntries++;
+			for (int i = y + 20; i < y + h - 27; i += 10)
+				pageEntries++;
 
 			int c = 0;
 			int c1 = -1;
-			for (String s: files) {
+			for (String s : files) {
 				c1++;
-				if (c1 < page * pageEntries) continue;
+				if (c1 < page * pageEntries)
+					continue;
 				if (double_1 > x + 5 && double_1 < x + 105 && double_2 > y + 15 + c * 10 && double_2 < y + 25 + c * 10) {
 					entry = new NotebotEntry(s);
 					selected = s;
@@ -223,7 +248,8 @@ public class NotebotScreen extends AbstractWindowScreen {
 	private String cutText(String text, int leng) {
 		String text1 = text;
 		for (int i = 0; i < text.length(); i++) {
-			if (textRenderer.getWidth(text1) < leng) return text1;
+			if (textRenderer.getWidth(text1) < leng)
+				return text1;
 			text1 = text1.replaceAll(".$", "");
 		}
 		return "";
@@ -241,33 +267,40 @@ public class NotebotScreen extends AbstractWindowScreen {
 		public NotebotEntry(String file) {
 			/* File and lines */
 			fileName = file;
-			lines = BleachFileMang.readFileLines("notebot", file)
-					.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
+			lines = BleachFileMang.readFileLines("notebot", file).stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";")))
+					.collect(Collectors.toList());
 
 			/* Get length */
 			int maxLeng = 0;
-			for (String s: lines) {
-				try { if (Integer.parseInt(s.split(":")[0]) > maxLeng) maxLeng = Integer.parseInt(s.split(":")[0]); } catch (Exception e) {}
+			for (String s : lines) {
+				try {
+					if (Integer.parseInt(s.split(":")[0]) > maxLeng)
+						maxLeng = Integer.parseInt(s.split(":")[0]);
+				} catch (Exception e) {
+				}
 			}
 			length = maxLeng;
 
 			/* Requirements */
 			List<List<Integer>> t = new ArrayList<>();
 
-			for (String s: lines) {
-				try{
+			for (String s : lines) {
+				try {
 					List<String> strings = Arrays.asList(s.split(":"));
 					if (!t.contains(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))))) {
 						t.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
 					}
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 			}
 
-			List<Integer> t1 = Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+			List<Integer> t1 = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-			for (List<Integer> i: t) t1.set(i.get(1), t1.get(i.get(1)) + 1);
+			for (List<Integer> i : t)
+				t1.set(i.get(1), t1.get(i.get(1)) + 1);
 			for (int i = 0; i < t1.size(); i++) {
-				if (t1.get(i) != 0) notes.put(Instrument.values()[i], t1.get(i));
+				if (t1.get(i) != 0)
+					notes.put(Instrument.values()[i], t1.get(i));
 			}
 		}
 	}

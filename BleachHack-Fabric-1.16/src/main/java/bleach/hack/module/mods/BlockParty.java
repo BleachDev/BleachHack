@@ -38,16 +38,15 @@ public class BlockParty extends Module {
 	private boolean jumping;
 
 	public BlockParty() {
-		super("Blockparty", KEY_UNBOUND, Category.MISC, "Wins You Blockparty",
-				new SettingToggle("Jump", true),
-				new SettingToggle("AutoSpeed", true));
+		super("Blockparty", KEY_UNBOUND, Category.MISC, "Wins You Blockparty", new SettingToggle("Jump", true), new SettingToggle("AutoSpeed", true));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
 		Item item = mc.player.inventory.getMainHandStack().getItem();
 		Block block = Block.getBlockFromItem(item);
-		if (block == Blocks.AIR) return;
+		if (block == Blocks.AIR)
+			return;
 
 		if (mc.world.getBlockState(mc.player.getBlockPos().add(0, -1, 0)).getBlock() == block
 				|| mc.world.getBlockState(mc.player.getBlockPos().add(0, -2, 0)).getBlock() == block) {
@@ -61,30 +60,32 @@ public class BlockParty extends Module {
 			for (int y = -2; y < 1; y++) {
 				for (int z = -50; z < 50; z++) {
 					if (mc.world.getBlockState(mc.player.getBlockPos().add(x, y, z)).getBlock() == block
-							&& mc.world.getBlockState(mc.player.getBlockPos().add(x, y+1, z)).getBlock() == Blocks.AIR) poses.add(mc.player.getBlockPos().add(x, y, z));
+							&& mc.world.getBlockState(mc.player.getBlockPos().add(x, y + 1, z)).getBlock() == Blocks.AIR)
+						poses.add(mc.player.getBlockPos().add(x, y, z));
 				}
 			}
 		}
 
-		if (poses.isEmpty()) return;
+		if (poses.isEmpty())
+			return;
 
-		poses.sort((a,b) -> Double.compare(a.getSquaredDistance(mc.player.getBlockPos()), b.getSquaredDistance(mc.player.getBlockPos())));
+		poses.sort((a, b) -> Double.compare(a.getSquaredDistance(mc.player.getBlockPos()), b.getSquaredDistance(mc.player.getBlockPos())));
 
 		double diffX = poses.get(0).getX() + 0.5 - mc.player.getX();
 		double diffZ = poses.get(0).getZ() + 0.5 - mc.player.getZ();
 
-		float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
+		float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
 
 		mc.player.yaw += MathHelper.wrapDegrees(yaw - mc.player.yaw);
 
 		KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKey(), true);
 
 		if (mc.player.getBlockPos().getSquaredDistance(poses.get(0)) < (mc.player.isSprinting() ? 25 : 8)
-				&& Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().z) > 0.15
-				&& mc.player.verticalCollision) {
+				&& Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().z) > 0.15 && mc.player.verticalCollision) {
 			mc.player.jump();
 			mc.player.verticalCollision = false;
-			//mc.player.setPosition(mc.player.getX(), mc.player.y + 0.02, mc.player.getZ());
+			// mc.player.setPosition(mc.player.getX(), mc.player.y + 0.02,
+			// mc.player.getZ());
 		}
 
 		if (getSetting(1).asToggle().state && mc.player.fallDistance < 0.25) {
@@ -97,8 +98,7 @@ public class BlockParty extends Module {
 			if (mc.player.forwardSpeed != 0.0F && !mc.player.horizontalCollision) {
 				if (mc.player.verticalCollision) {
 					mc.player.setVelocity(mc.player.getVelocity().x * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300),
-							mc.player.getVelocity().y,
-							mc.player.getVelocity().z * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300));
+							mc.player.getVelocity().y, mc.player.getVelocity().z * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300));
 					jumping = true;
 					mc.player.jump();
 				}

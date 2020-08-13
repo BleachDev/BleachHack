@@ -85,10 +85,8 @@ public class CrystalAura extends Module {
 	private HashMap<BlockPos, Integer> blackList = new HashMap<>();
 
 	public CrystalAura() {
-		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.",
-				new SettingToggle("Players", true).withDesc("Target players"),
-				new SettingToggle("Mobs", false).withDesc("Target mobs"),
-				new SettingToggle("Animals", false).withDesc("Target animals"),
+		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.", new SettingToggle("Players", true).withDesc("Target players"),
+				new SettingToggle("Mobs", false).withDesc("Target mobs"), new SettingToggle("Animals", false).withDesc("Target animals"),
 				new SettingToggle("Explode", true).withDesc("Hit/explode crystals").withChildren(
 						new SettingToggle("Anti Weakness", true).withDesc("Hit with sword when you have weakness"),
 						new SettingToggle("Slow", false).withDesc("Hits crystals slower")),
@@ -97,8 +95,7 @@ public class CrystalAura extends Module {
 						new SettingToggle("RayTrace", true).withDesc("Click on the most \"legit\" side of a block when possible"),
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
-				new SettingRotate(false).withDesc("Rotates to crystals"),
-				new SettingSlider("Range", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"),
+				new SettingRotate(false).withDesc("Rotates to crystals"), new SettingSlider("Range", 0, 6, 4.25, 2).withDesc("Range to place and attack crystals"),
 				new SettingToggle("Old Calcs", true).withDesc("Uses the old damage caclulations"));
 	}
 
@@ -112,8 +109,10 @@ public class CrystalAura extends Module {
 		}).map(entityx -> {
 			BlockPos p = entityx.getBlockPos().down();
 			if (blackList.containsKey(p)) {
-				if (blackList.get(p) > 0) blackList.replace(p, blackList.get(p) - 1);
-				else blackList.remove(p);
+				if (blackList.get(p) > 0)
+					blackList.replace(p, blackList.get(p) - 1);
+				else
+					blackList.remove(p);
 			}
 
 			return (EndCrystalEntity) entityx;
@@ -210,8 +209,7 @@ public class CrystalAura extends Module {
 		List<Entity> entities = new ArrayList<>();
 
 		entities.addAll(Streams.stream(mc.world.getEntities()).filter(e -> {
-			return (e instanceof PlayerEntity && getSetting(0).asToggle().state)
-					|| (e instanceof MobEntity && getSetting(1).asToggle().state)
+			return (e instanceof PlayerEntity && getSetting(0).asToggle().state) || (e instanceof MobEntity && getSetting(1).asToggle().state)
 					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state);
 		}).collect(Collectors.toList()));
 
@@ -220,116 +218,114 @@ public class CrystalAura extends Module {
 		double damage = 0.5D;
 		Iterator<Entity> var9 = entities.iterator();
 
-		main_loop:
-			while (true) {
-				Entity entity;
+		main_loop: while (true) {
+			Entity entity;
+			do {
 				do {
-					do {
-						if (!var9.hasNext()) {
-							if (damage == 0.5D) {
-								this.render = null;
-								if (getSetting(5).asRotate().state) {
-									isSpoofingAngles = false;
-								}
-
-								return;
-							}
-
-							this.render = q;
-							if (getSetting(4).asToggle().state) {
-								if (!offhand && mc.player.inventory.selectedSlot != crystalSlot) {
-									if (getSetting(4).asToggle().getChild(0).asToggle().state) {
-										mc.player.inventory.selectedSlot = crystalSlot;
-										if (getSetting(5).asRotate().state) {
-											isSpoofingAngles = false;
-										}
-
-										this.switchCooldown = true;
-									}
-
-									return;
-								}
-
-								if (getSetting(5).asRotate().state) {
-									WorldUtils.facePosAuto(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D, getSetting(5).asRotate());
-								}
-
-								Direction f;
-								if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
-									f = Direction.UP;
-								} else {
-									BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
-											new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
-											new Vec3d(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D),
-											RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
-
-									if (result != null && result.getSide() != null) {
-										f = result.getSide();
-									} else {
-										f = Direction.UP;
-									}
-
-									if (this.switchCooldown) {
-										this.switchCooldown = false;
-										return;
-									}
-								}
-
-								mc.interactionManager.interactBlock(mc.player, mc.world, offhand ? Hand.OFF_HAND : Hand.MAIN_HAND,
-										new BlockHitResult(Vec3d.of(q), f, q, false));
-
-								blackList.put(q, 5);
-							}
-
-							if (isSpoofingAngles) {
-								if (togglePitch) {
-									mc.player.pitch += 4.0E-4D;
-									togglePitch = false;
-								} else {
-									mc.player.pitch -= 4.0E-4D;
-									togglePitch = true;
-								}
+					if (!var9.hasNext()) {
+						if (damage == 0.5D) {
+							this.render = null;
+							if (getSetting(5).asRotate().state) {
+								isSpoofingAngles = false;
 							}
 
 							return;
 						}
 
-						entity = var9.next();
-					} while (entity == mc.player);
-				} while (((LivingEntity) entity).getHealth() <= 0.0F);
+						this.render = q;
+						if (getSetting(4).asToggle().state) {
+							if (!offhand && mc.player.inventory.selectedSlot != crystalSlot) {
+								if (getSetting(4).asToggle().getChild(0).asToggle().state) {
+									mc.player.inventory.selectedSlot = crystalSlot;
+									if (getSetting(5).asRotate().state) {
+										isSpoofingAngles = false;
+									}
 
-				Iterator<BlockPos> var11 = blocks.iterator();
-
-				while (true) {
-					BlockPos blockPos;
-					double d;
-					double self;
-					do {
-						do {
-							double b;
-							do {
-								if (!var11.hasNext()) {
-									continue main_loop;
+									this.switchCooldown = true;
 								}
 
-								blockPos = var11.next();
-								b = entity.getBlockPos().getSquaredDistance(blockPos);
-							} while (b >= 169.0D);
+								return;
+							}
 
-							d = getSetting(7).asToggle().state
-									? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, (LivingEntity) entity);
-						} while (d <= damage);
+							if (getSetting(5).asRotate().state) {
+								WorldUtils.facePosAuto(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D, getSetting(5).asRotate());
+							}
 
-						self = getSetting(7).asToggle().state
-								? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, mc.player);
-					} while (self > d && d >= ((LivingEntity) entity).getHealth());
+							Direction f;
+							if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
+								f = Direction.UP;
+							} else {
+								BlockHitResult result = mc.world.rayTrace(
+										new RayTraceContext(new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
+												new Vec3d(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D), RayTraceContext.ShapeType.OUTLINE,
+												RayTraceContext.FluidHandling.NONE, mc.player));
 
-					if (self - 0.5D <= mc.player.getHealth()) {
-						damage = d;
-						q = blockPos;
+								if (result != null && result.getSide() != null) {
+									f = result.getSide();
+								} else {
+									f = Direction.UP;
+								}
+
+								if (this.switchCooldown) {
+									this.switchCooldown = false;
+									return;
+								}
+							}
+
+							mc.interactionManager.interactBlock(mc.player, mc.world, offhand ? Hand.OFF_HAND : Hand.MAIN_HAND,
+									new BlockHitResult(Vec3d.of(q), f, q, false));
+
+							blackList.put(q, 5);
+						}
+
+						if (isSpoofingAngles) {
+							if (togglePitch) {
+								mc.player.pitch += 4.0E-4D;
+								togglePitch = false;
+							} else {
+								mc.player.pitch -= 4.0E-4D;
+								togglePitch = true;
+							}
+						}
+
+						return;
 					}
+
+					entity = var9.next();
+				} while (entity == mc.player);
+			} while (((LivingEntity) entity).getHealth() <= 0.0F);
+
+			Iterator<BlockPos> var11 = blocks.iterator();
+
+			while (true) {
+				BlockPos blockPos;
+				double d;
+				double self;
+				do {
+					do {
+						double b;
+						do {
+							if (!var11.hasNext()) {
+								continue main_loop;
+							}
+
+							blockPos = var11.next();
+							b = entity.getBlockPos().getSquaredDistance(blockPos);
+						} while (b >= 169.0D);
+
+						d = getSetting(7).asToggle().state ? getExplosionDamage_old(blockPos, (LivingEntity) entity)
+								: getExplosionDamage(blockPos, (LivingEntity) entity);
+					} while (d <= damage);
+
+					self = getSetting(7).asToggle().state ? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, mc.player);
+				} while (self > d && d >= ((LivingEntity) entity).getHealth());
+
+				if (self - 0.5D <= mc.player.getHealth()) {
+					damage = d;
+					q = blockPos;
 				}
 			}
+		}
 	}
 
 	@Subscribe
@@ -349,10 +345,11 @@ public class CrystalAura extends Module {
 				for (int z = -range; z < range + 1; z++) {
 					BlockPos basePos = mc.player.getBlockPos().add(x, y, z);
 
-					if (!canPlace(basePos) || (blackList.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().state)) continue;
+					if (!canPlace(basePos) || (blackList.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().state))
+						continue;
 
-					if (mc.player.getPos().distanceTo(Vec3d.of(basePos).add(0.5, 1, 0.5))
-							<= getSetting(6).asSlider().getValue() + 0.25) poses.add(basePos);
+					if (mc.player.getPos().distanceTo(Vec3d.of(basePos).add(0.5, 1, 0.5)) <= getSetting(6).asSlider().getValue() + 0.25)
+						poses.add(basePos);
 				}
 			}
 		}
@@ -363,31 +360,33 @@ public class CrystalAura extends Module {
 	private boolean canPlace(BlockPos basePos) {
 		BlockState baseState = mc.world.getBlockState(basePos);
 
-		if (baseState.getBlock() != Blocks.BEDROCK && baseState.getBlock() != Blocks.OBSIDIAN) return false;
+		if (baseState.getBlock() != Blocks.BEDROCK && baseState.getBlock() != Blocks.OBSIDIAN)
+			return false;
 
 		BlockPos placePos = basePos.up();
-		if (!mc.world.isAir(placePos)) return false;
+		if (!mc.world.isAir(placePos))
+			return false;
 
 		return mc.world.getOtherEntities((Entity) null, new Box(placePos).stretch(0, 1, 0)).isEmpty();
 	}
 
 	private float getExplosionDamage(BlockPos basePos, LivingEntity target) {
-		if (mc.world.getDifficulty() == Difficulty.PEACEFUL) return 0;
+		if (mc.world.getDifficulty() == Difficulty.PEACEFUL)
+			return 0;
 
-		if (damageCache.containsKey(target)) return damageCache.get(target);
+		if (damageCache.containsKey(target))
+			return damageCache.get(target);
 
 		Vec3d crystalPos = Vec3d.of(basePos).add(0.5, 1, 0.5);
 
 		Explosion explosion = new Explosion(mc.world, null, crystalPos.x, crystalPos.y, crystalPos.z, 6f, false, Explosion.DestructionType.DESTROY);
 
 		double power = 12;
-		if (!mc.world.getOtherEntities((Entity) null, new Box(
-				MathHelper.floor(crystalPos.x - power - 1.0),
-				MathHelper.floor(crystalPos.y - power - 1.0),
-				MathHelper.floor(crystalPos.z - power - 1.0),
-				MathHelper.floor(crystalPos.x + power + 1.0),
-				MathHelper.floor(crystalPos.y + power + 1.0),
-				MathHelper.floor(crystalPos.z + power + 1.0))).contains(target)) {
+		if (!mc.world
+				.getOtherEntities((Entity) null,
+						new Box(MathHelper.floor(crystalPos.x - power - 1.0), MathHelper.floor(crystalPos.y - power - 1.0), MathHelper.floor(crystalPos.z - power - 1.0),
+								MathHelper.floor(crystalPos.x + power + 1.0), MathHelper.floor(crystalPos.y + power + 1.0), MathHelper.floor(crystalPos.z + power + 1.0)))
+				.contains(target)) {
 			damageCache.put(target, 0f);
 			return 0f;
 		}
@@ -406,12 +405,15 @@ public class CrystalAura extends Module {
 					double double_13 = Explosion.getExposure(crystalPos, target);
 					double double_14 = (1.0D - double_8) * double_13;
 
-					//entity_1.damage(explosion.getDamageSource(), (float)((int)((double_14 * double_14 + double_14) / 2.0D * 7.0D * power + 1.0D)));
+					// entity_1.damage(explosion.getDamageSource(), (float)((int)((double_14 *
+					// double_14 + double_14) / 2.0D * 7.0D * power + 1.0D)));
 					float toDamage = (float) Math.floor((double_14 * double_14 + double_14) / 2.0D * 7.0D * power + 1.0D);
 
 					if (target instanceof PlayerEntity) {
-						if (mc.world.getDifficulty() == Difficulty.EASY) toDamage = Math.min(toDamage / 2.0F + 1.0F, toDamage);
-						else if (mc.world.getDifficulty() == Difficulty.HARD) toDamage = toDamage * 3.0F / 2.0F;
+						if (mc.world.getDifficulty() == Difficulty.EASY)
+							toDamage = Math.min(toDamage / 2.0F + 1.0F, toDamage);
+						else if (mc.world.getDifficulty() == Difficulty.HARD)
+							toDamage = toDamage * 3.0F / 2.0F;
 					}
 
 					// Armor
@@ -446,7 +448,8 @@ public class CrystalAura extends Module {
 	}
 
 	private float getExplosionDamage_old(BlockPos basePos, LivingEntity target) {
-		if (mc.world.getDifficulty() == Difficulty.PEACEFUL) return 0f;
+		if (mc.world.getDifficulty() == Difficulty.PEACEFUL)
+			return 0f;
 
 		Vec3d crystalVec = new Vec3d(basePos.getX() + 0.5, basePos.getY() + 1.0, basePos.getZ() + 0.5);
 

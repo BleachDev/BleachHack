@@ -35,14 +35,16 @@ import net.minecraft.world.BlockView;
 public class MixinBlock {
 
 	@Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
-	private static void shouldDrawSide(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, Direction direction_1, CallbackInfoReturnable<Boolean> callback) {
+	private static void shouldDrawSide(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, Direction direction_1,
+			CallbackInfoReturnable<Boolean> callback) {
 		try {
 			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
 			if (xray.isToggled()) {
 				callback.setReturnValue(xray.isVisible(blockState_1.getBlock()));
 				callback.cancel();
 			}
-		} catch (Exception ignored) {}
+		} catch (Exception ignored) {
+		}
 	}
 
 	@Inject(method = "isShapeFullCube", at = @At("HEAD"), cancellable = true)
@@ -53,13 +55,9 @@ public class MixinBlock {
 		}
 	}
 
-	/*@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-    public void getRenderType(CallbackInfoReturnable<BlockRenderType> callback) {
-        try {
-            if (ModuleManager.getModule(Xray.class).isToggled()) {
-                callback.setReturnValue(BlockRenderType.INVISIBLE);
-                callback.cancel();
-            }
-        } catch (Exception ignored) {}
-    }*/
+	/* @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
+	 * public void getRenderType(CallbackInfoReturnable<BlockRenderType> callback) {
+	 * try { if (ModuleManager.getModule(Xray.class).isToggled()) {
+	 * callback.setReturnValue(BlockRenderType.INVISIBLE); callback.cancel(); } }
+	 * catch (Exception ignored) {} } */
 }

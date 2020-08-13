@@ -22,7 +22,8 @@ public class ElytraReplace extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if((mc.currentScreen instanceof HandledScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
+		if ((mc.currentScreen instanceof HandledScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null)
+			return;
 
 		int chestSlot = 38;
 		ItemStack chest = mc.player.inventory.getStack(chestSlot);
@@ -45,10 +46,11 @@ public class ElytraReplace extends Module {
 			}
 
 			mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
-			mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, elytraSlot < 9 ? (elytraSlot + 36) : (elytraSlot), 0, SlotActionType.PICKUP, mc.player);
+			mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, elytraSlot < 9 ? (elytraSlot + 36) : (elytraSlot), 0, SlotActionType.PICKUP,
+					mc.player);
 			mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
 
-			mc.options.keyJump.setPressed(true);  // Make them fly again
+			mc.options.keyJump.setPressed(true); // Make them fly again
 			jump = true;
 		} else if (jump) {
 			mc.options.keyJump.setPressed(false); // Make them fly again
@@ -56,4 +58,3 @@ public class ElytraReplace extends Module {
 		}
 	}
 }
-

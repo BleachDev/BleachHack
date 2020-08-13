@@ -43,13 +43,14 @@ public class Particle {
 
 	public void genParticles() {
 		for (int j = 0; j < rand.nextInt(10); j++) {
-			particles.add(new int[] {x + rand.nextInt(5)-2, y + rand.nextInt(5)-2});
+			particles.add(new int[] { x + rand.nextInt(5) - 2, y + rand.nextInt(5) - 2 });
 		}
 	}
 
 	public void updateParticles() {
 		/* This is here to make it only trigger if a "tick" has passed */
-		if (System.currentTimeMillis() < lastTick + 16) return;
+		if (System.currentTimeMillis() < lastTick + 16)
+			return;
 		lastTick = System.currentTimeMillis();
 
 		tick++;
@@ -59,12 +60,12 @@ public class Particle {
 			particles.clear();
 		}
 
-		for (int i = 0; i < particles.size()-1; i++) {
+		for (int i = 0; i < particles.size() - 1; i++) {
 			int[] pos = particles.get(i);
 			int diffx = pos[0] - x;
 			int diffy = pos[1] - y;
 
-			particles.set(i, new int[] {pos[0] + (diffx / tick), pos[1] + (diffy / tick)});
+			particles.set(i, new int[] { pos[0] + (diffx / tick), pos[1] + (diffy / tick) });
 		}
 	}
 

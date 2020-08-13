@@ -55,7 +55,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void init() {
-		searchField = new TextFieldWidget(font, 2, 14, 100, 12, "" /* @LasnikProgram is author lol*/);
+		searchField = new TextFieldWidget(font, 2, 14, 100, 12, "" /* @LasnikProgram is author lol */);
 		searchField.visible = false;
 		searchField.setMaxLength(20);
 		searchField.setSuggestion("Search here");
@@ -66,9 +66,9 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
 
 		int i = 10;
-		for (Category c: Category.values()) {
-			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
-					StringUtils.capitalize(StringUtils.lowerCase(c.toString())), new ItemStack(Items.AIR)));
+		for (Category c : Category.values()) {
+			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len, StringUtils.capitalize(StringUtils.lowerCase(c.toString())),
+					new ItemStack(Items.AIR)));
 
 			i += len + 5;
 		}
@@ -91,22 +91,22 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		this.renderBackground();
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
-		font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height-20, 0x99ff99);
-		font.drawWithShadow("Use " + Command.PREFIX + "guireset to reset the gui" , 2, height-10, 0x9999ff);
+		font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
+		font.drawWithShadow("Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10, 0x9999ff);
 
 		if (ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
 
 			Set<Module> seachMods = new HashSet<>();
 			if (!searchField.getText().isEmpty()) {
-				for (Module m: ModuleManager.getModules()) {
+				for (Module m : ModuleManager.getModules()) {
 					if (m.getName().toLowerCase().contains(searchField.getText().toLowerCase().replace(" ", ""))) {
 						seachMods.add(m);
 					}
 				}
 			}
 
-			for (Window w: windows) {
+			for (Window w : windows) {
 				if (w instanceof ModuleWindow) {
 					((ModuleWindow) w).setSearchedModule(seachMods);
 				}
@@ -114,19 +114,19 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		}
 
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
-		for (Window w: windows) {
+		for (Window w : windows) {
 			if (w instanceof ClickGuiWindow) {
 				if (w instanceof ModuleWindow) {
 					((ModuleWindow) w).setLen(len);
 				}
 
-				((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
+				((ClickGuiWindow) w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
 			}
 		}
 
 		super.render(mX, mY, float_1);
 
-		for (Window w: windows) {
+		for (Window w : windows) {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
 				if (tooltip != null) {
@@ -135,12 +135,14 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 					int c2 = 0;
 					int c3 = 0;
-					while (mat.find()) { c2++; } mat.reset();
+					while (mat.find()) {
+						c2++;
+					}
+					mat.reset();
 
 					while (mat.find()) {
-						fill(tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10),
-								tooltip.getLeft() + 3 + font.getStringWidth(mat.group().trim()), tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9,
-								0xff000000);
+						fill(tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10), tooltip.getLeft() + 3 + font.getStringWidth(mat.group().trim()),
+								tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9, 0xff000000);
 						font.drawWithShadow(mat.group(), tooltip.getLeft() + 2, tooltip.getMiddle() - (c2 * 10) + (c3 * 10), -1);
 						c3++;
 					}
@@ -157,10 +159,11 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		if (int_1 == 0) {
 			lmDown = true;
 			lmHeld = true;
-		} else if (int_1 == 1) rmDown = true;
+		} else if (int_1 == 1)
+			rmDown = true;
 
 		// Fix having to double click windows to move them
-		for (Window w: windows) {
+		for (Window w : windows) {
 			if (double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
 				w.onMousePressed((int) double_1, (int) double_2);
 				break;
@@ -171,7 +174,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public boolean mouseReleased(double double_1, double double_2, int int_1) {
-		if (int_1 == 0) lmHeld = false;
+		if (int_1 == 0)
+			lmHeld = false;
 		return super.mouseReleased(double_1, double_2, int_1);
 	}
 
@@ -182,7 +186,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 	public void resetGui() {
 		int x = 30;
-		for (Window m: windows) {
+		for (Window m : windows) {
 			m.x1 = x;
 			m.y2 = 35;
 			x += (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue() + 5;

@@ -34,7 +34,8 @@ public class AutoTool extends Module {
 			PlayerActionC2SPacket p = (PlayerActionC2SPacket) event.getPacket();
 
 			if (p.getAction() == Action.START_DESTROY_BLOCK) {
-				if (mc.player.isCreative() || mc.player.isSpectator()) return;
+				if (mc.player.isCreative() || mc.player.isSpectator())
+					return;
 
 				queueSlot = -1;
 
@@ -79,12 +80,14 @@ public class AutoTool extends Module {
 			bestSlot = bestSlot == 0 ? 1 : bestSlot - 1;
 		}
 
-		if (state.isAir()) return mc.player.inventory.selectedSlot;
+		if (state.isAir())
+			return mc.player.inventory.selectedSlot;
 
 		float bestSpeed = getMiningSpeed(mc.player.inventory.getInvStack(bestSlot), state);
 
 		for (int slot = 0; slot < 9; slot++) {
-			if (slot == mc.player.inventory.selectedSlot || slot == bestSlot) continue;
+			if (slot == mc.player.inventory.selectedSlot || slot == bestSlot)
+				continue;
 
 			ItemStack stack = mc.player.inventory.getInvStack(slot);
 			if (getSetting(0).asToggle().state && stack.isDamageable() && stack.getMaxDamage() - stack.getDamage() < 2) {
@@ -93,9 +96,7 @@ public class AutoTool extends Module {
 
 			float speed = getMiningSpeed(stack, state);
 			if (speed > bestSpeed
-					|| (getSetting(2).asToggle().state
-							&& speed == bestSpeed && !stack.isDamageable()
-							&& mc.player.inventory.getInvStack(bestSlot).isDamageable()
+					|| (getSetting(2).asToggle().state && speed == bestSpeed && !stack.isDamageable() && mc.player.inventory.getInvStack(bestSlot).isDamageable()
 							&& EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, mc.player.inventory.getInvStack(bestSlot)) == 0)) {
 				bestSpeed = speed;
 				bestSlot = slot;
@@ -109,8 +110,7 @@ public class AutoTool extends Module {
 		float speed = stack.getMiningSpeed(state);
 
 		if (speed > 1) {
-			int efficiency =
-					EnchantmentHelper.getLevel(Enchantments.EFFICIENCY, stack);
+			int efficiency = EnchantmentHelper.getLevel(Enchantments.EFFICIENCY, stack);
 			if (efficiency > 0 && !stack.isEmpty())
 				speed += efficiency * efficiency + 1;
 		}

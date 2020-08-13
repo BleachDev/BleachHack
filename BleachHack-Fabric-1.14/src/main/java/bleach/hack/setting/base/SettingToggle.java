@@ -58,35 +58,37 @@ public class SettingToggle extends SettingBase {
 		String color2;
 
 		if (state) {
-			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a72";
-			else color2 = "\u00a7a";
+			if (window.mouseOver(x, y, x + len, y + 12))
+				color2 = "\u00a72";
+			else
+				color2 = "\u00a7a";
 		} else {
-			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a74";
-			else color2 = "\u00a7c";
+			if (window.mouseOver(x, y, x + len, y + 12))
+				color2 = "\u00a74";
+			else
+				color2 = "\u00a7c";
 		}
 
 		if (!children.isEmpty()) {
-			if (window.rmDown && window.mouseOver(x, y, x+len, y+12)) expanded = !expanded;
+			if (window.rmDown && window.mouseOver(x, y, x + len, y + 12))
+				expanded = !expanded;
 
-			/*if (expanded) {
-				window.fillGreySides(x + 1, y, x + len - 2, y + 12);
-				window.fillGreySides(x, y + 11, x + len - 1, y + getHeight(len));
-				DrawableHelper.fill(x, y, x + len - 3, y + 1, 0x90000000);
-				DrawableHelper.fill(x + 1, y + getHeight(len) - 2, x + 2, y + getHeight(len) - 1, 0x90000000);
-				DrawableHelper.fill(x + 2, y + getHeight(len) - 1, x + len - 2, y + getHeight(len), 0x90b0b0b0);
-
-				int h = y + 12;
-				for (SettingBase s: children) {
-					s.render(window, x + 1, h, len - 2);
-
-					h += s.getHeight(len - 2);
-				}
-			}*/
+			/* if (expanded) { window.fillGreySides(x + 1, y, x + len - 2, y + 12);
+			 * window.fillGreySides(x, y + 11, x + len - 1, y + getHeight(len));
+			 * DrawableHelper.fill(x, y, x + len - 3, y + 1, 0x90000000);
+			 * DrawableHelper.fill(x + 1, y + getHeight(len) - 2, x + 2, y + getHeight(len)
+			 * - 1, 0x90000000); DrawableHelper.fill(x + 2, y + getHeight(len) - 1, x + len
+			 * - 2, y + getHeight(len), 0x90b0b0b0);
+			 * 
+			 * int h = y + 12; for (SettingBase s: children) { s.render(window, x + 1, h,
+			 * len - 2);
+			 * 
+			 * h += s.getHeight(len - 2); } } */
 			if (expanded) {
 				DrawableHelper.fill(x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
 
 				int h = y + 12;
-				for (SettingBase s: children) {
+				for (SettingBase s : children) {
 					s.render(window, x + 2, h, len - 2);
 
 					h += s.getHeight(len - 2);
@@ -95,16 +97,15 @@ public class SettingToggle extends SettingBase {
 
 			GL11.glPushMatrix();
 			GL11.glScaled(0.65, 0.65, 1);
-			MinecraftClient.getInstance().textRenderer.drawWithShadow(
-					color2 + (expanded ? "[§lv" + color2 + "]" : "[§l>" + color2 + "]"), (int) ((x + len - 13) * 1/0.65), (int) ((y + 4) * 1/0.65), -1);
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(color2 + (expanded ? "[§lv" + color2 + "]" : "[§l>" + color2 + "]"),
+					(int) ((x + len - 13) * 1 / 0.65), (int) ((y + 4) * 1 / 0.65), -1);
 			GL11.glPopMatrix();
 		}
 
-
-
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(color2 + text, x + 3, y + 2, 0xffffff);
 
-		if (window.mouseOver(x, y, x+len, y+12) && window.lmDown) state = !state;
+		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown)
+			state = !state;
 	}
 
 	public int getHeight(int len) {
@@ -112,7 +113,8 @@ public class SettingToggle extends SettingBase {
 
 		if (expanded) {
 			h += 1;
-			for (SettingBase s: children) h += s.getHeight(len - 2);
+			for (SettingBase s : children)
+				h += s.getHeight(len - 2);
 		}
 
 		return h;
@@ -133,12 +135,13 @@ public class SettingToggle extends SettingBase {
 	}
 
 	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
-		if (!expanded || window.mouseY - y <= 12) return super.getGuiDesc(window, x, y, len);
+		if (!expanded || window.mouseY - y <= 12)
+			return super.getGuiDesc(window, x, y, len);
 
 		Triple<Integer, Integer, String> triple = null;
 
 		int h = y + 12;
-		for (SettingBase s: children) {
+		for (SettingBase s : children) {
 			if (window.mouseOver(x + 2, h, x + len, h + s.getHeight(len))) {
 				triple = s.getGuiDesc(window, x + 2, h, len - 2);
 			}
@@ -154,12 +157,13 @@ public class SettingToggle extends SettingBase {
 			state = settings.getAsBoolean();
 		} else if (settings.isJsonObject()) {
 			JsonObject jo = settings.getAsJsonObject();
-			if (!jo.has("toggled")) return;
+			if (!jo.has("toggled"))
+				return;
 
 			state = jo.get("toggled").getAsBoolean();
 
-			for (Entry<String, JsonElement> e: jo.get("children").getAsJsonObject().entrySet()) {
-				for (SettingBase s: children) {
+			for (Entry<String, JsonElement> e : jo.get("children").getAsJsonObject().entrySet()) {
+				for (SettingBase s : children) {
 					if (s.getName().equals(e.getKey())) {
 						s.readSettings(e.getValue());
 					}
@@ -176,7 +180,7 @@ public class SettingToggle extends SettingBase {
 			jo.add("toggled", new JsonPrimitive(state));
 
 			JsonObject subJo = new JsonObject();
-			for (SettingBase s: children) {
+			for (SettingBase s : children) {
 				subJo.add(s.getName(), s.saveSettings());
 			}
 
@@ -187,10 +191,12 @@ public class SettingToggle extends SettingBase {
 
 	@Override
 	public boolean isDefault() {
-		if (state != defaultState) return false;
+		if (state != defaultState)
+			return false;
 
-		for (SettingBase s: children) {
-			if (!s.isDefault()) return false;
+		for (SettingBase s : children) {
+			if (!s.isDefault())
+				return false;
 		}
 
 		return true;

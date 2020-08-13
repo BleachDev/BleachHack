@@ -38,13 +38,14 @@ public class Jesus extends Module {
 	public void onTick(EventTick event) {
 		Entity e = mc.player.getVehicle() != null ? mc.player.getVehicle() : mc.player;
 
-		if (e.isSneaking() || e.fallDistance > 3f) return;
+		if (e.isSneaking() || e.fallDistance > 3f)
+			return;
 
-		if (WorldUtils.isFluid(new BlockPos(e.getPos().add(0,0.3,0)))) {
+		if (WorldUtils.isFluid(new BlockPos(e.getPos().add(0, 0.3, 0)))) {
 			e.setVelocity(e.getVelocity().x, 0.08, e.getVelocity().z);
-		} else if (WorldUtils.isFluid(new BlockPos(e.getPos().add(0,0.1,0)))) {
+		} else if (WorldUtils.isFluid(new BlockPos(e.getPos().add(0, 0.1, 0)))) {
 			e.setVelocity(e.getVelocity().x, 0.05, e.getVelocity().z);
-		} else if (WorldUtils.isFluid(new BlockPos(e.getPos().add(0,0.05,0)))) {
+		} else if (WorldUtils.isFluid(new BlockPos(e.getPos().add(0, 0.05, 0)))) {
 			e.setVelocity(e.getVelocity().x, 0.01, e.getVelocity().z);
 		} else if (WorldUtils.isFluid(new BlockPos(e.getPos()))) {
 			e.setVelocity(e.getVelocity().x, -0.005, e.getVelocity().z);

@@ -64,11 +64,12 @@ public class CmdRbook extends Command {
 		int pageChars = args.length >= 4 && NumberUtils.isCreatable(args[3]) ? NumberUtils.createNumber(args[3]).intValue() : 210;
 
 		IntStream chars = new Random().ints(startChar, endChar + 1);
-		String text = chars.limit(pageChars*100).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
+		String text = chars.limit(pageChars * 100).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
 
 		ListTag textSplit = new ListTag();
 
-		for (int t = 0; t < pages; t++) textSplit.add(new StringTag(text.substring(t * pageChars, (t + 1) * pageChars)));
+		for (int t = 0; t < pages; t++)
+			textSplit.add(new StringTag(text.substring(t * pageChars, (t + 1) * pageChars)));
 
 		item.getOrCreateTag().put("pages", textSplit);
 		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, Hand.MAIN_HAND));

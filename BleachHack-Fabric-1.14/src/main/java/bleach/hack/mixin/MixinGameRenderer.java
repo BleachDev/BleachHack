@@ -40,27 +40,26 @@ public class MixinGameRenderer {
 	private void renderHand(Camera camera_1, float float_1, CallbackInfo info) {
 		EventWorldRender event = new EventWorldRender(float_1);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 
-	@Inject(at = {@At("HEAD")}, method = "bobViewWhenHurt(F)V", cancellable = true)
+	@Inject(at = { @At("HEAD") }, method = "bobViewWhenHurt(F)V", cancellable = true)
 	private void onBobViewWhenHurt(float f, CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(2).asToggle().state)
+		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(2).asToggle().state)
 			ci.cancel();
 	}
 
 	@Inject(at = @At("HEAD"), method = "showFloatingItem", cancellable = true)
 	private void showFloatingItem(ItemStack itemStack_1, CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(8).asToggle().state
+		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(8).asToggle().state
 				&& itemStack_1.getItem() == Items.TOTEM_OF_UNDYING)
 			ci.cancel();
 	}
 
-	@Redirect(
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0),
-			method = "applyCameraTransformations(F)V")
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0), method = "applyCameraTransformations(F)V")
 	private float nauseaWobble(float delta, float first, float second) {
-		if(!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state))
+		if (!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state))
 			return MathHelper.lerp(delta, first, second);
 
 		return 0;

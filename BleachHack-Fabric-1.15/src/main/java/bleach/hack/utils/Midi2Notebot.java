@@ -34,8 +34,8 @@ import javax.sound.midi.Track;
 
 public class Midi2Notebot {
 
-	public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-	public static final int[] NOTE_POSES = {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
+	public static final String[] NOTE_NAMES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+	public static final int[] NOTE_POSES = { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
 
 	public static List<List<Integer>> convert(Path path) {
 		List<List<Integer>> noteList = new ArrayList<>();
@@ -47,8 +47,8 @@ public class Midi2Notebot {
 
 			System.out.println("Tracks: " + seq.getTracks().length + " | " + seq.getDivisionType());
 			int trackCount = 0;
-			for (Track track: seq.getTracks()) {
-				//Track track = seq.getTracks()[0]
+			for (Track track : seq.getTracks()) {
+				// Track track = seq.getTracks()[0]
 
 				long time = 0;
 				long bpm = 120;
@@ -72,12 +72,11 @@ public class Midi2Notebot {
 
 						if (msg.getCommand() == 0x90 || msg.getCommand() == 0x80) {
 							int key = msg.getData1();
-							int octave = (key / 12)-1;
+							int octave = (key / 12) - 1;
 							int note = key % 12;
 							String noteName = NOTE_NAMES[note];
 							int velocity = msg.getData2();
-							out += " Note " + (msg.getCommand() == 0x80 ? "off" : "on") + " > "
-									+ noteName + octave + " key=" + key + " velocity: " + velocity;
+							out += " Note " + (msg.getCommand() == 0x80 ? "off" : "on") + " > " + noteName + octave + " key=" + key + " velocity: " + velocity;
 
 							if (!skipNote) {
 								noteList.add(Arrays.asList((int) Math.round(time / 50d), NOTE_POSES[note], instrument));
@@ -86,13 +85,13 @@ public class Midi2Notebot {
 								skipNote = false;
 							}
 						} else if (msg.getCommand() == 0xB0) {
-							int control = (msg.getLength() > 1) ? (msg.getMessage()[1] & 0xFF):-1;
-							int value = (msg.getLength() > 2) ? (msg.getMessage()[2] & 0xFF):-1;
+							int control = (msg.getLength() > 1) ? (msg.getMessage()[1] & 0xFF) : -1;
+							int value = (msg.getLength() > 2) ? (msg.getMessage()[2] & 0xFF) : -1;
 							out += " Control: " + control + " | " + value;
 						} else if (msg.getCommand() == 0xB0) {
 							out += " Program: " + msg.getData1();
-							//if (msg.getData1() <= 20) instrument = 0;
-							//else if (msg.getData1() <= 51) instrument = 7;
+							// if (msg.getData1() <= 20) instrument = 0;
+							// else if (msg.getData1() <= 51) instrument = 7;
 						} else {
 							out += " Command: " + msg.getCommand() + " > " + msg.getData1() + " | " + msg.getData2();
 						}
@@ -108,7 +107,8 @@ public class Midi2Notebot {
 							out += " Meta Tempo: " + bpm;
 						} else {
 							out += " Meta 0x" + Integer.toHexString(msg.getType()) + ": ";
-							for (byte b: data) out += (b & 0xff) + " | ";
+							for (byte b : data)
+								out += (b & 0xff) + " | ";
 							out += " (" + msg.getClass() + ")";
 						}
 
@@ -116,7 +116,8 @@ public class Midi2Notebot {
 						out += " Other message: " + message.getClass();
 					}
 
-					if (time < 10000) /*if (!out.contains("Note"))*/ System.out.println(out);
+					if (time < 10000)
+						/* if (!out.contains("Note")) */ System.out.println(out);
 				}
 
 				trackCount++;
@@ -124,7 +125,8 @@ public class Midi2Notebot {
 			Synthesizer synthesizer = MidiSystem.getSynthesizer();
 			synthesizer.open();
 			Instrument[] instruments = synthesizer.getDefaultSoundbank().getInstruments();
-			for (Instrument i : instruments) System.out.println(i);
+			for (Instrument i : instruments)
+				System.out.println(i);
 
 			synthesizer.close();
 

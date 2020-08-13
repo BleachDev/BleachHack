@@ -44,7 +44,7 @@ public class CmdBind extends Command {
 	public void onCommand(String command, String[] args) throws Exception {
 		if (args[0].equalsIgnoreCase("clear")) {
 			int c = 0;
-			for (Module m: ModuleManager.getModules()) {
+			for (Module m : ModuleManager.getModules()) {
 				if (m.getKey() != Module.KEY_UNBOUND) {
 					m.setKey(Module.KEY_UNBOUND);
 					c++;
@@ -53,7 +53,7 @@ public class CmdBind extends Command {
 
 			BleachLogger.infoMessage("Cleared " + c + " Binds");
 		} else if (args.length >= 2 && (args.length >= 3 || !args[1].equalsIgnoreCase("set"))) {
-			for (Module m: ModuleManager.getModules()) {
+			for (Module m : ModuleManager.getModules()) {
 				if (m.getName().equalsIgnoreCase(args[1])) {
 					if (args[0].equalsIgnoreCase("set")) {
 						int key = -1;

@@ -38,7 +38,7 @@ public abstract class AbstractWindowScreen extends Screen {
 		int noneSelected = -1;
 		int selected = -1;
 		int count = 0;
-		for (Window w: windows) {
+		for (Window w : windows) {
 			if (!w.closed) {
 				close = false;
 				if (!w.selected) {
@@ -47,7 +47,8 @@ public abstract class AbstractWindowScreen extends Screen {
 					selected = count;
 				}
 
-				if (noneSelected >= -1) noneSelected = count;
+				if (noneSelected >= -1)
+					noneSelected = count;
 			}
 
 			if (w.selected && !w.closed) {
@@ -56,9 +57,12 @@ public abstract class AbstractWindowScreen extends Screen {
 			count++;
 		}
 
-		if (selected >= 0) onRenderWindow(matrix, selected, mouseX, mouseY);
-		if (noneSelected >= 0) windows.get(noneSelected).selected = true;
-		if (close) this.onClose();
+		if (selected >= 0)
+			onRenderWindow(matrix, selected, mouseX, mouseY);
+		if (noneSelected >= 0)
+			windows.get(noneSelected).selected = true;
+		if (close)
+			this.onClose();
 
 		super.render(matrix, mouseX, mouseY, delta);
 	}
@@ -78,7 +82,7 @@ public abstract class AbstractWindowScreen extends Screen {
 
 	public void selectWindow(int window) {
 		int count = 0;
-		for (Window w: windows) {
+		for (Window w : windows) {
 			if (w.selected) {
 				w.inactiveTime = 2;
 			}
@@ -92,12 +96,13 @@ public abstract class AbstractWindowScreen extends Screen {
 		/* Handle what window will be selected when clicking */
 		int count = 0;
 		int nextSelected = -1;
-		for (Window w: windows) {
+		for (Window w : windows) {
 			if (w.selected) {
 				w.onMousePressed((int) double_1, (int) double_2);
 			}
 
-			if (w.shouldClose((int) double_1, (int) double_2)) w.closed = true;
+			if (w.shouldClose((int) double_1, (int) double_2))
+				w.closed = true;
 
 			if (w.inactiveTime <= 0 && double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
 				if (w.selected) {
@@ -111,7 +116,8 @@ public abstract class AbstractWindowScreen extends Screen {
 		}
 
 		if (nextSelected >= 0) {
-			for (Window w: windows) w.selected = false;
+			for (Window w : windows)
+				w.selected = false;
 			windows.get(nextSelected).selected = true;
 		}
 
@@ -119,7 +125,7 @@ public abstract class AbstractWindowScreen extends Screen {
 	}
 
 	public boolean mouseReleased(double double_1, double double_2, int int_1) {
-		for (Window w: windows) {
+		for (Window w : windows) {
 			w.onMouseReleased((int) double_1, (int) double_2);
 		}
 

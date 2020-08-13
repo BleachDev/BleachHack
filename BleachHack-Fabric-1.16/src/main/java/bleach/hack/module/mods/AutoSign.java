@@ -38,8 +38,7 @@ public class AutoSign extends Module {
 	public String[] text = new String[] {};
 
 	public AutoSign() {
-		super("AutoSign", KEY_UNBOUND, Category.PLAYER, "Automatically writes on signs",
-				new SettingToggle("Random", false));
+		super("AutoSign", KEY_UNBOUND, Category.PLAYER, "Automatically writes on signs", new SettingToggle("Random", false));
 	}
 
 	public void onDisable() {
@@ -56,14 +55,15 @@ public class AutoSign extends Module {
 
 	@Subscribe
 	public void onOpenScreen(EventOpenScreen event) {
-		if (text.length < 3) return;
+		if (text.length < 3)
+			return;
 
 		if (event.getScreen() instanceof SignEditScreen) {
 			event.setCancelled(true);
 
 			if (getSetting(0).asToggle().state) {
-				text =  new String[] {};
-				while(text.length < 4) {
+				text = new String[] {};
+				while (text.length < 4) {
 					IntStream chars = new Random().ints(0, 0x10FFFF);
 					text = chars.limit(1000).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining()).split("(?<=\\G.{250})");
 				}

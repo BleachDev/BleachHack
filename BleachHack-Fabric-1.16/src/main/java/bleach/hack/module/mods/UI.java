@@ -56,8 +56,7 @@ public class UI extends Module {
 	private long lastPacket = 0;
 
 	public UI() {
-		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle("Arraylist", true).withDesc("Shows the module list"), // 0
+		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.", new SettingToggle("Arraylist", true).withDesc("Shows the module list"), // 0
 				new SettingToggle("Extra Line", false).withDesc("Adds a extra line to the front of the arralist"), // 1
 				new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist"), // 2
 				new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 3
@@ -86,61 +85,64 @@ public class UI extends Module {
 		if ((getSetting(0).asToggle().state || getSetting(2).asToggle().state) && !mc.options.debugEnabled) {
 			List<String> lines = new ArrayList<>();
 
-			if (getSetting(2).asToggle().state) lines.add(0, "\u00a7a> BleachHack " + BleachHack.VERSION);
+			if (getSetting(2).asToggle().state)
+				lines.add(0, "\u00a7a> BleachHack " + BleachHack.VERSION);
 
 			if (getSetting(0).asToggle().state) {
-				for (Module m: ModuleManager.getModules()) if (m.isToggled()) lines.add(m.getName());
+				for (Module m : ModuleManager.getModules())
+					if (m.isToggled())
+						lines.add(m.getName());
 
 				lines.sort((a, b) -> Integer.compare(mc.textRenderer.getWidth(b), mc.textRenderer.getWidth(a)));
 			}
 
-			//new colors
+			// new colors
 			int color = getRainbowFromSettings(0);
 			int extra = getSetting(1).asToggle().state ? 1 : 0;
-			for (String s: lines) {
+			for (String s : lines) {
 				color = getRainbowFromSettings(arrayCount);
-				DrawableHelper.fill(event.matrix, 0, arrayCount*10, mc.textRenderer.getWidth(s)+3+extra, 10+(arrayCount*10), 0x70003030);
-				DrawableHelper.fill(event.matrix, 0, arrayCount*10, extra, 10+(arrayCount*10), color);
-				DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(s)+3+extra, (arrayCount*10), mc.textRenderer.getWidth(s)+4+extra, 10+(arrayCount*10), color);
+				DrawableHelper.fill(event.matrix, 0, arrayCount * 10, mc.textRenderer.getWidth(s) + 3 + extra, 10 + (arrayCount * 10), 0x70003030);
+				DrawableHelper.fill(event.matrix, 0, arrayCount * 10, extra, 10 + (arrayCount * 10), color);
+				DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(s) + 3 + extra, (arrayCount * 10), mc.textRenderer.getWidth(s) + 4 + extra,
+						10 + (arrayCount * 10), color);
 
 				if (arrayCount + 1 < lines.size()) {
-					DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(lines.get(arrayCount + 1))+4+extra, 10+(arrayCount*10),
-							mc.textRenderer.getWidth(s)+4+extra, 11+(arrayCount*10), color);
+					DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(lines.get(arrayCount + 1)) + 4 + extra, 10 + (arrayCount * 10),
+							mc.textRenderer.getWidth(s) + 4 + extra, 11 + (arrayCount * 10), color);
 				}
 
-				mc.textRenderer.drawWithShadow(event.matrix, s, 2+extra, 1+(arrayCount*10), color);
+				mc.textRenderer.drawWithShadow(event.matrix, s, 2 + extra, 1 + (arrayCount * 10), color);
 				arrayCount++;
 			}
 
 			if (!lines.isEmpty()) {
-				DrawableHelper.fill(event.matrix, 0, (arrayCount*10), mc.textRenderer.getWidth(lines.get(arrayCount-1))+4+extra, 1+(arrayCount*10), color);
+				DrawableHelper.fill(event.matrix, 0, (arrayCount * 10), mc.textRenderer.getWidth(lines.get(arrayCount - 1)) + 4 + extra, 1 + (arrayCount * 10), color);
 			}
 		}
 
 		if (getSetting(9).asToggle().state && !mc.options.debugEnabled) {
-			mc.textRenderer.drawWithShadow(event.matrix, "Players:", 2, 4+arrayCount*10, 0xff0000);
+			mc.textRenderer.drawWithShadow(event.matrix, "Players:", 2, 4 + arrayCount * 10, 0xff0000);
 			arrayCount++;
 
-			for (Entity e: mc.world.getPlayers().stream().sorted(
-					(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
+			for (Entity e : mc.world.getPlayers().stream()
+					.sorted((a, b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
 					.collect(Collectors.toList())) {
-				if (e == mc.player) continue;
+				if (e == mc.player)
+					continue;
 
 				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
-				String text = "" + e.getDisplayName().getString() + " \u00a77|\u00a7r " +
-						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
-						+ " (" + dist + "m)";
+				String text = "" + e.getDisplayName().getString() + " \u00a77|\u00a7r " + e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " "
+						+ e.getBlockPos().getZ() + " (" + dist + "m)";
 
-				mc.textRenderer.drawWithShadow(event.matrix, text, 2, 4+arrayCount*10,
+				mc.textRenderer.drawWithShadow(event.matrix, text, 2, 4 + arrayCount * 10,
 						new Color(255 - Math.min(dist * 3, 255), Math.min(dist * 3, 255), 0).brighter().getRGB());
 				arrayCount++;
 			}
 		}
 
 		if (getSetting(11).asToggle().state) {
-			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
-					+ (getSetting(11).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss" + (getSetting(11).asToggle().getChild(0).asToggle().state ? " zzz" : "")
 					+ (getSetting(11).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
 		}
 
@@ -148,11 +150,10 @@ public class UI extends Module {
 			boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 			BlockPos pos = mc.player.getBlockPos();
 			Vec3d vec = mc.player.getPos();
-			BlockPos pos2 = nether ? new BlockPos(vec.getX()*8, vec.getY(), vec.getZ()*8)
-					: new BlockPos(vec.getX()/8, vec.getY(), vec.getZ()/8);
+			BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8) : new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
 
-			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
+			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " \u00a77[" + (nether ? "\u00a7b" : "\u00a74")
+					+ pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
 
 		if (getSetting(8).asToggle().state) {
@@ -173,10 +174,14 @@ public class UI extends Module {
 
 		if (getSetting(6).asToggle().state) {
 			String suffix = "\u00a77";
-			if (lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
-			else if (lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
-			else if (lastPacket + 2500 < System.currentTimeMillis()) suffix += "..";
-			else if (lastPacket + 1200 < System.currentTimeMillis()) suffix += ".";
+			if (lastPacket + 7500 < System.currentTimeMillis())
+				suffix += "....";
+			else if (lastPacket + 5000 < System.currentTimeMillis())
+				suffix += "...";
+			else if (lastPacket + 2500 < System.currentTimeMillis())
+				suffix += "..";
+			else if (lastPacket + 1200 < System.currentTimeMillis())
+				suffix += ".";
 
 			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 		}
@@ -192,15 +197,15 @@ public class UI extends Module {
 
 		if (getSetting(10).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			GL11.glPushMatrix();
-			//GL11.glEnable(GL11.GL_TEXTURE_2D);
+			// GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 			int count = 0;
 			int x1 = mc.getWindow().getScaledWidth() / 2;
-			int y = mc.getWindow().getScaledHeight() -
-					(mc.player.isSubmergedInWater() || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
+			int y = mc.getWindow().getScaledHeight() - (mc.player.isSubmergedInWater() || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
 			for (ItemStack is : mc.player.inventory.armor) {
 				count++;
-				if (is.isEmpty()) continue;
+				if (is.isEmpty())
+					continue;
 				int x = x1 - 90 + (9 - count) * 20 + 2;
 
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -223,7 +228,10 @@ public class UI extends Module {
 					if (is.isDamageable()) {
 						String dur = is.getMaxDamage() - is.getDamage() + "";
 						int durcolor = 0x000000;
-						try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
+						try {
+							durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F);
+						} catch (Exception e) {
+						}
 
 						mc.textRenderer.drawWithShadow(event.matrix, dur, (x + 10 - mc.textRenderer.getWidth(dur) / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
 					}
@@ -236,13 +244,11 @@ public class UI extends Module {
 			GL11.glPopMatrix();
 		}
 
-
 		int count2 = 0;
 		int infoMode = getSetting(15).asMode().mode;
-		for (String s: infoList) {
-			mc.textRenderer.drawWithShadow(event.matrix, s,
-					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
-							infoMode == 1 ? 2+(count2*10) : mc.getWindow().getScaledHeight()-9-(count2*10), 0xa0a0a0);
+		for (String s : infoList) {
+			mc.textRenderer.drawWithShadow(event.matrix, s, infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
+					infoMode == 1 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
 			count2++;
 		}
 	}
@@ -252,7 +258,8 @@ public class UI extends Module {
 		lastPacket = System.currentTimeMillis();
 		if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
 			long time = System.currentTimeMillis();
-			if (time < 500) return;
+			if (time < 500)
+				return;
 			long timeOffset = Math.abs(1000 - (time - prevTime)) + 1000;
 			tps = Math.round(MathHelper.clamp(20 / ((double) timeOffset / 1000), 0, 20) * 100d) / 100d;
 			prevTime = time;
@@ -260,12 +267,18 @@ public class UI extends Module {
 	}
 
 	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {
-		if (!rev ? value > best : value < best) return "\u00a72";
-		else if (!rev ? value > good : value < good) return "\u00a7a";
-		else if (!rev ? value > mid : value < mid) return "\u00a7e";
-		else if (!rev ? value > bad : value < bad) return "\u00a76";
-		else if (!rev ? value > worst : value < worst) return "\u00a7c";
-		else return "\u00a74";
+		if (!rev ? value > best : value < best)
+			return "\u00a72";
+		else if (!rev ? value > good : value < good)
+			return "\u00a7a";
+		else if (!rev ? value > mid : value < mid)
+			return "\u00a7e";
+		else if (!rev ? value > bad : value < bad)
+			return "\u00a76";
+		else if (!rev ? value > worst : value < worst)
+			return "\u00a7c";
+		else
+			return "\u00a74";
 	}
 
 	public static int getRainbow(float sat, float bri, double speed, int offset) {
@@ -277,11 +290,10 @@ public class UI extends Module {
 	public static int getRainbowFromSettings(int offset) {
 		Module ui = ModuleManager.getModule(UI.class);
 
-		if (ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
+		if (ui == null)
+			return getRainbow(0.5f, 0.5f, 10, 0);
 
-		return getRainbow((float) ui.getSetting(13).asSlider().getValue(),
-				(float) ui.getSetting(12).asSlider().getValue(),
-				ui.getSetting(14).asSlider().getValue(),
+		return getRainbow((float) ui.getSetting(13).asSlider().getValue(), (float) ui.getSetting(12).asSlider().getValue(), ui.getSetting(14).asSlider().getValue(),
 				offset);
 	}
 }

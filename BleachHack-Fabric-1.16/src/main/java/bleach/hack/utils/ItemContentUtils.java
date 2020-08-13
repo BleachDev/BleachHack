@@ -52,16 +52,17 @@ public class ItemContentUtils {
 
 		if (nbt != null && nbt.contains("pages")) {
 			ListTag nbt2 = nbt.getList("pages", 8);
-			for (int i = 0; i < nbt2.size(); i++) pages.add(nbt2.getString(i));
+			for (int i = 0; i < nbt2.size(); i++)
+				pages.add(nbt2.getString(i));
 		}
 
 		List<List<String>> finalPages = new ArrayList<>();
 
-		for (String s: pages) {
+		for (String s : pages) {
 			String buffer = "";
 			List<String> pageBuffer = new ArrayList<>();
 
-			for (char c: s.toCharArray()) {
+			for (char c : s.toCharArray()) {
 				if (MinecraftClient.getInstance().textRenderer.getWidth(buffer) > 114 || buffer.endsWith("\n")) {
 					pageBuffer.add(buffer.replace("\n", ""));
 					buffer = "";

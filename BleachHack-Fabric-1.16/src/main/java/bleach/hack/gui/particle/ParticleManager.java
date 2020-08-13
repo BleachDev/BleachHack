@@ -34,16 +34,17 @@ public class ParticleManager {
 	public void renderParticles(MatrixStack matrix) {
 		List<Particle> tempParts = new ArrayList<>();
 
-		for (Particle p: particles) {
+		for (Particle p : particles) {
 			p.updateParticles();
-			if (p.isDead()) tempParts.add(p);
+			if (p.isDead())
+				tempParts.add(p);
 		}
 
 		particles.removeAll(tempParts);
 
-		for (Particle p: particles) {
-			for (int[] p1: p.getParticles()) {
-				DrawableHelper.fill(matrix, p1[0], p1[1], p1[0]+1, p1[1]+1, 0xffffc0e0);
+		for (Particle p : particles) {
+			for (int[] p1 : p.getParticles()) {
+				DrawableHelper.fill(matrix, p1[0], p1[1], p1[0] + 1, p1[1] + 1, 0xffffc0e0);
 			}
 		}
 	}

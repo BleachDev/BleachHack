@@ -45,23 +45,25 @@ public class BleachFileHelper {
 
 		JsonObject jo = new JsonObject();
 
-		for (Module m: ModuleManager.getModules()) {
+		for (Module m : ModuleManager.getModules()) {
 			JsonObject mo = new JsonObject();
 
 			if (m.isToggled() && !m.getName().equals("ClickGui") && !m.getName().equals("Freecam")) {
 				mo.add("toggled", new JsonPrimitive(true));
 			}
 
-			if (m.getKey() >= 0 || m.getDefaultKey() >= 0 /* Force saving of modules with a default bind to prevent them reapplying the default bind */) {
+			if (m.getKey() >= 0 || m.getDefaultKey() >= 0 /* Force saving of modules with a default bind to prevent them reapplying the
+															 * default bind */) {
 				mo.add("bind", new JsonPrimitive(m.getKey()));
 			}
 
 			if (!m.getSettings().isEmpty()) {
 				JsonObject so = new JsonObject();
-				// Seperate JsonObject with all the settings to keep the extra number so when it reads, it doesn't mess up the order
+				// Seperate JsonObject with all the settings to keep the extra number so when it
+				// reads, it doesn't mess up the order
 				JsonObject fullSo = new JsonObject();
 
-				for (SettingBase s: m.getSettings()) {
+				for (SettingBase s : m.getSettings()) {
 					String name = s.getName();
 
 					int extra = 0;
@@ -71,7 +73,8 @@ public class BleachFileHelper {
 					}
 
 					fullSo.add(name, s.saveSettings());
-					if (!s.isDefault()) so.add(name, s.saveSettings());
+					if (!s.isDefault())
+						so.add(name, s.saveSettings());
 				}
 
 				if (so.size() != 0) {
@@ -91,12 +94,14 @@ public class BleachFileHelper {
 	public static void readModules() {
 		JsonObject jo = BleachJsonHelper.readJsonFile("modules.json");
 
-		if (jo == null) return;
+		if (jo == null)
+			return;
 
-		for (Entry<String, JsonElement> e: jo.entrySet()) {
+		for (Entry<String, JsonElement> e : jo.entrySet()) {
 			Module mod = ModuleManager.getModuleByName(e.getKey());
 
-			if (mod == null) continue;
+			if (mod == null)
+				continue;
 
 			if (e.getValue().isJsonObject()) {
 				JsonObject mo = e.getValue().getAsJsonObject();
@@ -109,11 +114,11 @@ public class BleachFileHelper {
 				}
 
 				if (mo.has("settings") && mo.get("settings").isJsonObject()) {
-					for (Entry<String, JsonElement> se: mo.get("settings").getAsJsonObject().entrySet()) {
+					for (Entry<String, JsonElement> se : mo.get("settings").getAsJsonObject().entrySet()) {
 						// Map to keep track if there are multiple settings with the same name
 						HashMap<String, Integer> sNames = new HashMap<>();
 
-						for (SettingBase sb: mod.getSettings()) {
+						for (SettingBase sb : mod.getSettings()) {
 							String name = sNames.containsKey(sb.getName()) ? sb.getName() + sNames.get(sb.getName()) : sb.getName();
 
 							if (name.equals(se.getKey())) {
@@ -135,7 +140,8 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("clickgui.txt");
 
 		String text = "";
-		for (Window w: ClickGui.clickGui.windows) text += w.x1 + ":" + w.y1 + "\n";
+		for (Window w : ClickGui.clickGui.windows)
+			text += w.x1 + ":" + w.y1 + "\n";
 
 		BleachFileMang.appendFile(text, "clickgui.txt");
 	}
@@ -145,17 +151,19 @@ public class BleachFileHelper {
 
 		try {
 			int c = 0;
-			for (Window w: ClickGui.clickGui.windows) {
+			for (Window w : ClickGui.clickGui.windows) {
 				w.x1 = Integer.parseInt(lines.get(c).split(":")[0]);
 				w.y1 = Integer.parseInt(lines.get(c).split(":")[1]);
 				c++;
 			}
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 	}
 
 	public static void readPrefix() {
 		List<String> lines = BleachFileMang.readFileLines("prefix.txt");
-		if (!lines.isEmpty()) Command.PREFIX = lines.get(0);
+		if (!lines.isEmpty())
+			Command.PREFIX = lines.get(0);
 	}
 
 	public static void readFriends() {
@@ -166,7 +174,8 @@ public class BleachFileHelper {
 		SCHEDULE_SAVE_FRIENDS = false;
 
 		String toWrite = "";
-		for (String s: BleachHack.friendMang.getFriends()) toWrite += s + "\n";
+		for (String s : BleachHack.friendMang.getFriends())
+			toWrite += s + "\n";
 
 		BleachFileMang.createEmptyFile("friends.txt");
 		BleachFileMang.appendFile(toWrite, "friends.txt");

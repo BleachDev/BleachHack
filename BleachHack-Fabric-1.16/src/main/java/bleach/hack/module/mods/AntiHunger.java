@@ -22,7 +22,8 @@ public class AntiHunger extends Module {
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {
 			if (mc.player.getVelocity().y != 0 && !mc.options.keyJump.isPressed() && (!bool || !getSetting(0).asToggle().state)) {
-				//if (((PlayerMoveC2SPacket) event.getPacket()).isOnGround()) event.setCancelled(true);
+				// if (((PlayerMoveC2SPacket) event.getPacket()).isOnGround())
+				// event.setCancelled(true);
 				boolean onGround = mc.player.fallDistance >= 0.1f;
 				mc.player.setOnGround(onGround);
 				FabricReflect.writeField(event.getPacket(), onGround, "field_12891", "onGround");

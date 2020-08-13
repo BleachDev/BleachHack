@@ -67,9 +67,8 @@ public abstract class MixinContainerScreen extends Screen {
 		addButton(new ButtonWidget(titleX + 130, titleY + 4, 39, 12, new LiteralText("Dupe"), button -> {
 			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
 
-			MinecraftClient.getInstance().player.networkHandler.sendPacket(
-					new PlayerInteractEntityC2SPacket(
-							entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
+			MinecraftClient.getInstance().player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND,
+					entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
 
 			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
 		}));
@@ -77,9 +76,9 @@ public abstract class MixinContainerScreen extends Screen {
 
 	@Inject(at = @At("RETURN"), method = "render")
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
-		EventDrawContainer event = new EventDrawContainer(
-				(HandledScreen<?>) MinecraftClient.getInstance().currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
+		EventDrawContainer event = new EventDrawContainer((HandledScreen<?>) MinecraftClient.getInstance().currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 }

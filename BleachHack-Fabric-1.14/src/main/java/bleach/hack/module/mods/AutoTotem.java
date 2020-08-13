@@ -36,9 +36,11 @@ public class AutoTotem extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		// Cancel at all non-survival-inventory containers
-		if((mc.currentScreen instanceof AbstractContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null) return;
+		if ((mc.currentScreen instanceof AbstractContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null)
+			return;
 
-		if (mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING) return;
+		if (mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING)
+			return;
 
 		for (int i = 0; i < 36; i++) {
 			if (mc.player.inventory.getInvStack(i).getItem() == Items.TOTEM_OF_UNDYING) {

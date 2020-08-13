@@ -42,8 +42,7 @@ public class Xray extends Module {
 	private double gamma;
 
 	public Xray() {
-		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
-				new SettingToggle("Fluids", false));
+		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers", new SettingToggle("Fluids", false));
 	}
 
 	public boolean isVisible(Block block) {
@@ -66,7 +65,7 @@ public class Xray extends Module {
 	public void onEnable() {
 		visibleBlocks.clear();
 
-		for (String s: BleachFileMang.readFileLines("xrayblocks.txt")) {
+		for (String s : BleachFileMang.readFileLines("xrayblocks.txt")) {
 			setVisible(Registry.BLOCK.get(new Identifier(s)));
 		}
 
@@ -79,12 +78,12 @@ public class Xray extends Module {
 
 	@Override
 	public void onDisable() {
-		if (mc.world != null) mc.worldRenderer.setWorld(mc.world);
+		if (mc.world != null)
+			mc.worldRenderer.setWorld(mc.world);
 
-		/*for (int i = 0; i <= 15; ++i) {
-            float float_2 = 1.0F - (float) i / 15.0F;
-            mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) / (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F;
-        }*/
+		/* for (int i = 0; i <= 15; ++i) { float float_2 = 1.0F - (float) i / 15.0F;
+		 * mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) /
+		 * (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F; } */
 		mc.options.gamma = gamma;
 
 		mc.worldRenderer.reload();

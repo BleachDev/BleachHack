@@ -54,11 +54,12 @@ public class Module {
 		settings.add(new SettingBind(this));
 	}
 
-
 	public void toggle() {
 		toggled = !toggled;
-		if (toggled) onEnable();
-		else onDisable();
+		if (toggled)
+			onEnable();
+		else
+			onDisable();
 	}
 
 	public void onEnable() {
@@ -75,17 +76,20 @@ public class Module {
 	public void onDisable() {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 
-		try{
+		try {
 			for (Method method : getClass().getMethods()) {
 				if (method.isAnnotationPresent(Subscribe.class)) {
 					BleachHack.eventBus.unregister(this);
 					break;
 				}
 			}
-		} catch (Exception this_didnt_get_registered_hmm_weird) { this_didnt_get_registered_hmm_weird.printStackTrace(); }
+		} catch (Exception this_didnt_get_registered_hmm_weird) {
+			this_didnt_get_registered_hmm_weird.printStackTrace();
+		}
 	}
 
-	public void init() {}
+	public void init() {
+	}
 
 	public String getName() {
 		return name;
@@ -130,8 +134,10 @@ public class Module {
 
 	public void setToggled(boolean toggled) {
 		this.toggled = toggled;
-		if (toggled) onEnable();
-		else onDisable();
+		if (toggled)
+			onEnable();
+		else
+			onDisable();
 	}
 
 }

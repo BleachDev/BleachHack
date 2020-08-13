@@ -30,7 +30,9 @@ public class StarGithub extends Module {
 	public void onEnable() {
 		try {
 			SystemUtil.getOperatingSystem().open("https://github.com/BleachDrinker420/bleachhack-1.14");
-		} catch (Exception e) {e.printStackTrace();}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		this.setToggled(false);
 	}

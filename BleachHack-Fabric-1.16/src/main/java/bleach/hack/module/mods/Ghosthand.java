@@ -40,27 +40,27 @@ public class Ghosthand extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (!mc.options.keyUse.isPressed() || mc.player.isSneaking()) return;
+		if (!mc.options.keyUse.isPressed() || mc.player.isSneaking())
+			return;
 
-		for (BlockEntity b: mc.world.blockEntities) {
-			if (new BlockPos(mc.player.rayTrace(4.25, mc.getTickDelta(), false).getPos()).equals(b.getPos())) return;
+		for (BlockEntity b : mc.world.blockEntities) {
+			if (new BlockPos(mc.player.rayTrace(4.25, mc.getTickDelta(), false).getPos()).equals(b.getPos()))
+				return;
 		}
 
 		List<BlockPos> posList = new ArrayList<>();
 
-		Vec3d nextPos = new Vec3d(0,0,0.1)
-				.rotateX(-(float) Math.toRadians(mc.player.pitch))
-				.rotateY(-(float) Math.toRadians(mc.player.yaw));
+		Vec3d nextPos = new Vec3d(0, 0, 0.1).rotateX(-(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
 
 		for (int i = 1; i < 50; i++) {
 			BlockPos curPos = new BlockPos(mc.player.getCameraPosVec(mc.getTickDelta()).add(nextPos.multiply(i)));
-			if (posList.contains(curPos)) continue;
+			if (posList.contains(curPos))
+				continue;
 			posList.add(curPos);
 
-			for (BlockEntity b: mc.world.blockEntities) {
+			for (BlockEntity b : mc.world.blockEntities) {
 				if (b.getPos().equals(curPos)) {
-					mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
-							new BlockHitResult(mc.player.getPos(), Direction.UP, curPos, true));
+					mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos(), Direction.UP, curPos, true));
 					return;
 				}
 			}

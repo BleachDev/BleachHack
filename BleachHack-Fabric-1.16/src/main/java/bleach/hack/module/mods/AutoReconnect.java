@@ -45,15 +45,13 @@ public class AutoReconnect extends Module {
 	public ServerInfo server;
 
 	public AutoReconnect() {
-		super("AutoReconnect", KEY_UNBOUND, Category.MISC, "Shows reconnect options when disconnecting from a server",
-				new SettingToggle("Auto", true),
+		super("AutoReconnect", KEY_UNBOUND, Category.MISC, "Shows reconnect options when disconnecting from a server", new SettingToggle("Auto", true),
 				new SettingSlider("Time", 0.2, 10, 5, 2));
 	}
 
 	@Subscribe
 	public void onOpenScreen(EventOpenScreen event) {
-		if (event.getScreen() instanceof DisconnectedScreen
-				&& !(event.getScreen() instanceof newDisconnectScreen)) {
+		if (event.getScreen() instanceof DisconnectedScreen && !(event.getScreen() instanceof newDisconnectScreen)) {
 			mc.openScreen(new newDisconnectScreen((DisconnectedScreen) event.getScreen()));
 			event.setCancelled(true);
 		}
@@ -62,16 +60,21 @@ public class AutoReconnect extends Module {
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket) {
-			try { server = mc.getCurrentServerEntry(); } catch (Exception e) {}
+			try {
+				server = mc.getCurrentServerEntry();
+			} catch (Exception e) {
+			}
 		}
 	}
 
 	@Subscribe
 	public void sendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof HandshakeC2SPacket) {
-			try { server = new ServerInfo("Server",
-					(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
-							+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"), false); } catch (Exception e) {}
+			try {
+				server = new ServerInfo("Server", (String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
+						+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"), false);
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -90,26 +93,27 @@ public class AutoReconnect extends Module {
 			super.init();
 			reconnectTime = System.currentTimeMillis();
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 35, 200, 20, new LiteralText("Reconnect"), button -> {
-				if (server != null) client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
+				if (server != null)
+					client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
 			}));
-			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
-					new LiteralText((getSetting(0).asToggle().state ? "\u00a7a" : "\u00a7c") + "AutoReconnect ["
-							+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
-							+ "]"), button -> {
-								getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
-								reconnectTime = System.currentTimeMillis();
-							}));
+			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20, new LiteralText((getSetting(0).asToggle().state ? "\u00a7a" : "\u00a7c")
+					+ "AutoReconnect [" + ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis()) + "]"), button -> {
+						getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
+						reconnectTime = System.currentTimeMillis();
+					}));
 		}
 
 		public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 			super.render(matrix, mouseX, mouseY, delta);
 
-			buttons.get(2).setMessage(new LiteralText((getSetting(0).asToggle().state ? "\u00a7aAutoReconnect ["
-					+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
-					+ "]" : "\u00a7cAutoReconnect [" + getSetting(1).asSlider().getValue() * 1000 + "]")));
+			buttons.get(2)
+					.setMessage(new LiteralText((getSetting(0).asToggle().state
+							? "\u00a7aAutoReconnect [" + ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis()) + "]"
+							: "\u00a7cAutoReconnect [" + getSetting(1).asSlider().getValue() * 1000 + "]")));
 
 			if (reconnectTime + getSetting(1).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSetting(0).asToggle().state) {
-				if (server != null) client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
+				if (server != null)
+					client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
 				reconnectTime = System.currentTimeMillis();
 			}
 		}

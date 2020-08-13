@@ -24,14 +24,17 @@ public class SettingBind extends SettingBase {
 
 	@Override
 	public void render(ModuleWindow window, int x, int y, int len) {
-		if (window.keyDown >= 0 && window.mouseOver(x, y, x+len, y+12)) mod.setKey(window.keyDown == GLFW.GLFW_KEY_DELETE ? Module.KEY_UNBOUND : window.keyDown);
+		if (window.keyDown >= 0 && window.mouseOver(x, y, x + len, y + 12))
+			mod.setKey(window.keyDown == GLFW.GLFW_KEY_DELETE ? Module.KEY_UNBOUND : window.keyDown);
 
 		String name = mod.getKey() < 0 ? "NONE" : InputUtil.getKeycodeName(mod.getKey());
-		if (name == null) name = "KEY" + mod.getKey();
-		else if (name.isEmpty()) name = "NONE";
+		if (name == null)
+			name = "KEY" + mod.getKey();
+		else if (name.isEmpty())
+			name = "NONE";
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow("Bind: " + name + (window.mouseOver(x, y, x+len, y+12) ? "..." : "")
-				, x+2, y+2, window.mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow("Bind: " + name + (window.mouseOver(x, y, x + len, y + 12) ? "..." : ""), x + 2, y + 2,
+				window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
 	}
 
 	public SettingBind withDesc(String desc) {

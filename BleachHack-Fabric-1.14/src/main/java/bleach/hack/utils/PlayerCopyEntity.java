@@ -29,8 +29,7 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 	}
 
 	public PlayerCopyEntity(GameProfile profile) {
-		this(profile, MinecraftClient.getInstance().player.x,
-				MinecraftClient.getInstance().player.y, MinecraftClient.getInstance().player.z);
+		this(profile, MinecraftClient.getInstance().player.x, MinecraftClient.getInstance().player.y, MinecraftClient.getInstance().player.z);
 	}
 
 	public PlayerCopyEntity(GameProfile profile, double x, double y, double z) {

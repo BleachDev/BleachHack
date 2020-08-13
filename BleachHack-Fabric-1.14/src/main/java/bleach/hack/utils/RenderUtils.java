@@ -44,20 +44,16 @@ public class RenderUtils {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBufferBuilder();
 		buffer.begin(5, VertexFormats.POSITION_COLOR);
-		WorldRenderer.buildBox(buffer,
-				box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
-				box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z, r, g, b, a/2f);
+		WorldRenderer.buildBox(buffer, box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z, box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z, r, g, b, a / 2f);
 		tessellator.draw();
 
 		/* Outline */
-		WorldRenderer.drawBoxOutline(new Box(
-				box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
-				box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z), r, g, b, a);
+		WorldRenderer.drawBoxOutline(new Box(box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z, box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z), r, g, b, a);
 
 		gl11Cleanup();
 	}
 
-	public static void drawLine(double x1,double y1,double z1,double x2,double y2,double z2, float r, float g, float b, float t) {
+	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float t) {
 		gl11Setup();
 		GL11.glLineWidth(t);
 

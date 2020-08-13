@@ -46,7 +46,8 @@ public class MixinClientConnection {
 	private Channel channel;
 
 	@Shadow
-	private void sendImmediately(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1) {}
+	private void sendImmediately(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1) {
+	}
 
 	@Inject(method = "method_10770", at = @At("HEAD"), cancellable = true)
 	public void IchannelRead0(ChannelHandlerContext channelHandlerContext_1, Packet<?> packet_1, CallbackInfo callback) {
@@ -54,8 +55,10 @@ public class MixinClientConnection {
 			try {
 				EventReadPacket event = new EventReadPacket(packet_1);
 				BleachHack.eventBus.post(event);
-				if (event.isCancelled()) callback.cancel();
-			} catch (Exception exception) {}
+				if (event.isCancelled())
+					callback.cancel();
+			} catch (Exception exception) {
+			}
 		}
 	}
 
@@ -72,13 +75,15 @@ public class MixinClientConnection {
 		EventSendPacket event = new EventSendPacket(packet_1);
 		BleachHack.eventBus.post(event);
 
-		if (event.isCancelled()) callback.cancel();
+		if (event.isCancelled())
+			callback.cancel();
 	}
 
 	// Packet kick blocc
 	@Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
 	public void exceptionCaught(ChannelHandlerContext channelHandlerContext_1, Throwable throwable_1, CallbackInfo callback) {
-		if (!ModuleManager.getModule(AntiChunkBan.class).isToggled()) return;
+		if (!ModuleManager.getModule(AntiChunkBan.class).isToggled())
+			return;
 
 		if (!(throwable_1 instanceof PacketEncoderException)) {
 			BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);

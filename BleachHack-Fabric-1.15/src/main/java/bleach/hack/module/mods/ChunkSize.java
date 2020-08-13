@@ -81,14 +81,19 @@ public class ChunkSize extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (System.currentTimeMillis() - 1500 < timer) return;
+		if (System.currentTimeMillis() - 1500 < timer)
+			return;
 		timer = System.currentTimeMillis();
 
-		if (mc.world.getWorldChunk(mc.player.getBlockPos()) == null) return;
+		if (mc.world.getWorldChunk(mc.player.getBlockPos()) == null)
+			return;
 		new Thread(() -> {
 			CompoundTag tag = serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
 			DataOutputStream output = new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
-			try { NbtIo.writeCompressed(tag, output); } catch (IOException e) {}
+			try {
+				NbtIo.writeCompressed(tag, output);
+			} catch (IOException e) {
+			}
 			size = output.size();
 		}).start();
 	}
@@ -115,7 +120,7 @@ public class ChunkSize extends Module {
 		boolean boolean_1 = chunk_1.isLightOn();
 
 		CompoundTag compoundTag_6;
-		for (Integer int_1: IntStream.range(-1, 17).boxed().collect(Collectors.toList())) {
+		for (Integer int_1 : IntStream.range(-1, 17).boxed().collect(Collectors.toList())) {
 			ChunkSection chunkSection_1 = Arrays.stream(chunkSections_1).filter(chunkSection_1x -> {
 				return chunkSection_1x != null && chunkSection_1x.getYOffset() >> 4 == int_1;
 			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
@@ -123,7 +128,7 @@ public class ChunkSize extends Module {
 			ChunkNibbleArray chunkNibbleArray_2 = lightingProvider_1.get(LightType.SKY).getLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
 			if (chunkSection_1 != WorldChunk.EMPTY_SECTION || chunkNibbleArray_1 != null || chunkNibbleArray_2 != null) {
 				compoundTag_6 = new CompoundTag();
-				compoundTag_6.putByte("Y", (byte)(int_1 & 255));
+				compoundTag_6.putByte("Y", (byte) (int_1 & 255));
 				if (chunkSection_1 != WorldChunk.EMPTY_SECTION) {
 					chunkSection_1.getContainer().write(compoundTag_6, "Palette", "BlockStates");
 				}
@@ -157,7 +162,7 @@ public class ChunkSize extends Module {
 		ListTag listTag_2 = new ListTag();
 		Iterator<BlockPos> var23 = chunk_1.getBlockEntityPositions().iterator();
 
-		while(var23.hasNext()) {
+		while (var23.hasNext()) {
 			BlockPos blockPos_1 = var23.next();
 			compoundTag_6 = chunk_1.method_20598(blockPos_1);
 			if (compoundTag_6 != null) {
@@ -168,13 +173,13 @@ public class ChunkSize extends Module {
 		compoundTag_2.put("TileEntities", listTag_2);
 		ListTag listTag_3 = new ListTag();
 		if (chunk_1.getStatus().getChunkType() == ChunkStatus.ChunkType.LEVELCHUNK) {
-			WorldChunk worldChunk_1 = (WorldChunk)chunk_1;
+			WorldChunk worldChunk_1 = (WorldChunk) chunk_1;
 			worldChunk_1.setUnsaved(false);
 
 			for (int int_4 = 0; int_4 < worldChunk_1.getEntitySectionArray().length; ++int_4) {
 				Iterator<Entity> var16 = worldChunk_1.getEntitySectionArray()[int_4].iterator();
 
-				while(var16.hasNext()) {
+				while (var16.hasNext()) {
 					Entity entity_1 = var16.next();
 					CompoundTag compoundTag_5 = new CompoundTag();
 					if (entity_1.saveToTag(compoundTag_5)) {
@@ -184,7 +189,7 @@ public class ChunkSize extends Module {
 				}
 			}
 		} else {
-			ProtoChunk protoChunk_1 = (ProtoChunk)chunk_1;
+			ProtoChunk protoChunk_1 = (ProtoChunk) chunk_1;
 			listTag_3.addAll(protoChunk_1.getEntities());
 			compoundTag_2.put("Lights", ChunkSerializer.toNbt(protoChunk_1.getLightSourcesBySection()));
 			compoundTag_6 = new CompoundTag();
@@ -202,23 +207,23 @@ public class ChunkSize extends Module {
 		compoundTag_2.put("Entities", listTag_3);
 		TickScheduler<Block> tickScheduler_1 = chunk_1.getBlockTickScheduler();
 		if (tickScheduler_1 instanceof ChunkTickScheduler) {
-			compoundTag_2.put("ToBeTicked", ((ChunkTickScheduler<?>)tickScheduler_1).toNbt());
+			compoundTag_2.put("ToBeTicked", ((ChunkTickScheduler<?>) tickScheduler_1).toNbt());
 		} else if (tickScheduler_1 instanceof SimpleTickScheduler) {
-			compoundTag_2.put("TileTicks", ((SimpleTickScheduler<?>)tickScheduler_1).toNbt(serverWorld_1.getTime()));
+			compoundTag_2.put("TileTicks", ((SimpleTickScheduler<?>) tickScheduler_1).toNbt(serverWorld_1.getTime()));
 		}
 
 		TickScheduler<Fluid> tickScheduler_2 = chunk_1.getFluidTickScheduler();
 		if (tickScheduler_2 instanceof ChunkTickScheduler) {
-			compoundTag_2.put("LiquidsToBeTicked", ((ChunkTickScheduler<?>)tickScheduler_2).toNbt());
+			compoundTag_2.put("LiquidsToBeTicked", ((ChunkTickScheduler<?>) tickScheduler_2).toNbt());
 		} else if (tickScheduler_2 instanceof SimpleTickScheduler) {
-			compoundTag_2.put("LiquidTicks", ((SimpleTickScheduler<?>)tickScheduler_2).toNbt(serverWorld_1.getTime()));
+			compoundTag_2.put("LiquidTicks", ((SimpleTickScheduler<?>) tickScheduler_2).toNbt(serverWorld_1.getTime()));
 		}
 
 		compoundTag_2.put("PostProcessing", ChunkSerializer.toNbt(chunk_1.getPostProcessingLists()));
 		CompoundTag compoundTag_7 = new CompoundTag();
 		Iterator<Entry<Type, Heightmap>> var34 = chunk_1.getHeightmaps().iterator();
 
-		while(var34.hasNext()) {
+		while (var34.hasNext()) {
 			Entry<Heightmap.Type, Heightmap> map$Entry_1 = var34.next();
 			if (chunk_1.getStatus().getHeightmapTypes().contains(map$Entry_1.getKey())) {
 				compoundTag_7.put(map$Entry_1.getKey().getName(), new LongArrayTag(map$Entry_1.getValue().asLongArray()));
@@ -226,7 +231,8 @@ public class ChunkSize extends Module {
 		}
 
 		compoundTag_2.put("Heightmaps", compoundTag_7);
-		//compoundTag_2.put("Structures", writeStructures(chunkPos_1, chunk_1.getStructureStarts(), chunk_1.getStructureReferences()));
+		// compoundTag_2.put("Structures", writeStructures(chunkPos_1,
+		// chunk_1.getStructureStarts(), chunk_1.getStructureReferences()));
 		return compoundTag_1;
 	}
 }

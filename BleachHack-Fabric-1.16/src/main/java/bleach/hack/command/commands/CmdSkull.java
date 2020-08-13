@@ -51,8 +51,7 @@ public class CmdSkull extends Command {
 			item.setTag(StringNbtReader.parse("{SkullOwner:{Name:\"" + args[0] + "\"}}"));
 		} else if (args[0].equalsIgnoreCase("img")) {
 			CompoundTag tag = StringNbtReader.parse("{SkullOwner:{Id:\"" + UUID.randomUUID() + "\",Properties:{textures:[{Value:\""
-					+ Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + args[1] + "\"}}}").getBytes())
-					+ "\"}]}}}");
+					+ Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + args[1] + "\"}}}").getBytes()) + "\"}]}}}");
 			item.setTag(tag);
 			System.out.println(tag);
 		}

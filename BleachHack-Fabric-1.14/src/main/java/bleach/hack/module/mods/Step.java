@@ -32,8 +32,7 @@ public class Step extends Module {
 	private double pos;
 
 	public Step() {
-		super("Step", KEY_UNBOUND, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
-				new SettingMode("Mode", "Simple", "Spider", "Jump"));
+		super("Step", KEY_UNBOUND, Category.MOVEMENT, "Allows you to Run up blocks like stairs.", new SettingMode("Mode", "Simple", "Spider", "Jump"));
 	}
 
 	@Override
@@ -44,8 +43,8 @@ public class Step extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (!WorldUtils.NONSOLID_BLOCKS.contains(
-				mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight()+1, 0)).getBlock())) return;
+		if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight() + 1, 0)).getBlock()))
+			return;
 
 		if (getSetting(0).asMode().mode == 0) {
 			mc.player.stepHeight = 1.065F;
@@ -60,7 +59,8 @@ public class Step extends Module {
 				flag = true;
 			}
 
-			if (!mc.player.horizontalCollision) flag = false;
+			if (!mc.player.horizontalCollision)
+				flag = false;
 
 		} else if (getSetting(0).asMode().mode == 2) {
 

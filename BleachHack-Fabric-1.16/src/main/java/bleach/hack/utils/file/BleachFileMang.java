@@ -34,7 +34,8 @@ public class BleachFileMang {
 
 	public static void init() {
 		dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/");
-		if (!dir.toFile().exists()) dir.toFile().mkdirs();
+		if (!dir.toFile().exists())
+			dir.toFile().mkdirs();
 	}
 
 	/** Gets the bleach directory in your minecraft folder. **/
@@ -59,7 +60,8 @@ public class BleachFileMang {
 	/** Creates a file, doesn't do anything if the file already exists. **/
 	public static void createFile(String... file) {
 		try {
-			if (fileExists(file)) return;
+			if (fileExists(file))
+				return;
 			dir.toFile().mkdirs();
 			Files.createFile(stringsToPath(file));
 		} catch (Exception e) {
@@ -87,10 +89,7 @@ public class BleachFileMang {
 		try {
 			String fileContent = new String(Files.readAllBytes(stringsToPath(file)));
 			FileWriter writer = new FileWriter(stringsToPath(file).toFile(), true);
-			writer.write(
-					(fileContent.endsWith("\n") || !fileContent.contains("\n") ? "" : "\n")
-					+ content
-					+ (content.endsWith("\n") ? "" : "\n"));
+			writer.write((fileContent.endsWith("\n") || !fileContent.contains("\n") ? "" : "\n") + content + (content.endsWith("\n") ? "" : "\n"));
 			writer.close();
 		} catch (Exception e) {
 			System.out.println("Error Appending File: " + Arrays.toString(file));
@@ -117,10 +116,14 @@ public class BleachFileMang {
 		}
 	}
 
-	/** Gets a file by walking down all of the parameters (starts at .minecraft/bleach/). **/
+	/**
+	 * Gets a file by walking down all of the parameters (starts at
+	 * .minecraft/bleach/).
+	 **/
 	public static Path stringsToPath(String... strings) {
 		Path path = dir;
-		for (String s: strings) path = path.resolve(s);
+		for (String s : strings)
+			path = path.resolve(s);
 		return path;
 	}
 

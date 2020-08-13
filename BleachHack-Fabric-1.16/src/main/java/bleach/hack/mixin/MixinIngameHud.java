@@ -36,12 +36,13 @@ public class MixinIngameHud {
 	public void render(MatrixStack matrixStack, float float_1, CallbackInfo info) {
 		EventDrawOverlay event = new EventDrawOverlay(matrixStack);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
+		if (event.isCancelled())
+			info.cancel();
 	}
 
 	@Inject(at = @At("HEAD"), method = "renderPumpkinOverlay()V", cancellable = true)
 	private void onRenderPumpkinOverlay(CallbackInfo ci) {
-		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(4).asToggle().state)
+		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(4).asToggle().state)
 			ci.cancel();
 	}
 }

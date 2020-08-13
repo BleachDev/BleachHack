@@ -19,10 +19,10 @@ public class MountBypass extends Module {
 
 	@Subscribe
 	public void onPacket(EventSendPacket event) {
-		if (dontCancel) return;
+		if (dontCancel)
+			return;
 
-		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket
-				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getType() == InteractionType.INTERACT_AT
+		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket && ((PlayerInteractEntityC2SPacket) event.getPacket()).getType() == InteractionType.INTERACT_AT
 				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getEntity(mc.world) instanceof AbstractDonkeyEntity) {
 			event.setCancelled(true);
 		}

@@ -49,8 +49,10 @@ public class CleanUpScreen extends Screen {
 	public void init() {
 		try {
 			serverList = serverScreen.getServerList();
-			for (int i = 0; i < serverList.size(); i++) servers.add(serverList.get(i));
-		} catch (Exception e) {}
+			for (int i = 0; i < serverList.size(); i++)
+				servers.add(serverList.get(i));
+		} catch (Exception e) {
+		}
 
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 - 32, 200, 20, "Unknown Host", button -> {
 			cleanNoHost = !cleanNoHost;
@@ -65,17 +67,19 @@ public class CleanUpScreen extends Screen {
 			cleanAll = !cleanAll;
 		}));
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, "Clean", button -> {
-			for (ServerInfo s: servers) {
+			for (ServerInfo s : servers) {
 				try {
-					if (s.label == null) s.label = "";
-					if ((cleanNoHost && s.label.contains("Can't resolve hostname")) ||
-							(cleanVersion && s.protocolVersion < SharedConstants.getGameVersion().getProtocolVersion()) ||
-							(cleanNoPing && (s.label.contains("Pinging...") || s.label.contains("Can't connect to server"))) ||
-							cleanAll) {
+					if (s.label == null)
+						s.label = "";
+					if ((cleanNoHost && s.label.contains("Can't resolve hostname"))
+							|| (cleanVersion && s.protocolVersion < SharedConstants.getGameVersion().getProtocolVersion())
+							|| (cleanNoPing && (s.label.contains("Pinging...") || s.label.contains("Can't connect to server"))) || cleanAll) {
 						serverList.remove(s);
 						serverList.saveFile();
 					}
-				} catch (Exception e) {e.printStackTrace();}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			result = "§aFinished";
 		}));

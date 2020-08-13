@@ -84,9 +84,8 @@ public class Surround extends Module {
 		int cap = 0;
 
 		if (getSetting(0).asMode().mode == 0) {
-			for (BlockPos b: new BlockPos[] {
-					mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
-					mc.player.getBlockPos().south(), mc.player.getBlockPos().west()}) {
+			for (BlockPos b : new BlockPos[] { mc.player.getBlockPos().north(), mc.player.getBlockPos().east(), mc.player.getBlockPos().south(),
+					mc.player.getBlockPos().west() }) {
 
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;
@@ -102,11 +101,9 @@ public class Surround extends Module {
 			}
 		} else {
 			Box box = mc.player.getBoundingBox();
-			for (BlockPos b: Sets.newHashSet(
-					new BlockPos(box.x1 - 1, box.y1, box.z1), new BlockPos(box.x1, box.y1, box.z1 - 1),
-					new BlockPos(box.x2 + 1, box.y1, box.z1), new BlockPos(box.x2, box.y1, box.z1 - 1),
-					new BlockPos(box.x1 - 1, box.y1, box.z2), new BlockPos(box.x1, box.y1, box.z2 + 1),
-					new BlockPos(box.x2 + 1, box.y1, box.z2), new BlockPos(box.x2, box.y1, box.z2 + 1))) {
+			for (BlockPos b : Sets.newHashSet(new BlockPos(box.x1 - 1, box.y1, box.z1), new BlockPos(box.x1, box.y1, box.z1 - 1),
+					new BlockPos(box.x2 + 1, box.y1, box.z1), new BlockPos(box.x2, box.y1, box.z1 - 1), new BlockPos(box.x1 - 1, box.y1, box.z2),
+					new BlockPos(box.x1, box.y1, box.z2 + 1), new BlockPos(box.x2 + 1, box.y1, box.z2), new BlockPos(box.x2, box.y1, box.z2 + 1))) {
 
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;

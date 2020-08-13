@@ -47,50 +47,44 @@ public class Killaura extends Module {
 	private int delay = 0;
 
 	public Killaura() {
-		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities",
-				new SettingToggle("Players", true),
-				new SettingToggle("Mobs", true),
-				new SettingToggle("Animals", false),
-				new SettingToggle("Armor Stands", false),
-				new SettingRotate(true),
-				new SettingToggle("Thru Walls", false),
-				new SettingToggle("1.9 Delay", false),
-				new SettingSlider("Range", 0, 6, 4.25, 2),
-				new SettingSlider("CPS", 0, 20, 8, 0));
+		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities", new SettingToggle("Players", true), new SettingToggle("Mobs", true),
+				new SettingToggle("Animals", false), new SettingToggle("Armor Stands", false), new SettingRotate(true), new SettingToggle("Thru Walls", false),
+				new SettingToggle("1.9 Delay", false), new SettingSlider("Range", 0, 6, 4.25, 2), new SettingSlider("CPS", 0, 20, 8, 0));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
 		delay++;
-		int reqDelay = (int) Math.round(20/getSetting(8).asSlider().getValue());
+		int reqDelay = (int) Math.round(20 / getSetting(8).asSlider().getValue());
 
 		List<Entity> targets = Streams.stream(mc.world.getEntities())
-				.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state
-						&& !BleachHack.friendMang.has(e.getName().asString()))
-						|| (e instanceof Monster && getSetting(1).asToggle().state)
-						|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state)
+				.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state && !BleachHack.friendMang.has(e.getName().asString()))
+						|| (e instanceof Monster && getSetting(1).asToggle().state) || (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state)
 						|| (e instanceof ArmorStandEntity && getSetting(3).asToggle().state))
 				.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
 
-		for (Entity e: targets) {
-			if (mc.player.distanceTo(e) > getSetting(7).asSlider().getValue()
-					|| ((LivingEntity)e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
-					|| (!mc.player.canSee(e) && !getSetting(5).asToggle().state)) continue;
+		for (Entity e : targets) {
+			if (mc.player.distanceTo(e) > getSetting(7).asSlider().getValue() || ((LivingEntity) e).getHealth() <= 0
+					|| e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
+					|| (!mc.player.canSee(e) && !getSetting(5).asToggle().state))
+				continue;
 
 			if (getSetting(4).asRotate().state) {
-				WorldUtils.facePosAuto(e.x, e.y + e.getHeight()/2, e.z, getSetting(4).asRotate());
+				WorldUtils.facePosAuto(e.x, e.y + e.getHeight() / 2, e.z, getSetting(4).asRotate());
 			}
 
-			if (((delay > reqDelay || reqDelay == 0) && !getSetting(6).asToggle().state) ||
-					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSetting(6).asToggle().state)) {
+			if (((delay > reqDelay || reqDelay == 0) && !getSetting(6).asToggle().state)
+					|| (mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSetting(6).asToggle().state)) {
 				boolean wasSprinting = mc.player.isSprinting();
 
-				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
+				if (wasSprinting)
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
 
 				mc.interactionManager.attackEntity(mc.player, e);
 				mc.player.swingHand(Hand.MAIN_HAND);
 
-				if (wasSprinting) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+				if (wasSprinting)
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
 
 				delay = 0;
 			}

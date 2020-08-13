@@ -83,6 +83,7 @@ public abstract class SettingBase {
 	public abstract int getHeight(int len);
 
 	public abstract void readSettings(JsonElement settings);
+
 	public abstract JsonElement saveSettings();
 
 	public abstract boolean isDefault();

@@ -45,11 +45,10 @@ public class Peek extends Module {
 
 	public Peek() {
 		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
-				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers").withChildren(
-						new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
-				new SettingToggle("Books", true).withDesc("Show tooltips for books"),
-				new SettingToggle("Maps", true).withDesc("Show tooltips for maps").withChildren(
-						new SettingSlider("Map Size", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
+				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers")
+						.withChildren(new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
+				new SettingToggle("Books", true).withDesc("Show tooltips for books"), new SettingToggle("Maps", true).withDesc("Show tooltips for maps")
+						.withChildren(new SettingSlider("Map Size", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
 	}
 
 	@Subscribe
@@ -59,45 +58,52 @@ public class Peek extends Module {
 		}
 
 		Slot slot = (Slot) FabricReflect.getFieldValue(event.screen, "field_2787", "focusedSlot");
-		if (slot == null) return;
+		if (slot == null)
+			return;
 
-		if (!Arrays.equals(new int[] {slot.xPosition, slot.yPosition}, slotPos)) {
+		if (!Arrays.equals(new int[] { slot.xPosition, slot.yPosition }, slotPos)) {
 			pageCount = 0;
 			pages = null;
 		}
 
-		slotPos = new int[] {slot.xPosition, slot.yPosition};
+		slotPos = new int[] { slot.xPosition, slot.yPosition };
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0f, 0f, 500f);
 
-		if (getSetting(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
-		if (getSetting(1).asToggle().state) drawBookToolTip(slot, event.mX, event.mY);
-		if (getSetting(2).asToggle().state) drawMapToolTip(slot, event.mX, event.mY);
+		if (getSetting(0).asToggle().state)
+			drawShulkerToolTip(event, slot, event.mX, event.mY);
+		if (getSetting(1).asToggle().state)
+			drawBookToolTip(slot, event.mX, event.mY);
+		if (getSetting(2).asToggle().state)
+			drawMapToolTip(slot, event.mX, event.mY);
 
 		GL11.glPopMatrix();
 	}
 
 	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mX, int mY) {
-		if (!(slot.getStack().getItem() instanceof BlockItem)) return;
+		if (!(slot.getStack().getItem() instanceof BlockItem))
+			return;
 		if (!(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
 				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ChestBlock)
 				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof BarrelBlock)
 				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof DispenserBlock)
 				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof HopperBlock)
-				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof AbstractFurnaceBlock)) return;
+				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof AbstractFurnaceBlock))
+			return;
 
 		List<ItemStack> items = ItemContentUtils.getItemsInContainer(slot.getStack());
 
 		boolean empty = true;
-		for (ItemStack i: items) {
+		for (ItemStack i : items) {
 			if (i.getItem() != Items.AIR) {
 				empty = false;
 				break;
 			}
 		}
 
-		if (empty) return;
+		if (empty)
+			return;
 
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 
@@ -121,8 +127,9 @@ public class Peek extends Module {
 			renderTooltipBox(mX, realY - 55, 47, 150, true);
 		}
 
-		for (ItemStack i: items) {
-			if (count > 26) break;
+		for (ItemStack i : items) {
+			if (count > 26)
+				break;
 			int x = mX + 10 + (17 * (count % 9));
 			int y = realY - 69 + (17 * (count / 9));
 
@@ -133,27 +140,32 @@ public class Peek extends Module {
 	}
 
 	public void drawBookToolTip(Slot slot, int mX, int mY) {
-		if (slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK) return;
+		if (slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK)
+			return;
 
-		if (pages == null) pages = ItemContentUtils.getTextInBook(slot.getStack());
-		if (pages.isEmpty()) return;
+		if (pages == null)
+			pages = ItemContentUtils.getTextInBook(slot.getStack());
+		if (pages.isEmpty())
+			return;
 
 		/* Cycle through pages */
 		if (mc.player.age % 80 == 0 && !shown) {
 			shown = true;
-			if (pageCount == pages.size() - 1) pageCount = 0;
-			else pageCount++;
-		} else if (mc.player.age % 80 != 0) shown = false;
+			if (pageCount == pages.size() - 1)
+				pageCount = 0;
+			else
+				pageCount++;
+		} else if (mc.player.age % 80 != 0)
+			shown = false;
 
 		int length = mc.textRenderer.getStringWidth("Page: " + (pageCount + 1) + "/" + pages.size());
 
 		renderTooltipBox(mX + 56 - length / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, length, true);
 		renderTooltipBox(mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
-		mc.textRenderer.drawWithShadow("Page: " + (pageCount + 1) + "/" + pages.size(),
-				mX + 68 - length / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
+		mc.textRenderer.drawWithShadow("Page: " + (pageCount + 1) + "/" + pages.size(), mX + 68 - length / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
 
 		int count = 0;
-		for (String s: pages.get(pageCount)) {
+		for (String s : pages.get(pageCount)) {
 			mc.textRenderer.drawWithShadow(s, mX + 12, mY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
 			count++;
 		}
@@ -161,10 +173,12 @@ public class Peek extends Module {
 	}
 
 	public void drawMapToolTip(Slot slot, int mX, int mY) {
-		if (slot.getStack().getItem() != Items.FILLED_MAP) return;
+		if (slot.getStack().getItem() != Items.FILLED_MAP)
+			return;
 
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
-		if (data == null || data.colors == null) return;
+		if (data == null || data.colors == null)
+			return;
 
 		byte[] colors = data.colors;
 
@@ -173,16 +187,20 @@ public class Peek extends Module {
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
 		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
-		int x = (int) (mX*(1/size) + 12*(1/size));
-		int y = (int) (mY*(1/size) - 12*(1/size) - 140);
+		int x = (int) (mX * (1 / size) + 12 * (1 / size));
+		int y = (int) (mY * (1 / size) - 12 * (1 / size) - 140);
 
 		renderTooltipBox(x - 12, y + 12, 128, 128, false);
-		for (byte c: colors) {
+		for (byte c : colors) {
 			int c1 = c & 255;
 
-			if (c1 / 4 != 0) DrawableHelper.fill(x, y, x+1, y+1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
-			if (x - (int) (mX*(1/size)+12*(1/size)) == 127) { x = (int) (mX*(1/size)+12*(1/size)); y++; }
-			else x++;
+			if (c1 / 4 != 0)
+				DrawableHelper.fill(x, y, x + 1, y + 1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
+			if (x - (int) (mX * (1 / size) + 12 * (1 / size)) == 127) {
+				x = (int) (mX * (1 / size) + 12 * (1 / size));
+				y++;
+			} else
+				x++;
 		}
 
 		GL11.glPopMatrix();
@@ -202,8 +220,10 @@ public class Peek extends Module {
 		int int_5 = x1 + 12;
 		int int_6 = y1 - 12;
 		if (wrap) {
-			if (int_5 + y2 > mc.currentScreen.width) int_5 -= 28 + y2;
-			if (int_6 + x2 + 6 > mc.currentScreen.height) int_6 = mc.currentScreen.height - x2 - 6;
+			if (int_5 + y2 > mc.currentScreen.width)
+				int_5 -= 28 + y2;
+			if (int_6 + x2 + 6 > mc.currentScreen.height)
+				int_6 = mc.currentScreen.height - x2 - 6;
 		}
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);

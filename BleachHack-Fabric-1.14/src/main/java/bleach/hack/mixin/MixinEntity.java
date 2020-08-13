@@ -13,9 +13,7 @@ import net.minecraft.entity.Entity;
 @Mixin(Entity.class)
 public class MixinEntity {
 
-	@Redirect(
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isSneaking()Z", opcode = Opcodes.INVOKEVIRTUAL, ordinal = 0),
-			method = "clipSneakingMovement(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;")
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isSneaking()Z", opcode = Opcodes.INVOKEVIRTUAL, ordinal = 0), method = "clipSneakingMovement(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;")
 	private boolean isSneaking(Entity entity) {
 		return entity.isSneaking() || ModuleManager.getModule(SafeWalk.class).isToggled()
 				|| (ModuleManager.getModule(Scaffold.class).isToggled() && ModuleManager.getModule(Scaffold.class).getSetting(3).asToggle().state);

@@ -65,7 +65,7 @@ public class ProtocolScreen extends Screen {
 		targetField.setText(SharedConstants.getGameVersion().getReleaseTarget());
 		packVerField = new TextFieldWidget(font, width / 2 - 98, height / 2 + 15, 196, 18, "");
 		packVerField.setText(SharedConstants.getGameVersion().getPackVersion() + "");
-		//ipField.changeFocus(true);
+		// ipField.changeFocus(true);
 	}
 
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
@@ -95,18 +95,26 @@ public class ProtocolScreen extends Screen {
 	}
 
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
-		if (nameField.isFocused()) nameField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		if (protocolField.isFocused()) protocolField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		if (targetField.isFocused()) targetField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		if (packVerField.isFocused()) packVerField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (nameField.isFocused())
+			nameField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (protocolField.isFocused())
+			protocolField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (targetField.isFocused())
+			targetField.charTyped(p_charTyped_1_, p_charTyped_2_);
+		if (packVerField.isFocused())
+			packVerField.charTyped(p_charTyped_1_, p_charTyped_2_);
 		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
 	}
 
 	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-		if (nameField.isFocused()) nameField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		if (protocolField.isFocused()) protocolField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		if (targetField.isFocused()) targetField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		if (packVerField.isFocused()) packVerField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (nameField.isFocused())
+			nameField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (protocolField.isFocused())
+			protocolField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (targetField.isFocused())
+			targetField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		if (packVerField.isFocused())
+			packVerField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 	}
 

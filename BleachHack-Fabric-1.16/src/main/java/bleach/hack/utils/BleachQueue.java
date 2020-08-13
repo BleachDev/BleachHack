@@ -46,15 +46,19 @@ public class BleachQueue {
 
 	public static void nextQueue() {
 		if (!queue.isEmpty()) {
-			if (queue.getFirst() != null) queue.poll().run();
-			else queue.poll();
+			if (queue.getFirst() != null)
+				queue.poll().run();
+			else
+				queue.poll();
 		}
 
-		for (Entry<String, Deque<Runnable>> e: new HashMap<>(specialQueues).entrySet()) {
+		for (Entry<String, Deque<Runnable>> e : new HashMap<>(specialQueues).entrySet()) {
 			Deque<Runnable> deque = specialQueues.get(e.getKey());
 
-			if (deque.getFirst() != null) deque.poll().run();
-			else deque.poll();
+			if (deque.getFirst() != null)
+				deque.poll().run();
+			else
+				deque.poll();
 
 			if (deque.isEmpty()) {
 				specialQueues.remove(e.getKey());

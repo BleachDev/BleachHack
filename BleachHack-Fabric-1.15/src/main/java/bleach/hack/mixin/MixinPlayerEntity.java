@@ -24,7 +24,8 @@ import net.minecraft.world.World;
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity extends LivingEntity {
 
-	@Shadow public PlayerInventory inventory;
+	@Shadow
+	public PlayerInventory inventory;
 
 	protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType_1, World world_1) {
 		super(entityType_1, world_1);
@@ -51,7 +52,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 			if (!mod.getSetting(4).asToggle().state) {
 				if (this.hasStatusEffect(StatusEffects.MINING_FATIGUE)) {
 					float float_5;
-					switch(this.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
+					switch (this.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
 						case 0:
 							float_5 = 0.3F;
 							break;
@@ -80,7 +81,8 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				}
 			}
 
-			if (mod.getSetting(0).asMode().mode == 1) float_1 *= (float) mod.getSetting(3).asSlider().getValue();
+			if (mod.getSetting(0).asMode().mode == 1)
+				float_1 *= (float) mod.getSetting(3).asSlider().getValue();
 
 			ci.setReturnValue(float_1);
 			ci.cancel();

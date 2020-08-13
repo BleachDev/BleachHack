@@ -30,9 +30,12 @@ public class BleachGithubReader {
 	private static URI url;
 
 	static {
-		//why java, why do i have to use a static block to set a varable, theres nothing wrong with that url
-		try { url = new URI("https://raw.githubusercontent.com/BleachDrinker420/bleachhack-1.14/master/online/");
-		} catch (URISyntaxException e) {}
+		// why java, why do i have to use a static block to set a varable, theres
+		// nothing wrong with that url
+		try {
+			url = new URI("https://raw.githubusercontent.com/BleachDrinker420/bleachhack-1.14/master/online/");
+		} catch (URISyntaxException e) {
+		}
 	}
 
 	public static List<String> readFileLines(String file) {
@@ -40,9 +43,11 @@ public class BleachGithubReader {
 		try {
 			URL fileUrl = url.resolve(file).toURL();
 			Scanner sc = new Scanner(fileUrl.openStream());
-			while(sc.hasNextLine()) st.add(sc.nextLine());
+			while (sc.hasNextLine())
+				st.add(sc.nextLine());
 			sc.close();
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		}
 		return st;
 	}
 }

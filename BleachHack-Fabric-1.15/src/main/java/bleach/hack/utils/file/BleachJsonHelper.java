@@ -58,7 +58,8 @@ public class BleachJsonHelper {
 	public static JsonElement readJsonElement(String key, String... path) {
 		JsonObject jo = readJsonFile(path);
 
-		if (jo == null) return null;
+		if (jo == null)
+			return null;
 
 		if (jo.has(key)) {
 			return jo.get(key);
@@ -70,7 +71,8 @@ public class BleachJsonHelper {
 	public static JsonObject readJsonFile(String... path) {
 		List<String> lines = BleachFileMang.readFileLines(path);
 
-		if (lines.isEmpty()) return null;
+		if (lines.isEmpty())
+			return null;
 
 		String merged = String.join("\n", lines);
 

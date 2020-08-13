@@ -39,16 +39,15 @@ public class Flight extends Module {
 	private boolean flyTick = false;
 
 	public Flight() {
-		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
-				new SettingMode("Mode", "Normal","Static","Jetpack", "ec.me"),
-				new SettingSlider("Speed", 0, 5, 1, 1),
-				new SettingMode("AntiKick", "Off","Fall","Bob","Packet"));
+		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly", new SettingMode("Mode", "Normal", "Static", "Jetpack", "ec.me"),
+				new SettingSlider("Speed", 0, 5, 1, 1), new SettingMode("AntiKick", "Off", "Fall", "Bob", "Packet"));
 	}
 
 	@Override
 	public void onDisable() {
 		super.onDisable();
-		if (!mc.player.abilities.creativeMode) mc.player.abilities.allowFlying = false;
+		if (!mc.player.abilities.creativeMode)
+			mc.player.abilities.allowFlying = false;
 		mc.player.abilities.flying = false;
 	}
 
@@ -66,21 +65,46 @@ public class Flight extends Module {
 			mc.player.abilities.allowFlying = true;
 			mc.player.abilities.flying = true;
 		} else if (getSetting(0).asMode().mode == 1) {
-			if (getSetting(2).asMode().mode == 0 || getSetting(2).asMode().mode == 3) mc.player.setVelocity(0, 0, 0);
-			else if (getSetting(2).asMode().mode == 1 && WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.069, mc.player.getPos().getZ())).getBlock())) mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
-			else if (getSetting(2).asMode().mode == 2) mc.player.setVelocity(0, mc.player.age % 40 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() + 1.15, mc.player.getPos().getZ())).getBlock()) ? 0.15 : 0) : mc.player.age % 20 == 0 ? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.15, mc.player.getPos().getZ())).getBlock()) ? -0.15 : 0) : 0, 0);
+			if (getSetting(2).asMode().mode == 0 || getSetting(2).asMode().mode == 3)
+				mc.player.setVelocity(0, 0, 0);
+			else if (getSetting(2).asMode().mode == 1 && WorldUtils.NONSOLID_BLOCKS
+					.contains(mc.world.getBlockState(new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.069, mc.player.getPos().getZ())).getBlock()))
+				mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
+			else if (getSetting(2).asMode().mode == 2)
+				mc.player
+						.setVelocity(0,
+								mc.player.age % 40 == 0
+										? (WorldUtils.NONSOLID_BLOCKS
+												.contains(mc.world
+														.getBlockState(
+																new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() + 1.15, mc.player.getPos().getZ()))
+														.getBlock()) ? 0.15 : 0)
+										: mc.player.age % 20 == 0
+												? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world
+														.getBlockState(
+																new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.15, mc.player.getPos().getZ()))
+														.getBlock()) ? -0.15 : 0)
+												: 0,
+								0);
 			Vec3d forward = new Vec3d(0, 0, speed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 
-			if (mc.options.keyJump.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, speed, 0));
-			if (mc.options.keySneak.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(0, -speed, 0));
-			if (mc.options.keyBack.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(-forward.x, 0, -forward.z));
-			if (mc.options.keyForward.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(forward.x, 0, forward.z));
-			if (mc.options.keyLeft.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(strafe.x, 0, strafe.z));
-			if (mc.options.keyRight.isPressed()) mc.player.setVelocity(mc.player.getVelocity().add(-strafe.x, 0, -strafe.z));
+			if (mc.options.keyJump.isPressed())
+				mc.player.setVelocity(mc.player.getVelocity().add(0, speed, 0));
+			if (mc.options.keySneak.isPressed())
+				mc.player.setVelocity(mc.player.getVelocity().add(0, -speed, 0));
+			if (mc.options.keyBack.isPressed())
+				mc.player.setVelocity(mc.player.getVelocity().add(-forward.x, 0, -forward.z));
+			if (mc.options.keyForward.isPressed())
+				mc.player.setVelocity(mc.player.getVelocity().add(forward.x, 0, forward.z));
+			if (mc.options.keyLeft.isPressed())
+				mc.player.setVelocity(mc.player.getVelocity().add(strafe.x, 0, strafe.z));
+			if (mc.options.keyRight.isPressed())
+				mc.player.setVelocity(mc.player.getVelocity().add(-strafe.x, 0, -strafe.z));
 
 		} else if (getSetting(0).asMode().mode == 2) {
-			if (!mc.options.keyJump.isPressed()) return;
+			if (!mc.options.keyJump.isPressed())
+				return;
 			mc.player.setVelocity(mc.player.getVelocity().x, speed / 3, mc.player.getVelocity().z);
 		} else if (getSetting(0).asMode().mode == 3) {
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
@@ -97,7 +121,7 @@ public class Flight extends Module {
 	public void onSendPacket(EventSendPacket event) {
 		if (getSetting(0).asMode().mode == 3 && event.getPacket() instanceof PlayerMoveC2SPacket) {
 			if (!flyTick) {
-				boolean onGround = true;//mc.player.fallDistance >= 0.1f;
+				boolean onGround = true;// mc.player.fallDistance >= 0.1f;
 				mc.player.setOnGround(onGround);
 				FabricReflect.writeField(event.getPacket(), onGround, "field_12891", "onGround");
 

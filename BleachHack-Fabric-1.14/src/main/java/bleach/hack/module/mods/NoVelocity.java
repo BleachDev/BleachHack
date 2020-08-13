@@ -27,8 +27,7 @@ import net.minecraft.client.network.packet.EntityVelocityUpdateS2CPacket;
 import net.minecraft.client.network.packet.ExplosionS2CPacket;
 
 /**
- * @author sl
- * First Module utilizing EventBus!
+ * @author sl First Module utilizing EventBus!
  */
 
 public class NoVelocity extends Module {
@@ -36,20 +35,22 @@ public class NoVelocity extends Module {
 		super("NoVelocity", KEY_UNBOUND, Category.PLAYER, "If you take some damage, you don't move. Maybe.");
 	}
 
-	//The name of the method doesn't matter nor does it need to be consistent between modules, what matters is the argument.
+	// The name of the method doesn't matter nor does it need to be consistent
+	// between modules, what matters is the argument.
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
-		if (mc.player == null) return;
+		if (mc.player == null)
+			return;
 		if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
 			EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) event.getPacket();
 			if (packet.getId() == mc.player.getEntityId()) {
-				FabricReflect.writeField(packet, 0,"field_12563", "velocityX");
-				FabricReflect.writeField(packet, 0, "field_12562","velocityY");
+				FabricReflect.writeField(packet, 0, "field_12563", "velocityX");
+				FabricReflect.writeField(packet, 0, "field_12562", "velocityY");
 				FabricReflect.writeField(packet, 0, "field_12561", "velocityZ");
 			}
 		} else if (event.getPacket() instanceof ExplosionS2CPacket) {
-			FabricReflect.writeField(event.getPacket(), 0,"field_12176", "playerVelocityX");
-			FabricReflect.writeField(event.getPacket(), 0, "field_12182","playerVelocityY");
+			FabricReflect.writeField(event.getPacket(), 0, "field_12176", "playerVelocityX");
+			FabricReflect.writeField(event.getPacket(), 0, "field_12182", "playerVelocityY");
 			FabricReflect.writeField(event.getPacket(), 0, "field_12183", "playerVelocityZ");
 		}
 	}

@@ -80,7 +80,8 @@ public class CmdNuker extends Command {
 					lines.remove(block);
 
 					String s = "";
-					for (String s1: lines) s += s1 + "\n";
+					for (String s1 : lines)
+						s += s1 + "\n";
 
 					BleachFileMang.createEmptyFile("nukerblocks.txt");
 					BleachFileMang.appendFile(s, "nukerblocks.txt");
@@ -100,7 +101,7 @@ public class CmdNuker extends Command {
 			BleachLogger.infoMessage("Cleared Nuker Blocks");
 		} else if (args[0].equalsIgnoreCase("list")) {
 			String s = "";
-			for (String l: lines) {
+			for (String l : lines) {
 				s += "\n§6" + l;
 			}
 

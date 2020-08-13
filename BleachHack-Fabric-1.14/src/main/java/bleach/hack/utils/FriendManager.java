@@ -15,7 +15,7 @@ public class FriendManager {
 	}
 
 	public void add(String name) {
-		for (Formatting f: Formatting.values()) {
+		for (Formatting f : Formatting.values()) {
 			name = name.replace(f.toString(), "");
 		}
 
@@ -25,7 +25,7 @@ public class FriendManager {
 	}
 
 	public void remove(String name) {
-		for (Formatting f: Formatting.values()) {
+		for (Formatting f : Formatting.values()) {
 			name = name.replace(f.toString(), "");
 		}
 
@@ -35,11 +35,11 @@ public class FriendManager {
 	}
 
 	public boolean has(String name) {
-		for (Formatting f: Formatting.values()) {
+		for (Formatting f : Formatting.values()) {
 			name = name.replace(f.toString(), "");
 		}
 
-		//System.out.println(name);
+		// System.out.println(name);
 		if (!name.isEmpty()) {
 			return friends.contains(name.toLowerCase());
 		}

@@ -41,9 +41,7 @@ public class AutoDonkeyDupe extends Module {
 
 	public AutoDonkeyDupe() {
 		super("AutoDonkeyDupe", KEY_UNBOUND, Category.EXPLOITS, "Automatically does the mountbypass dupe (PRESS ESCAPE TO CANCEL)",
-				new SettingSlider("Limit", 1, 15, 15, 0),
-				new SettingMode("Mode", "Instant", "Single"),
-				new SettingToggle("Shulkers Only", true));
+				new SettingSlider("Limit", 1, 15, 15, 0), new SettingMode("Mode", "Instant", "Single"), new SettingToggle("Shulkers Only", true));
 	}
 
 	public void onEnable() {
@@ -78,10 +76,10 @@ public class AutoDonkeyDupe extends Module {
 
 	@Subscribe
 	public void onSendPacket(EventSendPacket event) {
-		if (((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel) return;
+		if (((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel)
+			return;
 
-		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket
-				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getType() == InteractionType.INTERACT_AT
+		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket && ((PlayerInteractEntityC2SPacket) event.getPacket()).getType() == InteractionType.INTERACT_AT
 				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getEntity(mc.world) instanceof AbstractDonkeyEntity) {
 			event.setCancelled(true);
 		}
@@ -97,14 +95,14 @@ public class AutoDonkeyDupe extends Module {
 		int slots = getSetting(0).asSlider().getValue() <= 0 ? getInvSize(mc.player.getVehicle())
 				: Math.min((int) getSetting(0).asSlider().getValue(), getInvSize(mc.player.getVehicle()));
 
-		for (Entity e: mc.world.getEntities()) {
-			if (e.getPos().distanceTo(mc.player.getPos()) < 6
-					&& e instanceof AbstractDonkeyEntity && ((AbstractDonkeyEntity) e).isTame()) {
+		for (Entity e : mc.world.getEntities()) {
+			if (e.getPos().distanceTo(mc.player.getPos()) < 6 && e instanceof AbstractDonkeyEntity && ((AbstractDonkeyEntity) e).isTame()) {
 				entity = (AbstractDonkeyEntity) e;
 			}
 		}
 
-		if (entity == null) return;
+		if (entity == null)
+			return;
 
 		if (firstFrameSneak) {
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
@@ -116,8 +114,10 @@ public class AutoDonkeyDupe extends Module {
 
 		if (slots == -1) {
 			if (entity.hasChest() || mc.player.inventory.getMainHandStack().getItem() == Items.CHEST) {
-				//mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND));
-				//mc.interactionManager.interactEntityAtLocation(playerEntity_1, entity_1, entityHitResult_1, hand_1)
+				// mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity,
+				// Hand.MAIN_HAND));
+				// mc.interactionManager.interactEntityAtLocation(playerEntity_1, entity_1,
+				// entityHitResult_1, hand_1)
 				mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND, false));
 			} else {
 				int chest = -1;
@@ -138,7 +138,7 @@ public class AutoDonkeyDupe extends Module {
 			if (isDupeTime(entity)) {
 				if (!slotsToThrow.isEmpty()) {
 					if (instant) {
-						for (int i: slotsToThrow) {
+						for (int i : slotsToThrow) {
 							mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 1, SlotActionType.THROW, mc.player);
 						}
 						slotsToThrow.clear();
@@ -171,20 +171,22 @@ public class AutoDonkeyDupe extends Module {
 				if (empty) {
 					for (int i = slots + 2; i < mc.player.currentScreenHandler.slots.size(); i++) {
 						if (mc.player.currentScreenHandler.slots.get(i).hasStack()) {
-							if (mc.player.currentScreenHandler.slots.get(i).getStack().getItem() == Items.CHEST) continue;
+							if (mc.player.currentScreenHandler.slots.get(i).getStack().getItem() == Items.CHEST)
+								continue;
 							if (!(mc.player.currentScreenHandler.slots.get(i).getStack().getItem() instanceof BlockItem
 									&& ((BlockItem) mc.player.currentScreenHandler.slots.get(i).getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
-									&& getSetting(2).asToggle().state) continue;
+									&& getSetting(2).asToggle().state)
+								continue;
 							slotsToMove.add(i);
 
-							if (slotsToMove.size() >= slots) break;
+							if (slotsToMove.size() >= slots)
+								break;
 						}
 					}
 				} else {
 					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
-					mc.player.networkHandler.sendPacket(
-							new PlayerInteractEntityC2SPacket(
-									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
+					mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND,
+							entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
 					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
 					return;
 				}
@@ -192,7 +194,8 @@ public class AutoDonkeyDupe extends Module {
 
 			if (!slotsToMove.isEmpty()) {
 				if (instant) {
-					for (int i: slotsToMove) mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
+					for (int i : slotsToMove)
+						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
 					slotsToMove.clear();
 				} else {
 					mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, slotsToMove.get(0), 0, SlotActionType.QUICK_MOVE, mc.player);
@@ -201,17 +204,16 @@ public class AutoDonkeyDupe extends Module {
 			}
 		}
 
-		/*int i = 0;
-		for (Slot s: mc.player.container.slots) {
-			System.out.println(s.getStack() + " | " + i);
-			i++;
-		}*/
+		/* int i = 0; for (Slot s: mc.player.container.slots) {
+		 * System.out.println(s.getStack() + " | " + i); i++; } */
 	}
 
 	private int getInvSize(Entity e) {
-		if (!(e instanceof AbstractDonkeyEntity)) return -1;
+		if (!(e instanceof AbstractDonkeyEntity))
+			return -1;
 
-		if (!((AbstractDonkeyEntity)e).hasChest()) return 0;
+		if (!((AbstractDonkeyEntity) e).hasChest())
+			return 0;
 
 		if (e instanceof LlamaEntity) {
 			return 3 * ((LlamaEntity) e).getStrength();
