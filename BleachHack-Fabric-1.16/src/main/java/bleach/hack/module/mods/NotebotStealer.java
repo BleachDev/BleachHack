@@ -22,16 +22,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
-import bleach.hack.event.events.EventTick;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.file.BleachFileMang;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 

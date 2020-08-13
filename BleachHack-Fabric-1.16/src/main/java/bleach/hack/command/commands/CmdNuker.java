@@ -49,14 +49,14 @@ public class CmdNuker extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		BleachFileMang.createFile("nukerblocks.txt");
-		
+
 		List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
-		lines.removeIf(s -> s.isEmpty());
-		
+		lines.removeIf(String::isEmpty);
+
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
 			Module mod = ModuleManager.getModule(Nuker.class);
 			String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
-			
+
 			if (args[0].equalsIgnoreCase("add")) {
 				if (Registry.BLOCK.get(new Identifier(block)) == Blocks.AIR) {
 					BleachLogger.errorMessage("Invalid Block: " + args[1]);
@@ -65,31 +65,31 @@ public class CmdNuker extends Command {
 					BleachLogger.errorMessage("Block is already added!");
 					return;
 				}
-	
+
 				BleachFileMang.appendFile(block, "nukerblocks.txt");
-				
+
 				if (mod.isToggled()) {
 					mod.toggle();
 					mod.toggle();
 				}
-				
+
 				BleachLogger.infoMessage("Added Block: " + block);
-	
+
 			} else if (args[0].equalsIgnoreCase("remove")) {
 				if (lines.contains(block)) {
 					lines.remove(block);
-	
+
 					String s = "";
 					for (String s1: lines) s += s1 + "\n";
-	
+
 					BleachFileMang.createEmptyFile("nukerblocks.txt");
 					BleachFileMang.appendFile(s, "nukerblocks.txt");
-					
+
 					if (mod.isToggled()) {
 						mod.toggle();
 						mod.toggle();
 					}
-	
+
 					BleachLogger.infoMessage("Removed Block: " + block);
 				} else {
 					BleachLogger.errorMessage("Block Not In List: " + block);

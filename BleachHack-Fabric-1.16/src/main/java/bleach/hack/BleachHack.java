@@ -32,7 +32,7 @@ public class BleachHack implements ModInitializer {
 
 	public static final String VERSION = "B14.2";
 	public static final int INTVERSION = 24;
-	
+
 	public static EventBus eventBus = new EventBus();
 
 	public static FriendManager friendMang;
@@ -53,7 +53,7 @@ public class BleachHack implements ModInitializer {
 		eventBus.register(new ModuleManager());
 		// wait why do we need this ^?
 		// Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
-		
+
 		String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
 			BleachMainMenu.customTitleScreen = false;

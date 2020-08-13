@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- package bleach.hack.module.mods;
+
+package bleach.hack.module.mods;
 
 
 import com.google.common.eventbus.Subscribe;
@@ -29,7 +29,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.BleachQueue;
 
 public class Zoom extends Module {
-	
+
 	public double prevFov;
 	public double prevSens;
 
@@ -38,20 +38,20 @@ public class Zoom extends Module {
 				new SettingSlider("Scale", 1, 10, 3, 2).withDesc("How much to zoom"),
 				new SettingToggle("Smooth", false).withDesc("Smooths the zoom when enabling and disabling"));
 	}
-	
+
 	public void onEnable() {
 		super.onEnable();
 		BleachQueue.cancelQueue("zoom");
-		
+
 		prevFov = mc.options.fov;
 		prevSens = mc.options.mouseSensitivity;
-		
+
 		if (getSetting(0).asSlider().getValue() < 1 || !getSetting(1).asToggle().state) {
 			mc.options.fov = prevFov / getSetting(0).asSlider().getValue();
 			mc.options.mouseSensitivity = prevSens / getSetting(0).asSlider().getValue();
 		}
 	}
-	
+
 	public void onDisable() {
 		if (getSetting(0).asSlider().getValue() < 1 || !getSetting(1).asToggle().state) {
 			mc.options.fov = prevFov;
@@ -64,16 +64,16 @@ public class Zoom extends Module {
 				});
 			}
 		}
-		
+
 		super.onDisable();
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asSlider().getValue() >= 1 && mc.options.fov > prevFov / getSetting(0).asSlider().getValue()) {
 			mc.options.fov /= 1.4;
 			mc.options.mouseSensitivity /= 1.4;
-			
+
 			if (mc.options.fov <= prevFov / getSetting(0).asSlider().getValue()) {
 				mc.options.fov = prevFov / getSetting(0).asSlider().getValue();
 				mc.options.mouseSensitivity = prevSens / getSetting(0).asSlider().getValue();

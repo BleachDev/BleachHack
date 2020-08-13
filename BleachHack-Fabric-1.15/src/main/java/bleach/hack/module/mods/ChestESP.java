@@ -17,12 +17,16 @@
  */
 package bleach.hack.module.mods;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.RenderUtils;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
@@ -45,9 +49,6 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChestESP extends Module {
 
@@ -110,7 +111,7 @@ public class ChestESP extends Module {
 					int axis = e.getBoundingBox().x2 - e.getBoundingBox().x1 < e.getBoundingBox().y2 - e.getBoundingBox().y1
 							? 0 : e.getBoundingBox().y2 - e.getBoundingBox().y1 < e.getBoundingBox().z2 - e.getBoundingBox().z1
 									? 1 : 2;
-					
+
 					RenderUtils.drawFilledBox(e.getBoundingBox().expand(axis == 0 ? 0 : 0.12, axis == 1 ? 0 : 0.12, axis == 2 ? 0 : 0.12), 0.1F, 0.1F, 0.5F, 0.7F);
 				} else {
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.1F, 0.45F, 0.1F, 0.7F);

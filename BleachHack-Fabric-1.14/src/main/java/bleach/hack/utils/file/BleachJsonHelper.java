@@ -11,9 +11,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 public class BleachJsonHelper {
-	
+
 	private static Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
-	
+
 	public static void addJsonElement(String key, JsonElement element, String... path) {
 		JsonObject file = null;
 		boolean overwrite = false;
@@ -49,27 +49,27 @@ public class BleachJsonHelper {
 			BleachFileMang.appendFile(jsonWriter.toJson(file), path);
 		}
 	}
-	
+
 	public static void setJsonFile(JsonObject element, String... path) {
 		BleachFileMang.createEmptyFile(path);
 		BleachFileMang.appendFile(jsonWriter.toJson(element), path);
 	}
-	
+
 	public static JsonElement readJsonElement(String key, String... path) {
 		JsonObject jo = readJsonFile(path);
-		
+
 		if (jo == null) return null;
 
 		if (jo.has(key)) {
 			return jo.get(key);
 		}
-		
+
 		return null;
 	}
-	
+
 	public static JsonObject readJsonFile(String... path) {
 		List<String> lines = BleachFileMang.readFileLines(path);
-		
+
 		if (lines.isEmpty()) return null;
 
 		String merged = String.join("\n", lines);

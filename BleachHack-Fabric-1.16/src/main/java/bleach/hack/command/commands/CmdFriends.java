@@ -57,7 +57,7 @@ public class CmdFriends extends Command {
 		} else {
 			BleachLogger.errorMessage("Invalid Syntax!\n" + getSyntax());
 		}
-		
+
 		BleachFileHelper.SCHEDULE_SAVE_FRIENDS = true;
 	}
 

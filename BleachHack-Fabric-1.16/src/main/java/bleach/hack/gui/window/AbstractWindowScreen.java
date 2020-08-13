@@ -82,7 +82,7 @@ public abstract class AbstractWindowScreen extends Screen {
 			if (w.selected) {
 				w.inactiveTime = 2;
 			}
-			
+
 			w.selected = (count == window);
 			count++;
 		}

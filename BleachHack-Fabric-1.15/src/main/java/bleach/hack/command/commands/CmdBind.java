@@ -50,14 +50,14 @@ public class CmdBind extends Command {
 					c++;
 				}
 			}
-			
+
 			BleachLogger.infoMessage("Cleared " + c + " Binds");
 		} else if (args.length >= 2 && (args.length >= 3 || !args[1].equalsIgnoreCase("set"))) {
 			for (Module m: ModuleManager.getModules()) {
 				if (m.getName().equalsIgnoreCase(args[1])) {
 					if (args[0].equalsIgnoreCase("set")) {
 						int key = -1;
-						
+
 						// Special cases for rshift/rcontrol and that shit
 						try {
 							key = InputUtil.fromName("key.keyboard." + args[2].toLowerCase()).getKeyCode();
@@ -81,18 +81,18 @@ public class CmdBind extends Command {
 								return;
 							}
 						}
-						
+
 						m.setKey(key);
 						BleachLogger.infoMessage("Bound " + m.getName() + " To " + args[2] + " (KEY" + key + ")");
 					} else if (args[0].equalsIgnoreCase("del")) {
 						m.setKey(Module.KEY_UNBOUND);
 						BleachLogger.infoMessage("Removed Bind For " + m.getName());
 					}
-					
+
 					return;
 				}
 			}
-			
+
 			BleachLogger.errorMessage("Could Not Find Module \"" + args[1] + "\"");
 		} else {
 			BleachLogger.errorMessage("Invalid Syntax!");

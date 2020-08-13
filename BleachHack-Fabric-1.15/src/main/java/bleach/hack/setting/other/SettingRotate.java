@@ -14,7 +14,7 @@ public class SettingRotate extends SettingToggle {
 	public SettingBase getChild(int c) {
 		return children.get(c + 1);
 	}
-	
+
 	public int getRotateMode() {
 		return children.get(0).asMode().mode;
 	}

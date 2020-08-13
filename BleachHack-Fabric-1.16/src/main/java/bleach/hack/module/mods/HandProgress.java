@@ -1,12 +1,12 @@
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventTick;
 import bleach.hack.mixin.FirstPersonRendererAccessor;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
-
-import com.google.common.eventbus.Subscribe;
 
 public class HandProgress extends Module {
 
@@ -20,13 +20,13 @@ public class HandProgress extends Module {
 	@Subscribe
 	public void tick(EventTick event){
 		FirstPersonRendererAccessor accessor = (FirstPersonRendererAccessor) mc.gameRenderer.firstPersonRenderer;
-		
-		// Refresh the item held in hand every tick
-        accessor.setItemStackMainHand(mc.player.getMainHandStack());
-        accessor.setItemStackOffHand(mc.player.getOffHandStack());
 
-        // Set the item render height
-        accessor.setEquippedProgressMainHand((float) this.getSetting(0).asSlider().getValue());
-        accessor.setEquippedProgressOffHand((float) this.getSetting(1).asSlider().getValue());
+		// Refresh the item held in hand every tick
+		accessor.setItemStackMainHand(mc.player.getMainHandStack());
+		accessor.setItemStackOffHand(mc.player.getOffHandStack());
+
+		// Set the item render height
+		accessor.setEquippedProgressMainHand((float) this.getSetting(0).asSlider().getValue());
+		accessor.setEquippedProgressOffHand((float) this.getSetting(1).asSlider().getValue());
 	}
 }

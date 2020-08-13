@@ -17,7 +17,6 @@
  */
 package bleach.hack.mixin;
 
-import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,6 +26,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoRender;
+import net.minecraft.client.gui.hud.InGameHud;
 
 @Mixin(InGameHud.class)
 public class MixinIngameHud {

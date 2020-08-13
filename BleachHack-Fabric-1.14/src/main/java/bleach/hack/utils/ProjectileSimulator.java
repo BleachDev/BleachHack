@@ -37,7 +37,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RayTraceContext;
 
 public class ProjectileSimulator {
-	
+
 	private static MinecraftClient mc = MinecraftClient.getInstance();
 
 	public static Entity summonProjectile(PlayerEntity thrower, boolean allowThrowables, boolean allowXp, boolean allowPotions) {
@@ -85,7 +85,7 @@ public class ProjectileSimulator {
 	public static boolean isThrowable(Item item) {
 		return isThrowable(item, true, true, true);
 	}
-	
+
 	public static boolean isThrowable(Item item, boolean allowThrowables, boolean allowXp, boolean allowPotions) {
 		return item instanceof RangedWeaponItem
 				|| (allowThrowables && (item instanceof EggItem || item instanceof SnowballItem || item instanceof EnderPearlItem))
@@ -98,11 +98,11 @@ public class ProjectileSimulator {
 		float velY = -MathHelper.sin((thrower.pitch + addPitch) * 0.017453292F);
 		float velZ = MathHelper.cos(thrower.yaw * 0.017453292F) * MathHelper.cos(thrower.pitch * 0.017453292F);
 
-		Vec3d velVec = new Vec3d((double) velX, (double) velY, (double) velZ).normalize().multiply((double) strength);
+		Vec3d velVec = new Vec3d(velX, velY, velZ).normalize().multiply(strength);
 		e.setVelocity(velVec);
 		float float_3 = MathHelper.sqrt(Entity.squaredHorizontalLength(velVec));
 		e.yaw = (float) (MathHelper.atan2(velVec.x, velVec.z) * 57.2957763671875D);
-		e.pitch = (float) (MathHelper.atan2(velVec.y, (double) float_3) * 57.2957763671875D);
+		e.pitch = (float) (MathHelper.atan2(velVec.y, float_3) * 57.2957763671875D);
 		e.prevYaw = e.yaw;
 		e.prevPitch = e.pitch;
 
@@ -144,45 +144,45 @@ public class ProjectileSimulator {
 
 		return Triple.of(vecs, null, null);
 	}
-	
+
 	/** Lightweight projectile entity without having to create an entirely new entity **/
 	private static class SimulatedProjectile {
-		
+
 		public double x;
 		public double y;
 		public double z;
-		
+
 		public float pitch;
 		public float prevPitch = 0f;
-		
+
 		public Vec3d velocity;
-		
+
 		private float width;
 		private float height;
-		
+
 		public SimulatedProjectile(Entity realProjectile) {
 			x = realProjectile.x;
 			y = realProjectile.y;
 			z = realProjectile.z;
-			
+
 			pitch = realProjectile.pitch;
-			
+
 			velocity = realProjectile.getVelocity();
-			
+
 			width = realProjectile.getWidth();
 			height = realProjectile.getHeight();
 		}
-		
+
 		public Vec3d getPos() {
 			return new Vec3d(x, y, z);
 		}
-		
+
 		public void setPos(double x, double y, double z) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
 		}
-		
+
 		public Box getBoundingBox() {
 			return new Box(x - width / 2, y - height / 2, z - width / 2, x + width / 2, y + height / 2, z + width / 2);
 		}

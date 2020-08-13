@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.modulewindow.ClickGuiWindow;
@@ -84,7 +85,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 	public void render(int mX, int mY, float float_1) {
 		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
-		
+
 		searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
 		this.renderBackground();
@@ -118,7 +119,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				if (w instanceof ModuleWindow) {
 					((ModuleWindow) w).setLen(len);
 				}
-				
+
 				((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
 			}
 		}

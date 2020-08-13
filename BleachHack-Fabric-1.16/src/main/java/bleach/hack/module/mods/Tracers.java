@@ -17,6 +17,8 @@
  */
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
@@ -26,7 +28,6 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -66,7 +67,7 @@ public class Tracers extends Module {
 			Vec3d vec2 = new Vec3d(0, 0, 75).rotateX(-(float) Math.toRadians(mc.cameraEntity.pitch))
 					.rotateY(-(float) Math.toRadians(mc.cameraEntity.yaw))
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
-			
+
 			float[] col = null;
 
 			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSetting(0).asToggle().state) {
@@ -82,7 +83,7 @@ public class Tracers extends Module {
 			} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
 				col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
 			}
-			
+
 			if (col != null) {
 				RenderUtils.drawLine(vec2.x,vec2.y,vec2.z,vec.x,vec.y,vec.z, col[0], col[1], col[2],thick);
 				RenderUtils.drawLine(vec.x,vec.y,vec.z, vec.x,vec.y+(e.getHeight()/1.1),vec.z, col[0], col[1], col[2],thick);

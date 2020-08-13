@@ -76,7 +76,7 @@ public class Trajectories extends Module {
 				}
 			}
 		}
-		
+
 		if (getSetting(5).asToggle().state) {
 			for (PlayerEntity e: mc.world.getPlayers()) {
 				if (e == mc.player) continue;
@@ -87,7 +87,7 @@ public class Trajectories extends Module {
 					poses.add(ProjectileSimulator.simulate(proj));
 				}
 			}
-			
+
 		}
 	}
 
@@ -102,7 +102,7 @@ public class Trajectories extends Module {
 						RenderUtils.drawLine(t.getLeft().get(i - 1).x, t.getLeft().get(i - 1).y, t.getLeft().get(i - 1).z,
 								t.getLeft().get(i).x, t.getLeft().get(i).y, t.getLeft().get(i).z, col[0], col[1], col[2],
 								(float) getSetting(7).asSlider().getValue());
-					} 
+					}
 				} else {
 					for (Vec3d v: t.getLeft()) {
 						RenderUtils.drawFilledBox(new Box(v.x - 0.1, v.y - 0.1, v.z - 0.1, v.x + 0.1, v.y + 0.1, v.z + 0.1),

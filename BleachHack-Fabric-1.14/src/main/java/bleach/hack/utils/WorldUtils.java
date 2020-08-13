@@ -39,7 +39,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class WorldUtils {
-	
+
 	protected static MinecraftClient mc = MinecraftClient.getInstance();
 
 	public static final List<Block> NONSOLID_BLOCKS = Arrays.asList(
@@ -110,7 +110,7 @@ public class WorldUtils {
 	public static Box moveBox(Box box, double x, double y, double z) {
 		return new Box(new Vec3d(box.minX, box.minY, box.minZ).add(x, y, z), new Vec3d(box.maxX, box.maxY, box.maxZ).add(x, y, z));
 	}
-	
+
 	public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack) {
 		if (!isBlockEmpty(pos)) return false;
 
@@ -130,10 +130,10 @@ public class WorldUtils {
 
 			if (rotate) facePosPacket(vec.x, vec.y, vec.z);
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));
-			
+
 			mc.interactionManager.interactBlock(
 					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos.offset(d), false));
-			
+
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));
 			if (rotateBack) mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(rot[0], rot[1], mc.player.onGround));
 			return true;
@@ -160,17 +160,17 @@ public class WorldUtils {
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 									pos.getY() + 0.5 + d.getOffsetY() * 0.5,
 									pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.25) continue;
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	public static void facePosAuto(double x, double y, double z, SettingRotate sr) {
 		if (sr.getRotateMode() == 0) facePosPacket(x, y, z);
 		else facePos(x, y, z);
 	}
-	
+
 	public static void facePos(double x, double y, double z) {
 		double diffX = x - mc.player.x;
 		double diffY = y - (mc.player.y + mc.player.getEyeHeight(mc.player.getPose()));

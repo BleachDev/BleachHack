@@ -17,6 +17,14 @@
  */
 package bleach.hack.gui;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
 import bleach.hack.BleachHack;
 import bleach.hack.gui.particle.ParticleManager;
 import bleach.hack.gui.widget.BleachCheckbox;
@@ -44,13 +52,6 @@ import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 public class BleachMainMenu extends AbstractWindowScreen {
 
@@ -312,7 +313,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	}
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		
+
 		try {
 			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
 				if (double_1 > width/2 - 80 && double_1 < width/2 + 80 && double_2 > 0 && double_2 < 20) {

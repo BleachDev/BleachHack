@@ -17,13 +17,17 @@
  */
 package bleach.hack.command.commands;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.*;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import net.minecraft.entity.passive.DonkeyEntity;
+import net.minecraft.entity.passive.HorseBaseEntity;
+import net.minecraft.entity.passive.HorseEntity;
+import net.minecraft.entity.passive.LlamaEntity;
+import net.minecraft.entity.passive.MuleEntity;
 
 public class CmdEntityStats extends Command {
 

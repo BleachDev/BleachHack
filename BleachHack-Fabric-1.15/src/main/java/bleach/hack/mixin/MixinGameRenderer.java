@@ -17,21 +17,22 @@
  */
 package bleach.hack.mixin;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventWorldRender;
-import net.minecraft.client.render.Camera;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NoRender;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventWorldRender;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.NoRender;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.MathHelper;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
@@ -48,7 +49,7 @@ public class MixinGameRenderer {
 		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(2).asToggle().state)
 			ci.cancel();
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "showFloatingItem", cancellable = true)
 	private void showFloatingItem(ItemStack itemStack_1, CallbackInfo ci) {
 		if(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(8).asToggle().state

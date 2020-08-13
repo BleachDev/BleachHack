@@ -81,7 +81,7 @@ public abstract class AbstractWindowScreen extends Screen {
 			if (w.selected) {
 				w.inactiveTime = 2;
 			}
-			
+
 			w.selected = (count == window);
 			count++;
 		}
@@ -92,7 +92,7 @@ public abstract class AbstractWindowScreen extends Screen {
 		int count = 0;
 		int nextSelected = -1;
 		for (Window w: windows) {
-			
+
 			if (w.selected) {
 				w.onMousePressed((int) double_1, (int) double_2);
 			}
@@ -114,7 +114,7 @@ public abstract class AbstractWindowScreen extends Screen {
 			for (Window w: windows) w.selected = false;
 			windows.get(nextSelected).selected = true;
 		}
-		
+
 		return super.mouseClicked(double_1, double_2, int_1);
 	}
 

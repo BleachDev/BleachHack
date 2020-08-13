@@ -43,7 +43,7 @@ public class SettingSlider extends SettingBase {
 		this.value = value;
 		this.round = round;
 		this.text = text;
-		
+
 		defaultValue = value;
 	}
 
@@ -60,11 +60,11 @@ public class SettingSlider extends SettingBase {
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
-	
+
 	public String getName() {
 		return text;
 	}
-	
+
 	public void render(ModuleWindow window, int x, int y, int len) {
 		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((getValue() - min) / (max - min)), 0, len-2));
 		window.fillGradient(x+1, y, x+pixels, y+12, 0xf03080a0, 0xf02070b0);
@@ -78,16 +78,16 @@ public class SettingSlider extends SettingBase {
 			setValue(round(percent*((max - min) / 100) + min, round));
 		}
 	}
-	
+
 	public SettingSlider withDesc(String desc) {
 		description = desc;
 		return this;
 	}
-	
+
 	public int getHeight(int len) {
 		return 12;
 	}
-	
+
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
 			setValue(settings.getAsDouble());
@@ -97,12 +97,12 @@ public class SettingSlider extends SettingBase {
 	public JsonElement saveSettings() {
 		return new JsonPrimitive(getValue());
 	}
-	
+
 	@Override
 	public boolean isDefault() {
 		BigDecimal bd = new BigDecimal(defaultValue);
 		bd = bd.setScale(round, RoundingMode.HALF_UP);
-		
+
 		return bd.doubleValue() == getValue();
 	}
 }

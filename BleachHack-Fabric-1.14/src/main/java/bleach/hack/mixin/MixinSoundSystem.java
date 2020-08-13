@@ -20,14 +20,14 @@ public class MixinSoundSystem {
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) ci.cancel();
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "play(Lnet/minecraft/client/sound/SoundInstance;I)V", cancellable = true)
 	public void play(SoundInstance soundInstance_1, int i, CallbackInfo ci) {
 		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) ci.cancel();
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "addPreloadedSound", cancellable = true)
 	public void addPreloadedSound(Sound sound_1, CallbackInfo ci) {
 		EventSoundPlay.Preloaded event = new EventSoundPlay.Preloaded(sound_1);

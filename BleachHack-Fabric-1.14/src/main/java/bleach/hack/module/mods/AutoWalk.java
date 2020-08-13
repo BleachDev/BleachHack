@@ -1,13 +1,13 @@
 package bleach.hack.module.mods;
 
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-
-import com.google.common.eventbus.Subscribe;
 
 public class AutoWalk extends Module {
 

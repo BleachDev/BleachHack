@@ -1,9 +1,10 @@
 package bleach.hack.mixin;
 
-import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+
+import net.minecraft.client.render.item.HeldItemRenderer;
+import net.minecraft.item.ItemStack;
 
 @Mixin(HeldItemRenderer.class)
 public interface FirstPersonRendererAccessor {

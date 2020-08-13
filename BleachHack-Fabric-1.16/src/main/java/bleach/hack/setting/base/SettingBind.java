@@ -12,9 +12,9 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class SettingBind extends SettingBase {
-	
+
 	private Module mod;
-	
+
 	public SettingBind(Module mod) {
 		this.mod = mod;
 	}
@@ -34,7 +34,7 @@ public class SettingBind extends SettingBase {
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, "Bind: " + name + (window.mouseOver(x, y, x+len, y+12) ? "..." : "")
 				, x+2, y+2, window.mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 	}
-	
+
 	public SettingBind withDesc(String desc) {
 		description = desc;
 		return this;
@@ -47,7 +47,7 @@ public class SettingBind extends SettingBase {
 
 	@Override
 	public void readSettings(JsonElement settings) {
-		
+
 	}
 
 	@Override

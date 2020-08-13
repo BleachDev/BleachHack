@@ -111,8 +111,8 @@ public class CmdEnchant extends Command {
 	}
 
 	public boolean equals(String a, String... b) {
-		for (int i = 0; i < b.length; i++) {
-			if (a.equalsIgnoreCase(b[i])) return true;
+		for (String element : b) {
+			if (a.equalsIgnoreCase(element)) return true;
 		}
 		return false;
 	}

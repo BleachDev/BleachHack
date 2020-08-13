@@ -92,7 +92,7 @@ public class Nuker extends Module {
 			blocks.remove(mc.player.getBlockPos().down());
 			blocks.add(mc.player.getBlockPos().down());
 		}
-		
+
 		Vec3d eyePos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0);
 
 		int broken = 0;

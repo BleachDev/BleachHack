@@ -17,24 +17,6 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
-import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.RenderUtils;
-import bleach.hack.utils.file.BleachFileMang;
-import com.google.common.eventbus.Subscribe;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.NoteBlock;
-import net.minecraft.block.enums.Instrument;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,6 +28,25 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.common.eventbus.Subscribe;
+
+import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
+import bleach.hack.module.Category;
+import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.RenderUtils;
+import bleach.hack.utils.file.BleachFileMang;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.NoteBlock;
+import net.minecraft.block.enums.Instrument;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 public class Notebot extends Module {
 
@@ -169,7 +170,7 @@ public class Notebot extends Module {
 				break;
 			}
 		}
-		
+
 		if (loopityloop) {
 			if (getSetting(4).asToggle().state) {
 				try {

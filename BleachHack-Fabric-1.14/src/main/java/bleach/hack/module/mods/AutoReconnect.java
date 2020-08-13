@@ -87,13 +87,13 @@ public class AutoReconnect extends Module {
 		public void init() {
 			super.init();
 			reconnectTime = System.currentTimeMillis();
-			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 35, 200, 20, "Reconnect", (button) -> {
+			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 35, 200, 20, "Reconnect", button -> {
 				if (server != null) minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));
 			}));
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
 					(getSetting(0).asToggle().state ? "§a" : "§c") + "AutoReconnect ["
 							+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
-							+ "]", (button) -> {
+							+ "]", button -> {
 								getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
 								reconnectTime = System.currentTimeMillis();
 							}));

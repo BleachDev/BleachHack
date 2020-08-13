@@ -17,15 +17,14 @@
  */
 package bleach.hack.module.mods;
 
+import org.lwjgl.glfw.GLFW;
+
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-
-import com.google.common.eventbus.Subscribe;
-
-import org.lwjgl.glfw.GLFW;
-
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
@@ -35,9 +34,9 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.server.network.packet.ClientCommandC2SPacket;
+import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
 import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 import net.minecraft.server.network.packet.VehicleMoveC2SPacket;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.math.Vec3d;
 
 public class Freecam extends Module {

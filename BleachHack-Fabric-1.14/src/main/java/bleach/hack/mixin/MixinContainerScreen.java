@@ -17,18 +17,6 @@
  */
 package bleach.hack.mixin;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
-import net.minecraft.client.gui.screen.ingame.ContainerProvider;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.container.Container;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,6 +28,17 @@ import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
+import net.minecraft.client.gui.screen.ingame.ContainerProvider;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.container.Container;
+import net.minecraft.entity.passive.AbstractDonkeyEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
+import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 
 @Mixin(AbstractContainerScreen.class)
 public abstract class MixinContainerScreen<T extends Container> extends Screen implements ContainerProvider<T> {

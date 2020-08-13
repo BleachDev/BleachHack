@@ -20,16 +20,13 @@ package bleach.hack.module.mods;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventTick;
-import com.google.common.eventbus.Subscribe;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket;
-import net.minecraft.util.Hand;
-
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
+import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
@@ -42,6 +39,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.packet.ClientCommandC2SPacket;
+import net.minecraft.util.Hand;
 
 public class Killaura extends Module {
 

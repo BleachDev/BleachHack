@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 
 @Mixin(ParticleManager.class)
 public class MixinParticleManager {
-	
+
 	@Inject(at = @At("HEAD"), method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", cancellable = true)
 	public void addParticle(Particle particle_1, CallbackInfo ci) {
 		// pls send help
@@ -26,21 +26,21 @@ public class MixinParticleManager {
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) ci.cancel();
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "addEmitter(Lnet/minecraft/entity/Entity;Lnet/minecraft/particle/ParticleEffect;)V", cancellable = true)
 	public void addEmitter(Entity entity_1, ParticleEffect particleEffect_1, CallbackInfo ci) {
 		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) ci.cancel();
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "addEmitter(Lnet/minecraft/entity/Entity;Lnet/minecraft/particle/ParticleEffect;I)V", cancellable = true)
 	public void addEmitter1(Entity entity_1, ParticleEffect particleEffect_1, int i, CallbackInfo ci) {
 		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect_1);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) ci.cancel();
 	}
-	
+
 	/** Mojang is retarded and makes this and ONLY this thread-unsafe **/
 	@Inject(at = @At("HEAD"), method = "addBlockBreakParticles", cancellable = true)
 	public void addBlockBreakParticles(BlockPos blockPos_1, BlockState blockState_1, CallbackInfo ci) {

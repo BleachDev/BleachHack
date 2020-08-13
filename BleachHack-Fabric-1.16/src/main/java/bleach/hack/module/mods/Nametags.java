@@ -84,7 +84,7 @@ public class Nametags extends Module {
 					((color == "\u00a75" || color == "\u00a7a") && !getSetting(3).asToggle().state)) return;
 			if (e.isInvisible()) color = "\u00a7e";
 
-			double scale = (e instanceof PlayerEntity ? 
+			double scale = (e instanceof PlayerEntity ?
 					Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1) :
 						Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
 
@@ -108,7 +108,7 @@ public class Nametags extends Module {
 				if (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
 					health += " \u00a7e+" + (int)(e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
 				}
-				
+
 				WorldRenderUtils.drawText(color + e.getName().getString(),
 						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
@@ -163,7 +163,7 @@ public class Nametags extends Module {
 				event.setCancelled(true);*/
 		}
 	}
-	
+
 	private String getHealthColor(LivingEntity entity) {
 		if (entity.getHealth() + entity.getAbsorptionAmount() > entity.getMaxHealth()) {
 			return "\u00a7e";

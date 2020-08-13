@@ -84,7 +84,7 @@ public class CmdGive extends Command {
 				Registry.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase())));
 
 		if (item.getItem() instanceof AirBlockItem) throw new Exception();
-		
+
 		if (args.length >= 2 && NumberUtils.isCreatable(args[1])) item.setCount(NumberUtils.createNumber(args[1]).intValue());
 		if (args.length >= 3 && NumberUtils.isCreatable(args[2])) item.setDamage(NumberUtils.createNumber(args[2]).intValue());
 		if (args.length >= 4) try { item.setTag(StringNbtReader.parse(args[3])); } catch (CommandSyntaxException e) {}

@@ -17,15 +17,14 @@
  */
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-
-import com.google.common.eventbus.Subscribe;
-
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;

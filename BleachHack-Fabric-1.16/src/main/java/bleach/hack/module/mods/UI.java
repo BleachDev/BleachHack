@@ -20,9 +20,10 @@ package bleach.hack.module.mods;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Date;
+
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.eventbus.Subscribe;
@@ -115,7 +116,7 @@ public class UI extends Module {
 				DrawableHelper.fill(event.matrix, 0, (arrayCount*10), mc.textRenderer.getWidth(lines.get(arrayCount-1))+4+extra, 1+(arrayCount*10), color);
 			}
 		}
-		
+
 		if (getSetting(9).asToggle().state && !mc.options.debugEnabled) {
 			mc.textRenderer.drawWithShadow(event.matrix, "Players:", 2, 4+arrayCount*10, 0xff0000);
 			arrayCount++;
@@ -124,7 +125,7 @@ public class UI extends Module {
 					(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
 					.collect(Collectors.toList())) {
 				if (e == mc.player) continue;
-				
+
 				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
 				String text = "" + e.getDisplayName().getString() + " \u00a77|\u00a7r " +
@@ -153,7 +154,7 @@ public class UI extends Module {
 			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
-		
+
 		if (getSetting(8).asToggle().state) {
 			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
 			infoList.add("\u00a77Server: \u00a7d" + server);
@@ -205,11 +206,11 @@ public class UI extends Module {
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 				mc.getItemRenderer().zOffset = 200F;
 				mc.getItemRenderer().renderGuiItemIcon(is, x, y);
-				
+
 				if (getSetting(10).asToggle().getChild(0).asMode().mode > 0) {
 					mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, is, x, y);
 				}
-				
+
 				mc.getItemRenderer().zOffset = 0F;
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
 
@@ -218,19 +219,19 @@ public class UI extends Module {
 					GL11.glScaled(0.75, 0.75, 0.75);
 					String s = is.getCount() > 1 ? "x" + is.getCount() : "";
 					mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
-	
+
 					if (is.isDamageable()) {
 						String dur = is.getMaxDamage() - is.getDamage() + "";
 						int durcolor = 0x000000;
 						try{ durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F); } catch (Exception e) {}
-	
+
 						mc.textRenderer.drawWithShadow(event.matrix, dur, (x + 10 - mc.textRenderer.getWidth(dur) / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
 					}
-	
+
 					GL11.glPopMatrix();
 				}
 			}
-			
+
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
 		}

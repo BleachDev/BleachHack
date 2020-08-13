@@ -2,14 +2,12 @@ package bleach.hack.mixin;
 
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.SafeWalk;
 import bleach.hack.module.mods.Scaffold;
-
-import org.spongepowered.asm.mixin.injection.At;
-
 import net.minecraft.entity.Entity;
 
 @Mixin(Entity.class)

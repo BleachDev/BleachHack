@@ -17,11 +17,12 @@
  */
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.network.packet.EntityVelocityUpdateS2CPacket;
 import net.minecraft.client.network.packet.ExplosionS2CPacket;
 

@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.BleachHack;
 import bleach.hack.setting.base.SettingBase;
 import bleach.hack.setting.base.SettingBind;
 import bleach.hack.utils.file.BleachFileHelper;
-
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 
 public class Module {
@@ -50,7 +50,7 @@ public class Module {
 		category = c;
 		desc = d;
 		settings = new ArrayList<>(Arrays.asList(s));
-		
+
 		settings.add(new SettingBind(this));
 	}
 
@@ -63,7 +63,7 @@ public class Module {
 
 	public void onEnable() {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
-		
+
 		for (Method method : getClass().getMethods()) {
 			if (method.isAnnotationPresent(Subscribe.class)) {
 				BleachHack.eventBus.register(this);
@@ -74,7 +74,7 @@ public class Module {
 
 	public void onDisable() {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
-		
+
 		try{
 			for (Method method : getClass().getMethods()) {
 				if (method.isAnnotationPresent(Subscribe.class)) {
@@ -106,7 +106,7 @@ public class Module {
 	public int getKey() {
 		return key;
 	}
-	
+
 	public int getDefaultKey() {
 		return defaultKey;
 	}
@@ -114,7 +114,7 @@ public class Module {
 	public List<SettingBase> getSettings() {
 		return settings;
 	}
-	
+
 	public SettingBase getSetting(int s) {
 		return settings.get(s);
 	}

@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Triple;
+
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -89,7 +90,7 @@ public class ModuleWindow extends ClickGuiWindow {
 				DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
 				DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
 			}
-			
+
 			DrawableHelper.fill(matrix, x, y + curY, x+len, y + 12 + curY,
 					mouseOver(x, y + curY, x+len, y + 12 + curY) ? 0x70303070 : 0x00000000);
 
@@ -110,7 +111,7 @@ public class ModuleWindow extends ClickGuiWindow {
 				if (rmDown) mods.replace(m.getKey(), !m.getValue());
 				if (lmDown || rmDown) mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
-			
+
 			curY += 12;
 
 			/* draw settings */
@@ -121,12 +122,12 @@ public class ModuleWindow extends ClickGuiWindow {
 					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x+len, y + s.getHeight(len) + curY)) {
 						tooltip = s.getGuiDesc(this, x, y + curY, len);
 					}
-					
+
 					fillGreySides(matrix, x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
-					
+
 					curY += s.getHeight(len);
 				}
-				
+
 				DrawableHelper.fill(matrix, x + 1, y + curY - 1, x+len-2, y + curY, 0x90b0b0b0);
 			}
 		}
@@ -157,7 +158,7 @@ public class ModuleWindow extends ClickGuiWindow {
 	public void setSearchedModule(Set<Module> mods) {
 		searchedModules = mods;
 	}
-	
+
 	public void setLen(int len) {
 		this.len = len;
 	}

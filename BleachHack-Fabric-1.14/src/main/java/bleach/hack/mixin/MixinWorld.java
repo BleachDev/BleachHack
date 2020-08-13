@@ -26,7 +26,7 @@ public class MixinWorld {
 			ci.cancel();
 		}
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "getCloudColor", cancellable = true)
 	public void getCloudColor(float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyColor.CloudColor event = new EventSkyColor.CloudColor(f);
@@ -39,7 +39,7 @@ public class MixinWorld {
 			ci.cancel();
 		}
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "getFogColor", cancellable = true)
 	public void getFogColor(float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyColor.FogColor event = new EventSkyColor.FogColor(f);

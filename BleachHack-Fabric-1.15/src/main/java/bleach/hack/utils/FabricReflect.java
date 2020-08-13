@@ -38,7 +38,7 @@ public class FabricReflect {
 			if (!field.isAccessible()) {
 				field.setAccessible(true);
 			}
-			
+
 			return field;
 		}
 
@@ -51,7 +51,7 @@ public class FabricReflect {
 
 			return field;
 		}
-		
+
 		throw new RuntimeException("Error reflecting field: " + deobfName + "/" + obfName + " @" + cls.getSimpleName());
 	}
 
@@ -70,7 +70,7 @@ public class FabricReflect {
 			if (!field.isAccessible()) {
 				field.setAccessible(true);
 			}
-			
+
 			try {
 				return field.get(target);
 			} catch (Exception e) {
@@ -91,7 +91,7 @@ public class FabricReflect {
 				throw new RuntimeException("Error getting reflected field value: " + deobfName + "/" + obfName + " @" + target.getClass().getSimpleName());
 			}
 		}
-		
+
 		throw new RuntimeException("Error getting reflected field value: " + deobfName + "/" + obfName + " @" + target.getClass().getSimpleName());
 	}
 
@@ -121,7 +121,7 @@ public class FabricReflect {
 				throw new RuntimeException("Error reflecting method: " + deobfName + "/" + obfName + " @" + target.getClass().getSimpleName());
 			}
 		}
-		
+
 		return o;
 	}
 }

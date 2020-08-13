@@ -17,12 +17,6 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventTick;
-import bleach.hack.event.events.EventWorldRender;
-
-import com.google.common.collect.Streams;
-import com.google.common.eventbus.Subscribe;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -34,6 +28,11 @@ import java.util.stream.Collectors;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.google.common.collect.Streams;
+import com.google.common.eventbus.Subscribe;
+
+import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
@@ -81,7 +80,7 @@ public class CrystalAura extends Module {
 	private int newSlot;
 	private int breaks;
 	private boolean isSpoofingAngles;
-	
+
 	private HashMap<BlockPos, Integer> blackList = new HashMap<>();
 
 	public CrystalAura() {
@@ -107,20 +106,20 @@ public class CrystalAura extends Module {
 	public void onTick(EventTick event) {
 		damageCache.clear();
 
-		EnderCrystalEntity crystal = Streams.stream(mc.world.getEntities()).filter((entityx) -> {
+		EnderCrystalEntity crystal = Streams.stream(mc.world.getEntities()).filter(entityx -> {
 			return entityx instanceof EnderCrystalEntity;
-		}).map((entityx) -> {
+		}).map(entityx -> {
 			BlockPos p = entityx.getBlockPos().down();
 			if (blackList.containsKey(p)) {
 				if (blackList.get(p) > 0) blackList.replace(p, blackList.get(p) - 1);
 				else blackList.remove(p);
 			}
-			
+
 			return (EnderCrystalEntity) entityx;
-		}).min(Comparator.comparing((c) -> {
+		}).min(Comparator.comparing(c -> {
 			return mc.player.distanceTo(c);
 		})).orElse(null);
-		
+
 		int crystalSlot;
 		if (getSetting(3).asToggle().state && crystal != null && mc.player.distanceTo(crystal) <= getSetting(6).asSlider().getValue()) {
 			if (getSetting(3).asToggle().getChild(0).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
@@ -155,7 +154,7 @@ public class CrystalAura extends Module {
 			if (getSetting(5).asRotate().state) {
 				WorldUtils.facePosAuto(crystal.getX(), crystal.getY(), crystal.getZ(), getSetting(5).asRotate());
 			}
-			
+
 			mc.interactionManager.attackEntity(mc.player, crystal);
 			mc.player.swingHand(Hand.MAIN_HAND);
 			++this.breaks;
@@ -209,7 +208,7 @@ public class CrystalAura extends Module {
 		Set<BlockPos> blocks = getCrystalPoses();
 		List<Entity> entities = new ArrayList<>();
 
-		entities.addAll(Streams.stream(mc.world.getEntities()).filter((e) -> {
+		entities.addAll(Streams.stream(mc.world.getEntities()).filter(e -> {
 			return (e instanceof PlayerEntity && getSetting(0).asToggle().state)
 					|| (e instanceof MobEntity && getSetting(1).asToggle().state)
 					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state);
@@ -253,7 +252,7 @@ public class CrystalAura extends Module {
 								if (getSetting(5).asRotate().state) {
 									WorldUtils.facePosAuto(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D, getSetting(5).asRotate());
 								}
-								
+
 								Direction f;
 								if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
 									f = Direction.UP;
@@ -277,7 +276,7 @@ public class CrystalAura extends Module {
 
 								mc.interactionManager.interactBlock(mc.player, mc.world, offhand ? Hand.OFF_HAND : Hand.MAIN_HAND,
 										new BlockHitResult(new Vec3d(q), f, q, false));
-								
+
 								blackList.put(q, 5);
 							}
 
@@ -316,11 +315,11 @@ public class CrystalAura extends Module {
 								b = entity.getBlockPos().getSquaredDistance(blockPos);
 							} while (b >= 169.0D);
 
-							d = getSetting(7).asToggle().state 
+							d = getSetting(7).asToggle().state
 									? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, (LivingEntity) entity);
 						} while (d <= damage);
 
-						self = getSetting(7).asToggle().state 
+						self = getSetting(7).asToggle().state
 								? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, mc.player);
 					} while (self > d && d >= ((LivingEntity) entity).getHealth());
 
@@ -447,18 +446,18 @@ public class CrystalAura extends Module {
 
 	private float getExplosionDamage_old(BlockPos basePos, LivingEntity target) {
 		if (mc.world.getDifficulty() == Difficulty.PEACEFUL) return 0f;
-		
+
 		Vec3d crystalVec = new Vec3d(basePos.getX() + 0.5, basePos.getY() + 1.0, basePos.getZ() + 0.5);
-		
+
 		float doubleExplosionSize = 12.0F;
-		double distancedsize = target.getPos().distanceTo(crystalVec) / (double) doubleExplosionSize;
+		double distancedsize = target.getPos().distanceTo(crystalVec) / doubleExplosionSize;
 
 		double blockDensity = Explosion.getExposure(crystalVec, target);
 		double v = (1.0D - distancedsize) * blockDensity;
-		
-		float damage = (float) ((int) ((v * v + v) / 2.0D * 9.0D * (double) doubleExplosionSize + 1.0D));
+
+		float damage = ((int) ((v * v + v) / 2.0D * 9.0D * doubleExplosionSize + 1.0D));
 		double finald = 1.0D;
-		
+
 		damage *= (mc.world.getDifficulty() == Difficulty.HARD ? 1.5f : mc.world.getDifficulty() == Difficulty.EASY ? 0.5f : 1f);
 
 		finald = this.getBlastReduction(target, damage,
@@ -466,30 +465,30 @@ public class CrystalAura extends Module {
 
 		return (float) finald;
 	}
-	
+
 	private float getBlastReduction(LivingEntity entity, float damage, Explosion explosion) {
-        if (entity instanceof PlayerEntity) {
-            PlayerEntity ep = (PlayerEntity) entity;
-            DamageSource ds = DamageSource.explosion(explosion);
-            
-            damage = DamageUtil.getDamageLeft(damage, entity.getArmor(), (float) entity.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
+		if (entity instanceof PlayerEntity) {
+			PlayerEntity ep = (PlayerEntity) entity;
+			DamageSource ds = DamageSource.explosion(explosion);
 
-            int k = EnchantmentHelper.getProtectionAmount(ep.getArmorItems(), ds);
-            float f = MathHelper.clamp((float) k, 0.0F, 20.0F);
+			damage = DamageUtil.getDamageLeft(damage, entity.getArmor(), (float) entity.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
 
-            damage *= 1.0F - f / 25.0F;
+			int k = EnchantmentHelper.getProtectionAmount(ep.getArmorItems(), ds);
+			float f = MathHelper.clamp(k, 0.0F, 20.0F);
 
-            if (entity.hasStatusEffect(StatusEffects.RESISTANCE)) {
-                damage -= damage / 4.0F;
-            }
+			damage *= 1.0F - f / 25.0F;
 
-            damage = Math.max(damage - ep.getAbsorptionAmount(), 0.0F);
+			if (entity.hasStatusEffect(StatusEffects.RESISTANCE)) {
+				damage -= damage / 4.0F;
+			}
 
-            return damage;
-        } else {
-            damage = DamageUtil.getDamageLeft(damage, entity.getArmor(), (float) entity.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
+			damage = Math.max(damage - ep.getAbsorptionAmount(), 0.0F);
 
-            return damage;
-        }
-    }
+			return damage;
+		} else {
+			damage = DamageUtil.getDamageLeft(damage, entity.getArmor(), (float) entity.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
+
+			return damage;
+		}
+	}
 }

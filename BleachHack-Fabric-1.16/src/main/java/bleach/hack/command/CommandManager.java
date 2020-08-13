@@ -20,7 +20,29 @@ package bleach.hack.command;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.command.commands.*;
+import bleach.hack.command.commands.CmdBind;
+import bleach.hack.command.commands.CmdCI;
+import bleach.hack.command.commands.CmdCustomChat;
+import bleach.hack.command.commands.CmdDupe;
+import bleach.hack.command.commands.CmdEnchant;
+import bleach.hack.command.commands.CmdEntityStats;
+import bleach.hack.command.commands.CmdFriends;
+import bleach.hack.command.commands.CmdGamemode;
+import bleach.hack.command.commands.CmdGive;
+import bleach.hack.command.commands.CmdGuiReset;
+import bleach.hack.command.commands.CmdHelp;
+import bleach.hack.command.commands.CmdNBT;
+import bleach.hack.command.commands.CmdNotebot;
+import bleach.hack.command.commands.CmdNuker;
+import bleach.hack.command.commands.CmdPeek;
+import bleach.hack.command.commands.CmdPrefix;
+import bleach.hack.command.commands.CmdRbook;
+import bleach.hack.command.commands.CmdRename;
+import bleach.hack.command.commands.CmdRpc;
+import bleach.hack.command.commands.CmdSetting;
+import bleach.hack.command.commands.CmdSkull;
+import bleach.hack.command.commands.CmdToggle;
+import bleach.hack.command.commands.CmdXray;
 import bleach.hack.utils.BleachLogger;
 
 public class CommandManager {

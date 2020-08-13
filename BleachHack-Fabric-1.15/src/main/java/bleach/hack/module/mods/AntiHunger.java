@@ -12,12 +12,12 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 public class AntiHunger extends Module {
 
 	private boolean bool = false;
-	
+
 	public AntiHunger() {
 		super("AntiHunger", KEY_UNBOUND, Category.PLAYER, "Minimizes the amount of hunger you use",
 				new SettingToggle("Relaxed", false).withDesc("Only activates every other ticks, might fix getting fly kicked"));
 	}
-	
+
 	@Subscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {

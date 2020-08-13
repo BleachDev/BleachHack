@@ -1,5 +1,7 @@
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.event.events.EventSignBlockEntityRender;
 import bleach.hack.event.events.EventSoundPlay;
@@ -8,8 +10,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.particle.ParticleTypes;
-
-import com.google.common.eventbus.Subscribe;
 
 public class NoRender extends Module {
 
@@ -39,21 +39,21 @@ public class NoRender extends Module {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@Subscribe
 	public void onParticle(EventParticle.Normal event) {
 		if (getSetting(10).asToggle().state && event.particle instanceof ElderGuardianAppearanceParticle) {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@Subscribe
 	public void onParticleEmitter(EventParticle.Emitter event) {
 		if (getSetting(8).asToggle().state && getSetting(8).asToggle().getChild(0).asToggle().state && event.effect.getType() == ParticleTypes.TOTEM_OF_UNDYING) {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@Subscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
 		if (getSetting(8).asToggle().state && getSetting(8).asToggle().getChild(1).asToggle().state && event.instance.getId().getPath().equals("item.totem.use")) {

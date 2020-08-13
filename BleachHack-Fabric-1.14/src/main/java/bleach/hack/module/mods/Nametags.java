@@ -18,6 +18,7 @@
 package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -48,7 +49,7 @@ public class Nametags extends Module {
 						new SettingToggle("Custom Name", true).withDesc("Shows the items custom name if it has it"),
 						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags")));
 	}
-	
+
 	@Subscribe
 	public void onEntityRender(EventEntityRender.Render event) {
 		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSetting(3).asToggle().state)
@@ -61,7 +62,7 @@ public class Nametags extends Module {
 		if (((event.getEntity() instanceof Monster || EntityUtils.isAnimal(event.getEntity())) && getSetting(3).asToggle().state)
 				|| (event.getEntity() instanceof PlayerEntity && getSetting(2).asToggle().state)
 				|| (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state)) event.setCancelled(true);
-		
+
 		if (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state) {
 			ItemEntity e = (ItemEntity) event.getEntity();
 
@@ -92,7 +93,7 @@ public class Nametags extends Module {
 			double scale = (e instanceof PlayerEntity ?
 					Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1) :
 						Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
-			
+
 			/* Drawing Nametags */
 			if (getSetting(1).asMode().mode == 0) {
 				WorldRenderUtils.drawText(color + e.getName().getString()
@@ -113,7 +114,7 @@ public class Nametags extends Module {
 				if (e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()) > 0) {
 					health += " §e+" + (int)(e.getAbsorptionAmount() - (e.getHealthMaximum() - e.getHealth()));
 				}
-				
+
 				WorldRenderUtils.drawText(color + e.getName().getString(),
 						e.prevX + (e.x - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.y - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
@@ -154,7 +155,7 @@ public class Nametags extends Module {
 			}
 		}
 	}
-	
+
 	private String getHealthColor(LivingEntity entity) {
 		if (entity.getHealth() + entity.getAbsorptionAmount() > entity.getHealthMaximum()) {
 			return "§e";

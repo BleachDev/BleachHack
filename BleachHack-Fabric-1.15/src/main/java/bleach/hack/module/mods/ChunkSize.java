@@ -29,6 +29,7 @@ import java.util.stream.IntStream;
 import java.util.zip.DeflaterOutputStream;
 
 import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
@@ -115,7 +116,7 @@ public class ChunkSize extends Module {
 
 		CompoundTag compoundTag_6;
 		for (Integer int_1: IntStream.range(-1, 17).boxed().collect(Collectors.toList())) {
-			ChunkSection chunkSection_1 = Arrays.stream(chunkSections_1).filter((chunkSection_1x) -> {
+			ChunkSection chunkSection_1 = Arrays.stream(chunkSections_1).filter(chunkSection_1x -> {
 				return chunkSection_1x != null && chunkSection_1x.getYOffset() >> 4 == int_1;
 			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
 			ChunkNibbleArray chunkNibbleArray_1 = lightingProvider_1.get(LightType.BLOCK).getLightArray(ChunkSectionPos.from(chunkPos_1, int_1));

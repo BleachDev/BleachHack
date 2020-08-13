@@ -17,14 +17,13 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.module.Category;
-import bleach.hack.module.Module;
-
 import java.util.Random;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventSendPacket;
+import bleach.hack.module.Category;
+import bleach.hack.module.Module;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;

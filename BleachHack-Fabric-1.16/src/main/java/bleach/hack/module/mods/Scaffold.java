@@ -21,12 +21,12 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import bleach.hack.event.events.EventTick;
-import bleach.hack.event.events.EventWorldRender;
-
-import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
+import com.google.common.eventbus.Subscribe;
+
+import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
@@ -42,7 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class Scaffold extends Module {
-	
+
 	private Set<BlockPos> renderBlocks = new LinkedHashSet<>();
 
 	public Scaffold() {
@@ -61,7 +61,7 @@ public class Scaffold extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		renderBlocks.clear();
-		
+
 		int slot = -1;
 		int prevSlot = mc.player.inventory.selectedSlot;
 
@@ -85,7 +85,7 @@ public class Scaffold extends Module {
 				? new LinkedHashSet<>(Arrays.asList(new BlockPos(placeVec), new BlockPos(placeVec.add(range, 0, 0)), new BlockPos(placeVec.add(-range, 0, 0)),
 						new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))
 						: getSpiral(mode, new BlockPos(placeVec)));
-		
+
 		// Don't bother doing anything if there aren't any blocks to place on
 		boolean empty = true;
 		for (BlockPos bp: blocks) {
@@ -94,21 +94,21 @@ public class Scaffold extends Module {
 				break;
 			}
 		}
-		
+
 		if (empty) return;
-		
+
 		if (getSetting(3).asToggle().state
 				&& WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock())
 				&& !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down(2)).getBlock())) {
 			double toBlock = (int) mc.player.getY() - mc.player.getY();
-			
+
 			if (toBlock < 0.05 && InputUtil.isKeyPressed(
 					mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -toBlock, mc.player.getVelocity().z);
 				mc.player.jump();
 			}
 		}
-		
+
 		if (getSetting(5).asToggle().state) {
 			for (BlockPos bp: blocks) {
 				if (getSetting(5).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
@@ -122,7 +122,7 @@ public class Scaffold extends Module {
 			if (getSetting(2).asRotate().state) {
 				WorldUtils.facePosAuto(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5, getSetting(2).asRotate());
 			}
-			
+
 			if (WorldUtils.placeBlock(bp, -1, false, false)) {
 				cap++;
 				if (cap >= (int) getSetting(6).asSlider().getValue()) return;
@@ -131,14 +131,14 @@ public class Scaffold extends Module {
 
 		mc.player.inventory.selectedSlot = prevSlot;
 	}
-	
+
 	@Subscribe
 	public void onWorldRender(EventWorldRender event) {
 		if (getSetting(5).asToggle().state) {
 			float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
 			for (BlockPos bp: renderBlocks) {
 				RenderUtils.drawFilledBox(bp, col[0], col[1], col[2], 0.7f);
-				
+
 				col[0] = Math.max(0f, col[0] - 0.01f);
 				col[2] = Math.min(1f, col[2] + 0.01f);
 			}

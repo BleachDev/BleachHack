@@ -6,6 +6,8 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventDrawTooltip;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -33,8 +35,6 @@ import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
-
-import com.google.common.eventbus.Subscribe;
 
 public class Peek extends Module {
 
@@ -67,14 +67,14 @@ public class Peek extends Module {
 		}
 
 		slotPos = new int[] {slot.xPosition, slot.yPosition};
-		
+
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0f, 0f, 500f);
 
 		if (getSetting(0).asToggle().state) drawShulkerToolTip(event, slot, event.mX, event.mY);
 		if (getSetting(1).asToggle().state) drawBookToolTip(slot, event.mX, event.mY);
 		if (getSetting(2).asToggle().state) drawMapToolTip(slot, event.mX, event.mY);
-		
+
 		GL11.glPopMatrix();
 	}
 
@@ -165,7 +165,7 @@ public class Peek extends Module {
 
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
 		if (data == null || data.colors == null) return;
-		
+
 		byte[] colors = data.colors;
 
 		double size = getSetting(2).asToggle().getChild(0).asSlider().getValue();
@@ -225,7 +225,7 @@ public class Peek extends Module {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
-	
+
 	private void fillGradient(int x1, int y1, int x2, int y2, int color1, int color2) {
 		float float_1 = (color1 >> 24 & 255) / 255.0F;
 		float float_2 = (color1 >> 16 & 255) / 255.0F;

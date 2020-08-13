@@ -1,5 +1,7 @@
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.event.events.EventSignBlockEntityRender;
 import bleach.hack.event.events.EventSoundPlay;
@@ -8,8 +10,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.particle.ParticleTypes;
-
-import com.google.common.eventbus.Subscribe;
 
 public class NoRender extends Module {
 

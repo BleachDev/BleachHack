@@ -17,16 +17,16 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 
 public class SettingColor extends SettingBase {
-	
+
 	public String text;
 	public float hue;
 	public float sat;
 	public float bri;
-	
+
 	protected float defaultHue;
 	protected float defaultSat;
 	protected float defaultBri;
-	
+
 	public SettingColor(String text, float r, float g, float b, boolean hsb) {
 		this.text = text;
 		if (hsb) {
@@ -39,7 +39,7 @@ public class SettingColor extends SettingBase {
 			this.sat = vals[1];
 			this.bri = vals[2];
 		}
-		
+
 		defaultHue = hue;
 		defaultSat = sat;
 		defaultBri = bri;
@@ -48,18 +48,18 @@ public class SettingColor extends SettingBase {
 	public String getName() {
 		return text;
 	}
-	
+
 	public void render(ModuleWindow window, int x, int y, int len) {
 		int sx = x + 3,
-			sy = y + 2,
-			ex = x + len - 18,
-			ey = y + getHeight(len) - 3;
-		
+				sy = y + 2,
+				ex = x + len - 18,
+				ey = y + getHeight(len) - 3;
+
 		window.fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
-		
+
 		DrawableHelper.fill(sx, sy, ex, ey, -1);
 		Color satColor = Color.getHSBColor(1f - hue, 1f, 1f);
-		
+
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
@@ -82,45 +82,45 @@ public class SettingColor extends SettingBase {
 		GL11.glShadeModel(7424);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
+
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
 			bri = 1f - 1f / ((float) (ey - sy) / (window.mouseY - sy));
 			sat = 1f / ((float) (ex - sx) / (window.mouseX - sx));
 		}
-		
+
 		int briY = (int) (ey - (ey - sy) * bri);
 		int satX = (int) (sx + (ex - sx) * sat);
-		
+
 		DrawableHelper.fill(satX - 2, briY, satX, briY + 1, 0xffd0d0d0);
 		DrawableHelper.fill(satX + 1, briY, satX + 3, briY + 1, 0xffd0d0d0);
 		DrawableHelper.fill(satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
 		DrawableHelper.fill(satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
-		
+
 		GL11.glPushMatrix();
 		GL11.glScaled(0.75, 0.75, 1);
 		MinecraftClient.getInstance().textRenderer.draw(text, (int) ((sx + 1) * 1/0.75), (int) ((sy + 1) * 1/0.75), 0x000000);
 		GL11.glPopMatrix();
-		
+
 		sx = ex + 5;
 		ex = ex + 12;
 		window.fillReverseGrey(sx - 1, sy - 1, ex + 1, ey + 1);
-		
+
 		for (int i = sy; i < ey; i++) {
 			float curHue = 1f / ((float) (ey - sy) / (i - sy));
 			DrawableHelper.fill(sx, i, ex, i + 1, Color.getHSBColor(curHue, 1f, 1f).getRGB());
 		}
-		
+
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
 			hue = 1f / ((float) (ey - sy) / (window.mouseY - sy));
 		}
-		
+
 		int hueY = (int) (sy + (ey - sy) * hue);
 		DrawableHelper.fill(sx, hueY - 1, sx + 1, hueY + 2, 0xffa0a0a0);
 		DrawableHelper.fill(ex - 1, hueY - 1, ex, hueY + 2, 0xffa0a0a0);
 		DrawableHelper.fill(sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
 		DrawableHelper.fill(ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
 	}
-	
+
 	public SettingColor withDesc(String desc) {
 		description = desc;
 		return this;
@@ -144,19 +144,19 @@ public class SettingColor extends SettingBase {
 		jo.add("hue", new JsonPrimitive(hue));
 		jo.add("sat", new JsonPrimitive(sat));
 		jo.add("bri", new JsonPrimitive(bri));
-		
+
 		return jo;
 	}
-	
+
 	public int getRGB() {
 		return Color.HSBtoRGB(hue, sat, bri);
 	}
-	
+
 	public float[] getRGBFloat() {
 		Color col = Color.getHSBColor(hue, sat, bri);
 		return new float[] { col.getRed() / 255f, col.getGreen() / 255f, col.getBlue() / 255f };
 	}
-	
+
 	@Override
 	public boolean isDefault() {
 		return hue == defaultHue && sat == defaultSat && bri == defaultBri;

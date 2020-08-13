@@ -22,17 +22,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.event.events.EventTick;
 import com.google.common.collect.Iterables;
+import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.RenderUtils;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
 
 public class Trail extends Module {

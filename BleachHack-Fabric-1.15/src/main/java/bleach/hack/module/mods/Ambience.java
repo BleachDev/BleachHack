@@ -63,7 +63,7 @@ public class Ambience extends Module {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@Subscribe
 	public void onSkyColor(EventSkyColor event) {
 		if (event instanceof EventSkyColor.CloudColor && getSetting(6).asToggle().state) {

@@ -12,6 +12,6 @@ public class NoKeyBlock extends Module {
 				new SettingToggle("Control Keys", false).withDesc("Allows you to type the 31 ascii control keys"),
 				new SettingToggle("Delete Key", false).withDesc("Allows you to type the delete key"));
 	}
-	
+
 	/* Logic handled in MixinSharedConstants */
 }

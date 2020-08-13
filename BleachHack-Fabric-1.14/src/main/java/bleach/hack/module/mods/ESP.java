@@ -17,6 +17,8 @@
  */
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventOutlineColor;
 import bleach.hack.event.events.EventTick;
@@ -25,7 +27,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EnderCrystalEntity;
@@ -52,7 +53,7 @@ public class ESP extends Module {
 						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
 				new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
 						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
-		     		new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
+				new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
 						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
@@ -65,7 +66,7 @@ public class ESP extends Module {
 			}
 		}
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		for (Entity e: mc.world.getEntities()) {
@@ -75,7 +76,7 @@ public class ESP extends Module {
 					|| (e instanceof ItemEntity && getSetting(3).asToggle().state)
 					|| (e instanceof EnderCrystalEntity && getSetting(4).asToggle().state)
 					|| ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state)
-			   		|| (e instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state)) {
+					|| (e instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state)) {
 				e.setGlowing(true);
 			}
 		}

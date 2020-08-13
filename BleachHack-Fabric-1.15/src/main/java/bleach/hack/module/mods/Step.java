@@ -17,14 +17,14 @@
  */
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-
-import com.google.common.eventbus.Subscribe;
 
 public class Step extends Module {
 

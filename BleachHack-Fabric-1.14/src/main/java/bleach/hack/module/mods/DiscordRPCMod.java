@@ -1,6 +1,7 @@
 package bleach.hack.module.mods;
 
 import org.apache.commons.lang3.RandomUtils;
+
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
@@ -66,33 +67,33 @@ public class DiscordRPCMod extends Module {
 			long start = 0;
 
 			switch (getSetting(0).asMode().mode) {
-			case 0:
-				if (mc.getCurrentServerEntry() != null) text1 = "Playing " + mc.getCurrentServerEntry().address;
-				else text1 = "Playing Singleplayer";
+				case 0:
+					if (mc.getCurrentServerEntry() != null) text1 = "Playing " + mc.getCurrentServerEntry().address;
+					else text1 = "Playing Singleplayer";
 
-				break;
-			case 1:
-				if (mc.getCurrentServerEntry() != null) text1 = mc.getCurrentServerEntry().address;
-				else text1 = "Singleplayer";
+					break;
+				case 1:
+					if (mc.getCurrentServerEntry() != null) text1 = mc.getCurrentServerEntry().address;
+					else text1 = "Singleplayer";
 
-				break;
-			case 2:
-				if (mc.getCurrentServerEntry() != null) text1 = "Multiplayer";
-				else text1 = "Singleplayer";
+					break;
+				case 2:
+					if (mc.getCurrentServerEntry() != null) text1 = "Multiplayer";
+					else text1 = "Singleplayer";
 
-				break;
-			case 3:
-				text1 = mc.player.getEntityName() + " Ontop!";
-				break;
-			case 4:
-				text1 = "Minecraft " + SharedConstants.getGameVersion().getName();
-				break;
-			case 5:
-				text1 = mc.player.getEntityName();
-				break;
-			case 6:
-				text1 = "<- bad client";
-				break;
+					break;
+				case 3:
+					text1 = mc.player.getEntityName() + " Ontop!";
+					break;
+				case 4:
+					text1 = "Minecraft " + SharedConstants.getGameVersion().getName();
+					break;
+				case 5:
+					text1 = mc.player.getEntityName();
+					break;
+				case 6:
+					text1 = "<- bad client";
+					break;
 			}
 
 			ItemStack currentItem = mc.player.inventory.getMainHandStack();
@@ -100,33 +101,33 @@ public class DiscordRPCMod extends Module {
 				(currentItem.getCount() > 1 ? currentItem.getCount() + " " : "") + currentItem.getItem().getName().asString();
 
 			switch (getSetting(1).asMode().mode) {
-			case 0:
-				text2 = (int) mc.player.getHealth() + " hp - Holding " + itemName;
-				break;
-			case 1:
-				text2 = mc.player.getEntityName() + " - " + (int) mc.player.getHealth() + " hp";
-				break;
-			case 2:
-				text2 = "Holding " + itemName;
-				break;
-			case 3:
-				text2 = (int) mc.player.getHealth() + " hp - At " + bpToString(mc.player.getBlockPos());
-				break;
-			case 4:
-				text2 = "At " + bpToString(mc.player.getBlockPos());
-				break;
+				case 0:
+					text2 = (int) mc.player.getHealth() + " hp - Holding " + itemName;
+					break;
+				case 1:
+					text2 = mc.player.getEntityName() + " - " + (int) mc.player.getHealth() + " hp";
+					break;
+				case 2:
+					text2 = "Holding " + itemName;
+					break;
+				case 3:
+					text2 = (int) mc.player.getHealth() + " hp - At " + bpToString(mc.player.getBlockPos());
+					break;
+				case 4:
+					text2 = "At " + bpToString(mc.player.getBlockPos());
+					break;
 			}
 
 			switch (getSetting(2).asMode().mode) {
-			case 0:
-				start = System.currentTimeMillis() - tick * 50;
-				break;
-			case 1:
-				start = System.currentTimeMillis() - RandomUtils.nextInt(0, 86400000);
-				break;
-			case 2:
-				start = 1590000000000l + tick * 100;
-				break;
+				case 0:
+					start = System.currentTimeMillis() - tick * 50;
+					break;
+				case 1:
+					start = System.currentTimeMillis() - RandomUtils.nextInt(0, 86400000);
+					break;
+				case 2:
+					start = 1590000000000l + tick * 100;
+					break;
 			}
 
 			DiscordRPC.discordUpdatePresence(

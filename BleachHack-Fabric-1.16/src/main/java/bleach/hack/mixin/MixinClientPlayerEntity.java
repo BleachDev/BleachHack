@@ -17,6 +17,15 @@
  */
 package bleach.hack.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.mojang.authlib.GameProfile;
+
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventMovementTick;
@@ -27,6 +36,8 @@ import bleach.hack.module.mods.Freecam;
 import bleach.hack.module.mods.NoSlow;
 import bleach.hack.module.mods.SafeWalk;
 import bleach.hack.module.mods.Scaffold;
+import bleach.hack.utils.BleachQueue;
+import bleach.hack.utils.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -35,21 +46,9 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.mojang.authlib.GameProfile;
-
-import bleach.hack.utils.BleachQueue;
-import bleach.hack.utils.file.BleachFileHelper;
-
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
-	
+
 	public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
 		super(world, profile);
 	}
@@ -68,7 +67,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
 			BleachQueue.nextQueue();
 		} catch (Exception e) {}
-		
+
 		EventTick event = new EventTick();
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) info.cancel();
@@ -104,21 +103,21 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 			info.cancel();
 		}
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "method_30673", cancellable = true)
 	protected void method_30673(double double_1, double double_2, CallbackInfo ci) {
 		if (ModuleManager.getModule(Freecam.class).isToggled()) {
 			ci.cancel();
 		}
 	}
-	
+
 	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0))
 	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
 			closeHandledScreen();
 		}
 	}
-	
+
 	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0))
 	private void updateNausea_openScreen(MinecraftClient player, Screen screen_1) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {

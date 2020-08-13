@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import net.fabricmc.loader.api.FabricLoader;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.BleachHack;
@@ -39,6 +38,7 @@ import bleach.hack.utils.LoginManager;
 import bleach.hack.utils.file.BleachFileHelper;
 import bleach.hack.utils.file.BleachFileMang;
 import bleach.hack.utils.file.BleachGithubReader;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.SettingsScreen;

@@ -59,7 +59,7 @@ public class WorldRenderUtils {
 		bufferbuilder.vertex(i + 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, f).next();
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
+
 		mc.textRenderer.draw(str, -i, 0, -1);
 
 		glCleanup();
@@ -71,7 +71,7 @@ public class WorldRenderUtils {
 		GL11.glScaled(0.4*scale, 0.4*scale, 0);
 
 		GL11.glTranslated(offX, offY, 0);
-		
+
 		if (item.getItem() instanceof BlockItem) GL11.glRotatef(180F, 1F, 180F, 10F);
 		mc.getItemRenderer().renderItem(new ItemStack(
 				item.getItem()), Mode.GUI, 0, OverlayTexture.DEFAULT_UV, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
@@ -89,11 +89,11 @@ public class WorldRenderUtils {
 		int c = 0;
 		for (Entry<Enchantment, Integer> m: EnchantmentHelper.getEnchantments(item).entrySet()) {
 			String text = I18n.translate(m.getKey().getName(2).getString());
-			
+
 			if (text.isEmpty()) continue;
-			
+
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
-			
+
 			int w1 = mc.textRenderer.getStringWidth(subText) / 2;
 			mc.textRenderer.drawWithShadow(
 					subText, -4 - w1, c*10-1,
@@ -105,7 +105,7 @@ public class WorldRenderUtils {
 		GL11.glScalef(0.6F, 0.6F, 0.6F);
 		if (item.isDamageable() && item.getMaxDamage() > 0) {
 			String dur = item.getMaxDamage() - item.getDamage() + "";
-			int color = MathHelper.hsvToRgb((float) MathHelper.clamp(item.getMaxDamage() - item.getDamage() / item.getMaxDamage(), 0f, 1f) / 3.0F, 1.0F, 1.0F);
+			int color = MathHelper.hsvToRgb(MathHelper.clamp(item.getMaxDamage() - item.getDamage() / item.getMaxDamage(), 0f, 1f) / 3.0F, 1.0F, 1.0F);
 			mc.textRenderer.drawWithShadow(dur, -8 - dur.length() * 3, 15, new Color(color >> 16 & 255, color >> 8 & 255, color & 255).getRGB());
 		}
 
@@ -119,7 +119,7 @@ public class WorldRenderUtils {
 		GL11.glNormal3f(0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-mc.player.yaw, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(mc.player.pitch, 1.0F, 0.0F, 0.0F);
-		GL11.glDepthFunc(GL11.GL_ALWAYS); 
+		GL11.glDepthFunc(GL11.GL_ALWAYS);
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);

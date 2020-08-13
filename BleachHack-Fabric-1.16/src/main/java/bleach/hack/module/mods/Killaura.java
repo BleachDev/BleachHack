@@ -20,13 +20,13 @@ package bleach.hack.module.mods;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventTick;
-import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
+import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;

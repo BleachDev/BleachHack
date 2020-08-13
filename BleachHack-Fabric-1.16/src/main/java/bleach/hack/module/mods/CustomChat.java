@@ -22,7 +22,7 @@ import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 public class CustomChat extends Module {
-	
+
 	private static final List<CustomFont> fonts = Arrays.asList(
 			new CustomFont(CharMap.range('!', 0xFF01, 95)),
 			new CustomFont(CharMap.single('a', '\u1D00'), CharMap.single('b', '\u0299'), CharMap.range('c', 0x1d04, 2), CharMap.single('e', '\u1d07'),
@@ -56,7 +56,7 @@ public class CustomChat extends Module {
 					CharMap.single('O', '\u03c3'), CharMap.single('P', '\u03c1'), CharMap.single('R', '\u044f'), CharMap.single('S', '\u0455'),
 					CharMap.single('T', '\u0442'), CharMap.single('U', '\u03c5'), CharMap.single('V', '\u03bd'), CharMap.single('W', '\u03c9'),
 					CharMap.single('X', '\u03c7'), CharMap.single('Y', '\u0443')));
-	
+
 	public String prefix = "";
 	public String suffix = " \u25ba \u0432\u2113\u0454\u03b1c\u043d\u043d\u03b1c\u043a";
 
@@ -69,11 +69,11 @@ public class CustomChat extends Module {
 				new SettingToggle("Suffix", false).withDesc("Message appended to the message, set with \"customchat suffix [message]\""),
 				new SettingMode("KillText", "None", "Ez", "GG"));
 	}
-	
+
 	public void init() {
 		String pfx = BleachFileHelper.readMiscSetting("customChatPrefix");
 		if (pfx != null) prefix = pfx;
-		
+
 		String sfx = BleachFileHelper.readMiscSetting("customChatSuffix");
 		if (sfx != null) suffix = sfx;
 	}
@@ -82,36 +82,36 @@ public class CustomChat extends Module {
 	public void onPacketSend(EventSendPacket event) {
 		if (event.getPacket() instanceof ChatMessageC2SPacket) {
 			String text = ((ChatMessageC2SPacket) event.getPacket()).getChatMessage();
-			
+
 			if (text.startsWith("/")) return;
-			
+
 			if (getSetting(0).asToggle().state) {
 				text = fonts.get(getSetting(1).asMode().mode).replace(text);
 			}
-			
+
 			if (getSetting(2).asToggle().state) {
 				text = prefix + text;
 			}
-			
+
 			if (getSetting(3).asToggle().state) {
 				text = text + suffix;
 			}
-			
+
 			if (!text.equals(((ChatMessageC2SPacket) event.getPacket()).getChatMessage())) {
 				FabricReflect.writeField(event.getPacket(), text, "field_12764", "chatMessage");
 			}
 		}
 	}
-	
+
 	@Subscribe
 	public void onPacketRead(EventReadPacket event) {
 		if (getSetting(4).asMode().mode != 0 && event.getPacket() instanceof GameMessageS2CPacket) {
-			
+
 			String msg = ((GameMessageS2CPacket) event.getPacket()).getMessage().asString();
 			if (msg.contains(mc.player.getName().asString()) && msg.contains("by")) {
 				for (PlayerEntity e: mc.world.getPlayers()) {
 					if (e == mc.player) continue;
-					
+
 					if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().asString())
 							&& !msg.contains("<" + e.getName().asString() + ">") && !msg.contains("<" + mc.player.getName().asString() + ">")) {
 						if (getSetting(4).asMode().mode == 1) {
@@ -126,7 +126,7 @@ public class CustomChat extends Module {
 	}
 
 	static class CustomFont {
-		
+
 		private HashMap<Character, Character> allMaps = new HashMap<>();
 
 		public CustomFont(CharMap... maps) {
@@ -134,12 +134,12 @@ public class CustomChat extends Module {
 				allMaps.putAll(map.getMap());
 			}
 		}
-		
+
 		public String replace(String startString) {
 			for (Entry<Character, Character> e: allMaps.entrySet()) {
 				startString = startString.replace(e.getKey(), e.getValue());
 			}
-			
+
 			return startString;
 		}
 

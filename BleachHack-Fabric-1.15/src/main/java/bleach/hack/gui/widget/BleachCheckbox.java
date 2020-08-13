@@ -17,13 +17,13 @@
  */
 package bleach.hack.gui.widget;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.AbstractPressableButtonWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
-
-import org.lwjgl.opengl.GL11;
 
 public class BleachCheckbox extends AbstractPressableButtonWidget {
 

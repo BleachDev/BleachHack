@@ -17,14 +17,15 @@
  */
 package bleach.hack.mixin;
 
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.Xray;
-import net.minecraft.client.render.chunk.ChunkOcclusionDataBuilder;
-import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.Xray;
+import net.minecraft.client.render.chunk.ChunkOcclusionDataBuilder;
+import net.minecraft.util.math.BlockPos;
 
 @Mixin(ChunkOcclusionDataBuilder.class)
 public class MixinChunkOcclusionGraphBuilder {

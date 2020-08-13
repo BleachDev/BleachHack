@@ -8,7 +8,7 @@ public class DiscordRPCManager {
 	public static void start(String id) {
 		System.out.println("Initing Discord RPC...");
 
-		DiscordRPC.discordInitialize(id, new DiscordEventHandlers.Builder().setReadyEventHandler((user) -> {
+		DiscordRPC.discordInitialize(id, new DiscordEventHandlers.Builder().setReadyEventHandler(user -> {
 			System.out.println(user.username + "#" + user.discriminator + " is big gay");
 		}).build(), true);
 	}

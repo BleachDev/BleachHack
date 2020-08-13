@@ -29,10 +29,10 @@ public class Surround extends Module {
 				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
 				new SettingRotate(false).withDesc("Rotates when placing"));
 	}
-	
+
 	public void onEnable() {
 		super.onEnable();
-		
+
 		int obby = -1;
 		for (int i = 0; i < 9; i++) {
 			if (mc.player.inventory.getInvStack(i).getItem() == Items.OBSIDIAN) {
@@ -40,29 +40,29 @@ public class Surround extends Module {
 				break;
 			}
 		}
-		
+
 		if (obby == -1) {
 			BleachLogger.errorMessage("No obsidian in hotbar!");
 			setToggled(false);
 			return;
 		}
-		
+
 		if (getSetting(1).asToggle().state) {
 			Vec3d centerPos = new Vec3d(mc.player.getBlockPos()).add(0.5, 0.5, 0.5);
 			mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.onGround));
 		}
-		
+
 		placeTick(obby);
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (getSetting(3).asToggle().state && mc.options.keyJump.isPressed()) {
 			setToggled(false);
 			return;
 		}
-		
+
 		int obby = -1;
 		for (int i = 0; i < 9; i++) {
 			if (mc.player.inventory.getInvStack(i).getItem() == Items.OBSIDIAN) {
@@ -70,32 +70,32 @@ public class Surround extends Module {
 				break;
 			}
 		}
-		
+
 		if (obby == -1) {
 			BleachLogger.errorMessage("Ran out of obsidian!");
 			setToggled(false);
 			return;
 		}
-		
+
 		placeTick(obby);
 	}
-	
+
 	private void placeTick(int obsidian) {
 		int cap = 0;
-		
+
 		if (getSetting(0).asMode().mode == 0) {
 			for (BlockPos b: new BlockPos[] {
 					mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
 					mc.player.getBlockPos().south(), mc.player.getBlockPos().west()}) {
-				
+
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;
 				}
-				
+
 				if (getSetting(5).asRotate().state) {
 					WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 				}
-				
+
 				if (WorldUtils.placeBlock(b, obsidian, false, false)) {
 					cap++;
 				}
@@ -107,21 +107,21 @@ public class Surround extends Module {
 					new BlockPos(box.x2 + 1, box.y1, box.z1), new BlockPos(box.x2, box.y1, box.z1 - 1),
 					new BlockPos(box.x1 - 1, box.y1, box.z2), new BlockPos(box.x1, box.y1, box.z2 + 1),
 					new BlockPos(box.x2 + 1, box.y1, box.z2), new BlockPos(box.x2, box.y1, box.z2 + 1))) {
-				
+
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;
 				}
-				
+
 				if (getSetting(5).asRotate().state) {
 					WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 				}
-				
+
 				if (WorldUtils.placeBlock(b, obsidian, false, false)) {
 					cap++;
 				}
 			}
 		}
-		
+
 		if (!getSetting(2).asToggle().state) {
 			setToggled(false);
 		}

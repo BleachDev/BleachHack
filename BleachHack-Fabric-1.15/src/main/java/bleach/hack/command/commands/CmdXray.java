@@ -17,6 +17,8 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.List;
+
 import bleach.hack.command.Command;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.Xray;
@@ -25,8 +27,6 @@ import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import java.util.List;
 
 public class CmdXray extends Command {
 	//brb stealing your nuker command
@@ -48,11 +48,11 @@ public class CmdXray extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		BleachFileMang.createFile("xrayblocks.txt");
-		
+
 		List<String> lines = BleachFileMang.readFileLines("xrayblocks.txt");
-		lines.removeIf(s -> s.isEmpty());
+		lines.removeIf(String::isEmpty);
 		System.out.println(lines);
-		
+
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
 			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
 			String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
@@ -65,14 +65,14 @@ public class CmdXray extends Command {
 					BleachLogger.errorMessage("Block is already added!");
 					return;
 				}
-				
+
 				BleachFileMang.appendFile(block, "xrayblocks.txt");
-				
+
 				if (xray.isToggled()) {
 					xray.toggle();
 					xray.toggle();
 				}
-				
+
 				BleachLogger.infoMessage("Added Block: " + args[1]);
 
 			} else if (args[0].equalsIgnoreCase("remove")) {
@@ -84,12 +84,12 @@ public class CmdXray extends Command {
 
 					BleachFileMang.createEmptyFile("xrayblocks.txt");
 					BleachFileMang.appendFile(s, "xrayblocks.txt");
-					
+
 					if (xray.isToggled()) {
 						xray.toggle();
 						xray.toggle();
 					}
-					
+
 					BleachLogger.infoMessage("Removed Block: " + args[1]);
 				} else {
 					BleachLogger.errorMessage("Block Not In List: " + args[1]);

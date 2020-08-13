@@ -1,12 +1,12 @@
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -17,7 +17,7 @@ import net.minecraft.server.network.packet.UpdateSelectedSlotC2SPacket;
 import net.minecraft.util.math.BlockPos;
 
 public class AutoTool extends Module {
-	
+
 	private int lastSlot = -1;
 	private int queueSlot = -1;
 
@@ -27,21 +27,21 @@ public class AutoTool extends Module {
 				new SettingToggle("Switch Back", true).withDesc("Switches back to your previous item when done breaking"),
 				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damagable item if possible"));
 	}
-	
+
 	@Subscribe
 	public void onPacketSend(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerActionC2SPacket) {
 			PlayerActionC2SPacket p = (PlayerActionC2SPacket) event.getPacket();
-			
+
 			if (p.getAction() == Action.START_DESTROY_BLOCK) {
 				if (mc.player.isCreative() || mc.player.isSpectator()) return;
-				
+
 				queueSlot = -1;
-				
+
 				lastSlot = mc.player.inventory.selectedSlot;
-				
+
 				int slot = getBestSlot(p.getPos());
-				
+
 				if (slot != mc.player.inventory.selectedSlot) {
 					mc.player.inventory.selectedSlot = slot;
 					mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
@@ -59,7 +59,7 @@ public class AutoTool extends Module {
 			}
 		}
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (queueSlot != -1) {
@@ -71,21 +71,21 @@ public class AutoTool extends Module {
 
 	private int getBestSlot(BlockPos pos) {
 		BlockState state = mc.world.getBlockState(pos);
-		
+
 		int bestSlot = mc.player.inventory.selectedSlot;
-		
+
 		ItemStack handSlot = mc.player.inventory.getInvStack(bestSlot);
 		if (getSetting(0).asToggle().state && handSlot.isDamageable() && handSlot.getMaxDamage() - handSlot.getDamage() < 2) {
 			bestSlot = bestSlot == 0 ? 1 : bestSlot - 1;
 		}
-		
+
 		if (state.isAir()) return mc.player.inventory.selectedSlot;
-		
+
 		float bestSpeed = getMiningSpeed(mc.player.inventory.getInvStack(bestSlot), state);
 
 		for (int slot = 0; slot < 9; slot++) {
 			if (slot == mc.player.inventory.selectedSlot || slot == bestSlot) continue;
-			
+
 			ItemStack stack = mc.player.inventory.getInvStack(slot);
 			if (getSetting(0).asToggle().state && stack.isDamageable() && stack.getMaxDamage() - stack.getDamage() < 2) {
 				continue;

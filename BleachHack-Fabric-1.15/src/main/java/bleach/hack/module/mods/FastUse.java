@@ -17,15 +17,14 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventTick;
-
-import com.google.common.collect.Sets;
-import com.google.common.eventbus.Subscribe;
-
 import java.util.Set;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.google.common.collect.Sets;
+import com.google.common.eventbus.Subscribe;
+
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;

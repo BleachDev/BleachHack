@@ -17,16 +17,16 @@
  */
 package bleach.hack.module.mods;
 
+import org.lwjgl.glfw.GLFW;
+
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.WorldUtils;
-
-import org.lwjgl.glfw.GLFW;
-
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.options.KeyBinding;
@@ -109,26 +109,26 @@ public class NoSlow extends Module {
 				KeyBinding.setKeyPressed(InputUtil.fromName(mc.options.keySneak.getName()),
 						InputUtil.isKeyPressed(mc.window.getHandle(), InputUtil.fromName(mc.options.keySneak.getName()).getKeyCode()));
 			}
-			
+
 			if (getSetting(5).asToggle().asToggle().getChild(2).asToggle().state) {
 				float yaw = 0f;
 				float pitch = 0f;
-				
+
 				if (InputUtil.isKeyPressed(mc.window.getHandle(), GLFW.GLFW_KEY_LEFT)) yaw -= 4f;
 				if (InputUtil.isKeyPressed(mc.window.getHandle(), GLFW.GLFW_KEY_RIGHT)) yaw += 4f;
 				if (InputUtil.isKeyPressed(mc.window.getHandle(), GLFW.GLFW_KEY_UP)) pitch -= 4f;
 				if (InputUtil.isKeyPressed(mc.window.getHandle(), GLFW.GLFW_KEY_DOWN)) pitch += 4f;
-				
+
 				if (getSetting(5).asToggle().asToggle().getChild(2).asToggle().getChild(1).asToggle().state) {
 					if (yaw == 0f && pitch != 0f) yaw += -0.1 + Math.random() / 5f;
 					else yaw *= 0.75f + Math.random() / 2f;
-					
+
 					if (pitch == 0f && yaw != 0f) pitch += -0.1 + Math.random() / 5f;
 					else pitch *= 0.75f + Math.random() / 2f;
 				}
-				
+
 				mc.player.yaw += yaw;
-				
+
 				if (getSetting(5).asToggle().asToggle().getChild(2).asToggle().getChild(0).asToggle().state) {
 					mc.player.pitch = MathHelper.clamp(mc.player.pitch + pitch, -90f, 90f);
 				} else {
@@ -137,7 +137,7 @@ public class NoSlow extends Module {
 			}
 		}
 	}
-	
+
 	@Subscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof ClickWindowC2SPacket && getSetting(5).asToggle().asToggle().getChild(1).asToggle().state) {

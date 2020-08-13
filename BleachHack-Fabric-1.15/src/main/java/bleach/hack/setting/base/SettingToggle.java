@@ -37,35 +37,35 @@ public class SettingToggle extends SettingBase {
 
 	public boolean state;
 	public String text;
-	
+
 	protected boolean defaultState;
-	
+
 	protected List<SettingBase> children = new ArrayList<>();
 	protected boolean expanded = false;
 
 	public SettingToggle(String text, boolean state) {
 		this.state = state;
 		this.text = text;
-		
+
 		defaultState = state;
 	}
-	
-	
+
+
 	public String getName() {
 		return text;
 	}
-	
+
 	public void render(ModuleWindow window, int x, int y, int len) {
 		String color2;
 
-		if (state) { 
+		if (state) {
 			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a72";
 			else color2 = "\u00a7a";
 		} else {
 			if (window.mouseOver(x, y, x+len, y+12)) color2 = "\u00a74";
 			else color2 = "\u00a7c";
 		}
-		
+
 		if (!children.isEmpty()) {
 			if (window.rmDown && window.mouseOver(x, y, x+len, y+12)) expanded = !expanded;
 
@@ -75,11 +75,11 @@ public class SettingToggle extends SettingBase {
 				DrawableHelper.fill(x, y, x + len - 3, y + 1, 0x90000000);
 				DrawableHelper.fill(x + 1, y + getHeight(len) - 2, x + 2, y + getHeight(len) - 1, 0x90000000);
 				DrawableHelper.fill(x + 2, y + getHeight(len) - 1, x + len - 2, y + getHeight(len), 0x90b0b0b0);
-				
+
 				int h = y + 12;
 				for (SettingBase s: children) {
 					s.render(window, x + 1, h, len - 2);
-					
+
 					h += s.getHeight(len - 2);
 				}
 			}*/
@@ -107,7 +107,7 @@ public class SettingToggle extends SettingBase {
 
 		if (window.mouseOver(x, y, x+len, y+12) && window.lmDown) state = !state;
 	}
-	
+
 	public int getHeight(int len) {
 		int h = 12;
 
@@ -118,35 +118,35 @@ public class SettingToggle extends SettingBase {
 
 		return h;
 	}
-	
+
 	public SettingBase getChild(int c) {
 		return children.get(c);
 	}
-	
+
 	public SettingToggle withChildren(SettingBase... children) {
 		this.children.addAll(Arrays.asList(children));
 		return this;
 	}
-	
+
 	public SettingToggle withDesc(String desc) {
 		description = desc;
 		return this;
 	}
-	
+
 	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
 		if (!expanded || window.mouseY - y <= 12) return super.getGuiDesc(window, x, y, len);
-		
+
 		Triple<Integer, Integer, String> triple = null;
-		
+
 		int h = y + 12;
 		for (SettingBase s: children) {
 			if (window.mouseOver(x + 2, h, x + len, h + s.getHeight(len))) {
 				triple = s.getGuiDesc(window, x + 2, h, len - 2);
 			}
-			
+
 			h += s.getHeight(len - 2);
 		}
-		
+
 		return triple;
 	}
 
@@ -185,15 +185,15 @@ public class SettingToggle extends SettingBase {
 			return jo;
 		}
 	}
-	
+
 	@Override
 	public boolean isDefault() {
 		if (state != defaultState) return false;
-		
+
 		for (SettingBase s: children) {
 			if (!s.isDefault()) return false;
 		}
-		
+
 		return true;
 	}
 }

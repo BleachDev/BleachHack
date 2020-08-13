@@ -86,7 +86,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 	public void render(MatrixStack matrix, int mX, int mY, float float_1) {
 		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
-		
+
 		searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
 		this.renderBackground(matrix);
@@ -122,7 +122,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				if (w instanceof ModuleWindow) {
 					((ModuleWindow) w).setLen(len);
 				}
-				
+
 				((ClickGuiWindow)w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
 			}
 		}

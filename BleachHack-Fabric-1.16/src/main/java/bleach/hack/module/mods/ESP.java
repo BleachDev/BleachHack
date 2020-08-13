@@ -17,6 +17,8 @@
  */
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
@@ -24,8 +26,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
-import com.google.common.eventbus.Subscribe;
-
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -33,9 +33,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 
 public class ESP extends Module {
@@ -72,7 +72,7 @@ public class ESP extends Module {
 	@Subscribe
 	public void onWorldEntityRender(EventWorldRenderEntity event) {
 		boolean glow = true;
-		
+
 		if (event.entity instanceof PlayerEntity && event.entity != mc.player && getSetting(0).asToggle().state) {
 			if (BleachHack.friendMang.has(event.entity.getName().asString())) {
 				float[] col = getSetting(0).asToggle().getChild(1).asColor().getRGBFloat();
@@ -103,13 +103,13 @@ public class ESP extends Module {
 		} else {
 			glow = false;
 		}
-		
+
 		event.entity.setGlowing(glow);
 	}
-	
+
 	private VertexConsumerProvider getOutline(BufferBuilderStorage buffers, float r, float g, float b) {
 		OutlineVertexConsumerProvider ovsp = buffers.getOutlineVertexConsumers();
 		ovsp.setColor((int) (r * 255), (int) (g * 255), (int) (b * 255), 255);
-        return ovsp;
+		return ovsp;
 	}
 }

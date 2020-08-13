@@ -52,7 +52,7 @@ public abstract class SettingBase {
 			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
-	
+
 	public SettingColor asColor() {
 		try {
 			return (SettingColor) this;
@@ -60,7 +60,7 @@ public abstract class SettingBase {
 			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
-	
+
 	public SettingRotate asRotate() {
 		try {
 			return (SettingRotate) this;
@@ -68,23 +68,23 @@ public abstract class SettingBase {
 			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
-	
+
 	public abstract String getName();
 
 	public String getDesc() {
 		return description;
 	}
-	
+
 	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
 		return Triple.of(x + len + 2, y, description);
 	}
-	
+
 	public abstract void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len);
-	
+
 	public abstract int getHeight(int len);
-	
+
 	public abstract void readSettings(JsonElement settings);
 	public abstract JsonElement saveSettings();
-	
+
 	public abstract boolean isDefault();
 }

@@ -17,11 +17,14 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.event.events.EventTick;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventReadPacket;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
@@ -39,10 +42,6 @@ import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /* Rebranded queueskip exploit. credit > https://www.youtube.com/watch?v=-BA4ABlFJuc */
 public class BookCrash extends Module {
