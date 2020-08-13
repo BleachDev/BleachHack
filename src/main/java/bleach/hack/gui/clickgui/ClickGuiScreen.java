@@ -92,21 +92,12 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		this.renderBackground(matrix);
 		textRenderer.draw(matrix, "BleachHack 1.16 epearl edition", 3, 3, ColourThingy.guiColour());
 		if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
-			textRenderer.draw(matrix, "TODO LIST:", 2, height - 120, 0x5555ff);
-			textRenderer.draw(matrix, "1. auto-trap module", 2, height - 110, 0x5555ff);
-			textRenderer.draw(matrix, "2. better crystal-aura module", 2, height - 100, 0x5555ff);
-			textRenderer.draw(matrix, "3. change hover module description colors to match theme", 2, height - 90, 0x5555ff);
-			textRenderer.draw(matrix, "4. make surround walk to center of block not tp", 2, height - 80, 0x5555ff);
-			textRenderer.draw(matrix, "5. syncronize all the rgb in the gui color picker", 2, height - 70, 0x5555ff);
-			textRenderer.draw(matrix, "6. ability to save configs and switch between them", 2, height - 60, 0x5555ff);
-			textRenderer.draw(matrix, "7. ability to create columns and add/remove modules to them", 2, height - 50, 0x5555ff);
-			textRenderer.draw(matrix, "8. draggable or xyz customizable UI modules", 2, height - 40, 0x5555ff);
-		}
-		textRenderer.draw(matrix,
-				"Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
-		textRenderer.draw(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
-				ColourThingy.guiColour());
+			textRenderer.draw(matrix,
+					"Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
+			textRenderer.draw(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
+					ColourThingy.guiColour());
 
+		}
 		if (ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
 

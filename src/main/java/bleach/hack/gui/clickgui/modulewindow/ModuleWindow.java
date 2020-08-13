@@ -90,8 +90,8 @@ public class ModuleWindow extends ClickGuiWindow {
 			if (m.getValue()) {
 				//fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
 				fillGreySides(matrix, x, y + curY, x+len-1, y + 12 + curY);
-				DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
-				DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
+				//DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
+				//DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
 			}
 			
 			DrawableHelper.fill(matrix, x, y + curY, x+len, y + 12 + curY,
@@ -139,9 +139,9 @@ public class ModuleWindow extends ClickGuiWindow {
 	}
 
 	public void drawBindSetting(MatrixStack matrix, Module m, int key, int x, int y, TextRenderer textRend) {
-		DrawableHelper.fill(matrix, x, y + 11, x + len - 2, y + 12, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x + len - 2, y, x + len - 1, y + 12, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x, y - 1, x + 1, y + 11, 0x90000000);
+		//DrawableHelper.fill(matrix, x, y + 11, x + len - 2, y + 12, 0x90b0b0b0);
+		//DrawableHelper.fill(matrix, x + len - 2, y, x + len - 1, y + 12, 0x90b0b0b0);
+		//DrawableHelper.fill(matrix, x, y - 1, x + 1, y + 11, 0x90000000);
 
 		if (key >= 0 && mouseOver(x, y, x + len, y + 12))
 			m.setKey((key != GLFW.GLFW_KEY_DELETE && key != GLFW.GLFW_KEY_ESCAPE) ? key : Module.KEY_UNBOUND);
@@ -165,8 +165,8 @@ public class ModuleWindow extends ClickGuiWindow {
 	}
 
 	private void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
+		//DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
+		//DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
 	}
 
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
