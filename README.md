@@ -12,24 +12,8 @@ Works on fabric 1.16.2 (YOU WILL NEED VIAFABRIC TO CONNECT TO ENDCRYSTAL UNTIL I
 **For normal people:**
 
 Download [fabric for minecraft 1.16.2](https://fabricmc.net/use/)  
-Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section](https://github.com/22s/bleachhack-1.16-epearl-edition/releases/)
-
-On Windows: type %appdata% into the location field of the Windows Explorer; then open '.minecraft'.
-
-On Mac: click on the desktop, press Command+Shift+G, type ~/Library and press enter; then open 'Application Support' and finally '.minecraft'.
-
-On Linux: in a terminal window, type 'xdg-open ~/.minecraft'... or if you like working at the commandline, 'cd ~/.minecraft'.
-
-Then inside that folder, you should see a folder named 'mods'. (If you don't see one, make sure you've installed Fabric already and started Minecraft again once).
-That's where you'll put any mods you want to install. 
-
-## Differences
-
-epearl edition is blue themed
-has the title screen bleachhack mode off by default
-has the gui fills removed
-has prebinds removed
-other stuff i dont remember
+Download the lastest compiled version of bleachhack for your Minecraft version [from the Actions section](https://github.com/22s/bleachhack-1.16-epearl-edition/actions)
+Extract the zip and put the jar into your mods folder
 
 ## Plans
 
