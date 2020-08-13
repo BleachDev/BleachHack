@@ -33,7 +33,8 @@ public class ClickGui extends Module {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
 				new SettingSlider("Length", 70, 85, 85, 0),
 				new SettingToggle("Search bar", true),
-				new SettingToggle("Help", true));
+				new SettingToggle("Help", true),
+				new SettingToggle("Static descriptions", false));
 	}
 
 	public void onEnable() {

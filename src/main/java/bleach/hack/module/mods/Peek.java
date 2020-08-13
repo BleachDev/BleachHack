@@ -49,7 +49,7 @@ public class Peek extends Module {
 	public Peek() {
 		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
 				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers").withChildren(
-						new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
+						new SettingMode("Info", "None", "Name", "All").withDesc("How to show the old tooltip")),
 				new SettingToggle("Books", true).withDesc("Show tooltips for books"),
 				new SettingToggle("Maps", true).withDesc("Show tooltips for maps").withChildren(
 						new SettingSlider("Map Size", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
@@ -104,13 +104,13 @@ public class Peek extends Module {
 
 		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
 
-		if (getSetting(0).asToggle().getChild(0).asMode().mode == 2) {
+		if (getSetting(0).asToggle().getChild(0).asMode().mode == 0) {
 			event.setCancelled(true);
 		} else if (getSetting(0).asToggle().getChild(0).asMode().mode == 1) {
 			event.text = Lists.transform(Arrays.asList(slot.getStack().getName()), Text::asOrderedText);
 		}
 
-		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mY + 24 : mY;
+		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 0 ? mY + 24 : mY;
 
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
 

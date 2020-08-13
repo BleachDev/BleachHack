@@ -131,29 +131,41 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		super.render(matrix, mX, mY, float_1);
 
 		for (Window w : windows) {
+			if (!ModuleManager.getModule(ClickGui.class).getSetting(3).asToggle().state) {
+				if (w instanceof ClickGuiWindow) {
+					Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
+					if (tooltip != null) {
+						/* Match lines to end of words */
+						Matcher mat = Pattern.compile(".{1,22}\\b\\W*").matcher(tooltip.getRight());
+						int c2 = 0;
+						int c3 = 0;
+						while (mat.find()) {
+							c2++;
+						}
+						mat.reset();
+						while (mat.find()) {
+							//fill(matrix, tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10),tooltip.getLeft() + 3 + textRenderer.getWidth(mat.group().trim()),tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9, 0xff000000);
+							textRenderer.draw(matrix, mat.group(), tooltip.getLeft() + 2,
+									tooltip.getMiddle() - (c2 * 10) + (c3 * 10), ColourThingy.guiColour());
+							c3++;
+						}
+					}
+				}
+			} else if (ModuleManager.getModule(ClickGui.class).getSetting(3).asToggle().state && !ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
+				if (w instanceof ClickGuiWindow) {
+					Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
+					if (tooltip != null) {
+						textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 11, ColourThingy.guiColour());
+					}
+				}
+			} else if (ModuleManager.getModule(ClickGui.class).getSetting(3).asToggle().state && ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
 				if (tooltip != null) {
-					/* Match lines to end of words */
-					Matcher mat = Pattern.compile(".{1,22}\\b\\W*").matcher(tooltip.getRight());
-
-					int c2 = 0;
-					int c3 = 0;
-					while (mat.find()) {
-						c2++;
-					}
-					mat.reset();
-
-					while (mat.find()) {
-						fill(matrix, tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10),
-								tooltip.getLeft() + 3 + textRenderer.getWidth(mat.group().trim()),
-								tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9, 0xff000000);
-						textRenderer.draw(matrix, mat.group(), tooltip.getLeft() + 2,
-								tooltip.getMiddle() - (c2 * 10) + (c3 * 10), -1);
-						c3++;
-					}
+					textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 30, ColourThingy.guiColour());
 				}
 			}
+		}
 		}
 
 		lmDown = false;
