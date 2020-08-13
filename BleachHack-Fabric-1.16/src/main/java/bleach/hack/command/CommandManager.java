@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,13 +24,15 @@ import bleach.hack.command.commands.*;
 import bleach.hack.utils.BleachLogger;
 
 public class CommandManager {
-	
+
 	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
 			new CmdCI(),
+			new CmdCustomChat(),
 			new CmdDupe(),
 			new CmdEnchant(),
 			new CmdEntityStats(),
+			new CmdFriends(),
 			new CmdGamemode(),
 			new CmdGive(),
 			new CmdGuiReset(),
@@ -47,13 +49,13 @@ public class CommandManager {
 			new CmdSkull(),
 			new CmdToggle(),
 			new CmdXray());
-	
+
 	public static List<Command> getCommands() {
 		return commands;
 	}
-	
+
 	public static void callCommand(String input) {
-		String[] split = input.split(" ");
+		String[] split = input.split(" ", -1);
 		System.out.println(Arrays.asList(split));
 		String command = split[0];
 		String args = input.substring(command.length()).trim();
@@ -69,6 +71,6 @@ public class CommandManager {
 				return;
 			}
 		}
-		BleachLogger.errorMessage("Command Not Found, Maybe Try .Help");
+		BleachLogger.errorMessage("Command Not Found, Maybe Try " + Command.PREFIX + "help");
 	}
 }

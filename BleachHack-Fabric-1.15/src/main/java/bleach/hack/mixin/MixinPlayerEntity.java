@@ -1,61 +1,89 @@
-/*
- * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
- * Copyright (c) 2019 Bleach.
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package bleach.hack.mixin;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventMovementTick;
-import bleach.hack.event.events.EventTick;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import bleach.hack.utils.BleachQueue;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.SpeedMine;
+import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tag.FluidTags;
+import net.minecraft.world.World;
 
-@Mixin(ClientPlayerEntity.class)
-public class MixinPlayerEntity {
+@Mixin(PlayerEntity.class)
+public abstract class MixinPlayerEntity extends LivingEntity {
 	
-	@Inject(at = @At("RETURN"), method = "tick()V", cancellable = true)
-	public void tick(CallbackInfo info) {
-		try {
-			if (MinecraftClient.getInstance().player.age % 100 == 0) {
-				BleachFileHelper.saveModules();
-				BleachFileHelper.saveSettings();
-				BleachFileHelper.saveBinds();
-				BleachFileHelper.saveClickGui();
+	@Shadow public PlayerInventory inventory;
+
+	protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType_1, World world_1) {
+		super(entityType_1, world_1);
+	}
+
+	@Inject(at = @At("HEAD"), method = "getBlockBreakingSpeed", cancellable = true)
+	public void getBlockBreakingSpeed(BlockState blockState_1, CallbackInfoReturnable<Float> ci) {
+		Module mod = ModuleManager.getModule(SpeedMine.class);
+		
+		if (mod.isToggled()) {
+			float float_1 = inventory.getBlockBreakingSpeed(blockState_1);
+			if (float_1 > 1.0F) {
+				int int_1 = EnchantmentHelper.getEfficiency(this);
+				ItemStack itemStack_1 = this.getMainHandStack();
+				if (int_1 > 0 && !itemStack_1.isEmpty()) {
+					float_1 += (float)(int_1 * int_1 + 1);
+				}
+			}
+
+			if (StatusEffectUtil.hasHaste(this)) {
+				float_1 *= 1.0F + (float)(StatusEffectUtil.getHasteAmplifier(this) + 1) * 0.2F;
+			}
+
+			if (!mod.getSetting(4).asToggle().state) {
+				if (this.hasStatusEffect(StatusEffects.MINING_FATIGUE)) {
+					float float_5;
+					switch(this.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
+					case 0:
+						float_5 = 0.3F;
+						break;
+					case 1:
+						float_5 = 0.09F;
+						break;
+					case 2:
+						float_5 = 0.0027F;
+						break;
+					case 3:
+					default:
+						float_5 = 8.1E-4F;
+					}
+	
+					float_1 *= float_5;
+				}
+			}
+
+			if (!mod.getSetting(5).asToggle().state) {
+				if (this.isInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+					float_1 /= 5.0F;
+				}
+	
+				if (!this.onGround) {
+					float_1 /= 5.0F;
+				}
 			}
 			
-			BleachQueue.nextQueue();
-		} catch (Exception e) {}
-		EventTick event = new EventTick();
-		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
-	}
-	
-	@Inject(at = @At("HEAD"), method = "sendMovementPackets()V", cancellable = true)
-	public void sendMovementPackets(CallbackInfo info) {
-		EventMovementTick event = new EventMovementTick();
-		BleachHack.eventBus.post(new EventMovementTick());
-		if (event.isCancelled()) info.cancel();
-	}
+			if (mod.getSetting(0).asMode().mode == 1) float_1 *= (float) mod.getSetting(3).asSlider().getValue();
 
+			ci.setReturnValue(float_1);
+			ci.cancel();
+		}
+	}
 }
-

@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,14 +29,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.gui.BleachMainMenu;
+import bleach.hack.utils.file.BleachFileHelper;
 
 @Mixin(TitleScreen.class)
 public class MixinTitleScreen extends Screen {
-	
+
 	protected MixinTitleScreen(Text text_1) {
 		super(text_1);
 	}
-	
+
 	@Inject(at = @At("HEAD"), method = "init()V")
 	private void init(CallbackInfo info) {
 		if (BleachMainMenu.customTitleScreen) {
@@ -44,6 +45,7 @@ public class MixinTitleScreen extends Screen {
 		} else {
 			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, "BH", button -> {
 				BleachMainMenu.customTitleScreen = !BleachMainMenu.customTitleScreen;
+				BleachFileHelper.saveMiscSetting("customTitleScreen", "true");
 				minecraft.openScreen(new TitleScreen(false));
 			}));
 		}

@@ -1,17 +1,17 @@
 /*
  * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
  * Copyright (c) 2019 Bleach.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,32 +38,36 @@ import java.util.Random;
  */
 @Mixin(value = BlockModelRenderer.class, priority = 10000)
 public class MixinBlockModelRenderer {
-    @Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
-    private void tesselate(ExtendedBlockView extendedBlockView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1, boolean boolean_1, Random random_1, long long_1, CallbackInfoReturnable<Boolean> ci) {
-        try {
-            Xray xray = (Xray) ModuleManager.getModule(Xray.class);
-            if (!xray.isVisible(blockState_1.getBlock())) {
-                ci.setReturnValue(false);
-                ci.cancel();
-            }
-        } catch (Exception ignored) {}
-    }
+	@Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
+	private void tesselate(ExtendedBlockView extendedBlockView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1, boolean boolean_1, Random random_1, long long_1, CallbackInfoReturnable<Boolean> ci) {
+		try {
+			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+			if (!xray.isVisible(blockState_1.getBlock())) {
+				ci.setReturnValue(false);
+				ci.cancel();
+			}
+		} catch (Exception ignored) {}
+	}
 
-    @ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateSmooth(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
-    private boolean tesselateSmooth(boolean checkSides) {
-        try {
-            if (ModuleManager.getModule(Xray.class).isToggled()) return false;
-        } catch (Exception ignored) {}
-        return checkSides;
-    }
+	@ModifyArg(
+			method = "tesselate",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateSmooth(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
+	private boolean tesselateSmooth(boolean checkSides) {
+		try {
+			if (ModuleManager.getModule(Xray.class).isToggled()) return false;
+		} catch (Exception ignored) {}
+		return checkSides;
+	}
 
-    @ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateFlat(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
-    private boolean tesselateFlat(boolean checkSides) {
-        try {
-            if (ModuleManager.getModule(Xray.class).isToggled()) return false;
-        } catch (Exception ignored) {}
+	@ModifyArg(
+			method = "tesselate",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateFlat(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
+	private boolean tesselateFlat(boolean checkSides) {
+		try {
+			if (ModuleManager.getModule(Xray.class).isToggled()) return false;
+		} catch (Exception ignored) {}
 
-        return checkSides;
-    }
-	
+		return checkSides;
+	}
+
 }
