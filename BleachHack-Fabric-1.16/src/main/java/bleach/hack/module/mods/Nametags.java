@@ -57,7 +57,6 @@ public class Nametags extends Module {
 
 	@Subscribe
 	public void onLivingRender(EventEntityRender.Render event) {
-				
 		if (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state) {
 			ItemEntity e = (ItemEntity) event.getEntity();
 

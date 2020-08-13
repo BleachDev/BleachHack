@@ -24,6 +24,7 @@ import java.util.List;
 
 import bleach.hack.BleachHack;
 import bleach.hack.setting.base.SettingBase;
+import bleach.hack.setting.base.SettingBind;
 import bleach.hack.utils.file.BleachFileHelper;
 
 import com.google.common.eventbus.Subscribe;
@@ -37,7 +38,7 @@ public class Module {
 	private String name;
 	private int key;
 	private int defaultKey;
-	private boolean toggled;
+	private boolean toggled = false;
 	private Category category;
 	private String desc;
 	private List<SettingBase> settings = new ArrayList<>();
@@ -48,8 +49,9 @@ public class Module {
 		defaultKey = getKey();
 		category = c;
 		desc = d;
-		settings = Arrays.asList(s);
-		toggled = false;
+		settings = new ArrayList<>(Arrays.asList(s));
+		
+		settings.add(new SettingBind(this));
 	}
 
 

@@ -24,8 +24,6 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.glfw.GLFW;
-
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -33,7 +31,6 @@ import bleach.hack.setting.base.SettingBase;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 
@@ -127,27 +124,10 @@ public class ModuleWindow extends ClickGuiWindow {
 					
 					curY += s.getHeight(len);
 				}
-
-				drawBindSetting(m.getKey(), keyDown, x, y + curY, textRend);
-				curY += 12;
-				//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
+				
+				DrawableHelper.fill(x + 1, y + curY - 1, x+len-2, y + curY, 0x90b0b0b0);
 			}
 		}
-	}
-
-	public void drawBindSetting(Module m, int key, int x, int y, TextRenderer textRend) {
-		DrawableHelper.fill(x, y+11, x+len-2, y+12, 0x90b0b0b0);
-		DrawableHelper.fill(x+len - 2, y, x+len-1, y+12, 0x90b0b0b0);
-		DrawableHelper.fill(x, y - 1, x + 1, y+11, 0x90000000);
-
-		if (key >= 0 && mouseOver(x, y, x+len, y+12)) m.setKey((key != GLFW.GLFW_KEY_DELETE && key != GLFW.GLFW_KEY_ESCAPE) ? key : Module.KEY_UNBOUND);
-
-		String name = m.getKey() < 0 ? "NONE" : InputUtil.getKeycodeName(m.getKey());
-		if (name == null) name = "KEY" + m.getKey();
-		else if (name.isEmpty()) name = "NONE";
-
-		textRend.drawWithShadow("Bind: " + name + (mouseOver(x, y, x+len, y+12) ? "..." : "")
-				, x+2, y+2, mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
 	}
 
 	public void fillReverseGrey(int x1, int y1, int x2, int y2) {
@@ -189,8 +169,6 @@ public class ModuleWindow extends ClickGuiWindow {
 				for (SettingBase s: e.getKey().getSettings()) {
 					h += s.getHeight(len);
 				}
-				
-				h += 12;
 			}
 		}
 
