@@ -159,13 +159,13 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 					}
 				}
 			} else if (ModuleManager.getModule(ClickGui.class).getSetting(3).asToggle().state && ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
-			if (w instanceof ClickGuiWindow) {
-				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
-				if (tooltip != null) {
-					textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 30, ColourThingy.guiColour());
+				if (w instanceof ClickGuiWindow) {
+					Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
+					if (tooltip != null) {
+						textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 30, ColourThingy.guiColour());
+					}
 				}
 			}
-		}
 		}
 
 		lmDown = false;
