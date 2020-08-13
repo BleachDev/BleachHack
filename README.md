@@ -5,7 +5,7 @@
 
 Very cool client and now reskinned by epearl using spaghetti code.  
 
-Works on fabric 1.16.2
+Works on fabric 1.16.2 (YOU WILL NEED VIAFABRIC TO CONNECT TO ENDCRYSTAL UNTIL I ADD 1.16.2 CONNECTION SUPPORT!)
 
 > Join Bleach's Discord Cuz He Made The Client Im Skidding: https://discord.gg/b5Wc4nQ
 
@@ -26,26 +26,17 @@ That's where you'll put any mods you want to install.
 
 ## Differences
 
-epearl edition is blue themed  
-has the title screen bleachhack mode off by default  
-has the gui fills removed  
-has prebinds removed  
-changed the watermark  
-other stuff i dont remember  
+epearl edition is blue themed
+has the title screen bleachhack mode off by default
+has the gui fills removed
+has prebinds removed
+other stuff i dont remember
 
 ## Plans
 
-
- - [x] custom blue RPC logo  
- - [x] UI on by default  
- - [x] add border to gui  
- - [ ] auto-trap module  
- - [ ] better crystal-aura module  
- - [x] drawn modules command to unlist stuff in arraylist  
- - [ ] change hover module description colors to match theme  
- - [ ] make surround walk to center of block not tp  
- - [x] syncronize all the rgb in the gui color picker  
- - [ ] draggable or xyz customizable UI modules  
- - [ ] ability to save configs and switch between them  
- - [ ] ability to create columns and add/remove modules to them  
- - [ ] other stuff i dont remember   
+custom blue rpc logo
+UI on by default
+add border to gui
+auto-trap module
+better crystal-aura module
+other stuff i dont remember
