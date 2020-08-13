@@ -32,8 +32,8 @@ public abstract class ClickGuiWindow extends Window {
 
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
 		/* background and title bar */
-		fillGrey(matrix, x1, y1, x2, y2);
-		fillGradient(matrix, x1 + 1, y1 + 1, x2 - 2, y1 + 12, 0xff0000ff, 0xff4080ff);
+		//fillGrey(matrix, x1, y1, x2, y2);
+		//fillGradient(matrix, x1 + 1, y1 + 1, x2 - 2, y1 + 12, 0xff0000ff, 0xff4080ff);
 	}
 
 	public void fillGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {

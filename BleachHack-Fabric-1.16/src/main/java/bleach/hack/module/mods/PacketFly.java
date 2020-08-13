@@ -43,7 +43,7 @@ public class PacketFly extends Module {
 	private int timer = 0;
 
 	public PacketFly() {
-		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.",
+		super("PacketFly", KEY_UNBOUND, Category.MOVEMENT, "Allows you to fly with packets.",
 				new SettingMode("Mode", "Phase", "Packet"),
 				new SettingSlider("HSpeed", 0.05, 2, 0.5, 2),
 				new SettingSlider("VSpeed", 0.05, 2, 0.5, 2),

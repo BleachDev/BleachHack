@@ -97,7 +97,7 @@ public class ModuleWindow extends ClickGuiWindow {
 					mouseOver(x, y + curY, x+len, y + 12 + curY) ? 0x70303070 : 0x00000000);
 
 			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
-					x+2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
+					x+2, y + 2 + curY, m.getKey().isToggled() ? 0x5555ff : 0xc0c0c0);
 
 			//If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
@@ -170,7 +170,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
 		super.drawBar(matrix, mX, mY, textRend);
-		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
+		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0x5555ff);
 	}
 
 	public Triple<Integer, Integer, String> getTooltip() {

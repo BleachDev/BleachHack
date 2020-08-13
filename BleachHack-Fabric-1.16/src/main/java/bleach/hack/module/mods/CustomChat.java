@@ -58,7 +58,7 @@ public class CustomChat extends Module {
 					CharMap.single('X', '\u03c7'), CharMap.single('Y', '\u0443')));
 	
 	public String prefix = "";
-	public String suffix = " \u25ba \u0432\u2113\u0454\u03b1c\u043d\u043d\u03b1c\u043a";
+	public String suffix = " \u01c0 \u0299\u029f\u1d07\u1d00\u1d04\u029c\u029c\u1d00\u1d04\u1d0b";
 
 	public CustomChat() {
 		super("CustomChat", KEY_UNBOUND, Category.MISC, "Customizes your chat messages, use the \"customchat\" command to edit the stuff",

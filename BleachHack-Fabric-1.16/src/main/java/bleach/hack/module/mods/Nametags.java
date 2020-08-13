@@ -68,7 +68,7 @@ public class Nametags extends Module {
 						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			}
 
-			WorldRenderUtils.drawText("\u00a76" + e.getName().getString() + " \u00a7e[x" + e.getStack().getCount() + "]",
+			WorldRenderUtils.drawText("\u00A79" + e.getStack().getCount() + "x " + e.getName().getString(),
 					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);

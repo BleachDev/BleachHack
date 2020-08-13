@@ -46,14 +46,14 @@ public class Scaffold extends Module {
 	private Set<BlockPos> renderBlocks = new LinkedHashSet<>();
 
 	public Scaffold() {
-		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
+		super("Scaffold", KEY_UNBOUND, Category.WORLD, "Places blocks under you",
 				new SettingSlider("Range", 0, 1, 0.3, 1),
 				new SettingMode("Mode", "Normal", "3x3", "5x5", "7x7"),
 				new SettingRotate(false).withDesc("Rotates when placing blocks"),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier"),
 				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
-						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight"),
+						new SettingColor("Color", 0.3f, 0.2f, 1f, false).withDesc("Color for the block highlight"),
 						new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed")),
 				new SettingSlider("BPT", 1, 10, 2, 0).withDesc("Blocks Per Tick, how many blocks to place per tick"));
 	}

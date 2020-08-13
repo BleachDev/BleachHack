@@ -42,7 +42,7 @@ public class FastUse extends Module {
 			Items.ENDER_EYE, Items.ENDER_PEARL, Items.SPLASH_POTION, Items.LINGERING_POTION);
 
 	public FastUse() {
-		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster",
+		super("FastUse", KEY_UNBOUND, Category.PLAYER, "Allows you to use items faster",
 				new SettingMode("Mode", "Single", "Multi"),
 				new SettingSlider("Multi", 1, 100, 20, 0),
 				new SettingToggle("Throwables Only", true),

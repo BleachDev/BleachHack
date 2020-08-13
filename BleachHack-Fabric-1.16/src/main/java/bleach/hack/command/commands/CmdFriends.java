@@ -9,7 +9,7 @@ public class CmdFriends extends Command {
 
 	@Override
 	public String getAlias() {
-		return "friends";
+		return "friend";
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class CmdFriends extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "friends add [user] | friends remove [user] | friends list | friends clear";
+		return "friend add [user] | friend remove [user] | friend list | friend clear";
 	}
 
 	@Override

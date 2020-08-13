@@ -90,12 +90,19 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
 		this.renderBackground(matrix);
-		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 3, 3, 0x305090);
-		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 2, 2, 0x6090d0);
-		textRenderer.drawWithShadow(matrix,
-				"Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
-		textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
-				0x9999ff);
+		textRenderer.draw(matrix, "BleachHack 1.16 epearl edition", 3, 3, 0x5555ff);
+		if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
+			textRenderer.draw(matrix, "TODO LIST:", 2, height - 90, 0x5555ff);
+			textRenderer.draw(matrix, "1. custom blue RPC logo", 2, height - 80, 0x5555ff);
+			textRenderer.draw(matrix, "2. UI on by default", 2, height - 70, 0x5555ff);
+			textRenderer.draw(matrix, "3. add border to gui", 2, height - 60, 0x5555ff);
+			textRenderer.draw(matrix, "4. auto-trap module", 2, height - 50, 0x5555ff);
+			textRenderer.draw(matrix, "5. better crystal-aura module", 2, height - 40, 0x5555ff);
+		}
+		textRenderer.draw(matrix,
+				"Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x5555ff);
+		textRenderer.draw(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
+				0x5555ff);
 
 		if (ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
@@ -147,7 +154,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 						fill(matrix, tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10),
 								tooltip.getLeft() + 3 + textRenderer.getWidth(mat.group().trim()),
 								tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9, 0xff000000);
-						textRenderer.drawWithShadow(matrix, mat.group(), tooltip.getLeft() + 2,
+						textRenderer.draw(matrix, mat.group(), tooltip.getLeft() + 2,
 								tooltip.getMiddle() - (c2 * 10) + (c3 * 10), -1);
 						c3++;
 					}

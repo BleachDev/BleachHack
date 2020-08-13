@@ -36,7 +36,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityControl extends Module {
 
 	public EntityControl() {
-		super("EntityControl", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Manipulate Entities.",
+		super("EntityControl", KEY_UNBOUND, Category.MOVEMENT, "Manipulate Entities.",
 				new SettingToggle("EntitySpeed", true),
 				new SettingSlider("Speed", 0, 5, 1.2, 2),
 				new SettingToggle("EntityFly", false),

@@ -1,20 +1,20 @@
-# BleachHack-1.14
+# BleachHack 1.16.2 epearl edition
 [![Github All Releases](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total.svg)]()
 ![](https://img.shields.io/github/last-commit/bleachdrinker420/bleachhack-1.14.svg)
 ![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14.svg)
 ![](https://img.shields.io/badge/daily%20commit-yes-blue)
 
-Very cool client.  
+Very cool client and now reskinned by epearl using spaghetti code.  
 
-Works on fabric 1.14-1.16 (1.14 for forge is discontinued)
+Works on fabric 1.16.2 (YOU WILL NEED VIAFABRIC TO CONNECT TO ENDCRYSTAL UNTIL I ADD 1.16.2 CONNECTION SUPPORT!)
 
-> Join The Discord: https://discord.gg/b5Wc4nQ
+> Join Bleach's Discord Cuz He Made The Client Im Skidding: https://discord.gg/b5Wc4nQ
 
 ## Installation:
 **For normal people:**
 
-Download [fabric for minecraft 1.14/1.15/1.16](https://fabricmc.net/use/)  
-Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section](https://github.com/BleachDrinker420/bleachhack-1.14/releases)
+Download [fabric for minecraft 1.16.2](https://fabricmc.net/use/)  
+Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section](https://github.com/22s/bleachhack-1.14/releases/)
 
 On Windows: type %appdata% into the location field of the Windows Explorer; then open '.minecraft'.
 
@@ -25,34 +25,19 @@ On Linux: in a terminal window, type 'xdg-open ~/.minecraft'... or if you like w
 Then inside that folder, you should see a folder named 'mods'. (If you don't see one, make sure you've installed Fabric already and started Minecraft again once).
 That's where you'll put any mods you want to install. 
 
---------------
+## Differences
 
-**For (200 IQ) developers:**
+epearl edition is blue themed
+has the title screen bleachhack mode off by default
+has the gui fills removed
+has prebinds removed
+other stuff i dont remember
 
-Download the project  
-Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder. 
-Generate the needed files for your preferred IDE.
+## Plans
 
-***Eclipse:***
-
-  On Windows:
-  > gradlew genSources eclipse
-  
-  On Linux:
-  > chmod +x ./gradlew  
-  >./gradlew genSources eclipse
-
-  Start a new workspace in eclipse  
-  Click File > Import... > Gradle > Gradle Project  
-  Select the BleachHack-Fabric-(*Version*) folder  
-  
-***Other IDE´s:***
-
-  Use [this link](https://fabricmc.net/wiki/tutorial:setup) for more information.
-  It should be pretty similar to the eclipse setup.
-  
---------------
-
-### For skidders:
-
-If you are porting features of BleachHack to another mod or making a custom version of BleachHack, you are **required** to disclose the source code, state changes, use the same license, and follow the [licence terms](https://github.com/BleachDrinker420/bleachhack-1.14/blob/master/LICENSE)
+custom blue rpc logo
+UI on by default
+add border to gui
+auto-trap module
+better crystal-aura module
+other stuff i dont remember

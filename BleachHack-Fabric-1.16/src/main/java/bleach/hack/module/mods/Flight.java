@@ -39,7 +39,7 @@ public class Flight extends Module {
 	private boolean flyTick = false;
 
 	public Flight() {
-		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
+		super("Flight", KEY_UNBOUND, Category.MOVEMENT, "Allows you to fly",
 				new SettingMode("Mode", "Normal","Static","Jetpack", "ec.me"),
 				new SettingSlider("Speed", 0, 5, 1, 1),
 				new SettingMode("AntiKick", "Off","Fall","Bob","Packet"));

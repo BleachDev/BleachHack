@@ -49,7 +49,7 @@ public class Freecam extends Module {
 	private float prevFlySpeed;
 
 	public Freecam() {
-		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",
+		super("Freecam", KEY_UNBOUND, Category.PLAYER, "Its freecam, you know what it does",
 				new SettingSlider("Speed", 0, 3, 0.5, 2),
 				new SettingToggle("Horse Inv", true));
 	}

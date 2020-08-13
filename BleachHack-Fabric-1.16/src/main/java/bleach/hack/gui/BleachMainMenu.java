@@ -58,7 +58,7 @@ import net.minecraft.util.math.MathHelper;
 public class BleachMainMenu extends AbstractWindowScreen {
 
 	private ParticleManager particleMang = new ParticleManager();
-	public static boolean customTitleScreen = true;
+	public static boolean customTitleScreen = false;
 
 	public static String splash = "";
 	public static List<String> versions = new ArrayList<>();

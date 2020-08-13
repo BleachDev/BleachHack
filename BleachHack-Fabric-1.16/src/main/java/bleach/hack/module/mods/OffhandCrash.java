@@ -34,7 +34,7 @@ import net.minecraft.util.math.Direction;
 public class OffhandCrash extends Module {
 
 	public OffhandCrash() {
-		super("OffhandCrash", GLFW.GLFW_KEY_P, Category.EXPLOITS, "Lags people using the snowball exploit",
+		super("OffhandCrash", KEY_UNBOUND, Category.EXPLOITS, "Lags people using the snowball exploit",
 				new SettingSlider("Switches", 0, 2000, 420, 0),
 				new SettingToggle("Player Packet", true));
 	}

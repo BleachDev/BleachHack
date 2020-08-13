@@ -48,7 +48,7 @@ public class Killaura extends Module {
 	private int delay = 0;
 
 	public Killaura() {
-		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities",
+		super("Killaura", KEY_UNBOUND, Category.COMBAT, "Automatically attacks entities",
 				new SettingToggle("Players", true),
 				new SettingToggle("Mobs", true),
 				new SettingToggle("Animals", false),
