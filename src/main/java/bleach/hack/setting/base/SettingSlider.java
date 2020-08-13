@@ -20,6 +20,7 @@ package bleach.hack.setting.base;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import bleach.hack.utils.ColourThingy;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -68,7 +69,7 @@ public class SettingSlider extends SettingBase {
 	
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
 		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((getValue() - min) / (max - min)), 0, len-2));
-		window.fillGradient(matrix, x+1, y, x+pixels, y+12, 0xf05555ff, 0xf05555ff);
+		window.fillGradient(matrix, x+1, y, x+pixels, y+12, ColourThingy.guiColour(), ColourThingy.guiColour());
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text + ": " + (round == 0  && getValue() > 100 ? Integer.toString((int)getValue()) : getValue()),
 				x+2, y+2, window.mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
