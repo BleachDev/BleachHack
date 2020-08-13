@@ -35,16 +35,17 @@ other stuff i dont remember
 
 ## Plans
 
-custom blue RPC logo  
-UI on by default  
-add border to gui  
-auto-trap module  
-better crystal-aura module  
-drawn modules command to unlist stuff in arraylist  
-change hover module description colors to match theme  
-make surround walk to center of block not tp  
-syncronize all the rgb in the gui color picker  
-draggable or xyz customizable UI modules  
-ability to save configs and switch between them  
-ability to create columns and add/remove modules to them  
-other stuff i dont remember  
+
+ - [ ] custom blue RPC logo  
+ - [ ] UI on by default  
+ - [ ] add border to gui  
+ - [ ] auto-trap module  
+ - [ ] better crystal-aura module  
+ - [ ] drawn modules command to unlist stuff in arraylist  
+ - [ ] change hover module description colors to match theme  
+ - [ ] make surround walk to center of block not tp  
+ - [ ] syncronize all the rgb in the gui color picker  
+ - [ ] draggable or xyz customizable UI modules  
+ - [ ] ability to save configs and switch between them  
+ - [ ] ability to create columns and add/remove modules to them  
+ - [ ] other stuff i dont remember   
