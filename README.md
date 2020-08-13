@@ -26,18 +26,20 @@ That's where you'll put any mods you want to install.
 
 ## Differences
 
-epearl edition is blue themed
-has the title screen bleachhack mode off by default
-has the gui fills removed
-has prebinds removed
-other stuff i dont remember
+epearl edition is blue themed  
+has the title screen bleachhack mode off by default  
+has the gui fills removed  
+has prebinds removed  
+changed the watermark  
+other stuff i dont remember  
 
 ## Plans
 
-custom blue rpc logo
-UI on by default
-add border to gui
-auto-trap module
-better crystal-aura module
-drawn modules command to unlist stuff in arraylist
-other stuff i dont remember
+custom blue rpc logo  
+UI on by default  
+add border to gui  
+auto-trap module  
+better crystal-aura module  
+drawn modules command to unlist stuff in arraylist  
+custom hover module description colors  
+other stuff i dont remember  
