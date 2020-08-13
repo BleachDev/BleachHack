@@ -1,0 +1,19 @@
+package bleach.hack.utils;
+
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ColourChooser;
+
+import java.awt.*;
+
+public class ColourThingy {
+    public static int guiColour() {
+        if (ModuleManager.getModule(ColourChooser.class).getSetting(0).asToggle().state) return Rainbow.getInt();
+        int red;
+        int green;
+        int blue;
+        red = (int)ModuleManager.getModule(ColourChooser.class).getSetting(1).asSlider().getValue();
+        green = (int)ModuleManager.getModule(ColourChooser.class).getSetting(2).asSlider().getValue();
+        blue = (int)ModuleManager.getModule(ColourChooser.class).getSetting(3).asSlider().getValue();
+        return (0xff << 24) | ((red&0xff) << 16) | ((green&0xff) << 8) | (blue&0xff);
+    }
+}
