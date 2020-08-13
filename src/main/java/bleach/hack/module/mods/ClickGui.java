@@ -34,7 +34,7 @@ public class ClickGui extends Module {
 				new SettingSlider("Length", 70, 85, 85, 0),
 				new SettingToggle("Search bar", true),
 				new SettingToggle("Help", true),
-				new SettingToggle("Static descriptions", false));
+				new SettingToggle("Static descriptions", true));
 	}
 
 	public void onEnable() {

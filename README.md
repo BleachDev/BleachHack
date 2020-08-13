@@ -4,7 +4,7 @@
 
 Very cool client and now reskinned by epearl using spaghetti code.  
 
-Works on fabric 1.16.2 (YOU WILL NEED VIAFABRIC TO CONNECT TO ENDCRYSTAL UNTIL I ADD 1.16.2 CONNECTION SUPPORT!)
+Works on fabric 1.16.2
 
 > Join Bleach's Discord Cuz He Made The Client Im Skidding: https://discord.gg/b5Wc4nQ
 
@@ -14,6 +14,10 @@ Works on fabric 1.16.2 (YOU WILL NEED VIAFABRIC TO CONNECT TO ENDCRYSTAL UNTIL I
 Download [fabric for minecraft 1.16.2](https://fabricmc.net/use/)  
 Download the lastest compiled version of bleachhack for your Minecraft version [from the Actions section](https://github.com/22s/bleachhack-1.16-epearl-edition/actions)
 Extract the zip and put the jar into your mods folder
+
+## Images
+
+![GUI](https://i.imgur.com/d3ws32U.png)
 
 ## Plans
 
