@@ -106,7 +106,7 @@ public class UI extends Module {
 				//			mc.textRenderer.getWidth(s)+4+extra, 11+(arrayCount*10), color);
 				//}
 
-				mc.textRenderer.drawWithShadow(event.matrix, s, 2+extra, 1+(arrayCount*10), ColourThingy.guiColour());
+				mc.textRenderer.drawWithShadow(event.matrix, s, 1+extra, 1+(arrayCount*10), ColourThingy.guiColour());
 				arrayCount++;
 			}
 
