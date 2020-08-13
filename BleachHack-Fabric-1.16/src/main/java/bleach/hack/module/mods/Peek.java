@@ -48,10 +48,11 @@ public class Peek extends Module {
 
 	public Peek() {
 		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
-				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers")
-						.withChildren(new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
-				new SettingToggle("Books", true).withDesc("Show tooltips for books"), new SettingToggle("Maps", true).withDesc("Show tooltips for maps")
-						.withChildren(new SettingSlider("Map Size", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
+				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers").withChildren(
+						new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
+				new SettingToggle("Books", true).withDesc("Show tooltips for books"),
+				new SettingToggle("Maps", true).withDesc("Show tooltips for maps").withChildren(
+						new SettingSlider("Map Size", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
 	}
 
 	@Subscribe
@@ -167,7 +168,8 @@ public class Peek extends Module {
 
 		renderTooltipBox(matrix, mX + 56 - length / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, length, true);
 		renderTooltipBox(matrix, mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
-		mc.textRenderer.drawWithShadow(matrix, "Page: " + (pageCount + 1) + "/" + pages.size(), mX + 68 - length / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
+		mc.textRenderer.drawWithShadow(matrix, "Page: " + (pageCount + 1) + "/" + pages.size(),
+				mX + 68 - length / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
 
 		int count = 0;
 		for (String s : pages.get(pageCount)) {

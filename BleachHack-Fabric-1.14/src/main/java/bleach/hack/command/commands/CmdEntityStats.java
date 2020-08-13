@@ -62,8 +62,10 @@ public class CmdEntityStats extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if (mc.player.getVehicle() != null) {
-			if (mc.player.getVehicle() instanceof HorseEntity || mc.player.getVehicle() instanceof DonkeyEntity || mc.player.getVehicle() instanceof LlamaEntity
-					|| mc.player.getVehicle() instanceof MuleEntity) {
+			if (mc.player.getVehicle() instanceof HorseEntity ||
+					mc.player.getVehicle() instanceof DonkeyEntity ||
+					mc.player.getVehicle() instanceof LlamaEntity ||
+					mc.player.getVehicle() instanceof MuleEntity) {
 				HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
 				maxHealth = h.getHealthMaximum() + " §2HP";
 				speed = round(43.17 * h.getMovementSpeed(), 2) + " §2m/s";

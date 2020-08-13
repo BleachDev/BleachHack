@@ -53,10 +53,19 @@ import net.minecraft.util.math.Direction;
 public class ChestESP extends Module {
 
 	public ChestESP() {
-		super("ChestESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.", new SettingToggle("Chests", true), new SettingToggle("EndChests", true),
-				new SettingToggle("Furnaces", true), new SettingToggle("Dispensers", true), new SettingToggle("Hoppers", true), new SettingToggle("Shulkers", true),
-				new SettingToggle("BrewStands", true), new SettingToggle("ChestCarts", true), new SettingToggle("FurnaceCarts", true),
-				new SettingToggle("HopperCarts", true), new SettingToggle("ItemFrames", true), new SettingToggle("ArmorStands", true));
+		super("ChestESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.",
+				new SettingToggle("Chests", true),
+				new SettingToggle("EndChests", true),
+				new SettingToggle("Furnaces", true),
+				new SettingToggle("Dispensers", true),
+				new SettingToggle("Hoppers", true),
+				new SettingToggle("Shulkers", true),
+				new SettingToggle("BrewStands", true),
+				new SettingToggle("ChestCarts", true),
+				new SettingToggle("FurnaceCarts", true),
+				new SettingToggle("HopperCarts", true),
+				new SettingToggle("ItemFrames", true),
+				new SettingToggle("ArmorStands", true));
 	}
 
 	@Subscribe
@@ -73,8 +82,9 @@ public class ChestESP extends Module {
 				if (p != null)
 					linkedChests.add(p);
 			} else if (e instanceof EnderChestBlockEntity && getSetting(1).asToggle().state) {
-				RenderUtils.drawFilledBox(new Box(e.getPos().getX() + 0.06, e.getPos().getY(), e.getPos().getZ() + 0.06, e.getPos().getX() + 0.94,
-						e.getPos().getY() + 0.875, e.getPos().getZ() + 0.94), 1F, 0.05F, 1F, 0.7F);
+				RenderUtils.drawFilledBox(new Box(
+						e.getPos().getX() + 0.06, e.getPos().getY(), e.getPos().getZ() + 0.06,
+						e.getPos().getX() + 0.94, e.getPos().getY() + 0.875, e.getPos().getZ() + 0.94), 1F, 0.05F, 1F, 0.7F);
 			} else if (e instanceof AbstractFurnaceBlockEntity && getSetting(2).asToggle().state) {
 				RenderUtils.drawFilledBox(e.getPos(), 0.5F, 0.5F, 0.5F, 0.7F);
 			} else if (e instanceof DispenserBlockEntity && getSetting(3).asToggle().state) {
@@ -99,8 +109,11 @@ public class ChestESP extends Module {
 				if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.AIR) {
 					RenderUtils.drawFilledBox(e.getBoundingBox(), 0.45F, 0.1F, 0.1F, 0.7F);
 				} else if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {
-					int axis = e.getBoundingBox().x2 - e.getBoundingBox().x1 < e.getBoundingBox().y2 - e.getBoundingBox().y1 ? 0
-							: e.getBoundingBox().y2 - e.getBoundingBox().y1 < e.getBoundingBox().z2 - e.getBoundingBox().z1 ? 1 : 2;
+					int axis = e.getBoundingBox().x2 - e.getBoundingBox().x1 < e.getBoundingBox().y2 - e.getBoundingBox().y1
+							? 0
+							: e.getBoundingBox().y2 - e.getBoundingBox().y1 < e.getBoundingBox().z2 - e.getBoundingBox().z1
+									? 1
+									: 2;
 
 					RenderUtils.drawFilledBox(e.getBoundingBox().expand(axis == 0 ? 0 : 0.12, axis == 1 ? 0 : 0.12, axis == 2 ? 0 : 0.12), 0.1F, 0.1F, 0.5F, 0.7F);
 				} else {
@@ -124,8 +137,9 @@ public class ChestESP extends Module {
 		}
 
 		if (state.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE) {
-			RenderUtils.drawFilledBox(new Box(pos.getX() + 0.06, pos.getY(), pos.getZ() + 0.06, pos.getX() + 0.94, pos.getY() + 0.875, pos.getZ() + 0.94), 1F, 0.6F, 0.3F,
-					0.7F);
+			RenderUtils.drawFilledBox(new Box(
+					pos.getX() + 0.06, pos.getY(), pos.getZ() + 0.06,
+					pos.getX() + 0.94, pos.getY() + 0.875, pos.getZ() + 0.94), 1F, 0.6F, 0.3F, 0.7F);
 			return null;
 		}
 
@@ -142,8 +156,14 @@ public class ChestESP extends Module {
 			west = true;
 		}
 
-		RenderUtils.drawFilledBox(new Box(west ? pos.getX() - 0.94 : pos.getX() + 0.06, pos.getY(), north ? pos.getZ() - 0.94 : pos.getZ() + 0.06,
-				east ? pos.getX() + 1.94 : pos.getX() + 0.94, pos.getY() + 0.875, south ? pos.getZ() + 1.94 : pos.getZ() + 0.94), 1F, 0.6F, 0.3F, 0.7F);
+		RenderUtils.drawFilledBox(new Box(
+				west ? pos.getX() - 0.94 : pos.getX() + 0.06,
+				pos.getY(),
+				north ? pos.getZ() - 0.94 : pos.getZ() + 0.06,
+				east ? pos.getX() + 1.94 : pos.getX() + 0.94,
+				pos.getY() + 0.875,
+				south ? pos.getZ() + 1.94 : pos.getZ() + 0.94),
+				1F, 0.6F, 0.3F, 0.7F);
 
 		return north ? pos.north() : east ? pos.east() : south ? pos.south() : west ? pos.west() : null;
 	}

@@ -35,13 +35,15 @@ public class Trajectories extends Module {
 	public Trajectories() {
 		super("Trajectories", KEY_UNBOUND, Category.RENDER, "Shows the trajectories of projectiles",
 				new SettingMode("Draw", "Line", "Dots").withDesc("How to draw the line where the projectile is going"),
-				new SettingToggle("Throwables", true).withDesc("Shows snowballs/eggs/epearls"), new SettingToggle("XP Bottles", true).withDesc("Shows XP bottles"),
+				new SettingToggle("Throwables", true).withDesc("Shows snowballs/eggs/epearls"),
+				new SettingToggle("XP Bottles", true).withDesc("Shows XP bottles"),
 				new SettingToggle("Potions", true).withDesc("Shows splash/lingering potions"),
 				new SettingToggle("Flying", true).withDesc("Shows trajectories for flying projectiles").withChildren(
 						new SettingToggle("Throwables", true).withDesc("Shows flying snowballs/eggs/epearls"),
 						new SettingToggle("XP Bottles", true).withDesc("Shows flying XP bottles"),
 						new SettingToggle("Potions", true).withDesc("Shows flying splash/lingering potions")),
-				new SettingToggle("Other Players", false).withDesc("Show other players trajectories"), new SettingColor("Color", 1f, 0.3f, 1f, false),
+				new SettingToggle("Other Players", false).withDesc("Show other players trajectories"),
+				new SettingColor("Color", 1f, 0.3f, 1f, false),
 				new SettingSlider("Thick", 0.1, 5, 2, 2));
 	}
 
@@ -49,7 +51,8 @@ public class Trajectories extends Module {
 	public void onTick(EventTick event) {
 		poses.clear();
 
-		Entity entity = ProjectileSimulator.summonProjectile(mc.player, getSetting(1).asToggle().state, getSetting(2).asToggle().state, getSetting(3).asToggle().state);
+		Entity entity = ProjectileSimulator.summonProjectile(
+				mc.player, getSetting(1).asToggle().state, getSetting(2).asToggle().state, getSetting(3).asToggle().state);
 
 		if (entity != null) {
 			poses.add(ProjectileSimulator.simulate(entity));
@@ -79,7 +82,8 @@ public class Trajectories extends Module {
 			for (PlayerEntity e : mc.world.getPlayers()) {
 				if (e == mc.player)
 					continue;
-				Entity proj = ProjectileSimulator.summonProjectile(e, getSetting(1).asToggle().state, getSetting(2).asToggle().state, getSetting(3).asToggle().state);
+				Entity proj = ProjectileSimulator.summonProjectile(
+						e, getSetting(1).asToggle().state, getSetting(2).asToggle().state, getSetting(3).asToggle().state);
 
 				if (proj != null) {
 					poses.add(ProjectileSimulator.simulate(proj));
@@ -97,12 +101,14 @@ public class Trajectories extends Module {
 			if (t.getLeft().size() >= 2) {
 				if (getSetting(0).asMode().mode == 0) {
 					for (int i = 1; i < t.getLeft().size(); i++) {
-						RenderUtils.drawLine(t.getLeft().get(i - 1).x, t.getLeft().get(i - 1).y, t.getLeft().get(i - 1).z, t.getLeft().get(i).x, t.getLeft().get(i).y,
-								t.getLeft().get(i).z, col[0], col[1], col[2], (float) getSetting(7).asSlider().getValue());
+						RenderUtils.drawLine(t.getLeft().get(i - 1).x, t.getLeft().get(i - 1).y, t.getLeft().get(i - 1).z,
+								t.getLeft().get(i).x, t.getLeft().get(i).y, t.getLeft().get(i).z, col[0], col[1], col[2],
+								(float) getSetting(7).asSlider().getValue());
 					}
 				} else {
 					for (Vec3d v : t.getLeft()) {
-						RenderUtils.drawFilledBox(new Box(v.x - 0.1, v.y - 0.1, v.z - 0.1, v.x + 0.1, v.y + 0.1, v.z + 0.1), col[0], col[1], col[2], 0.75f);
+						RenderUtils.drawFilledBox(new Box(v.x - 0.1, v.y - 0.1, v.z - 0.1, v.x + 0.1, v.y + 0.1, v.z + 0.1),
+								col[0], col[1], col[2], 0.75f);
 					}
 				}
 			}

@@ -55,9 +55,13 @@ public class Dispenser32k extends Module {
 	private int timer = 0;
 
 	public Dispenser32k() {
-		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020", new SettingToggle("Legit Place", true),
-				new SettingToggle("Killaura", true), new SettingSlider("CPS", 0, 20, 20, 0), new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay"),
-				new SettingToggle("Timeout", false), new SettingMode("Place", "Auto", "Looking"));
+		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020",
+				new SettingToggle("Legit Place", true),
+				new SettingToggle("Killaura", true),
+				new SettingSlider("CPS", 0, 20, 20, 0),
+				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay"),
+				new SettingToggle("Timeout", false),
+				new SettingMode("Place", "Auto", "Looking"));
 	}
 
 	public void onEnable() {
@@ -116,8 +120,11 @@ public class Dispenser32k extends Module {
 
 			rot = Math.abs(x) > Math.abs(z) ? x > 0 ? new int[] { -1, 0 } : new int[] { 1, 0 } : z > 0 ? new int[] { 0, -1 } : new int[] { 0, 1 };
 
-			if (!(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */) || !WorldUtils.isBlockEmpty(pos)
-					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1])) || !WorldUtils.isBlockEmpty(pos.add(0, 1, 0)) || !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
+			if (!(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */)
+					|| !WorldUtils.isBlockEmpty(pos)
+					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))
+					|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
+					|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
 					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1]))) {
 				BleachLogger.errorMessage("Unable to place 32k");
 				setToggled(false);
@@ -128,7 +135,8 @@ public class Dispenser32k extends Module {
 
 			WorldUtils.placeBlock(pos, block, rotate, false);
 
-			WorldUtils.facePosPacket(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
+			WorldUtils.facePosPacket(
+					pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
 			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false);
 			return;
 
@@ -140,13 +148,16 @@ public class Dispenser32k extends Module {
 
 						pos = mc.player.getBlockPos().add(x, y, z);
 
-						if (mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
-								.distanceTo(mc.player.getPos().add(x - rot[0] / 2, y + 0.5, z + rot[1] / 2)) > 4.5
-								|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
-										.distanceTo(mc.player.getPos().add(x + 0.5, y + 2.5, z + 0.5)) > 4.5
-								|| !(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */) || !WorldUtils.isBlockEmpty(pos)
-								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1])) || !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
-								|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0)) || !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1])))
+						if (mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
+								mc.player.getPos().add(x - rot[0] / 2, y + 0.5, z + rot[1] / 2)) > 4.5
+								|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
+										mc.player.getPos().add(x + 0.5, y + 2.5, z + 0.5)) > 4.5
+								|| !(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */)
+								|| !WorldUtils.isBlockEmpty(pos)
+								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))
+								|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
+								|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
+								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1])))
 							continue;
 
 						startRot = new float[] { mc.player.yaw, mc.player.pitch };
@@ -268,7 +279,8 @@ public class Dispenser32k extends Module {
 
 			List<Entity> players = Streams.stream(mc.world.getEntities())
 					.filter(e -> e instanceof PlayerEntity && e != mc.player && !(BleachHack.friendMang.has(e.getName().asString())))
-					.sorted((a, b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player))).collect(Collectors.toList());
+					.sorted((a, b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)))
+					.collect(Collectors.toList());
 
 			if (!players.isEmpty() && players.get(0).getPos().distanceTo(mc.player.getPos()) < 8) {
 				target = players.get(0);
@@ -290,7 +302,8 @@ public class Dispenser32k extends Module {
 			if (!WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock))
 				continue;
 
-			mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos, false));
+			mc.interactionManager.interactBlock(
+					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos, false));
 			return;
 		}
 	}

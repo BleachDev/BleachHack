@@ -19,8 +19,8 @@ public class BetterPortal extends Module {
 				new SettingToggle("Gui", true).withDesc("Allows you to open guis in a nether portal"),
 				new SettingToggle("Overlay", true).withDesc("Removes the portal overlay"),
 				new SettingToggle("Particles", false).withDesc("Removes the portal particles that fly out of the portal"),
-				new SettingToggle("Sound", false).withDesc("Disables the portal sound when going through a nether portal")
-						.withChildren(new SettingToggle("Ambience", true).withDesc("Disables the portal ambience sound that plays when you get close to a portal")));
+				new SettingToggle("Sound", false).withDesc("Disables the portal sound when going through a nether portal").withChildren(
+						new SettingToggle("Ambience", true).withDesc("Disables the portal ambience sound that plays when you get close to a portal")));
 	}
 
 	@Subscribe

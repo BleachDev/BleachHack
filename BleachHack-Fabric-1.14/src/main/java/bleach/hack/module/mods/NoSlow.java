@@ -43,8 +43,12 @@ public class NoSlow extends Module {
 	private Vec3d addVelocity = Vec3d.ZERO;
 
 	public NoSlow() {
-		super("NoSlow", KEY_UNBOUND, Category.MOVEMENT, "Disables Stuff From Slowing You Down", new SettingToggle("Slowness", true), new SettingToggle("Soul Sand", true),
-				new SettingToggle("Slime Blocks", true), new SettingToggle("Webs", true), new SettingToggle("Items", true),
+		super("NoSlow", KEY_UNBOUND, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
+				new SettingToggle("Slowness", true),
+				new SettingToggle("Soul Sand", true),
+				new SettingToggle("Slime Blocks", true),
+				new SettingToggle("Webs", true),
+				new SettingToggle("Items", true),
 				new SettingToggle("Inventory", true).withDesc("Allows you to move in inventories").withChildren(
 						new SettingToggle("Sneaking", false).withDesc("Enabled the sneak key while in a inventory"),
 						new SettingToggle("NCP Bypass", false).withDesc("Allows you to move items around while running on NCP"),
@@ -60,8 +64,9 @@ public class NoSlow extends Module {
 
 		/* Slowness */
 		if (getSetting(0).asToggle().state && (mc.player.getStatusEffect(StatusEffects.SLOWNESS) != null || mc.player.getStatusEffect(StatusEffects.BLINDNESS) != null)) {
-			if (mc.options.keyForward.isPressed() && mc.player.getVelocity().x > -0.15 && mc.player.getVelocity().x < 0.15 && mc.player.getVelocity().z > -0.15
-					&& mc.player.getVelocity().z < 0.15) {
+			if (mc.options.keyForward.isPressed()
+					&& mc.player.getVelocity().x > -0.15 && mc.player.getVelocity().x < 0.15
+					&& mc.player.getVelocity().z > -0.15 && mc.player.getVelocity().z < 0.15) {
 				mc.player.setVelocity(mc.player.getVelocity().add(addVelocity));
 				addVelocity = addVelocity.add(new Vec3d(0, 0, 0.05).rotateY(-(float) Math.toRadians(mc.player.yaw)));
 			} else
@@ -96,9 +101,10 @@ public class NoSlow extends Module {
 
 		/* Inventory */
 		if (getSetting(5).asToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
-			for (KeyBinding k : new KeyBinding[] { mc.options.keyForward, mc.options.keyBack, mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump,
-					mc.options.keySprint }) {
-				KeyBinding.setKeyPressed(InputUtil.fromName(k.getName()), InputUtil.isKeyPressed(mc.window.getHandle(), InputUtil.fromName(k.getName()).getKeyCode()));
+			for (KeyBinding k : new KeyBinding[] { mc.options.keyForward, mc.options.keyBack,
+					mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump, mc.options.keySprint }) {
+				KeyBinding.setKeyPressed(InputUtil.fromName(k.getName()),
+						InputUtil.isKeyPressed(mc.window.getHandle(), InputUtil.fromName(k.getName()).getKeyCode()));
 			}
 
 			if (getSetting(5).asToggle().asToggle().getChild(0).asToggle().state) {

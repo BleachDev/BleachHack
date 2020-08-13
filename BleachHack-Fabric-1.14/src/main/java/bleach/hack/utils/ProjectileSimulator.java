@@ -41,13 +41,18 @@ public class ProjectileSimulator {
 	private static MinecraftClient mc = MinecraftClient.getInstance();
 
 	public static Entity summonProjectile(PlayerEntity thrower, boolean allowThrowables, boolean allowXp, boolean allowPotions) {
-		ItemStack hand = (isThrowable(thrower.inventory.getMainHandStack().getItem(), allowThrowables, allowXp, allowPotions) ? thrower.inventory.getMainHandStack()
-				: isThrowable(thrower.inventory.offHand.get(0).getItem(), allowThrowables, allowXp, allowPotions) ? thrower.inventory.offHand.get(0) : null);
+		ItemStack hand = (isThrowable(thrower.inventory.getMainHandStack().getItem(), allowThrowables, allowXp, allowPotions)
+				? thrower.inventory.getMainHandStack()
+				: isThrowable(thrower.inventory.offHand.get(0).getItem(), allowThrowables, allowXp, allowPotions)
+						? thrower.inventory.offHand.get(0)
+						: null);
 
 		if (hand == null)
 			return null;
 
-		Vec3d spawnVec = new Vec3d(thrower.x - Math.cos(Math.toRadians(thrower.yaw)) * 0.05, thrower.y - 0.1000000015,
+		Vec3d spawnVec = new Vec3d(
+				thrower.x - Math.cos(Math.toRadians(thrower.yaw)) * 0.05,
+				thrower.y - 0.1000000015,
 				thrower.z - Math.sin(Math.toRadians(thrower.yaw)) * 0.05);
 
 		if (hand.getItem() instanceof RangedWeaponItem) {
@@ -85,9 +90,10 @@ public class ProjectileSimulator {
 	}
 
 	public static boolean isThrowable(Item item, boolean allowThrowables, boolean allowXp, boolean allowPotions) {
-		return item instanceof RangedWeaponItem || (allowThrowables && (item instanceof EggItem || item instanceof SnowballItem || item instanceof EnderPearlItem))
-				|| (allowXp && item instanceof ExperienceBottleItem) || (allowPotions && (item instanceof SplashPotionItem || item instanceof LingeringPotionItem))
-				|| item instanceof TridentItem;
+		return item instanceof RangedWeaponItem
+				|| (allowThrowables && (item instanceof EggItem || item instanceof SnowballItem || item instanceof EnderPearlItem))
+				|| (allowXp && item instanceof ExperienceBottleItem)
+				|| (allowPotions && (item instanceof SplashPotionItem || item instanceof LingeringPotionItem)) || item instanceof TridentItem;
 	}
 
 	private static void initProjectile(Entity e, Entity thrower, float addPitch, float strength) {
@@ -121,8 +127,8 @@ public class ProjectileSimulator {
 				return Triple.of(vecs, entities.get(0), null);
 			}
 
-			BlockHitResult blockHit = mc.world
-					.rayTrace(new RayTraceContext(spoofE.getPos(), newVec, RayTraceContext.ShapeType.COLLIDER, RayTraceContext.FluidHandling.NONE, e));
+			BlockHitResult blockHit = mc.world.rayTrace(
+					new RayTraceContext(spoofE.getPos(), newVec, RayTraceContext.ShapeType.COLLIDER, RayTraceContext.FluidHandling.NONE, e));
 			if (blockHit.getType() != HitResult.Type.MISS) {
 				return Triple.of(vecs, null, blockHit.getBlockPos());
 			}
@@ -134,7 +140,8 @@ public class ProjectileSimulator {
 			double gravity = e instanceof ThrownPotionEntity ? 0.05
 					: e instanceof ThrownExperienceBottleEntity ? 0.07 : e instanceof ThrownEntity ? 0.03 : 0.05000000074505806;
 			spoofE.velocity = new Vec3d(vel.x * 0.99, vel.y * 0.99 - gravity, vel.z * 0.99);
-			spoofE.setPos(spoofE.getPos().x + spoofE.velocity.x, spoofE.getPos().y + spoofE.velocity.y, spoofE.getPos().z + spoofE.velocity.z);
+			spoofE.setPos(spoofE.getPos().x + spoofE.velocity.x,
+					spoofE.getPos().y + spoofE.velocity.y, spoofE.getPos().z + spoofE.velocity.z);
 
 			vecs.add(spoofE.getPos());
 		}

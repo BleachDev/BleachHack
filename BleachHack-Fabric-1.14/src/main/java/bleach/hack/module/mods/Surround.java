@@ -84,8 +84,9 @@ public class Surround extends Module {
 		int cap = 0;
 
 		if (getSetting(0).asMode().mode == 0) {
-			for (BlockPos b : new BlockPos[] { mc.player.getBlockPos().north(), mc.player.getBlockPos().east(), mc.player.getBlockPos().south(),
-					mc.player.getBlockPos().west() }) {
+			for (BlockPos b : new BlockPos[] {
+					mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
+					mc.player.getBlockPos().south(), mc.player.getBlockPos().west() }) {
 
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;
@@ -101,9 +102,11 @@ public class Surround extends Module {
 			}
 		} else {
 			Box box = mc.player.getBoundingBox();
-			for (BlockPos b : Sets.newHashSet(new BlockPos(box.minX - 1, box.minY, box.minZ), new BlockPos(box.minX, box.minY, box.minZ - 1),
-					new BlockPos(box.maxX + 1, box.minY, box.minZ), new BlockPos(box.maxX, box.minY, box.minZ - 1), new BlockPos(box.minX - 1, box.minY, box.maxZ),
-					new BlockPos(box.minX, box.minY, box.maxZ + 1), new BlockPos(box.maxX + 1, box.minY, box.maxZ), new BlockPos(box.maxX, box.minY, box.maxZ + 1))) {
+			for (BlockPos b : Sets.newHashSet(
+					new BlockPos(box.minX - 1, box.minY, box.minZ), new BlockPos(box.minX, box.minY, box.minZ - 1),
+					new BlockPos(box.maxX + 1, box.minY, box.minZ), new BlockPos(box.maxX, box.minY, box.minZ - 1),
+					new BlockPos(box.minX - 1, box.minY, box.maxZ), new BlockPos(box.minX, box.minY, box.maxZ + 1),
+					new BlockPos(box.maxX + 1, box.minY, box.maxZ), new BlockPos(box.maxX, box.minY, box.maxZ + 1))) {
 
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;

@@ -102,7 +102,8 @@ public class ServerScraperScreen extends Screen {
 		scrapeThread = new Thread(() -> {
 			for (int change : new int[] { 0, -1, 1, -2, 2, -3, 3 }) {
 				for (int i = 0; i <= 255; i++) {
-					String newIp = (ip.getAddress()[0] & 255) + "." + (ip.getAddress()[1] & 255) + "." + (ip.getAddress()[2] + change & 255) + "." + i;
+					String newIp = (ip.getAddress()[0] & 255) + "." + (ip.getAddress()[1] & 255)
+							+ "." + (ip.getAddress()[2] + change & 255) + "." + i;
 
 					BleachServerPinger ping = new BleachServerPinger();
 					ping.ping(newIp, 25565);

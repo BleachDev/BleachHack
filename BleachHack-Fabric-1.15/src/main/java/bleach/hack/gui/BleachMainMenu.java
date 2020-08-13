@@ -76,37 +76,50 @@ public class BleachMainMenu extends AbstractWindowScreen {
 
 	public void init() {
 		windows.clear();
-		windows.add(new Window(width / 8, height / 8, width / 8 + (width - width / 4), height / 8 + (height - height / 4), "BleachHack",
-				new ItemStack(Items.MUSIC_DISC_CAT)));
-		windows.add(new Window(width / 8 + 15, height / 8 + 15, width / 8 + 15 + (width - width / 2), height / 8 + 15 + (height - height / 2), "Login Manager",
-				new ItemStack(Items.PAPER), true));
-		windows.add(new Window(width / 8 + 30, height / 8 + 30, width / 8 + 30 + (width - width / 2), height / 8 + 30 + (height - height / 2), "Accounts",
-				new ItemStack(Items.WRITABLE_BOOK), true));
+		windows.add(new Window(width / 8,
+				height / 8,
+				width / 8 + (width - width / 4),
+				height / 8 + (height - height / 4), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)));
+		windows.add(new Window(width / 8 + 15,
+				height / 8 + 15,
+				width / 8 + 15 + (width - width / 2),
+				height / 8 + 15 + (height - height / 2), "Login Manager", new ItemStack(Items.PAPER), true));
+		windows.add(new Window(width / 8 + 30,
+				height / 8 + 30,
+				width / 8 + 30 + (width - width / 2),
+				height / 8 + 30 + (height - height / 2), "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
 
-		int w = windows.get(0).x2 - windows.get(0).x1, h = windows.get(0).y2 - windows.get(0).y1;
+		int w = windows.get(0).x2 - windows.get(0).x1,
+				h = windows.get(0).y2 - windows.get(0).y1;
 		int maxY = MathHelper.clamp(h / 4 + 119, 0, h - 22);
 
-		windows.get(0).buttons.add(new WindowButton(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
-			minecraft.openScreen(new SelectWorldScreen(this));
-		}));
-		windows.get(0).buttons.add(new WindowButton(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
-			minecraft.openScreen(new MultiplayerScreen(this));
-		}));
-		windows.get(0).buttons.add(new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 - 2, h / 4 + 106, "MC Menu", () -> {
-			customTitleScreen = !customTitleScreen;
-			BleachFileHelper.saveMiscSetting("customTitleScreen", "false");
-			minecraft.openScreen(new TitleScreen(false));
-		}));
-		windows.get(0).buttons.add(new WindowButton(w / 2 + 2, h / 4 + 86, w / 2 + 100, h / 4 + 106, "Login Manager", () -> {
-			windows.get(1).closed = false;
-			selectWindow(1);
-		}));
-		windows.get(0).buttons.add(new WindowButton(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
-			minecraft.openScreen(new SettingsScreen(this, minecraft.options));
-		}));
-		windows.get(0).buttons.add(new WindowButton(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
-			minecraft.scheduleStop();
-		}));
+		windows.get(0).buttons.add(
+				new WindowButton(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
+					minecraft.openScreen(new SelectWorldScreen(this));
+				}));
+		windows.get(0).buttons.add(
+				new WindowButton(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
+					minecraft.openScreen(new MultiplayerScreen(this));
+				}));
+		windows.get(0).buttons.add(
+				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 - 2, h / 4 + 106, "MC Menu", () -> {
+					customTitleScreen = !customTitleScreen;
+					BleachFileHelper.saveMiscSetting("customTitleScreen", "false");
+					minecraft.openScreen(new TitleScreen(false));
+				}));
+		windows.get(0).buttons.add(
+				new WindowButton(w / 2 + 2, h / 4 + 86, w / 2 + 100, h / 4 + 106, "Login Manager", () -> {
+					windows.get(1).closed = false;
+					selectWindow(1);
+				}));
+		windows.get(0).buttons.add(
+				new WindowButton(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
+					minecraft.openScreen(new SettingsScreen(this, minecraft.options));
+				}));
+		windows.get(0).buttons.add(
+				new WindowButton(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
+					minecraft.scheduleStop();
+				}));
 
 		int x = windows.get(1).x1;
 		int y = windows.get(1).y1;
@@ -128,34 +141,38 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		userField.setMaxLength(32767);
 		passField.setMaxLength(32767);
 
-		windows.get(1).buttons.add(new WindowButton(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
-			windows.get(1).closed = true;
-			selectWindow(1);
-		}));
-		windows.get(1).buttons.add(new WindowButton(w / 2 - 100, h / 3 + 62, w / 2 - 2, h / 3 + 82, "Accounts", () -> {
-			windows.get(2).closed = false;
-			selectWindow(2);
-		}));
-		windows.get(1).buttons.add(new WindowButton(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
-			for (String s : BleachFileMang.readFileLines("logins.txt")) {
-				entries.add(new ArrayList<>(Arrays.asList(s.split(":"))));
-			}
+		windows.get(1).buttons.add(
+				new WindowButton(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
+					windows.get(1).closed = true;
+					selectWindow(1);
+				}));
+		windows.get(1).buttons.add(
+				new WindowButton(w / 2 - 100, h / 3 + 62, w / 2 - 2, h / 3 + 82, "Accounts", () -> {
+					windows.get(2).closed = false;
+					selectWindow(2);
+				}));
+		windows.get(1).buttons.add(
+				new WindowButton(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
+					for (String s : BleachFileMang.readFileLines("logins.txt")) {
+						entries.add(new ArrayList<>(Arrays.asList(s.split(":"))));
+					}
 
-			loginResult = LoginManager.login(userField.getText(), passField.getText());
-			try {
-				Decrypter decrypter = new Decrypter(Decrypter.getPassPhrase());
-				String text = userField.getText() + ":" + decrypter.encrypt(passField.getText());
+					loginResult = LoginManager.login(userField.getText(), passField.getText());
+					try {
+						Decrypter decrypter = new Decrypter(Decrypter.getPassPhrase());
+						String text = userField.getText() + ":" + decrypter.encrypt(passField.getText());
 
-				if (checkBox.checked && (loginResult.equals("§aLogin Successful") || loginResult.equals("§6Logged in as an unverified account"))
-						&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
-					entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
-					BleachFileMang.createFile("logins.txt");
-					BleachFileMang.appendFile(text, "logins.txt");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}));
+						if (checkBox.checked && (loginResult.equals("§aLogin Successful")
+								|| loginResult.equals("§6Logged in as an unverified account"))
+								&& !entries.contains(new ArrayList<>(Arrays.asList(text.split(":"))))) {
+							entries.add(new ArrayList<>(Arrays.asList(text.split(":"))));
+							BleachFileMang.createFile("logins.txt");
+							BleachFileMang.appendFile(text, "logins.txt");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}));
 
 		if (versions.isEmpty()) {
 			versions.clear();
@@ -220,7 +237,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		super.onRenderWindow(window, mX, mY);
 
 		if (window == 0) {
-			int x = windows.get(0).x1, y = windows.get(0).y1 - 10, w = width - width / 4, h = height - height / 4;
+			int x = windows.get(0).x1,
+					y = windows.get(0).y1 - 10,
+					w = width - width / 4,
+					h = height - height / 4;
 
 			/* Main Text */
 			GL11.glPushMatrix();
@@ -250,7 +270,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			this.drawCenteredString(font, splash, 0, -8, 16776960);
 			GL11.glPopMatrix();
 		} else if (window == 1) {
-			int x = windows.get(1).x1, y = windows.get(1).y1 - 10, w = width - width / 2, h = height - height / 2;
+			int x = windows.get(1).x1,
+					y = windows.get(1).y1 - 10,
+					w = width - width / 2,
+					h = height - height / 2;
 
 			GL11.glPushMatrix();
 			GL11.glScaled(1, 1, 1);
@@ -272,7 +295,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			checkBox.render(mX, mY, 1f);
 			GL11.glPopMatrix();
 		} else if (window == 2) {
-			int x = windows.get(2).x1, y = windows.get(2).y1 - 10, w = width - width / 2, h = height - height / 2;
+			int x = windows.get(2).x1,
+					y = windows.get(2).y1 - 10,
+					w = width - width / 2,
+					h = height - height / 2;
 
 			drawCenteredString(font, "§cTemprary™ alt manager", x + w / 2, y + h / 4 - 30, -1);
 			// drawCenteredString(font, "§4(accounts stored in plaintext for now)", x + w /
@@ -330,7 +356,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				checkBox.checked = !checkBox.checked;
 			}
 		} else if (!windows.get(2).closed && windows.get(2).selected) {
-			int x = windows.get(2).x1, y = windows.get(2).y1 - 10, w = width - width / 2, h = height - height / 2;
+			int x = windows.get(2).x1,
+					y = windows.get(2).y1 - 10,
+					w = width - width / 2,
+					h = height - height / 2;
 
 			int c = 0;
 			for (List<String> e : new ArrayList<>(entries)) {

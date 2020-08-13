@@ -84,8 +84,10 @@ public class CrystalAura extends Module {
 	private HashMap<BlockPos, Integer> blackList = new HashMap<>();
 
 	public CrystalAura() {
-		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.", new SettingToggle("Players", true).withDesc("Target players"),
-				new SettingToggle("Mobs", false).withDesc("Target mobs"), new SettingToggle("Animals", false).withDesc("Target animals"),
+		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.",
+				new SettingToggle("Players", true).withDesc("Target players"),
+				new SettingToggle("Mobs", false).withDesc("Target mobs"),
+				new SettingToggle("Animals", false).withDesc("Target animals"),
 				new SettingToggle("Explode", true).withDesc("Hit/explode crystals").withChildren(
 						new SettingToggle("Anti Weakness", true).withDesc("Hit with sword when you have weakness"),
 						new SettingToggle("Slow", false).withDesc("Hits crystals slower")),
@@ -209,7 +211,8 @@ public class CrystalAura extends Module {
 		List<Entity> entities = new ArrayList<>();
 
 		entities.addAll(Streams.stream(mc.world.getEntities()).filter(e -> {
-			return (e instanceof PlayerEntity && getSetting(0).asToggle().state) || (e instanceof MobEntity && getSetting(1).asToggle().state)
+			return (e instanceof PlayerEntity && getSetting(0).asToggle().state)
+					|| (e instanceof MobEntity && getSetting(1).asToggle().state)
 					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state);
 		}).collect(Collectors.toList()));
 
@@ -255,10 +258,10 @@ public class CrystalAura extends Module {
 							if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
 								f = Direction.UP;
 							} else {
-								BlockHitResult result = mc.world.rayTrace(
-										new RayTraceContext(new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
-												new Vec3d(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D), RayTraceContext.ShapeType.OUTLINE,
-												RayTraceContext.FluidHandling.NONE, mc.player));
+								BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
+										new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
+										new Vec3d(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D),
+										RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
 
 								if (result != null && result.getSide() != null) {
 									f = result.getSide();
@@ -313,11 +316,14 @@ public class CrystalAura extends Module {
 							b = entity.getBlockPos().getSquaredDistance(blockPos);
 						} while (b >= 169.0D);
 
-						d = getSetting(7).asToggle().state ? getExplosionDamage_old(blockPos, (LivingEntity) entity)
+						d = getSetting(7).asToggle().state
+								? getExplosionDamage_old(blockPos, (LivingEntity) entity)
 								: getExplosionDamage(blockPos, (LivingEntity) entity);
 					} while (d <= damage);
 
-					self = getSetting(7).asToggle().state ? getExplosionDamage_old(blockPos, (LivingEntity) entity) : getExplosionDamage(blockPos, mc.player);
+					self = getSetting(7).asToggle().state
+							? getExplosionDamage_old(blockPos, (LivingEntity) entity)
+							: getExplosionDamage(blockPos, mc.player);
 				} while (self > d && d >= ((LivingEntity) entity).getHealth());
 
 				if (self - 0.5D <= mc.player.getHealth()) {
@@ -382,11 +388,13 @@ public class CrystalAura extends Module {
 		Explosion explosion = new Explosion(mc.world, null, crystalPos.x, crystalPos.y, crystalPos.z, 6f, false, Explosion.DestructionType.DESTROY);
 
 		double power = 12;
-		if (!mc.world
-				.getEntities((Entity) null,
-						new Box(MathHelper.floor(crystalPos.x - power - 1.0), MathHelper.floor(crystalPos.y - power - 1.0), MathHelper.floor(crystalPos.z - power - 1.0),
-								MathHelper.floor(crystalPos.x + power + 1.0), MathHelper.floor(crystalPos.y + power + 1.0), MathHelper.floor(crystalPos.z + power + 1.0)))
-				.contains(target)) {
+		if (!mc.world.getEntities((Entity) null, new Box(
+				MathHelper.floor(crystalPos.x - power - 1.0),
+				MathHelper.floor(crystalPos.y - power - 1.0),
+				MathHelper.floor(crystalPos.z - power - 1.0),
+				MathHelper.floor(crystalPos.x + power + 1.0),
+				MathHelper.floor(crystalPos.y + power + 1.0),
+				MathHelper.floor(crystalPos.z + power + 1.0))).contains(target)) {
 			damageCache.put(target, 0f);
 			return 0f;
 		}
@@ -417,7 +425,8 @@ public class CrystalAura extends Module {
 					}
 
 					// Armor
-					toDamage = DamageUtil.getDamageLeft(toDamage, target.getArmor(), (float) target.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
+					toDamage = DamageUtil.getDamageLeft(toDamage, target.getArmor(),
+							(float) target.getAttributeInstance(EntityAttributes.ARMOR_TOUGHNESS).getValue());
 
 					// Enchantments
 					if (target.hasStatusEffect(StatusEffects.RESISTANCE)) {

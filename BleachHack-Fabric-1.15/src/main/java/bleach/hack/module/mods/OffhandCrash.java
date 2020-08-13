@@ -33,7 +33,8 @@ import net.minecraft.util.math.Direction;
 public class OffhandCrash extends Module {
 
 	public OffhandCrash() {
-		super("OffhandCrash", KEY_UNBOUND, Category.EXPLOITS, "Lags people using the snowball exploit", new SettingSlider("Switches", 0, 2000, 420, 0),
+		super("OffhandCrash", KEY_UNBOUND, Category.EXPLOITS, "Lags people using the snowball exploit",
+				new SettingSlider("Switches", 0, 2000, 420, 0),
 				new SettingToggle("Player Packet", true));
 	}
 

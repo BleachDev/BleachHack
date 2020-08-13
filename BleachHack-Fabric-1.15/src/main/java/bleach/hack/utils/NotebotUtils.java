@@ -43,7 +43,8 @@ public class NotebotUtils {
 
 	public static void downloadSongs(boolean log) {
 		try {
-			FileUtils.copyURLToFile(new URL("https://github.com/BleachDrinker420/bleachhack-1.14/raw/master/online/notebot/songs.zip"),
+			FileUtils.copyURLToFile(
+					new URL("https://github.com/BleachDrinker420/bleachhack-1.14/raw/master/online/notebot/songs.zip"),
 					BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
 			ZipFile zip = new ZipFile(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
 			Enumeration<? extends ZipEntry> files = zip.entries();
@@ -97,10 +98,11 @@ public class NotebotUtils {
 
 	private static void play(SoundEvent sound, float pitch) {
 		if (MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null) {
-			MinecraftClient.getInstance().world.playSound(MinecraftClient.getInstance().player, MinecraftClient.getInstance().player.getBlockPos(), sound,
-					SoundCategory.RECORDS, 3.0F, pitch);
+			MinecraftClient.getInstance().world.playSound(MinecraftClient.getInstance().player,
+					MinecraftClient.getInstance().player.getBlockPos(), sound, SoundCategory.RECORDS, 3.0F, pitch);
 		} else {
-			MinecraftClient.getInstance().getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, 0F, 0F, 0F));
+			MinecraftClient.getInstance().getSoundManager().play(
+					new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, 0F, 0F, 0F));
 		}
 	}
 }

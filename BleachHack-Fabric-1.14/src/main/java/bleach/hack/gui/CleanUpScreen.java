@@ -71,9 +71,10 @@ public class CleanUpScreen extends Screen {
 				try {
 					if (s.label == null)
 						s.label = "";
-					if ((cleanNoHost && s.label.contains("Can't resolve hostname"))
-							|| (cleanVersion && s.protocolVersion < SharedConstants.getGameVersion().getProtocolVersion())
-							|| (cleanNoPing && (s.label.contains("Pinging...") || s.label.contains("Can't connect to server"))) || cleanAll) {
+					if ((cleanNoHost && s.label.contains("Can't resolve hostname")) ||
+							(cleanVersion && s.protocolVersion < SharedConstants.getGameVersion().getProtocolVersion()) ||
+							(cleanNoPing && (s.label.contains("Pinging...") || s.label.contains("Can't connect to server"))) ||
+							cleanAll) {
 						serverList.remove(s);
 						serverList.saveFile();
 					}

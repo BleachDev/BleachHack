@@ -76,7 +76,8 @@ public class Midi2Notebot {
 							int note = key % 12;
 							String noteName = NOTE_NAMES[note];
 							int velocity = msg.getData2();
-							out += " Note " + (msg.getCommand() == 0x80 ? "off" : "on") + " > " + noteName + octave + " key=" + key + " velocity: " + velocity;
+							out += " Note " + (msg.getCommand() == 0x80 ? "off" : "on") + " > "
+									+ noteName + octave + " key=" + key + " velocity: " + velocity;
 
 							if (!skipNote) {
 								noteList.add(Arrays.asList((int) Math.round(time / 50d), NOTE_POSES[note], instrument));

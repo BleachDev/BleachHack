@@ -69,7 +69,8 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
 
 			MinecraftClient.getInstance().player.networkHandler.sendPacket(
-					new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
+					new PlayerInteractEntityC2SPacket(
+							entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
 
 			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
 		}));
@@ -77,7 +78,8 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 
 	@Inject(at = @At("RETURN"), method = "render(IIF)V")
 	public void render(int int_1, int int_2, float float_1, CallbackInfo info) {
-		EventDrawContainer event = new EventDrawContainer((ContainerScreen<?>) MinecraftClient.getInstance().currentScreen, int_1, int_2); // hmm
+		EventDrawContainer event = new EventDrawContainer(
+				(ContainerScreen<?>) MinecraftClient.getInstance().currentScreen, int_1, int_2); // hmm
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();

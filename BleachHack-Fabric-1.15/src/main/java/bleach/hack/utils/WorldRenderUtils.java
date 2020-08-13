@@ -74,8 +74,8 @@ public class WorldRenderUtils {
 
 		if (item.getItem() instanceof BlockItem)
 			GL11.glRotatef(180F, 1F, 180F, 10F);
-		mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), Mode.GUI, 0, OverlayTexture.DEFAULT_UV, new MatrixStack(),
-				mc.getBufferBuilders().getEntityVertexConsumers());
+		mc.getItemRenderer().renderItem(new ItemStack(
+				item.getItem()), Mode.GUI, 0, OverlayTexture.DEFAULT_UV, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
 		if (item.getItem() instanceof BlockItem)
 			GL11.glRotatef(-180F, -1F, -180F, -10F);
 
@@ -98,8 +98,11 @@ public class WorldRenderUtils {
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
 			int w1 = mc.textRenderer.getStringWidth(subText) / 2;
-			mc.textRenderer.drawWithShadow(subText, -4 - w1, c * 10 - 1,
-					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0);
+			mc.textRenderer.drawWithShadow(
+					subText, -4 - w1, c * 10 - 1,
+					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
+							? 0xff5050
+							: 0xffb0e0);
 			c--;
 		}
 

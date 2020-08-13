@@ -40,8 +40,11 @@ public class Trail extends Module {
 	private List<List<Vec3d>> trails = new ArrayList<>();
 
 	public Trail() {
-		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go", new SettingToggle("Trail", true), new SettingToggle("Keep Trail", false),
-				new SettingMode("Color", "Red", "Green", "Blue", "B2G", "R2B"), new SettingSlider("Thick", 0.1, 10, 3, 1));
+		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
+				new SettingToggle("Trail", true),
+				new SettingToggle("Keep Trail", false),
+				new SettingMode("Color", "Red", "Green", "Blue", "B2G", "R2B"),
+				new SettingSlider("Thick", 0.1, 10, 3, 1));
 	}
 
 	@Override
@@ -80,7 +83,8 @@ public class Trail extends Module {
 				clr = new Color(50, 255 - count, count);
 			else if (getSetting(2).asMode().mode == 4)
 				clr = new Color(count, 50, 255 - count);
-			RenderUtils.drawLine(e.get(0).x, e.get(0).y, e.get(0).z, e.get(1).x, e.get(1).y, e.get(1).z, clr.getRed() / 255f, clr.getGreen() / 255f, clr.getBlue() / 255f,
+			RenderUtils.drawLine(e.get(0).x, e.get(0).y, e.get(0).z, e.get(1).x, e.get(1).y, e.get(1).z,
+					clr.getRed() / 255f, clr.getGreen() / 255f, clr.getBlue() / 255f,
 					(float) getSetting(3).asSlider().getValue());
 			if (count < 5 || count > 250)
 				rev = !rev;

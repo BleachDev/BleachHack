@@ -70,8 +70,8 @@ public class NotebotStealer extends Module {
 	@SuppressWarnings("unchecked")
 	@Subscribe
 	public void onTick(EventTick event) {
-		Multimap<SoundCategory, SoundInstance> soundMap = (Multimap<SoundCategory, SoundInstance>) FabricReflect
-				.getFieldValue(FabricReflect.getFieldValue(mc.getSoundManager(), "field_5590", "soundSystem"), "field_18951", "sounds");
+		Multimap<SoundCategory, SoundInstance> soundMap = (Multimap<SoundCategory, SoundInstance>) FabricReflect.getFieldValue(
+				FabricReflect.getFieldValue(mc.getSoundManager(), "field_5590", "soundSystem"), "field_18951", "sounds");
 
 		for (Entry<SoundCategory, SoundInstance> e : HashMultimap.create(soundMap).entries()) {
 			if (prevSoundMap.containsEntry(e.getKey(), e.getValue()))
@@ -84,8 +84,8 @@ public class NotebotStealer extends Module {
 				int note = 0;
 
 				for (int n = 0; n < 25; n++) {
-					if ((float) Math.pow(2.0D, (n - 12) / 12.0D) - 0.01 < e.getValue().getPitch()
-							&& (float) Math.pow(2.0D, (n - 12) / 12.0D) + 0.01 > e.getValue().getPitch()) {
+					if ((float) Math.pow(2.0D, (n - 12) / 12.0D) - 0.01 < e.getValue().getPitch() &&
+							(float) Math.pow(2.0D, (n - 12) / 12.0D) + 0.01 > e.getValue().getPitch()) {
 						note = n;
 						break;
 					}

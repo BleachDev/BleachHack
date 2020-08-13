@@ -37,7 +37,8 @@ import net.minecraft.util.math.Vec3d;
 public class ArrowJuke extends Module {
 
 	public ArrowJuke() {
-		super("ArrowJuke", KEY_UNBOUND, Category.COMBAT, "Tries to dodge arrows coming at you", new SettingMode("Move", "Client", "Packet"),
+		super("ArrowJuke", KEY_UNBOUND, Category.COMBAT, "Tries to dodge arrows coming at you",
+				new SettingMode("Move", "Client", "Packet"),
 				new SettingSlider("Speed", 0.01, 2, 1, 2));
 	}
 
@@ -52,7 +53,8 @@ public class ArrowJuke extends Module {
 
 			for (int i = 0; i < 100; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5));
-				boxes.add(new Box(nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
+				boxes.add(new Box(
+						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
 						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2)));
 			}
 
@@ -61,7 +63,8 @@ public class ArrowJuke extends Module {
 
 			for (int i = 0; i < 75; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5));
-				Box nextBox = new Box(nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
+				Box nextBox = new Box(
+						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
 						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2));
 
 				if (pBox.intersects(nextBox)) {

@@ -90,13 +90,16 @@ public class ModuleWindow extends ClickGuiWindow {
 				DrawableHelper.fill(x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
 			}
 
-			DrawableHelper.fill(x, y + curY, x + len, y + 12 + curY, mouseOver(x, y + curY, x + len, y + 12 + curY) ? 0x70303070 : 0x00000000);
+			DrawableHelper.fill(x, y + curY, x + len, y + 12 + curY,
+					mouseOver(x, y + curY, x + len, y + 12 + curY) ? 0x70303070 : 0x00000000);
 
-			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len), x + 2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
+			textRend.drawWithShadow(textRend.trimToWidth(m.getKey().getName(), len),
+					x + 2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
 
 			// If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
-				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0), m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
+				DrawableHelper.fill(m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0),
+						m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
 			}
 
 			/* Set which module settings show on */

@@ -56,7 +56,8 @@ public class UI extends Module {
 	private long lastPacket = 0;
 
 	public UI() {
-		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.", new SettingToggle("Arraylist", true).withDesc("Shows the module list"), // 0
+		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
+				new SettingToggle("Arraylist", true).withDesc("Shows the module list"), // 0
 				new SettingToggle("Extra Line", false).withDesc("Adds a extra line to the front of the arralist"), // 1
 				new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist"), // 2
 				new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 3
@@ -124,16 +125,17 @@ public class UI extends Module {
 			mc.textRenderer.drawWithShadow(event.matrix, "Players:", 2, 4 + arrayCount * 10, 0xff0000);
 			arrayCount++;
 
-			for (Entity e : mc.world.getPlayers().stream()
-					.sorted((a, b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
+			for (Entity e : mc.world.getPlayers().stream().sorted(
+					(a, b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
 					.collect(Collectors.toList())) {
 				if (e == mc.player)
 					continue;
 
 				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
-				String text = "" + e.getDisplayName().getString() + " \u00a77|\u00a7r " + e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " "
-						+ e.getBlockPos().getZ() + " (" + dist + "m)";
+				String text = "" + e.getDisplayName().getString() + " \u00a77|\u00a7r " +
+						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
+						+ " (" + dist + "m)";
 
 				mc.textRenderer.drawWithShadow(event.matrix, text, 2, 4 + arrayCount * 10,
 						new Color(255 - Math.min(dist * 3, 255), Math.min(dist * 3, 255), 0).brighter().getRGB());
@@ -142,7 +144,8 @@ public class UI extends Module {
 		}
 
 		if (getSetting(11).asToggle().state) {
-			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss" + (getSetting(11).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
+					+ (getSetting(11).asToggle().getChild(0).asToggle().state ? " zzz" : "")
 					+ (getSetting(11).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
 		}
 
@@ -150,10 +153,11 @@ public class UI extends Module {
 			boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 			BlockPos pos = mc.player.getBlockPos();
 			Vec3d vec = mc.player.getPos();
-			BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8) : new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
+			BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
+					: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
 
-			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " \u00a77[" + (nether ? "\u00a7b" : "\u00a74")
-					+ pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
+			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
+					+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
 
 		if (getSetting(8).asToggle().state) {
@@ -201,7 +205,8 @@ public class UI extends Module {
 
 			int count = 0;
 			int x1 = mc.getWindow().getScaledWidth() / 2;
-			int y = mc.getWindow().getScaledHeight() - (mc.player.isSubmergedInWater() || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
+			int y = mc.getWindow().getScaledHeight() -
+					(mc.player.isSubmergedInWater() || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
 			for (ItemStack is : mc.player.inventory.armor) {
 				count++;
 				if (is.isEmpty())
@@ -247,7 +252,8 @@ public class UI extends Module {
 		int count2 = 0;
 		int infoMode = getSetting(15).asMode().mode;
 		for (String s : infoList) {
-			mc.textRenderer.drawWithShadow(event.matrix, s, infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
+			mc.textRenderer.drawWithShadow(event.matrix, s,
+					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
 					infoMode == 1 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
 			count2++;
 		}
@@ -293,7 +299,9 @@ public class UI extends Module {
 		if (ui == null)
 			return getRainbow(0.5f, 0.5f, 10, 0);
 
-		return getRainbow((float) ui.getSetting(13).asSlider().getValue(), (float) ui.getSetting(12).asSlider().getValue(), ui.getSetting(14).asSlider().getValue(),
+		return getRainbow((float) ui.getSetting(13).asSlider().getValue(),
+				(float) ui.getSetting(12).asSlider().getValue(),
+				ui.getSetting(14).asSlider().getValue(),
 				offset);
 	}
 }

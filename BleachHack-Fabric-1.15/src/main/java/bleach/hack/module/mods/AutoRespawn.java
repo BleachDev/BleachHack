@@ -13,7 +13,8 @@ import net.minecraft.client.gui.screen.DeathScreen;
 public class AutoRespawn extends Module {
 
 	public AutoRespawn() {
-		super("AutoRespawn", KEY_UNBOUND, Category.PLAYER, "Automatically respawn when you die", new SettingToggle("Delay", false),
+		super("AutoRespawn", KEY_UNBOUND, Category.PLAYER, "Automatically respawn when you die",
+				new SettingToggle("Delay", false),
 				new SettingSlider("Delay", 1, 15, 5, 0));
 	}
 

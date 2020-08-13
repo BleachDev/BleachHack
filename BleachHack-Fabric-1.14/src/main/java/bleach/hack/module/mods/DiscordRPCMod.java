@@ -32,7 +32,8 @@ public class DiscordRPCMod extends Module {
 		super("DiscordRPC", KEY_UNBOUND, Category.MISC, "Dicord RPC, use \"rpc\" command to set a custom status",
 				new SettingMode("Text 1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%"),
 				new SettingMode("Text 2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
-				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None"), new SettingToggle("Silent", false));
+				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None"),
+				new SettingToggle("Silent", false));
 	}
 
 	public void init() {
@@ -137,9 +138,10 @@ public class DiscordRPCMod extends Module {
 					break;
 			}
 
-			DiscordRPC.discordUpdatePresence(new DiscordRichPresence.Builder(text2)
-					.setBigImage("bh14", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION).setDetails(text1)
-					.setStartTimestamps(start).build());
+			DiscordRPC.discordUpdatePresence(
+					new DiscordRichPresence.Builder(text2)
+							.setBigImage("bh14", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION)
+							.setDetails(text1).setStartTimestamps(start).build());
 		}
 
 		if (tick % 200 == 0) {

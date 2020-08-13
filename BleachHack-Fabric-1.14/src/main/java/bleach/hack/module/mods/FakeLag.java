@@ -37,8 +37,11 @@ public class FakeLag extends Module {
 	public long startTime = 0;
 
 	public FakeLag() {
-		super("FakeLag", KEY_UNBOUND, Category.MOVEMENT, "Stores up movement packets", new SettingMode("Mode", "Always", "Pulse"), new SettingToggle("Limit", false),
-				new SettingSlider("Limit", 0, 15, 5, 1), new SettingSlider("Pulse", 0, 5, 1, 1));
+		super("FakeLag", KEY_UNBOUND, Category.MOVEMENT, "Stores up movement packets",
+				new SettingMode("Mode", "Always", "Pulse"),
+				new SettingToggle("Limit", false),
+				new SettingSlider("Limit", 0, 15, 5, 1),
+				new SettingSlider("Pulse", 0, 5, 1, 1));
 	}
 
 	@Override
@@ -56,8 +59,10 @@ public class FakeLag extends Module {
 
 	@Subscribe
 	public void sendPacket(EventSendPacket event) {
-		if (!(event.getPacket() instanceof PlayerMoveC2SPacket || event.getPacket() instanceof PlayerMoveC2SPacket.PositionOnly
-				|| event.getPacket() instanceof PlayerMoveC2SPacket.LookOnly || event.getPacket() instanceof PlayerMoveC2SPacket.Both))
+		if (!(event.getPacket() instanceof PlayerMoveC2SPacket
+				|| event.getPacket() instanceof PlayerMoveC2SPacket.PositionOnly
+				|| event.getPacket() instanceof PlayerMoveC2SPacket.LookOnly
+				|| event.getPacket() instanceof PlayerMoveC2SPacket.Both))
 			return;
 		queue.add((PlayerMoveC2SPacket) event.getPacket());
 		event.setCancelled(true);
@@ -66,7 +71,8 @@ public class FakeLag extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asMode().mode == 0) {
-			if (getSetting(1).asToggle().state && System.currentTimeMillis() - startTime > getSetting(2).asSlider().getValue() * 1000)
+			if (getSetting(1).asToggle().state &&
+					System.currentTimeMillis() - startTime > getSetting(2).asSlider().getValue() * 1000)
 				setToggled(false);
 		} else if (getSetting(0).asMode().mode == 1) {
 			if (System.currentTimeMillis() - startTime > getSetting(3).asSlider().getValue() * 1000) {

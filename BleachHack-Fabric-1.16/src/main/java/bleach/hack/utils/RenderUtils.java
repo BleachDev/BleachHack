@@ -44,7 +44,9 @@ public class RenderUtils {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(5, VertexFormats.POSITION_COLOR);
-		WorldRenderer.drawBox(buffer, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, r, g, b, a / 2f);
+		WorldRenderer.drawBox(buffer,
+				box.minX, box.minY, box.minZ,
+				box.maxX, box.maxY, box.maxZ, r, g, b, a / 2f);
 		tessellator.draw();
 
 		// Outline

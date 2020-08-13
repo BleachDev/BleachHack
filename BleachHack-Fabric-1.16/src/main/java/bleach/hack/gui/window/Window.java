@@ -91,7 +91,8 @@ public class Window {
 
 			DrawableHelper.fill(matrix, bx1, by1, bx2 - 1, by2 - 1, 0xffb0b0b0);
 			DrawableHelper.fill(matrix, bx1 + 1, by1 + 1, bx2, by2, 0xff000000);
-			DrawableHelper.fill(matrix, bx1 + 1, by1 + 1, bx2 - 1, by2 - 1, selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0xff959595 : 0xff858585);
+			DrawableHelper.fill(matrix, bx1 + 1, by1 + 1, bx2 - 1, by2 - 1,
+					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0xff959595 : 0xff858585);
 			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 		}
 

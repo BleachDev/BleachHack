@@ -38,7 +38,9 @@ public class BlockParty extends Module {
 	private boolean jumping;
 
 	public BlockParty() {
-		super("Blockparty", KEY_UNBOUND, Category.MISC, "Wins You Blockparty", new SettingToggle("Jump", true), new SettingToggle("AutoSpeed", true));
+		super("Blockparty", KEY_UNBOUND, Category.MISC, "Wins You Blockparty",
+				new SettingToggle("Jump", true),
+				new SettingToggle("AutoSpeed", true));
 	}
 
 	@Subscribe
@@ -81,7 +83,8 @@ public class BlockParty extends Module {
 		KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKey(), true);
 
 		if (mc.player.getBlockPos().getSquaredDistance(poses.get(0)) < (mc.player.isSprinting() ? 25 : 8)
-				&& Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().z) > 0.15 && mc.player.verticalCollision) {
+				&& Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().z) > 0.15
+				&& mc.player.verticalCollision) {
 			mc.player.jump();
 			mc.player.verticalCollision = false;
 			// mc.player.setPosition(mc.player.getX(), mc.player.y + 0.02,
@@ -98,7 +101,8 @@ public class BlockParty extends Module {
 			if (mc.player.forwardSpeed != 0.0F && !mc.player.horizontalCollision) {
 				if (mc.player.verticalCollision) {
 					mc.player.setVelocity(mc.player.getVelocity().x * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300),
-							mc.player.getVelocity().y, mc.player.getVelocity().z * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300));
+							mc.player.getVelocity().y,
+							mc.player.getVelocity().z * Math.min(1.3, 0.85 + mc.player.getBlockPos().getSquaredDistance(poses.get(0)) / 300));
 					jumping = true;
 					mc.player.jump();
 				}

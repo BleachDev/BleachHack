@@ -51,7 +51,8 @@ public class CmdEnchant extends Command {
 					+ "§5[Efficiency/Eff] §d[Feather_Falling/Fall] §5[Fire_Aspect] §d[Fire_Prot] "
 					+ "§5[Flame] §d[Fortune] §5[Frost_Walker/Frost] §d[Impaling] §5[Infinity] §d[Knockback/Knock] "
 					+ "§5[Looting/Loot] §d[Loyalty] §5[Luck_Of_The_Sea/Luck] §d[Lure] §5[Mending/Mend] §d[Multishot] "
-					+ "§5[Piercing] §d[Power] §5[Projectile_Prot/Proj_Prot] §d[Protection/Prot] " + "§5[Punch] §d[Quick_Charge/Charge] §5[Respiration/Resp] §d[Riptide] "
+					+ "§5[Piercing] §d[Power] §5[Projectile_Prot/Proj_Prot] §d[Protection/Prot] "
+					+ "§5[Punch] §d[Quick_Charge/Charge] §5[Respiration/Resp] §d[Riptide] "
 					+ "§5[Sharpness/Sharp] §d[Silk_Touch/Silk] §5[Smite] §d[Sweeping_Edge/Sweep] §5[Thorns] §d[Unbreaking]");
 			return;
 		}

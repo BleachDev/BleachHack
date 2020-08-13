@@ -37,7 +37,8 @@ public class Spammer extends Module {
 	private int lineCount = 0;
 
 	public Spammer() {
-		super("Spammer", KEY_UNBOUND, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)", new SettingMode("Read", "Random", "Order"),
+		super("Spammer", KEY_UNBOUND, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
+				new SettingMode("Read", "Random", "Order"),
 				new SettingSlider("Delay", 1, 120, 20, 0));
 	}
 

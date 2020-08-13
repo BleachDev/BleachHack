@@ -149,7 +149,8 @@ public class CmdGive extends Command {
 			return;
 		}
 
-		ItemStack item = new ItemStack(Registry.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase())));
+		ItemStack item = new ItemStack(
+				Registry.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase())));
 
 		if (item.getItem() instanceof AirBlockItem)
 			throw new Exception();

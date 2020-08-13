@@ -41,7 +41,9 @@ public class AutoDonkeyDupe extends Module {
 
 	public AutoDonkeyDupe() {
 		super("AutoDonkeyDupe", KEY_UNBOUND, Category.EXPLOITS, "Automatically does the mountbypass dupe (PRESS ESCAPE TO CANCEL)",
-				new SettingSlider("Limit", 1, 15, 15, 0), new SettingMode("Mode", "Instant", "Single"), new SettingToggle("Shulkers Only", true));
+				new SettingSlider("Limit", 1, 15, 15, 0),
+				new SettingMode("Mode", "Instant", "Single"),
+				new SettingToggle("Shulkers Only", true));
 	}
 
 	public void onEnable() {
@@ -79,7 +81,8 @@ public class AutoDonkeyDupe extends Module {
 		if (((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel)
 			return;
 
-		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket && ((PlayerInteractEntityC2SPacket) event.getPacket()).getType() == InteractionType.INTERACT_AT
+		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket
+				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getType() == InteractionType.INTERACT_AT
 				&& ((PlayerInteractEntityC2SPacket) event.getPacket()).getEntity(mc.world) instanceof AbstractDonkeyEntity) {
 			event.setCancelled(true);
 		}
@@ -96,7 +99,8 @@ public class AutoDonkeyDupe extends Module {
 				: Math.min((int) getSetting(0).asSlider().getValue(), getInvSize(mc.player.getVehicle()));
 
 		for (Entity e : mc.world.getEntities()) {
-			if (e.getPos().distanceTo(mc.player.getPos()) < 6 && e instanceof AbstractDonkeyEntity && ((AbstractDonkeyEntity) e).isTame()) {
+			if (e.getPos().distanceTo(mc.player.getPos()) < 6
+					&& e instanceof AbstractDonkeyEntity && ((AbstractDonkeyEntity) e).isTame()) {
 				entity = (AbstractDonkeyEntity) e;
 			}
 		}
@@ -185,8 +189,9 @@ public class AutoDonkeyDupe extends Module {
 					}
 				} else {
 					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
-					mc.player.networkHandler.sendPacket(new PlayerInteractEntityC2SPacket(entity, Hand.MAIN_HAND,
-							entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
+					mc.player.networkHandler.sendPacket(
+							new PlayerInteractEntityC2SPacket(
+									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
 					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
 					return;
 				}

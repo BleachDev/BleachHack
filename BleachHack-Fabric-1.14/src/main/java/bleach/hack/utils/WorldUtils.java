@@ -42,23 +42,38 @@ public class WorldUtils {
 
 	protected static MinecraftClient mc = MinecraftClient.getInstance();
 
-	public static final List<Block> NONSOLID_BLOCKS = Arrays.asList(Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS, Blocks.VINE, Blocks.SEAGRASS,
-			Blocks.TALL_SEAGRASS, Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE);
+	public static final List<Block> NONSOLID_BLOCKS = Arrays.asList(
+			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
+			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
+			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE);
 
-	public static final List<Block> RIGHTCLICKABLE_BLOCKS = Arrays.asList(Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST, Blocks.WHITE_SHULKER_BOX,
-			Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX,
-			Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.LIGHT_GRAY_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX,
-			Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX, Blocks.ANVIL, Blocks.OAK_BUTTON, Blocks.ACACIA_BUTTON,
-			Blocks.BIRCH_BUTTON, Blocks.DARK_OAK_BUTTON, Blocks.JUNGLE_BUTTON, Blocks.SPRUCE_BUTTON, Blocks.STONE_BUTTON, Blocks.COMPARATOR, Blocks.REPEATER,
-			Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.ACACIA_FENCE_GATE,
-			Blocks.BREWING_STAND, Blocks.DISPENSER, Blocks.DROPPER, Blocks.LEVER, Blocks.NOTE_BLOCK, Blocks.JUKEBOX, Blocks.BEACON, Blocks.BLACK_BED, Blocks.BLUE_BED,
-			Blocks.BROWN_BED, Blocks.CYAN_BED, Blocks.GRAY_BED, Blocks.GREEN_BED, Blocks.LIGHT_BLUE_BED, Blocks.LIGHT_GRAY_BED, Blocks.LIME_BED, Blocks.MAGENTA_BED,
-			Blocks.ORANGE_BED, Blocks.PINK_BED, Blocks.PURPLE_BED, Blocks.RED_BED, Blocks.WHITE_BED, Blocks.YELLOW_BED, Blocks.FURNACE, Blocks.OAK_DOOR,
-			Blocks.SPRUCE_DOOR, Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR, Blocks.DARK_OAK_DOOR, Blocks.CAKE, Blocks.ENCHANTING_TABLE, Blocks.DRAGON_EGG,
-			Blocks.HOPPER, Blocks.REPEATING_COMMAND_BLOCK, Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.CRAFTING_TABLE, Blocks.ACACIA_TRAPDOOR,
-			Blocks.BIRCH_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR, Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.CAKE, Blocks.ACACIA_SIGN,
-			Blocks.ACACIA_WALL_SIGN, Blocks.BIRCH_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.DARK_OAK_SIGN, Blocks.DARK_OAK_WALL_SIGN, Blocks.JUNGLE_SIGN,
-			Blocks.JUNGLE_WALL_SIGN, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.SPRUCE_SIGN, Blocks.SPRUCE_WALL_SIGN);
+	public static final List<Block> RIGHTCLICKABLE_BLOCKS = Arrays.asList(
+			Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
+			Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX,
+			Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX,
+			Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.LIGHT_GRAY_SHULKER_BOX,
+			Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX,
+			Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX,
+			Blocks.BLACK_SHULKER_BOX, Blocks.ANVIL,
+			Blocks.OAK_BUTTON, Blocks.ACACIA_BUTTON, Blocks.BIRCH_BUTTON, Blocks.DARK_OAK_BUTTON,
+			Blocks.JUNGLE_BUTTON, Blocks.SPRUCE_BUTTON, Blocks.STONE_BUTTON, Blocks.COMPARATOR,
+			Blocks.REPEATER, Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE,
+			Blocks.JUNGLE_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.ACACIA_FENCE_GATE,
+			Blocks.BREWING_STAND, Blocks.DISPENSER, Blocks.DROPPER,
+			Blocks.LEVER, Blocks.NOTE_BLOCK, Blocks.JUKEBOX,
+			Blocks.BEACON, Blocks.BLACK_BED, Blocks.BLUE_BED, Blocks.BROWN_BED, Blocks.CYAN_BED, Blocks.GRAY_BED,
+			Blocks.GREEN_BED, Blocks.LIGHT_BLUE_BED, Blocks.LIGHT_GRAY_BED, Blocks.LIME_BED, Blocks.MAGENTA_BED,
+			Blocks.ORANGE_BED, Blocks.PINK_BED, Blocks.PURPLE_BED, Blocks.RED_BED, Blocks.WHITE_BED,
+			Blocks.YELLOW_BED, Blocks.FURNACE, Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR,
+			Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR,
+			Blocks.DARK_OAK_DOOR, Blocks.CAKE, Blocks.ENCHANTING_TABLE,
+			Blocks.DRAGON_EGG, Blocks.HOPPER, Blocks.REPEATING_COMMAND_BLOCK,
+			Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.CRAFTING_TABLE,
+			Blocks.ACACIA_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR,
+			Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.CAKE, Blocks.ACACIA_SIGN, Blocks.ACACIA_WALL_SIGN,
+			Blocks.BIRCH_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.DARK_OAK_SIGN, Blocks.DARK_OAK_WALL_SIGN,
+			Blocks.JUNGLE_SIGN, Blocks.JUNGLE_WALL_SIGN, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN,
+			Blocks.SPRUCE_SIGN, Blocks.SPRUCE_WALL_SIGN);
 
 	public static boolean isFluid(BlockPos pos) {
 		List<Material> fluids = Arrays.asList(Material.WATER, Material.LAVA, Material.SEAGRASS);
@@ -106,9 +121,12 @@ public class WorldUtils {
 		for (Direction d : Direction.values()) {
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
 
-			Vec3d vec = new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5, pos.getY() + 0.5 + d.getOffsetY() * 0.5, pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
+			Vec3d vec = new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
+					pos.getY() + 0.5 + d.getOffsetY() * 0.5,
+					pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
 
-			if (NONSOLID_BLOCKS.contains(neighborBlock) || mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.25)
+			if (NONSOLID_BLOCKS.contains(neighborBlock)
+					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.25)
 				continue;
 
 			float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
@@ -118,7 +136,8 @@ public class WorldUtils {
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SNEAKING));
 
-			mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos.offset(d), false));
+			mc.interactionManager.interactBlock(
+					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos), d.getOpposite(), pos.offset(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SNEAKING));
@@ -148,7 +167,9 @@ public class WorldUtils {
 		for (Direction d : Direction.values()) {
 			if (NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
-							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5, pos.getY() + 0.5 + d.getOffsetY() * 0.5, pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.25)
+							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
+									pos.getY() + 0.5 + d.getOffsetY() * 0.5,
+									pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.25)
 				continue;
 
 			return true;
@@ -189,7 +210,9 @@ public class WorldUtils {
 
 		mc.player.headYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
 		mc.player.renderPitch = mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch);
-		mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),
-				mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch), mc.player.onGround));
+		mc.player.networkHandler.sendPacket(
+				new PlayerMoveC2SPacket.LookOnly(
+						mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),
+						mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch), mc.player.onGround));
 	}
 }

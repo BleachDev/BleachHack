@@ -47,9 +47,30 @@ import bleach.hack.utils.BleachLogger;
 
 public class CommandManager {
 
-	private static List<Command> commands = Arrays.asList(new CmdBind(), new CmdCI(), new CmdCustomChat(), new CmdDupe(), new CmdEnchant(), new CmdEntityStats(),
-			new CmdFriends(), new CmdGamemode(), new CmdGive(), new CmdGuiReset(), new CmdHelp(), new CmdNBT(), new CmdNotebot(), new CmdNuker(), new CmdPeek(),
-			new CmdPrefix(), new CmdRbook(), new CmdRename(), new CmdRpc(), new CmdSetting(), new CmdSkull(), new CmdToggle(), new CmdXray());
+	private static List<Command> commands = Arrays.asList(
+			new CmdBind(),
+			new CmdCI(),
+			new CmdCustomChat(),
+			new CmdDupe(),
+			new CmdEnchant(),
+			new CmdEntityStats(),
+			new CmdFriends(),
+			new CmdGamemode(),
+			new CmdGive(),
+			new CmdGuiReset(),
+			new CmdHelp(),
+			new CmdNBT(),
+			new CmdNotebot(),
+			new CmdNuker(),
+			new CmdPeek(),
+			new CmdPrefix(),
+			new CmdRbook(),
+			new CmdRename(),
+			new CmdRpc(),
+			new CmdSetting(),
+			new CmdSkull(),
+			new CmdToggle(),
+			new CmdXray());
 
 	public static List<Command> getCommands() {
 		return commands;

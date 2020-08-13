@@ -33,7 +33,7 @@ public class Sprint extends Module {
 	public void onTick(EventTick event) {
 		if (!isToggled())
 			return;
-		mc.player.setSprinting(
-				mc.player.input.movementForward > 0 && mc.player.input.movementSideways != 0 || mc.player.input.movementForward > 0 && !mc.player.isSneaking());
+		mc.player.setSprinting(mc.player.input.movementForward > 0 && mc.player.input.movementSideways != 0 ||
+				mc.player.input.movementForward > 0 && !mc.player.isSneaking());
 	}
 }

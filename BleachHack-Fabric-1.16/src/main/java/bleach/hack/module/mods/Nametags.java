@@ -39,10 +39,10 @@ public class Nametags extends Module {
 		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor"),
 				new SettingMode("Health", "Number", "Bar", "Percent").withDesc("How to show health"),
-				new SettingToggle("Players", true).withDesc("show player nametags")
-						.withChildren(new SettingSlider("Size", 0.5, 5, 2, 1).withDesc("Size of the nametags")),
-				new SettingToggle("Mobs", false).withDesc("show mobs/animal nametags")
-						.withChildren(new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags")),
+				new SettingToggle("Players", true).withDesc("show player nametags").withChildren(
+						new SettingSlider("Size", 0.5, 5, 2, 1).withDesc("Size of the nametags")),
+				new SettingToggle("Mobs", false).withDesc("show mobs/animal nametags").withChildren(
+						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags")),
 				new SettingToggle("Items", true).withDesc("Shows nametags for items").withChildren(
 						new SettingToggle("Custom Name", true).withDesc("Shows the items custom name if it has it"),
 						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags")));
@@ -63,23 +63,28 @@ public class Nametags extends Module {
 
 			double scale = Math.max(getSetting(4).asToggle().getChild(1).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 			if (!e.getName().getString().equals(e.getStack().getName().getString()) && getSetting(4).asToggle().getChild(0).asToggle().state) {
-				WorldRenderUtils.drawText("\u00a76\"" + e.getStack().getName().getString() + "\"", e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale), e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(),
-						scale);
+				WorldRenderUtils.drawText("\u00a76\"" + e.getStack().getName().getString() + "\"",
+						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
+						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			}
 
 			WorldRenderUtils.drawText("\u00a76" + e.getName().getString() + " \u00a7e[x" + e.getStack().getCount() + "]",
-					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(), (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 		} else if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity e = (LivingEntity) event.getEntity();
 
 			// Color before name
 			String color = e instanceof Monster ? "\u00a75"
-					: EntityUtils.isAnimal(e) ? "\u00a7a" : e.isSneaking() ? "\u00a76" : e instanceof PlayerEntity ? "\u00a7c" : "\u00a7f";
+					: EntityUtils.isAnimal(e)
+							? "\u00a7a"
+							: e.isSneaking() ? "\u00a76" : e instanceof PlayerEntity ? "\u00a7c" : "\u00a7f";
 
-			if (e == mc.player || e == mc.player.getVehicle() || color == "\u00a7f" || ((color == "\u00a7c" || color == "\u00a76") && !getSetting(2).asToggle().state)
-					|| ((color == "\u00a75" || color == "\u00a7a") && !getSetting(3).asToggle().state))
+			if (e == mc.player || e == mc.player.getVehicle() || color == "\u00a7f" ||
+					((color == "\u00a7c" || color == "\u00a76") && !getSetting(2).asToggle().state) ||
+					((color == "\u00a75" || color == "\u00a7a") && !getSetting(3).asToggle().state))
 				return;
 			if (e.isInvisible())
 				color = "\u00a7e";
@@ -89,10 +94,10 @@ public class Nametags extends Module {
 
 			/* Drawing Nametags */
 			if (getSetting(1).asMode().mode == 0) {
-				WorldRenderUtils.drawText(
-						color + e.getName().getString() + " \u00a7a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a7a/"
-								+ (int) e.getMaxHealth() + "]",
-						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(), (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+				WorldRenderUtils.drawText(color + e.getName().getString()
+						+ " \u00a7a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a7a/" + (int) e.getMaxHealth() + "]",
+						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			} else if (getSetting(1).asMode().mode == 1) {
 				/* Health bar */
@@ -111,15 +116,19 @@ public class Nametags extends Module {
 					health += " \u00a7e+" + (int) (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
 				}
 
-				WorldRenderUtils.drawText(color + e.getName().getString(), e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale), e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
-				WorldRenderUtils.drawText(health, e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale), e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(),
-						scale);
+				WorldRenderUtils.drawText(color + e.getName().getString(),
+						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
+				WorldRenderUtils.drawText(health,
+						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
+						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			} else if (getSetting(1).asMode().mode == 2) {
-				WorldRenderUtils.drawText(
-						color + e.getName().getString() + getHealthColor(e) + " [" + (int) ((e.getHealth() + e.getAbsorptionAmount()) / e.getMaxHealth() * 100) + "%]",
-						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(), (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+				WorldRenderUtils.drawText(color + e.getName().getString()
+						+ getHealthColor(e) + " [" + (int) ((e.getHealth() + e.getAbsorptionAmount()) / e.getMaxHealth() * 100) + "%]",
+						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			}
 

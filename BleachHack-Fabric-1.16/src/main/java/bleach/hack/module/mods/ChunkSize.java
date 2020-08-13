@@ -80,7 +80,8 @@ public class ChunkSize extends Module {
 
 	@Subscribe
 	public void onOverlay(EventDrawOverlay event) {
-		mc.textRenderer.drawWithShadow(event.matrix, "Chunk: " + (size < 1000 ? size + "B" : size / 1000d + "KB"), 120, 5, -1);
+		mc.textRenderer.drawWithShadow(event.matrix, "Chunk: " + (size < 1000 ? size + "B" : size / 1000d + "KB"), 120,
+				5, -1);
 	}
 
 	@Subscribe
@@ -93,7 +94,8 @@ public class ChunkSize extends Module {
 			return;
 		new Thread(() -> {
 			CompoundTag tag = serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
-			DataOutputStream output = new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
+			DataOutputStream output = new DataOutputStream(
+					new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
 			try {
 				NbtIo.writeCompressed(tag, output);
 			} catch (IOException e) {
@@ -129,8 +131,10 @@ public class ChunkSize extends Module {
 			ChunkSection chunkSection = Arrays.stream(chunkSections).filter(chunkSectionx -> {
 				return chunkSectionx != null && chunkSectionx.getYOffset() >> 4 == finalI;
 			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
-			ChunkNibbleArray chunkNibbleArray = lightingProvider.get(LightType.BLOCK).getLightSection(ChunkSectionPos.from(chunkPos, i));
-			ChunkNibbleArray chunkNibbleArray2 = lightingProvider.get(LightType.SKY).getLightSection(ChunkSectionPos.from(chunkPos, i));
+			ChunkNibbleArray chunkNibbleArray = lightingProvider.get(LightType.BLOCK)
+					.getLightSection(ChunkSectionPos.from(chunkPos, i));
+			ChunkNibbleArray chunkNibbleArray2 = lightingProvider.get(LightType.SKY)
+					.getLightSection(ChunkSectionPos.from(chunkPos, i));
 			if (chunkSection != WorldChunk.EMPTY_SECTION || chunkNibbleArray != null || chunkNibbleArray2 != null) {
 				compoundTag7 = new CompoundTag();
 				compoundTag7.putByte("Y", (byte) (i & 255));
@@ -231,12 +235,14 @@ public class ChunkSize extends Module {
 		while (var33.hasNext()) {
 			Entry<Heightmap.Type, Heightmap> entry = var33.next();
 			if (chunk.getStatus().getHeightmapTypes().contains(entry.getKey())) {
-				compoundTag7.put(entry.getKey().getName(), new LongArrayTag(entry.getValue().asLongArray()));
+				compoundTag7.put(entry.getKey().getName(),
+						new LongArrayTag(entry.getValue().asLongArray()));
 			}
 		}
 
 		compoundTag2.put("Heightmaps", compoundTag7);
-		compoundTag2.put("Structures", writeStructures(chunkPos, chunk.getStructureStarts(), chunk.getStructureReferences()));
+		compoundTag2.put("Structures",
+				writeStructures(chunkPos, chunk.getStructureStarts(), chunk.getStructureReferences()));
 		return compoundTag;
 	}
 
@@ -247,8 +253,10 @@ public class ChunkSize extends Module {
 		Iterator<Entry<StructureFeature<?>, StructureStart<?>>> var5 = structureStarts.entrySet().iterator();
 
 		while (var5.hasNext()) {
-			Entry<StructureFeature<?>, StructureStart<?>> entry = var5.next();
-			compoundTag2.put(((StructureFeature<?>) entry.getKey()).getName(), ((StructureStart<?>) entry.getValue()).toTag(pos.x, pos.z));
+			Entry<StructureFeature<?>, StructureStart<?>> entry = var5
+					.next();
+			compoundTag2.put(((StructureFeature<?>) entry.getKey()).getName(),
+					((StructureStart<?>) entry.getValue()).toTag(pos.x, pos.z));
 		}
 
 		compoundTag.put("Starts", compoundTag2);
@@ -257,7 +265,8 @@ public class ChunkSize extends Module {
 
 		while (var9.hasNext()) {
 			Entry<StructureFeature<?>, LongSet> entry2 = var9.next();
-			compoundTag3.put(((StructureFeature<?>) entry2.getKey()).getName(), new LongArrayTag(entry2.getValue()));
+			compoundTag3.put(((StructureFeature<?>) entry2.getKey()).getName(),
+					new LongArrayTag(entry2.getValue()));
 		}
 
 		compoundTag.put("References", compoundTag3);

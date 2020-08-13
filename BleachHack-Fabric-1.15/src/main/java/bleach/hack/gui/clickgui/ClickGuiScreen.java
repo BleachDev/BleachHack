@@ -67,8 +67,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 		int i = 10;
 		for (Category c : Category.values()) {
-			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len, StringUtils.capitalize(StringUtils.lowerCase(c.toString())),
-					new ItemStack(Items.AIR)));
+			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
+					StringUtils.capitalize(StringUtils.lowerCase(c.toString())), new ItemStack(Items.AIR)));
 
 			i += len + 5;
 		}
@@ -141,8 +141,9 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 					mat.reset();
 
 					while (mat.find()) {
-						fill(tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10), tooltip.getLeft() + 3 + font.getStringWidth(mat.group().trim()),
-								tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9, 0xff000000);
+						fill(tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10),
+								tooltip.getLeft() + 3 + font.getStringWidth(mat.group().trim()), tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9,
+								0xff000000);
 						font.drawWithShadow(mat.group(), tooltip.getLeft() + 2, tooltip.getMiddle() - (c2 * 10) + (c3 * 10), -1);
 						c3++;
 					}

@@ -81,7 +81,10 @@ public class NotebotScreen extends AbstractWindowScreen {
 		super.onRenderWindow(matrix, window, mX, mY);
 
 		if (window == 0) {
-			int x = windows.get(0).x1, y = windows.get(0).y1 + 10, w = width / 2, h = height / 2;
+			int x = windows.get(0).x1,
+					y = windows.get(0).y1 + 10,
+					w = width / 2,
+					h = height / 2;
 
 			drawCenteredString(matrix, textRenderer, "Tutorial..", x + w - 24, y + 4, 0x9090c0);
 
@@ -119,8 +122,8 @@ public class NotebotScreen extends AbstractWindowScreen {
 				int c2 = 0;
 				for (Entry<Instrument, Integer> e : entry.notes.entrySet()) {
 					itemRenderer.zOffset = 500 - c2 * 20;
-					drawCenteredString(matrix, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(), x + w - w / 4, y + 50 + c2 * 10,
-							0x50f050);
+					drawCenteredString(matrix, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(),
+							x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
 					GL11.glPushMatrix();
 					DiffuseLighting.enableGuiDepthLighting();
 					if (e.getKey() == Instrument.HARP)
@@ -188,7 +191,10 @@ public class NotebotScreen extends AbstractWindowScreen {
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
 		if (!windows.get(0).closed) {
-			int x = windows.get(0).x1, y = windows.get(0).y1 + 10, w = width / 2, h = height / 2;
+			int x = windows.get(0).x1,
+					y = windows.get(0).y1 + 10,
+					w = width / 2,
+					h = height / 2;
 
 			if (double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15)
 				if (page > 0)
@@ -267,8 +273,8 @@ public class NotebotScreen extends AbstractWindowScreen {
 		public NotebotEntry(String file) {
 			/* File and lines */
 			fileName = file;
-			lines = BleachFileMang.readFileLines("notebot", file).stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";")))
-					.collect(Collectors.toList());
+			lines = BleachFileMang.readFileLines("notebot", file)
+					.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 
 			/* Get length */
 			int maxLeng = 0;

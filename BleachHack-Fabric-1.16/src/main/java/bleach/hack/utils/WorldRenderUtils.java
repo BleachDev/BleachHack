@@ -73,7 +73,8 @@ public class WorldRenderUtils {
 		GL11.glTranslated(offX, offY, 0);
 		if (item.getItem() instanceof BlockItem)
 			GL11.glRotatef(180F, 1F, 180F, 10F);
-		mc.getItemRenderer().renderItem(new ItemStack(item.getItem()), Mode.GUI, 0, 0, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
+		mc.getItemRenderer().renderItem(new ItemStack(
+				item.getItem()), Mode.GUI, 0, 0, new MatrixStack(), mc.getBufferBuilders().getEntityVertexConsumers());
 		if (item.getItem() instanceof BlockItem)
 			GL11.glRotatef(-180F, -1F, -180F, -10F);
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -97,8 +98,11 @@ public class WorldRenderUtils {
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
 			int w1 = mc.textRenderer.getWidth(subText) / 2;
-			mc.textRenderer.drawWithShadow(new MatrixStack(), subText, -4 - w1, c * 10 - 1,
-					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0);
+			mc.textRenderer.drawWithShadow(new MatrixStack(),
+					subText, -4 - w1, c * 10 - 1,
+					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
+							? 0xff5050
+							: 0xffb0e0);
 			c--;
 		}
 

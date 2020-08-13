@@ -46,8 +46,10 @@ public class Scaffold extends Module {
 	private Set<BlockPos> renderBlocks = new LinkedHashSet<>();
 
 	public Scaffold() {
-		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you", new SettingSlider("Range", 0, 1, 0.3, 1),
-				new SettingMode("Mode", "Normal", "3x3", "5x5", "7x7"), new SettingRotate(false).withDesc("Rotates when placing blocks"),
+		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
+				new SettingSlider("Range", 0, 1, 0.3, 1),
+				new SettingMode("Mode", "Normal", "3x3", "5x5", "7x7"),
+				new SettingRotate(false).withDesc("Rotates when placing blocks"),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier"),
 				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
@@ -81,8 +83,9 @@ public class Scaffold extends Module {
 		int mode = getSetting(1).asMode().mode;
 
 		Vec3d placeVec = mc.player.getPos().add(0, -0.85, 0);
-		Set<BlockPos> blocks = (mode == 0 ? new LinkedHashSet<>(Arrays.asList(new BlockPos(placeVec), new BlockPos(placeVec.add(range, 0, 0)),
-				new BlockPos(placeVec.add(-range, 0, 0)), new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))
+		Set<BlockPos> blocks = (mode == 0
+				? new LinkedHashSet<>(Arrays.asList(new BlockPos(placeVec), new BlockPos(placeVec.add(range, 0, 0)), new BlockPos(placeVec.add(-range, 0, 0)),
+						new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))
 				: getSpiral(mode, new BlockPos(placeVec)));
 
 		// Don't bother doing anything if there aren't any blocks to place on
@@ -97,7 +100,8 @@ public class Scaffold extends Module {
 		if (empty)
 			return;
 
-		if (getSetting(3).asToggle().state && WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock())
+		if (getSetting(3).asToggle().state
+				&& WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock())
 				&& !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down(2)).getBlock())) {
 			double toBlock = (int) mc.player.y - mc.player.y;
 

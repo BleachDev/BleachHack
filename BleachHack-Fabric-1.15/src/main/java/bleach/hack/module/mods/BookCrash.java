@@ -50,8 +50,12 @@ public class BookCrash extends Module {
 
 	public BookCrash() {
 		super("BookCrash", KEY_UNBOUND, Category.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
-				new SettingMode("Mode", "Jessica", "Raion", "Sign"), new SettingSlider("Uses", 1, 20, 5, 0), new SettingSlider("Delay", 0, 5, 0, 0),
-				new SettingMode("Fill", "Ascii", "0xFFFF", "Random", "Old"), new SettingSlider("Pages", 1, 100, 50, 0), new SettingToggle("Auto-Off", true));
+				new SettingMode("Mode", "Jessica", "Raion", "Sign"),
+				new SettingSlider("Uses", 1, 20, 5, 0),
+				new SettingSlider("Delay", 0, 5, 0, 0),
+				new SettingMode("Fill", "Ascii", "0xFFFF", "Random", "Old"),
+				new SettingSlider("Pages", 1, 100, 50, 0),
+				new SettingToggle("Auto-Off", true));
 	}
 
 	@Subscribe
@@ -86,8 +90,8 @@ public class BookCrash extends Module {
 			Text text = Text.Serializer.fromJson("{\"text\":\"pp\"}");
 			Random rand = new Random();
 			for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
-				mc.player.networkHandler.sendPacket(
-						new UpdateSignC2SPacket(new BlockPos(rand.nextInt(29999999), rand.nextInt(29999999), rand.nextInt(29999999)), text, text, text, text));
+				mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(
+						new BlockPos(rand.nextInt(29999999), rand.nextInt(29999999), rand.nextInt(29999999)), text, text, text, text));
 			}
 		} else {
 			for (int i = 0; i < pages; i++) {

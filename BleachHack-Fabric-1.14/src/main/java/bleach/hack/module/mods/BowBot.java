@@ -41,8 +41,10 @@ import net.minecraft.util.math.Direction;
 public class BowBot extends Module {
 
 	public BowBot() {
-		super("BowBot", KEY_UNBOUND, Category.COMBAT, "Automatically aims and shoots at entities", new SettingToggle("Shoot", true),
-				new SettingSlider("Charge", 0.1, 1, 0.5, 2), new SettingToggle("Aim", false));
+		super("BowBot", KEY_UNBOUND, Category.COMBAT, "Automatically aims and shoots at entities",
+				new SettingToggle("Shoot", true),
+				new SettingSlider("Charge", 0.1, 1, 0.5, 2),
+				new SettingToggle("Aim", false));
 	}
 
 	@Subscribe
@@ -57,7 +59,8 @@ public class BowBot extends Module {
 
 		// skidded from wurst no bully pls
 		if (getSetting(2).asToggle().state) {
-			List<Entity> targets = Streams.stream(mc.world.getEntities()).filter(e -> e instanceof LivingEntity && e != mc.player)
+			List<Entity> targets = Streams.stream(mc.world.getEntities())
+					.filter(e -> e instanceof LivingEntity && e != mc.player)
 					.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
 
 			if (targets.isEmpty())
@@ -73,10 +76,15 @@ public class BowBot extends Module {
 				velocity = 1;
 
 			// set position to aim at
-			double d = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(target.getBoundingBox().getCenter());
-			double x = target.x + (target.x - target.prevX) * d - mc.player.x;
-			double y = target.y + (target.y - target.prevY) * d + target.getHeight() * 0.5 - mc.player.y - mc.player.getEyeHeight(mc.player.getPose());
-			double z = target.z + (target.z - target.prevZ) * d - mc.player.z;
+			double d = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
+					.distanceTo(target.getBoundingBox().getCenter());
+			double x = target.x + (target.x - target.prevX) * d
+					- mc.player.x;
+			double y = target.y + (target.y - target.prevY) * d
+					+ target.getHeight() * 0.5 - mc.player.y
+					- mc.player.getEyeHeight(mc.player.getPose());
+			double z = target.z + (target.z - target.prevZ) * d
+					- mc.player.z;
 
 			// set yaw
 			mc.player.yaw = (float) Math.toDegrees(Math.atan2(z, x)) - 90;
@@ -87,7 +95,9 @@ public class BowBot extends Module {
 			float g = 0.006F;
 			float velocitySq = velocity * velocity;
 			float velocityPow4 = velocitySq * velocitySq;
-			float neededPitch = (float) -Math.toDegrees(Math.atan((velocitySq - Math.sqrt(velocityPow4 - g * (g * hDistanceSq + 2 * y * velocitySq))) / (g * hDistance)));
+			float neededPitch = (float) -Math.toDegrees(Math.atan((velocitySq - Math
+					.sqrt(velocityPow4 - g * (g * hDistanceSq + 2 * y * velocitySq)))
+					/ (g * hDistance)));
 
 			// set pitch
 			if (Float.isNaN(neededPitch))

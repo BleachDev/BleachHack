@@ -49,8 +49,8 @@ public class Criticals extends Module {
 				Entity e = packet.getEntity(mc.world);
 				Random r = new Random();
 				for (int i = 0; i < 10; i++) {
-					mc.particleManager.addParticle(ParticleTypes.CRIT, e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), r.nextDouble() - 0.5, r.nextDouble() - 0.5,
-							r.nextDouble() - 0.5);
+					mc.particleManager.addParticle(ParticleTypes.CRIT, e.getX(), e.getY() + e.getHeight() / 2, e.getZ(),
+							r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5);
 				}
 			}
 		}

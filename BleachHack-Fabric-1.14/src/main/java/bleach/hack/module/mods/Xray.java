@@ -41,7 +41,8 @@ public class Xray extends Module {
 	private Set<Block> visibleBlocks = new HashSet<>();
 
 	public Xray() {
-		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers", new SettingToggle("Fluids", false));
+		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
+				new SettingToggle("Fluids", false));
 	}
 
 	public boolean isVisible(Block block) {

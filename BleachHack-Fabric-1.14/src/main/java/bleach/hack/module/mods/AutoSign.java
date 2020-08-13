@@ -39,7 +39,8 @@ public class AutoSign extends Module {
 	public String[] text = new String[] {};
 
 	public AutoSign() {
-		super("AutoSign", KEY_UNBOUND, Category.PLAYER, "Automatically writes on signs", new SettingToggle("Random", false));
+		super("AutoSign", KEY_UNBOUND, Category.PLAYER, "Automatically writes on signs",
+				new SettingToggle("Random", false));
 	}
 
 	public void onDisable() {
@@ -73,8 +74,8 @@ public class AutoSign extends Module {
 			SignEditScreen screen = (SignEditScreen) event.getScreen();
 			SignBlockEntity sign = (SignBlockEntity) FabricReflect.getFieldValue(screen, "field_3031", "sign");
 
-			mc.player.networkHandler.sendPacket(
-					new UpdateSignC2SPacket(sign.getPos(), new LiteralText(text[0]), new LiteralText(text[1]), new LiteralText(text[2]), new LiteralText(text[3])));
+			mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(sign.getPos(),
+					new LiteralText(text[0]), new LiteralText(text[1]), new LiteralText(text[2]), new LiteralText(text[3])));
 		}
 	}
 }

@@ -44,11 +44,15 @@ public class RenderUtils {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBufferBuilder();
 		buffer.begin(5, VertexFormats.POSITION_COLOR);
-		WorldRenderer.buildBox(buffer, box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z, box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z, r, g, b, a / 2f);
+		WorldRenderer.buildBox(buffer,
+				box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
+				box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z, r, g, b, a / 2f);
 		tessellator.draw();
 
 		/* Outline */
-		WorldRenderer.drawBoxOutline(new Box(box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z, box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z), r, g, b, a);
+		WorldRenderer.drawBoxOutline(new Box(
+				box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
+				box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z), r, g, b, a);
 
 		gl11Cleanup();
 	}

@@ -96,8 +96,11 @@ public class WorldRenderUtils {
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
 			int w1 = mc.textRenderer.getStringWidth(subText) / 2;
-			mc.textRenderer.drawWithShadow(subText, -4 - w1, c * 10 - 1,
-					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0);
+			mc.textRenderer.drawWithShadow(
+					subText, -4 - w1, c * 10 - 1,
+					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
+							? 0xff5050
+							: 0xffb0e0);
 			c--;
 		}
 

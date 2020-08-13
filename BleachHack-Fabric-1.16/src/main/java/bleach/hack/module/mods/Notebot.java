@@ -64,8 +64,11 @@ public class Notebot extends Module {
 	public static String filePath = "";
 
 	public Notebot() {
-		super("Notebot", KEY_UNBOUND, Category.MISC, "Plays those noteblocks nicely", new SettingToggle("Tune", true),
-				new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"), new SettingToggle("Loop", false), new SettingToggle("NoInstruments", false),
+		super("Notebot", KEY_UNBOUND, Category.MISC, "Plays those noteblocks nicely",
+				new SettingToggle("Tune", true),
+				new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
+				new SettingToggle("Loop", false),
+				new SettingToggle("NoInstruments", false),
 				new SettingToggle("AutoPlay", false));
 	}
 
@@ -137,10 +140,12 @@ public class Notebot extends Module {
 				if (getNote(e.getKey()) != e.getValue()) {
 					if (getSetting(1).asMode().mode <= 2) {
 						if (getSetting(1).asMode().mode >= 1) {
-							if (mc.player.age % 2 == 0 || (mc.player.age % 3 == 0 && getSetting(1).asMode().mode == 2))
+							if (mc.player.age % 2 == 0 ||
+									(mc.player.age % 3 == 0 && getSetting(1).asMode().mode == 2))
 								return;
 						}
-						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
+						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
+								new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
 					} else if (getSetting(1).asMode().mode >= 3) {
 						if (tuneDelay < (getSetting(1).asMode().mode == 3 ? 3 : 5)) {
 							tuneDelay++;
@@ -159,8 +164,8 @@ public class Notebot extends Module {
 						}
 
 						for (int i = 0; i < reqTunes; i++)
-							mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
-									new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
+							mc.interactionManager.interactBlock(mc.player, mc.world,
+									Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
 						tuneDelay = 0;
 					}
 					return;
@@ -207,8 +212,9 @@ public class Notebot extends Module {
 
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 			for (List<Integer> i : curNotes) {
-				if (isNoteblock(e.getKey())
-						&& (i.get(1) == (getNote(e.getKey())) && (getSetting(3).asToggle().state || i.get(2) == (getInstrument(e.getKey()).ordinal()))))
+				if (isNoteblock(e.getKey()) && (i.get(1) == (getNote(e.getKey()))
+						&& (getSetting(3).asToggle().state
+								|| i.get(2) == (getInstrument(e.getKey()).ordinal()))))
 					playBlock(e.getKey());
 			}
 		}
@@ -249,8 +255,8 @@ public class Notebot extends Module {
 
 		/* Read the file */
 		BleachFileMang.createFile("notebot", fileName);
-		List<String> lines = BleachFileMang.readFileLines("notebot", fileName).stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";")))
-				.collect(Collectors.toList());
+		List<String> lines = BleachFileMang.readFileLines("notebot", fileName)
+				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 		for (String s : lines)
 			s = s.replaceAll(" ", "");
 

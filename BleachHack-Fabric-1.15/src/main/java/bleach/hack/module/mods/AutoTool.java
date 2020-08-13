@@ -96,7 +96,9 @@ public class AutoTool extends Module {
 
 			float speed = getMiningSpeed(stack, state);
 			if (speed > bestSpeed
-					|| (getSetting(2).asToggle().state && speed == bestSpeed && !stack.isDamageable() && mc.player.inventory.getInvStack(bestSlot).isDamageable()
+					|| (getSetting(2).asToggle().state
+							&& speed == bestSpeed && !stack.isDamageable()
+							&& mc.player.inventory.getInvStack(bestSlot).isDamageable()
 							&& EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, mc.player.inventory.getInvStack(bestSlot)) == 0)) {
 				bestSpeed = speed;
 				bestSlot = slot;

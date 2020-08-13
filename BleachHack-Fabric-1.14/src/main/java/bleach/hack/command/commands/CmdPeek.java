@@ -61,8 +61,10 @@ public class CmdPeek extends Command {
 			return;
 		}
 
-		if (!(((BlockItem) item.getItem()).getBlock() instanceof ShulkerBoxBlock) && !(((BlockItem) item.getItem()).getBlock() instanceof ChestBlock)
-				&& !(((BlockItem) item.getItem()).getBlock() instanceof DispenserBlock) && !(((BlockItem) item.getItem()).getBlock() instanceof HopperBlock)) {
+		if (!(((BlockItem) item.getItem()).getBlock() instanceof ShulkerBoxBlock)
+				&& !(((BlockItem) item.getItem()).getBlock() instanceof ChestBlock)
+				&& !(((BlockItem) item.getItem()).getBlock() instanceof DispenserBlock)
+				&& !(((BlockItem) item.getItem()).getBlock() instanceof HopperBlock)) {
 			BleachLogger.errorMessage("Must be holding a containter to peek.");
 			return;
 		}
@@ -72,7 +74,10 @@ public class CmdPeek extends Command {
 		BasicInventory inv = new BasicInventory(items.toArray(new ItemStack[27]));
 
 		BleachQueue.add(() -> {
-			mc.openScreen(new PeekShulkerScreen(new ShulkerBoxContainer(420, mc.player.inventory, inv), mc.player.inventory, item.getName()));
+			mc.openScreen(new PeekShulkerScreen(
+					new ShulkerBoxContainer(420, mc.player.inventory, inv),
+					mc.player.inventory,
+					item.getName()));
 		});
 	}
 

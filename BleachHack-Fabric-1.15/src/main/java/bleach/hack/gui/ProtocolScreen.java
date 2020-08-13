@@ -87,25 +87,29 @@ public class ProtocolScreen extends Screen {
 	}
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		if (double_1 >= nameField.x && double_1 <= nameField.x + nameField.getWidth() && double_2 >= nameField.y && double_2 <= nameField.y + 18) {
+		if (double_1 >= nameField.x && double_1 <= nameField.x + nameField.getWidth()
+				&& double_2 >= nameField.y && double_2 <= nameField.y + 18) {
 			nameField.changeFocus(true);
 			protocolField.setSelected(false);
 			targetField.setSelected(false);
 			packVerField.setSelected(false);
 		}
-		if (double_1 >= protocolField.x && double_1 <= protocolField.x + protocolField.getWidth() && double_2 >= protocolField.y && double_2 <= protocolField.y + 18) {
+		if (double_1 >= protocolField.x && double_1 <= protocolField.x + protocolField.getWidth()
+				&& double_2 >= protocolField.y && double_2 <= protocolField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.changeFocus(true);
 			targetField.setSelected(false);
 			packVerField.setSelected(false);
 		}
-		if (double_1 >= targetField.x && double_1 <= targetField.x + targetField.getWidth() && double_2 >= targetField.y && double_2 <= targetField.y + 18) {
+		if (double_1 >= targetField.x && double_1 <= targetField.x + targetField.getWidth()
+				&& double_2 >= targetField.y && double_2 <= targetField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.setSelected(false);
 			targetField.changeFocus(true);
 			packVerField.setSelected(false);
 		}
-		if (double_1 >= packVerField.x && double_1 <= packVerField.x + packVerField.getWidth() && double_2 >= packVerField.y && double_2 <= packVerField.y + 18) {
+		if (double_1 >= packVerField.x && double_1 <= packVerField.x + packVerField.getWidth()
+				&& double_2 >= packVerField.y && double_2 <= packVerField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.setSelected(false);
 			targetField.setSelected(false);

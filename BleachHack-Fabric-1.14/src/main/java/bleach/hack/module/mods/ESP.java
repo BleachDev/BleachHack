@@ -43,18 +43,18 @@ public class ESP extends Module {
 				new SettingToggle("Players", true).withDesc("Show Players").withChildren(
 						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players"),
 						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Outline color for friends")),
-				new SettingToggle("Mobs", false).withDesc("Show Mobs")
-						.withChildren(new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Outline color for mobs")),
-				new SettingToggle("Animals", false).withDesc("Show Animals")
-						.withChildren(new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals")),
-				new SettingToggle("Items", true).withDesc("Show Items")
-						.withChildren(new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items")),
-				new SettingToggle("Crystals", true).withDesc("Show End Crystals")
-						.withChildren(new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
-				new SettingToggle("Vehicles", false).withDesc("Show Vehicles")
-						.withChildren(new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
-				new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping")
-						.withChildren(new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
+				new SettingToggle("Mobs", false).withDesc("Show Mobs").withChildren(
+						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Outline color for mobs")),
+				new SettingToggle("Animals", false).withDesc("Show Animals").withChildren(
+						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals")),
+				new SettingToggle("Items", true).withDesc("Show Items").withChildren(
+						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items")),
+				new SettingToggle("Crystals", true).withDesc("Show End Crystals").withChildren(
+						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
+				new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
+				new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
+						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
 	@Override
@@ -71,8 +71,10 @@ public class ESP extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		for (Entity e : mc.world.getEntities()) {
-			if ((e instanceof PlayerEntity && e != mc.player && getSetting(0).asToggle().state) || (e instanceof Monster && getSetting(1).asToggle().state)
-					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state) || (e instanceof ItemEntity && getSetting(3).asToggle().state)
+			if ((e instanceof PlayerEntity && e != mc.player && getSetting(0).asToggle().state)
+					|| (e instanceof Monster && getSetting(1).asToggle().state)
+					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state)
+					|| (e instanceof ItemEntity && getSetting(3).asToggle().state)
 					|| (e instanceof EnderCrystalEntity && getSetting(4).asToggle().state)
 					|| ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state)
 					|| (e instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state)) {
