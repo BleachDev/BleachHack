@@ -1,8 +1,7 @@
 # BleachHack 1.16.2 epearl edition
-[![Github All Releases](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total.svg)]()
-![](https://img.shields.io/github/last-commit/bleachdrinker420/bleachhack-1.14.svg)
-![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14.svg)
-![](https://img.shields.io/badge/daily%20commit-yes-blue)
+[![Github All Releases](https://img.shields.io/github/downloads/22s/bleachhack-1.16-epearl-edition/total.svg)]()
+![](https://img.shields.io/github/last-commit/22s/bleachhack-1.16-epearl-edition.svg)
+![](https://img.shields.io/github/languages/code-size/22s/bleachhack-1.16-epearl-edition.svg)
 
 Very cool client and now reskinned by epearl using spaghetti code.  
 
@@ -14,7 +13,7 @@ Works on fabric 1.16.2 (YOU WILL NEED VIAFABRIC TO CONNECT TO ENDCRYSTAL UNTIL I
 **For normal people:**
 
 Download [fabric for minecraft 1.16.2](https://fabricmc.net/use/)  
-Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section](https://github.com/22s/bleachhack-1.14/releases/)
+Download the lastest compiled version of bleachhack for your Minecraft version [from the releases section](https://github.com/22s/bleachhack-1.16-epearl-edition/releases/)
 
 On Windows: type %appdata% into the location field of the Windows Explorer; then open '.minecraft'.
 
