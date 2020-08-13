@@ -89,7 +89,7 @@ public class ModuleManager {
 			new SafeWalk(),
 			new Scaffold(),
 			new Spammer(),
-			new SpeedHack(),
+			new Speed(),
 			new SpeedMine(),
 			new Sprint(),
 			new StarGithub(),
