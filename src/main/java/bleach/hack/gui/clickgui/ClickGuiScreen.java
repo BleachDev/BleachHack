@@ -100,7 +100,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 			textRenderer.draw(matrix, "5. syncronize all the rgb in the gui color picker", 2, height - 70, 0x5555ff);
 			textRenderer.draw(matrix, "6. ability to save configs and switch between them", 2, height - 60, 0x5555ff);
 			textRenderer.draw(matrix, "7. ability to create columns and add/remove modules to them", 2, height - 50, 0x5555ff);
-			textRenderer.draw(matrix, "8. draggable or xyz customizable UI modules", 2, height - 40, 0x5555ff);		}
+			textRenderer.draw(matrix, "8. draggable or xyz customizable UI modules", 2, height - 40, 0x5555ff);
+		}
 		textRenderer.draw(matrix,
 				"Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
 		textRenderer.draw(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
