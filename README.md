@@ -1,5 +1,4 @@
 # BleachHack 1.16.2 epearl edition
-[![Github All Releases](https://img.shields.io/github/downloads/22s/bleachhack-1.16-epearl-edition/total.svg)]()
 ![](https://img.shields.io/github/last-commit/22s/bleachhack-1.16-epearl-edition.svg)
 ![](https://img.shields.io/github/languages/code-size/22s/bleachhack-1.16-epearl-edition.svg)
 
