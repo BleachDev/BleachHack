@@ -41,5 +41,6 @@ add border to gui
 auto-trap module  
 better crystal-aura module  
 drawn modules command to unlist stuff in arraylist  
-custom hover module description colors  
+change hover module description colors to match theme  
+make surround walk to center of block not tp  
 other stuff i dont remember  
