@@ -5,7 +5,7 @@
 
 Very cool client and now reskinned by epearl using spaghetti code.  
 
-Works on fabric 1.16.2 (YOU WILL NEED VIAFABRIC TO CONNECT TO ENDCRYSTAL UNTIL I ADD 1.16.2 CONNECTION SUPPORT!)
+Works on fabric 1.16.2
 
 > Join Bleach's Discord Cuz He Made The Client Im Skidding: https://discord.gg/b5Wc4nQ
 
