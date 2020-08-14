@@ -17,6 +17,7 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.BleachHack;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventEntityRender;
@@ -90,11 +91,19 @@ public class Nametags extends Module {
 
 			/* Drawing Nametags */
 			if (getSetting(1).asMode().mode == 0) {
-				WorldRenderUtils.drawText(color + e.getName().getString()
-						+ " \u00a7a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a7a/" + (int) e.getMaxHealth() + "]",
-						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
-						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
+				if (BleachHack.friendMang.has(e.getName().getString())) {
+					WorldRenderUtils.drawText("\u00A7b" + e.getName().getString()
+									+ " \u00a7a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a7a/" + (int) e.getMaxHealth() + "]",
+							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
+				} else {
+					WorldRenderUtils.drawText("\u00A7c" + e.getName().getString()
+									+ " \u00a7a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a7a/" + (int) e.getMaxHealth() + "]",
+							e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
+							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
+				}
 			} else if (getSetting(1).asMode().mode == 1) {
 				/* Health bar */
 				String health = "";
