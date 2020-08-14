@@ -116,25 +116,30 @@ public class UI extends Module {
 			//	DrawableHelper.fill(event.matrix, 0, (arrayCount*10), mc.textRenderer.getWidth(lines.get(arrayCount-1))+4+extra, 1+(arrayCount*10), color);
 			//}
 		}
-		
+
+		int playerarrayCount = 0;
 		if (getSetting(8).asToggle().state && !mc.options.debugEnabled) {
 			mc.textRenderer.drawWithShadow(event.matrix, "Player Radar\u00a77:\u00a7r", (int)getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int)getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
-			arrayCount++;
+			playerarrayCount++;
 
 			for (Entity e: mc.world.getPlayers().stream().sorted(
 					(a,b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
 					.collect(Collectors.toList())) {
 				if (e == mc.player) continue;
-				
+
 				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
-				String text = "" + e.getDisplayName().getString() + " \u00a77|\u00a7r " +
+				String text = "" + e.getDisplayName().getString() + " \u00a77\u01c0\u00a7r " +
 						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
-						+ " (" + dist + "m)";
-
-				mc.textRenderer.drawWithShadow(event.matrix, text, (int)getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int)getSetting(8).asToggle().getChild(1).asSlider().getValue()+arrayCount*10,
-						new Color(255 - Math.min(dist * 3, 255), Math.min(dist * 3, 255), 0).brighter().getRGB());
-				arrayCount++;
+						+ " \u00a77(\u00a7r" + dist + "m\u00a77)\u00a7r";
+				if(BleachHack.friendMang.has(e.getDisplayName().getString())) {
+					mc.textRenderer.drawWithShadow(event.matrix, text, (int)getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int)getSetting(8).asToggle().getChild(1).asSlider().getValue()+(playerarrayCount*10),
+							new Color(85, 255, 255).getRGB());
+				} else {
+					mc.textRenderer.drawWithShadow(event.matrix, text, (int)getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int)getSetting(8).asToggle().getChild(1).asSlider().getValue()+(playerarrayCount*10),
+							new Color(255, 85, 85).getRGB());
+				}
+				playerarrayCount++;
 			}
 		}
 
