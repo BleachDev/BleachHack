@@ -34,23 +34,23 @@ public class SettingSlider extends SettingBase {
 	public double min;
 	public double max;
 	private double value;
-	public int round;
+	public int decimals;
 	public String text;
-	
+
 	protected double defaultValue;
 
-	public SettingSlider(String text, double min, double max, double value, int round) {
+	public SettingSlider(String text, double min, double max, double value, int decimals) {
 		this.min = min;
 		this.max = max;
 		this.value = value;
-		this.round = round;
+		this.decimals = decimals;
 		this.text = text;
-		
+
 		defaultValue = value;
 	}
 
 	public double getValue() {
-		return round(value, round);
+		return round(value, decimals);
 	}
 
 	public void setValue(double value) {
@@ -62,34 +62,35 @@ public class SettingSlider extends SettingBase {
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
-	
+
 	public String getName() {
 		return text;
 	}
-	
+
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
-		int pixels = (int) Math.round(MathHelper.clamp((len-2)*((getValue() - min) / (max - min)), 0, len-2));
-		window.fillGradient(matrix, x+1, y, x+pixels, y+12, ColourThingy.guiColour(), ColourThingy.guiColour());
+		int pixels = (int) Math.round(MathHelper.clamp((len - 2) * ((getValue() - min) / (max - min)), 0, len - 2));
+		window.fillGradient(matrix, x + 1, y, x + pixels, y + 12, ColourThingy.guiColour(), ColourThingy.guiColour());
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text + ": " + (round == 0  && getValue() > 100 ? Integer.toString((int)getValue()) : getValue()),
-				x+2, y+2, window.mouseOver(x, y, x+len, y+12) ? 0xcfc3cf : 0xcfe0cf);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
+				text + ": " + (decimals == 0 && getValue() > 100 ? Integer.toString((int) getValue()) : getValue()),
+				x + 2, y + 2, window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
 
-		if (window.mouseOver(x+1, y, x+len-2, y+12) && window.lmHeld) {
+		if (window.mouseOver(x + 1, y, x + len - 2, y + 12) && window.lmHeld) {
 			int percent = ((window.mouseX - x) * 100) / (len - 2);
 
-			setValue(round(percent*((max - min) / 100) + min, round));
+			setValue(round(percent * ((max - min) / 100) + min, decimals));
 		}
 	}
-	
+
 	public SettingSlider withDesc(String desc) {
 		description = desc;
 		return this;
 	}
-	
+
 	public int getHeight(int len) {
 		return 12;
 	}
-	
+
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
 			setValue(settings.getAsDouble());
@@ -103,8 +104,8 @@ public class SettingSlider extends SettingBase {
 	@Override
 	public boolean isDefault() {
 		BigDecimal bd = new BigDecimal(defaultValue);
-		bd = bd.setScale(round, RoundingMode.HALF_UP);
-		
+		bd = bd.setScale(decimals, RoundingMode.HALF_UP);
+
 		return bd.doubleValue() == getValue();
 	}
 }
