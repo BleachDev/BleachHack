@@ -27,7 +27,7 @@ public class CmdSetDrawn extends Command {
 
 	@Override
 	public String getAlias() {
-		return "setdrawn";
+		return "drawn";
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class CmdSetDrawn extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "setdrawn [Module] [true/false]";
+		return "drawn [Module] [true/false]";
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class CmdSetDrawn extends Command {
 				return;
 			}
 		}
-		BleachLogger.errorMessage("No Module Provided");
+		BleachLogger.errorMessage("No module provided.");
 	}
 
 }
