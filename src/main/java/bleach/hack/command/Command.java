@@ -21,7 +21,7 @@ import net.minecraft.client.MinecraftClient;
 
 public abstract class Command {
 
-	public static String PREFIX = "$";
+	public static String PREFIX = ".";
 
 	protected MinecraftClient mc = MinecraftClient.getInstance();
 

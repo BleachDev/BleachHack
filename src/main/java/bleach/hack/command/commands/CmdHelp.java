@@ -48,10 +48,10 @@ public class CmdHelp extends Command {
 		for (Command c: CommandManager.getCommands()) {
 			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias())) continue;
 
-			LiteralText text = new LiteralText("\u00a72" + Command.PREFIX + c.getAlias() + " ->\u00a7a " + c.getSyntax());
+			LiteralText text = new LiteralText("\u00A77[\u00A79" + Command.PREFIX + c.getAlias() + "\u00A77] \u00A79" + c.getSyntax());
 			text.setStyle(text.getStyle().withHoverEvent(
 					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7a" + Command.PREFIX + c.getAlias() + "\n\u00a72" + c.getSyntax() + "\n\u00a7a" + c.getDescription()))));
+							"\u00A79" + Command.PREFIX + c.getAlias() + "\n" + c.getSyntax() + "\n" + c.getDescription()))));
 			BleachLogger.noPrefixMessage(text);
 		}
 	}

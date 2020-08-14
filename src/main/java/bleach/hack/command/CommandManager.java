@@ -66,12 +66,12 @@ public class CommandManager {
 					c.onCommand(command, args.split(" "));
 				} catch (Exception e) {
 					e.printStackTrace();
-					BleachLogger.errorMessage("Invalid Syntax!");
+					BleachLogger.errorMessage("Invalid syntax!");
 					BleachLogger.infoMessage(c.getSyntax());
 				}
 				return;
 			}
 		}
-		BleachLogger.errorMessage("Command Not Found, Maybe Try " + Command.PREFIX + "help");
+		BleachLogger.errorMessage("Command Not Found, Try \"" + Command.PREFIX + "help\"");
 	}
 }
