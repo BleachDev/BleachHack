@@ -89,6 +89,14 @@ public class Nametags extends Module {
 					Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1) :
 						Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
 
+
+			/* bruh code bleach sent me to find ppls ping, i intend on implementing into nametags soon.
+			for (PlayerEntity player: mc.world.getPlayers()) {
+ 				PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(player.getGameProfile().getId());
+  				int theirPing = playerEntry == null ? 0 : playerEntry.getLatency();
+			}
+			*/
+
 			/* Drawing Nametags */
 			if (getSetting(1).asMode().mode == 0) {
 				if (BleachHack.friendMang.has(e.getName().getString())) {
