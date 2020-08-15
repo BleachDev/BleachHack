@@ -20,28 +20,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build 1.14 bruh time
-      run: |
-        chmod +x BleachHack-Fabric-1.14/gradlew
-        ./BleachHack-Fabric-1.14/gradlew build
-    - name: Build 1.15 bruh time
-      run: |
-        chmod +x BleachHack-Fabric-1.15/gradlew
-        ./BleachHack-Fabric-1.15/gradlew build
     - name: Build 1.16 bruh time
       run: |
-        chmod +x BleachHack-Fabric-1.16/gradlew
-        ./BleachHack-Fabric-1.16/gradlew build
-    - name: Upload 1.14 Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: BleachHack-1.14
-        path: BleachHack-Fabric-1.14/build/libs/bleachhack-1.14.4.jar
-    - name: Upload 1.15 Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: BleachHack-1.15
-        path: BleachHack-Fabric-1.15/build/libs/bleachhack-1.15.2.jar
+        cd BleachHack-Fabric-1.16
+        chmod +x radlew
+        ./gradlew build
+        cd ..
     - name: Upload 1.16 Artifact
       uses: actions/upload-artifact@v2
       with:
