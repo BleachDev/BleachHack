@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class ModuleManager {
 
     private static final List<Module> mods = Arrays.asList(
+            new AllahHaramHack(),
             new Ambience(),
             new AntiChunkBan(),
             new AntiHunger(),
