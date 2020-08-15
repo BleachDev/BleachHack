@@ -2,6 +2,8 @@ package bleach.hack.module.mods;
 
 import java.util.Optional;
 
+import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.BleachLogger;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
@@ -21,7 +23,8 @@ public class MouseFriend extends Module {
 
 	public MouseFriend() {
 		super("MouseFriend", KEY_UNBOUND, Category.MISC, "Add/Remove friends with mouse buttons",
-				new SettingMode("Button", "Middle", "Right", "MOUSE4", "MOUSE5", "MOUSE6"));
+				new SettingMode("Button", "Middle", "Right", "MOUSE4", "MOUSE5", "MOUSE6"),
+				new SettingToggle("Messages", true).withDesc("says in chat when a friend is added/removed"));
 	}
 
 	@Subscribe
@@ -40,8 +43,14 @@ public class MouseFriend extends Module {
 				if (e instanceof PlayerEntity) {
 					if (BleachHack.friendMang.has(e.getName().asString())) {
 						BleachHack.friendMang.remove(e.getName().asString());
+						if (this.getSetting(1).asToggle().state) {
+							BleachLogger.infoMessage("Removed \"" + e.getName().asString() + "\" from the friend list");
+						}
 					} else {
 						BleachHack.friendMang.add(e.getName().asString());
+						if (this.getSetting(1).asToggle().state) {
+							BleachLogger.infoMessage("Added \"" + e.getName().asString() + "\" to the friend list");
+						}
 					}
 				}
 			}

@@ -23,7 +23,7 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.BleachQueue;
 
-public class CmdSetDrawn extends Command {
+public class CmdDrawn extends Command {
 
 	@Override
 	public String getAlias() {
@@ -49,6 +49,7 @@ public class CmdSetDrawn extends Command {
 					return;
 				}
 				m.setDrawn(Boolean.parseBoolean(args[1]));
+				BleachLogger.errorMessage("Drawn \""+m.getName()+"\" set to "+Boolean.parseBoolean(args[1]));
 				return;
 			}
 		}

@@ -50,7 +50,6 @@ import net.minecraft.util.math.Vec3d;
 
 public class UI extends Module {
 
-	public List<String> infoList = new ArrayList<>();
 	private long prevTime = 0;
 	private double tps = 20;
 	private long lastPacket = 0;
@@ -61,29 +60,39 @@ public class UI extends Module {
 						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
 						new SettingSlider("y", 1, 3840, 1, 0).withDesc("y coordinates")),
 				new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist"), // 1
-				new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 2
-				new SettingToggle("Ping", true).withDesc("Shows your ping"), // 3
-				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 4
-				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 5
+				new SettingToggle("FPS", true).withDesc("Shows your FPS").withChildren( // 2
+					new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+					new SettingSlider("y", 1, 3840, 250, 0).withDesc("y coordinates")),
+				new SettingToggle("Ping", true).withDesc("Shows your ping").withChildren( // 3
+					new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+					new SettingSlider("y", 1, 3840, 240, 0).withDesc("y coordinates")),
+				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords").withChildren( // 4
+					new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+					new SettingSlider("y", 1, 3840, 200, 0).withDesc("y coordinates")),
+				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps").withChildren( // 5
+					new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+					new SettingSlider("y", 1, 3840, 210, 0).withDesc("y coordinates")),
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server is lagging"), // 6
-				new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 7
-				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance").withChildren( // 8
+				new SettingToggle("Server", true).withDesc("Shows the current server you are on").withChildren( // 7
+					new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+					new SettingSlider("y", 1, 3840, 220, 0).withDesc("y coordinates")),
+				new SettingToggle("Players", true).withDesc("Lists all the players in your render distance").withChildren( // 8
 						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-						new SettingSlider("y", 1, 3840, 250, 0).withDesc("y coordinates")),
+						new SettingSlider("y", 1, 3840, 260, 0).withDesc("y coordinates")),
 				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 9
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
-				new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 10
+				new SettingToggle("Time", true).withDesc("Shows the current time").withChildren( // 10
 						new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"),
-						new SettingToggle("Year", false).withDesc("Shows the current year in the time")),
+						new SettingToggle("Year", false).withDesc("Shows the current year in the time"),
+						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+						new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates")),
 				new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 11
 				new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 12
-				new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 13
-				new SettingMode("Info", "BL", "TR", "BR").withDesc("Where on the screan to show the info")); // 14
+				new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed")); // 13
 	}
 
 	@Subscribe
 	public void onDrawOverlay(EventDrawOverlay event) {
-		infoList.clear();
 
 		int arrayCount = 0;
 		if ((getSetting(0).asToggle().state || getSetting(1).asToggle().state) && !mc.options.debugEnabled) {
@@ -144,9 +153,12 @@ public class UI extends Module {
 		}
 
 		if (getSetting(10).asToggle().state) {
-			infoList.add("Time\u00a77: \u00a7r" + new SimpleDateFormat("MMM dd HH:mm:ss"
+			mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r" + new SimpleDateFormat("MMM dd hh:mm:ss"
 					+ (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-					+ (getSetting(10).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
+					+ (getSetting(10).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()),
+					(int)getSetting(10).asToggle().getChild(2).asSlider().getValue(),
+					(int)getSetting(10).asToggle().getChild(3).asSlider().getValue(),
+					ColourThingy.guiColour());
 		}
 
 		if (getSetting(4).asToggle().state) {
@@ -155,25 +167,37 @@ public class UI extends Module {
 			Vec3d vec = mc.player.getPos();
 			BlockPos pos2 = nether ? new BlockPos(vec.getX()*8, vec.getY(), vec.getZ()*8)
 					: new BlockPos(vec.getX()/8, vec.getY(), vec.getZ()/8);
-
-			infoList.add("XYZ\u00a77: \u00a7r" + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-			+ " \u00a77[\u00a7r" + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
+			mc.textRenderer.drawWithShadow(event.matrix, "XYZ\u00a77: \u00a7r" + pos.getX() + " " + pos.getY() + " " + pos.getZ()
+							+ " \u00a77[\u00a7r" + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]",
+					(int)getSetting(4).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(4).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
 		}
-		
+
 		if (getSetting(7).asToggle().state) {
 			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-			infoList.add("Server\u00a77: \u00a7r" + server);
+			mc.textRenderer.drawWithShadow(event.matrix, "Server\u00a77: \u00a7r" + server,
+					(int)getSetting(7).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(7).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
 		}
+
 
 		if (getSetting(2).asToggle().state) {
 			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
-			infoList.add("FPS\u00a77: \u00a7r" + fps);
+			mc.textRenderer.drawWithShadow(event.matrix, "FPS\u00a77: \u00a7r" + fps,
+					(int)getSetting(2).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(2).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
 		}
 
 		if (getSetting(3).asToggle().state) {
 			PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
 			int ping = playerEntry == null ? 0 : playerEntry.getLatency();
-			infoList.add("Ping\u00a77: \u00a7r" +  ping);
+			mc.textRenderer.drawWithShadow(event.matrix, "Ping\u00a77: \u00a7r" +  ping,
+					(int)getSetting(3).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(3).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
 		}
 
 		if (getSetting(5).asToggle().state) {
@@ -182,14 +206,16 @@ public class UI extends Module {
 			else if (lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
 			else if (lastPacket + 2500 < System.currentTimeMillis()) suffix += "..";
 			else if (lastPacket + 1200 < System.currentTimeMillis()) suffix += ".";
-
-			infoList.add("TPS\u00a77: \u00a7r" + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
+			mc.textRenderer.drawWithShadow(event.matrix, "TPS\u00a77: \u00a7r" + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix,
+					(int)getSetting(5).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(5).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
 		}
 
 		if (getSetting(6).asToggle().state) {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
-				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
+				String text = "Server Lagging For " + ((time - lastPacket) / 1000d) + "s";
 				mc.textRenderer.drawWithShadow(event.matrix, text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getWidth(text) / 2,
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), ColourThingy.guiColour());
 			}
@@ -239,16 +265,6 @@ public class UI extends Module {
 			
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
-		}
-
-
-		int count2 = 0;
-		int infoMode = getSetting(14).asMode().mode;
-		for (String s: infoList) {
-			mc.textRenderer.drawWithShadow(event.matrix, s,
-					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 1,
-							infoMode == 1 ? 1+(count2*10) : mc.getWindow().getScaledHeight()-9-(count2*10), ColourThingy.guiColour());
-			count2++;
 		}
 	}
 
