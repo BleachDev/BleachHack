@@ -23,7 +23,7 @@ jobs:
     - name: Build 1.16 bruh time
       run: |
         cd BleachHack-Fabric-1.16
-        chmod +x radlew
+        chmod +x gradlew
         ./gradlew build
         cd ..
     - name: Upload 1.16 Artifact
