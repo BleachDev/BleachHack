@@ -14,11 +14,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(SignBlockEntityRenderer.class)
 public class MixinSignBlockEntityRenderer {
 
-	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
-	private void render(SignBlockEntity signBlockEntity_1, float float_1, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1, int int_2, CallbackInfo ci) {
-		EventSignBlockEntityRender event = new EventSignBlockEntityRender(signBlockEntity_1);
-		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) ci.cancel();
-	}
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    private void render(SignBlockEntity signBlockEntity_1, float float_1, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1, int int_2, CallbackInfo ci) {
+        EventSignBlockEntityRender event = new EventSignBlockEntityRender(signBlockEntity_1);
+        BleachHack.eventBus.post(event);
+        if (event.isCancelled()) ci.cancel();
+    }
 
 }

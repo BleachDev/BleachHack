@@ -24,41 +24,41 @@ import java.util.Map.Entry;
 
 public class BleachQueue {
 
-	private static HashMap<String, Deque<Runnable>> specialQueues = new HashMap<>();
+    private static final HashMap<String, Deque<Runnable>> specialQueues = new HashMap<>();
 
-	private static Deque<Runnable> queue = new ArrayDeque<>();
+    private static final Deque<Runnable> queue = new ArrayDeque<>();
 
-	public static void add(Runnable runnable) {
-		queue.add(runnable);
-	}
+    public static void add(Runnable runnable) {
+        queue.add(runnable);
+    }
 
-	public static void add(String id, Runnable runnable) {
-		if (!specialQueues.containsKey(id)) {
-			specialQueues.put(id, new ArrayDeque<>());
-		}
+    public static void add(String id, Runnable runnable) {
+        if (!specialQueues.containsKey(id)) {
+            specialQueues.put(id, new ArrayDeque<>());
+        }
 
-		specialQueues.get(id).add(runnable);
-	}
+        specialQueues.get(id).add(runnable);
+    }
 
-	public static void cancelQueue(String id) {
-		specialQueues.remove(id);
-	}
+    public static void cancelQueue(String id) {
+        specialQueues.remove(id);
+    }
 
-	public static void nextQueue() {
-		if (!queue.isEmpty()) {
-			if (queue.getFirst() != null) queue.poll().run();
-			else queue.poll();
-		}
+    public static void nextQueue() {
+        if (!queue.isEmpty()) {
+            if (queue.getFirst() != null) queue.poll().run();
+            else queue.poll();
+        }
 
-		for (Entry<String, Deque<Runnable>> e: new HashMap<>(specialQueues).entrySet()) {
-			Deque<Runnable> deque = specialQueues.get(e.getKey());
+        for (Entry<String, Deque<Runnable>> e : new HashMap<>(specialQueues).entrySet()) {
+            Deque<Runnable> deque = specialQueues.get(e.getKey());
 
-			if (deque.getFirst() != null) deque.poll().run();
-			else deque.poll();
+            if (deque.getFirst() != null) deque.poll().run();
+            else deque.poll();
 
-			if (deque.isEmpty()) {
-				specialQueues.remove(e.getKey());
-			}
-		}
-	}
+            if (deque.isEmpty()) {
+                specialQueues.remove(e.getKey());
+            }
+        }
+    }
 }

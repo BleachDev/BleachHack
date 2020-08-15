@@ -29,83 +29,83 @@ import net.minecraft.util.registry.Registry;
 import java.util.List;
 
 public class CmdXray extends Command {
-	//brb stealing your nuker command
-	@Override
-	public String getAlias() {
-		return "xray";
-	}
+    //brb stealing your nuker command
+    @Override
+    public String getAlias() {
+        return "xray";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Edit Xray blocks";
-	}
+    @Override
+    public String getDescription() {
+        return "Edit Xray blocks";
+    }
 
-	@Override
-	public String getSyntax() {
-		return "xray add [block] | xray remove [block] | xray clear | xray list";
-	}
+    @Override
+    public String getSyntax() {
+        return "xray add [block] | xray remove [block] | xray clear | xray list";
+    }
 
-	@Override
-	public void onCommand(String command, String[] args) throws Exception {
-		BleachFileMang.createFile("xrayblocks.txt");
-		
-		List<String> lines = BleachFileMang.readFileLines("xrayblocks.txt");
-		lines.removeIf(s -> s.isEmpty());
-		System.out.println(lines);
-		
-		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
-			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
-			String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
+    @Override
+    public void onCommand(String command, String[] args) throws Exception {
+        BleachFileMang.createFile("xrayblocks.txt");
 
-			if (args[0].equalsIgnoreCase("add")) {
-				if (Registry.BLOCK.get(new Identifier(block)) == Blocks.AIR) {
-					BleachLogger.errorMessage("Invalid Block: " + args[1]);
-					return;
-				} else if (lines.contains(block)) {
-					BleachLogger.errorMessage("Block is already added!");
-					return;
-				}
-				
-				BleachFileMang.appendFile(block, "xrayblocks.txt");
-				
-				if (xray.isToggled()) {
-					xray.toggle();
-					xray.toggle();
-				}
-				
-				BleachLogger.infoMessage("Added Block: " + args[1]);
+        List<String> lines = BleachFileMang.readFileLines("xrayblocks.txt");
+        lines.removeIf(s -> s.isEmpty());
+        System.out.println(lines);
 
-			} else if (args[0].equalsIgnoreCase("remove")) {
-				if (lines.contains(block)) {
-					lines.remove(block);
+        if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
+            Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+            String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
 
-					String s = "";
-					for (String s1 : lines) s += s1 + "\n";
+            if (args[0].equalsIgnoreCase("add")) {
+                if (Registry.BLOCK.get(new Identifier(block)) == Blocks.AIR) {
+                    BleachLogger.errorMessage("Invalid Block: " + args[1]);
+                    return;
+                } else if (lines.contains(block)) {
+                    BleachLogger.errorMessage("Block is already added!");
+                    return;
+                }
 
-					BleachFileMang.createEmptyFile("xrayblocks.txt");
-					BleachFileMang.appendFile(s, "xrayblocks.txt");
-					
-					if (xray.isToggled()) {
-						xray.toggle();
-						xray.toggle();
-					}
-					
-					BleachLogger.infoMessage("Removed Block: " + args[1]);
-				} else {
-					BleachLogger.errorMessage("Block Not In List: " + args[1]);
-				}
-			}
-		} else if (args[0].equalsIgnoreCase("clear")) {
-			BleachFileMang.createEmptyFile("xrayblocks.txt");
-			BleachLogger.infoMessage("Cleared Xray Blocks");
-		} else if (args[0].equalsIgnoreCase("list")) {
-			String s = "";
-			for (String l: lines) {
-				s += "\n\u00a76" + l;
-			}
+                BleachFileMang.appendFile(block, "xrayblocks.txt");
 
-			BleachLogger.infoMessage(s);
-		}
-	}
+                if (xray.isToggled()) {
+                    xray.toggle();
+                    xray.toggle();
+                }
+
+                BleachLogger.infoMessage("Added Block: " + args[1]);
+
+            } else if (args[0].equalsIgnoreCase("remove")) {
+                if (lines.contains(block)) {
+                    lines.remove(block);
+
+                    String s = "";
+                    for (String s1 : lines) s += s1 + "\n";
+
+                    BleachFileMang.createEmptyFile("xrayblocks.txt");
+                    BleachFileMang.appendFile(s, "xrayblocks.txt");
+
+                    if (xray.isToggled()) {
+                        xray.toggle();
+                        xray.toggle();
+                    }
+
+                    BleachLogger.infoMessage("Removed Block: " + args[1]);
+                } else {
+                    BleachLogger.errorMessage("Block Not In List: " + args[1]);
+                }
+            }
+        } else if (args[0].equalsIgnoreCase("clear")) {
+            BleachFileMang.createEmptyFile("xrayblocks.txt");
+            BleachLogger.infoMessage("Cleared Xray Blocks");
+        } else if (args[0].equalsIgnoreCase("list")) {
+            String s = "";
+            for (String l : lines) {
+                s += "\n\u00a76" + l;
+            }
+
+            BleachLogger.infoMessage(s);
+        }
+    }
 }
 

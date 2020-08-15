@@ -24,35 +24,35 @@ import net.minecraft.text.LiteralText;
 
 public class CmdRename extends Command {
 
-	@Override
-	public String getAlias() {
-		return "rename";
-	}
+    @Override
+    public String getAlias() {
+        return "rename";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Renames an item, use \"&\" for color";
-	}
+    @Override
+    public String getDescription() {
+        return "Renames an item, use \"&\" for color";
+    }
 
-	@Override
-	public String getSyntax() {
-		return "rename [name]";
-	}
+    @Override
+    public String getSyntax() {
+        return "rename [name]";
+    }
 
-	@Override
-	public void onCommand(String command, String[] args) throws Exception {
-		if (!mc.player.abilities.creativeMode) {
-			BleachLogger.errorMessage("Not In Creative Mode!");
-			return;
-		}
+    @Override
+    public void onCommand(String command, String[] args) throws Exception {
+        if (!mc.player.abilities.creativeMode) {
+            BleachLogger.errorMessage("Not In Creative Mode!");
+            return;
+        }
 
-		ItemStack i = mc.player.inventory.getMainHandStack();
+        ItemStack i = mc.player.inventory.getMainHandStack();
 
-		String name = "";
-		for (int j = 0; j < args.length; j++) name += args[j] += " ";
+        String name = "";
+        for (int j = 0; j < args.length; j++) name += args[j] += " ";
 
-		i.setCustomName(new LiteralText(name.replace("&", "\u00a7").replace("\u00a7\u00a7", "&")));
-		BleachLogger.infoMessage("Renamed Item");
-	}
+        i.setCustomName(new LiteralText(name.replace("&", "\u00a7").replace("\u00a7\u00a7", "&")));
+        BleachLogger.infoMessage("Renamed Item");
+    }
 
 }

@@ -17,10 +17,6 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -29,40 +25,44 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Spammer extends Module {
 
-	private Random rand = new Random();
-	private List<String> lines = new ArrayList<>();
-	private int lineCount = 0;
+    private final Random rand = new Random();
+    private List<String> lines = new ArrayList<>();
+    private int lineCount = 0;
 
-	public Spammer() {
-		super("Spammer", KEY_UNBOUND, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
-				new SettingMode("Read", "Random", "Order"),
-				new SettingSlider("Delay", 1, 120, 20, 0));
-	}
+    public Spammer() {
+        super("Spammer", KEY_UNBOUND, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
+                new SettingMode("Read", "Random", "Order"),
+                new SettingSlider("Delay", 1, 120, 20, 0));
+    }
 
-	@Override
-	public void onEnable() {
-		super.onEnable();
-		BleachFileMang.createFile("spammer.txt");
-		lines = BleachFileMang.readFileLines("spammer.txt");
-		lineCount = 0;
-	}
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        BleachFileMang.createFile("spammer.txt");
+        lines = BleachFileMang.readFileLines("spammer.txt");
+        lineCount = 0;
+    }
 
-	@Subscribe
-	public void onTick(EventTick event) {
-		if (lines.isEmpty()) return;
+    @Subscribe
+    public void onTick(EventTick event) {
+        if (lines.isEmpty()) return;
 
-		if (mc.player.age % (int) (getSetting(1).asSlider().getValue() * 20) == 0) {
-			if (getSetting(0).asMode().mode == 0) {
-				mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())));
-			} else if (getSetting(0).asMode().mode == 1) {
-				mc.player.sendChatMessage(lines.get(lineCount));
-			}
+        if (mc.player.age % (int) (getSetting(1).asSlider().getValue() * 20) == 0) {
+            if (getSetting(0).asMode().mode == 0) {
+                mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())));
+            } else if (getSetting(0).asMode().mode == 1) {
+                mc.player.sendChatMessage(lines.get(lineCount));
+            }
 
-			if (lineCount >= lines.size() -1) lineCount = 0;
-			else lineCount++;
-		}
-	}
+            if (lineCount >= lines.size() - 1) lineCount = 0;
+            else lineCount++;
+        }
+    }
 
 }

@@ -17,12 +17,11 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
-
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
@@ -34,45 +33,45 @@ import net.minecraft.util.math.Direction;
 
 public class AutoTotem extends Module {
 
-	public AutoTotem() {
-		super("AutoTotem", KEY_UNBOUND, Category.COMBAT, "Automatically equips totems.",
-				new SettingToggle("Override", true).withDesc("Equips a totem even if theres another item in the offhand"));
-	}
+    public AutoTotem() {
+        super("AutoTotem", KEY_UNBOUND, Category.COMBAT, "Automatically equips totems.",
+                new SettingToggle("Override", true).withDesc("Equips a totem even if theres another item in the offhand"));
+    }
 
-	@Subscribe
-	public void onTick(EventTick event) {
-		if (mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING
-				|| (!mc.player.getOffHandStack().isEmpty() && !getSetting(0).asToggle().state))
-			return;
+    @Subscribe
+    public void onTick(EventTick event) {
+        if (mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING
+                || (!mc.player.getOffHandStack().isEmpty() && !getSetting(0).asToggle().state))
+            return;
 
-		// Cancel at all non-survival-inventory containers
-		if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
-			for (int i = 9; i < 45; i++) {
-				if (mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.TOTEM_OF_UNDYING) {
-					boolean itemInOffhand = !mc.player.getOffHandStack().isEmpty();
-					mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
-					mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 45, 0, SlotActionType.PICKUP, mc.player);
+        // Cancel at all non-survival-inventory containers
+        if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
+            for (int i = 9; i < 45; i++) {
+                if (mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.TOTEM_OF_UNDYING) {
+                    boolean itemInOffhand = !mc.player.getOffHandStack().isEmpty();
+                    mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
+                    mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 45, 0, SlotActionType.PICKUP, mc.player);
 
-					if (itemInOffhand)
-						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
+                    if (itemInOffhand)
+                        mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
 
-					return;
-				}
-			}
-		} else {
-			// If the player is in another inventory, atleast check the hotbar for anything to swap
-			for (int i = 0; i < 9; i++) {
-				if (mc.player.inventory.getStack(i).getItem() == Items.TOTEM_OF_UNDYING) {
-					if (i != mc.player.inventory.selectedSlot) {
-						mc.player.inventory.selectedSlot = i;
-						mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
-					}
+                    return;
+                }
+            }
+        } else {
+            // If the player is in another inventory, atleast check the hotbar for anything to swap
+            for (int i = 0; i < 9; i++) {
+                if (mc.player.inventory.getStack(i).getItem() == Items.TOTEM_OF_UNDYING) {
+                    if (i != mc.player.inventory.selectedSlot) {
+                        mc.player.inventory.selectedSlot = i;
+                        mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
+                    }
 
-					mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.DOWN));
-					return;
-				}
-			}
-		}
-	}
+                    mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.DOWN));
+                    return;
+                }
+            }
+        }
+    }
 
 }

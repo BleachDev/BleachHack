@@ -17,52 +17,48 @@
  */
 package bleach.hack;
 
-import bleach.hack.utils.Rainbow;
-import com.google.common.eventbus.EventBus;
-
 import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.FriendManager;
+import bleach.hack.utils.Rainbow;
 import bleach.hack.utils.file.BleachFileHelper;
 import bleach.hack.utils.file.BleachFileMang;
+import com.google.common.eventbus.EventBus;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
-
-import java.nio.file.Paths;
 
 public class BleachHack implements ModInitializer {
 
-	public static final String VERSION = "b1000";
-	public static final int INTVERSION = 24;
-	
-	public static EventBus eventBus = new EventBus();
+    public static final String VERSION = "b1000";
+    public static final int INTVERSION = 24;
 
-	public static FriendManager friendMang;
+    public static EventBus eventBus = new EventBus();
 
-	@Override
-	public void onInitialize() {
-		BleachFileMang.init();
-		BleachFileHelper.readModules();
+    public static FriendManager friendMang;
 
-		ClickGui.clickGui.initWindows();
-		BleachFileHelper.readClickGui();
-		BleachFileHelper.readPrefix();
-		BleachFileHelper.readFriends();
+    @Override
+    public void onInitialize() {
+        BleachFileMang.init();
+        BleachFileHelper.readModules();
 
-		for (Module m: ModuleManager.getModules()) m.init();
+        ClickGui.clickGui.initWindows();
+        BleachFileHelper.readClickGui();
+        BleachFileHelper.readPrefix();
+        BleachFileHelper.readFriends();
 
-		eventBus.register(new Rainbow());
+        for (Module m : ModuleManager.getModules()) m.init();
 
-		//v This makes a scat fetishist look like housekeeping.
-		eventBus.register(new ModuleManager());
-		// wait why do we need this ^?
-		// Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
-		
-		String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
-		if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
-			BleachMainMenu.customTitleScreen = false;
-		}
-	}
+        eventBus.register(new Rainbow());
+
+        //v This makes a scat fetishist look like housekeeping.
+        eventBus.register(new ModuleManager());
+        // wait why do we need this ^?
+        // Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
+
+        String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
+        if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
+            BleachMainMenu.customTitleScreen = false;
+        }
+    }
 }

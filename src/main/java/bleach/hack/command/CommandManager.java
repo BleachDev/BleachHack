@@ -17,61 +17,61 @@
  */
 package bleach.hack.command;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.command.commands.*;
 import bleach.hack.utils.BleachLogger;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CommandManager {
 
-	private static List<Command> commands = Arrays.asList(
-			new CmdBind(),
-			new CmdCI(),
-			new CmdCustomChat(),
-			new CmdDupe(),
-			new CmdEnchant(),
-			new CmdEntityStats(),
-			new CmdFriends(),
-			new CmdGamemode(),
-			new CmdGive(),
-			new CmdGuiReset(),
-			new CmdHelp(),
-			new CmdNBT(),
-			new CmdNotebot(),
-			new CmdNuker(),
-			new CmdPeek(),
-			new CmdPrefix(),
-			new CmdRbook(),
-			new CmdRename(),
-			new CmdRpc(),
-			new CmdDrawn(),
-			new CmdSetting(),
-			new CmdSkull(),
-			new CmdToggle(),
-			new CmdXray());
+    private static final List<Command> commands = Arrays.asList(
+            new CmdBind(),
+            new CmdCI(),
+            new CmdCustomChat(),
+            new CmdDupe(),
+            new CmdEnchant(),
+            new CmdEntityStats(),
+            new CmdFriends(),
+            new CmdGamemode(),
+            new CmdGive(),
+            new CmdGuiReset(),
+            new CmdHelp(),
+            new CmdNBT(),
+            new CmdNotebot(),
+            new CmdNuker(),
+            new CmdPeek(),
+            new CmdPrefix(),
+            new CmdRbook(),
+            new CmdRename(),
+            new CmdRpc(),
+            new CmdDrawn(),
+            new CmdSetting(),
+            new CmdSkull(),
+            new CmdToggle(),
+            new CmdXray());
 
-	public static List<Command> getCommands() {
-		return commands;
-	}
+    public static List<Command> getCommands() {
+        return commands;
+    }
 
-	public static void callCommand(String input) {
-		String[] split = input.split(" ", -1);
-		System.out.println(Arrays.asList(split));
-		String command = split[0];
-		String args = input.substring(command.length()).trim();
-		for (Command c: getCommands()) {
-			if (c.getAlias().equalsIgnoreCase(command)) {
-				try {
-					c.onCommand(command, args.split(" "));
-				} catch (Exception e) {
-					e.printStackTrace();
-					BleachLogger.errorMessage("Invalid syntax!");
-					BleachLogger.infoMessage(c.getSyntax());
-				}
-				return;
-			}
-		}
-		BleachLogger.errorMessage("Command Not Found, Try \"" + Command.PREFIX + "help\"");
-	}
+    public static void callCommand(String input) {
+        String[] split = input.split(" ", -1);
+        System.out.println(Arrays.asList(split));
+        String command = split[0];
+        String args = input.substring(command.length()).trim();
+        for (Command c : getCommands()) {
+            if (c.getAlias().equalsIgnoreCase(command)) {
+                try {
+                    c.onCommand(command, args.split(" "));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    BleachLogger.errorMessage("Invalid syntax!");
+                    BleachLogger.infoMessage(c.getSyntax());
+                }
+                return;
+            }
+        }
+        BleachLogger.errorMessage("Command Not Found, Try \"" + Command.PREFIX + "help\"");
+    }
 }

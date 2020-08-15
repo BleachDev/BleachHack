@@ -17,70 +17,69 @@
  */
 package bleach.hack.module.mods;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.event.events.EventTick;
-import com.google.common.collect.Iterables;
-
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.RenderUtils;
+import com.google.common.collect.Iterables;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.Vec3d;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Trail extends Module {
 
-	private List<List<Vec3d>> trails = new ArrayList<>();
+    private final List<List<Vec3d>> trails = new ArrayList<>();
 
-	public Trail() {
-		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
-				new SettingToggle("Trail", true),
-				new SettingToggle("Keep Trail", false),
-				new SettingMode("Color", "Red", "Green", "Blue", "B2G", "R2B"),
-				new SettingSlider("Thick", 0.1, 10, 3, 1));
-	}
+    public Trail() {
+        super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
+                new SettingToggle("Trail", true),
+                new SettingToggle("Keep Trail", false),
+                new SettingMode("Color", "Red", "Green", "Blue", "B2G", "R2B"),
+                new SettingSlider("Thick", 0.1, 10, 3, 1));
+    }
 
-	@Override
-	public void onEnable() {
-		super.onEnable();
-		if (!getSetting(1).asToggle().state) trails.clear();
-	}
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        if (!getSetting(1).asToggle().state) trails.clear();
+    }
 
-	@Subscribe
-	public void onTick(EventTick event) {
-		if (!getSetting(0).asToggle().state) return;
+    @Subscribe
+    public void onTick(EventTick event) {
+        if (!getSetting(0).asToggle().state) return;
 
-		if (trails.isEmpty()) trails.add(Arrays.asList(mc.player.getPos().add(0, 0.1, 0), mc.player.getPos()));
-		else if (mc.player.getPos().add(0, 0.1, 0).distanceTo(Iterables.getLast(trails).get(1)) > 0.15) {
-			trails.add(Arrays.asList(Iterables.getLast(trails).get(1), mc.player.getPos().add(0, 0.1, 0)));
-		}
-	}
+        if (trails.isEmpty()) trails.add(Arrays.asList(mc.player.getPos().add(0, 0.1, 0), mc.player.getPos()));
+        else if (mc.player.getPos().add(0, 0.1, 0).distanceTo(Iterables.getLast(trails).get(1)) > 0.15) {
+            trails.add(Arrays.asList(Iterables.getLast(trails).get(1), mc.player.getPos().add(0, 0.1, 0)));
+        }
+    }
 
-	@Subscribe
-	public void onRender(EventWorldRender event) {
-		Color clr = Color.BLACK;
-		if (getSetting(2).asMode().mode == 0) clr = new Color(200, 50, 50);
-		else if (getSetting(2).asMode().mode == 1) clr = new Color(50, 200, 50);
-		else if (getSetting(2).asMode().mode == 2) clr = new Color(50, 50, 200);
+    @Subscribe
+    public void onRender(EventWorldRender event) {
+        Color clr = Color.BLACK;
+        if (getSetting(2).asMode().mode == 0) clr = new Color(200, 50, 50);
+        else if (getSetting(2).asMode().mode == 1) clr = new Color(50, 200, 50);
+        else if (getSetting(2).asMode().mode == 2) clr = new Color(50, 50, 200);
 
-		int count = 250;
-		boolean rev = false;
-		for (List<Vec3d> e: trails) {
-			if (getSetting(2).asMode().mode == 3) clr = new Color(50, 255-count, count);
-			else if (getSetting(2).asMode().mode == 4) clr = new Color(count, 50, 255-count);
-			RenderUtils.drawLine(e.get(0).x, e.get(0).y, e.get(0).z, e.get(1).x, e.get(1).y, e.get(1).z,
-					clr.getRed()/255f, clr.getGreen()/255f, clr.getBlue()/255f,
-					(float) getSetting(3).asSlider().getValue());
-			if (count < 5 || count > 250) rev = !rev;
-			count += rev ? 3 : -3;
-		}
-	}
+        int count = 250;
+        boolean rev = false;
+        for (List<Vec3d> e : trails) {
+            if (getSetting(2).asMode().mode == 3) clr = new Color(50, 255 - count, count);
+            else if (getSetting(2).asMode().mode == 4) clr = new Color(count, 50, 255 - count);
+            RenderUtils.drawLine(e.get(0).x, e.get(0).y, e.get(0).z, e.get(1).x, e.get(1).y, e.get(1).z,
+                    clr.getRed() / 255f, clr.getGreen() / 255f, clr.getBlue() / 255f,
+                    (float) getSetting(3).asSlider().getValue());
+            if (count < 5 || count > 250) rev = !rev;
+            count += rev ? 3 : -3;
+        }
+    }
 
 }

@@ -17,20 +17,11 @@
  */
 package bleach.hack.gui.clickgui.modulewindow;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import bleach.hack.utils.ColourThingy;
-import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.glfw.GLFW;
-
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.setting.base.SettingBase;
+import bleach.hack.utils.ColourThingy;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -38,169 +29,178 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
+import org.apache.commons.lang3.tuple.Triple;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class ModuleWindow extends ClickGuiWindow {
 
-	public List<Module> modList = new ArrayList<>();
-	public LinkedHashMap<Module, Boolean> mods = new LinkedHashMap<>();
+    public List<Module> modList = new ArrayList<>();
+    public LinkedHashMap<Module, Boolean> mods = new LinkedHashMap<>();
 
-	public boolean hiding;
+    public boolean hiding;
 
-	private int len;
+    private int len;
 
-	private Set<Module> searchedModules;
+    private Set<Module> searchedModules;
 
-	private Triple<Integer, Integer, String> tooltip = null;
+    private Triple<Integer, Integer, String> tooltip = null;
 
-	public ModuleWindow(List<Module> mods, int x1, int y1, int len, String title, ItemStack icon) {
-		super(x1, y1, x1 + len, 0, title, icon);
+    public ModuleWindow(List<Module> mods, int x1, int y1, int len, String title, ItemStack icon) {
+        super(x1, y1, x1 + len, 0, title, icon);
 
-		this.len = len;
-		modList = mods;
+        this.len = len;
+        modList = mods;
 
-		for (Module m : mods)
-			this.mods.put(m, false);
-		y2 = getHeight();
-	}
+        for (Module m : mods)
+            this.mods.put(m, false);
+        y2 = getHeight();
+    }
 
-	public void render(MatrixStack matrix, int mX, int mY) {
-		super.render(matrix, mX, mY);
+    public void render(MatrixStack matrix, int mX, int mY) {
+        super.render(matrix, mX, mY);
 
-		TextRenderer textRend = mc.textRenderer;
+        TextRenderer textRend = mc.textRenderer;
 
-		tooltip = null;
-		int x = x1 + 1;
-		int y = y1 + 13;
-		x2 = x + len + 1;
+        tooltip = null;
+        int x = x1 + 1;
+        int y = y1 + 13;
+        x2 = x + len + 1;
 
-		if (rmDown && mouseOver(x, y - 12, x + len, y)) {
-			mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-			hiding = !hiding;
-		}
+        if (rmDown && mouseOver(x, y - 12, x + len, y)) {
+            mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            hiding = !hiding;
+        }
 
-		if (hiding) {
-			y2 = y;
-			return;
-		} else {
-			y2 = y + getHeight();
-		}
+        if (hiding) {
+            y2 = y;
+            return;
+        } else {
+            y2 = y + getHeight();
+        }
 
-		int curY = 0;
-		for (Entry<Module, Boolean> m : new LinkedHashMap<>(mods).entrySet()) {
-			if (m.getValue()) {
-				//fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
-				fillGreySides(matrix, x, y + curY, x+len-1, y + 12 + curY);
-				//DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
-				//DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
-			}
+        int curY = 0;
+        for (Entry<Module, Boolean> m : new LinkedHashMap<>(mods).entrySet()) {
+            if (m.getValue()) {
+                //fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
+                fillGreySides(matrix, x, y + curY, x + len - 1, y + 12 + curY);
+                //DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
+                //DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
+            }
 
-			DrawableHelper.fill(matrix, x, y + curY, x+len, y + 12 + curY,
-					//mouseOver(x, y + curY, x+len, y + 12 + curY) ? ColourThingy.guiColour() : 0x00000000);
-					mouseOver(x, y + curY, x+len, y + 12 + curY) ? 0x70303070 : 0x00000000);
+            DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY,
+                    //mouseOver(x, y + curY, x+len, y + 12 + curY) ? ColourThingy.guiColour() : 0x00000000);
+                    mouseOver(x, y + curY, x + len, y + 12 + curY) ? 0x70303070 : 0x00000000);
 
-			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
-					x+2, y + 2 + curY, m.getKey().isToggled() ? ColourThingy.guiColour() : 0xc0c0c0);
+            textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
+                    x + 2, y + 2 + curY, m.getKey().isToggled() ? ColourThingy.guiColour() : 0xc0c0c0);
 
-			//If they match: Module gets marked red
-			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
-				DrawableHelper.fill(matrix, m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0),
-						m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
-			}
+            //If they match: Module gets marked red
+            if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
+                DrawableHelper.fill(matrix, m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0),
+                        m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
+            }
 
-			/* Set which module settings show on */
-			if (mouseOver(x, y + curY, x+len, y + 12 + curY)) {
-				tooltip = Triple.of(x + len + 2, y + curY, m.getKey().getDesc());
+            /* Set which module settings show on */
+            if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
+                tooltip = Triple.of(x + len + 2, y + curY, m.getKey().getDesc());
 
-				if (lmDown) m.getKey().toggle();
-				if (rmDown) mods.replace(m.getKey(), !m.getValue());
-				if (lmDown || rmDown) mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-			}
-			
-			curY += 12;
+                if (lmDown) m.getKey().toggle();
+                if (rmDown) mods.replace(m.getKey(), !m.getValue());
+                if (lmDown || rmDown)
+                    mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            }
 
-			/* draw settings */
-			if (m.getValue()) {
-				for (SettingBase s: m.getKey().getSettings()) {
-					s.render(this, matrix, x, y + curY, len);
+            curY += 12;
 
-					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x+len, y + s.getHeight(len) + curY)) {
-						tooltip = s.getGuiDesc(this, x, y + curY, len);
-					}
-					
-					fillGreySides(matrix, x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
-					
-					curY += s.getHeight(len);
-				}
+            /* draw settings */
+            if (m.getValue()) {
+                for (SettingBase s : m.getKey().getSettings()) {
+                    s.render(this, matrix, x, y + curY, len);
 
-				drawBindSetting(matrix, m.getKey(), keyDown, x, y + curY, textRend);
-				curY += 12;
-				//fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
-			}
-		}
-	}
+                    if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x + len, y + s.getHeight(len) + curY)) {
+                        tooltip = s.getGuiDesc(this, x, y + curY, len);
+                    }
 
-	public void drawBindSetting(MatrixStack matrix, Module m, int key, int x, int y, TextRenderer textRend) {
-		//DrawableHelper.fill(matrix, x, y + 11, x + len - 2, y + 12, 0x90b0b0b0);
-		//DrawableHelper.fill(matrix, x + len - 2, y, x + len - 1, y + 12, 0x90b0b0b0);
-		//DrawableHelper.fill(matrix, x, y - 1, x + 1, y + 11, 0x90000000);
+                    fillGreySides(matrix, x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
 
-		if (key >= 0 && mouseOver(x, y, x + len, y + 12))
-			m.setKey((key != GLFW.GLFW_KEY_DELETE && key != GLFW.GLFW_KEY_ESCAPE) ? key : Module.KEY_UNBOUND);
+                    curY += s.getHeight(len);
+                }
 
-		String name = m.getKey() < 0 ? "NONE" : InputUtil.fromKeyCode(m.getKey(), -1).getLocalizedText().getString();
-		if (name == null)
-			name = "KEY" + m.getKey();
-		else if (name.isEmpty())
-			name = "NONE";
+                drawBindSetting(matrix, m.getKey(), keyDown, x, y + curY, textRend);
+                curY += 12;
+                //fill(x+len-1, y+(count*12), x+len, y+12+(count*12), 0x9f70fff0);
+            }
+        }
+    }
 
-		textRend.drawWithShadow(matrix, "Bind: " + name + (mouseOver(x, y, x + len, y + 12) ? "..." : ""), x + 2, y + 2,
-				mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
-	}
+    public void drawBindSetting(MatrixStack matrix, Module m, int key, int x, int y, TextRenderer textRend) {
+        //DrawableHelper.fill(matrix, x, y + 11, x + len - 2, y + 12, 0x90b0b0b0);
+        //DrawableHelper.fill(matrix, x + len - 2, y, x + len - 1, y + 12, 0x90b0b0b0);
+        //DrawableHelper.fill(matrix, x, y - 1, x + 1, y + 11, 0x90000000);
 
-	public void fillReverseGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
-		DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2, y2, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
-	}
+        if (key >= 0 && mouseOver(x, y, x + len, y + 12))
+            m.setKey((key != GLFW.GLFW_KEY_DELETE && key != GLFW.GLFW_KEY_ESCAPE) ? key : Module.KEY_UNBOUND);
 
-	private void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		//DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		//DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
-	}
+        String name = m.getKey() < 0 ? "NONE" : InputUtil.fromKeyCode(m.getKey(), -1).getLocalizedText().getString();
+        if (name == null)
+            name = "KEY" + m.getKey();
+        else if (name.isEmpty())
+            name = "NONE";
 
-	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
-		super.drawBar(matrix, mX, mY, textRend);
-		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 0), ColourThingy.guiColour());
-	}
+        textRend.drawWithShadow(matrix, "Bind: " + name + (mouseOver(x, y, x + len, y + 12) ? "..." : ""), x + 2, y + 2,
+                mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
+    }
 
-	public Triple<Integer, Integer, String> getTooltip() {
-		return tooltip;
-	}
+    public void fillReverseGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+        DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
+        DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
+        DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2, y2, 0x90b0b0b0);
+        DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0x90b0b0b0);
+        DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
+    }
 
-	public void setSearchedModule(Set<Module> mods) {
-		searchedModules = mods;
-	}
-	
-	public void setLen(int len) {
-		this.len = len;
-	}
+    private void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+        //DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
+        //DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
+    }
 
-	public int getHeight() {
-		int h = 1;
-		for (Entry<Module, Boolean> e: mods.entrySet()) {
-			h += 12;
+    protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
+        super.drawBar(matrix, mX, mY, textRend);
+        textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 0), ColourThingy.guiColour());
+    }
 
-			if (e.getValue()) {
-				for (SettingBase s: e.getKey().getSettings()) {
-					h += s.getHeight(len);
-				}
-				
-				h += 12;
-			}
-		}
+    public Triple<Integer, Integer, String> getTooltip() {
+        return tooltip;
+    }
 
-		return h;
-	}
+    public void setSearchedModule(Set<Module> mods) {
+        searchedModules = mods;
+    }
+
+    public void setLen(int len) {
+        this.len = len;
+    }
+
+    public int getHeight() {
+        int h = 1;
+        for (Entry<Module, Boolean> e : mods.entrySet()) {
+            h += 12;
+
+            if (e.getValue()) {
+                for (SettingBase s : e.getKey().getSettings()) {
+                    h += s.getHeight(len);
+                }
+
+                h += 12;
+            }
+        }
+
+        return h;
+    }
 }

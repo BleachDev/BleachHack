@@ -23,19 +23,19 @@ import net.minecraft.util.math.BlockPos;
 
 public class EventBlockRender extends Event {
 
-	private BlockState blockState;
-	private BlockPos blockPos;
+    private final BlockState blockState;
+    private final BlockPos blockPos;
 
-	public EventBlockRender(BlockState blockState, BlockPos blockPos) {
-		this.blockState = blockState;
-		this.blockPos = blockPos;
-	}
+    public EventBlockRender(BlockState blockState, BlockPos blockPos) {
+        this.blockState = blockState;
+        this.blockPos = blockPos;
+    }
 
-	public BlockState getBlockState() {
-		return blockState;
-	}
+    public BlockState getBlockState() {
+        return blockState;
+    }
 
-	public BlockPos getBlockPos() {
-		return blockPos;
-	}
+    public BlockPos getBlockPos() {
+        return blockPos;
+    }
 }

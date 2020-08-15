@@ -24,17 +24,17 @@ import net.minecraft.network.Packet;
  * @author sl
  */
 public class EventReadPacket extends Event {
-	private Packet<?> packet;
+    private Packet<?> packet;
 
-	public EventReadPacket(Packet<?> packet) {
-		this.packet = packet;
-	}
+    public EventReadPacket(Packet<?> packet) {
+        this.packet = packet;
+    }
 
-	public Packet<?> getPacket() {
-		return packet;
-	}
+    public Packet<?> getPacket() {
+        return packet;
+    }
 
-	public void setPacket(Packet<?> packet) {
-		this.packet = packet;
-	}
+    public void setPacket(Packet<?> packet) {
+        this.packet = packet;
+    }
 }

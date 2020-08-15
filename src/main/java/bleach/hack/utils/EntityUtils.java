@@ -29,21 +29,21 @@ import net.minecraft.util.Formatting;
 
 public class EntityUtils {
 
-	private static MinecraftClient mc = MinecraftClient.getInstance();
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-	public static boolean isAnimal(Entity e) {
-		return e instanceof PassiveEntity || e instanceof AmbientEntity || e instanceof WaterCreatureEntity || e instanceof GolemEntity;
-	}
+    public static boolean isAnimal(Entity e) {
+        return e instanceof PassiveEntity || e instanceof AmbientEntity || e instanceof WaterCreatureEntity || e instanceof GolemEntity;
+    }
 
-	public static void setGlowing(Entity entity, Formatting color, String teamName) {
-		Team team = (mc.world.getScoreboard().getTeamNames().contains(teamName) ?
-				mc.world.getScoreboard().getTeam(teamName) :
-					mc.world.getScoreboard().addTeam(teamName));
+    public static void setGlowing(Entity entity, Formatting color, String teamName) {
+        Team team = (mc.world.getScoreboard().getTeamNames().contains(teamName) ?
+                mc.world.getScoreboard().getTeam(teamName) :
+                mc.world.getScoreboard().addTeam(teamName));
 
-		mc.world.getScoreboard().addPlayerToTeam(
-				entity instanceof PlayerEntity ? entity.getEntityName() : entity.getUuidAsString(), team);
-		mc.world.getScoreboard().getTeam(teamName).setColor(color);
+        mc.world.getScoreboard().addPlayerToTeam(
+                entity instanceof PlayerEntity ? entity.getEntityName() : entity.getUuidAsString(), team);
+        mc.world.getScoreboard().getTeam(teamName).setColor(color);
 
-		entity.setGlowing(true);
-	}
+        entity.setGlowing(true);
+    }
 }

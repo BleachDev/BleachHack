@@ -21,10 +21,9 @@ import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.FabricReflect;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
-
-import com.google.common.eventbus.Subscribe;
 
 /**
  * @author sl
@@ -32,25 +31,25 @@ import com.google.common.eventbus.Subscribe;
  */
 
 public class NoVelocity extends Module {
-	public NoVelocity() {
-		super("NoVelocity", KEY_UNBOUND, Category.PLAYER, "If you take some damage, you don't move. Maybe.");
-	}
+    public NoVelocity() {
+        super("NoVelocity", KEY_UNBOUND, Category.PLAYER, "If you take some damage, you don't move. Maybe.");
+    }
 
-	//The name of the method doesn't matter nor does it need to be consistent between modules, what matters is the argument.
-	@Subscribe
-	public void readPacket(EventReadPacket event) {
-		if (mc.player == null) return;
-		if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
-			EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) event.getPacket();
-			if (packet.getId() == mc.player.getEntityId()) {
-				FabricReflect.writeField(packet, 0,"field_12563", "velocityX");
-				FabricReflect.writeField(packet, 0, "field_12562","velocityY");
-				FabricReflect.writeField(packet, 0, "field_12561", "velocityZ");
-			}
-		} else if (event.getPacket() instanceof ExplosionS2CPacket) {
-			FabricReflect.writeField(event.getPacket(), 0,"field_12176", "playerVelocityX");
-			FabricReflect.writeField(event.getPacket(), 0, "field_12182","playerVelocityY");
-			FabricReflect.writeField(event.getPacket(), 0, "field_12183", "playerVelocityZ");
-		}
-	}
+    //The name of the method doesn't matter nor does it need to be consistent between modules, what matters is the argument.
+    @Subscribe
+    public void readPacket(EventReadPacket event) {
+        if (mc.player == null) return;
+        if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
+            EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) event.getPacket();
+            if (packet.getId() == mc.player.getEntityId()) {
+                FabricReflect.writeField(packet, 0, "field_12563", "velocityX");
+                FabricReflect.writeField(packet, 0, "field_12562", "velocityY");
+                FabricReflect.writeField(packet, 0, "field_12561", "velocityZ");
+            }
+        } else if (event.getPacket() instanceof ExplosionS2CPacket) {
+            FabricReflect.writeField(event.getPacket(), 0, "field_12176", "playerVelocityX");
+            FabricReflect.writeField(event.getPacket(), 0, "field_12182", "playerVelocityY");
+            FabricReflect.writeField(event.getPacket(), 0, "field_12183", "playerVelocityZ");
+        }
+    }
 }

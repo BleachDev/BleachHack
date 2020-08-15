@@ -17,125 +17,131 @@
  */
 package bleach.hack.module;
 
+import bleach.hack.BleachHack;
+import bleach.hack.setting.base.SettingBase;
+import bleach.hack.utils.file.BleachFileHelper;
+import com.google.common.eventbus.Subscribe;
+import net.minecraft.client.MinecraftClient;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import bleach.hack.BleachHack;
-import bleach.hack.setting.base.SettingBase;
-import bleach.hack.utils.file.BleachFileHelper;
-
-import com.google.common.eventbus.Subscribe;
-import net.minecraft.client.MinecraftClient;
-
 public class Module {
 
-	public final static int KEY_UNBOUND = -2;
+    public final static int KEY_UNBOUND = -2;
 
-	protected MinecraftClient mc = MinecraftClient.getInstance();
-	private String name;
-	private int key;
-	private int defaultKey;
-	private boolean toggled;
-	private Category category;
-	private String desc;
-	private List<SettingBase> settings = new ArrayList<>();
-	private boolean drawn;
+    protected MinecraftClient mc = MinecraftClient.getInstance();
+    private String name;
+    private int key;
+    private final int defaultKey;
+    private boolean toggled;
+    private final Category category;
+    private final String desc;
+    private List<SettingBase> settings = new ArrayList<>();
+    private boolean drawn;
 
-	public Module(String nm, int k, Category c, String d, SettingBase... s) {
-		name = nm;
-		setKey(k);
-		defaultKey = getKey();
-		category = c;
-		desc = d;
-		settings = Arrays.asList(s);
-		toggled = false;
-		drawn = true;
-	}
+    public Module(String nm, int k, Category c, String d, SettingBase... s) {
+        name = nm;
+        setKey(k);
+        defaultKey = getKey();
+        category = c;
+        desc = d;
+        settings = Arrays.asList(s);
+        toggled = false;
+        drawn = true;
+    }
 
 
-	public void toggle() {
-		toggled = !toggled;
-		if (toggled) onEnable();
-		else onDisable();
-	}
+    public void toggle() {
+        toggled = !toggled;
+        if (toggled) onEnable();
+        else onDisable();
+    }
 
-	public void onEnable() {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
-		
-		for (Method method : getClass().getMethods()) {
-			if (method.isAnnotationPresent(Subscribe.class)) {
-				BleachHack.eventBus.register(this);
-				break;
-			}
-		}
-	}
+    public void onEnable() {
+        BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 
-	public void onDisable() {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
-		
-		try{
-			for (Method method : getClass().getMethods()) {
-				if (method.isAnnotationPresent(Subscribe.class)) {
-					BleachHack.eventBus.unregister(this);
-					break;
-				}
-			}
-		} catch (Exception this_didnt_get_registered_hmm_weird) { this_didnt_get_registered_hmm_weird.printStackTrace(); }
-	}
+        for (Method method : getClass().getMethods()) {
+            if (method.isAnnotationPresent(Subscribe.class)) {
+                BleachHack.eventBus.register(this);
+                break;
+            }
+        }
+    }
 
-	public void init() {}
+    public void onDisable() {
+        BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 
-	public String getName() {
-		return name;
-	}
+        try {
+            for (Method method : getClass().getMethods()) {
+                if (method.isAnnotationPresent(Subscribe.class)) {
+                    BleachHack.eventBus.unregister(this);
+                    break;
+                }
+            }
+        } catch (Exception this_didnt_get_registered_hmm_weird) {
+            this_didnt_get_registered_hmm_weird.printStackTrace();
+        }
+    }
 
-	public Category getCategory() {
-		return category;
-	}
+    public void init() {
+    }
 
-	public String getDesc() {
-		return desc;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Category getCategory() {
+        return category;
+    }
 
-	public int getKey() {
-		return key;
-	}
-	
-	public int getDefaultKey() {
-		return defaultKey;
-	}
+    public String getDesc() {
+        return desc;
+    }
 
-	public List<SettingBase> getSettings() {
-		return settings;
-	}
-	
-	public SettingBase getSetting(int s) {
-		return settings.get(s);
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setKey(int key) {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
-		this.key = key;
-	}
+    public int getKey() {
+        return key;
+    }
 
-	public boolean isToggled() {
-		return toggled;
-	}
+    public int getDefaultKey() {
+        return defaultKey;
+    }
 
-	public void setToggled(boolean toggled) {
-		this.toggled = toggled;
-		if (toggled) onEnable();
-		else onDisable();
-	}
+    public List<SettingBase> getSettings() {
+        return settings;
+    }
 
-	public boolean isDrawn() {return drawn;}
+    public SettingBase getSetting(int s) {
+        return settings.get(s);
+    }
 
-	public void setDrawn(boolean d) {drawn = d;}
+    public void setKey(int key) {
+        BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+        this.key = key;
+    }
+
+    public boolean isToggled() {
+        return toggled;
+    }
+
+    public void setToggled(boolean toggled) {
+        this.toggled = toggled;
+        if (toggled) onEnable();
+        else onDisable();
+    }
+
+    public boolean isDrawn() {
+        return drawn;
+    }
+
+    public void setDrawn(boolean d) {
+        drawn = d;
+    }
 
 }

@@ -21,39 +21,38 @@ import bleach.hack.command.Command;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.BleachQueue;
 
 public class CmdDrawn extends Command {
 
-	@Override
-	public String getAlias() {
-		return "drawn";
-	}
+    @Override
+    public String getAlias() {
+        return "drawn";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Choose if the module is drawn or not";
-	}
+    @Override
+    public String getDescription() {
+        return "Choose if the module is drawn or not";
+    }
 
-	@Override
-	public String getSyntax() {
-		return "drawn [Module] [true/false]";
-	}
+    @Override
+    public String getSyntax() {
+        return "drawn [Module] [true/false]";
+    }
 
-	@Override
-	public void onCommand(String command, String[] args) throws Exception {
-		for (Module m: ModuleManager.getModules()) {
-			if (args[0].equalsIgnoreCase(m.getName())) {
-				if (args[1] == null) {
-					BleachLogger.errorMessage("Expected true or false.");
-					return;
-				}
-				m.setDrawn(Boolean.parseBoolean(args[1]));
-				BleachLogger.errorMessage("Drawn \""+m.getName()+"\" set to "+Boolean.parseBoolean(args[1]));
-				return;
-			}
-		}
-		BleachLogger.errorMessage("No module provided.");
-	}
+    @Override
+    public void onCommand(String command, String[] args) throws Exception {
+        for (Module m : ModuleManager.getModules()) {
+            if (args[0].equalsIgnoreCase(m.getName())) {
+                if (args[1] == null) {
+                    BleachLogger.errorMessage("Expected true or false.");
+                    return;
+                }
+                m.setDrawn(Boolean.parseBoolean(args[1]));
+                BleachLogger.errorMessage("Drawn \"" + m.getName() + "\" set to " + Boolean.parseBoolean(args[1]));
+                return;
+            }
+        }
+        BleachLogger.errorMessage("No module provided.");
+    }
 
 }

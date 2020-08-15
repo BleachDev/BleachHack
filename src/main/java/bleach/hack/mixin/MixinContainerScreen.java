@@ -17,6 +17,11 @@
  */
 package bleach.hack.mixin;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventDrawContainer;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.AutoDonkeyDupe;
+import bleach.hack.module.mods.MountBypass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -27,60 +32,53 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventDrawContainer;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.AutoDonkeyDupe;
-import bleach.hack.module.mods.MountBypass;
-
 @Mixin(HandledScreen.class)
 public abstract class MixinContainerScreen extends Screen {
 
-	@Shadow
-	public int titleX;
+    @Shadow
+    public int titleX;
 
-	@Shadow
-	public int titleY;
+    @Shadow
+    public int titleY;
 
-	protected MixinContainerScreen(Text title) {
-		super(title);
-	}
+    protected MixinContainerScreen(Text title) {
+        super(title);
+    }
 
-	@Inject(at = @At("RETURN"), method = "init()V")
-	protected void init(CallbackInfo info) {
-		if (!(MinecraftClient.getInstance().player.getVehicle() instanceof AbstractDonkeyEntity)) {
-			return;
-		}
+    @Inject(at = @At("RETURN"), method = "init()V")
+    protected void init(CallbackInfo info) {
+        if (!(MinecraftClient.getInstance().player.getVehicle() instanceof AbstractDonkeyEntity)) {
+            return;
+        }
 
-		AbstractDonkeyEntity entity = (AbstractDonkeyEntity) MinecraftClient.getInstance().player.getVehicle();
+        AbstractDonkeyEntity entity = (AbstractDonkeyEntity) MinecraftClient.getInstance().player.getVehicle();
 
-		addButton(new ButtonWidget(titleX + 82, titleY + 4, 44, 12, new LiteralText("AutoDupe"), button -> {
-			ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
-		}));
+        addButton(new ButtonWidget(titleX + 82, titleY + 4, 44, 12, new LiteralText("AutoDupe"), button -> {
+            ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
+        }));
 
-		addButton(new ButtonWidget(titleX + 130, titleY + 4, 39, 12, new LiteralText("Dupe"), (button) -> {
-			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
+        addButton(new ButtonWidget(titleX + 130, titleY + 4, 39, 12, new LiteralText("Dupe"), (button) -> {
+            ((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
 
-			MinecraftClient.getInstance().player.networkHandler.sendPacket(
-					new PlayerInteractEntityC2SPacket(
-							entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
+            MinecraftClient.getInstance().player.networkHandler.sendPacket(
+                    new PlayerInteractEntityC2SPacket(
+                            entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
 
-			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
-		}));
-	}
+            ((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
+        }));
+    }
 
-	@Inject(at = @At("RETURN"), method = "render")
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
-		EventDrawContainer event = new EventDrawContainer(
-				(HandledScreen<?>) MinecraftClient.getInstance().currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
-		BleachHack.eventBus.post(event);
-		if (event.isCancelled()) info.cancel();
-	}
+    @Inject(at = @At("RETURN"), method = "render")
+    public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
+        EventDrawContainer event = new EventDrawContainer(
+                (HandledScreen<?>) MinecraftClient.getInstance().currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
+        BleachHack.eventBus.post(event);
+        if (event.isCancelled()) info.cancel();
+    }
 }

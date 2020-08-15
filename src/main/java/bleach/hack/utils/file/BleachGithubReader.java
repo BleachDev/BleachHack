@@ -27,22 +27,25 @@ import java.util.Scanner;
 
 public class BleachGithubReader {
 
-	private static URI url;
+    private static URI url;
 
-	static {
-		//why java, why do i have to use a static block to set a varable, theres nothing wrong with that url
-		try { url = new URI("https://raw.githubusercontent.com/BleachDrinker420/bleachhack-1.14/master/online/");
-		} catch (URISyntaxException e) {}
-	}
+    static {
+        //why java, why do i have to use a static block to set a varable, theres nothing wrong with that url
+        try {
+            url = new URI("https://raw.githubusercontent.com/BleachDrinker420/bleachhack-1.14/master/online/");
+        } catch (URISyntaxException e) {
+        }
+    }
 
-	public static List<String> readFileLines(String file) {
-		List<String> st = new ArrayList<>();
-		try {
-			URL fileUrl = url.resolve(file).toURL();
-			Scanner sc = new Scanner(fileUrl.openStream());
-			while(sc.hasNextLine()) st.add(sc.nextLine());
-			sc.close();
-		} catch (IOException e) {}
-		return st;
-	}
+    public static List<String> readFileLines(String file) {
+        List<String> st = new ArrayList<>();
+        try {
+            URL fileUrl = url.resolve(file).toURL();
+            Scanner sc = new Scanner(fileUrl.openStream());
+            while (sc.hasNextLine()) st.add(sc.nextLine());
+            sc.close();
+        } catch (IOException e) {
+        }
+        return st;
+    }
 }

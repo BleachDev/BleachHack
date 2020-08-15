@@ -13,11 +13,11 @@ public class Rainbow {
 
     @Subscribe
     public void onTick(EventTick event) {
-        this.rgb = Color.HSBtoRGB(this.hue, 1.0F, 1.0F);
-        this.hue += this.speed / 2000.0F;
+        rgb = Color.HSBtoRGB(hue, 1.0F, 1.0F);
+        hue += speed / 2000.0F;
     }
 
-    public static int getInt(){
+    public static int getInt() {
         return Rainbow.rgb;
     }
 }

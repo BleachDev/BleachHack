@@ -17,121 +17,119 @@
  */
 package bleach.hack.module;
 
+import bleach.hack.event.events.EventKeyPress;
+import bleach.hack.module.mods.*;
+import com.google.common.eventbus.Subscribe;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
+import org.lwjgl.glfw.GLFW;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.lwjgl.glfw.GLFW;
-
-import bleach.hack.event.events.EventKeyPress;
-import bleach.hack.module.mods.*;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
-
-import com.google.common.eventbus.Subscribe;
-
 public class ModuleManager {
 
-	private static List<Module> mods = Arrays.asList(
-			new Ambience(),
-			new AntiChunkBan(),
-			new AntiHunger(),
-			new ArrowJuke(),
-			new AutoDonkeyDupe(),
-			new AutoReconnect(),
-			new AutoRespawn(),
-			new AutoSign(),
-			new AutoTool(),
-			new AutoTotem(),
-			new AutoWalk(),
-			new BetterPortal(),
-			new BlockParty(),
-			new BookCrash(),
-			new BowBot(),
-			new ChestESP(),
-			new ChunkSize(),
-			new ClickGui(),
-			new ColorSigns(),
-			new ColourChooser(),
-			new Criticals(),
-			new CrystalAura(),
-			new CustomChat(),
-			new DiscordRPCMod(),
-			new Dispenser32k(),
-			new ElytraFly(),
-			new EntityControl(),
-			new ElytraReplace(),
-			new ESP(),
-			new FakeLag(),
-			new FastUse(),
-			new Flight(),
-			new Freecam(),
-			new Fullbright(),
-			new Ghosthand(),
-			new HandProgress(),
-			new Jesus(),
-			new Killaura(),
-			new MountBypass(),
-			new MouseFriend(),
-			new Nametags(),
-			new Nofall(),
-			new NoKeyBlock(),
-			new NoRender(),
-			new NoSlow(),
-			new Notebot(),
-			new NotebotStealer(),
-			new NoVelocity(),
-			new Nuker(),
-			new OffhandCrash(),
-			new PacketFly(),
-			new Peek(),
-			new PlayerCrash(),
-			new SafeWalk(),
-			new Scaffold(),
-			new Spammer(),
-			new Speed(),
-			new SpeedMine(),
-			new Sprint(),
-			new StarGithub(),
-			new Step(),
-			new Surround(),
-			new Timer(),
-			new Tracers(),
-			new Trail(),
-			new Trajectories(),
-			new UI(),
-			new Xray(),
-			new Zoom());
+    private static final List<Module> mods = Arrays.asList(
+            new Ambience(),
+            new AntiChunkBan(),
+            new AntiHunger(),
+            new ArrowJuke(),
+            new AutoDonkeyDupe(),
+            new AutoReconnect(),
+            new AutoRespawn(),
+            new AutoSign(),
+            new AutoTool(),
+            new AutoTotem(),
+            new AutoWalk(),
+            new BetterPortal(),
+            new BlockParty(),
+            new BookCrash(),
+            new BowBot(),
+            new ChestESP(),
+            new ChunkSize(),
+            new ClickGui(),
+            new ColorSigns(),
+            new ColourChooser(),
+            new Criticals(),
+            new CrystalAura(),
+            new CustomChat(),
+            new DiscordRPCMod(),
+            new Dispenser32k(),
+            new ElytraFly(),
+            new EntityControl(),
+            new ElytraReplace(),
+            new ESP(),
+            new FakeLag(),
+            new FastUse(),
+            new Flight(),
+            new Freecam(),
+            new Fullbright(),
+            new Ghosthand(),
+            new HandProgress(),
+            new Jesus(),
+            new Killaura(),
+            new MountBypass(),
+            new MouseFriend(),
+            new Nametags(),
+            new Nofall(),
+            new NoKeyBlock(),
+            new NoRender(),
+            new NoSlow(),
+            new Notebot(),
+            new NotebotStealer(),
+            new NoVelocity(),
+            new Nuker(),
+            new OffhandCrash(),
+            new PacketFly(),
+            new Peek(),
+            new PlayerCrash(),
+            new SafeWalk(),
+            new Scaffold(),
+            new Spammer(),
+            new Speed(),
+            new SpeedMine(),
+            new Sprint(),
+            new StarGithub(),
+            new Step(),
+            new Surround(),
+            new Timer(),
+            new Tracers(),
+            new Trail(),
+            new Trajectories(),
+            new UI(),
+            new Xray(),
+            new Zoom());
 
-	public static List<Module> getModules() {
-		return mods;
-	}
+    public static List<Module> getModules() {
+        return mods;
+    }
 
-	public static Module getModule(Class<? extends Module> clazz) {
-		for (Module module : mods) {
-			if (module.getClass().equals(clazz)) {
-				return module;
-			}
-		}
+    public static Module getModule(Class<? extends Module> clazz) {
+        for (Module module : mods) {
+            if (module.getClass().equals(clazz)) {
+                return module;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static Module getModuleByName(String name) {
-		for (Module m: mods) {
-			if (name.equalsIgnoreCase(m.getName())) return m;
-		}
-		return null;
-	}
+    public static Module getModuleByName(String name) {
+        for (Module m : mods) {
+            if (name.equalsIgnoreCase(m.getName())) return m;
+        }
+        return null;
+    }
 
-	public static List<Module> getModulesInCat(Category cat) {
-		return mods.stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
-	}
+    public static List<Module> getModulesInCat(Category cat) {
+        return mods.stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
+    }
 
-	@Subscribe
-	public static void handleKeyPress(EventKeyPress eventKeyPress) {
-		if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) return;
-		
-		mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(m -> m.toggle());
-	}
+    @Subscribe
+    public static void handleKeyPress(EventKeyPress eventKeyPress) {
+        if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) return;
+
+        mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(m -> m.toggle());
+    }
 }

@@ -17,28 +17,27 @@
  */
 package bleach.hack.module.mods;
 
-import org.lwjgl.glfw.GLFW;
-
 import bleach.hack.gui.clickgui.ClickGuiScreen;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import org.lwjgl.glfw.GLFW;
 
 public class ClickGui extends Module {
 
-	public static ClickGuiScreen clickGui = new ClickGuiScreen();
+    public static ClickGuiScreen clickGui = new ClickGuiScreen();
 
-	public ClickGui() {
-		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
-				new SettingSlider("Length", 70, 85, 85, 0),
-				new SettingToggle("Search bar", true),
-				new SettingToggle("Help", true),
-				new SettingToggle("Static descriptions", true));
-	}
+    public ClickGui() {
+        super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
+                new SettingSlider("Length", 70, 85, 85, 0),
+                new SettingToggle("Search bar", true),
+                new SettingToggle("Help", true),
+                new SettingToggle("Static descriptions", true));
+    }
 
-	public void onEnable() {
-		mc.openScreen(clickGui);
-		setToggled(false);
-	}
+    public void onEnable() {
+        mc.openScreen(clickGui);
+        setToggled(false);
+    }
 }
