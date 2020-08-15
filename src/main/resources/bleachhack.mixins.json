@@ -38,6 +38,7 @@
     "MixinSignBlockEntityRenderer",
     "MixinSkyProperties",
     "MixinSoundSystem",
+    "MixinTextRenderer",
     "MixinTitleScreen",
     "MixinWorldRenderer"
   ],
