@@ -246,7 +246,8 @@ public class UI extends Module {
         if (getSetting(6).asToggle().state) {
             long time = System.currentTimeMillis();
             if (time - lastPacket > 500) {
-                String text = "Server Lagging For " + ((time - lastPacket) / 1000d) + "s";
+                DecimalFormat round = new DecimalFormat("0.0");
+                String text = "Server Lagging For " + (round.format((time - lastPacket) / 1000d)) + "s";
                 mc.textRenderer.drawWithShadow(event.matrix, text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getWidth(text) / 2,
                         Math.min((time - lastPacket - 500) / 20 - 20, 10), ColourThingy.guiColour());
             }
