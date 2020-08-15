@@ -78,12 +78,15 @@ public class UI extends Module {
 					new SettingSlider("y", 1, 3840, 220, 0).withDesc("y coordinates")),
 				new SettingToggle("Players", true).withDesc("Lists all the players in your render distance").withChildren( // 8
 						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-						new SettingSlider("y", 1, 3840, 260, 0).withDesc("y coordinates")),
+						new SettingSlider("y", 1, 3840, 270, 0).withDesc("y coordinates")),
 				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 9
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
 				new SettingToggle("Time", true).withDesc("Shows the current time").withChildren( // 10
-						new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"),
+						new SettingToggle("Time Zone", false).withDesc("Shows your time zone in the time"),
 						new SettingToggle("Year", false).withDesc("Shows the current year in the time"),
+						new SettingToggle("Month/Day", false).withDesc("Shows the current day and month in the time"),
+						new SettingToggle("Seconds", false).withDesc("adds seconds to time"),
+						new SettingToggle("AM/PM", true).withDesc("adds AM/PM marker to time"),
 						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
 						new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates")),
 				new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 11
@@ -153,11 +156,14 @@ public class UI extends Module {
 		}
 
 		if (getSetting(10).asToggle().state) {
-			mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r" + new SimpleDateFormat("MMM dd hh:mm:ss"
-					+ (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-					+ (getSetting(10).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()),
-					(int)getSetting(10).asToggle().getChild(2).asSlider().getValue(),
-					(int)getSetting(10).asToggle().getChild(3).asSlider().getValue(),
+			mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r"
+							+ new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "")
+							+ (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "")  + "h:mm"
+							+ (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "")
+							+ (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "")
+							+ (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date()),
+					(int) getSetting(10).asToggle().getChild(5).asSlider().getValue(),
+					(int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
 					ColourThingy.guiColour());
 		}
 
