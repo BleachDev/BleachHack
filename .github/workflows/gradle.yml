@@ -36,14 +36,14 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: BleachHack-1.14
-        path: BleachHack-Fabric-1.14/build/libs/bleachHack-1.14.4.jar
+        path: BleachHack-Fabric-1.14/build/libs/bleachhack-1.14.4.jar
     - name: Upload 1.15 Artifact
       uses: actions/upload-artifact@v2
       with:
         name: BleachHack-1.15
-        path: BleachHack-Fabric-1.15/build/libs/bleachHack-1.15.2.jar
+        path: BleachHack-Fabric-1.15/build/libs/bleachhack-1.15.2.jar
     - name: Upload 1.16 Artifact
       uses: actions/upload-artifact@v2
       with:
         name: BleachHack-1.16
-        path: BleachHack-Fabric-1.16/build/libs/bleachHack-1.16.2.jar
+        path: BleachHack-Fabric-1.16/build/libs/bleachhack-1.16.2.jar
