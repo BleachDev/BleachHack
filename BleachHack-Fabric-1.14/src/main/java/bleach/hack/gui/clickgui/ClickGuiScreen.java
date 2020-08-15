@@ -17,11 +17,14 @@
  */
 package bleach.hack.gui.clickgui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -133,22 +136,31 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
 				if (tooltip != null) {
-					/* Match lines to end of words */
-					Matcher mat = Pattern.compile(".{1,22}\\b\\W*").matcher(tooltip.getRight());
+					int tooltipY = tooltip.getMiddle();
+					
+					String[] split = tooltip.getRight().split("\n", -1 /* Adding -1 makes it keep empty splits */);
+					ArrayUtils.reverse(split);
+					for (String s: split) {
+						/* Match lines to end of words after it reaches 22 characters long */
+						Matcher mat = Pattern.compile(".{1,22}\\b\\W*").matcher(s);
 
-					int c2 = 0;
-					int c3 = 0;
-					while (mat.find()) {
-						c2++;
-					}
-					mat.reset();
+						List<String> lines = new ArrayList<>();
 
-					while (mat.find()) {
-						fill(tooltip.getLeft(), tooltip.getMiddle() - 1 - (c2 * 10) + (c3 * 10),
-								tooltip.getLeft() + 3 + font.getStringWidth(mat.group().trim()), tooltip.getMiddle() - (c2 * 10) + (c3 * 10) + 9,
-								0xff000000);
-						font.drawWithShadow(mat.group(), tooltip.getLeft() + 2, tooltip.getMiddle() - (c2 * 10) + (c3 * 10), -1);
-						c3++;
+						while (mat.find())
+							lines.add(mat.group().trim());
+
+						if (lines.isEmpty())
+							lines.add(s);
+
+						int start = tooltipY - lines.size() * 10;
+						for (int l = 0; l < lines.size(); l++) {
+							fill(tooltip.getLeft(), start + (l * 10) - 1,
+									tooltip.getLeft() + font.getStringWidth(lines.get(l)) + 3,
+									start + (l * 10) + 9, 0xff000000);
+							font.drawWithShadow(lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
+						}
+						
+						tooltipY -= lines.size() * 10;
 					}
 				}
 			}
