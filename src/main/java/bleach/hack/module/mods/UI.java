@@ -18,6 +18,7 @@
 package bleach.hack.module.mods;
 
 import java.awt.Color;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +90,9 @@ public class UI extends Module {
 						new SettingToggle("AM/PM", true).withDesc("adds AM/PM marker to time"),
 						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
 						new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates")),
+				//new SettingToggle("BPS", true).withDesc("Shows the current time").withChildren( // 11
+				//		new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+				//		new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates")),
 				new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 11
 				new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 12
 				new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed")); // 13
@@ -206,6 +210,20 @@ public class UI extends Module {
 					ColourThingy.guiColour());
 		}
 
+		//if (getSetting(11).asToggle().state) {
+		//	long time = System.currentTimeMillis();
+		//	DecimalFormat decimalFormat = new DecimalFormat("0.0");
+		//	final double deltaX = mc.player.getPos().getX() - mc.player.prevX;
+		//	final double deltaZ = mc.player.getPos().getZ() - mc.player.prevZ;
+		//	final float tickRate = (time - lastPacket) / 1000f;
+		//	String bps = decimalFormat.format(MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) / tickRate);
+//
+		//	mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" +  bps,
+		//			(int)getSetting(11).asToggle().getChild(0).asSlider().getValue(),
+		//			(int)getSetting(11).asToggle().getChild(1).asSlider().getValue(),
+		//			ColourThingy.guiColour());
+		//}
+
 		if (getSetting(5).asToggle().state) {
 			String suffix = "\u00a77";
 			if (lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
@@ -307,8 +325,8 @@ public class UI extends Module {
 		if (ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
 
 		return getRainbow((float) ui.getSetting(12).asSlider().getValue(),
-				(float) ui.getSetting(11).asSlider().getValue(),
-				ui.getSetting(13).asSlider().getValue(),
+				(float) ui.getSetting(13).asSlider().getValue(),
+				ui.getSetting(14).asSlider().getValue(),
 				offset);
 	}
 }
