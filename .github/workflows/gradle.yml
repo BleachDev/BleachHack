@@ -1,0 +1,55 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: bleachhack daily afghanistan builds
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build 1.14 bruh time
+      run: |
+        cd BleachHack-Fabric-1.14
+        chmod +x gradlew
+        ./gradlew build
+        cd ..
+    - name: Build 1.15 bruh time
+      run: |
+        cd BleachHack-Fabric-1.15
+        chmod +x gradlew
+        ./gradlew build
+        cd ..
+    - name: Build 1.16 bruh time
+      run: |
+        cd BleachHack-Fabric-1.16
+        chmod +x gradlew
+        ./gradlew build
+        cd ..
+    - name: Upload 1.14 Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: BleachHack-1.14.4
+        path: BleachHack-Fabric-1.14/build/libs/bleachhack-1.14.4.jar
+    - name: Upload 1.15 Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: BleachHack-1.15.2
+        path: BleachHack-Fabric-1.15/build/libs/bleachhack-1.15.2.jar
+    - name: Upload 1.16 Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: BleachHack-1.16.2
+        path: BleachHack-Fabric-1.16/build/libs/bleachhack-1.16.2.jar
