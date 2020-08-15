@@ -79,7 +79,7 @@ public class UI extends Module {
 					new SettingSlider("y", 1, 3840, 220, 0).withDesc("y coordinates")),
 				new SettingToggle("Players", true).withDesc("Lists all the players in your render distance").withChildren( // 8
 						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-						new SettingSlider("y", 1, 3840, 270, 0).withDesc("y coordinates")),
+						new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates")),
 				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 9
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
 				new SettingToggle("Time", true).withDesc("Shows the current time").withChildren( // 10
@@ -90,12 +90,19 @@ public class UI extends Module {
 						new SettingToggle("AM/PM", true).withDesc("adds AM/PM marker to time"),
 						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
 						new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates")),
-				//new SettingToggle("BPS", true).withDesc("Shows the current time").withChildren( // 11
-				//		new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-				//		new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates")),
-				new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 11
-				new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 12
-				new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed")); // 13
+				new SettingToggle("BPS", true).withDesc("Shows your block per second speed (WORK IN PROGRESS)").withChildren( // 11
+						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+						new SettingSlider("y", 1, 3840, 260, 0).withDesc("y coordinates")),
+				new SettingToggle("Online", true).withDesc("Shows count of players online").withChildren( // 12
+						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+						new SettingSlider("y", 1, 3840, 270, 0).withDesc("y coordinates")),
+				new SettingToggle("Welcome", true).withDesc("Shows your username").withChildren( // 13
+						new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+						new SettingSlider("y", 1, 3840, 190, 0).withDesc("y coordinates")),
+				new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 14
+				new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 15
+				new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed") // 16
+		);
 	}
 
 	@Subscribe
@@ -210,19 +217,19 @@ public class UI extends Module {
 					ColourThingy.guiColour());
 		}
 
-		//if (getSetting(11).asToggle().state) {
-		//	long time = System.currentTimeMillis();
-		//	DecimalFormat decimalFormat = new DecimalFormat("0.0");
-		//	final double deltaX = mc.player.getPos().getX() - mc.player.prevX;
-		//	final double deltaZ = mc.player.getPos().getZ() - mc.player.prevZ;
-		//	final float tickRate = (time - lastPacket) / 1000f;
-		//	String bps = decimalFormat.format(MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) / tickRate);
-//
-		//	mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" +  bps,
-		//			(int)getSetting(11).asToggle().getChild(0).asSlider().getValue(),
-		//			(int)getSetting(11).asToggle().getChild(1).asSlider().getValue(),
-		//			ColourThingy.guiColour());
-		//}
+		if (getSetting(11).asToggle().state) {
+			long time = System.currentTimeMillis();
+			DecimalFormat decimalFormat = new DecimalFormat("0.0");
+			final double deltaX = mc.player.getPos().getX() - mc.player.prevX;
+			final double deltaZ = mc.player.getPos().getZ() - mc.player.prevZ;
+			final double tickRate = (time - lastPacket) / 1000d;
+			String bps = decimalFormat.format(MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) / tickRate);
+
+			mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" +  bps,
+					(int)getSetting(11).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(11).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
+		}
 
 		if (getSetting(5).asToggle().state) {
 			String suffix = "\u00a77";
@@ -236,6 +243,7 @@ public class UI extends Module {
 					ColourThingy.guiColour());
 		}
 
+
 		if (getSetting(6).asToggle().state) {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
@@ -243,6 +251,25 @@ public class UI extends Module {
 				mc.textRenderer.drawWithShadow(event.matrix, text, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getWidth(text) / 2,
 						Math.min((time - lastPacket - 500) / 20 - 20, 10), ColourThingy.guiColour());
 			}
+		}
+
+
+		if (getSetting(13).asToggle().state) {
+			mc.textRenderer.drawWithShadow(event.matrix, "Welcome\u00a77, \u00a7r" + mc.player.getName().asString(),
+					(int)getSetting(13).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(13).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
+		}
+
+
+
+
+		if (getSetting(12).asToggle().state) {
+			int playerCount = mc.player.networkHandler.getPlayerList().size();
+			mc.textRenderer.drawWithShadow(event.matrix, "Online\u00a77: \u00a7r" + playerCount,
+					(int)getSetting(12).asToggle().getChild(0).asSlider().getValue(),
+					(int)getSetting(12).asToggle().getChild(1).asSlider().getValue(),
+					ColourThingy.guiColour());
 		}
 
 		if (getSetting(9).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
@@ -324,9 +351,9 @@ public class UI extends Module {
 
 		if (ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
 
-		return getRainbow((float) ui.getSetting(12).asSlider().getValue(),
-				(float) ui.getSetting(13).asSlider().getValue(),
-				ui.getSetting(14).asSlider().getValue(),
+		return getRainbow((float) ui.getSetting(14).asSlider().getValue(),
+				(float) ui.getSetting(15).asSlider().getValue(),
+				ui.getSetting(16).asSlider().getValue(),
 				offset);
 	}
 }
