@@ -217,12 +217,10 @@ public class UI extends Module {
         }
 
         if (getSetting(11).asToggle().state) {
-            long time = System.currentTimeMillis();
             DecimalFormat decimalFormat = new DecimalFormat("0.0");
-            final double deltaX = mc.player.getPos().getX() - mc.player.prevX;
-            final double deltaZ = mc.player.getPos().getZ() - mc.player.prevZ;
-            final double tickRate = (time - lastPacket) / 1000d;
-            String bps = decimalFormat.format(MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) / tickRate);
+            final double deltaX = Math.abs(mc.player.getPos().getX() - mc.player.prevX);
+            final double deltaZ = Math.abs(mc.player.getPos().getZ() - mc.player.prevZ);
+            String bps = decimalFormat.format((deltaX + deltaZ) * 20);
 
             mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" + bps,
                     (int) getSetting(11).asToggle().getChild(0).asSlider().getValue(),
