@@ -32,16 +32,17 @@ import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ExtendedBlockView;
+import net.minecraft.world.BlockRenderView;
 
 /**
  * Blocks are still tesselated even if they're transparent because Minecraft's
  * rendering engine is retarded.
  */
-@Mixin(value = BlockModelRenderer.class, priority = 10000)
+@Mixin(BlockModelRenderer.class)
 public class MixinBlockModelRenderer {
+	
 	@Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
-	private void tesselate(ExtendedBlockView extendedBlockView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1,
+	private void tesselate(BlockRenderView blockRenderView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1,
 			boolean boolean_1, Random random_1, long long_1, CallbackInfoReturnable<Boolean> ci) {
 		try {
 			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
@@ -53,7 +54,7 @@ public class MixinBlockModelRenderer {
 		}
 	}
 
-	@ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateSmooth(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
+	@ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateSmooth(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
 	private boolean tesselateSmooth(boolean checkSides) {
 		try {
 			if (ModuleManager.getModule(Xray.class).isToggled())
@@ -63,7 +64,7 @@ public class MixinBlockModelRenderer {
 		return checkSides;
 	}
 
-	@ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateFlat(Lnet/minecraft/world/ExtendedBlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
+	@ModifyArg(method = "tesselate", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;tesselateFlat(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;ZLjava/util/Random;J)Z"))
 	private boolean tesselateFlat(boolean checkSides) {
 		try {
 			if (ModuleManager.getModule(Xray.class).isToggled())

@@ -12,8 +12,8 @@ import net.minecraft.world.chunk.light.ChunkSkyLightProvider;
 @Mixin(ChunkSkyLightProvider.class)
 public class MixinChunkSkylightProvider {
 
-	@Inject(at = @At("HEAD"), method = "getMergedLevel", cancellable = true)
-	protected void getMergedLevel(long long_1, long long_2, int int_1, CallbackInfoReturnable<Integer> ci) {
+	@Inject(at = @At("HEAD"), method = "recalculateLevel", cancellable = true)
+	protected void recalculateLevel(long long_1, long long_2, int int_1, CallbackInfoReturnable<Integer> ci) {
 		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(12).asToggle().state) {
 			ci.setReturnValue(15);
 			ci.cancel();

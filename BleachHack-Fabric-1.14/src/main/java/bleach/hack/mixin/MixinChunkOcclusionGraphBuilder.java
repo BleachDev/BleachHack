@@ -24,10 +24,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.Xray;
-import net.minecraft.client.render.chunk.ChunkOcclusionGraphBuilder;
+import net.minecraft.client.render.chunk.ChunkOcclusionDataBuilder;
 import net.minecraft.util.math.BlockPos;
 
-@Mixin(ChunkOcclusionGraphBuilder.class)
+@Mixin(ChunkOcclusionDataBuilder.class)
 public class MixinChunkOcclusionGraphBuilder {
 
 	// Forces chunks to render regardless of assumed occlusion. Without this you'd

@@ -25,7 +25,7 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.MaterialColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
+import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
@@ -54,7 +54,7 @@ public class Peek extends Module {
 
 	@Subscribe
 	public void drawScreen(EventDrawTooltip event) {
-		if (!(event.screen instanceof AbstractContainerScreen)) {
+		if (!(event.screen instanceof ContainerScreen)) {
 			return;
 		}
 
@@ -258,7 +258,7 @@ public class Peek extends Module {
 		float float_7 = (color2 >> 8 & 255) / 255.0F;
 		float float_8 = (color2 & 255) / 255.0F;
 		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = tessellator_1.getBufferBuilder();
+		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
 		bufferBuilder_1.vertex(x1, y1, 0).color(float_2, float_3, float_4, float_1).next();
 		bufferBuilder_1.vertex(x1, y2, 0).color(float_2, float_3, float_4, float_1).next();

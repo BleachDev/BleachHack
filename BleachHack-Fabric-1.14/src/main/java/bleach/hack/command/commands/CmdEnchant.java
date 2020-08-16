@@ -158,7 +158,7 @@ public class CmdEnchant extends Command {
 	public void enchant(ItemStack item, Enchantment e, int level) {
 		if (item.getTag() == null)
 			item.setTag(new CompoundTag());
-		if (!item.getTag().containsKey("Enchantments", 9)) {
+		if (!item.getTag().contains("Enchantments", 9)) {
 			item.getTag().put("Enchantments", new ListTag());
 		}
 

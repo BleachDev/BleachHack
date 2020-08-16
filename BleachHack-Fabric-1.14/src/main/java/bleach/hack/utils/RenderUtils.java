@@ -42,17 +42,17 @@ public class RenderUtils {
 
 		/* Fill */
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBufferBuilder();
+		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(5, VertexFormats.POSITION_COLOR);
 		WorldRenderer.buildBox(buffer,
-				box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
-				box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z, r, g, b, a / 2f);
+				box.x1 - ren.x, box.y1 - ren.y, box.z1 - ren.z,
+				box.x2 - ren.x, box.y2 - ren.y, box.z2 - ren.z, r, g, b, a / 2f);
 		tessellator.draw();
 
 		/* Outline */
 		WorldRenderer.drawBoxOutline(new Box(
-				box.minX - ren.x, box.minY - ren.y, box.minZ - ren.z,
-				box.maxX - ren.x, box.maxY - ren.y, box.maxZ - ren.z), r, g, b, a);
+				box.x1 - ren.x, box.y1 - ren.y, box.z1 - ren.z,
+				box.x2 - ren.x, box.y2 - ren.y, box.z2 - ren.z), r, g, b, a);
 
 		gl11Cleanup();
 	}
@@ -64,7 +64,7 @@ public class RenderUtils {
 		Vec3d ren = renderPos();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBufferBuilder();
+		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(3, VertexFormats.POSITION_COLOR);
 		buffer.vertex(x1 - ren.x, y1 - ren.y, z1 - ren.z).color(r, g, b, 0.0F).next();
 		buffer.vertex(x1 - ren.x, y1 - ren.y, z1 - ren.z).color(r, g, b, 1.0F).next();

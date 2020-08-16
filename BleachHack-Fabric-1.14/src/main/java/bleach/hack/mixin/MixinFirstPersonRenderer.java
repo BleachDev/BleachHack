@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoRender;
-import net.minecraft.client.render.FirstPersonRenderer;
+import net.minecraft.client.render.item.HeldItemRenderer;
 
-@Mixin(FirstPersonRenderer.class)
+@Mixin(HeldItemRenderer.class)
 public class MixinFirstPersonRenderer {
 
 	@Inject(at = @At("HEAD"), method = "renderFireOverlay", cancellable = true)

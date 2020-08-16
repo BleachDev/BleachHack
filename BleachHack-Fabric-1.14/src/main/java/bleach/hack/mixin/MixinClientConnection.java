@@ -38,7 +38,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketEncoderException;
-import net.minecraft.server.network.packet.ChatMessageC2SPacket;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
@@ -49,7 +49,7 @@ public class MixinClientConnection {
 	private void sendImmediately(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1) {
 	}
 
-	@Inject(method = "method_10770", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
 	public void IchannelRead0(ChannelHandlerContext channelHandlerContext_1, Packet<?> packet_1, CallbackInfo callback) {
 		if (this.channel.isOpen() && packet_1 != null) {
 			try {

@@ -18,7 +18,7 @@ import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.client.gui.screen.ingame.ContainerScreen9;
+import net.minecraft.client.gui.screen.ingame.Generic3x3ContainerScreen;
 import net.minecraft.client.gui.screen.ingame.HopperScreen;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -195,7 +195,7 @@ public class Dispenser32k extends Module {
 		if (active && getSetting(1).asToggle().state && timer == 0)
 			killAura();
 
-		if (mc.currentScreen instanceof ContainerScreen9) {
+		if (mc.currentScreen instanceof Generic3x3ContainerScreen) {
 			openedDispenser = true;
 		}
 

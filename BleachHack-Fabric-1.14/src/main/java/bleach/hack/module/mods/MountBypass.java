@@ -6,8 +6,8 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket.InteractionType;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.InteractionType;
 
 public class MountBypass extends Module {
 

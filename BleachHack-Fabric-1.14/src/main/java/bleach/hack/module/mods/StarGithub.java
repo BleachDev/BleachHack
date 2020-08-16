@@ -19,7 +19,7 @@ package bleach.hack.module.mods;
 
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import net.minecraft.util.SystemUtil;
+import net.minecraft.util.Util;
 
 public class StarGithub extends Module {
 
@@ -29,7 +29,7 @@ public class StarGithub extends Module {
 
 	public void onEnable() {
 		try {
-			SystemUtil.getOperatingSystem().open("https://github.com/BleachDrinker420/bleachhack-1.14");
+			Util.getOperatingSystem().open("https://github.com/BleachDrinker420/bleachhack-1.14");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

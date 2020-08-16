@@ -48,7 +48,7 @@ public class WorldRenderUtils {
 		int i = mc.textRenderer.getStringWidth(str) / 2;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBufferBuilder();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, VertexFormats.POSITION_COLOR);
 		float f = mc.options.getTextBackgroundOpacity(0.25F);
 		bufferbuilder.vertex(-i - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, f).next();

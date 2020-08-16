@@ -30,7 +30,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
@@ -54,8 +54,8 @@ public class ArrowJuke extends Module {
 			for (int i = 0; i < 100; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5));
 				boxes.add(new Box(
-						nextPos.subtract(e.getBoundingBox().getXSize() / 2, 0, e.getBoundingBox().getZSize() / 2),
-						nextPos.add(e.getBoundingBox().getXSize() / 2, e.getBoundingBox().getYSize(), e.getBoundingBox().getZSize() / 2)));
+						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
+						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2)));
 			}
 
 			int mode = getSetting(0).asMode().mode;
@@ -64,8 +64,8 @@ public class ArrowJuke extends Module {
 			for (int i = 0; i < 75; i++) {
 				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5));
 				Box nextBox = new Box(
-						nextPos.subtract(e.getBoundingBox().getXSize() / 2, 0, e.getBoundingBox().getZSize() / 2),
-						nextPos.add(e.getBoundingBox().getXSize() / 2, e.getBoundingBox().getYSize(), e.getBoundingBox().getZSize() / 2));
+						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
+						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2));
 
 				if (pBox.intersects(nextBox)) {
 					for (Vec3d vel : new Vec3d[] { new Vec3d(1, 0, 0), new Vec3d(-1, 0, 0), new Vec3d(0, 0, 1) }) {

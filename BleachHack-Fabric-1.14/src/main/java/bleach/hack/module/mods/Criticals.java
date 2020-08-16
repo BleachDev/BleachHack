@@ -25,9 +25,9 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
 
 /**
  * @author sl
@@ -59,7 +59,7 @@ public class Criticals extends Module {
 	private void doCritical() {
 		if (!mc.player.onGround)
 			return;
-		if (mc.player.isInLava() || mc.player.isInWater())
+		if (mc.player.isInLava() || mc.player.isTouchingWater())
 			return;
 		double posX = mc.player.x;
 		double posY = mc.player.y;

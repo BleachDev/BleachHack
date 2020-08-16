@@ -50,7 +50,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.SystemUtil;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
 public class BleachMainMenu extends AbstractWindowScreen {
@@ -267,7 +267,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 			/* Splash Text */
 			GL11.glTranslated(x + w / 2 + 80, y + h / 4 + 8, 0.0F);
 			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-			float float_4 = 1.8F - MathHelper.abs(MathHelper.sin(SystemUtil.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
+			float float_4 = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
 			float_4 = float_4 * 60.0F / (font.getStringWidth(splash) + 32);
 			GL11.glScalef(float_4, float_4, float_4);
 			this.drawCenteredString(font, splash, 0, -8, 16776960);
@@ -323,7 +323,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 		try {
 			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
 				if (double_1 > width / 2 - 80 && double_1 < width / 2 + 80 && double_2 > 0 && double_2 < 20) {
-					SystemUtil.getOperatingSystem().open(new URI("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
+					Util.getOperatingSystem().open(new URI("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
 				}
 			}
 		} catch (Exception e) {

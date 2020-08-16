@@ -5,7 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
+import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -24,7 +24,7 @@ public class ElytraReplace extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if ((mc.currentScreen instanceof AbstractContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null)
+		if ((mc.currentScreen instanceof ContainerScreen && !(mc.currentScreen instanceof InventoryScreen)) && mc.currentScreen != null)
 			return;
 
 		int chestSlot = 38;

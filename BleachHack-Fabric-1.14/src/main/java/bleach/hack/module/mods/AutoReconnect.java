@@ -33,14 +33,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.packet.DisconnectS2CPacket;
-import net.minecraft.client.options.ServerEntry;
-import net.minecraft.server.network.packet.HandshakeC2SPacket;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.Text;
 
 public class AutoReconnect extends Module {
 
-	public ServerEntry server;
+	public ServerInfo server;
 
 	public AutoReconnect() {
 		super("AutoReconnect", KEY_UNBOUND, Category.MISC, "Shows reconnect options when disconnecting from a server",
@@ -71,7 +71,7 @@ public class AutoReconnect extends Module {
 	public void sendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof HandshakeC2SPacket) {
 			try {
-				server = new ServerEntry("Server",
+				server = new ServerInfo("Server",
 						(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
 								+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"),
 						false);

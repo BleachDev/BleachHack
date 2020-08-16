@@ -17,9 +17,9 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.file.BleachFileHelper;
-import net.minecraft.client.network.packet.ChatMessageS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.packet.ChatMessageC2SPacket;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
+import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 
 public class CustomChat extends Module {
 

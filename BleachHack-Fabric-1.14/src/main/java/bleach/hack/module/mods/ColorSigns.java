@@ -5,7 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import net.minecraft.server.network.packet.UpdateSignC2SPacket;
+import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 
 public class ColorSigns extends Module {
 

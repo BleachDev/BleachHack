@@ -29,13 +29,14 @@ import net.minecraft.client.render.block.FluidRenderer;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.ExtendedBlockView;
 
 @Mixin(FluidRenderer.class)
 public class MixinFluidRenderer {
+	
 	@Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
-	public void tesselate(ExtendedBlockView extendedBlockView_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1, FluidState fluidState_1,
+	public void tesselate(BlockRenderView blockRenderView_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1, FluidState fluidState_1,
 			CallbackInfoReturnable<Boolean> callbackInfo) {
 		Xray xray = (Xray) ModuleManager.getModule(Xray.class);
 		if (xray.getSetting(0).asToggle().state)

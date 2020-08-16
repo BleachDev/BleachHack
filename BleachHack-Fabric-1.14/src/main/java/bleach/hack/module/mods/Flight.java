@@ -30,7 +30,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -109,7 +109,7 @@ public class Flight extends Module {
 				mc.player.jump();
 			} else {
 				if (InputUtil.isKeyPressed(mc.window.getHandle(), InputUtil.fromName(mc.options.keySneak.getName()).getKeyCode())) {
-					mc.player.setPosition(mc.player.x, mc.player.y - speed / 10f, mc.player.z);
+					mc.player.updatePosition(mc.player.x, mc.player.y - speed / 10f, mc.player.z);
 				}
 			}
 		}

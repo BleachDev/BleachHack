@@ -30,24 +30,24 @@ import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
 import net.minecraft.client.gui.screen.ingame.ContainerProvider;
+import net.minecraft.client.gui.screen.ingame.ContainerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.container.Container;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 
-@Mixin(AbstractContainerScreen.class)
+@Mixin(ContainerScreen.class)
 public abstract class MixinContainerScreen<T extends Container> extends Screen implements ContainerProvider<T> {
 
 	@Shadow
-	public int left;
+	public int x;
 
 	@Shadow
-	public int top;
+	public int y;
 
 	public MixinContainerScreen(Container container_1, PlayerInventory playerInventory_1, Text text_1) {
 		super(text_1);
@@ -61,11 +61,11 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 
 		AbstractDonkeyEntity entity = (AbstractDonkeyEntity) MinecraftClient.getInstance().player.getVehicle();
 
-		addButton(new ButtonWidget(left + 82, top + 4, 44, 12, "AutoDupe", button -> {
+		addButton(new ButtonWidget(x + 82, y + 4, 44, 12, "AutoDupe", button -> {
 			ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
 		}));
 
-		addButton(new ButtonWidget(left + 130, top + 4, 39, 12, "Dupe", button -> {
+		addButton(new ButtonWidget(x + 130, y + 4, 39, 12, "Dupe", button -> {
 			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
 
 			MinecraftClient.getInstance().player.networkHandler.sendPacket(
@@ -79,7 +79,7 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 	@Inject(at = @At("RETURN"), method = "render(IIF)V")
 	public void render(int int_1, int int_2, float float_1, CallbackInfo info) {
 		EventDrawContainer event = new EventDrawContainer(
-				(AbstractContainerScreen<?>) MinecraftClient.getInstance().currentScreen, int_1, int_2); // hmm
+				(ContainerScreen<?>) MinecraftClient.getInstance().currentScreen, int_1, int_2); // hmm
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();

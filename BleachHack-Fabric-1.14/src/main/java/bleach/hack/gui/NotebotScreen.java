@@ -38,11 +38,11 @@ import bleach.hack.module.mods.Notebot;
 import bleach.hack.utils.NotebotUtils;
 import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.SystemUtil;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
 public class NotebotScreen extends AbstractWindowScreen {
@@ -124,7 +124,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 					drawCenteredString(font, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(),
 							x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
 					GL11.glPushMatrix();
-					GuiLighting.enableForItems();
+					DiffuseLighting.enableForItems();
 					if (e.getKey() == Instrument.HARP)
 						itemRenderer.renderGuiItem(new ItemStack(Items.DIRT), x + w - w / 4 + 40, y + 46 + c2 * 10);
 					if (e.getKey() == Instrument.BASEDRUM)
@@ -202,7 +202,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 				page++;
 			if (double_1 > x + w - 44 && double_1 < x + w && double_2 > y + 3 && double_2 < y + 15) {
 				try {
-					SystemUtil.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=Z6O80jItoAk"));
+					Util.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=Z6O80jItoAk"));
 				} catch (Exception e) {
 				}
 			}

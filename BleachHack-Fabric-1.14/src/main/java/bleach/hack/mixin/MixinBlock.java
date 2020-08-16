@@ -25,8 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.Xray;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -76,10 +76,10 @@ public class MixinBlock {
 	}
 
 	@Inject(method = "getRenderLayer", at = @At("HEAD"), cancellable = true)
-	public void getRenderLayer(CallbackInfoReturnable<BlockRenderLayer> callback) {
+	public void getRenderLayer(CallbackInfoReturnable<RenderLayer> callback) {
 		try {
 			if (ModuleManager.getModule(Xray.class).isToggled()) {
-				callback.setReturnValue(BlockRenderLayer.TRANSLUCENT);
+				callback.setReturnValue(RenderLayer.TRANSLUCENT);
 				callback.cancel();
 			}
 		} catch (Exception ignored) {

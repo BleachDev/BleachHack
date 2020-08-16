@@ -33,10 +33,10 @@ import bleach.hack.utils.PlayerCopyEntity;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.HorseBaseEntity;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
-import net.minecraft.server.network.packet.VehicleMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
 public class Freecam extends Module {
@@ -90,7 +90,7 @@ public class Freecam extends Module {
 		mc.player.abilities.flying = prevFlying;
 		mc.player.abilities.setFlySpeed(prevFlySpeed);
 
-		mc.player.setPositionAndAngles(playerPos[0], playerPos[1], playerPos[2], playerRot[0], playerRot[1]);
+		mc.player.updatePositionAndAngles(playerPos[0], playerPos[1], playerPos[2], playerRot[0], playerRot[1]);
 		mc.player.setVelocity(Vec3d.ZERO);
 
 		if (riding != null && mc.world.getEntityById(riding.getEntityId()) != null) {

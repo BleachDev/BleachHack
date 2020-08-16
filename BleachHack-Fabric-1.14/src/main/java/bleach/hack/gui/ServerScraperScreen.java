@@ -26,8 +26,8 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.network.ServerEntryNetworkPart;
-import net.minecraft.client.options.ServerEntry;
+import net.minecraft.client.network.MultiplayerServerListPinger;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.options.ServerList;
 import net.minecraft.text.LiteralText;
 
@@ -158,17 +158,17 @@ public class ServerScraperScreen extends Screen {
 
 class BleachServerPinger {
 
-	public ServerEntry server;
+	public ServerInfo server;
 	public boolean done = false;
 	public boolean failed = false;
 
 	public void ping(String ip, int port) {
-		server = new ServerEntry(ip, ip + ":" + port, false);
+		server = new ServerInfo(ip, ip + ":" + port, false);
 		System.out.println("Starting Ping " + ip + ":" + port);
 		new Thread(() -> {
-			ServerEntryNetworkPart pinger = new ServerEntryNetworkPart();
+			MultiplayerServerListPinger pinger = new MultiplayerServerListPinger();
 			try {
-				pinger.method_3003(server);
+				pinger.add(server);
 			} catch (Exception e) {
 				failed = true;
 			}

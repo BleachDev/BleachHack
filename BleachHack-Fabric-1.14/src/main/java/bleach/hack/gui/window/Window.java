@@ -27,7 +27,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -99,9 +99,9 @@ public class Window {
 		if (icon != null && selected) {
 			GL11.glPushMatrix();
 			GL11.glScaled(0.55, 0.55, 1);
-			GuiLighting.enable();
+			DiffuseLighting.enable();
 			MinecraftClient.getInstance().getItemRenderer().renderGuiItem(icon, (int) ((x1 + 3) * 1 / 0.55), (int) ((y1 + 3) * 1 / 0.55));
-			GuiLighting.disable();
+			DiffuseLighting.disable();
 			GL11.glPopMatrix();
 		}
 
@@ -174,7 +174,7 @@ public class Window {
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GL11.glShadeModel(7425);
 		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = tessellator_1.getBufferBuilder();
+		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
 		bufferBuilder_1.vertex(x1, y1, 0).color(float_2, float_3, float_4, float_1).next();
 		bufferBuilder_1.vertex(x1, y2, 0).color(float_2, float_3, float_4, float_1).next();

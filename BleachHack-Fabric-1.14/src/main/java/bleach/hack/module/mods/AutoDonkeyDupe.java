@@ -25,10 +25,10 @@ import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Items;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket;
-import net.minecraft.server.network.packet.ClientCommandC2SPacket.Mode;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket.InteractionType;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.InteractionType;
 import net.minecraft.util.Hand;
 
 public class AutoDonkeyDupe extends Module {
@@ -166,19 +166,19 @@ public class AutoDonkeyDupe extends Module {
 			if (slotsToMove.isEmpty()) {
 				boolean empty = true;
 				for (int i = 2; i <= slots + 1; i++) {
-					if (mc.player.container.slotList.get(i).hasStack()) {
+					if (mc.player.container.slots.get(i).hasStack()) {
 						empty = false;
 						break;
 					}
 				}
 
 				if (empty) {
-					for (int i = slots + 2; i < mc.player.container.slotList.size(); i++) {
-						if (mc.player.container.slotList.get(i).hasStack()) {
-							if (mc.player.container.slotList.get(i).getStack().getItem() == Items.CHEST)
+					for (int i = slots + 2; i < mc.player.container.slots.size(); i++) {
+						if (mc.player.container.slots.get(i).hasStack()) {
+							if (mc.player.container.slots.get(i).getStack().getItem() == Items.CHEST)
 								continue;
-							if (!(mc.player.container.slotList.get(i).getStack().getItem() instanceof BlockItem
-									&& ((BlockItem) mc.player.container.slotList.get(i).getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
+							if (!(mc.player.container.slots.get(i).getStack().getItem() instanceof BlockItem
+									&& ((BlockItem) mc.player.container.slots.get(i).getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
 									&& getSetting(2).asToggle().state)
 								continue;
 							slotsToMove.add(i);
@@ -228,11 +228,11 @@ public class AutoDonkeyDupe extends Module {
 	}
 
 	private boolean isDupeTime(AbstractDonkeyEntity e) {
-		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.container.slotList.size() == 46) {
+		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.container.slots.size() == 46) {
 			return false;
 		}
 
-		if (mc.player.container.slotList.size() > 38) {
+		if (mc.player.container.slots.size() > 38) {
 			for (int i = 2; i < getDupeSize(e) + 1; i++) {
 				if (mc.player.container.getSlot(i).hasStack()) {
 					return true;
@@ -244,11 +244,11 @@ public class AutoDonkeyDupe extends Module {
 	}
 
 	private int getDupeSize(AbstractDonkeyEntity e) {
-		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.container.slotList.size() == 46) {
+		if (mc.player.getVehicle() != e || e.hasChest() || mc.player.container.slots.size() == 46) {
 			return 0;
 		}
 
-		return mc.player.container.slotList.size() - 38;
+		return mc.player.container.slots.size() - 38;
 	}
 
 }

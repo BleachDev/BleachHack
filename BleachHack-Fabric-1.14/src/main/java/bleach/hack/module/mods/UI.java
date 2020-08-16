@@ -40,9 +40,9 @@ import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.network.packet.WorldTimeUpdateS2CPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -207,7 +207,7 @@ public class UI extends Module {
 			int count = 0;
 			int x1 = mc.window.getScaledWidth() / 2;
 			int y = mc.window.getScaledHeight() -
-					(mc.player.isInFluid(FluidTags.WATER) || mc.player.getBreath() < mc.player.getMaxBreath() ? 64 : 55);
+					(mc.player.isInFluid(FluidTags.WATER) || mc.player.getAir() < mc.player.getMaxAir() ? 64 : 55);
 			for (ItemStack is : mc.player.inventory.armor) {
 				count++;
 				if (is.isEmpty())

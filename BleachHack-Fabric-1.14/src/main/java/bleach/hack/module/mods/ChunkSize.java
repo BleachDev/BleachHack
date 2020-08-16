@@ -108,7 +108,7 @@ public class ChunkSize extends Module {
 		compoundTag_2.putInt("zPos", chunkPos_1.z);
 		compoundTag_2.putLong("LastUpdate", serverWorld_1.getTime());
 		compoundTag_2.putLong("InhabitedTime", chunk_1.getInhabitedTime());
-		compoundTag_2.putString("Status", chunk_1.getStatus().getName());
+		compoundTag_2.putString("Status", chunk_1.getStatus().getId());
 		UpgradeData upgradeData_1 = chunk_1.getUpgradeData();
 		if (!upgradeData_1.method_12349()) {
 			compoundTag_2.put("UpgradeData", upgradeData_1.toTag());
@@ -124,8 +124,8 @@ public class ChunkSize extends Module {
 			ChunkSection chunkSection_1 = Arrays.stream(chunkSections_1).filter(chunkSection_1x -> {
 				return chunkSection_1x != null && chunkSection_1x.getYOffset() >> 4 == int_1;
 			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
-			ChunkNibbleArray chunkNibbleArray_1 = lightingProvider_1.get(LightType.BLOCK).getChunkLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
-			ChunkNibbleArray chunkNibbleArray_2 = lightingProvider_1.get(LightType.SKY).getChunkLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
+			ChunkNibbleArray chunkNibbleArray_1 = lightingProvider_1.get(LightType.BLOCK).getLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
+			ChunkNibbleArray chunkNibbleArray_2 = lightingProvider_1.get(LightType.SKY).getLightArray(ChunkSectionPos.from(chunkPos_1, int_1));
 			if (chunkSection_1 != WorldChunk.EMPTY_SECTION || chunkNibbleArray_1 != null || chunkNibbleArray_2 != null) {
 				compoundTag_6 = new CompoundTag();
 				compoundTag_6.putByte("Y", (byte) (int_1 & 255));
@@ -225,7 +225,7 @@ public class ChunkSize extends Module {
 
 		while (var34.hasNext()) {
 			Entry<Heightmap.Type, Heightmap> map$Entry_1 = var34.next();
-			if (chunk_1.getStatus().isSurfaceGenerated().contains(map$Entry_1.getKey())) {
+			if (chunk_1.getStatus().getHeightmapTypes().contains(map$Entry_1.getKey())) {
 				compoundTag_7.put(map$Entry_1.getKey().getName(), new LongArrayTag(map$Entry_1.getValue().asLongArray()));
 			}
 		}

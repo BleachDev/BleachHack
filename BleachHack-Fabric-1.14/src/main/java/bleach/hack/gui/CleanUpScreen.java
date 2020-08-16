@@ -25,7 +25,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.options.ServerEntry;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.options.ServerList;
 import net.minecraft.text.LiteralText;
 
@@ -33,7 +33,7 @@ public class CleanUpScreen extends Screen {
 
 	private MultiplayerScreen serverScreen;
 	private ServerList serverList;
-	private List<ServerEntry> servers = new ArrayList<>();
+	private List<ServerInfo> servers = new ArrayList<>();
 	private String result = "";
 
 	private boolean cleanNoHost = true;
@@ -67,7 +67,7 @@ public class CleanUpScreen extends Screen {
 			cleanAll = !cleanAll;
 		}));
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, "Clean", button -> {
-			for (ServerEntry s : servers) {
+			for (ServerInfo s : servers) {
 				try {
 					if (s.label == null)
 						s.label = "";

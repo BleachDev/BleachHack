@@ -13,7 +13,7 @@ import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.item.Items;
-import net.minecraft.server.network.packet.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -49,7 +49,7 @@ public class Surround extends Module {
 
 		if (getSetting(1).asToggle().state) {
 			Vec3d centerPos = new Vec3d(mc.player.getBlockPos()).add(0.5, 0.5, 0.5);
-			mc.player.setPosition(centerPos.x, centerPos.y, centerPos.z);
+			mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.onGround));
 		}
 
@@ -103,10 +103,10 @@ public class Surround extends Module {
 		} else {
 			Box box = mc.player.getBoundingBox();
 			for (BlockPos b : Sets.newHashSet(
-					new BlockPos(box.minX - 1, box.minY, box.minZ), new BlockPos(box.minX, box.minY, box.minZ - 1),
-					new BlockPos(box.maxX + 1, box.minY, box.minZ), new BlockPos(box.maxX, box.minY, box.minZ - 1),
-					new BlockPos(box.minX - 1, box.minY, box.maxZ), new BlockPos(box.minX, box.minY, box.maxZ + 1),
-					new BlockPos(box.maxX + 1, box.minY, box.maxZ), new BlockPos(box.maxX, box.minY, box.maxZ + 1))) {
+					new BlockPos(box.x1 - 1, box.y1, box.z1), new BlockPos(box.x1, box.y1, box.z1 - 1),
+					new BlockPos(box.x2 + 1, box.y1, box.z1), new BlockPos(box.x2, box.y1, box.z1 - 1),
+					new BlockPos(box.x1 - 1, box.y1, box.z2), new BlockPos(box.x1, box.y1, box.z2 + 1),
+					new BlockPos(box.x2 + 1, box.y1, box.z2), new BlockPos(box.x2, box.y1, box.z2 + 1))) {
 
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;

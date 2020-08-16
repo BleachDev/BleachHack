@@ -3,10 +3,10 @@ package bleach.hack.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.client.render.FirstPersonRenderer;
+import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.ItemStack;
 
-@Mixin(FirstPersonRenderer.class)
+@Mixin(HeldItemRenderer.class)
 public interface FirstPersonRendererAccessor {
 	@Accessor("mainHand")
 	public abstract void setItemStackMainHand(ItemStack value);
