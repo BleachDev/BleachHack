@@ -18,5 +18,5 @@ Extract the zip and put the jar into your mods folder
 
 ## Images
 
-![GUI](https://cdn.discordapp.com/attachments/745366273168244906/745368916792049825/unknown.png)  
-![GUI2](https://cdn.discordapp.com/attachments/745366273168244906/745368986518028509/unknown.png)  
+![GUI](https://media.discordapp.net/attachments/745366273168244906/745372657423351808/unknown.png)  
+![GUI2](https://media.discordapp.net/attachments/745366273168244906/745372674464809563/unknown.png)  
