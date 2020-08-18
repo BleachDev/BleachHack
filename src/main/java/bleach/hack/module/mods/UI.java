@@ -37,7 +37,6 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.biome.Biome;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -58,27 +57,37 @@ public class UI extends Module {
         super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
                 new SettingToggle("Arraylist", true).withDesc("Shows the module list").withChildren( // 0
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 1, 0).withDesc("y coordinates")),
-                new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist"), // 1
+                        new SettingSlider("y", 1, 3840, 11, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
+                new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist").withChildren( // 1
+                        new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+                        new SettingSlider("y", 1, 3840, 1, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("FPS", true).withDesc("Shows your FPS").withChildren( // 2
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 250, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 250, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Ping", true).withDesc("Shows your ping").withChildren( // 3
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 240, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 240, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords").withChildren( // 4
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 200, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 200, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("TPS", true).withDesc("Shows the estimated server tps").withChildren( // 5
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 210, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 210, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Lag-Meter", true).withDesc("Shows when the server is lagging"), // 6
                 new SettingToggle("Server", true).withDesc("Shows the current server you are on").withChildren( // 7
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 220, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 220, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Players", true).withDesc("Lists all the players in your render distance").withChildren( // 8
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 9
                         new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
                 new SettingToggle("Time", true).withDesc("Shows the current time").withChildren( // 10
@@ -88,19 +97,24 @@ public class UI extends Module {
                         new SettingToggle("Seconds", false).withDesc("adds seconds to time"),
                         new SettingToggle("AM/PM", true).withDesc("adds AM/PM marker to time"),
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("BPS", true).withDesc("Shows your block per second speed (WORK IN PROGRESS)").withChildren( // 11
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 260, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 260, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Online", true).withDesc("Shows count of players online").withChildren( // 12
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 270, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 270, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Welcome", true).withDesc("Shows your username").withChildren( // 13
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 190, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 190, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Biome", true).withDesc("Shows your current biome (WIP)").withChildren( // 14
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
                 new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 16
                 new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed") // 17
@@ -111,10 +125,8 @@ public class UI extends Module {
     public void onDrawOverlay(EventDrawOverlay event) {
 
         int arrayCount = 0;
-        if ((getSetting(0).asToggle().state || getSetting(1).asToggle().state) && !mc.options.debugEnabled) {
+        if (getSetting(0).asToggle().state && !mc.options.debugEnabled || getSetting(1).asToggle().state && !mc.options.debugEnabled) {
             List<String> lines = new ArrayList<>();
-
-            if (getSetting(1).asToggle().state) lines.add(0, "BleachHack " + BleachHack.VERSION);
 
             if (getSetting(0).asToggle().state) {
                 for (Module m : ModuleManager.getModules())
@@ -122,34 +134,32 @@ public class UI extends Module {
 
                 lines.sort((a, b) -> Integer.compare(mc.textRenderer.getWidth(b), mc.textRenderer.getWidth(a)));
             }
-
-            //new colors
-            for (String s : lines) {
-                //DrawableHelper.fill(event.matrix, 0, arrayCount*10, mc.textRenderer.getWidth(s)+3+extra, 10+(arrayCount*10), ColourThingy.guiColour());
-                //DrawableHelper.fill(event.matrix, 0, arrayCount*10, extra, 10+(arrayCount*10), color);
-                //DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(s)+3+extra, (arrayCount*10), mc.textRenderer.getWidth(s)+4+extra, 10+(arrayCount*10), color);
-
-                //if (arrayCount + 1 < lines.size()) {
-                //	DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(lines.get(arrayCount + 1))+4+extra, 10+(arrayCount*10),
-                //			mc.textRenderer.getWidth(s)+4+extra, 11+(arrayCount*10), color);
-                //}
-
-                mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * 10), ColourThingy.guiColour());
-                arrayCount++;
+            if (getSetting(0).asToggle().getChild(2).asToggle().state) {
+                for (String s : lines) {
+                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * 10), ColourThingy.guiColour());
+                    arrayCount++;
+                }
+            } else{
+                for (String s : lines) {
+                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(s), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * 10), ColourThingy.guiColour());
+                    arrayCount++;
+                }
             }
 
-            //if (!lines.isEmpty()) {
-            //	DrawableHelper.fill(event.matrix, 0, (arrayCount*10), mc.textRenderer.getWidth(lines.get(arrayCount-1))+4+extra, 1+(arrayCount*10), color);
-            //}
         }
 
         int playerarrayCount = 0;
         if (getSetting(8).asToggle().state && !mc.options.debugEnabled) {
-            mc.textRenderer.drawWithShadow(event.matrix, "Player Radar\u00a77:\u00a7r", (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
-            playerarrayCount++;
+            String radar_title = "Player Radar\u00a77:\u00a7r";
+            if (getSetting(8).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, radar_title, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+            } else {
+                mc.textRenderer.drawWithShadow(event.matrix, radar_title, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(radar_title), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+            }
 
-            for (Entity e : mc.world.getPlayers().stream().sorted(
-                    (a, b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
+                playerarrayCount++;
+
+            for (Entity e : mc.world.getPlayers().stream().sorted((a, b) -> Double.compare(mc.player.getPos().distanceTo(a.getPos()), mc.player.getPos().distanceTo(b.getPos())))
                     .collect(Collectors.toList())) {
                 if (e == mc.player) continue;
 
@@ -158,90 +168,168 @@ public class UI extends Module {
                 String text = "" + e.getDisplayName().getString() + " \u00a77\u01c0\u00a7r " +
                         e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
                         + " \u00a77(\u00a7r" + dist + "m\u00a77)\u00a7r";
-                if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
-                    mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
-                            new Color(85, 255, 255).getRGB());
-                } else {
-                    mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
-                            new Color(255, 85, 85).getRGB());
+                if (getSetting(8).asToggle().getChild(2).asToggle().state) {
+                    if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                                new Color(85, 255, 255).getRGB());
+                                playerarrayCount++;
+                    } else {
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                                new Color(255, 85, 85).getRGB());
+                                playerarrayCount++;
+                    }
+                } else{
+                    if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                                new Color(85, 255, 255).getRGB());
+                                playerarrayCount++;
+                    } else {
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                                new Color(255, 85, 85).getRGB());
+                                playerarrayCount++;
+                    }
                 }
-                playerarrayCount++;
             }
         }
 
-        if (getSetting(10).asToggle().state) {
-            mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r"
-                            + new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "")
-                            + (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "") + "h:mm"
-                            + (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "")
-                            + (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "")
-                            + (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date()),
-                    (int) getSetting(10).asToggle().getChild(5).asSlider().getValue(),
-                    (int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
-                    ColourThingy.guiColour());
+        if (getSetting(10).asToggle().state && !mc.options.debugEnabled) {
+            if (getSetting(10).asToggle().getChild(7).asToggle().state) {
+                String time_now = new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "") + (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "") + "h:mm" + (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "") + (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "") + (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date());
+                mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r" + time_now,
+                        (int) getSetting(10).asToggle().getChild(5).asSlider().getValue(),
+                        (int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                String time_now = new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "") + (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "") + "h:mm" + (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "") + (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "") + (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date());
+                mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r" + time_now,
+                        (int) getSetting(10).asToggle().getChild(5).asSlider().getValue() - mc.textRenderer.getWidth(time_now),
+                        (int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            }
         }
 
-        if (getSetting(4).asToggle().state) {
+        if (getSetting(1).asToggle().state && !mc.options.debugEnabled) {
+            String watermark = "BleachHack " + BleachHack.VERSION;
+            if (getSetting(1).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, watermark, (int) getSetting(1).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(1).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, watermark, (int) getSetting(1).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(watermark), (int) getSetting(1).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+            }
+        }
+
+        if (getSetting(4).asToggle().state && !mc.options.debugEnabled) {
             boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
             BlockPos pos = mc.player.getBlockPos();
             Vec3d vec = mc.player.getPos();
             BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
                     : new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
-            mc.textRenderer.drawWithShadow(event.matrix, "XYZ\u00a77: \u00a7r" + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-                            + " \u00a77[\u00a7r" + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]",
-                    (int) getSetting(4).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(4).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String coords = "XYZ\u00a77: \u00a7r" + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " \u00a77[\u00a7r" + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]";
+            if (getSetting(4).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, coords,
+                        (int) getSetting(4).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(4).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, coords,
+                        (int) getSetting(4).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(coords),
+                        (int) getSetting(4).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+
+            }
         }
 
-        if (getSetting(7).asToggle().state) {
+        if (getSetting(7).asToggle().state && !mc.options.debugEnabled) {
             String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-            mc.textRenderer.drawWithShadow(event.matrix, "Server\u00a77: \u00a7r" + server,
-                    (int) getSetting(7).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(7).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String server1 = "Server\u00a77: \u00a7r" + server;
+            if (getSetting(7).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, server1,
+                        (int) getSetting(7).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(7).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, server1,
+                        (int) getSetting(7).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(server1),
+                        (int) getSetting(7).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            }
         }
 
 
-        if (getSetting(2).asToggle().state) {
+        if (getSetting(2).asToggle().state && !mc.options.debugEnabled) {
             int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
-            mc.textRenderer.drawWithShadow(event.matrix, "FPS\u00a77: \u00a7r" + fps,
-                    (int) getSetting(2).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(2).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String fps1 = "FPS\u00a77: \u00a7r" + fps;
+            if (getSetting(2).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, fps1,
+                        (int) getSetting(2).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(2).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, fps1,
+                        (int) getSetting(2).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(fps1),
+                        (int) getSetting(2).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+
+            }
         }
 
-        if (getSetting(3).asToggle().state) {
+
+
+        if (getSetting(3).asToggle().state && !mc.options.debugEnabled) {
             PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
             int ping = playerEntry == null ? 0 : playerEntry.getLatency();
-            mc.textRenderer.drawWithShadow(event.matrix, "Ping\u00a77: \u00a7r" + ping,
-                    (int) getSetting(3).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(3).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String ping1 = "Ping\u00a77: \u00a7r" + ping;
+            if (getSetting(3).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, ping1,
+                        (int) getSetting(3).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(3).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, ping1,
+                        (int) getSetting(3).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(ping1),
+                        (int) getSetting(3).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+
+            }
         }
 
-        if (getSetting(11).asToggle().state) {
+        if (getSetting(11).asToggle().state && !mc.options.debugEnabled) {
             DecimalFormat decimalFormat = new DecimalFormat("0.0");
             final double deltaX = Math.abs(mc.player.getPos().getX() - mc.player.prevX);
             final double deltaZ = Math.abs(mc.player.getPos().getZ() - mc.player.prevZ);
             String bps = decimalFormat.format((deltaX + deltaZ) * 20);
 
-            mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" + bps,
+            if (getSetting(11).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" + bps,
                     (int) getSetting(11).asToggle().getChild(0).asSlider().getValue(),
                     (int) getSetting(11).asToggle().getChild(1).asSlider().getValue(),
                     ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" + bps,
+                        (int) getSetting(11).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(bps),
+                        (int) getSetting(11).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            }
         }
 
-        if (getSetting(5).asToggle().state) {
+        if (getSetting(5).asToggle().state && !mc.options.debugEnabled) {
             String suffix = "\u00a77";
             if (lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
             else if (lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
             else if (lastPacket + 2500 < System.currentTimeMillis()) suffix += "..";
             else if (lastPacket + 1200 < System.currentTimeMillis()) suffix += ".";
-            mc.textRenderer.drawWithShadow(event.matrix, "TPS\u00a77: \u00a7r" + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix,
-                    (int) getSetting(5).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(5).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String tps1 = getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix;
+            if (getSetting(5).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, "TPS\u00a77: \u00a7r" + tps1,
+                        (int) getSetting(5).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(5).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, "TPS\u00a77: \u00a7r" + tps1,
+                        (int) getSetting(5).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(tps1),
+                        (int) getSetting(5).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            }
+
         }
 
 
@@ -255,36 +343,56 @@ public class UI extends Module {
             }
         }
 
-
-        if (getSetting(13).asToggle().state) {
-            mc.textRenderer.drawWithShadow(event.matrix, "Welcome\u00a77, \u00a7r" + mc.player.getName().asString(),
+        if (getSetting(13).asToggle().state && !mc.options.debugEnabled) {
+            String welcome = "Welcome\u00a77, \u00a7r" + mc.player.getName().asString();
+            if (getSetting(13).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, welcome,
                     (int) getSetting(13).asToggle().getChild(0).asSlider().getValue(),
                     (int) getSetting(13).asToggle().getChild(1).asSlider().getValue(),
                     ColourThingy.guiColour());
-        }
-
-
-        if (getSetting(12).asToggle().state) {
-            int playerCount = mc.player.networkHandler.getPlayerList().size();
-            mc.textRenderer.drawWithShadow(event.matrix, "Online\u00a77: \u00a7r" + playerCount,
-                    (int) getSetting(12).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(12).asToggle().getChild(1).asSlider().getValue(),
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, welcome,
+                    (int) getSetting(13).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(welcome),
+                    (int) getSetting(13).asToggle().getChild(1).asSlider().getValue(),
                     ColourThingy.guiColour());
+            }
         }
 
-        if (getSetting(14).asToggle().state) {
+
+        if (getSetting(12).asToggle().state && !mc.options.debugEnabled) {
+            String playercount = "Online\u00a77: \u00a7r" + mc.player.networkHandler.getPlayerList().size();
+            if (getSetting(12).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, playercount,
+                        (int) getSetting(12).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(12).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else {
+                mc.textRenderer.drawWithShadow(event.matrix, playercount,
+                        (int) getSetting(12).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(playercount),
+                        (int) getSetting(12).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            }
+        }
+
+        if (getSetting(14).asToggle().state && !mc.options.debugEnabled) {
             String biome = mc.world.getBiome(mc.player.getBlockPos()).getCategory().getName();
             String biome1 = biome.substring(0, 1).toUpperCase() + biome.substring(1);
 
-            mc.textRenderer.drawWithShadow(event.matrix, "Biome\u00a77: \u00a7r" + biome1,
-                    (int) getSetting(14).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            if (getSetting(14).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, "Biome\u00a77: \u00a7r" + biome1,
+                        (int) getSetting(14).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else {
+                mc.textRenderer.drawWithShadow(event.matrix, "Biome\u00a77: \u00a7r" + biome1,
+                        (int) getSetting(14).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(biome1),
+                        (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            }
         }
 
-        if (getSetting(9).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
+        if (getSetting(9).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator() && !mc.options.debugEnabled) {
             GL11.glPushMatrix();
-            //GL11.glEnable(GL11.GL_TEXTURE_2D);
 
             int count = 0;
             int x1 = mc.getWindow().getScaledWidth() / 2;
