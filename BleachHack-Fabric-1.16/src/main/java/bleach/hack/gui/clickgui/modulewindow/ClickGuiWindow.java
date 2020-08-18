@@ -20,6 +20,7 @@ public abstract class ClickGuiWindow extends Window {
 	public boolean lmDown = false;
 	public boolean rmDown = false;
 	public boolean lmHeld = false;
+	public int mwScroll = 0;
 
 	public ClickGuiWindow(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
 		super(x1, y1, x2, y2, title, icon);
@@ -52,12 +53,13 @@ public abstract class ClickGuiWindow extends Window {
 		return null;
 	}
 
-	public void updateKeys(int mouseX, int mouseY, int keyDown, boolean lmDown, boolean rmDown, boolean lmHeld) {
+	public void updateKeys(int mouseX, int mouseY, int keyDown, boolean lmDown, boolean rmDown, boolean lmHeld, int mwScroll) {
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		this.keyDown = keyDown;
 		this.lmDown = lmDown;
 		this.rmDown = rmDown;
 		this.lmHeld = lmHeld;
+		this.mwScroll = mwScroll;
 	}
 }
