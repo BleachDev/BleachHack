@@ -89,7 +89,9 @@ public class UI extends Module {
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true),
-                        new SettingSlider("Text Gap", 1, 10, 10, 0).withDesc("new line space distance")),
+                        new SettingSlider("Text Gap", 1, 10, 10, 0).withDesc("new line space distance"),
+                        new SettingToggle("Show coordinates", false).withDesc("shows xyz coords of players near you"),
+                        new SettingSlider("Player distance", 1, 128, 60, 0).withDesc("Lower or raise player distance")),
                 new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 9
                         new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
                 new SettingToggle("Time", true).withDesc("Shows the current time").withChildren( // 10
@@ -167,28 +169,29 @@ public class UI extends Module {
 
                 int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
-                String text = "" + e.getDisplayName().getString() + " \u00a77\u01c0\u00a7r " +
-                        e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
-                        + " \u00a77(\u00a7r" + dist + "m\u00a77)\u00a7r";
-                if (getSetting(8).asToggle().getChild(2).asToggle().state) {
-                    if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
-                                new Color(85, 255, 255).getRGB());
-                                playerarrayCount++;
+                String text = "" + e.getDisplayName().getString() + " " + (getSetting(8).asToggle().getChild(4).asToggle().state ? "\u00a77\u01c0\u00a7r " + e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ() + " " : "")
+                        + "\u00a77(\u00a7r" + dist + "m\u00a77)\u00a7r";
+                if (dist <= (int) getSetting(8).asToggle().getChild(5).asSlider().getValue()) {
+                    if (getSetting(8).asToggle().getChild(2).asToggle().state) {
+                        if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
+                            mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
+                                    new Color(85, 255, 255).getRGB());
+                            playerarrayCount++;
+                        } else {
+                            mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
+                                    new Color(255, 85, 85).getRGB());
+                            playerarrayCount++;
+                        }
                     } else {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
-                                new Color(255, 85, 85).getRGB());
-                                playerarrayCount++;
-                    }
-                } else{
-                    if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
-                                new Color(85, 255, 255).getRGB());
-                                playerarrayCount++;
-                    } else {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
-                                new Color(255, 85, 85).getRGB());
-                                playerarrayCount++;
+                        if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
+                            mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
+                                    new Color(85, 255, 255).getRGB());
+                            playerarrayCount++;
+                        } else {
+                            mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
+                                    new Color(255, 85, 85).getRGB());
+                            playerarrayCount++;
+                        }
                     }
                 }
             }
