@@ -80,7 +80,7 @@ public class UI extends Module {
                         new SettingSlider("y", 1, 3840, 210, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
                 new SettingToggle("Lag-Meter", true).withDesc("Shows when the server is lagging"), // 6
-                new SettingToggle("Server", true).withDesc("Shows the current server you are on").withChildren( // 7
+                new SettingToggle("IP", true).withDesc("Shows the current server IP you are on").withChildren( // 7
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 220, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
@@ -240,7 +240,7 @@ public class UI extends Module {
 
         if (getSetting(7).asToggle().state && !mc.options.debugEnabled) {
             String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-            String server1 = "Server\u00a77: \u00a7r" + server;
+            String server1 = "IP\u00a77: \u00a7r" + server;
             if (getSetting(7).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, server1,
                         (int) getSetting(7).asToggle().getChild(0).asSlider().getValue(),
