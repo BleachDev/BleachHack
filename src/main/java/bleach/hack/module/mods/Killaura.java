@@ -47,12 +47,12 @@ public class Killaura extends Module {
     public Killaura() {
         super("Killaura", KEY_UNBOUND, Category.COMBAT, "Automatically attacks entities",
                 new SettingToggle("Players", true),
-                new SettingToggle("Mobs", true),
+                new SettingToggle("Mobs", false),
                 new SettingToggle("Animals", false),
                 new SettingToggle("Armor Stands", false),
                 new SettingRotate(true),
-                new SettingToggle("Thru Walls", false),
-                new SettingToggle("1.9 Delay", false),
+                new SettingToggle("Thru Walls", true),
+                new SettingToggle("1.9 Delay", true),
                 new SettingSlider("Range", 0, 6, 4.25, 2),
                 new SettingSlider("CPS", 0, 20, 8, 0));
     }

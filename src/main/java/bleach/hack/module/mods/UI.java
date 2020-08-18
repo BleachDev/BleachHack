@@ -37,6 +37,7 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.biome.Biome;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -77,7 +78,7 @@ public class UI extends Module {
                         new SettingSlider("y", 1, 3840, 220, 0).withDesc("y coordinates")),
                 new SettingToggle("Players", true).withDesc("Lists all the players in your render distance").withChildren( // 8
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates")),
                 new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 9
                         new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
                 new SettingToggle("Time", true).withDesc("Shows the current time").withChildren( // 10
@@ -97,9 +98,12 @@ public class UI extends Module {
                 new SettingToggle("Welcome", true).withDesc("Shows your username").withChildren( // 13
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 190, 0).withDesc("y coordinates")),
-                new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 14
-                new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 15
-                new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed") // 16
+                new SettingToggle("Biome", true).withDesc("Shows your current biome (WIP)").withChildren( // 14
+                        new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
+                        new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates")),
+                new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
+                new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 16
+                new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed") // 17
         );
     }
 
@@ -268,6 +272,16 @@ public class UI extends Module {
                     ColourThingy.guiColour());
         }
 
+        if (getSetting(14).asToggle().state) {
+            String biome = mc.world.getBiome(mc.player.getBlockPos()).getCategory().getName();
+            String biome1 = biome.substring(0, 1).toUpperCase() + biome.substring(1);
+
+            mc.textRenderer.drawWithShadow(event.matrix, "Biome\u00a77: \u00a7r" + biome1,
+                    (int) getSetting(14).asToggle().getChild(0).asSlider().getValue(),
+                    (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
+                    ColourThingy.guiColour());
+        }
+
         if (getSetting(9).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
             GL11.glPushMatrix();
             //GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -350,9 +364,9 @@ public class UI extends Module {
 
         if (ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
 
-        return getRainbow((float) ui.getSetting(14).asSlider().getValue(),
-                (float) ui.getSetting(15).asSlider().getValue(),
-                ui.getSetting(16).asSlider().getValue(),
+        return getRainbow((float) ui.getSetting(15).asSlider().getValue(),
+                (float) ui.getSetting(16).asSlider().getValue(),
+                ui.getSetting(17).asSlider().getValue(),
                 offset);
     }
 }

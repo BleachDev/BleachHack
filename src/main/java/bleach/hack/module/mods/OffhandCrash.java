@@ -17,6 +17,7 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -26,6 +27,7 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -34,7 +36,8 @@ public class OffhandCrash extends Module {
     public OffhandCrash() {
         super("OffhandCrash", KEY_UNBOUND, Category.EXPLOITS, "Lags people using the snowball exploit",
                 new SettingSlider("Switches", 0, 2000, 420, 0),
-                new SettingToggle("Player Packet", true));
+                new SettingToggle("Player Packet", true),
+                new SettingToggle("Auto-Off", true));
     }
 
     @Subscribe
@@ -44,4 +47,9 @@ public class OffhandCrash extends Module {
             if (getSetting(1).asToggle().state) mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
         }
     }
+    @Subscribe
+    private void EventDisconnect(EventReadPacket event) {
+        if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(2).asToggle().state) setToggled(false);
+    }
+
 }
