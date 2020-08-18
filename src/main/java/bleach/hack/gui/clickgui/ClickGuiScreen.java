@@ -47,6 +47,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
     private boolean lmDown = false;
     private boolean rmDown = false;
     private boolean lmHeld = false;
+    private int mwScroll = 0;
 
     private TextFieldWidget searchField;
 
@@ -123,7 +124,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
                     ((ModuleWindow) w).setLen(len);
                 }
 
-                ((ClickGuiWindow) w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
+                ((ClickGuiWindow) w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld, mwScroll);
             }
         }
 
@@ -170,6 +171,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         lmDown = false;
         rmDown = false;
         keyDown = -1;
+        mwScroll = 0;
     }
 
     public boolean mouseClicked(double double_1, double double_2, int int_1) {
@@ -200,7 +202,10 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         keyDown = int_1;
         return super.keyPressed(int_1, int_2, int_3);
     }
-
+    public boolean mouseScrolled(double double_1, double double_2, double double_3) {
+        mwScroll = (int) double_3;
+        return super.mouseScrolled(double_1, double_2, double_3);
+    }
     public void resetGui() {
         int x = 30;
         for (Window m : windows) {

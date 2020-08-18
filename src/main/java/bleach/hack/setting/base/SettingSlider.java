@@ -17,16 +17,17 @@
  */
 package bleach.hack.setting.base;
 
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.utils.ColourThingy;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class SettingSlider extends SettingBase {
 
@@ -74,10 +75,18 @@ public class SettingSlider extends SettingBase {
                 text + ": " + (decimals == 0 && getValue() > 100 ? Integer.toString((int) getValue()) : getValue()),
                 x + 2, y + 2, window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
 
-        if (window.mouseOver(x + 1, y, x + len - 2, y + 12) && window.lmHeld) {
-            int percent = ((window.mouseX - x) * 100) / (len - 2);
+        if (window.mouseOver(x + 1, y, x + len - 2, y + 12)) {
+            if (window.lmHeld) {
+                int percent = ((window.mouseX - x) * 100) / (len - 2);
 
-            setValue(round(percent * ((max - min) / 100) + min, decimals));
+                setValue(round(percent * ((max - min) / 100) + min, decimals));
+            }
+
+            if (window.mwScroll != 0) {
+                double units = 1 / (Math.pow(10, decimals));
+
+                setValue(MathHelper.clamp(getValue() + units * window.mwScroll, min, max));
+            }
         }
     }
 
