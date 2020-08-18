@@ -1,4 +1,5 @@
 # BleachHack 1.16.2 epearl edition
+[![Github All Releases](https://img.shields.io/github/downloads/22s/bleachhack-1.16-epearl-edition/total.svg)]()
 ![](https://img.shields.io/github/last-commit/22s/bleachhack-1.16-epearl-edition.svg)
 ![](https://img.shields.io/github/languages/code-size/22s/bleachhack-1.16-epearl-edition.svg)
 
@@ -17,20 +18,5 @@ Extract the zip and put the jar into your mods folder
 
 ## Images
 
-![GUI](https://i.imgur.com/d3ws32U.png)
-
-## Plans
-
- - [x] custom blue RPC logo  
- - [x] UI on by default  
- - [x] add border to gui  
- - [ ] auto-trap module  
- - [ ] better crystal-aura module  
- - [x] drawn modules command to unlist stuff in arraylist  
- - [ ] change hover module description colors to match theme  
- - [ ] make surround walk to center of block not tp  
- - [x] syncronize all the rgb in the gui color picker  
- - [ ] draggable or xyz customizable UI modules  
- - [ ] ability to save configs and switch between them  
- - [ ] ability to create columns and add/remove modules to them  
- - [ ] other stuff i dont remember   
+![GUI](https://cdn.discordapp.com/attachments/745366273168244906/745368916792049825/unknown.png)  
+![GUI2](https://cdn.discordapp.com/attachments/745366273168244906/745368986518028509/unknown.png)  
