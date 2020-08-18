@@ -58,7 +58,8 @@ public class UI extends Module {
                 new SettingToggle("Arraylist", true).withDesc("Shows the module list").withChildren( // 0
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 11, 0).withDesc("y coordinates"),
-                        new SettingToggle("Right Align", true)),
+                        new SettingToggle("Right Align", true),
+                        new SettingSlider("Text Gap", 1, 10, 10, 0).withDesc("new line space distance")),
                 new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist").withChildren( // 1
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 1, 0).withDesc("y coordinates"),
@@ -87,7 +88,8 @@ public class UI extends Module {
                 new SettingToggle("Players", true).withDesc("Lists all the players in your render distance").withChildren( // 8
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates"),
-                        new SettingToggle("Right Align", true)),
+                        new SettingToggle("Right Align", true),
+                        new SettingSlider("Text Gap", 1, 10, 10, 0).withDesc("new line space distance")),
                 new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 9
                         new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")),
                 new SettingToggle("Time", true).withDesc("Shows the current time").withChildren( // 10
@@ -136,12 +138,12 @@ public class UI extends Module {
             }
             if (getSetting(0).asToggle().getChild(2).asToggle().state) {
                 for (String s : lines) {
-                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * 10), ColourThingy.guiColour());
+                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColourThingy.guiColour());
                     arrayCount++;
                 }
             } else{
                 for (String s : lines) {
-                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(s), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * 10), ColourThingy.guiColour());
+                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(s), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColourThingy.guiColour());
                     arrayCount++;
                 }
             }
@@ -170,21 +172,21 @@ public class UI extends Module {
                         + " \u00a77(\u00a7r" + dist + "m\u00a77)\u00a7r";
                 if (getSetting(8).asToggle().getChild(2).asToggle().state) {
                     if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
                                 new Color(85, 255, 255).getRGB());
                                 playerarrayCount++;
                     } else {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
                                 new Color(255, 85, 85).getRGB());
                                 playerarrayCount++;
                     }
                 } else{
                     if (BleachHack.friendMang.has(e.getDisplayName().getString())) {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
                                 new Color(85, 255, 255).getRGB());
                                 playerarrayCount++;
                     } else {
-                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * 10),
+                        mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
                                 new Color(255, 85, 85).getRGB());
                                 playerarrayCount++;
                     }
