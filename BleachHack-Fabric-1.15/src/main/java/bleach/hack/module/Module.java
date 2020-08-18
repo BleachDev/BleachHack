@@ -38,7 +38,7 @@ public class Module {
 	private String name;
 	private int key;
 	private int defaultKey;
-	private boolean toggled = true;
+	private boolean toggled = false;
 	private Category category;
 	private String desc;
 	private List<SettingBase> settings = new ArrayList<>();
