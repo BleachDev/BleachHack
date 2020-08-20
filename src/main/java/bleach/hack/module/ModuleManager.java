@@ -67,6 +67,7 @@ public class ModuleManager {
             new FastUse(),
             new Flight(),
             new Freecam(),
+            new Yaw(),
             new Fullbright(),
             new Ghosthand(),
             new HandProgress(),

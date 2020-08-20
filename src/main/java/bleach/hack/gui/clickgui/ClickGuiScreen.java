@@ -90,11 +90,11 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
         this.renderBackground(matrix);
-        textRenderer.draw(matrix, "BleachHack 1.16 epearl edition", 3, 3, ColourThingy.guiColour());
+        textRenderer.drawWithShadow(matrix, "BleachHack 1.16 epearl edition", 3, 3, ColourThingy.guiColour());
         if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
-            textRenderer.draw(matrix,
+            textRenderer.drawWithShadow(matrix,
                     "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
-            textRenderer.draw(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
+            textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
                     ColourThingy.guiColour());
 
         }
