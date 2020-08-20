@@ -17,15 +17,15 @@
  */
 package bleach.hack.command;
 
-import bleach.hack.command.commands.*;
-import bleach.hack.utils.BleachLogger;
-
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.command.commands.*;
+import bleach.hack.utils.BleachLogger;
+
 public class CommandManager {
 
-    private static final List<Command> commands = Arrays.asList(
+    private static List<Command> commands = Arrays.asList(
             new CmdBind(),
             new CmdCI(),
             new CmdCustomChat(),
@@ -45,10 +45,10 @@ public class CommandManager {
             new CmdRbook(),
             new CmdRename(),
             new CmdRpc(),
-            new CmdDrawn(),
             new CmdSetting(),
             new CmdSkull(),
             new CmdToggle(),
+            new CmdDrawn(),
             new CmdXray());
 
     public static List<Command> getCommands() {
@@ -66,7 +66,7 @@ public class CommandManager {
                     c.onCommand(command, args.split(" "));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    BleachLogger.errorMessage("Invalid syntax!");
+                    BleachLogger.errorMessage("Invalid Syntax!");
                     BleachLogger.infoMessage(c.getSyntax());
                 }
                 return;

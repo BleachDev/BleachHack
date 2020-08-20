@@ -140,11 +140,17 @@ public class UI extends Module {
             }
             if (getSetting(0).asToggle().getChild(2).asToggle().state) {
                 for (String s : lines) {
+                    //if (s.equals("ElytraFly")) {
+                    //    s = "ElytraFly" + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether") ? " \u00a77[\u00a7rNether\u00a77]" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end") ? " \u00a77[\u00a7rEnd\u00a77]" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("overworld") ? " \u00a77[\u00a7rOverworld\u00a77]" : "");
+                    //}
                     mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColourThingy.guiColour());
                     arrayCount++;
                 }
             } else{
                 for (String s : lines) {
+                    //if (s.equals("ElytraFly")) {
+                    //    s = (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether") ? "\u00a77[\u00a7rNether\u00a77] \u00a7r" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end") ? "\u00a77[\u00a7rEnd\u00a77] \u00a7r" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("overworld") ? "\u00a77[\u00a7rOverworld\u00a77] \u00a7r" : "") + "ElytraFly";
+                    //}
                     mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(s), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColourThingy.guiColour());
                     arrayCount++;
                 }
@@ -223,7 +229,7 @@ public class UI extends Module {
         }
 
         if (getSetting(4).asToggle().state && !mc.options.debugEnabled) {
-            boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
+            boolean nether = mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether");
             BlockPos pos = mc.player.getBlockPos();
             Vec3d vec = mc.player.getPos();
             BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)

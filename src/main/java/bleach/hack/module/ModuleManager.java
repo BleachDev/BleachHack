@@ -17,30 +17,34 @@
  */
 package bleach.hack.module;
 
-import bleach.hack.event.events.EventKeyPress;
-import bleach.hack.module.mods.*;
-import com.google.common.eventbus.Subscribe;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.lwjgl.glfw.GLFW;
+
+import com.google.common.eventbus.Subscribe;
+
+import bleach.hack.event.events.EventKeyPress;
+import bleach.hack.module.mods.*;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
+
 public class ModuleManager {
 
-    private static final List<Module> mods = Arrays.asList(
+    private static List<Module> mods = Arrays.asList(
             new Ambience(),
             new AntiChunkBan(),
             new AntiHunger(),
             new ArrowJuke(),
+            new AutoArmor(),
             new AutoDonkeyDupe(),
             new AutoReconnect(),
             new AutoRespawn(),
             new AutoSign(),
             new AutoTool(),
             new AutoTotem(),
+            new ColourChooser(),
             new AutoWalk(),
             new BetterPortal(),
             new BlockParty(),
@@ -50,7 +54,6 @@ public class ModuleManager {
             new ChunkSize(),
             new ClickGui(),
             new ColorSigns(),
-            new ColourChooser(),
             new Criticals(),
             new CrystalAura(),
             new CustomChat(),
@@ -99,6 +102,8 @@ public class ModuleManager {
             new Trajectories(),
             new UI(),
             new Xray(),
+            //new Test(),
+            new ElytraSwap(),
             new Zoom());
 
     public static List<Module> getModules() {
@@ -117,7 +122,8 @@ public class ModuleManager {
 
     public static Module getModuleByName(String name) {
         for (Module m : mods) {
-            if (name.equalsIgnoreCase(m.getName())) return m;
+            if (name.equalsIgnoreCase(m.getName()))
+                return m;
         }
         return null;
     }
@@ -128,8 +134,9 @@ public class ModuleManager {
 
     @Subscribe
     public static void handleKeyPress(EventKeyPress eventKeyPress) {
-        if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) return;
+        if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3))
+            return;
 
-        mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(m -> m.toggle());
+        mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(Module::toggle);
     }
 }

@@ -35,7 +35,9 @@ public class ElytraFly extends Module {
     public ElytraFly() {
         super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
                 new SettingMode("Mode", "Normal", "Control", "Bruh Momentum"),
-                new SettingSlider("Speed", 0, 5, 0.8, 2));
+                new SettingSlider("Overworld Speed", 0, 5, 0.8, 2),
+                new SettingSlider("Nether Speed", 0, 5, 0.8, 2),
+                new SettingSlider("End Speed", 0, 5, 0.8, 2));
     }
 
     @Subscribe
@@ -55,11 +57,15 @@ public class ElytraFly extends Module {
 
     @Subscribe
     public void onTick(EventTick event) {
-        Vec3d vec3d = new Vec3d(0, 0, getSetting(1).asSlider().getValue())
-                .rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch))
-                .rotateY(-(float) Math.toRadians(mc.player.yaw));
-
-        //if (getSetting(0).toMode().mode == 1) vec3d = new Vec3d(vec3d.x, 0, vec3d.z);
+        assert mc.world != null;
+        Vec3d vec3d;
+        if (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end")) {
+            vec3d = new Vec3d(0, 0, getSetting(3).asSlider().getValue()).rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
+        } else if (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether")) {
+            vec3d = new Vec3d(0, 0, getSetting(2).asSlider().getValue()).rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
+        } else {
+            vec3d = new Vec3d(0, 0, getSetting(1).asSlider().getValue()).rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
+        }
 
         if (mc.player.isFallFlying()) {
             if (getSetting(0).asMode().mode == 0 && mc.options.keyForward.isPressed()) {
