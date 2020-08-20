@@ -23,6 +23,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
@@ -34,7 +35,8 @@ public class ElytraFly extends Module {
 
     public ElytraFly() {
         super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
-                new SettingMode("Mode", "Normal", "Control", "Bruh Momentum"),
+                new SettingToggle("Auto Open", true).withDesc("Auto open elytra (only works with control) WIP"),
+                new SettingMode("Mode", "Normal", "Control"/*, "Bruh Momentum"*/),
                 new SettingSlider("Overworld Speed", 0, 5, 0.8, 2),
                 new SettingSlider("Nether Speed", 0, 5, 0.8, 2),
                 new SettingSlider("End Speed", 0, 5, 0.8, 2));
@@ -43,7 +45,7 @@ public class ElytraFly extends Module {
     @Subscribe
     public void onClientMove(EventClientMove event) {
         /* Cancel the retarded auto elytra movement */
-        if (getSetting(0).asMode().mode == 1 && mc.player.isFallFlying()) {
+        if (getSetting(1).asMode().mode == 1 && mc.player.isFallFlying()) {
             if (!mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
                 event.vec3d = new Vec3d(event.vec3d.x, 0, event.vec3d.z);
             }
@@ -60,37 +62,35 @@ public class ElytraFly extends Module {
         assert mc.world != null;
         Vec3d vec3d;
         if (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end")) {
-            vec3d = new Vec3d(0, 0, getSetting(3).asSlider().getValue()).rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
+            vec3d = new Vec3d(0, 0, getSetting(4).asSlider().getValue()).rotateX(getSetting(1).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
         } else if (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether")) {
-            vec3d = new Vec3d(0, 0, getSetting(2).asSlider().getValue()).rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
+            vec3d = new Vec3d(0, 0, getSetting(3).asSlider().getValue()).rotateX(getSetting(1).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
         } else {
-            vec3d = new Vec3d(0, 0, getSetting(1).asSlider().getValue()).rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
+            vec3d = new Vec3d(0, 0, getSetting(2).asSlider().getValue()).rotateX(getSetting(1).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch)).rotateY(-(float) Math.toRadians(mc.player.yaw));
         }
-
+        if (!mc.player.isFallFlying() && !mc.player.isOnGround() && getSetting(1).asMode().mode == 1 && mc.player.age % 10 == 0 && getSetting(0).asToggle().state) {
+                mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
+        }
         if (mc.player.isFallFlying()) {
-            if (getSetting(0).asMode().mode == 0 && mc.options.keyForward.isPressed()) {
+            if (getSetting(1).asMode().mode == 0 && mc.options.keyForward.isPressed()) {
                 mc.player.setVelocity(
                         mc.player.getVelocity().x + vec3d.x + (vec3d.x - mc.player.getVelocity().x),
                         mc.player.getVelocity().y + vec3d.y + (vec3d.y - mc.player.getVelocity().y),
                         mc.player.getVelocity().z + vec3d.z + (vec3d.z - mc.player.getVelocity().z));
-            } else if (getSetting(0).asMode().mode == 1) {
+            } else if (getSetting(1).asMode().mode == 1) {
                 if (mc.options.keyBack.isPressed()) vec3d = vec3d.multiply(-1);
                 if (mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
                 if (mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
-                if (mc.options.keyJump.isPressed()) vec3d = vec3d.add(0, getSetting(1).asSlider().getValue(), 0);
-                if (mc.options.keySneak.isPressed()) vec3d = vec3d.add(0, -getSetting(1).asSlider().getValue(), 0);
+
+                //TODO check in on this later and add thingy to syncronize the world with its movement speed
+                if (mc.options.keyJump.isPressed()) vec3d = vec3d.add(0, getSetting(2).asSlider().getValue(), 0);
+                if (mc.options.keySneak.isPressed()) vec3d = vec3d.add(0, -getSetting(2).asSlider().getValue(), 0);
+
                 if (!mc.options.keyBack.isPressed() && !mc.options.keyLeft.isPressed()
                         && !mc.options.keyRight.isPressed() && !mc.options.keyForward.isPressed()
                         && !mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) vec3d = Vec3d.ZERO;
                 mc.player.setVelocity(vec3d.multiply(2));
             }
-        } else if (getSetting(0).asMode().mode == 2 && !mc.player.isOnGround()
-                && mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA && mc.player.fallDistance > 0.5) {
-            /* I tried packet mode and got whatever the fuck **i mean frick** this is */
-            if (mc.options.keySneak.isPressed()) return;
-            mc.player.setVelocity(vec3d);
-            mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
-            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
         }
     }
 }

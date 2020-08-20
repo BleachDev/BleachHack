@@ -51,10 +51,7 @@ public class BleachHack implements ModInitializer {
 
         eventBus.register(new Rainbow());
 
-        //v This makes a scat fetishist look like housekeeping.
         eventBus.register(new ModuleManager());
-        // wait why do we need this ^?
-        // Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
 
         String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
         if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
