@@ -34,14 +34,14 @@ public class Surround extends Module {
 
         int obby = -1;
         for (int i = 0; i < 9; i++) {
-            if (mc.player.inventory.getStack(i).getItem() == Items.OBSIDIAN) {
+            if (mc.player.inventory.getStack(i).getItem() == Items.NETHERITE_BLOCK || mc.player.inventory.getStack(i).getItem() == Items.OBSIDIAN) {
                 obby = i;
                 break;
             }
         }
 
         if (obby == -1) {
-            BleachLogger.errorMessage("No obsidian in hotbar!");
+            BleachLogger.errorMessage("No netherite/obsidian in hotbar!");
             setToggled(false);
             return;
         }
@@ -64,14 +64,14 @@ public class Surround extends Module {
 
         int obby = -1;
         for (int i = 0; i < 9; i++) {
-            if (mc.player.inventory.getStack(i).getItem() == Items.OBSIDIAN) {
+            if (mc.player.inventory.getStack(i).getItem() == Items.NETHERITE_BLOCK || mc.player.inventory.getStack(i).getItem() == Items.OBSIDIAN) {
                 obby = i;
                 break;
             }
         }
 
         if (obby == -1) {
-            BleachLogger.errorMessage("Ran out of obsidian!");
+            BleachLogger.errorMessage("Ran out of netherite/obsidian!");
             setToggled(false);
             return;
         }
