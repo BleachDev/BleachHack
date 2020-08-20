@@ -84,6 +84,8 @@ public class Surround extends Module {
 
         if (getSetting(0).asMode().mode == 0) {
             for (BlockPos b : new BlockPos[]{
+                    mc.player.getBlockPos().north().down(1), mc.player.getBlockPos().east().down(1),
+                    mc.player.getBlockPos().south().down(1), mc.player.getBlockPos().west().down(1),
                     mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
                     mc.player.getBlockPos().south(), mc.player.getBlockPos().west()}) {
 
@@ -102,6 +104,11 @@ public class Surround extends Module {
         } else {
             Box box = mc.player.getBoundingBox();
             for (BlockPos b : Sets.newHashSet(
+                    new BlockPos(box.minX - 1, box.minY - 1, box.minZ), new BlockPos(box.minX, box.minY - 1, box.minZ - 1),
+                    new BlockPos(box.maxX + 1, box.minY - 1, box.minZ), new BlockPos(box.maxX, box.minY - 1, box.minZ - 1),
+                    new BlockPos(box.minX - 1, box.minY - 1, box.maxZ), new BlockPos(box.minX, box.minY - 1, box.maxZ + 1),
+                    new BlockPos(box.maxX + 1, box.minY - 1, box.maxZ), new BlockPos(box.maxX, box.minY - 1, box.maxZ + 1),
+
                     new BlockPos(box.minX - 1, box.minY, box.minZ), new BlockPos(box.minX, box.minY, box.minZ - 1),
                     new BlockPos(box.maxX + 1, box.minY, box.minZ), new BlockPos(box.maxX, box.minY, box.minZ - 1),
                     new BlockPos(box.minX - 1, box.minY, box.maxZ), new BlockPos(box.minX, box.minY, box.maxZ + 1),
