@@ -37,9 +37,9 @@ public class ElytraFly extends Module {
         super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
                 new SettingToggle("Auto Open", true).withDesc("Auto open elytra (only works with control) WIP"),
                 new SettingMode("Mode", "Normal", "Control"/*, "Bruh Momentum"*/),
-                new SettingSlider("Overworld Speed", 0, 5, 0.8, 2),
-                new SettingSlider("Nether Speed", 0, 5, 0.8, 2),
-                new SettingSlider("End Speed", 0, 5, 0.8, 2));
+                new SettingSlider("Overworld Speed", 0, 5, 1.28, 2),
+                new SettingSlider("Nether Speed", 0, 5, 2.49, 2),
+                new SettingSlider("End Speed", 0, 5, 1.28, 2));
     }
 
     @Subscribe
