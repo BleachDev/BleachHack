@@ -28,7 +28,10 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.ColourThingy;
 import bleach.hack.utils.FabricReflect;
+import bleach.hack.utils.RenderUtils;
+import bleach.hack.utils.WorldRenderUtils;
 import com.google.common.eventbus.Subscribe;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.Entity;
@@ -119,6 +122,9 @@ public class UI extends Module {
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
+                new SettingToggle("Inventory", false).withDesc("Shows your inventory on your screen").withChildren( // 15
+                        new SettingSlider("x", 1, 3840, 571, 0).withDesc("x coordinates"),
+                        new SettingSlider("y", 1, 3840, 459, 0).withDesc("y coordinates")),
                 new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
                 new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 16
                 new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed") // 17
@@ -402,6 +408,27 @@ public class UI extends Module {
             }
         }
 
+
+
+        if (getSetting(15).asToggle().state && !mc.options.debugEnabled) {
+            if (mc.player == null)
+                return;
+
+            GL11.glPushMatrix();
+            //TODO ADD BACKGROUND!!
+            //RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x75101010); // background
+            for (int i = 0; i < 27; i++) {
+                ItemStack itemStack = mc.player.inventory.main.get(i + 9);
+                int offsetX = (int) getSetting(15).asToggle().getChild(0).asSlider().getValue() + (i % 9) * 16;
+                int offsetY = (int) getSetting(15).asToggle().getChild(1).asSlider().getValue() + (i / 9) * 16;
+                mc.getItemRenderer().renderGuiItemIcon(itemStack, offsetX, offsetY);
+                mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, itemStack, offsetX, offsetY);
+            }
+
+            mc.getItemRenderer().zOffset = 0.0F;
+            GL11.glPopMatrix();
+        }
+
         if (getSetting(9).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator() && !mc.options.debugEnabled) {
             GL11.glPushMatrix();
 
@@ -483,9 +510,9 @@ public class UI extends Module {
 
         if (ui == null) return getRainbow(0.5f, 0.5f, 10, 0);
 
-        return getRainbow((float) ui.getSetting(15).asSlider().getValue(),
-                (float) ui.getSetting(16).asSlider().getValue(),
-                ui.getSetting(17).asSlider().getValue(),
+        return getRainbow((float) ui.getSetting(16).asSlider().getValue(),
+                (float) ui.getSetting(17).asSlider().getValue(),
+                ui.getSetting(18).asSlider().getValue(),
                 offset);
     }
 }
