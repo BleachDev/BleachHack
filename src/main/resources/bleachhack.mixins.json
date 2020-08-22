@@ -9,6 +9,8 @@
     "MixinBackgroundRenderer",
     "MixinAbstractBlock",
     "MixinBlock",
+    "IKeyBinding",
+    "IMinecraftClient",
     "MixinBlockModelRenderer",
     "MixinBossBarHud",
     "MixinCamera",

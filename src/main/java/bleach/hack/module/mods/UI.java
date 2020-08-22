@@ -122,7 +122,7 @@ public class UI extends Module {
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
-                new SettingToggle("Inventory", false).withDesc("Shows your inventory on your screen").withChildren( // 15
+                new SettingToggle("Inventory", true).withDesc("Shows your inventory on your screen").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 571, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 459, 0).withDesc("y coordinates")),
                 new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
