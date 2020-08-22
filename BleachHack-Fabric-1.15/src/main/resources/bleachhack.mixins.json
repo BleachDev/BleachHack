@@ -19,6 +19,7 @@
     "MixinClientWorld",
     "MixinContainerScreen",
     "MixinEntityRenderer",
+    "MixinFlowableFluid",
     "MixinFluidRenderer",
     "MixinGameRenderer",
     "MixinIngameHud",

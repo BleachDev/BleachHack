@@ -20,6 +20,7 @@
   	"MixinEntity",
   	"MixinEntityRenderer",
   	"MixinFirstPersonRenderer",
+  	"MixinFlowableFluid",
     "MixinFluidRenderer",
     "MixinGameRenderer",
     "MixinIngameHud",
