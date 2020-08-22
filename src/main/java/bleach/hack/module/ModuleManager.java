@@ -37,7 +37,6 @@ public class ModuleManager {
             new AntiChunkBan(),
             new AntiHunger(),
             new ArrowJuke(),
-            new Blink(),
             new AutoArmor(),
             new AutoDonkeyDupe(),
             new AutoReconnect(),
