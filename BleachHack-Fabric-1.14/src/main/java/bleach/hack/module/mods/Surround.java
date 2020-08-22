@@ -48,7 +48,7 @@ public class Surround extends Module {
 		}
 
 		if (getSetting(1).asToggle().state) {
-			Vec3d centerPos = new Vec3d(mc.player.getBlockPos()).add(0.5, 0.5, 0.5);
+			Vec3d centerPos = new Vec3d(mc.player.getBlockPos()).add(0.5, 0, 0.5);
 			mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.onGround));
 		}
@@ -92,16 +92,33 @@ public class Surround extends Module {
 					return;
 				}
 
-				if (getSetting(5).asRotate().state) {
-					WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
+				if (!WorldUtils.canPlaceBlock(b)) {
+					if (WorldUtils.canPlaceBlock(b.down())) {
+						if (getSetting(5).asRotate().state) {
+							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
+						}
+
+						WorldUtils.placeBlock(b.down(), obsidian, false, false);
+						cap++;
+
+						if (cap >= (int) getSetting(4).asSlider().getValue()) {
+							return;
+						}
+					}
 				}
 
-				if (WorldUtils.placeBlock(b, obsidian, false, false)) {
+				if (WorldUtils.canPlaceBlock(b)) {
+					if (getSetting(5).asRotate().state) {
+						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
+					}
+
+					WorldUtils.placeBlock(b, obsidian, false, false);
 					cap++;
 				}
 			}
 		} else {
 			Box box = mc.player.getBoundingBox();
+
 			for (BlockPos b : Sets.newHashSet(
 					new BlockPos(box.x1 - 1, box.y1, box.z1), new BlockPos(box.x1, box.y1, box.z1 - 1),
 					new BlockPos(box.x2 + 1, box.y1, box.z1), new BlockPos(box.x2, box.y1, box.z1 - 1),
@@ -112,13 +129,33 @@ public class Surround extends Module {
 					return;
 				}
 
-				if (getSetting(5).asRotate().state) {
-					WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
+				if (!WorldUtils.canPlaceBlock(b)) {
+					if (WorldUtils.canPlaceBlock(b.down())) {
+						if (getSetting(5).asRotate().state) {
+							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
+						}
+
+						WorldUtils.placeBlock(b.down(), obsidian, false, false);
+						cap++;
+
+						if (cap >= (int) getSetting(4).asSlider().getValue()) {
+							return;
+						}
+					}
 				}
 
-				if (WorldUtils.placeBlock(b, obsidian, false, false)) {
+				if (WorldUtils.canPlaceBlock(b)) {
+					if (getSetting(5).asRotate().state) {
+						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
+					}
+
+					WorldUtils.placeBlock(b, obsidian, false, false);
 					cap++;
 				}
+			}
+
+			if (!getSetting(2).asToggle().state) {
+				setToggled(false);
 			}
 		}
 
