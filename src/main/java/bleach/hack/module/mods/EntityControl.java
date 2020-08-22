@@ -36,7 +36,7 @@ public class EntityControl extends Module {
     public EntityControl() {
         super("EntityControl", KEY_UNBOUND, Category.MOVEMENT, "Manipulate Entities.",
                 new SettingToggle("EntitySpeed", true),
-                new SettingSlider("Speed", 0, 5, 1.2, 2),
+                new SettingSlider("Speed", 0, 50, 1.2, 2),
                 new SettingToggle("EntityFly", false),
                 new SettingSlider("Ascend", 0, 2, 0.3, 2),
                 new SettingSlider("Descend", 0, 2, 0.5, 2),

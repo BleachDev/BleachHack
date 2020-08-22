@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//TODO Figure out why this doesnt render
 public class HoleESP extends Module
 {
     private final List<BlockPos> poses = new ArrayList<>();
@@ -71,17 +71,6 @@ public class HoleESP extends Module
 
     @Subscribe
     public void onRender(EventWorldRender event) {
-        try
-        {
-            this.rPos = new double[] {
-                    //(Double) Objects.requireNonNull(ReflectUtil(RenderManager.class, "renderPosX", "renderPosX")).get(mc.getBlockRenderManager()),
-                    //(Double) Objects.requireNonNull(ReflectUtil(RenderManager.class, "renderPosY", "renderPosY")).get(this.mc.getBlockRenderManager()),
-                    //(Double) Objects.requireNonNull(ReflectUtil(RenderManager.class, "renderPosZ", "renderPosZ")).get(this.mc.getBlockRenderManager())
-            };
-        } catch (Exception e)
-        {
-            this.rPos = new double[] {0.0D, 0.0D, 0.0D};
-        }
 
         GL11.glPushMatrix();
         GL11.glBlendFunc(770, 771);

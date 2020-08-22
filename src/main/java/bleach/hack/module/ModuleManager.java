@@ -49,6 +49,7 @@ public class ModuleManager {
             new AutoWalk(),
             new BetterPortal(),
             new BlockParty(),
+            new AutoAnvil(),
             new BookCrash(),
             new BowBot(),
             new ChestESP(),
