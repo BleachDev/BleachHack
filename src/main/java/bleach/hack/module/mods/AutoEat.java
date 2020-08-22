@@ -20,6 +20,7 @@ public class AutoEat extends Module {
         super("AutoEat", KEY_UNBOUND, Category.PLAYER, "Auto eats when food is low");
     }
     // TODO make this thing switch back after done eating and health
+    // mc.player.eatFood(mc.world, mc.player.getMainHandStack());
     private int lastSlot = -1;
     private boolean eating = false;
 

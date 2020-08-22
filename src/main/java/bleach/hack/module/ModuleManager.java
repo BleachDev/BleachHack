@@ -45,6 +45,7 @@ public class ModuleManager {
             new AutoTool(),
             new AutoTotem(),
             new ColourChooser(),
+            //new HoleESP(),
             new AutoWalk(),
             new BetterPortal(),
             new BlockParty(),
