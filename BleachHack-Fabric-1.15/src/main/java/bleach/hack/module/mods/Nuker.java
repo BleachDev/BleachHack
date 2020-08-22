@@ -114,7 +114,7 @@ public class Nuker extends Module {
 			double dist = Double.MAX_VALUE;
 			for (Direction d : Direction.values()) {
 				double dist2 = eyePos.distanceTo(new Vec3d(pos.offset(d)).add(0.5, 0.5, 0.5));
-				if (dist2 > range || mc.world.getBlockState(pos.offset(d)).getBlock() != Blocks.AIR || dist2 > dist)
+				if (dist2 > range || WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock()) || dist2 > dist)
 					continue;
 				dist = dist2;
 				dir = d;
