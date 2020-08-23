@@ -77,7 +77,6 @@ public class ModuleManager {
             new Ghosthand(),
             new HandProgress(),
             new HoleTP(),
-            //new AutoBreed(),
             new Jesus(),
             new Killaura(),
             new MountBypass(),
@@ -109,6 +108,8 @@ public class ModuleManager {
             new Trajectories(),
             new UI(),
             new Xray(),
+            //new TunnelESP(),
+            //new AutoBreed(),
             //new Test(),
             new ElytraSwap(),
             new Zoom());
