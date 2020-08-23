@@ -31,8 +31,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
 public class ModuleManager {
-
-    private static List<Module> mods = Arrays.asList(
+    private static final List<Module> mods = Arrays.asList(
             new Ambience(),
             new AntiChunkBan(),
             new AntiHunger(),
@@ -54,6 +53,7 @@ public class ModuleManager {
             new BowBot(),
             new ChestESP(),
             new ChunkSize(),
+            new BoxESP(),
             new ClickGui(),
             new ColorSigns(),
             new AutoEat(),
@@ -67,7 +67,7 @@ public class ModuleManager {
             new ElytraFly(),
             new EntityControl(),
             new ElytraReplace(),
-            new BoxESP(),
+			new AllahHaramHack(),
             new FakeLag(),
             new FastUse(),
             new Flight(),
