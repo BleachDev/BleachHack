@@ -50,7 +50,24 @@ public class RenderUtils {
         tessellator.draw();
 
         // Outline
-        drawOutlineBox(box, r, g, b, a);
+        buffer.begin(3, VertexFormats.POSITION_COLOR);
+        buffer.vertex(box.minX, box.minY, box.minZ).color(r, g, b, a).next();
+        buffer.vertex(box.minX, box.minY, box.maxZ).color(r, g, b, a).next();
+        buffer.vertex(box.maxX, box.minY, box.maxZ).color(r, g, b, a).next();
+        buffer.vertex(box.maxX, box.minY, box.minZ).color(r, g, b, a).next();
+        buffer.vertex(box.minX, box.minY, box.minZ).color(r, g, b, a).next();
+        buffer.vertex(box.minX, box.maxY, box.minZ).color(r, g, b, a).next();
+        buffer.vertex(box.maxX, box.maxY, box.minZ).color(r, g, b, a).next();
+        buffer.vertex(box.maxX, box.maxY, box.maxZ).color(r, g, b, a).next();
+        buffer.vertex(box.minX, box.maxY, box.maxZ).color(r, g, b, a).next();
+        buffer.vertex(box.minX, box.maxY, box.minZ).color(r, g, b, a).next();
+        buffer.vertex(box.minX, box.minY, box.maxZ).color(r, g, b, 0f).next();
+        buffer.vertex(box.minX, box.maxY, box.maxZ).color(r, g, b, a).next();
+        buffer.vertex(box.maxX, box.minY, box.maxZ).color(r, g, b, 0f).next();
+        buffer.vertex(box.maxX, box.maxY, box.maxZ).color(r, g, b, a).next();
+        buffer.vertex(box.maxX, box.minY, box.minZ).color(r, g, b, 0f).next();
+        buffer.vertex(box.maxX, box.maxY, box.minZ).color(r, g, b, a).next();
+        tessellator.draw();
 
         gl11Cleanup();
     }

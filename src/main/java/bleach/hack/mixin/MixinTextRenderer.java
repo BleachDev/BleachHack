@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.AllahHaramHack;
+import bleach.hack.module.mods.AllahHaram;
 import net.minecraft.client.font.TextHandler;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -30,7 +30,7 @@ public abstract class MixinTextRenderer {
 	
 	@Inject(method = "drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), cancellable = true)
 	public void drawWithShadow(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(AllahHaramHack.class).isToggled()) {
+		if (ModuleManager.getModule(AllahHaram.class).isToggled()) {
 			text = new LiteralText(chingChong(text.asString()));
 			ci.setReturnValue(draw(text.asOrderedText(), x, y, color, matrices.peek().getModel(), true));
 			ci.cancel();
@@ -39,7 +39,7 @@ public abstract class MixinTextRenderer {
 	
 	@Inject(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), cancellable = true)
 	public void draw(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(AllahHaramHack.class).isToggled()) {
+		if (ModuleManager.getModule(AllahHaram.class).isToggled()) {
 			text = new LiteralText(chingChong(text.asString()));
 			ci.setReturnValue(draw(text.asOrderedText(), x, y, color, matrices.peek().getModel(), false));
 			ci.cancel();
@@ -48,7 +48,7 @@ public abstract class MixinTextRenderer {
 	
 	@Inject(method = "draw(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"), cancellable = true)
 	public void draw(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, boolean mirror, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(AllahHaramHack.class).isToggled()) {
+		if (ModuleManager.getModule(AllahHaram.class).isToggled()) {
 			text = chingChong(text);
 			ci.setReturnValue(drawInternal(text, x, y, color, shadow, matrix, vertexConsumers, seeThrough, backgroundColor, light, mirror));
 			ci.cancel();
@@ -57,7 +57,7 @@ public abstract class MixinTextRenderer {
 
 	@Inject(method = "getWidth(Ljava/lang/String;)I", at = @At("HEAD"), cancellable = true)
 	public void getWidth(String text, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(AllahHaramHack.class).isToggled()) {
+		if (ModuleManager.getModule(AllahHaram.class).isToggled()) {
 			ci.setReturnValue(MathHelper.ceil(this.handler.getWidth(chingChong(text))));
 			ci.cancel();
 		}
@@ -65,7 +65,7 @@ public abstract class MixinTextRenderer {
 
 	@Inject(method = "getWidth(Lnet/minecraft/text/StringVisitable;)I", at = @At("HEAD"), cancellable = true)
 	public void getWidth(StringVisitable text, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(AllahHaramHack.class).isToggled() && text instanceof Text) {
+		if (ModuleManager.getModule(AllahHaram.class).isToggled() && text instanceof Text) {
 			ci.setReturnValue(MathHelper.ceil(this.handler.getWidth(chingChong(((Text)text).asString()))));
 			ci.cancel();
 		}
