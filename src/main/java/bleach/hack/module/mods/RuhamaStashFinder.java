@@ -20,7 +20,6 @@ public class RuhamaStashFinder extends Module {
                 new SettingToggle("Render", true),
                 new SettingToggle("Toggle Stash Logger", true),
                 new SettingSlider("Range: ", 1.0D, 10.0D, 4.0D, 0));
-
     }
 
     public int range = 0;
@@ -50,7 +49,7 @@ public class RuhamaStashFinder extends Module {
 
             if (!mod.isEnabled())
                 mod.toggle();
-        }*/ //implement later this is salhacks way of doing it
+        }*/ //implement later this is salhacks way of enabling modules
         mc.inGameHud.getChatHud().addMessage(new LiteralText("Toggle StashFinder and AutoWalk"));
     }
 
