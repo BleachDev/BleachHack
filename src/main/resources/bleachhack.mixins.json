@@ -9,6 +9,8 @@
     "MixinBackgroundRenderer",
     "MixinAbstractBlock",
     "MixinBlock",
+    "IKeyBinding",
+    "IMinecraftClient",
     "MixinBlockModelRenderer",
     "MixinBossBarHud",
     "MixinCamera",
@@ -43,6 +45,6 @@
     "MixinWorldRenderer"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 0
   }
 }

@@ -89,7 +89,7 @@ public class Nametags extends Module {
                     Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1) :
                     Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
 
-
+            //TODO add player ping to nametags
 			/* bruh code bleach sent me to find ppls ping, i intend on implementing into nametags soon.
 			for (PlayerEntity player: mc.world.getPlayers()) {
  				PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(player.getGameProfile().getId());

@@ -47,6 +47,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
     private boolean lmDown = false;
     private boolean rmDown = false;
     private boolean lmHeld = false;
+    private int mwScroll = 0;
 
     private TextFieldWidget searchField;
 
@@ -89,11 +90,11 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
         this.renderBackground(matrix);
-        textRenderer.draw(matrix, "BleachHack 1.16 epearl edition", 3, 3, ColourThingy.guiColour());
+        textRenderer.drawWithShadow(matrix, "BleachHack 1.16 epearl edition", 3, 3, ColourThingy.guiColour());
         if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
-            textRenderer.draw(matrix,
+            textRenderer.drawWithShadow(matrix,
                     "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
-            textRenderer.draw(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
+            textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
                     ColourThingy.guiColour());
 
         }
@@ -123,7 +124,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
                     ((ModuleWindow) w).setLen(len);
                 }
 
-                ((ClickGuiWindow) w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld);
+                ((ClickGuiWindow) w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld, mwScroll);
             }
         }
 
@@ -170,6 +171,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         lmDown = false;
         rmDown = false;
         keyDown = -1;
+        mwScroll = 0;
     }
 
     public boolean mouseClicked(double double_1, double double_2, int int_1) {
@@ -200,7 +202,10 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         keyDown = int_1;
         return super.keyPressed(int_1, int_2, int_3);
     }
-
+    public boolean mouseScrolled(double double_1, double double_2, double double_3) {
+        mwScroll = (int) double_3;
+        return super.mouseScrolled(double_1, double_2, double_3);
+    }
     public void resetGui() {
         int x = 30;
         for (Window m : windows) {

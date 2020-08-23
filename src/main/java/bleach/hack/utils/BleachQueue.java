@@ -22,42 +22,55 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.tuple.MutablePair;
+
 public class BleachQueue {
 
-    private static final HashMap<String, Deque<Runnable>> specialQueues = new HashMap<>();
-
-    private static final Deque<Runnable> queue = new ArrayDeque<>();
+    /* cum queue */
+    private static HashMap<String, Deque<MutablePair<Runnable, Integer>>> queues = new HashMap<>();
 
     public static void add(Runnable runnable) {
-        queue.add(runnable);
+        add("", runnable);
     }
 
     public static void add(String id, Runnable runnable) {
-        if (!specialQueues.containsKey(id)) {
-            specialQueues.put(id, new ArrayDeque<>());
+        add(id, runnable, 0);
+    }
+
+    public static void add(String id, Runnable runnable, int inTicks) {
+        if (!queues.containsKey(id)) {
+            Deque<MutablePair<Runnable, Integer>> newQueue = new ArrayDeque<>();
+            newQueue.add(MutablePair.of(runnable, inTicks));
+
+            queues.put(id, newQueue);
         }
 
-        specialQueues.get(id).add(runnable);
+        queues.get(id).add(MutablePair.of(runnable, inTicks));
     }
 
     public static void cancelQueue(String id) {
-        specialQueues.remove(id);
+        queues.remove(id);
+    }
+
+    public static boolean isEmpty(String id) {
+        return !queues.containsKey(id);
     }
 
     public static void nextQueue() {
-        if (!queue.isEmpty()) {
-            if (queue.getFirst() != null) queue.poll().run();
-            else queue.poll();
-        }
+        for (Entry<String, Deque<MutablePair<Runnable, Integer>>> e : new HashMap<>(queues).entrySet()) {
+            Deque<MutablePair<Runnable, Integer>> deque = e.getValue();
 
-        for (Entry<String, Deque<Runnable>> e : new HashMap<>(specialQueues).entrySet()) {
-            Deque<Runnable> deque = specialQueues.get(e.getKey());
+            MutablePair<Runnable, Integer> first = deque.peek();
 
-            if (deque.getFirst() != null) deque.poll().run();
-            else deque.poll();
+            if (first.right > 0) {
+                first.right--;
+            } else {
+                first.left.run();
+                deque.removeFirst();
+            }
 
             if (deque.isEmpty()) {
-                specialQueues.remove(e.getKey());
+                queues.remove(e.getKey());
             }
         }
     }

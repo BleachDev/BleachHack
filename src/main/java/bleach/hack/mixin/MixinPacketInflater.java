@@ -69,9 +69,4 @@ public class MixinPacketInflater {
         }
     }
 
-	/*@Override
-	public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		// TODO Auto-generated method stub
-
-	}*/
 }

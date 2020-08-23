@@ -17,41 +17,47 @@
  */
 package bleach.hack.module;
 
-import bleach.hack.event.events.EventKeyPress;
-import bleach.hack.module.mods.*;
-import com.google.common.eventbus.Subscribe;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ModuleManager {
+import org.lwjgl.glfw.GLFW;
 
+import com.google.common.eventbus.Subscribe;
+
+import bleach.hack.event.events.EventKeyPress;
+import bleach.hack.module.mods.*;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
+
+public class ModuleManager {
     private static final List<Module> mods = Arrays.asList(
-            new AllahHaramHack(),
             new Ambience(),
             new AntiChunkBan(),
             new AntiHunger(),
             new ArrowJuke(),
+            new AutoArmor(),
             new AutoDonkeyDupe(),
             new AutoReconnect(),
             new AutoRespawn(),
             new AutoSign(),
             new AutoTool(),
             new AutoTotem(),
+            new ColourChooser(),
+            new HoleESP(),
             new AutoWalk(),
             new BetterPortal(),
             new BlockParty(),
+            new AutoAnvil(),
             new BookCrash(),
             new BowBot(),
             new ChestESP(),
             new ChunkSize(),
             new ClickGui(),
             new ColorSigns(),
-            new ColourChooser(),
+            new AutoEat(),
+            new AutoFish(),
+            new AutoLog(),
             new Criticals(),
             new CrystalAura(),
             new CustomChat(),
@@ -60,14 +66,17 @@ public class ModuleManager {
             new ElytraFly(),
             new EntityControl(),
             new ElytraReplace(),
+            new AllahHaramHack(),
             new ESP(),
             new FakeLag(),
             new FastUse(),
             new Flight(),
             new Freecam(),
+            new Yaw(),
             new Fullbright(),
             new Ghosthand(),
             new HandProgress(),
+            new HoleTP(),
             new Jesus(),
             new Killaura(),
             new MountBypass(),
@@ -91,7 +100,6 @@ public class ModuleManager {
             new Speed(),
             new SpeedMine(),
             new Sprint(),
-            new StarGithub(),
             new Step(),
             new Surround(),
             new Timer(),
@@ -100,6 +108,10 @@ public class ModuleManager {
             new Trajectories(),
             new UI(),
             new Xray(),
+            //new TunnelESP(),
+            //new AutoBreed(),
+            //new Test(),
+            new ElytraSwap(),
             new Zoom());
 
     public static List<Module> getModules() {
@@ -118,7 +130,8 @@ public class ModuleManager {
 
     public static Module getModuleByName(String name) {
         for (Module m : mods) {
-            if (name.equalsIgnoreCase(m.getName())) return m;
+            if (name.equalsIgnoreCase(m.getName()))
+                return m;
         }
         return null;
     }
@@ -129,8 +142,9 @@ public class ModuleManager {
 
     @Subscribe
     public static void handleKeyPress(EventKeyPress eventKeyPress) {
-        if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) return;
+        if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3))
+            return;
 
-        mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(m -> m.toggle());
+        mods.stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(Module::toggle);
     }
 }

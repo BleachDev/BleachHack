@@ -30,7 +30,7 @@ import net.fabricmc.api.ModInitializer;
 
 public class BleachHack implements ModInitializer {
 
-    public static final String VERSION = "b1000";
+    public static final String VERSION = "b2100";
     public static final int INTVERSION = 24;
 
     public static EventBus eventBus = new EventBus();
@@ -51,10 +51,7 @@ public class BleachHack implements ModInitializer {
 
         eventBus.register(new Rainbow());
 
-        //v This makes a scat fetishist look like housekeeping.
         eventBus.register(new ModuleManager());
-        // wait why do we need this ^?
-        // Because I was too lazy to implement a proper keybind system and I left the keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind System
 
         String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
         if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {

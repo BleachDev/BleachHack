@@ -17,20 +17,5 @@ Extract the zip and put the jar into your mods folder
 
 ## Images
 
-![GUI](https://i.imgur.com/d3ws32U.png)
-
-## Plans
-
- - [x] custom blue RPC logo  
- - [x] UI on by default  
- - [x] add border to gui  
- - [ ] auto-trap module  
- - [ ] better crystal-aura module  
- - [x] drawn modules command to unlist stuff in arraylist  
- - [ ] change hover module description colors to match theme  
- - [ ] make surround walk to center of block not tp  
- - [x] syncronize all the rgb in the gui color picker  
- - [ ] draggable or xyz customizable UI modules  
- - [ ] ability to save configs and switch between them  
- - [ ] ability to create columns and add/remove modules to them  
- - [ ] other stuff i dont remember   
+![GUI](https://media.discordapp.net/attachments/745366273168244906/745372657423351808/unknown.png)  
+![GUI2](https://media.discordapp.net/attachments/745366273168244906/745372674464809563/unknown.png)  

@@ -1,14 +1,20 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventParticle;
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSignBlockEntityRender;
 import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.FabricReflect;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
+import net.minecraft.sound.SoundEvents;
 
 public class NoRender extends Module {
 
@@ -29,7 +35,8 @@ public class NoRender extends Module {
                 new SettingToggle("Shield-WIP", false).withDesc("Removes your sheild"), // 9
                 new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse"),
                 new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)"),
-                new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"));
+                new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"),
+                new SettingToggle("Explosions", false).withDesc("Disables rendering explosions"));
     }
 
     @Subscribe
@@ -59,6 +66,14 @@ public class NoRender extends Module {
             event.setCancelled(true);
         } else if (getSetting(10).asToggle().state && event.instance.getId().getPath().equals("entity.elder_guardian.curse")) {
             event.setCancelled(true);
+        }
+    }
+    @Subscribe
+    public void readPacket(EventReadPacket event) {
+        if (mc.player == null) return;
+        if (event.getPacket() instanceof ExplosionS2CPacket && getSetting(13).asToggle().state) {
+            event.setCancelled(true);
+            mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F));
         }
     }
 }

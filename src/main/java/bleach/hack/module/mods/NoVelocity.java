@@ -52,4 +52,24 @@ public class NoVelocity extends Module {
             FabricReflect.writeField(event.getPacket(), 0, "field_12183", "playerVelocityZ");
         }
     }
+    //TODO implement this anti push from Kami??
+    //@EventHandler
+    //private Listener<EntityEvent.EntityCollision> entityCollisionListener = new Listener<>(event -> {
+    //    if (event.getEntity() == mc.player) {
+    //        if (horizontal == 0 && vertical == 0) {
+    //            event.cancel();
+    //            return;
+    //        }
+    //        event.setX(-event.getX() * horizontal);
+    //        event.setY(0);
+    //        event.setZ(-event.getZ() * horizontal);
+    //    }
+    //});
+    //
+    //@EventHandler
+    //private Listener<MoveEntityFluidEvent> moveEntityFluidEventListener = new Listener<>(event -> {
+    //    if (event.getEntity() == mc.player) {
+    //        event.setMovement(event.getMovement().multiply(horizontal, vertical, horizontal));
+    //    }
+    //});
 }
