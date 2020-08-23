@@ -94,6 +94,7 @@ public class ModuleManager {
             new PacketFly(),
             new Peek(),
             new PlayerCrash(),
+            new RuhamaStashFinder(),
             new SafeWalk(),
             new Scaffold(),
             new Spammer(),
