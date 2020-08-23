@@ -126,7 +126,7 @@ public class WorldUtils {
 					pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
 
 			if (NONSOLID_BLOCKS.contains(neighborBlock)
-					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.25)
+					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.55)
 				continue;
 
 			float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
@@ -169,7 +169,7 @@ public class WorldUtils {
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 									pos.getY() + 0.5 + d.getOffsetY() * 0.5,
-									pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.25)
+									pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.55)
 				continue;
 
 			return true;
