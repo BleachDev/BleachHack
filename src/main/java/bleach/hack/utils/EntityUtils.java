@@ -19,6 +19,7 @@ package bleach.hack.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.GolemEntity;
@@ -45,5 +46,29 @@ public class EntityUtils {
         mc.world.getScoreboard().getTeam(teamName).setColor(color);
 
         entity.setGlowing(true);
+    }
+    public static double[] calculateLookAt(double px, double py, double pz, PlayerEntity me)
+    {
+        double dirx = me.getX() - px;
+        double diry = me.getY() - py;
+        double dirz = me.getZ() - pz;
+
+        double len = Math.sqrt(dirx * dirx + diry * diry + dirz * dirz);
+
+        dirx /= len;
+        diry /= len;
+        dirz /= len;
+
+        double pitch = Math.asin(diry);
+        double yaw = Math.atan2(dirz, dirx);
+
+        // to degree
+        pitch = pitch * 180.0d / Math.PI;
+        yaw = yaw * 180.0d / Math.PI;
+
+        yaw += 90f;
+
+        return new double[]
+                { yaw, pitch };
     }
 }
