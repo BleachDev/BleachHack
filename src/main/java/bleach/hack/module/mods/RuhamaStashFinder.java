@@ -1,4 +1,4 @@
-package bleack.hack.module.mods;
+package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
@@ -13,12 +13,6 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.ChunkPos;
 
 import java.util.*;
-
-
-//public class RuhamaStashFinder extends Module {
-    //public final Value<Integer> FlyGap = new Value<Integer>("FlyGap", new String[] {"Gap"}, "No fucking clue what it does no cap", 4, 1, 10, 1);
-    //public final Value<Boolean> Render = new Value<Boolean>("Render Debug Path", new java.lang.String[] {"Render"}, "Renders Path Bruh", true);
-    //public final Value<Boolean> ToggleLog = new Value<Boolean>("ToggleStashLogger", new java.lang.String[] {"ToggleLog"}, "Automatically toggles on StashLogger if not already enabled", true);
 
 public class RuhamaStashFinder extends Module {
     public RuhamaStashFinder() {
