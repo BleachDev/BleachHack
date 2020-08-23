@@ -16,7 +16,7 @@ import java.util.*;
 
 public class RuhamaStashFinder extends Module {
     public RuhamaStashFinder() {
-        super("Stash Finder", KEY_UNBOUND, Category.MOVEMENT, "Find Stashes!",
+        super("Stash Finder", KEY_UNBOUND, Category.WORLD, "Find Stashes!",
                 new SettingToggle("Render", true),
                 new SettingToggle("Toggle Stash Logger", true),
                 new SettingSlider("Range: ", 1.0D, 10.0D, 4.0D, 0));
