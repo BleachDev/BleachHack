@@ -31,8 +31,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
 public class ModuleManager {
-
-    private static List<Module> mods = Arrays.asList(
+    private static final List<Module> mods = Arrays.asList(
             new Ambience(),
             new AntiChunkBan(),
             new AntiHunger(),
@@ -67,6 +66,7 @@ public class ModuleManager {
             new ElytraFly(),
             new EntityControl(),
             new ElytraReplace(),
+            new AllahHaramHack(),
             new ESP(),
             new FakeLag(),
             new FastUse(),
