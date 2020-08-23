@@ -27,14 +27,14 @@ public class HoleESP extends Module
     public HoleESP()
     {
         super("HoleESP", KEY_UNBOUND, Category.RENDER, "ESP for safe crystal holes",
-                new SettingSlider("Range: ", 5.0D, 25.0D, 10.0D, 0),
+                new SettingSlider("Range: ", 5.0D, 25.0D, 5.0D, 0),
                 new SettingMode("Draw: ", "Full", "Flat"),
-                new SettingToggle("Rainbow", true),
-                new SettingSlider("Obsidian-R: ", 0.0D, 255.0D, 100.0D, 0),
-                new SettingSlider("Obsidian-G: ", 0.0D, 255.0D, 255.0D, 0),
-                new SettingSlider("Obsidian-B: ", 0.0D, 255.0D, 100.0D, 0),
-                new SettingSlider("Bedrock-R: ", 0.0D, 255.0D, 100.0D, 0),
-                new SettingSlider("Bedrock-G: ", 0.0D, 255.0D, 100.0D, 0),
+                new SettingToggle("Rainbow", false),
+                new SettingSlider("Obsidian-R: ", 0.0D, 255.0D, 85.0D, 0),
+                new SettingSlider("Obsidian-G: ", 0.0D, 255.0D, 85.0D, 0),
+                new SettingSlider("Obsidian-B: ", 0.0D, 255.0D, 255.0D, 0),
+                new SettingSlider("Bedrock-R: ", 0.0D, 255.0D, 85.0D, 0),
+                new SettingSlider("Bedrock-G: ", 0.0D, 255.0D, 85.0D, 0),
                 new SettingSlider("Bedrock-B: ", 0.0D, 255.0D, 255.0D, 0));
     }
 
