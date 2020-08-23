@@ -116,7 +116,6 @@ public class AutoLog extends Module {
 
     private void logOut(String reason)
     {
-        System.out.println("[BH] TEST: bruh log 2020jd");
         this.mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(new LiteralText(reason)));
         this.setToggled(false);
     }
