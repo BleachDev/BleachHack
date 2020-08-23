@@ -17,14 +17,12 @@
  */
 package bleach.hack.utils;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -110,4 +108,3 @@ public class RenderUtils {
         GL11.glPopMatrix();
     }
 }
-
