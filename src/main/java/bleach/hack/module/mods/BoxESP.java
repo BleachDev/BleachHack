@@ -21,9 +21,12 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.ColourThingy;
 import bleach.hack.utils.EntityUtils;
+import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
@@ -37,10 +40,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 
-public class ESP extends Module {
+public class BoxESP extends Module {
 
-    public ESP() {
-        super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
+    public BoxESP() {
+        super("BoxESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
                 new SettingToggle("Players", true).withDesc("Show Players").withChildren(
                         new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players"),
                         new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Outline color for friends")),
@@ -58,52 +61,47 @@ public class ESP extends Module {
                         new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
     }
 
-    @Override
-    public void onDisable() {
-        super.onDisable();
-        for (Entity e : mc.world.getEntities()) {
-            if (e != mc.player) {
-                if (e.isGlowing()) e.setGlowing(false);
-            }
-        }
-    }
 
     @Subscribe
     public void onWorldEntityRender(EventWorldRenderEntity event) {
-        boolean glow = true;
 
         if (event.entity instanceof PlayerEntity && event.entity != mc.player && getSetting(0).asToggle().state) {
             if (BleachHack.friendMang.has(event.entity.getName().asString())) {
                 float[] col = getSetting(0).asToggle().getChild(1).asColor().getRGBFloat();
                 event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+                RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
             } else {
                 float[] col = getSetting(0).asToggle().getChild(0).asColor().getRGBFloat();
                 event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+                RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
             }
         } else if (event.entity instanceof Monster && getSetting(1).asToggle().state) {
             float[] col = getSetting(1).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+            RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
         } // Before animals to prevent animals from overlapping donkeys
         else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
             float[] col = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+            RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
         } else if (EntityUtils.isAnimal(event.entity) && getSetting(2).asToggle().state) {
             float[] col = getSetting(2).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+            RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
         } else if (event.entity instanceof ItemEntity && getSetting(3).asToggle().state) {
             float[] col = getSetting(3).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+            RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
         } else if (event.entity instanceof EndCrystalEntity && getSetting(4).asToggle().state) {
             float[] col = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+            RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
         } else if ((event.entity instanceof BoatEntity || event.entity instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
             float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
-        } else {
-            glow = false;
+            RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
         }
 
-        event.entity.setGlowing(glow);
     }
 
     private VertexConsumerProvider getOutline(BufferBuilderStorage buffers, float r, float g, float b) {

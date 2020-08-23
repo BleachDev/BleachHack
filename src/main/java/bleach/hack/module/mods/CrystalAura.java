@@ -202,7 +202,6 @@ public class CrystalAura extends Module {
                     || (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state);
         }).collect(Collectors.toList()));
 
-        // TODO: not this
         BlockPos q = null;
         double damage = 0.5D;
         Iterator<Entity> var9 = entities.iterator();

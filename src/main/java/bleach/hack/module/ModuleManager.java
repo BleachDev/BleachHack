@@ -67,7 +67,7 @@ public class ModuleManager {
             new ElytraFly(),
             new EntityControl(),
             new ElytraReplace(),
-            new ESP(),
+            new BoxESP(),
             new FakeLag(),
             new FastUse(),
             new Flight(),

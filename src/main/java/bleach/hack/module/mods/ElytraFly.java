@@ -82,7 +82,6 @@ public class ElytraFly extends Module {
                 if (mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
                 if (mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
 
-                //TODO check in on this later and add thingy to syncronize the world with its movement speed
                 if (mc.options.keyJump.isPressed()) vec3d = vec3d.add(0, getSetting(2).asSlider().getValue(), 0);
                 if (mc.options.keySneak.isPressed()) vec3d = vec3d.add(0, -getSetting(2).asSlider().getValue(), 0);
 

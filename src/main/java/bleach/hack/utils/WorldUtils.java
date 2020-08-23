@@ -17,6 +17,9 @@
  */
 package bleach.hack.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.setting.other.SettingRotate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -29,10 +32,11 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.*;
-
-import java.util.Arrays;
-import java.util.List;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class WorldUtils {
 
@@ -108,9 +112,11 @@ public class WorldUtils {
     }
 
     public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack) {
-        if (!isBlockEmpty(pos)) return false;
+        if (!isBlockEmpty(pos))
+            return false;
 
-        if (slot != mc.player.inventory.selectedSlot && slot >= 0 && slot <= 8) mc.player.inventory.selectedSlot = slot;
+        if (slot != mc.player.inventory.selectedSlot && slot >= 0 && slot <= 8)
+            mc.player.inventory.selectedSlot = slot;
 
         for (Direction d : Direction.values()) {
             Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
@@ -120,12 +126,13 @@ public class WorldUtils {
                     pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
 
             if (NONSOLID_BLOCKS.contains(neighborBlock)
-                    || mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.25)
+                    || mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.55)
                 continue;
 
-            float[] rot = new float[]{mc.player.yaw, mc.player.pitch};
+            float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
 
-            if (rotate) facePosPacket(vec.x, vec.y, vec.z);
+            if (rotate)
+                facePosPacket(vec.x, vec.y, vec.z);
             if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
                 mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
 
@@ -142,24 +149,28 @@ public class WorldUtils {
     }
 
     public static boolean isBlockEmpty(BlockPos pos) {
-        if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) return false;
+        if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock()))
+            return false;
 
         Box box = new Box(pos);
         for (Entity e : mc.world.getEntities()) {
-            if (e instanceof LivingEntity && box.intersects(e.getBoundingBox())) return false;
+            if (e instanceof LivingEntity && box.intersects(e.getBoundingBox()))
+                return false;
         }
 
         return true;
     }
 
     public static boolean canPlaceBlock(BlockPos pos) {
-        if (!isBlockEmpty(pos)) return false;
+        if (!isBlockEmpty(pos))
+            return false;
         for (Direction d : Direction.values()) {
             if (NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
                     || mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
                     new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
                             pos.getY() + 0.5 + d.getOffsetY() * 0.5,
-                            pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.25) continue;
+                            pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.55)
+                continue;
 
             return true;
         }
@@ -167,8 +178,10 @@ public class WorldUtils {
     }
 
     public static void facePosAuto(double x, double y, double z, SettingRotate sr) {
-        if (sr.getRotateMode() == 0) facePosPacket(x, y, z);
-        else facePos(x, y, z);
+        if (sr.getRotateMode() == 0)
+            facePosPacket(x, y, z);
+        else
+            facePos(x, y, z);
     }
 
     public static void facePos(double x, double y, double z) {

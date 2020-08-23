@@ -9,8 +9,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.util.Hand;
 
 public class AutoBreed extends Module {
-    // TODO FINISH THIS MODULE LOL
-    // https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/BreedModule.java
     public AutoBreed() {
         super("AutoBreed", KEY_UNBOUND, Category.WORLD, "auto breeds nearby animals");
     }

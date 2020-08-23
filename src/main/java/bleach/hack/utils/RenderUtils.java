@@ -17,14 +17,19 @@
  */
 package bleach.hack.utils;
 
-import net.minecraft.client.render.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
 
 public class RenderUtils {
 
@@ -43,6 +48,22 @@ public class RenderUtils {
                 box.minX, box.minY, box.minZ,
                 box.maxX, box.maxY, box.maxZ, r, g, b, a / 2f);
         tessellator.draw();
+
+        // Outline
+        drawOutlineBox(box, r, g, b, a);
+
+        gl11Cleanup();
+    }
+
+    public static void drawOutlineBox(BlockPos blockPos, float r, float g, float b, float a) {
+        drawOutlineBox(new Box(blockPos), r, g, b, a);
+    }
+
+    public static void drawOutlineBox(Box box, float r, float g, float b, float a) {
+        gl11Setup();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
 
         // Outline
         buffer.begin(3, VertexFormats.POSITION_COLOR);
