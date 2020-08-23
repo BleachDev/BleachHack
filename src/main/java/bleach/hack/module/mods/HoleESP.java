@@ -1,5 +1,6 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -16,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
-//TODO Figure out why this doesnt render
+//TODO make this not highlight per block and highlight entire hole instead depending on surround type
 public class HoleESP extends Module
 {
     private final List<BlockPos> poses = new ArrayList<>();
@@ -25,7 +26,7 @@ public class HoleESP extends Module
 
     public HoleESP()
     {
-        super("HoleESP", KEY_UNBOUND, Category.RENDER, "ESP for safe crystal holes (WIP)",
+        super("HoleESP", KEY_UNBOUND, Category.RENDER, "ESP for safe crystal holes",
                 new SettingSlider("Range: ", 5.0D, 25.0D, 10.0D, 0),
                 new SettingMode("Draw: ", "Full", "Flat"),
                 new SettingToggle("Rainbow", true),
@@ -35,16 +36,15 @@ public class HoleESP extends Module
                 new SettingSlider("Bedrock-R: ", 0.0D, 255.0D, 100.0D, 0),
                 new SettingSlider("Bedrock-G: ", 0.0D, 255.0D, 100.0D, 0),
                 new SettingSlider("Bedrock-B: ", 0.0D, 255.0D, 255.0D, 0));
-        this.prevPos = Vec3d.ZERO;
     }
 
-    public void onUpdate()
+    @Subscribe
+    public void onTick(EventTick event)
     {
-        assert this.mc.player != null;
-        if (mc.player.age % 20 == 0 || this.mc.player.getPos().distanceTo(this.prevPos) > 5.0D && mc.player.age % 10 == 0)
-        {
-            this.update((int) this.getSettings().get(0).asSlider().getValue());
-        }
+            if (mc.player.age % 10 == 0)
+            {
+                this.update((int) this.getSettings().get(0).asSlider().getValue());
+            }
     }
 
     public void update(int range)
@@ -107,92 +107,90 @@ public class HoleESP extends Module
 
     public void drawFilledBlockBox(BlockPos blockPos, float r, float g, float b, float a)
     {
-        try
+        double x = (double) blockPos.getX();
+        double y = (double) blockPos.getY();
+        double z = (double) blockPos.getZ();
+
+        float or = (float) (this.getSettings().get(3).asSlider().getValue() / 255.0D);
+        float og = (float) (this.getSettings().get(4).asSlider().getValue() / 255.0D);
+        float ob = (float) (this.getSettings().get(5).asSlider().getValue() / 255.0D);
+        float br = (float) (this.getSettings().get(6).asSlider().getValue() / 255.0D);
+        float bg = (float) (this.getSettings().get(7).asSlider().getValue() / 255.0D);
+        float bb = (float) (this.getSettings().get(8).asSlider().getValue() / 255.0D);
+
+        if (this.getSettings().get(2).asToggle().state)
         {
-            double x = (double) blockPos.getX() - this.rPos[0];
-            double y = (double) blockPos.getY() - this.rPos[1];
-            double z = (double) blockPos.getZ() - this.rPos[2];
-
-            float or = (float) (this.getSettings().get(3).asSlider().getValue() / 255.0D);
-            float og = (float) (this.getSettings().get(4).asSlider().getValue() / 255.0D);
-            float ob = (float) (this.getSettings().get(5).asSlider().getValue() / 255.0D);
-            float br = (float) (this.getSettings().get(6).asSlider().getValue() / 255.0D);
-            float bg = (float) (this.getSettings().get(7).asSlider().getValue() / 255.0D);
-            float bb = (float) (this.getSettings().get(8).asSlider().getValue() / 255.0D);
-
-            if (this.getSettings().get(2).asToggle().state)
-            {
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), r, g, b, a);
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), r, g, b, a * 1.5F);
-            } else if (this.mc.world.getBlockState(blockPos.down()).getBlock() == Blocks.OBSIDIAN)
-            {
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a);
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
-            } else
-            {
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), br, bg, bb, a);
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), br, bg, bb, a * 1.5F);
-            }
-
-            if (this.getSettings().get(1).asMode().mode == 1)
-            {
-                return;
-            }
-
-            if (this.getSettings().get(2).asToggle().state)
-            {
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), r, g, b, a);
-                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), r, g, b, a * 1.5F);
-                RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), r, g, b, a);
-                RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), r, g, b, a * 1.5F);
-                RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a);
-                RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a * 1.5F);
-                RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a);
-                RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a * 1.5F);
-            } else
-            {
-                if (this.mc.world.getBlockState(blockPos.north()).getBlock() == Blocks.OBSIDIAN)
-                {
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a);
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a * 1.5F);
-                } else
-                {
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), br, bg, bb, a);
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), br, bg, bb, a * 1.5F);
-                }
-
-                if (this.mc.world.getBlockState(blockPos.west()).getBlock() == Blocks.OBSIDIAN)
-                {
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a);
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-                } else
-                {
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), br, bg, bb, a);
-                    RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), br, bg, bb, a * 1.5F);
-                }
-
-                if (this.mc.world.getBlockState(blockPos.east()).getBlock() == Blocks.OBSIDIAN)
-                {
-                    RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
-                    RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-                } else
-                {
-                    RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a);
-                    RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a * 1.5F);
-                }
-
-                if (this.mc.world.getBlockState(blockPos.south()).getBlock() == Blocks.OBSIDIAN)
-                {
-                    RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
-                    RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-                } else
-                {
-                    RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a);
-                    RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a * 1.5F);
-                }
-            }
-        } catch (Exception ignored)
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), r, g, b, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), r, g, b, a * 1.5F);
+        } else if (this.mc.world.getBlockState(blockPos.down()).getBlock() == Blocks.OBSIDIAN)
         {
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
+        } else
+        {
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), br, bg, bb, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), br, bg, bb, a * 1.5F);
         }
+
+        if (this.getSettings().get(1).asMode().mode == 1)
+        {
+            return;
+        }
+
+        if (this.getSettings().get(2).asToggle().state)
+        {
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), r, g, b, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), r, g, b, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), r, g, b, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), r, g, b, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a);
+            RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), r, g, b, a * 1.5F);
+        } else
+        {
+            if (this.mc.world.getBlockState(blockPos.north()).getBlock() == Blocks.OBSIDIAN)
+            {
+                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a);
+                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a * 1.5F);
+            } else
+            {
+                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), br, bg, bb, a);
+                RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), br, bg, bb, a * 1.5F);
+            }
+
+            if (this.mc.world.getBlockState(blockPos.west()).getBlock() == Blocks.OBSIDIAN)
+            {
+                RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a);
+                RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            } else
+            {
+                RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), br, bg, bb, a);
+                RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), br, bg, bb, a * 1.5F);
+            }
+
+            if (this.mc.world.getBlockState(blockPos.east()).getBlock() == Blocks.OBSIDIAN)
+            {
+                RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+                RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            } else
+            {
+                RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a);
+                RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a * 1.5F);
+            }
+
+            if (this.mc.world.getBlockState(blockPos.south()).getBlock() == Blocks.OBSIDIAN)
+            {
+                RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+                RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            } else
+            {
+                RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a);
+                RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), br, bg, bb, a * 1.5F);
+            }
+        }
+    }
+    public void onDisable () {
+        this.poses.clear();
     }
 }
