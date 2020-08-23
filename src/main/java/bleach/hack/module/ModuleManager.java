@@ -75,6 +75,7 @@ public class ModuleManager {
             new Fullbright(),
             new Ghosthand(),
             new HandProgress(),
+            new HoleTP(),
             //new AutoBreed(),
             new Jesus(),
             new Killaura(),
