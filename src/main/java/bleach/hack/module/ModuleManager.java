@@ -58,6 +58,7 @@ public class ModuleManager {
             new ColorSigns(),
             new AutoEat(),
             new AutoFish(),
+            new AutoLog(),
             new Criticals(),
             new CrystalAura(),
             new CustomChat(),
