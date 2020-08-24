@@ -21,19 +21,17 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.ColourThingy;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -58,7 +56,8 @@ public class BoxESP extends Module {
                 new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
                         new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
                 new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
-                        new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
+                        new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")),
+                new SettingToggle("Strength", false).withDesc("Show red boxes around people with strength"));
     }
 
 
@@ -100,6 +99,8 @@ public class BoxESP extends Module {
             float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
             RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
+        } else if (((PlayerEntity) event.entity).hasStatusEffect(StatusEffects.STRENGTH) && this.getSettings().get(7).asToggle().state) {
+            RenderUtils.drawFilledBox(event.entity.getBoundingBox(), 1.0F, 0.0F, 0.0F, 1F);
         }
 
     }

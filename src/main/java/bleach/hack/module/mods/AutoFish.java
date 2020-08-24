@@ -1,13 +1,10 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.mixin.IMinecraftClient;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
-import me.zero.alpine.listener.EventHandler;
-import me.zero.alpine.listener.Listener;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.sound.SoundEvents;

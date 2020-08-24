@@ -1,16 +1,14 @@
 package bleach.hack.module.mods;
 
-import org.lwjgl.glfw.GLFW;
-
-import com.google.common.eventbus.Subscribe;
-
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.glfw.GLFW;
 
 public class Yaw extends Module {
 

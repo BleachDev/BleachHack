@@ -17,12 +17,12 @@
  */
 package bleach.hack.utils;
 
+import org.apache.commons.lang3.tuple.MutablePair;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import org.apache.commons.lang3.tuple.MutablePair;
 
 public class BleachQueue {
 

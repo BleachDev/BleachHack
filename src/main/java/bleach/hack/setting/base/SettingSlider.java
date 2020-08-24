@@ -17,17 +17,16 @@
  */
 package bleach.hack.setting.base;
 
+import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.utils.ColourThingy;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class SettingSlider extends SettingBase {
 

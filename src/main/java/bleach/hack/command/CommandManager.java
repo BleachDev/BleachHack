@@ -17,11 +17,11 @@
  */
 package bleach.hack.command;
 
-import java.util.Arrays;
-import java.util.List;
-
 import bleach.hack.command.commands.*;
 import bleach.hack.utils.BleachLogger;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CommandManager {
 

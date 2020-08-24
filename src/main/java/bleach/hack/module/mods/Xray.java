@@ -29,7 +29,6 @@ import net.minecraft.block.Block;
 import net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.crash.CrashException;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Arrays;

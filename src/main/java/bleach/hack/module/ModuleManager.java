@@ -17,18 +17,16 @@
  */
 package bleach.hack.module;
 
+import bleach.hack.event.events.EventKeyPress;
+import bleach.hack.module.mods.*;
+import com.google.common.eventbus.Subscribe;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
+import org.lwjgl.glfw.GLFW;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.lwjgl.glfw.GLFW;
-
-import com.google.common.eventbus.Subscribe;
-
-import bleach.hack.event.events.EventKeyPress;
-import bleach.hack.module.mods.*;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
 
 public class ModuleManager {
     private static final List<Module> mods = Arrays.asList(
@@ -110,7 +108,6 @@ public class ModuleManager {
             new Trajectories(),
             new UI(),
             new Xray(),
-            new StrengthESP(),
             //new TunnelESP(),
             //new AutoBreed(),
             //new Test(),

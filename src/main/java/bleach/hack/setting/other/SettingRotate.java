@@ -1,6 +1,5 @@
 package bleach.hack.setting.other;
 
-import bleach.hack.setting.base.SettingBase;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
 

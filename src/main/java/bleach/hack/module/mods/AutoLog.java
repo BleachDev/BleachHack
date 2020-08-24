@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingBase;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -14,9 +13,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.LiteralText;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 public class AutoLog extends Module {
 

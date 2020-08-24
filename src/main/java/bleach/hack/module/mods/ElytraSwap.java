@@ -3,7 +3,6 @@ package bleach.hack.module.mods;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.utils.BleachQueue;
 
 public class ElytraSwap extends Module {
 
