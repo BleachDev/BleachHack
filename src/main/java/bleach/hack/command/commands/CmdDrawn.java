@@ -22,6 +22,9 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.util.List;
 
 public class CmdDrawn extends Command {
 
@@ -50,11 +53,17 @@ public class CmdDrawn extends Command {
                 }
                 if (Boolean.parseBoolean(args[1]) == Boolean.FALSE) {
                     BleachFileMang.appendFile(args[0].toLowerCase(), "drawn.txt");
+                } else if (Boolean.parseBoolean(args[1]) == Boolean.TRUE) {
+                    List<String> lines = BleachFileMang.readFileLines("drawn.txt");
+                    System.out.println("[BH] TEST: "+lines.toString());
+                    lines.removeIf(s -> s.equals(args[0].toLowerCase()));
+                    System.out.println("[BH] TEST: "+lines.toString());
+                    BleachFileMang.createEmptyFile("drawn.txt");
+                    for (String line : lines) {
+                        BleachFileMang.appendFile(line.toLowerCase(), "drawn.txt");
+                    }
                 }
-                //TODO add a new file manager option to remove strings from a document
-                //} else if (Boolean.parseBoolean(args[1]) == Boolean.TRUE) {
-                //    BleachFileMang.deleteFile(args[0].toLowerCase(), "drawn.txt");
-                //}
+                m.setDrawn(Boolean.parseBoolean(args[1]));
                 BleachLogger.errorMessage("Drawn \"" + m.getName() + "\" set to " + Boolean.parseBoolean(args[1]));
                 return;
             }

@@ -60,6 +60,9 @@ public class BleachHack implements ModInitializer {
         if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
             BleachMainMenu.customTitleScreen = false;
         }
+        if (!BleachFileMang.fileExists("drawn.txt")) {
+            BleachFileMang.createFile("drawn.txt");
+        }
         for (String s : BleachFileMang.readFileLines("drawn.txt")) {
             for (Module m : ModuleManager.getModules()) {
                 if (m.getName().toLowerCase().equals(s.toLowerCase())) {
