@@ -54,18 +54,18 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 	protected void init(CallbackInfo info) {
 		if (minecraft.player.getVehicle() instanceof AbstractDonkeyEntity) {
 			AbstractDonkeyEntity entity = (AbstractDonkeyEntity) minecraft.player.getVehicle();
-	
+
 			addButton(new ButtonWidget((width - containerWidth) / 2 + 82, (height - containerHeight) / 2 + 4, 44, 12, "AutoDupe", button -> {
 				ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
 			}));
-	
+
 			addButton(new ButtonWidget((width - containerWidth) / 2 + 130, (height - containerHeight) / 2 + 4, 39, 12, "Dupe", button -> {
 				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
-	
+
 				MinecraftClient.getInstance().player.networkHandler.sendPacket(
 						new PlayerInteractEntityC2SPacket(
 								entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
-	
+
 				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
 			}));
 		}

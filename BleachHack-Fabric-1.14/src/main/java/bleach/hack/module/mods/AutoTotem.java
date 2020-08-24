@@ -44,7 +44,7 @@ public class AutoTotem extends Module {
 		if (mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING
 				|| (!mc.player.getOffHandStack().isEmpty() && !getSetting(0).asToggle().state))
 			return;
-		
+
 		// Cancel at all non-survival-inventory containers
 		if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
 			for (int i = 9; i < 45; i++) {
@@ -52,22 +52,22 @@ public class AutoTotem extends Module {
 					boolean itemInOffhand = !mc.player.getOffHandStack().isEmpty();
 					mc.interactionManager.method_2906(mc.player.container.syncId, i, 0, SlotActionType.PICKUP, mc.player);
 					mc.interactionManager.method_2906(mc.player.container.syncId, 45, 0, SlotActionType.PICKUP, mc.player);
-					
-					if (itemInOffhand) 
+
+					if (itemInOffhand)
 						mc.interactionManager.method_2906(mc.player.container.syncId, i, 0, SlotActionType.PICKUP, mc.player);
-					
+
 					return;
 				}
 			}
 		} else {
-			// If the player is in another inventory, atleast check the hotbar for anything to swap 
+			// If the player is in another inventory, atleast check the hotbar for anything to swap
 			for (int i = 0; i < 9; i++) {
 				if (mc.player.inventory.getInvStack(i).getItem() == Items.TOTEM_OF_UNDYING) {
 					if (i != mc.player.inventory.selectedSlot) {
 						mc.player.inventory.selectedSlot = i;
 						mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
 					}
-					
+
 					mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_HELD_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
 					return;
 				}

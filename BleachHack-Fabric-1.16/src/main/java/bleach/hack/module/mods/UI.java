@@ -157,7 +157,7 @@ public class UI extends Module {
 					: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
 
 			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-					+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
+			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
 
 		if (getSetting(8).asToggle().state) {
@@ -254,7 +254,7 @@ public class UI extends Module {
 		for (String s : infoList) {
 			mc.textRenderer.drawWithShadow(event.matrix, s,
 					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
-					infoMode == 1 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
+							infoMode == 1 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
 			count2++;
 		}
 	}

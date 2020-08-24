@@ -107,9 +107,7 @@ public class CrystalAura extends Module {
 	public void onTick(EventTick event) {
 		damageCache.clear();
 
-		EnderCrystalEntity crystal = Streams.stream(mc.world.getEntities()).filter(entityx -> {
-			return entityx instanceof EnderCrystalEntity;
-		}).map(entityx -> {
+		EnderCrystalEntity crystal = Streams.stream(mc.world.getEntities()).filter(entityx -> (entityx instanceof EnderCrystalEntity)).map(entityx -> {
 			BlockPos p = entityx.getBlockPos().down();
 			if (blackList.containsKey(p)) {
 				if (blackList.get(p) > 0)
@@ -119,9 +117,7 @@ public class CrystalAura extends Module {
 			}
 
 			return (EnderCrystalEntity) entityx;
-		}).min(Comparator.comparing(c -> {
-			return mc.player.distanceTo(c);
-		})).orElse(null);
+		}).min(Comparator.comparing(c -> mc.player.distanceTo(c))).orElse(null);
 
 		int crystalSlot;
 		if (getSetting(3).asToggle().state && crystal != null && mc.player.distanceTo(crystal) <= getSetting(6).asSlider().getValue()) {
@@ -211,11 +207,9 @@ public class CrystalAura extends Module {
 		Set<BlockPos> blocks = getCrystalPoses();
 		List<Entity> entities = new ArrayList<>();
 
-		entities.addAll(Streams.stream(mc.world.getEntities()).filter(e -> {
-			return (e instanceof PlayerEntity && getSetting(0).asToggle().state)
-					|| (e instanceof MobEntity && getSetting(1).asToggle().state)
-					|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state);
-		}).collect(Collectors.toList()));
+		entities.addAll(Streams.stream(mc.world.getEntities()).filter(e -> ((e instanceof PlayerEntity && getSetting(0).asToggle().state)
+				|| (e instanceof MobEntity && getSetting(1).asToggle().state)
+				|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state))).collect(Collectors.toList()));
 
 		// TODO: not this
 		BlockPos q = null;
@@ -319,12 +313,12 @@ public class CrystalAura extends Module {
 
 						d = getSetting(7).asToggle().state
 								? getExplosionDamage_old(blockPos, (LivingEntity) entity)
-								: getExplosionDamage(blockPos, (LivingEntity) entity);
+										: getExplosionDamage(blockPos, (LivingEntity) entity);
 					} while (d <= damage);
 
 					self = getSetting(7).asToggle().state
 							? getExplosionDamage_old(blockPos, (LivingEntity) entity)
-							: getExplosionDamage(blockPos, mc.player);
+									: getExplosionDamage(blockPos, mc.player);
 				} while (self > d && d >= ((LivingEntity) entity).getHealth());
 
 				if (self - 0.5D <= mc.player.getHealth()) {

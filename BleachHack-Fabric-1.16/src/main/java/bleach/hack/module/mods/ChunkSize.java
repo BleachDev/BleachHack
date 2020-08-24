@@ -128,9 +128,7 @@ public class ChunkSize extends Module {
 		CompoundTag compoundTag7;
 		for (int i = -1; i < 17; ++i) {
 			final int finalI = i;
-			ChunkSection chunkSection = Arrays.stream(chunkSections).filter(chunkSectionx -> {
-				return chunkSectionx != null && chunkSectionx.getYOffset() >> 4 == finalI;
-			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
+			ChunkSection chunkSection = Arrays.stream(chunkSections).filter(chunkSectionx -> (chunkSectionx != null && chunkSectionx.getYOffset() >> 4 == finalI)).findFirst().orElse(WorldChunk.EMPTY_SECTION);
 			ChunkNibbleArray chunkNibbleArray = lightingProvider.get(LightType.BLOCK)
 					.getLightSection(ChunkSectionPos.from(chunkPos, i));
 			ChunkNibbleArray chunkNibbleArray2 = lightingProvider.get(LightType.SKY)

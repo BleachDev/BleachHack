@@ -53,7 +53,7 @@ public class BleachFileHelper {
 			}
 
 			if (m.getKey() >= 0 || m.getDefaultKey() >= 0 /* Force saving of modules with a default bind to prevent them reapplying the
-															 * default bind */) {
+			 * default bind */) {
 				mo.add("bind", new JsonPrimitive(m.getKey()));
 			}
 

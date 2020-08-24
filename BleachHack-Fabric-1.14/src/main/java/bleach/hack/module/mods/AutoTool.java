@@ -53,7 +53,7 @@ public class AutoTool extends Module {
 						boolean itemInHand = !mc.player.inventory.getMainHandStack().isEmpty();
 						mc.interactionManager.method_2906(mc.player.container.syncId, slot, 0, SlotActionType.PICKUP, mc.player);
 						mc.interactionManager.method_2906(mc.player.container.syncId, 36 + mc.player.inventory.selectedSlot, 0, SlotActionType.PICKUP, mc.player);
-						
+
 						if (itemInHand)
 							mc.interactionManager.method_2906(mc.player.container.syncId, slot, 0, SlotActionType.PICKUP, mc.player);
 					}

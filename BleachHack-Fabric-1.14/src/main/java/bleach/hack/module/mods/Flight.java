@@ -74,16 +74,16 @@ public class Flight extends Module {
 				mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
 			else if (getSetting(2).asMode().mode == 2)
 				mc.player
-						.setVelocity(0,
-								mc.player.age % 40 == 0
-										? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(
-												new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() + 1.15, mc.player.getPosVector().getZ()))
-												.getBlock()) ? 0.15 : 0)
-										: mc.player.age % 20 == 0
-												? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(),
-														mc.player.getPosVector().getY() - 0.15, mc.player.getPosVector().getZ())).getBlock()) ? -0.15 : 0)
-												: 0,
-								0);
+				.setVelocity(0,
+						mc.player.age % 40 == 0
+						? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(
+								new BlockPos(mc.player.getPosVector().getX(), mc.player.getPosVector().getY() + 1.15, mc.player.getPosVector().getZ()))
+								.getBlock()) ? 0.15 : 0)
+								: mc.player.age % 20 == 0
+								? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(mc.player.getPosVector().getX(),
+										mc.player.getPosVector().getY() - 0.15, mc.player.getPosVector().getZ())).getBlock()) ? -0.15 : 0)
+										: 0,
+										0);
 			Vec3d forward = new Vec3d(0, 0, speed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 

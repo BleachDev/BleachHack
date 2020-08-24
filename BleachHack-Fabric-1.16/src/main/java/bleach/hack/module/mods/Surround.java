@@ -97,10 +97,10 @@ public class Surround extends Module {
 						if (getSetting(5).asRotate().state) {
 							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 						}
-						
+
 						WorldUtils.placeBlock(b.down(), obsidian, false, false);
 						cap++;
-						
+
 						if (cap >= (int) getSetting(4).asSlider().getValue()) {
 							return;
 						}
@@ -111,33 +111,33 @@ public class Surround extends Module {
 					if (getSetting(5).asRotate().state) {
 						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 					}
-	
+
 					WorldUtils.placeBlock(b, obsidian, false, false);
 					cap++;
 				}
 			}
 		} else {
 			Box box = mc.player.getBoundingBox();
-			
+
 			for (BlockPos b : Sets.newHashSet(
 					new BlockPos(box.minX - 1, box.minY, box.minZ), new BlockPos(box.minX, box.minY, box.minZ - 1),
 					new BlockPos(box.maxX + 1, box.minY, box.minZ), new BlockPos(box.maxX, box.minY, box.minZ - 1),
 					new BlockPos(box.minX - 1, box.minY, box.maxZ), new BlockPos(box.minX, box.minY, box.maxZ + 1),
 					new BlockPos(box.maxX + 1, box.minY, box.maxZ), new BlockPos(box.maxX, box.minY, box.maxZ + 1))) {
-				
+
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;
 				}
-				
+
 				if (!WorldUtils.canPlaceBlock(b)) {
 					if (WorldUtils.canPlaceBlock(b.down())) {
 						if (getSetting(5).asRotate().state) {
 							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 						}
-						
+
 						WorldUtils.placeBlock(b.down(), obsidian, false, false);
 						cap++;
-						
+
 						if (cap >= (int) getSetting(4).asSlider().getValue()) {
 							return;
 						}
@@ -148,7 +148,7 @@ public class Surround extends Module {
 					if (getSetting(5).asRotate().state) {
 						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 					}
-	
+
 					WorldUtils.placeBlock(b, obsidian, false, false);
 					cap++;
 				}

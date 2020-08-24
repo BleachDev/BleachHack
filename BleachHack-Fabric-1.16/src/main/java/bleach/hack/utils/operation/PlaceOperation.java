@@ -21,7 +21,7 @@ public class PlaceOperation extends Operation {
 				return mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(Vec3d.of(pos).add(0.5, 0.5, 0.5)) < 4.5;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -32,7 +32,7 @@ public class PlaceOperation extends Operation {
 				return WorldUtils.placeBlock(pos, i, false, false);
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -40,7 +40,7 @@ public class PlaceOperation extends Operation {
 	public boolean verify() {
 		return true;
 	}
-	
+
 	public Item getItem() {
 		return item;
 	}

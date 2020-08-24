@@ -56,24 +56,24 @@ public class RenderUtils {
 
 		gl11Cleanup();
 	}
-	
+
 	public static void drawOutlineBox(BlockPos blockPos, float r, float g, float b, float a) {
 		drawOutlineBox(new Box(blockPos), r, g, b, a);
 	}
-	
+
 	public static void drawOutlineBox(Box box, float r, float g, float b, float a) {
 		gl11Setup();
-		
+
 		Vec3d ren = renderPos();
-		
+
 		WorldRenderer.drawBoxOutline(new Box(
 				box.x1 - ren.x, box.y1 - ren.y, box.z1 - ren.z,
 				box.x2 - ren.x, box.y2 - ren.y, box.z2 - ren.z), r, g, b, a);
-		
+
 		gl11Cleanup();
 	}
-	
-	
+
+
 
 	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float t) {
 		gl11Setup();

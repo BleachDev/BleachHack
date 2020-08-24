@@ -79,10 +79,10 @@ public class SettingToggle extends SettingBase {
 			 * DrawableHelper.fill(x + 1, y + getHeight(len) - 2, x + 2, y + getHeight(len)
 			 * - 1, 0x90000000); DrawableHelper.fill(x + 2, y + getHeight(len) - 1, x + len
 			 * - 2, y + getHeight(len), 0x90b0b0b0);
-			 * 
+			 *
 			 * int h = y + 12; for (SettingBase s: children) { s.render(window, x + 1, h,
 			 * len - 2);
-			 * 
+			 *
 			 * h += s.getHeight(len - 2); } } */
 			if (expanded) {
 				DrawableHelper.fill(x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);

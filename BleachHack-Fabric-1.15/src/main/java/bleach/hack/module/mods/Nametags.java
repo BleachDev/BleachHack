@@ -79,7 +79,7 @@ public class Nametags extends Module {
 			// Color before name
 			String color = e instanceof Monster ? "§5"
 					: EntityUtils.isAnimal(e)
-							? "§a"
+					? "§a"
 							: e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 
 			if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||

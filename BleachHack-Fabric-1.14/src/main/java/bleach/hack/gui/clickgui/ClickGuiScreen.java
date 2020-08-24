@@ -51,7 +51,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	private boolean rmDown = false;
 	private boolean lmHeld = false;
 	private int mwScroll = 0;
-	
+
 	private TextFieldWidget searchField;
 
 	public ClickGuiScreen() {
@@ -95,7 +95,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		this.renderBackground();
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 3, 3, 0x305090);
 		font.draw("BleachHack-1.14-" + BleachHack.VERSION, 2, 2, 0x6090d0);
-		
+
 		if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
 			font.drawWithShadow("Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
 			font.drawWithShadow("Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10, 0x9999ff);
@@ -138,7 +138,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
 				if (tooltip != null) {
 					int tooltipY = tooltip.getMiddle();
-					
+
 					String[] split = tooltip.getRight().split("\n", -1 /* Adding -1 makes it keep empty splits */);
 					ArrayUtils.reverse(split);
 					for (String s: split) {
@@ -160,7 +160,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 									start + (l * 10) + 9, 0xff000000);
 							font.drawWithShadow(lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
 						}
-						
+
 						tooltipY -= lines.size() * 10;
 					}
 				}
@@ -201,7 +201,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		keyDown = int_1;
 		return super.keyPressed(int_1, int_2, int_3);
 	}
-	
+
 	public boolean mouseScrolled(double double_1, double double_2, double double_3) {
 		mwScroll = (int) double_3;
 		return super.mouseScrolled(double_1, double_2, double_3);

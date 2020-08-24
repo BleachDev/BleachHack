@@ -56,7 +56,7 @@ public class Fullbright extends Module {
 		} else if (getSetting(0).asMode().mode == 1) {
 			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 1, 5));
 		} /* else if (getSetting(0).toMode().mode == 2) { for (int i = 0; i < 16; i++) {
-			 * if (mc.world.dimension.getLightLevelToBrightness()[i] != 1) {
-			 * mc.world.dimension.getLightLevelToBrightness()[i] = 1; } } } */
+		 * if (mc.world.dimension.getLightLevelToBrightness()[i] != 1) {
+		 * mc.world.dimension.getLightLevelToBrightness()[i] = 1; } } } */
 	}
 }

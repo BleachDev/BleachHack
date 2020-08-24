@@ -36,12 +36,12 @@ public class BleachQueue {
 	public static void add(String id, Runnable runnable) {
 		add(id, runnable, 0);
 	}
-	
+
 	public static void add(String id, Runnable runnable, int inTicks) {
 		if (!queues.containsKey(id)) {
 			Deque<MutablePair<Runnable, Integer>> newQueue = new ArrayDeque<>();
 			newQueue.add(MutablePair.of(runnable, inTicks));
-			
+
 			queues.put(id, newQueue);
 		}
 
@@ -51,7 +51,7 @@ public class BleachQueue {
 	public static void cancelQueue(String id) {
 		queues.remove(id);
 	}
-	
+
 	public static boolean isEmpty(String id) {
 		return !queues.containsKey(id);
 	}
@@ -61,7 +61,7 @@ public class BleachQueue {
 			Deque<MutablePair<Runnable, Integer>> deque = e.getValue();
 
 			MutablePair<Runnable, Integer> first = deque.peek();
-			
+
 			if (first.right > 0) {
 				first.right--;
 				//System.out.println("sdrbubdu " + deque.peek().getRight() + " | " + first.getRight() + " | " + (deque.peek().getRight() > 0));

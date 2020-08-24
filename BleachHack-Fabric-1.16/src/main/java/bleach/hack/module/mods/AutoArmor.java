@@ -54,13 +54,13 @@ public class AutoArmor extends Module {
 		armorMap.put(EquipmentSlot.LEGS, new int[] { 37, getProtection(mc.player.inventory.getStack(37)), -1, -1 });
 		armorMap.put(EquipmentSlot.CHEST, new int[] { 38, getProtection(mc.player.inventory.getStack(38)), -1, -1 });
 		armorMap.put(EquipmentSlot.HEAD, new int[] { 39, getProtection(mc.player.inventory.getStack(39)), -1, -1 });
-		
+
 		/* Anti Break */
 		if (getSetting(0).asToggle().state) {
 			for (Entry<EquipmentSlot, int[]> e: armorMap.entrySet()) {
 				ItemStack is = mc.player.inventory.getStack(e.getValue()[0]);
 				int armorSlot = (e.getValue()[0] - 34) + (39 - e.getValue()[0]) * 2;
-				
+
 				if (is.isDamageable() && is.getMaxDamage() - is.getDamage() < 7) {
 					/* Look for an empty slot to quick move to */
 					int forceMoveSlot = -1;
@@ -75,7 +75,7 @@ public class AutoArmor extends Module {
 							forceMoveSlot = s;
 						}
 					}
-					
+
 					/* Bruh no empty spots, then force move to a non-totem/tool/armor item */
 					if (forceMoveSlot != -1) {
 						//System.out.println(forceMoveSlot);
@@ -84,7 +84,7 @@ public class AutoArmor extends Module {
 						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, armorSlot, 1, SlotActionType.QUICK_MOVE, mc.player);
 						return;
 					}
-					
+
 					/* No spots to move to, yeet the armor to not cause any bruh moments */
 					mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, armorSlot, 1, SlotActionType.THROW, mc.player);
 					return;
@@ -139,11 +139,11 @@ public class AutoArmor extends Module {
 	private int getProtection(ItemStack is) {
 		if (is.getItem() instanceof ArmorItem || is.getItem() == Items.ELYTRA) {
 			int prot = 0;
-			
+
 			if (is.getItem() instanceof ElytraItem) {
 				if (!ElytraItem.isUsable(is))
 					return 0;
-				
+
 				if (getSetting(1).asToggle().state)
 					prot = 32767;
 				else
@@ -151,7 +151,7 @@ public class AutoArmor extends Module {
 			} else if (is.getMaxDamage() - is.getDamage() < 7 && getSetting(0).asToggle().state) {
 				return 0;
 			}
-			
+
 			if (is.hasEnchantments()) {
 				for (Entry<Enchantment, Integer> e: EnchantmentHelper.get(is).entrySet()) {
 					if (e.getKey() instanceof ProtectionEnchantment)

@@ -96,7 +96,7 @@ public class NoSlow extends Module {
 			// still kinda scuffed until i get an actual mixin
 			mc.player.slowMovement(mc.player.getBlockState(), new Vec3d(1.75, 1.75, 1.75));
 		}
-		
+
 		/* Berry Bush */
 		if (getSetting(4).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.SWEET_BERRY_BUSH)) {
 			// also scuffed
@@ -105,7 +105,7 @@ public class NoSlow extends Module {
 
 		// Items handled in MixinPlayerEntity:sendMovementPackets_isUsingItem
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		/* Inventory */

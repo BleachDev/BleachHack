@@ -111,9 +111,9 @@ public class ChestESP extends Module {
 				} else if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {
 					int axis = e.getBoundingBox().maxX - e.getBoundingBox().minX < e.getBoundingBox().maxY - e.getBoundingBox().minY
 							? 0
-							: e.getBoundingBox().maxY - e.getBoundingBox().minY < e.getBoundingBox().maxZ - e.getBoundingBox().minZ
+									: e.getBoundingBox().maxY - e.getBoundingBox().minY < e.getBoundingBox().maxZ - e.getBoundingBox().minZ
 									? 1
-									: 2;
+											: 2;
 
 					RenderUtils.drawFilledBox(e.getBoundingBox().expand(axis == 0 ? 0 : 0.12, axis == 1 ? 0 : 0.12, axis == 2 ? 0 : 0.12), 0.1F, 0.1F, 0.5F, 0.7F);
 				} else {
@@ -158,11 +158,11 @@ public class ChestESP extends Module {
 
 		RenderUtils.drawFilledBox(new Box(
 				west ? pos.getX() - 0.94 : pos.getX() + 0.06,
-				pos.getY(),
-				north ? pos.getZ() - 0.94 : pos.getZ() + 0.06,
-				east ? pos.getX() + 1.94 : pos.getX() + 0.94,
-				pos.getY() + 0.875,
-				south ? pos.getZ() + 1.94 : pos.getZ() + 0.94),
+						pos.getY(),
+						north ? pos.getZ() - 0.94 : pos.getZ() + 0.06,
+								east ? pos.getX() + 1.94 : pos.getX() + 0.94,
+										pos.getY() + 0.875,
+										south ? pos.getZ() + 1.94 : pos.getZ() + 0.94),
 				1F, 0.6F, 0.3F, 0.7F);
 
 		return north ? pos.north() : east ? pos.east() : south ? pos.south() : west ? pos.west() : null;

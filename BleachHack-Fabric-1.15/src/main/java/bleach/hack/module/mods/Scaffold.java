@@ -86,7 +86,7 @@ public class Scaffold extends Module {
 		Set<BlockPos> blocks = (mode == 0
 				? new LinkedHashSet<>(Arrays.asList(new BlockPos(placeVec), new BlockPos(placeVec.add(range, 0, 0)), new BlockPos(placeVec.add(-range, 0, 0)),
 						new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))
-				: getSpiral(mode, new BlockPos(placeVec)));
+						: getSpiral(mode, new BlockPos(placeVec)));
 
 		// Don't bother doing anything if there aren't any blocks to place on
 		boolean empty = true;

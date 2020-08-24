@@ -7,7 +7,7 @@ import net.minecraft.util.math.Direction;
 public abstract class OperationBlueprint {
 
 	/* popbob penis
-	 * 
+	 *
 	 *   |    *
 	 *   |    *
 	 *   |   * *

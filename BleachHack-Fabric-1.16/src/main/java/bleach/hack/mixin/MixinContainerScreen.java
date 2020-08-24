@@ -41,7 +41,7 @@ import net.minecraft.util.Hand;
 
 @Mixin(HandledScreen.class)
 public abstract class MixinContainerScreen extends Screen {
-	
+
 	@Shadow protected int backgroundWidth;
 	@Shadow protected int backgroundHeight;
 
@@ -53,18 +53,18 @@ public abstract class MixinContainerScreen extends Screen {
 	protected void init(CallbackInfo info) {
 		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 			AbstractDonkeyEntity entity = (AbstractDonkeyEntity) client.player.getVehicle();
-	
+
 			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 82, (height - backgroundHeight) / 2 + 4, 44, 12, new LiteralText("AutoDupe"), button -> {
 				ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
 			}));
-	
+
 			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 130, (height - backgroundHeight) / 2 + 4, 39, 12, new LiteralText("Dupe"), button -> {
 				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
-	
+
 				MinecraftClient.getInstance().player.networkHandler.sendPacket(
 						new PlayerInteractEntityC2SPacket(
 								entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
-	
+
 				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
 			}));
 		}

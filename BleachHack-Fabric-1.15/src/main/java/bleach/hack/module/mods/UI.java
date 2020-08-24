@@ -159,7 +159,7 @@ public class UI extends Module {
 					: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
 
 			infoList.add("XYZ: " + (nether ? "§4" : "§b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-					+ " §7[" + (nether ? "§b" : "§4") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "§7]");
+			+ " §7[" + (nether ? "§b" : "§4") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "§7]");
 		}
 
 		if (getSetting(8).asToggle().state) {
@@ -256,7 +256,7 @@ public class UI extends Module {
 		for (String s : infoList) {
 			mc.textRenderer.drawWithShadow(s,
 					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getStringWidth(s) - 2,
-					infoMode == 1 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
+							infoMode == 1 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
 			count2++;
 		}
 	}

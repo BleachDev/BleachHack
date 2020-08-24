@@ -35,7 +35,7 @@ public abstract class MixinEntityRenderer<T extends Entity> {
 
 	/**
 	 * fuck javadoc
-	 * 
+	 *
 	 * @param entity_1
 	 * @reason fuck
 	 * @author bleach

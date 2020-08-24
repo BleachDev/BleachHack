@@ -21,12 +21,12 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class ClickTp extends Module {
-	
+
 	private BlockPos pos = null;
 	private Direction dir = null;
-	
+
 	private boolean antiSpamClick = false;
-	
+
 	public ClickTp() {
 		super("ClickTp", KEY_UNBOUND, Category.MOVEMENT, "Allows you to teleport by clicking",
 				new SettingToggle("In Air", true).withDesc("Teleports even if you are pointing in the air"),
@@ -35,11 +35,11 @@ public class ClickTp extends Module {
 				new SettingToggle("Always Up", false).withDesc("Always teleports you to the top of blocks instead of sides"),
 				new SettingColor("Highlight", 1f, 0.2f, 0.8f, false));
 	}
-	
+
 	public void onDisable() {
 		pos = null;
 		dir = null;
-		
+
 		super.onDisable();
 	}
 
@@ -53,7 +53,7 @@ public class ClickTp extends Module {
 					col[0], col[1], col[2], 1f);
 		}
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
@@ -61,20 +61,20 @@ public class ClickTp extends Module {
 			dir = null;
 			return;
 		}
-		
+
 		BlockHitResult hit = (BlockHitResult) mc.player.rayTrace(100, mc.getTickDelta(), getSetting(1).asToggle().state);
-		
+
 		boolean miss = hit.getType() == Type.MISS && !getSetting(0).asToggle().state;
-		
+
 		pos = miss ? null : hit.getBlockPos();
 		dir = miss ? null : getSetting(3).asToggle().state ? Direction.UP : hit.getSide();
-		
+
 		if (pos != null && dir != null) {
 			if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == 1 && mc.currentScreen == null && !antiSpamClick) {
 				antiSpamClick = true;
-				
+
 				Vec3d tpPos = Vec3d.of(pos.offset(dir, dir == Direction.DOWN ? 2 : 1)).add(0.5, 0, 0.5);
-				
+
 				if (getSetting(2).asToggle().state) {
 					mc.player.updatePosition(mc.player.getX(), tpPos.y, mc.player.getZ());
 					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), tpPos.y, mc.player.getZ(), false));

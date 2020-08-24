@@ -76,7 +76,7 @@ public class AutoReconnect extends Module {
 				server = new ServerInfo("Server",
 						(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
 								+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"),
-						false);
+								false);
 			} catch (Exception e) {
 			}
 		}

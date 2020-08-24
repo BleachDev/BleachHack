@@ -27,17 +27,17 @@ public class PlaceDirOperation extends PlaceOperation {
 				if (WorldUtils.canPlaceBlock(pos)) {
 					Vec3d lookPos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).add(dir.getOffsetX(), dir.getOffsetY(), dir.getOffsetZ());
 					WorldUtils.facePosPacket(lookPos.getX(), lookPos.getY(), lookPos.getZ());
-					
+
 					if (!faced) {
 						faced = true;
 						return false;
 					}
-					
+
 					return WorldUtils.placeBlock(pos, i, false, false);
 				}
 			}
 		}
-		
+
 		return false;
 	}
 

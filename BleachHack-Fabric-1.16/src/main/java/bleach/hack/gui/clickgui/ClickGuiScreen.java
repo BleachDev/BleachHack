@@ -139,7 +139,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
 				if (tooltip != null) {
 					int tooltipY = tooltip.getMiddle();
-					
+
 					String[] split = tooltip.getRight().split("\n", -1 /* Adding -1 makes it keep empty splits */);
 					ArrayUtils.reverse(split);
 					for (String s: split) {
@@ -161,7 +161,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 									start + (l * 10) + 9, 0xff000000);
 							textRenderer.drawWithShadow(matrix, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
 						}
-						
+
 						tooltipY -= lines.size() * 10;
 					}
 				}
@@ -202,7 +202,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		keyDown = int_1;
 		return super.keyPressed(int_1, int_2, int_3);
 	}
-	
+
 	public boolean mouseScrolled(double double_1, double double_2, double double_3) {
 		mwScroll = (int) double_3;
 		return super.mouseScrolled(double_1, double_2, double_3);

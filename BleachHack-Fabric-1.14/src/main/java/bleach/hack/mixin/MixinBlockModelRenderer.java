@@ -40,7 +40,7 @@ import net.minecraft.world.BlockRenderView;
  */
 @Mixin(BlockModelRenderer.class)
 public class MixinBlockModelRenderer {
-	
+
 	@Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
 	private void tesselate(BlockRenderView blockRenderView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1,
 			boolean boolean_1, Random random_1, long long_1, CallbackInfoReturnable<Boolean> ci) {

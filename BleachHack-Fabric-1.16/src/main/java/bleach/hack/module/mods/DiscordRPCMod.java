@@ -144,8 +144,8 @@ public class DiscordRPCMod extends Module {
 
 			DiscordRPC.discordUpdatePresence(
 					new DiscordRichPresence.Builder(text2)
-							.setBigImage("bh14", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION)
-							.setDetails(text1).setStartTimestamps(start).build());
+					.setBigImage("bh14", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION)
+					.setDetails(text1).setStartTimestamps(start).build());
 		}
 
 		if (tick % 200 == 0) {

@@ -21,8 +21,8 @@ public class NoRender extends Module {
 				new SettingToggle("Liquid", true).withDesc("Removes the underwater overlay when you are in water"), // 3
 				new SettingToggle("Pumpkin", true).withDesc("Removes the pumpkin overlay"), // 4
 				new SettingToggle("Signs", false).withDesc("Doesn't render signs"), /* .withChildren( // 5 new SettingMode("Mode", "Unrender", "Blank", "Custom").
-																					 * withDesc("How to render signs, use the \"customsign\" command to set sign text"
-																					 * )), */
+				 * withDesc("How to render signs, use the \"customsign\" command to set sign text"
+				 * )), */
 				new SettingToggle("Wobble", true).withDesc("Removes the nuasea effect"), // 6
 				new SettingToggle("BossBar", false).withDesc("Removes bossbars"), // 7
 				new SettingToggle("Totem", false).withDesc("Removes the totem animation").withChildren(

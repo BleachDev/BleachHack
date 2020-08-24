@@ -75,13 +75,13 @@ public class SettingSlider extends SettingBase {
 		if (window.mouseOver(x + 1, y, x + len - 2, y + 12)) {
 			if (window.lmHeld) {
 				int percent = ((window.mouseX - x) * 100) / (len - 2);
-	
+
 				setValue(round(percent * ((max - min) / 100) + min, decimals));
 			}
-			
+
 			if (window.mwScroll != 0) {
 				double units = 1 / (Math.pow(10, decimals));
-				
+
 				setValue(MathHelper.clamp(getValue() + units * window.mwScroll, min, max));
 			}
 		}

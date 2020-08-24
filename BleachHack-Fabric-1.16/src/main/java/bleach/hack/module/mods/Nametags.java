@@ -79,7 +79,7 @@ public class Nametags extends Module {
 			// Color before name
 			String color = e instanceof Monster ? "\u00a75"
 					: EntityUtils.isAnimal(e)
-							? "\u00a7a"
+					? "\u00a7a"
 							: e.isSneaking() ? "\u00a76" : e instanceof PlayerEntity ? "\u00a7c" : "\u00a7f";
 
 			if (e == mc.player || e == mc.player.getVehicle() || color == "\u00a7f" ||
@@ -134,7 +134,7 @@ public class Nametags extends Module {
 
 			/* Drawing Items */
 			/* double c = 0; double higher = getSetting(1).asMode().mode == 1 ? 0.25 : 0;
-			 * 
+			 *
 			 * if (getSetting(0).asMode().mode == 0) { RenderUtilsLiving.drawItem(e.prevX +
 			 * (e.getX() - e.prevX) * mc.getTickDelta(), (e.prevY + (e.getY() - e.prevY) *
 			 * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale), e.prevZ +
@@ -144,7 +144,7 @@ public class Nametags extends Module {
 			 * mc.getTickDelta(), (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) +
 			 * e.getHeight() + ((0.75 + higher) * scale), e.prevZ + (e.getZ() - e.prevZ) *
 			 * mc.getTickDelta(), 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
-			 * 
+			 *
 			 * for (ItemStack i: e.getArmorItems()) { RenderUtilsLiving.drawItem(e.prevX +
 			 * (e.getX() - e.prevX) * mc.getTickDelta(), (e.prevY + (e.getY() - e.prevY) *
 			 * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale), e.prevZ +
@@ -159,13 +159,13 @@ public class Nametags extends Module {
 			 * e.getHeight() + ((0.75 + higher) * scale), e.prevZ + (e.getZ() - e.prevZ) *
 			 * mc.getTickDelta(), 1.25, 0, scale,
 			 * e.getEquippedStack(EquipmentSlot.OFFHAND));
-			 * 
+			 *
 			 * for (ItemStack i: e.getArmorItems()) { if (i.getCount() < 1) continue;
 			 * RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) *
 			 * mc.getTickDelta(), (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) +
 			 * e.getHeight() + ((0.75 + higher) * scale), e.prevZ + (e.getZ() - e.prevZ) *
 			 * mc.getTickDelta(), 0, c, scale, i); c++; } }
-			 * 
+			 *
 			 * event.setCancelled(true); */
 		}
 	}

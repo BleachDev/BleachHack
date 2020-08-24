@@ -101,7 +101,7 @@ public class WorldRenderUtils {
 			mc.textRenderer.drawWithShadow(
 					subText, -4 - w1, c * 10 - 1,
 					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE
-							? 0xff5050
+					? 0xff5050
 							: 0xffb0e0);
 			c--;
 		}

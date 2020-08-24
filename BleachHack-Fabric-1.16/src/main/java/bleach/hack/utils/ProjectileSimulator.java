@@ -42,9 +42,9 @@ public class ProjectileSimulator {
 	public static Entity summonProjectile(PlayerEntity thrower, boolean allowThrowables, boolean allowXp, boolean allowPotions) {
 		ItemStack hand = (isThrowable(thrower.inventory.getMainHandStack().getItem(), allowThrowables, allowXp, allowPotions)
 				? thrower.inventory.getMainHandStack()
-				: isThrowable(thrower.inventory.offHand.get(0).getItem(), allowThrowables, allowXp, allowPotions)
+						: isThrowable(thrower.inventory.offHand.get(0).getItem(), allowThrowables, allowXp, allowPotions)
 						? thrower.inventory.offHand.get(0)
-						: null);
+								: null);
 
 		if (hand == null)
 			return null;

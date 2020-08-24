@@ -91,8 +91,8 @@ public class BleachFileMang {
 			FileWriter writer = new FileWriter(stringsToPath(file).toFile(), true);
 			writer.write(
 					(fileContent.endsWith("\n") || !fileContent.contains("\n") ? "" : "\n")
-							+ content
-							+ (content.endsWith("\n") ? "" : "\n"));
+					+ content
+					+ (content.endsWith("\n") ? "" : "\n"));
 			writer.close();
 		} catch (Exception e) {
 			System.out.println("Error Appending File: " + Arrays.toString(file));

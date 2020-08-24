@@ -74,7 +74,7 @@ public class AutoReconnect extends Module {
 				server = new ServerInfo("Server",
 						(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
 								+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"),
-						false);
+								false);
 			} catch (Exception e) {
 			}
 		}
@@ -102,10 +102,10 @@ public class AutoReconnect extends Module {
 					(getSetting(0).asToggle().state ? "§a" : "§c") + "AutoReconnect ["
 							+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
 							+ "]",
-					button -> {
-						getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
-						reconnectTime = System.currentTimeMillis();
-					}));
+							button -> {
+								getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
+								reconnectTime = System.currentTimeMillis();
+							}));
 		}
 
 		public void render(int int_1, int int_2, float float_1) {

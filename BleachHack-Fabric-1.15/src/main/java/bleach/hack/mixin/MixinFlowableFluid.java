@@ -20,8 +20,8 @@ public class MixinFlowableFluid {
 		if (ModuleManager.getModule(NoVelocity.class).getSetting(3).asToggle().state) {
 			return false;
 		}
-		
+
 		return var9.hasNext();
 	}
-	
+
 }

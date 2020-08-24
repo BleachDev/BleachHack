@@ -70,7 +70,7 @@ public class CmdEntityStats extends Command {
 				maxHealth = h.getMaxHealth() + " \u00a72HP";
 				speed = round(43.17 * h.getMovementSpeed(), 2) + " \u00a72m/s";
 				jumpHeight = round(-0.1817584952 * Math.pow(h.getJumpStrength(), 3) + 3.689713992 * Math.pow(h.getJumpStrength(), 2) + 2.128599134 * h.getJumpStrength()
-						- 0.343930367, 4) + " \u00a72m";
+				- 0.343930367, 4) + " \u00a72m";
 				BleachLogger.infoMessage(
 						"\n\u00a76Entity Stats:\n\u00a7cMax Health: \u00a7b" + maxHealth + "\n\u00a7cSpeed: \u00a7b" + speed + "\n\u00a7cJump: \u00a7b" + jumpHeight);
 			} else if (mc.player.getVehicle() instanceof LivingEntity) {

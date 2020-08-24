@@ -14,7 +14,7 @@ public class HandProgress extends Module {
 		super("HandProgress", KEY_UNBOUND, Category.RENDER, "Smaller view of mainhand/offhand",
 				new SettingSlider("Mainhand", 0.1, 1.0, 1.0, 1), // 0
 				new SettingSlider("Offhand", 0.1, 1.0, 1.0, 1) // 1
-		);
+				);
 	}
 
 	@Subscribe
