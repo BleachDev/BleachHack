@@ -27,10 +27,12 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.WorldRenderUtils;
 import com.google.common.eventbus.Subscribe;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
 public class Nametags extends Module {
@@ -100,15 +102,13 @@ public class Nametags extends Module {
             /* Drawing Nametags */
             if (getSetting(1).asMode().mode == 0) {
                 if (BleachHack.friendMang.has(e.getName().getString())) {
-                    WorldRenderUtils.drawText("\u00A7b" + e.getName().getString()
-                                    + " \u00a77[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a77/\u00a7a" + getHealthColor(e) + (int) e.getMaxHealth() + "\u00a77]",
+                    WorldRenderUtils.drawText("\u00A7b" + e.getName().getString() + " " + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()),
                             e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
                             (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
                             e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
                 } else {
-                    WorldRenderUtils.drawText("\u00A7c" + e.getName().getString()
-                                    + " \u00a77[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\u00a77/\u00a7a" + getHealthColor(e) + (int) e.getMaxHealth() + "\u00a77]",
-                            e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+                    WorldRenderUtils.drawText("\u00A7c" + e.getName().getString() + " " + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()),
+                        e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
                             (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
                             e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
                 }
@@ -138,58 +138,54 @@ public class Nametags extends Module {
                         e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
             } else if (getSetting(1).asMode().mode == 2) {
                 WorldRenderUtils.drawText(color + e.getName().getString()
-                                + getHealthColor(e) + " [" + (int) ((e.getHealth() + e.getAbsorptionAmount()) / e.getMaxHealth() * 100) + "%]",
+                                + getHealthColor(e) + " " + (int) ((e.getHealth() + e.getAbsorptionAmount()) / e.getMaxHealth() * 100) + "%",
                         e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
                         (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
                         e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
             }
 
             /* Drawing Items */
-			/*double c = 0;
+			double c = 0;
 				double higher = getSetting(1).asMode().mode == 1 ? 0.25 : 0;
 
 				if (getSetting(0).asMode().mode == 0) {
-					RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+                    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-					RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+                    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 
 					for (ItemStack i: e.getArmorItems()) {
-						RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+                        WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 								(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 								e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), c+1.5, 0, scale, i);
 						c--;
 					}
 				} else if (getSetting(0).asMode().mode == 1) {
-					RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+                    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-					RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+                    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 							(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 							e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
 
 					for (ItemStack i: e.getArmorItems()) {
 						if (i.getCount() < 1) continue;
-						RenderUtilsLiving.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+						WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 								(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
 								e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 0, c, scale, i);
 						c++;
 					}
 				}
 
-				event.setCancelled(true);*/
+				event.setCancelled(true);
         }
     }
 
     private String getHealthColor(LivingEntity entity) {
-        if (entity.getHealth() + entity.getAbsorptionAmount() > entity.getMaxHealth()) {
-            return "\u00a7e";
-        } else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.7) {
+        if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.7) {
             return "\u00a7a";
-        } else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.4) {
-            return "\u00a76";
         } else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.1) {
             return "\u00a7c";
         } else {
