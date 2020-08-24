@@ -110,6 +110,7 @@ public class ModuleManager {
             new Trajectories(),
             new UI(),
             new Xray(),
+            new StrengthESP(),
             //new TunnelESP(),
             //new AutoBreed(),
             //new Test(),
