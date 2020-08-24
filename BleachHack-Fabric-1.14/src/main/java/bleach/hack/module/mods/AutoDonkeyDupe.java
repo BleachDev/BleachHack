@@ -78,7 +78,7 @@ public class AutoDonkeyDupe extends Module {
 
 	@Subscribe
 	public void onSendPacket(EventSendPacket event) {
-		if (((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel)
+		if (ModuleManager.getModule(MountBypass.class).dontCancel)
 			return;
 
 		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket
@@ -188,11 +188,11 @@ public class AutoDonkeyDupe extends Module {
 						}
 					}
 				} else {
-					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
+					ModuleManager.getModule(MountBypass.class).dontCancel = true;
 					mc.player.networkHandler.sendPacket(
 							new PlayerInteractEntityC2SPacket(
 									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
-					((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
+					ModuleManager.getModule(MountBypass.class).dontCancel = false;
 					return;
 				}
 			}

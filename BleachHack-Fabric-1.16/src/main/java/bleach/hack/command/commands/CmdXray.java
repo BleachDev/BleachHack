@@ -54,7 +54,7 @@ public class CmdXray extends Command {
 		System.out.println(lines);
 
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
-			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+			Xray xray = ModuleManager.getModule(Xray.class);
 			String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
 
 			if (args[0].equalsIgnoreCase("add")) {

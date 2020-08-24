@@ -38,7 +38,7 @@ public class MixinFluidRenderer {
 	@Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
 	public void tesselate(BlockRenderView blockRenderView_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1, FluidState fluidState_1,
 			CallbackInfoReturnable<Boolean> callbackInfo) {
-		Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+		Xray xray = ModuleManager.getModule(Xray.class);
 		if (xray.getSetting(0).asToggle().state)
 			return;
 		if (xray.isToggled() && !xray.isVisible(fluidState_1.getBlockState().getBlock())) {
@@ -49,7 +49,7 @@ public class MixinFluidRenderer {
 
 	@Inject(method = "method_3344", at = @At("HEAD"), cancellable = true)
 	private static void method_3344(BlockView blockView_1, BlockPos blockPos_1, Direction direction_1, float float_1, CallbackInfoReturnable<Boolean> callbackInfo) {
-		Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+		Xray xray = ModuleManager.getModule(Xray.class);
 		if (xray.getSetting(0).asToggle().state)
 			return;
 		if (xray.isToggled() && xray.isVisible(blockView_1.getBlockState(blockPos_1).getBlock())) {

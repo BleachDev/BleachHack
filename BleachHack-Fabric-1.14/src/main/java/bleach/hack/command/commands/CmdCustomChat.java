@@ -32,7 +32,7 @@ public class CmdCustomChat extends Command {
 			return;
 		}
 
-		CustomChat chat = (CustomChat) ModuleManager.getModule(CustomChat.class);
+		CustomChat chat = ModuleManager.getModule(CustomChat.class);
 		if (args[0].equalsIgnoreCase("current")) {
 			BleachLogger.infoMessage("Current prefix: \"" + chat.prefix + "\", suffix: \"" + chat.suffix + "\"");
 		} else if (args[0].equalsIgnoreCase("reset")) {

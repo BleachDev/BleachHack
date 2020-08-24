@@ -110,10 +110,11 @@ public class ModuleManager {
 		return mods;
 	}
 
-	public static Module getModule(Class<? extends Module> clazz) {
+	@SuppressWarnings("unchecked")
+	public static <T> T getModule(Class<T> clazz) {
 		for (Module module : mods) {
-			if (module.getClass().equals(clazz)) {
-				return module;
+			if (clazz.isInstance(module)) {
+				return (T) module;
 			}
 		}
 

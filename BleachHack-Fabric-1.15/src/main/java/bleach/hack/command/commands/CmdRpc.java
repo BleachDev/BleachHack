@@ -29,7 +29,7 @@ public class CmdRpc extends Command {
 			BleachLogger.errorMessage(getSyntax());
 		}
 
-		((DiscordRPCMod) ModuleManager.getModule(DiscordRPCMod.class)).setText(args[0], args[1]);
+		ModuleManager.getModule(DiscordRPCMod.class).setText(args[0], args[1]);
 
 		BleachLogger.infoMessage("Set RPC to " + args[0] + ", " + args[1]);
 

@@ -45,7 +45,7 @@ public class MixinBlockModelRenderer {
 	private void tesselate(BlockRenderView blockRenderView_1, BakedModel bakedModel_1, BlockState blockState_1, BlockPos blockPos_1, BufferBuilder bufferBuilder_1,
 			boolean boolean_1, Random random_1, long long_1, CallbackInfoReturnable<Boolean> ci) {
 		try {
-			Xray xray = (Xray) ModuleManager.getModule(Xray.class);
+			Xray xray = ModuleManager.getModule(Xray.class);
 			if (!xray.isVisible(blockState_1.getBlock())) {
 				ci.setReturnValue(false);
 				ci.cancel();

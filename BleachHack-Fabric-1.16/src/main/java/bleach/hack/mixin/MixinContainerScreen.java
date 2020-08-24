@@ -59,13 +59,13 @@ public abstract class MixinContainerScreen extends Screen {
 			}));
 
 			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 130, (height - backgroundHeight) / 2 + 4, 39, 12, new LiteralText("Dupe"), button -> {
-				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
+				ModuleManager.getModule(MountBypass.class).dontCancel = true;
 
 				MinecraftClient.getInstance().player.networkHandler.sendPacket(
 						new PlayerInteractEntityC2SPacket(
 								entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
 
-				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
+				ModuleManager.getModule(MountBypass.class).dontCancel = false;
 			}));
 		}
 	}
