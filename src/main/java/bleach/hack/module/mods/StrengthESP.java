@@ -4,6 +4,8 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.particle.Particle;
@@ -16,7 +18,9 @@ import java.util.*;
 
 public class StrengthESP extends Module {
     public StrengthESP() {
-        super("StrengthESP", KEY_UNBOUND, Category.RENDER, "Renders red box around people with strength");
+        super("StrengthESP", KEY_UNBOUND, Category.RENDER, "Renders red box around people with strength",
+            new SettingToggle("Chat Alert", false).withDesc("Logs strength into chat (work in progress)")
+        );
     }
 
     @Subscribe
@@ -25,6 +29,9 @@ public class StrengthESP extends Module {
             assert event.entity != null;
             if (((PlayerEntity) event.entity).hasStatusEffect(StatusEffects.STRENGTH)) {
                 RenderUtils.drawFilledBox(event.entity.getBoundingBox(), 1.0F, 0.0F, 0.0F, 1F);
+                if (this.getSettings().get(0).asToggle().state) {
+                    BleachLogger.infoMessage((event.entity.getEntityName() + " has drank strength"));
+                }
             }
         }
     }
