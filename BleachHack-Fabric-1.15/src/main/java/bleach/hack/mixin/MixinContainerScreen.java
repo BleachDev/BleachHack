@@ -43,11 +43,8 @@ import net.minecraft.util.Hand;
 @Mixin(ContainerScreen.class)
 public abstract class MixinContainerScreen<T extends Container> extends Screen implements ContainerProvider<T> {
 
-	@Shadow
-	public int x;
-
-	@Shadow
-	public int y;
+	@Shadow protected int containerWidth;
+	@Shadow protected int containerHeight;
 
 	public MixinContainerScreen(Container container_1, PlayerInventory playerInventory_1, Text text_1) {
 		super(text_1);
@@ -55,31 +52,29 @@ public abstract class MixinContainerScreen<T extends Container> extends Screen i
 
 	@Inject(at = @At("RETURN"), method = "init()V")
 	protected void init(CallbackInfo info) {
-		if (!(MinecraftClient.getInstance().player.getVehicle() instanceof AbstractDonkeyEntity)) {
-			return;
+		if (minecraft.player.getVehicle() instanceof AbstractDonkeyEntity) {
+			AbstractDonkeyEntity entity = (AbstractDonkeyEntity) minecraft.player.getVehicle();
+	
+			addButton(new ButtonWidget((width - containerWidth) / 2 + 82, (height - containerHeight) / 2 + 4, 44, 12, "AutoDupe", button -> {
+				ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
+			}));
+	
+			addButton(new ButtonWidget((width - containerWidth) / 2 + 130, (height - containerHeight) / 2 + 4, 39, 12, "Dupe", button -> {
+				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
+	
+				MinecraftClient.getInstance().player.networkHandler.sendPacket(
+						new PlayerInteractEntityC2SPacket(
+								entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
+	
+				((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
+			}));
 		}
-
-		AbstractDonkeyEntity entity = (AbstractDonkeyEntity) MinecraftClient.getInstance().player.getVehicle();
-
-		addButton(new ButtonWidget(x + 82, y + 4, 44, 12, "AutoDupe", button -> {
-			ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
-		}));
-
-		addButton(new ButtonWidget(x + 130, y + 4, 39, 12, "Dupe", button -> {
-			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = true;
-
-			MinecraftClient.getInstance().player.networkHandler.sendPacket(
-					new PlayerInteractEntityC2SPacket(
-							entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
-
-			((MountBypass) ModuleManager.getModule(MountBypass.class)).dontCancel = false;
-		}));
 	}
 
 	@Inject(at = @At("RETURN"), method = "render(IIF)V")
 	public void render(int int_1, int int_2, float float_1, CallbackInfo info) {
 		EventDrawContainer event = new EventDrawContainer(
-				(ContainerScreen<?>) MinecraftClient.getInstance().currentScreen, int_1, int_2); // hmm
+				(ContainerScreen<?>) minecraft.currentScreen, int_1, int_2); // hmm
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();
