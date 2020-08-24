@@ -51,75 +51,67 @@ public class StashFinder extends Module {
 
     @Subscribe
     public void onTick(EventTick event){
-        mc.options.keyForward.setPressed(true);
-        if (this.startChunk == null) {
-            this.startChunk = new ChunkPos(this.mc.player.getBlockPos());
-        }
-        int view = 16;
-        int step = 1;
-
-        boolean sorted = false;
-
-        ChunkPos c;
-
-        int x;
-        int z;
-
-        for (x = -view; x <= view; x += 16)
-        {
-            for (z = -view; z <= view; z += 16)
-            {
-                c = new ChunkPos(this.mc.player.getBlockPos().add(x, 0, z));
-
-                if (!this.chunks.contains(c))
-                {
-                    this.chunks.add(c);
-
-                    if (this.nextChunks.contains(c))
-                    {
-                        this.nextChunks.remove(c);
-                        if (!sorted)
-                        {
-                            this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
-                            sorted = true;
-                        }
-                    }
-                }
+        if (mc.player.isFallFlying()) {
+            mc.options.keyForward.setPressed(true);
+            if (this.startChunk == null) {
+                this.startChunk = new ChunkPos(this.mc.player.getBlockPos());
             }
-        }
+            int view = 16;
+            int step = 1;
 
-         if (!this.nextChunks.isEmpty())
-        {
-            this.nextChunk = this.nextChunks.get(0);
-            final double rotations[] = EntityUtils.calculateLookAt(
-                    nextChunk.getStartX() + 8,
-                    64,
-                    nextChunk.getStartZ() + 8,
-                    mc.player);
+            boolean sorted = false;
 
-            mc.player.yaw = (float)rotations[0];
+            ChunkPos c;
 
+            int x;
+            int z;
 
-        } else {
-             this.chunks.clear();
-             this.range += (int) this.getSettings().get(2).asSlider().getValue();
+            for (x = -view; x <= view; x += 16) {
+                for (z = -view; z <= view; z += 16) {
+                    c = new ChunkPos(this.mc.player.getBlockPos().add(x, 0, z));
 
-            for (x = this.startChunk.x - this.range; x <= this.startChunk.x + this.range; ++x)
-            {
-                for (z = this.startChunk.z - this.range; z <= this.startChunk.z + this.range; ++z)
-                {
-                    if (Math.abs(x - this.startChunk.x) > this.range - step || Math.abs(z - this.startChunk.z) > this.range - step)
-                    {
-                        c = new ChunkPos(x, z);
-                        if (!this.chunks.contains(c))
-                        {
-                            this.nextChunks.add(c);
+                    if (!this.chunks.contains(c)) {
+                        this.chunks.add(c);
+
+                        if (this.nextChunks.contains(c)) {
+                            this.nextChunks.remove(c);
+                            if (!sorted) {
+                                this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
+                                sorted = true;
+                            }
                         }
                     }
                 }
             }
 
-            this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
+            if (!this.nextChunks.isEmpty()) {
+                this.nextChunk = this.nextChunks.get(0);
+                final double rotations[] = EntityUtils.calculateLookAt(
+                        nextChunk.getStartX() + 8,
+                        64,
+                        nextChunk.getStartZ() + 8,
+                        mc.player);
+
+                mc.player.yaw = (float) rotations[0];
+
+
+            } else {
+                this.chunks.clear();
+                this.range += (int) this.getSettings().get(2).asSlider().getValue();
+
+                for (x = this.startChunk.x - this.range; x <= this.startChunk.x + this.range; ++x) {
+                    for (z = this.startChunk.z - this.range; z <= this.startChunk.z + this.range; ++z) {
+                        if (Math.abs(x - this.startChunk.x) > this.range - step || Math.abs(z - this.startChunk.z) > this.range - step) {
+                            c = new ChunkPos(x, z);
+                            if (!this.chunks.contains(c)) {
+                                this.nextChunks.add(c);
+                            }
+                        }
+                    }
+                }
+
+                this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
+            }
         }
     }
 
