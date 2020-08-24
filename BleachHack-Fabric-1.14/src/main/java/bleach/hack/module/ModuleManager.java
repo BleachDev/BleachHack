@@ -38,6 +38,7 @@ public class ModuleManager {
 			new AntiHunger(),
 			new ArrowJuke(),
 			new AutoArmor(),
+			new AutoBuild(),
 			new AutoDonkeyDupe(),
 			new AutoReconnect(),
 			new AutoRespawn(),
