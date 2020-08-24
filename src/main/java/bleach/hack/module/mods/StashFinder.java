@@ -1,5 +1,6 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
@@ -9,6 +10,8 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
+import net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.ChunkPos;
 
@@ -33,7 +36,6 @@ public class StashFinder extends Module {
 
     public void onEnable() {
         super.onEnable();
-        mc.options.keyForward.setPressed(true);
 
         if (this.startChunk != null) {
             this.range = ((int) Math.max(Math.abs(this.mc.player.getX() - (double) this.startChunk.getStartX()), Math.abs(this.mc.player.getZ() - (double) this.startChunk.getStartZ())) >> 4) - 1;
@@ -50,6 +52,7 @@ public class StashFinder extends Module {
 
     @Subscribe
     public void onTick(EventTick event){
+        mc.options.keyForward.setPressed(true);
         if (this.startChunk == null) {
             this.startChunk = new ChunkPos(this.mc.player.getBlockPos());
         }
@@ -152,4 +155,11 @@ public class StashFinder extends Module {
             }
         }
     }*/
+
+    // This ensures that if the game crashes, the StashFinder will not be saved as enabled. this will cause the game to crash every time it turns on
+    @Subscribe
+    private void EventDisconnect(EventReadPacket event) {
+        if (event.getPacket() instanceof CloseScreenS2CPacket || event.getPacket() instanceof DisconnectS2CPacket)
+            setToggled(false);
+    }
 }
