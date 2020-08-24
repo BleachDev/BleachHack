@@ -21,6 +21,7 @@ import bleach.hack.command.Command;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.file.BleachFileMang;
 
 public class CmdDrawn extends Command {
 
@@ -47,7 +48,13 @@ public class CmdDrawn extends Command {
                     BleachLogger.errorMessage("Expected true or false.");
                     return;
                 }
-                m.setDrawn(Boolean.parseBoolean(args[1]));
+                if (Boolean.parseBoolean(args[1]) == Boolean.FALSE) {
+                    BleachFileMang.appendFile(args[0].toLowerCase(), "drawn.txt");
+                }
+                //TODO add a new file manager option to remove strings from a document
+                //} else if (Boolean.parseBoolean(args[1]) == Boolean.TRUE) {
+                //    BleachFileMang.deleteFile(args[0].toLowerCase(), "drawn.txt");
+                //}
                 BleachLogger.errorMessage("Drawn \"" + m.getName() + "\" set to " + Boolean.parseBoolean(args[1]));
                 return;
             }

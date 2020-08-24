@@ -99,7 +99,7 @@ public class BoxESP extends Module {
             float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
             event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
             RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), col[0], col[1], col[2], 1f);
-        } else if (((PlayerEntity) event.entity).hasStatusEffect(StatusEffects.STRENGTH) && this.getSettings().get(7).asToggle().state) {
+        } else if ((event.entity instanceof PlayerEntity) && ((PlayerEntity) event.entity).hasStatusEffect(StatusEffects.STRENGTH) && this.getSettings().get(7).asToggle().state) {
             RenderUtils.drawFilledBox(event.entity.getBoundingBox(), 1.0F, 0.0F, 0.0F, 1F);
         }
 

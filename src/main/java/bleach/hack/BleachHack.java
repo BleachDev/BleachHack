@@ -21,12 +21,15 @@ import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.FriendManager;
 import bleach.hack.utils.Rainbow;
 import bleach.hack.utils.file.BleachFileHelper;
 import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.EventBus;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class BleachHack implements ModInitializer {
 
@@ -56,6 +59,13 @@ public class BleachHack implements ModInitializer {
         String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
         if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
             BleachMainMenu.customTitleScreen = false;
+        }
+        for (String s : BleachFileMang.readFileLines("drawn.txt")) {
+            for (Module m : ModuleManager.getModules()) {
+                if (m.getName().toLowerCase().equals(s.toLowerCase())) {
+                    m.setDrawn(false);
+                }
+            }
         }
     }
 }

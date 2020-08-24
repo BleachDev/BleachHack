@@ -22,6 +22,7 @@ import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
