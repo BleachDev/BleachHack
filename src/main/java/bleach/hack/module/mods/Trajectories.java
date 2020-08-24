@@ -41,7 +41,7 @@ public class Trajectories extends Module {
                         new SettingToggle("XP Bottles", true).withDesc("Shows flying XP bottles"),
                         new SettingToggle("Potions", true).withDesc("Shows flying splash/lingering potions")),
                 new SettingToggle("Other Players", false).withDesc("Show other players trajectories"),
-                new SettingColor("Color", 1f, 0.3f, 1f, false),
+                new SettingColor("Color", 0.333f, 0.333f, 1f, false),
                 new SettingSlider("Thick", 0.1, 5, 2, 2));
     }
 

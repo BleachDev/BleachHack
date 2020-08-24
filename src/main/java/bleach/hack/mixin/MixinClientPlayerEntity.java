@@ -17,15 +17,27 @@
  */
 package bleach.hack.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.mojang.authlib.GameProfile;
+
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.*;
+import bleach.hack.module.mods.BetterPortal;
+import bleach.hack.module.mods.Freecam;
+import bleach.hack.module.mods.NoSlow;
+import bleach.hack.module.mods.SafeWalk;
+import bleach.hack.module.mods.Scaffold;
 import bleach.hack.utils.BleachQueue;
 import bleach.hack.utils.file.BleachFileHelper;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -33,12 +45,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
@@ -58,9 +64,12 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
     public void tick(CallbackInfo info) {
         try {
             if (MinecraftClient.getInstance().player.age % 100 == 0) {
-                if (BleachFileHelper.SCHEDULE_SAVE_MODULES) BleachFileHelper.saveModules();
-                if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
-                if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
+                if (BleachFileHelper.SCHEDULE_SAVE_MODULES)
+                    BleachFileHelper.saveModules();
+                if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI)
+                    BleachFileHelper.saveClickGui();
+                if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS)
+                    BleachFileHelper.saveFriends();
             }
 
             BleachQueue.nextQueue();
@@ -69,19 +78,21 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
         EventTick event = new EventTick();
         BleachHack.eventBus.post(event);
-        if (event.isCancelled()) info.cancel();
+        if (event.isCancelled())
+            info.cancel();
     }
 
     @Inject(at = @At("HEAD"), method = "sendMovementPackets()V", cancellable = true)
     public void sendMovementPackets(CallbackInfo info) {
         EventMovementTick event = new EventMovementTick();
         BleachHack.eventBus.post(event);
-        if (event.isCancelled()) info.cancel();
+        if (event.isCancelled())
+            info.cancel();
     }
 
     @Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
     private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
-        if (ModuleManager.getModule(NoSlow.class).isToggled() && ModuleManager.getModule(NoSlow.class).getSetting(4).asToggle().state) {
+        if (ModuleManager.getModule(NoSlow.class).isToggled() && ModuleManager.getModule(NoSlow.class).getSetting(5).asToggle().state) {
             return false;
         }
 
@@ -130,4 +141,3 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
                 || (ModuleManager.getModule(Scaffold.class).isToggled() && ModuleManager.getModule(Scaffold.class).getSetting(3).asToggle().state);
     }
 }
-

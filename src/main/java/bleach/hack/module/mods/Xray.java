@@ -18,6 +18,7 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventBlockRender;
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -25,7 +26,10 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Block;
+import net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.crash.CrashException;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Arrays;
@@ -78,10 +82,6 @@ public class Xray extends Module {
     public void onDisable() {
         if (mc.world != null) mc.worldRenderer.setWorld(mc.world);
 
-		/*for (int i = 0; i <= 15; ++i) {
-            float float_2 = 1.0F - (float) i / 15.0F;
-            mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) / (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F;
-        }*/
         mc.options.gamma = gamma;
 
         mc.worldRenderer.reload();
@@ -99,5 +99,12 @@ public class Xray extends Module {
     @Subscribe
     public void onTick(EventTick eventPreUpdate) {
         mc.options.gamma = 69.420;
+    }
+
+    // This ensures that if the game crashes, the Xray will not be saved as enabled. this will cause the game to crash every time it turns on
+    @Subscribe
+    private void EventDisconnect(EventReadPacket event) {
+        if (event.getPacket() instanceof CloseScreenS2CPacket || event.getPacket() instanceof DisconnectS2CPacket)
+            setToggled(false);
     }
 }
