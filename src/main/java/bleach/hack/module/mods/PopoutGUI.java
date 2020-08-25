@@ -102,6 +102,12 @@ public class PopoutGUI extends Module {
                 }
             });
 
+            hud_popout_window.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    PopoutGUI.super.toggle();
+                }
+            });
+
             text_input.addActionListener(p0 -> {
                 mc.player.sendChatMessage(text_input.getText());
                 text_input.setText("");
@@ -260,7 +266,9 @@ public class PopoutGUI extends Module {
     @Override
     public void onDisable() {
         popout_window.setVisible(false);
+        hud_popout_window.setVisible(false);
         popout_window.dispose();
+        hud_popout_window.dispose();
         super.onDisable();
     }
 
