@@ -70,6 +70,7 @@ public class ModuleManager {
             new FakeLag(),
             new FastUse(),
             new Flight(),
+            /*new FootXp(),*/
             new Freecam(),
             new Yaw(),
             new Fullbright(),
@@ -104,6 +105,7 @@ public class ModuleManager {
             new Step(),
             new Surround(),
             new Timer(),
+            /*new TotemPopCounter(),*/
             new Tracers(),
             new Trail(),
             new Trajectories(),
