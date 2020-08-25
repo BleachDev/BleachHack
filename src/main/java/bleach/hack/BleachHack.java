@@ -42,6 +42,10 @@ public class BleachHack implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        System.out.println(System.getProperty("java.runtime.version"));
+        System.out.println(System.getProperty("java.awt.headless"));
+        System.setProperty("java.awt.headless", "false");
+        System.out.println(System.getProperty("java.awt.headless"));
         BleachFileMang.init();
         BleachFileHelper.readModules();
 
