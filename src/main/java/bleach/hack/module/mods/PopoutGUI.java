@@ -68,10 +68,10 @@ public class PopoutGUI extends Module {
     public static JTextArea chat_window;
     public static JTextPane hud_input;
     public static JTextField text_input;
-    public static JPanel xu;
+    public static JPanel main_panel;
     public static JPanel hud_panel;
-    public static JSplitPane xv;
-    public static JPanel xw;
+    public static JSplitPane popout_window_splitter;
+    public static JPanel module_panel;
     public static JPanel chat_panel;
     public static JScrollPane module_scroller;
     public static JScrollPane chat_scroller;
@@ -82,7 +82,7 @@ public class PopoutGUI extends Module {
             c();
             popout_window = new JFrame("BleachHack epearl Edition | Chat and module HUD");
             popout_window.setPreferredSize(new Dimension(1000, 500));
-            popout_window.setContentPane(xu);
+            popout_window.setContentPane(main_panel);
             popout_window.pack();
             popout_window.setVisible(true);
 
@@ -116,21 +116,21 @@ public class PopoutGUI extends Module {
         }
 
         public void c() {
-            (xu = new JPanel()).setLayout(new BorderLayout(0, 0));
-            xu.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null));
-            xv = new JSplitPane();
-            xu.add(xv, "Center");
-            (xw = new JPanel()).setLayout(new BorderLayout(0, 0));
-            xv.setLeftComponent(xw);
+            (main_panel = new JPanel()).setLayout(new BorderLayout(0, 0));
+            main_panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null));
+            popout_window_splitter = new JSplitPane();
+            main_panel.add(popout_window_splitter, "Center");
+            (module_panel = new JPanel()).setLayout(new BorderLayout(0, 0));
+            popout_window_splitter.setLeftComponent(module_panel);
             (module_scroller = new JScrollPane()).setHorizontalScrollBarPolicy(31);
             module_scroller.setVerticalScrollBarPolicy(20);
-            xw.add(module_scroller, "Center");
+            module_panel.add(module_scroller, "Center");
             (module_list = new JTextArea()).setLineWrap(true);
             module_list.setEditable(false);
             module_list.setText("");
             module_scroller.setViewportView(module_list);
             (chat_panel = new JPanel()).setLayout(new BorderLayout(0, 0));
-            xv.setRightComponent(chat_panel);
+            popout_window_splitter.setRightComponent(chat_panel);
             text_input = new JTextField();
             chat_panel.add(text_input, "South");
             chat_window = new JTextArea();
@@ -143,7 +143,7 @@ public class PopoutGUI extends Module {
         }
 
         public JComponent d() {
-            return xu;
+            return main_panel;
         }
 
 
