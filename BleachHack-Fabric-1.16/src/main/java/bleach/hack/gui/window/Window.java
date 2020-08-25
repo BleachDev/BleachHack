@@ -75,10 +75,10 @@ public class Window {
 		TextRenderer textRend = MinecraftClient.getInstance().textRenderer;
 
 		if (dragging) {
-			x2 = (x2 - x1) + mX - dragOffX;
-			y2 = (y2 - y1) + mY - dragOffY;
-			x1 = mX - dragOffX;
-			y1 = mY - dragOffY;
+			x1 = Math.max(0, mX - dragOffX);
+			y1 = Math.max(0, mY - dragOffY);
+			x2 = (x2 - x1) + mX - dragOffX - Math.min(0, mX - dragOffX);
+			y2 = (y2 - y1) + mY - dragOffY - Math.min(0, mY - dragOffY);
 		}
 
 		drawBar(matrix, mX, mY, textRend);
