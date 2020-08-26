@@ -26,6 +26,7 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.MathHelper;
 
 public class EntityUtils {
 
@@ -69,5 +70,31 @@ public class EntityUtils {
 
         return new double[]
                 { yaw, pitch };
+    }
+    public enum FacingDirection
+    {
+        North,
+        South,
+        East,
+        West,
+    }
+
+    public static FacingDirection GetFacing()
+    {
+        switch (MathHelper.floor((double) (mc.player.yaw * 8.0F / 360.0F) + 0.5D) & 7)
+        {
+            case 0:
+            case 1:
+                return FacingDirection.South;
+            case 3:
+                return FacingDirection.West;
+            case 4:
+            case 5:
+                return FacingDirection.North;
+            case 6:
+            case 7:
+                return FacingDirection.East;
+        }
+        return FacingDirection.North;
     }
 }

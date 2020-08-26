@@ -73,6 +73,9 @@ public class ModuleManager {
             new Flight(),
             /*new FootXp(),*/
             new Freecam(),
+            new NoToolCooldown(),
+            new HotbarCacheRewrite(),
+            new NukerBypass(),
             new Yaw(),
             new Fullbright(),
             new Ghosthand(),
