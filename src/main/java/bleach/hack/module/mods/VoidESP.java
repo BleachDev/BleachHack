@@ -16,15 +16,15 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BedrockHoleESP extends Module
+public class VoidESP extends Module
 {
     private final List<BlockPos> poses = new ArrayList<>();
     public Vec3d prevPos;
     private double[] rPos;
 
-    public BedrockHoleESP()
+    public VoidESP()
     {
-        super("BedrockHoleESP", KEY_UNBOUND, Category.RENDER, "ESP for holes in the bedrock",
+        super("VoidESP", KEY_UNBOUND, Category.RENDER, "ESP for holes in the bedrock",
                 new SettingSlider("Range", 0, 50, 15, 0),
                 new SettingSlider("R: ", 0.0D, 255.0D, 255.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 0.0D, 0),

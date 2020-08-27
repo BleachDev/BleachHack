@@ -18,8 +18,6 @@
 package bleach.hack.module;
 
 import bleach.hack.event.events.EventKeyPress;
-import bleach.hack.event.events.EventOpenScreen;
-import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.mods.*;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
@@ -78,6 +76,7 @@ public class ModuleManager {
             new NukerBypass(),
             new Yaw(),
             new Fullbright(),
+            new TunnelESP(),
             new Ghosthand(),
             new HandProgress(),
             new HoleTP(),
@@ -100,7 +99,7 @@ public class ModuleManager {
             new Peek(),
             new PlayerCrash(),
             new StashFinder(),
-            new BedrockHoleESP(),
+            new VoidESP(),
             new SafeWalk(),
             new Scaffold(),
             new Spammer(),
