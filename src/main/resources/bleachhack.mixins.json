@@ -42,6 +42,7 @@
     "MixinSoundSystem",
     "MixinTextRenderer",
     "MixinTitleScreen",
+    "MixinNoToolCooldown",
     "MixinWorldRenderer"
   ],
   "injectors": {
