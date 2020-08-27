@@ -43,6 +43,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.swing.UIManager.*;
+
+
 
 public class PopoutGUI extends Module {
 
@@ -60,7 +63,6 @@ public class PopoutGUI extends Module {
     private long lastPacket = 0;
     private final long time = System.currentTimeMillis();
     private String radar_player_list = "";
-
 
     public static JFrame popout_window;
     public static JFrame hud_popout_window;
@@ -85,6 +87,7 @@ public class PopoutGUI extends Module {
             popout_window.setContentPane(main_panel);
             popout_window.pack();
             popout_window.setVisible(true);
+
 
             hud_popout_window = new JFrame("BleachHack epearl Edition | UI HUD");
             hud_panel = new JPanel(new BorderLayout());

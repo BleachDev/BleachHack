@@ -113,6 +113,7 @@ public class ModuleManager {
             new UI(),
             new Xray(),
             new PopoutGUI(),
+            //new AutoExplode(),
             //new TunnelESP(),
             //new AutoBreed(),
             //new Test(),
