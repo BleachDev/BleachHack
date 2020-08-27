@@ -4,10 +4,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
@@ -15,29 +12,28 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.CallbackI;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PortalESP extends Module
+public class BedrockHoleESP extends Module
 {
     private final List<BlockPos> poses = new ArrayList<>();
     public Vec3d prevPos;
     private double[] rPos;
 
-    public PortalESP()
+    public BedrockHoleESP()
     {
-        super("PortalESP", KEY_UNBOUND, Category.RENDER, "ESP for portals (laggy with high range)",
-                new SettingSlider("Range", 0, 125, 75, 0),
-                new SettingSlider("R: ", 0.0D, 255.0D, 115.0D, 0),
+        super("BedrockHoleESP", KEY_UNBOUND, Category.RENDER, "ESP for holes in the bedrock",
+                new SettingSlider("Range", 0, 50, 15, 0),
+                new SettingSlider("R: ", 0.0D, 255.0D, 255.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 0.0D, 0),
-                new SettingSlider("B: ", 0.0D, 255.0D, 255.0D, 0));
+                new SettingSlider("B: ", 0.0D, 255.0D, 0.0D, 0));
     }
     @Subscribe
     public void onTick(EventTick event)
     {
-        if (mc.player.age % 10 == 0 && this.isToggled())
+        if (mc.player.age % 5 == 0 && this.isToggled())
         {
             this.update((int) this.getSettings().get(0).asSlider().getValue());
         }
@@ -56,7 +52,7 @@ public class PortalESP extends Module
                 for (int z = -range; z < range; ++z)
                 {
                     BlockPos pos = player.add(x, y, z);
-                    if ((this.mc.world.getBlockState(pos).getBlock() == Blocks.NETHER_PORTAL))
+                    if ((this.mc.world.getBlockState(pos).getBlock() == Blocks.AIR) && (pos.getY() == 0))
                     {
                         this.poses.add(pos);
                     }
@@ -109,15 +105,18 @@ public class PortalESP extends Module
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);
         float ob = (float) (this.getSettings().get(3).asSlider().getValue() / 255.0D);
-        if (this.mc.world.getBlockState(new BlockPos(x,y,z)).getEntries().toString().equals("{EnumProperty{name=axis, clazz=class net.minecraft.util.math.Direction$Axis, values=[x, z]}=x}")) {
-                RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a);
-                RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a * 1.5F);
-        } else {
-            //RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a);
-            //RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a * 1.5F);
-              RenderUtils.drawFilledBox(new Box(x + 0.5D, y, z, x + 0.5D, y + 1.0D, z + 1.0D), or, og, ob, a);
-              RenderUtils.drawFilledBox(new Box(x + 0.5D, y, z, x + 0.5D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-        }
+        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a);
+        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a * 1.5F);
+        RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a);
+        RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+        RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+        RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+        RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+        RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a);
+        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
+        RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+        RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
     }
     public void onDisable () {
         this.poses.clear();

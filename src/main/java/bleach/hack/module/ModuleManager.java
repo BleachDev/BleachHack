@@ -100,6 +100,7 @@ public class ModuleManager {
             new Peek(),
             new PlayerCrash(),
             new StashFinder(),
+            new BedrockHoleESP(),
             new SafeWalk(),
             new Scaffold(),
             new Spammer(),
