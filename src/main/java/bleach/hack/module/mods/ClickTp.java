@@ -17,7 +17,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import org.lwjgl.glfw.GLFW;
 
-public class ClickTp extends Module {
+public class ClickTP extends Module {
 
     private BlockPos pos = null;
     private Direction dir = null;

@@ -85,7 +85,7 @@ public class ModuleManager {
             new MountBypass(),
             new MouseFriend(),
             new Nametags(),
-            new ClickTp(),
+            new ClickTP(),
             new Nofall(),
             new NoKeyBlock(),
             new NoRender(),

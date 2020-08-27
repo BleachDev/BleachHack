@@ -114,10 +114,8 @@ public class PortalESP extends Module
                 RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a);
                 RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a * 1.5F);
         } else {
-            //RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a);
-            //RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a * 1.5F);
-              RenderUtils.drawFilledBox(new Box(x + 0.5D, y, z, x + 0.5D, y + 1.0D, z + 1.0D), or, og, ob, a);
-              RenderUtils.drawFilledBox(new Box(x + 0.5D, y, z, x + 0.5D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+                RenderUtils.drawFilledBox(new Box(x + 0.5D, y, z, x + 0.5D, y + 1.0D, z + 1.0D), or, og, ob, a);
+                RenderUtils.drawFilledBox(new Box(x + 0.5D, y, z, x + 0.5D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
         }
     }
     public void onDisable () {
