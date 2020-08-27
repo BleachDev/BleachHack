@@ -56,6 +56,7 @@ public class TunnelESP extends Module
                     if (
                             (this.mc.world.getBlockState(pos).getBlock() == Blocks.AIR)
                             && (this.mc.world.getBlockState(pos.up(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.down(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.north(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.south(1)).getBlock() == Blocks.AIR)
@@ -64,6 +65,7 @@ public class TunnelESP extends Module
                             ||
                             (this.mc.world.getBlockState(pos).getBlock() == Blocks.AIR)
                             && (this.mc.world.getBlockState(pos.up(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.down(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.west(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.east(1)).getBlock() == Blocks.AIR)
