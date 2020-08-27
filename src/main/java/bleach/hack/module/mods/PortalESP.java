@@ -32,12 +32,13 @@ public class PortalESP extends Module
                 new SettingSlider("Range", 0, 125, 75, 0),
                 new SettingSlider("R: ", 0.0D, 255.0D, 115.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 0.0D, 0),
-                new SettingSlider("B: ", 0.0D, 255.0D, 255.0D, 0));
+                new SettingSlider("B: ", 0.0D, 255.0D, 255.0D, 0),
+                new SettingSlider("Tick Delay", 1, 20, 10, 0));
     }
     @Subscribe
     public void onTick(EventTick event)
     {
-        if (mc.player.age % 10 == 0 && this.isToggled())
+        if (mc.player.age % (int) this.getSettings().get(4).asSlider().getValue() == 0 && this.isToggled())
         {
             this.update((int) this.getSettings().get(0).asSlider().getValue());
         }
