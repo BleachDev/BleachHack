@@ -24,8 +24,8 @@ public class ClickTP extends Module {
 
     private boolean antiSpamClick = false;
 
-    public ClickTp() {
-        super("ClickTp", KEY_UNBOUND, Category.MOVEMENT, "Allows you to teleport by clicking",
+    public ClickTP() {
+        super("ClickTP", KEY_UNBOUND, Category.MOVEMENT, "Allows you to teleport by clicking",
                 new SettingToggle("In Air", true).withDesc("Teleports even if you are pointing in the air"),
                 new SettingToggle("Liquids", false).withDesc("Interacts with liquids"),
                 new SettingToggle("Y First", false).withDesc("Sets you to the correct Y level first, then to your XZ coords, might fix going through walls"),
