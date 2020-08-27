@@ -114,6 +114,7 @@ public class ModuleManager {
             new Trail(),
             new Trajectories(),
             new UI(),
+            new PortalESP(),
             new Xray(),
             new PopoutGUI(),
             //new AutoExplode(),
