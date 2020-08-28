@@ -192,7 +192,7 @@ public class Notebot extends Module {
 					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
 					setToggled(false);
 					setToggled(true);
-					BleachLogger.infoMessage("Now Playing: \00a7a" + filePath);
+					BleachLogger.infoMessage("Now Playing: §a" + filePath);
 				} catch (IOException e) {
 				}
 			} else if (getSetting(2).asToggle().state) {
@@ -266,7 +266,7 @@ public class Notebot extends Module {
 			try {
 				notes.add(Arrays.asList(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
 			} catch (Exception e) {
-				BleachLogger.warningMessage("Error Parsing Note: \00a7o" + s);
+				BleachLogger.warningMessage("Error Parsing Note: §o" + s);
 			}
 		}
 
@@ -278,7 +278,7 @@ public class Notebot extends Module {
 					tunes.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
 				}
 			} catch (Exception e) {
-				BleachLogger.warningMessage("Error Trying To Tune: \00a7o" + s);
+				BleachLogger.warningMessage("Error Trying To Tune: §o" + s);
 			}
 		}
 	}

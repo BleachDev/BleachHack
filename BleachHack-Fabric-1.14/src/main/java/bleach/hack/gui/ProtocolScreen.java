@@ -70,10 +70,10 @@ public class ProtocolScreen extends Screen {
 
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		renderBackground();
-		drawRightAlignedString(font, "\00a77Name:", width / 2 - 103, height / 2 - 55, -1);
-		drawRightAlignedString(font, "\00a77Protocol:", width / 2 - 103, height / 2 - 30, -1);
-		drawRightAlignedString(font, "\00a77Target Ver:", width / 2 - 103, height / 2 - 5, -1);
-		drawRightAlignedString(font, "\00a77Packet Ver:", width / 2 - 103, height / 2 + 20, -1);
+		drawRightAlignedString(font, "§7Name:", width / 2 - 103, height / 2 - 55, -1);
+		drawRightAlignedString(font, "§7Protocol:", width / 2 - 103, height / 2 - 30, -1);
+		drawRightAlignedString(font, "§7Target Ver:", width / 2 - 103, height / 2 - 5, -1);
+		drawRightAlignedString(font, "§7Packet Ver:", width / 2 - 103, height / 2 + 20, -1);
 		nameField.render(p_render_1_, p_render_2_, p_render_3_);
 		protocolField.render(p_render_1_, p_render_2_, p_render_3_);
 		targetField.render(p_render_1_, p_render_2_, p_render_3_);

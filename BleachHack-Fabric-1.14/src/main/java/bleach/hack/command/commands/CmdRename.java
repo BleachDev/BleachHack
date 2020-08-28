@@ -52,7 +52,7 @@ public class CmdRename extends Command {
 		for (int j = 0; j < args.length; j++)
 			name += args[j] += " ";
 
-		i.setCustomName(new LiteralText(name.replace("&", "\00a7").replace("\00a7\00a7", "&")));
+		i.setCustomName(new LiteralText(name.replace("&", "§").replace("§§", "&")));
 		BleachLogger.infoMessage("Renamed Item");
 	}
 

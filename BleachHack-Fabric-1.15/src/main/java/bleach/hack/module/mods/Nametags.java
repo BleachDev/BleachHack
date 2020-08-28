@@ -63,13 +63,13 @@ public class Nametags extends Module {
 
 			double scale = Math.max(getSetting(4).asToggle().getChild(1).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 			if (!e.getName().getString().equals(e.getStack().getName().getString()) && getSetting(4).asToggle().getChild(0).asToggle().state) {
-				WorldRenderUtils.drawText("\00a76\"" + e.getStack().getName().getString() + "\"",
+				WorldRenderUtils.drawText("§6\"" + e.getStack().getName().getString() + "\"",
 						e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
 						e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
 			}
 
-			WorldRenderUtils.drawText("\00a76" + e.getName().getString() + " \00a7e[x" + e.getStack().getCount() + "]",
+			WorldRenderUtils.drawText("§6" + e.getName().getString() + " §e[x" + e.getStack().getCount() + "]",
 					e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 					e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
@@ -77,17 +77,17 @@ public class Nametags extends Module {
 			LivingEntity e = (LivingEntity) event.getEntity();
 
 			// Color before name
-			String color = e instanceof Monster ? "\00a75"
+			String color = e instanceof Monster ? "§5"
 					: EntityUtils.isAnimal(e)
-					? "\00a7a"
-							: e.isSneaking() ? "\00a76" : e instanceof PlayerEntity ? "\00a7c" : "\00a7f";
+					? "§a"
+							: e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
 
-			if (e == mc.player || e == mc.player.getVehicle() || color == "\00a7f" ||
-					((color == "\00a7c" || color == "\00a76") && !getSetting(2).asToggle().state) ||
-					((color == "\00a75" || color == "\00a7a") && !getSetting(3).asToggle().state))
+			if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||
+					((color == "§c" || color == "§6") && !getSetting(2).asToggle().state) ||
+					((color == "§5" || color == "§a") && !getSetting(3).asToggle().state))
 				return;
 			if (e.isInvisible())
-				color = "\00a7e";
+				color = "§e";
 
 			double scale = (e instanceof PlayerEntity ? Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1)
 					: Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));

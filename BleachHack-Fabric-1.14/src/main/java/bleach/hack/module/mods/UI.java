@@ -88,7 +88,7 @@ public class UI extends Module {
 			List<String> lines = new ArrayList<>();
 
 			if (getSetting(2).asToggle().state)
-				lines.add(0, "\00a7a> BleachHack " + BleachHack.VERSION);
+				lines.add(0, "§a> BleachHack " + BleachHack.VERSION);
 
 			if (getSetting(0).asToggle().state) {
 				for (Module m : ModuleManager.getModules())
@@ -134,7 +134,7 @@ public class UI extends Module {
 
 				int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
-				String text = "" + e.getDisplayName().getString() + " \00a77|\00a7r " +
+				String text = "" + e.getDisplayName().getString() + " §7|§r " +
 						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
 						+ " (" + dist + "m)";
 
@@ -145,7 +145,7 @@ public class UI extends Module {
 		}
 
 		if (getSetting(11).asToggle().state) {
-			infoList.add("\00a77Time: \00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
+			infoList.add("§7Time: §e" + new SimpleDateFormat("MMM dd HH:mm:ss"
 					+ (getSetting(11).asToggle().getChild(0).asToggle().state ? " zzz" : "")
 					+ (getSetting(11).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
 		}
@@ -157,13 +157,13 @@ public class UI extends Module {
 			BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
 					: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
 
-			infoList.add("XYZ: " + (nether ? "\00a74" : "\00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-			+ " \00a77[" + (nether ? "\00a7b" : "\00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\00a77]");
+			infoList.add("XYZ: " + (nether ? "§4" : "§b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
+			+ " §7[" + (nether ? "§b" : "§4") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "§7]");
 		}
 
 		if (getSetting(8).asToggle().state) {
 			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-			infoList.add("\00a77Server: \00a7d" + server);
+			infoList.add("§7Server: §d" + server);
 		}
 
 		if (getSetting(3).asToggle().state) {
@@ -178,7 +178,7 @@ public class UI extends Module {
 		}
 
 		if (getSetting(6).asToggle().state) {
-			String suffix = "\00a77";
+			String suffix = "§7";
 			if (lastPacket + 7500 < System.currentTimeMillis())
 				suffix += "....";
 			else if (lastPacket + 5000 < System.currentTimeMillis())
@@ -275,17 +275,17 @@ public class UI extends Module {
 
 	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {
 		if (!rev ? value > best : value < best)
-			return "\00a72";
+			return "§2";
 		else if (!rev ? value > good : value < good)
-			return "\00a7a";
+			return "§a";
 		else if (!rev ? value > mid : value < mid)
-			return "\00a7e";
+			return "§e";
 		else if (!rev ? value > bad : value < bad)
-			return "\00a76";
+			return "§6";
 		else if (!rev ? value > worst : value < worst)
-			return "\00a7c";
+			return "§c";
 		else
-			return "\00a74";
+			return "§4";
 	}
 
 	public static int getRainbow(float sat, float bri, double speed, int offset) {

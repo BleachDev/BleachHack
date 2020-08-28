@@ -41,7 +41,7 @@ public class ServerScraperScreen extends Screen {
 	private int working;
 	private boolean abort = false;
 	private List<BleachServerPinger> pingers = new ArrayList<>();
-	private String result = "\00a77Idle...";
+	private String result = "§7Idle...";
 
 	public ServerScraperScreen(MultiplayerScreen serverScreen) {
 		super(new LiteralText("Server Scraper"));
@@ -61,7 +61,7 @@ public class ServerScraperScreen extends Screen {
 				working = 0;
 				scrapeIp(ip);
 			} catch (Exception e) {
-				result = "\00a7cFailed Scraping!";
+				result = "§cFailed Scraping!";
 				e.printStackTrace();
 				return;
 			}
@@ -78,13 +78,13 @@ public class ServerScraperScreen extends Screen {
 
 	public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 		renderBackground();
-		drawCenteredString(font, "\00a77IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
-		drawCenteredString(font, "\00a77" + checked + " / 1792 [\00a7a" + working + "\00a77]", this.width / 2, this.height / 4 + 58, -1);
+		drawCenteredString(font, "§7IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
+		drawCenteredString(font, "§7" + checked + " / 1792 [§a" + working + "§7]", this.width / 2, this.height / 4 + 58, -1);
 		drawCenteredString(font, result, this.width / 2, this.height / 4 + 70, -1);
 		ipField.render(p_render_1_, p_render_2_, p_render_3_);
 
 		if (abort) {
-			result = "\00a77Aborting.. [" + pingers.size() + "] Left";
+			result = "§7Aborting.. [" + pingers.size() + "] Left";
 			if (pingers.size() == 0)
 				minecraft.openScreen(new MultiplayerScreen(new TitleScreen()));
 		}
@@ -97,7 +97,7 @@ public class ServerScraperScreen extends Screen {
 	}
 
 	public void scrapeIp(InetAddress ip) {
-		result = "\00a7eScraping...";
+		result = "§eScraping...";
 		scrapeThread = new Thread(() -> {
 			for (int change : new int[] { 0, -1, 1, -2, 2, -3, 3 }) {
 				for (int i = 0; i <= 255; i++) {
@@ -115,7 +115,7 @@ public class ServerScraperScreen extends Screen {
 
 			while (pingers.size() > 0)
 				updatePingers();
-			result = "\00a7aDone!";
+			result = "§aDone!";
 		});
 		scrapeThread.start();
 	}

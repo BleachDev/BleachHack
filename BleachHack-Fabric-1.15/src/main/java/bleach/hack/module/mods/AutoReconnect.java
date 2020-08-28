@@ -99,7 +99,7 @@ public class AutoReconnect extends Module {
 					minecraft.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), minecraft, server));
 			}));
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
-					(getSetting(0).asToggle().state ? "\00a7a" : "\00a7c") + "AutoReconnect ["
+					(getSetting(0).asToggle().state ? "§a" : "§c") + "AutoReconnect ["
 							+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
 							+ "]",
 							button -> {
@@ -111,9 +111,9 @@ public class AutoReconnect extends Module {
 		public void render(int int_1, int int_2, float float_1) {
 			super.render(int_1, int_2, float_1);
 
-			buttons.get(2).setMessage((getSetting(0).asToggle().state ? "\00a7aAutoReconnect ["
+			buttons.get(2).setMessage((getSetting(0).asToggle().state ? "§aAutoReconnect ["
 					+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
-					+ "]" : "\00a7cAutoReconnect [" + getSetting(1).asSlider().getValue() * 1000 + "]"));
+					+ "]" : "§cAutoReconnect [" + getSetting(1).asSlider().getValue() * 1000 + "]"));
 
 			if (reconnectTime + getSetting(1).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSetting(0).asToggle().state) {
 				if (server != null)

@@ -46,14 +46,14 @@ public class CmdEnchant extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if (args[0].equalsIgnoreCase("list")) {
-			BleachLogger.infoMessage("\00a7d[Aqua_Affinity/Aqua] \00a75[Arthropods] \00a7d[Blast/Blast_Prot] "
-					+ "\00a75[Channeling] \00a7d[Curse_Binding/Binding] \00a75[Curse_Vanish/Vanish] \00a7d[Depth_Strider/Strider] "
-					+ "\00a75[Efficiency/Eff] \00a7d[Feather_Falling/Fall] \00a75[Fire_Aspect] \00a7d[Fire_Prot] "
-					+ "\00a75[Flame] \00a7d[Fortune] \00a75[Frost_Walker/Frost] \00a7d[Impaling] \00a75[Infinity] \00a7d[Knockback/Knock] "
-					+ "\00a75[Looting/Loot] \00a7d[Loyalty] \00a75[Luck_Of_The_Sea/Luck] \00a7d[Lure] \00a75[Mending/Mend] \00a7d[Multishot] "
-					+ "\00a75[Piercing] \00a7d[Power] \00a75[Projectile_Prot/Proj_Prot] \00a7d[Protection/Prot] "
-					+ "\00a75[Punch] \00a7d[Quick_Charge/Charge] \00a75[Respiration/Resp] \00a7d[Riptide] "
-					+ "\00a75[Sharpness/Sharp] \00a7d[Silk_Touch/Silk] \00a75[Smite] \00a7d[Sweeping_Edge/Sweep] \00a75[Thorns] \00a7d[Unbreaking]");
+			BleachLogger.infoMessage("§d[Aqua_Affinity/Aqua] §5[Arthropods] §d[Blast/Blast_Prot] "
+					+ "§5[Channeling] §d[Curse_Binding/Binding] §5[Curse_Vanish/Vanish] §d[Depth_Strider/Strider] "
+					+ "§5[Efficiency/Eff] §d[Feather_Falling/Fall] §5[Fire_Aspect] §d[Fire_Prot] "
+					+ "§5[Flame] §d[Fortune] §5[Frost_Walker/Frost] §d[Impaling] §5[Infinity] §d[Knockback/Knock] "
+					+ "§5[Looting/Loot] §d[Loyalty] §5[Luck_Of_The_Sea/Luck] §d[Lure] §5[Mending/Mend] §d[Multishot] "
+					+ "§5[Piercing] §d[Power] §5[Projectile_Prot/Proj_Prot] §d[Protection/Prot] "
+					+ "§5[Punch] §d[Quick_Charge/Charge] §5[Respiration/Resp] §d[Riptide] "
+					+ "§5[Sharpness/Sharp] §d[Silk_Touch/Silk] §5[Smite] §d[Sweeping_Edge/Sweep] §5[Thorns] §d[Unbreaking]");
 			return;
 		}
 

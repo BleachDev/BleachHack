@@ -67,16 +67,16 @@ public class CmdEntityStats extends Command {
 					mc.player.getVehicle() instanceof LlamaEntity ||
 					mc.player.getVehicle() instanceof MuleEntity) {
 				HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
-				maxHealth = h.getMaximumHealth() + " \00a72HP";
-				speed = round(43.17 * h.getMovementSpeed(), 2) + " \00a72m/s";
+				maxHealth = h.getMaximumHealth() + " §2HP";
+				speed = round(43.17 * h.getMovementSpeed(), 2) + " §2m/s";
 				jumpHeight = round(-0.1817584952 * Math.pow(h.getJumpStrength(), 3) + 3.689713992 * Math.pow(h.getJumpStrength(), 2) + 2.128599134 * h.getJumpStrength()
-				- 0.343930367, 4) + " \00a72m";
-				BleachLogger.infoMessage("\n\00a76Entity Stats:\n\00a7cMax Health: \00a7b" + maxHealth + "\n\00a7cSpeed: \00a7b" + speed + "\n\00a7cJump: \00a7b" + jumpHeight);
+				- 0.343930367, 4) + " §2m";
+				BleachLogger.infoMessage("\n§6Entity Stats:\n§cMax Health: §b" + maxHealth + "\n§cSpeed: §b" + speed + "\n§cJump: §b" + jumpHeight);
 			} else if (mc.player.getVehicle() instanceof LivingEntity) {
 				LivingEntity l = (LivingEntity) mc.player.getVehicle();
-				maxHealth = l.getMaximumHealth() + " \00a72HP";
-				speed = round(43.17 * l.getMovementSpeed(), 2) + " \00a72m/s";
-				BleachLogger.infoMessage("\n\00a76Entity Stats:\n\00a7cMax Health: \00a7b" + maxHealth + "\n\00a7cSpeed: \00a7b" + speed);
+				maxHealth = l.getMaximumHealth() + " §2HP";
+				speed = round(43.17 * l.getMovementSpeed(), 2) + " §2m/s";
+				BleachLogger.infoMessage("\n§6Entity Stats:\n§cMax Health: §b" + maxHealth + "\n§cSpeed: §b" + speed);
 			}
 		} else {
 			BleachLogger.errorMessage("Not riding a living entity.");
