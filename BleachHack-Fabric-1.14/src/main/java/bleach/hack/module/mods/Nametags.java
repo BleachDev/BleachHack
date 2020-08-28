@@ -70,13 +70,13 @@ public class Nametags extends Module {
 
 			double scale = Math.max(getSetting(4).asToggle().getChild(1).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 			if (!e.getName().getString().equals(e.getStack().getName().getString()) && getSetting(4).asToggle().getChild(0).asToggle().state) {
-				WorldRenderUtils.drawText("§6\"" + e.getStack().getName().getString() + "\"",
+				WorldRenderUtils.drawText("\00a76\"" + e.getStack().getName().getString() + "\"",
 						e.prevX + (e.x - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.y - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.75f * scale),
 						e.prevZ + (e.z - e.prevZ) * mc.getTickDelta(), scale);
 			}
 
-			WorldRenderUtils.drawText("§6" + e.getName().getString() + " §e[x" + e.getStack().getCount() + "]",
+			WorldRenderUtils.drawText("\00a76" + e.getName().getString() + " \00a7e[x" + e.getStack().getCount() + "]",
 					e.prevX + (e.x - e.prevX) * mc.getTickDelta(),
 					(e.prevY + (e.y - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 					e.prevZ + (e.z - e.prevZ) * mc.getTickDelta(), scale);
@@ -84,17 +84,17 @@ public class Nametags extends Module {
 			LivingEntity e = (LivingEntity) event.getEntity();
 
 			/* Color before name */
-			String color = e instanceof Monster ? "§5"
+			String color = e instanceof Monster ? "\00a75"
 					: EntityUtils.isAnimal(e)
-					? "§a"
-							: e.isSneaking() ? "§6" : e instanceof PlayerEntity ? "§c" : "§f";
+					? "\00a7a"
+							: e.isSneaking() ? "\00a76" : e instanceof PlayerEntity ? "\00a7c" : "\00a7f";
 
-			if (e == mc.player || e == mc.player.getVehicle() || color == "§f" ||
-					((color == "§c" || color == "§6") && !getSetting(2).asToggle().state) ||
-					((color == "§5" || color == "§a") && !getSetting(3).asToggle().state))
+			if (e == mc.player || e == mc.player.getVehicle() || color == "\00a7f" ||
+					((color == "\00a7c" || color == "\00a76") && !getSetting(2).asToggle().state) ||
+					((color == "\00a75" || color == "\00a7a") && !getSetting(3).asToggle().state))
 				return;
 			if (e.isInvisible())
-				color = "§e";
+				color = "\00a7e";
 
 			double scale = (e instanceof PlayerEntity ? Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1)
 					: Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
@@ -102,7 +102,7 @@ public class Nametags extends Module {
 			/* Drawing Nametags */
 			if (getSetting(1).asMode().mode == 0) {
 				WorldRenderUtils.drawText(color + e.getName().getString()
-						+ " §a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "§a/" + (int) e.getMaximumHealth() + "]",
+						+ " \00a7a[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + "\00a7a/" + (int) e.getMaximumHealth() + "]",
 						e.prevX + (e.x - e.prevX) * mc.getTickDelta(),
 						(e.prevY + (e.y - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
 						e.prevZ + (e.z - e.prevZ) * mc.getTickDelta(), scale);
@@ -111,16 +111,16 @@ public class Nametags extends Module {
 				String health = "";
 				/* - Add Green Normal Health */
 				for (int i = 0; i < e.getHealth(); i++)
-					health += "§a|";
+					health += "\00a7a|";
 				/* - Add Red Empty Health (Remove Based on absorption amount) */
 				for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaximumHealth() - e.getHealth()); i++)
-					health += "§e|";
+					health += "\00a7e|";
 				/* Add Yellow Absorption Health */
 				for (int i = 0; i < e.getMaximumHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++)
-					health += "§c|";
+					health += "\00a7c|";
 				/* Add "+??" to the end if the entity has extra hearts */
 				if (e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()) > 0) {
-					health += " §e+" + (int) (e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
+					health += " \00a7e+" + (int) (e.getAbsorptionAmount() - (e.getMaximumHealth() - e.getHealth()));
 				}
 
 				WorldRenderUtils.drawText(color + e.getName().getString(),
@@ -167,15 +167,15 @@ public class Nametags extends Module {
 
 	private String getHealthColor(LivingEntity entity) {
 		if (entity.getHealth() + entity.getAbsorptionAmount() > entity.getMaximumHealth()) {
-			return "§e";
+			return "\00a7e";
 		} else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaximumHealth() * 0.7) {
-			return "§a";
+			return "\00a7a";
 		} else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaximumHealth() * 0.4) {
-			return "§6";
+			return "\00a76";
 		} else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaximumHealth() * 0.1) {
-			return "§c";
+			return "\00a7c";
 		} else {
-			return "§4";
+			return "\00a74";
 		}
 	}
 }

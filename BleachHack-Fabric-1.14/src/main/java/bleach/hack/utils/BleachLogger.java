@@ -27,7 +27,7 @@ public class BleachLogger {
 	public static void infoMessage(String s) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.DARK_BLUE) + "§9§lINFO: §9" + s));
+			.addMessage(new LiteralText(getBHText(Formatting.DARK_BLUE) + "\00a79\00a7lINFO: \00a79" + s));
 		} catch (Exception e) {
 			System.out.println("[BH] INFO: " + s);
 		}
@@ -36,7 +36,7 @@ public class BleachLogger {
 	public static void warningMessage(String s) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "§e§lWARN: §e" + s));
+			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\00a7e\00a7lWARN: \00a7e" + s));
 		} catch (Exception e) {
 			System.out.println("[BH] WARN: " + s);
 		}
@@ -45,7 +45,7 @@ public class BleachLogger {
 	public static void errorMessage(String s) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.RED) + "§c§lERROR: §c" + s));
+			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\00a7c\00a7lERROR: \00a7c" + s));
 		} catch (Exception e) {
 			System.out.println("[BH] ERROR: " + s);
 		}
@@ -69,6 +69,6 @@ public class BleachLogger {
 	}
 
 	private static String getBHText(Formatting color) {
-		return color + "§l[§6B§dH" + color + "§l] ";
+		return color + "\00a7l[\00a76B\00a7dH" + color + "\00a7l] ";
 	}
 }

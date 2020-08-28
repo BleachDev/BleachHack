@@ -38,11 +38,11 @@ public final class LoginManager {
 
 		try {
 			if (email.isEmpty())
-				return "§cNo Username/Email!";
+				return "\00a7cNo Username/Email!";
 
 			if (password.isEmpty()) {
 				FabricReflect.writeField(MinecraftClient.getInstance().getSession(), email, "a", "username");
-				return "§6Logged in as an unverified account"; /* Idk this sound weird */
+				return "\00a76Logged in as an unverified account"; /* Idk this sound weird */
 			}
 
 			if (!email.isEmpty() && !password.isEmpty())
@@ -53,21 +53,21 @@ public final class LoginManager {
 					auth.getAuthenticatedToken(), "mojang");
 
 			FabricReflect.writeField(MinecraftClient.getInstance(), newsession, "field_1726", "session");
-			return "§aLogin Successful";
+			return "\00a7aLogin Successful";
 
 		} catch (SecurityException e) {
-			return "§cReflection Error";
+			return "\00a7cReflection Error";
 
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			if (e.getMessage().contains("Invalid username or password.")
 					|| e.getMessage().toLowerCase().contains("account migrated"))
-				return "§4Wrong password!";
+				return "\00a74Wrong password!";
 			else
-				return "§cCannot contact authentication server!";
+				return "\00a7cCannot contact authentication server!";
 
 		} catch (NullPointerException e) {
-			return "§4Wrong password!";
+			return "\00a74Wrong password!";
 
 		}
 	}
