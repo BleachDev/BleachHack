@@ -17,14 +17,14 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import org.lwjgl.glfw.GLFW;
 
-public class ClickTP extends Module {
+public class ClickTp extends Module {
 
     private BlockPos pos = null;
     private Direction dir = null;
 
     private boolean antiSpamClick = false;
 
-    public ClickTP() {
+    public ClickTp() {
         super("ClickTP", KEY_UNBOUND, Category.MOVEMENT, "Allows you to teleport by clicking",
                 new SettingToggle("In Air", true).withDesc("Teleports even if you are pointing in the air"),
                 new SettingToggle("Liquids", false).withDesc("Interacts with liquids"),
