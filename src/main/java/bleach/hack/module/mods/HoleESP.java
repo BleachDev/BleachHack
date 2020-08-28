@@ -41,7 +41,7 @@ public class HoleESP extends Module
     @Subscribe
     public void onTick(EventTick event)
     {
-            if (mc.player.age % 10 == 0)
+            if (mc.player.age % 10 == 0 && this.isToggled())
             {
                 this.update((int) this.getSettings().get(0).asSlider().getValue());
             }

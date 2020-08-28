@@ -142,7 +142,8 @@ public class TunnelESP extends Module
         double x = (double) blockPos.getX();
         double y = (double) blockPos.getY();
         double z = (double) blockPos.getZ();
-
+        double y2 = (double) blockPos.up(1).getY();
+        
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);
         float ob = (float) (this.getSettings().get(3).asSlider().getValue() / 255.0D);
@@ -162,6 +163,19 @@ public class TunnelESP extends Module
             RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
             RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
             RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+
+            RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2 + 1.0D, z), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2 + 1.0D, z), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y2, z, x, y2 + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y2, z, x, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x + 1.0D, y2, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x + 1.0D, y2, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y2, z + 1.0D, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y2, z + 1.0D, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y2 + 1.0D, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y2 + 1.0D, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
         }
     }
     public void onDisable () {
