@@ -62,6 +62,16 @@ public class TunnelESP extends Module
                             && !(this.mc.world.getBlockState(pos.south(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.up(1).north(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.up(1).south(1)).getBlock() == Blocks.AIR)
+
+                            && (this.mc.world.getBlockState(pos.west(1)).getBlock() == Blocks.AIR)
+                            && (this.mc.world.getBlockState(pos.west(1).up(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.west(1).down(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.west(1).up(2)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.west(1).north(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.west(1).south(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.west(1).up(1).north(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.west(1).up(1).south(1)).getBlock() == Blocks.AIR)
+
                             ||
                             (this.mc.world.getBlockState(pos).getBlock() == Blocks.AIR)
                             && (this.mc.world.getBlockState(pos.up(1)).getBlock() == Blocks.AIR)
@@ -71,6 +81,16 @@ public class TunnelESP extends Module
                             && !(this.mc.world.getBlockState(pos.east(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.up(1).west(1)).getBlock() == Blocks.AIR)
                             && !(this.mc.world.getBlockState(pos.up(1).east(1)).getBlock() == Blocks.AIR)
+
+                            && (this.mc.world.getBlockState(pos.north(1)).getBlock() == Blocks.AIR)
+                            && (this.mc.world.getBlockState(pos.north(1).up(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.north(1).down(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.north(1).up(2)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.north(1).west(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.north(1).east(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.north(1).up(1).west(1)).getBlock() == Blocks.AIR)
+                            && !(this.mc.world.getBlockState(pos.north(1).up(1).east(1)).getBlock() == Blocks.AIR)
+
                     )
                     {
                         this.poses.add(pos);

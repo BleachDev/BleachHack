@@ -34,7 +34,7 @@ public class VoidESP extends Module
     @Subscribe
     public void onTick(EventTick event)
     {
-        if (mc.player.age % (int) this.getSettings().get(4).asSlider().getValue() == 0 && this.isToggled())
+        if (mc.player.age % (int) this.getSettings().get(4).asSlider().getValue() == 0 && this.isToggled() && mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether"))
         {
             this.update((int) this.getSettings().get(0).asSlider().getValue());
         }
