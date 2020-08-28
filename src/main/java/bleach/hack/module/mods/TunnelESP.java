@@ -4,6 +4,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
@@ -29,12 +30,13 @@ public class TunnelESP extends Module
                 new SettingSlider("R: ", 0.0D, 255.0D, 85.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 85.0D, 0),
                 new SettingSlider("B: ", 0.0D, 255.0D, 255.0D, 0),
+                new SettingMode("Mode", "Flat", "Boxes"),
                 new SettingSlider("Tick Delay", 1, 20, 5, 0));
     }
     @Subscribe
     public void onTick(EventTick event)
     {
-        if (mc.player.age % (int) this.getSettings().get(4).asSlider().getValue() == 0 && this.isToggled())
+        if (mc.player.age % (int) this.getSettings().get(5).asSlider().getValue() == 0 && this.isToggled())
         {
             this.update((int) this.getSettings().get(0).asSlider().getValue());
         }
@@ -140,36 +142,27 @@ public class TunnelESP extends Module
         double x = (double) blockPos.getX();
         double y = (double) blockPos.getY();
         double z = (double) blockPos.getZ();
-        double y2 = (double) blockPos.up(1).getY();
 
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);
         float ob = (float) (this.getSettings().get(3).asSlider().getValue() / 255.0D);
-        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-
-        RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2 + 1.0D, z), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2 + 1.0D, z), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y2, z, x, y2 + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y2, z, x, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x + 1.0D, y2, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x + 1.0D, y2, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y2, z + 1.0D, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y2, z + 1.0D, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y2, z, x + 1.0D, y2, z + 1.0D), or, og, ob, a * 1.5F);
-        RenderUtils.drawFilledBox(new Box(x, y2 + 1.0D, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a);
-        RenderUtils.drawFilledBox(new Box(x, y2 + 1.0D, z, x + 1.0D, y2 + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+        if (getSetting(4).asMode().mode == 0) {
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
+        } else {
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y + 1.0D, z), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x + 1.0D, y, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z + 1.0D, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
+            RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
+            RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+        }
     }
     public void onDisable () {
         this.poses.clear();
