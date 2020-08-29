@@ -23,7 +23,6 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
@@ -46,7 +45,7 @@ public class AutoTotem extends Module {
 			return;
 
 		// Cancel at all non-survival-inventory containers
-		if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
+		if (mc.player.playerScreenHandler == mc.player.currentScreenHandler) {
 			for (int i = 9; i < 45; i++) {
 				if (mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.TOTEM_OF_UNDYING) {
 					boolean itemInOffhand = !mc.player.getOffHandStack().isEmpty();

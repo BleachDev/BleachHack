@@ -11,7 +11,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.BleachQueue;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.container.SlotActionType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -119,7 +118,7 @@ public class AutoArmor extends Module {
 					}
 
 					mc.interactionManager.clickSlot(mc.player.container.syncId, 36 + e.getValue()[2], 1, SlotActionType.QUICK_MOVE, mc.player);
-				} else if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
+				} else if (mc.player.playerContainer == mc.player.playerContainer) {
 					/* Convert inventory slots to container slots */
 					int armorSlot = (e.getValue()[0] - 34) + (39 - e.getValue()[0]) * 2;
 					int newArmorslot = e.getValue()[2] < 9 ? 36 + e.getValue()[2] : e.getValue()[2];

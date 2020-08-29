@@ -8,7 +8,6 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
@@ -49,7 +48,7 @@ public class AutoTool extends Module {
 					if (slot < 9) {
 						mc.player.inventory.selectedSlot = slot;
 						mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
-					} else if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
+					} else if (mc.player.playerScreenHandler == mc.player.currentScreenHandler) {
 						boolean itemInHand = !mc.player.inventory.getMainHandStack().isEmpty();
 						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, slot, 0, SlotActionType.PICKUP, mc.player);
 						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 36 + mc.player.inventory.selectedSlot, 0, SlotActionType.PICKUP, mc.player);
