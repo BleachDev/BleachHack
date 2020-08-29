@@ -36,9 +36,11 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
+import net.minecraft.block.Block;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class Scaffold extends Module {
@@ -123,7 +125,18 @@ public class Scaffold extends Module {
 		int cap = 0;
 		for (BlockPos bp : blocks) {
 			if (getSetting(2).asRotate().state) {
-				WorldUtils.facePosAuto(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5, getSetting(2).asRotate());
+				for (Direction d : Direction.values()) {
+					Block neighborBlock = mc.world.getBlockState(bp.offset(d)).getBlock();
+					Vec3d vec = new Vec3d(bp.getX() + 0.5 + d.getOffsetX() * 0.5,
+							bp.getY() + 0.5 + d.getOffsetY() * 0.5,
+							bp.getZ() + 0.5 + d.getOffsetZ() * 0.5);
+
+					if (!WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock)
+							&& mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) <= 4.55) {
+						WorldUtils.facePosAuto(vec.x, vec.y, vec.z, getSetting(2).asRotate());
+						break;
+					}
+				}
 			}
 
 			if (WorldUtils.placeBlock(bp, -1, false, false)) {
