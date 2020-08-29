@@ -71,7 +71,7 @@ public class Tracers extends Module {
 			float[] col = null;
 
 			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSetting(0).asToggle().state) {
-				col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(e.getName().asString()) ? 1 : 0).asColor().getRGBFloat();
+				col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(e.getName().getString()) ? 1 : 0).asColor().getRGBFloat();
 			} else if (e instanceof Monster && getSetting(1).asToggle().state) {
 				col = getSetting(1).asToggle().getChild(0).asColor().getRGBFloat();
 			} else if (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state) {

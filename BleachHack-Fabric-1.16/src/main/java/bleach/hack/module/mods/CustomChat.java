@@ -110,18 +110,18 @@ public class CustomChat extends Module {
 	public void onPacketRead(EventReadPacket event) {
 		if (getSetting(4).asMode().mode != 0 && event.getPacket() instanceof GameMessageS2CPacket) {
 
-			String msg = ((GameMessageS2CPacket) event.getPacket()).getMessage().asString();
-			if (msg.contains(mc.player.getName().asString()) && msg.contains("by")) {
+			String msg = ((GameMessageS2CPacket) event.getPacket()).getMessage().getString();
+			if (msg.contains(mc.player.getName().getString()) && msg.contains("by")) {
 				for (PlayerEntity e : mc.world.getPlayers()) {
 					if (e == mc.player)
 						continue;
 
-					if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().asString())
-							&& !msg.contains("<" + e.getName().asString() + ">") && !msg.contains("<" + mc.player.getName().asString() + ">")) {
+					if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().getString())
+							&& !msg.contains("<" + e.getName().getString() + ">") && !msg.contains("<" + mc.player.getName().getString() + ">")) {
 						if (getSetting(4).asMode().mode == 1) {
-							mc.player.sendChatMessage(e.getName().asString() + " Just got EZed using the power of BleachHack " + BleachHack.VERSION);
+							mc.player.sendChatMessage(e.getName().getString() + " Just got EZed using the power of BleachHack " + BleachHack.VERSION);
 						} else {
-							mc.player.sendChatMessage("GG, " + e.getName().asString() + ", but BleachHack " + BleachHack.VERSION + " is ontop!");
+							mc.player.sendChatMessage("GG, " + e.getName().getString() + ", but BleachHack " + BleachHack.VERSION + " is ontop!");
 						}
 					}
 				}

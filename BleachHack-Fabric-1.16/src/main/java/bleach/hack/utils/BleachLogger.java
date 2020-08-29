@@ -63,7 +63,7 @@ public class BleachLogger {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
 		} catch (Exception e) {
-			System.out.println(text.asString());
+			System.out.println(text.getString());
 		}
 	}
 

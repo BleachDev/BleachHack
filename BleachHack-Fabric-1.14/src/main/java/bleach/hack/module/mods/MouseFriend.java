@@ -38,10 +38,10 @@ public class MouseFriend extends Module {
 				Entity e = lookingAt.get();
 
 				if (e instanceof PlayerEntity) {
-					if (BleachHack.friendMang.has(e.getName().asString())) {
-						BleachHack.friendMang.remove(e.getName().asString());
+					if (BleachHack.friendMang.has(e.getName().getString())) {
+						BleachHack.friendMang.remove(e.getName().getString());
 					} else {
-						BleachHack.friendMang.add(e.getName().asString());
+						BleachHack.friendMang.add(e.getName().getString());
 					}
 				}
 			}

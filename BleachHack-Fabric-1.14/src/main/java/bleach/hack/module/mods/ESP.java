@@ -86,7 +86,7 @@ public class ESP extends Module {
 	@Subscribe
 	public void onOutlineColor(EventOutlineColor event) {
 		if (event.entity instanceof PlayerEntity && event.entity != mc.player && getSetting(0).asToggle().state) {
-			if (BleachHack.friendMang.has(event.entity.getName().asString())) {
+			if (BleachHack.friendMang.has(event.entity.getName().getString())) {
 				event.color = getSetting(0).asToggle().getChild(1).asColor().getRGB();
 			} else {
 				event.color = getSetting(0).asToggle().getChild(0).asColor().getRGB();

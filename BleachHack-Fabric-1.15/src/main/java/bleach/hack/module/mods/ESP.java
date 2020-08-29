@@ -105,7 +105,7 @@ public class ESP extends Module {
 	public void onWorldEntityRender(EventWorldRenderEntity event) {
 		if (event.entity instanceof PlayerEntity && event.entity != mc.player && getSetting(0).asToggle().state) {
 			// Manually draw on players because of 2 colors
-			float[] col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(event.entity.getName().asString()) ? 3 : 2).asColor().getRGBFloat();
+			float[] col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(event.entity.getName().getString()) ? 3 : 2).asColor().getRGBFloat();
 			
 			if (getSetting(0).asToggle().getChild(0).asToggle().state) {
 				event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
