@@ -110,6 +110,7 @@ public class ModuleManager {
             new Surround(),
             new Timer(),
             /*new TotemPopCounter(),*/
+            new ToggleMSGs(),
             new Tracers(),
             new Trail(),
             new Trajectories(),
