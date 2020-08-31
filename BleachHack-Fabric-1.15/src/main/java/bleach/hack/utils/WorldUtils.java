@@ -45,7 +45,7 @@ public class WorldUtils {
 	public static final List<Block> NONSOLID_BLOCKS = Arrays.asList(
 			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
 			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
-			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE);
+			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE, Blocks.VOID_AIR);
 
 	public static final List<Block> RIGHTCLICKABLE_BLOCKS = Arrays.asList(
 			Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
@@ -112,13 +112,16 @@ public class WorldUtils {
 	}
 
 	public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack) {
-		if (!isBlockEmpty(pos))
+		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
 			return false;
 
 		if (slot != mc.player.inventory.selectedSlot && slot >= 0 && slot <= 8)
 			mc.player.inventory.selectedSlot = slot;
 
 		for (Direction d : Direction.values()) {
+			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255))
+				continue;
+			
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
 
 			Vec3d vec = new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
@@ -162,10 +165,12 @@ public class WorldUtils {
 	}
 
 	public static boolean canPlaceBlock(BlockPos pos) {
-		if (!isBlockEmpty(pos))
+		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
 			return false;
+		
 		for (Direction d : Direction.values()) {
-			if (NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
+			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255)
+					|| NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 									pos.getY() + 0.5 + d.getOffsetY() * 0.5,
