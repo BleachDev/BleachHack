@@ -98,6 +98,7 @@ public class ModuleManager {
             new PacketFly(),
             new Peek(),
             new PlayerCrash(),
+            new PopCounter(),
             new StashFinder(),
             new VoidESP(),
             new SafeWalk(),
