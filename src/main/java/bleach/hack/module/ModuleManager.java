@@ -69,7 +69,6 @@ public class ModuleManager {
             new FakeLag(),
             new FastUse(),
             new Flight(),
-            /*new FootXp(),*/
             new Freecam(),
             new NoToolCooldown(),
             new HotbarCacheRewrite(),
@@ -109,7 +108,6 @@ public class ModuleManager {
             new Step(),
             new Surround(),
             new Timer(),
-            /*new TotemPopCounter(),*/
             new Tracers(),
             new Trail(),
             new Trajectories(),
@@ -117,6 +115,9 @@ public class ModuleManager {
             new PortalESP(),
             new Xray(),
             new PopoutGUI(),
+            //new FootXp(),
+            //new TotemPopCounter(),
+            //new WireframeESP(),
             //new AutoExplode(),
             //new TunnelESP(),
             //new AutoBreed(),

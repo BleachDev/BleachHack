@@ -27,9 +27,9 @@ public class TunnelESP extends Module
     {
         super("TunnelESP", KEY_UNBOUND, Category.RENDER, "ESP for tunnels off the highway",
                 new SettingSlider("Range", 0, 50, 20, 0),
-                new SettingSlider("R: ", 0.0D, 255.0D, 85.0D, 0),
-                new SettingSlider("G: ", 0.0D, 255.0D, 85.0D, 0),
-                new SettingSlider("B: ", 0.0D, 255.0D, 255.0D, 0),
+                new SettingSlider("R: ", 0.0D, 255.0D, 50.0D, 0),
+                new SettingSlider("G: ", 0.0D, 255.0D, 255.0D, 0),
+                new SettingSlider("B: ", 0.0D, 255.0D, 50.0D, 0),
                 new SettingMode("Mode", "Flat", "Boxes"),
                 new SettingSlider("Tick Delay", 1, 20, 5, 0));
     }

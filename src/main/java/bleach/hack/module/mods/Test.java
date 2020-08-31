@@ -1,17 +1,21 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
+import com.google.common.eventbus.Subscribe;
 
 public class Test extends Module {
 
     public Test() {
         super("Test", KEY_UNBOUND, Category.WORLD, "dumps variables into console");
     }
-    public void onEnable() {
-        System.out.println("[BH] TEST: " + mc.world.getRegistryKey().getValue().getPath());
-        BleachLogger.infoMessage("[BH] TEST: " + mc.world.getRegistryKey().getValue().getPath());
-        this.setToggled(false);
+
+    @Subscribe
+    public void onSendPacket(EventSendPacket event) {
+        System.out.println("[BH] TEST: " + event.getPacket().toString());
+        BleachLogger.infoMessage("[BH] TEST: " + event.getPacket().toString());
     }
+
 }
