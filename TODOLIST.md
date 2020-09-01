@@ -79,3 +79,5 @@ Minor Adjustments:
 69. add 2b2t flight mode to elytra  
 70. Add way to slow down swimming speed for 2b2t  
 71. ncp bypass noslow for eating  
+72. add thing to auto turn off freecam when command #come is ran  
+73. move chunk size into UI modules

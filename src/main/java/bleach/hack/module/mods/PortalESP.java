@@ -33,7 +33,9 @@ public class PortalESP extends Module
                 new SettingSlider("R: ", 0.0D, 255.0D, 115.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 0.0D, 0),
                 new SettingSlider("B: ", 0.0D, 255.0D, 255.0D, 0),
-                new SettingSlider("Tick Delay", 1, 20, 10, 0));
+                new SettingSlider("Tick Delay", 1, 20, 10, 0),
+                new SettingToggle("Debug", false)
+        );
     }
     @Subscribe
     public void onTick(EventTick event)
@@ -110,7 +112,10 @@ public class PortalESP extends Module
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);
         float ob = (float) (this.getSettings().get(3).asSlider().getValue() / 255.0D);
-        if (this.mc.world.getBlockState(new BlockPos(x,y,z)).getEntries().toString().equals("{EnumProperty{name=axis, clazz=class net.minecraft.util.math.Direction$Axis, values=[x, z]}=x}")) {
+        if (getSetting(5).asToggle().state) {
+            BleachLogger.infoMessage(this.mc.world.getBlockState(new BlockPos(x,y,z)).getEntries().toString());
+        }
+        if (this.mc.world.getBlockState(new BlockPos(x,y,z)).getEntries().toString().contains("values=[x, z]}=x")) {
                 RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a);
                 RenderUtils.drawFilledBox(new Box(x, y, z + 0.5D, x + 1.0D, y + 1.0D, z + 0.5D), or, og, ob, a * 1.5F);
         } else {

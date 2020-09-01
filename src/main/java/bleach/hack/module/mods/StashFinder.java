@@ -51,7 +51,7 @@ public class StashFinder extends Module {
 
     @Subscribe
     public void onTick(EventTick event){
-        if (mc.player.isFallFlying()) {
+        if (mc.player.isFallFlying() || mc.player.isRiding()) {
             mc.options.keyForward.setPressed(true);
             if (this.startChunk == null) {
                 this.startChunk = new ChunkPos(this.mc.player.getBlockPos());

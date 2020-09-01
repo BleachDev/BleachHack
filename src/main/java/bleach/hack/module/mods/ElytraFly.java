@@ -37,7 +37,8 @@ public class ElytraFly extends Module {
                 new SettingMode("Mode", "Normal", "Control"),
                 new SettingSlider("Overworld Speed", 0, 5, 1.28, 2),
                 new SettingSlider("Nether Speed", 0, 5, 2.49, 2),
-                new SettingSlider("End Speed", 0, 5, 1.28, 2));
+                new SettingSlider("End Speed", 0, 5, 1.28, 2),
+                new SettingToggle("2b2t Downwards Velocity", false));
     }
 
     @Subscribe
@@ -45,12 +46,20 @@ public class ElytraFly extends Module {
         /* Cancel the retarded auto elytra movement */
         if (getSetting(1).asMode().mode == 1 && mc.player.isFallFlying()) {
             if (!mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
-                event.vec3d = new Vec3d(event.vec3d.x, 0, event.vec3d.z);
+                if (getSetting(5).asToggle().state) {
+                    event.vec3d = new Vec3d(event.vec3d.x, -0.0001, event.vec3d.z);
+                } else {
+                    event.vec3d = new Vec3d(event.vec3d.x, 0, event.vec3d.z);
+                }
             }
 
             if (!mc.options.keyBack.isPressed() && !mc.options.keyLeft.isPressed()
                     && !mc.options.keyRight.isPressed() && !mc.options.keyForward.isPressed()) {
-                event.vec3d = new Vec3d(0, event.vec3d.y, 0);
+                if (getSetting(5).asToggle().state) {
+                    event.vec3d = new Vec3d(0, event.vec3d.y-0.0001, 0);
+                } else {
+                    event.vec3d = new Vec3d(0, event.vec3d.y, 0);
+                }
             }
         }
     }
