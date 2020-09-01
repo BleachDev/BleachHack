@@ -23,7 +23,4 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Upload Artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: BleachHack
-        path: /home/runner/work/bleachhack-1.16-epearl-edition/bleachhack-1.16-epearl-edition/build/libs/bleachhack-epearl-edition-1000.jar
+      uses: actions/upload-artifact@v2
