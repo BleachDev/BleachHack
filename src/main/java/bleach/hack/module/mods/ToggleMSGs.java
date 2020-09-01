@@ -7,6 +7,6 @@ public class ToggleMSGs extends Module{
 
     public ToggleMSGs()
     {
-        super("ToggleMsg", KEY_UNBOUND, Category.MISC, "Stops you walking off blocks");
+        super("ToggleMSGs", KEY_UNBOUND, Category.MISC, "Messages in chat when you turn on/off a module");
     }
 }

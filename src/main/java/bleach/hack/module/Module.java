@@ -20,6 +20,7 @@ package bleach.hack.module;
 import bleach.hack.BleachHack;
 import bleach.hack.module.mods.ToggleMSGs;
 import bleach.hack.setting.base.SettingBase;
+import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileHelper;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
@@ -72,8 +73,8 @@ public class Module {
                 break;
             }
         }
-        if (ModuleManager.getModule(ToggleMSGs.class).isToggled()){
-            mc.inGameHud.getChatHud().addMessage(new LiteralText(Formatting.BLUE + "[Epearl Hack] "+ Formatting.AQUA + this.getName() + Formatting.BLUE + " Enabled"));
+        if (ModuleManager.getModule(ToggleMSGs.class).isToggled() && !this.getName().equals("ClickGUI") && !this.getName().equals("ColourChooser")){
+            BleachLogger.infoMessage(this.getName() + " Enabled");
         }
     }
 
@@ -90,8 +91,8 @@ public class Module {
         } catch (Exception this_didnt_get_registered_hmm_weird) {
             this_didnt_get_registered_hmm_weird.printStackTrace();
         }
-        if (ModuleManager.getModule(ToggleMSGs.class).isToggled()){
-            mc.inGameHud.getChatHud().addMessage(new LiteralText(Formatting.BLUE + "[Epearl Hack] "+ Formatting.AQUA + this.getName() + Formatting.BLUE + " Disabled"));
+        if (ModuleManager.getModule(ToggleMSGs.class).isToggled() && !this.getName().equals("ClickGUI") && !this.getName().equals("ColourChooser")){
+            BleachLogger.infoMessage(this.getName() + " Disabled");
         }
     }
 

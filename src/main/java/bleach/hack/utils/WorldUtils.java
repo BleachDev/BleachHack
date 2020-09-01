@@ -17,6 +17,9 @@
  */
 package bleach.hack.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 import bleach.hack.setting.other.SettingRotate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -29,10 +32,11 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.*;
-
-import java.util.Arrays;
-import java.util.List;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class WorldUtils {
 
@@ -41,7 +45,7 @@ public class WorldUtils {
     public static final List<Block> NONSOLID_BLOCKS = Arrays.asList(
             Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
             Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
-            Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE);
+            Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE, Blocks.VOID_AIR);
 
     public static final List<Block> RIGHTCLICKABLE_BLOCKS = Arrays.asList(
             Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
@@ -108,13 +112,16 @@ public class WorldUtils {
     }
 
     public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack) {
-        if (!isBlockEmpty(pos))
+        if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
             return false;
 
         if (slot != mc.player.inventory.selectedSlot && slot >= 0 && slot <= 8)
             mc.player.inventory.selectedSlot = slot;
 
         for (Direction d : Direction.values()) {
+            if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255))
+                continue;
+
             Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
 
             Vec3d vec = new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
@@ -132,6 +139,7 @@ public class WorldUtils {
             if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
                 mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
 
+            System.out.println(mc.world.getBlockState(pos.offset(d)) + " | " + pos.offset(d));
             mc.interactionManager.interactBlock(
                     mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.offset(d), false));
 
@@ -158,10 +166,12 @@ public class WorldUtils {
     }
 
     public static boolean canPlaceBlock(BlockPos pos) {
-        if (!isBlockEmpty(pos))
+        if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
             return false;
+
         for (Direction d : Direction.values()) {
-            if (NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
+            if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255)
+                    || NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
                     || mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
                     new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
                             pos.getY() + 0.5 + d.getOffsetY() * 0.5,
@@ -204,8 +214,8 @@ public class WorldUtils {
         float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
         float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
 
-        mc.player.headYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
-        mc.player.renderPitch = mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch);
+        //mc.player.headYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
+        //mc.player.renderPitch = mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch);
         mc.player.networkHandler.sendPacket(
                 new PlayerMoveC2SPacket.LookOnly(
                         mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),

@@ -1,18 +1,17 @@
 package bleach.hack.module.mods;
 
+import com.google.common.eventbus.Subscribe;
+
 import bleach.hack.event.events.EventParticle;
-import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSignBlockEntityRender;
 import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
+import net.minecraft.client.particle.ExplosionLargeParticle;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvents;
 
 public class NoRender extends Module {
 
@@ -23,9 +22,10 @@ public class NoRender extends Module {
                 new SettingToggle("Hurtcam", true).withDesc("Removes shaking when you get hurt"), // 2
                 new SettingToggle("Liquid", true).withDesc("Removes the underwater overlay when you are in water"), // 3
                 new SettingToggle("Pumpkin", true).withDesc("Removes the pumpkin overlay"), // 4
-                new SettingToggle("Signs", false).withDesc("Doesn't render signs"),/*.withChildren( // 5
-						new SettingMode("Mode", "Unrender", "Blank", "Custom").withDesc("How to render signs, use the \"customsign\" command to set sign text")),*/
-                new SettingToggle("Wobble", true).withDesc("Removes the nuasea effect"), // 6
+                new SettingToggle("Signs", false).withDesc("Doesn't render signs"), /* .withChildren( // 5 new SettingMode("Mode", "Unrender", "Blank", "Custom").
+                 * withDesc("How to render signs, use the \"customsign\" command to set sign text"
+                 * )), */
+                new SettingToggle("Wobble", true).withDesc("Removes the nausea effect"), // 6
                 new SettingToggle("BossBar", false).withDesc("Removes bossbars"), // 7
                 new SettingToggle("Totem", false).withDesc("Removes the totem animation").withChildren(
                         new SettingToggle("Particles", true).withDesc("Removes the yellow-green particles when a totem is used"),
@@ -34,7 +34,8 @@ public class NoRender extends Module {
                 new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse"),
                 new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)"),
                 new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"),
-                new SettingToggle("Explosions", false).withDesc("Disables rendering explosions"));
+                new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren(
+                        new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")));
     }
 
     @Subscribe
@@ -48,6 +49,10 @@ public class NoRender extends Module {
     public void onParticle(EventParticle.Normal event) {
         if (getSetting(10).asToggle().state && event.particle instanceof ElderGuardianAppearanceParticle) {
             event.setCancelled(true);
+        } else if (getSetting(13).asToggle().state && event.particle instanceof ExplosionLargeParticle) {
+            if (Math.abs(event.particle.getBoundingBox().hashCode() % 101) >= (int) getSetting(13).asToggle().getChild(0).asSlider().getValue()) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -64,14 +69,6 @@ public class NoRender extends Module {
             event.setCancelled(true);
         } else if (getSetting(10).asToggle().state && event.instance.getId().getPath().equals("entity.elder_guardian.curse")) {
             event.setCancelled(true);
-        }
-    }
-    @Subscribe
-    public void readPacket(EventReadPacket event) {
-        if (mc.player == null) return;
-        if (event.getPacket() instanceof ExplosionS2CPacket && getSetting(13).asToggle().state) {
-            event.setCancelled(true);
-            mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F));
         }
     }
 }

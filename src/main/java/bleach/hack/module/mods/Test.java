@@ -15,7 +15,7 @@ public class Test extends Module {
     @Subscribe
     public void onSendPacket(EventSendPacket event) {
         System.out.println("[BH] TEST: " + event.getPacket().toString());
-        BleachLogger.infoMessage("[BH] TEST: " + event.getPacket().toString());
+        BleachLogger.infoMessage("TEST: " + event.getPacket().toString());
     }
 
 }
