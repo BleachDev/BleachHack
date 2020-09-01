@@ -124,7 +124,8 @@ public class UI extends Module {
                         new SettingSlider("y", 1, 3840, 459, 0).withDesc("y coordinates")),
                 new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
                 new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 16
-                new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed") // 17
+                new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 17
+                new SettingToggle("Impact+", false)
         );
     }
 
@@ -163,7 +164,7 @@ public class UI extends Module {
 
         int playerarrayCount = 0;
         if (getSetting(8).asToggle().state && !mc.options.debugEnabled) {
-            String radar_title = "Player Radar\u00a77:\u00a7r";
+            String radar_title = "Player Radar" + (getSetting(19).asToggle().state ? "" : "\u00a77:\u00a7r");
             if (getSetting(8).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, radar_title, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
             } else {
@@ -209,13 +210,13 @@ public class UI extends Module {
         if (getSetting(10).asToggle().state && !mc.options.debugEnabled) {
             if (getSetting(10).asToggle().getChild(7).asToggle().state) {
                 String time_now = new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "") + (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "") + "h:mm" + (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "") + (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "") + (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date());
-                mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r" + time_now,
+                mc.textRenderer.drawWithShadow(event.matrix, "Time" + (getSetting(19).asToggle().state ? " \u00A7f" : "\u00a77: \u00a7r") + time_now,
                         (int) getSetting(10).asToggle().getChild(5).asSlider().getValue(),
                         (int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
                         ColourThingy.guiColour());
             } else{
                 String time_now = new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "") + (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "") + "h:mm" + (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "") + (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "") + (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date());
-                mc.textRenderer.drawWithShadow(event.matrix, "Time\u00a77: \u00a7r" + time_now,
+                mc.textRenderer.drawWithShadow(event.matrix, "Time" + (getSetting(19).asToggle().state ? " \u00A7f" : "\u00a77: \u00a7r") + time_now,
                         (int) getSetting(10).asToggle().getChild(5).asSlider().getValue() - mc.textRenderer.getWidth(time_now),
                         (int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
                         ColourThingy.guiColour());
@@ -223,7 +224,7 @@ public class UI extends Module {
         }
 
         if (getSetting(1).asToggle().state && !mc.options.debugEnabled) {
-            String watermark = "BleachHack " + BleachHack.VERSION;
+            String watermark = "BleachHack epearl edition " + (getSetting(19).asToggle().state ? "\u00A7f" : "")  + BleachHack.VERSION + (getSetting(19).asToggle().state ? "+" : "");
             if (getSetting(1).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, watermark, (int) getSetting(1).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(1).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
             } else{
@@ -237,7 +238,7 @@ public class UI extends Module {
             Vec3d vec = mc.player.getPos();
             BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
                     : new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
-            String coords = "XYZ\u00a77: \u00a7r" + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " \u00a77[\u00a7r" + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]";
+            String coords = "XYZ" + (getSetting(19).asToggle().state ? " \u00A7f" : "\u00a77: \u00a7r") + pos.getX() + " " + pos.getY() + " " + pos.getZ() + (getSetting(19).asToggle().state ? " \u00a77[\u00a7f" : " \u00a77[\u00a7r") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]";
             if (getSetting(4).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, coords,
                         (int) getSetting(4).asToggle().getChild(0).asSlider().getValue(),
@@ -254,7 +255,7 @@ public class UI extends Module {
 
         if (getSetting(7).asToggle().state && !mc.options.debugEnabled) {
             String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-            String server1 = "IP\u00a77: \u00a7r" + server;
+            String server1 = "IP" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + server;
             if (getSetting(7).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, server1,
                         (int) getSetting(7).asToggle().getChild(0).asSlider().getValue(),
@@ -271,7 +272,7 @@ public class UI extends Module {
 
         if (getSetting(2).asToggle().state && !mc.options.debugEnabled) {
             int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
-            String fps1 = "FPS\u00a77: \u00a7r" + fps;
+            String fps1 = "FPS" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + fps;
             if (getSetting(2).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, fps1,
                         (int) getSetting(2).asToggle().getChild(0).asSlider().getValue(),
@@ -291,7 +292,7 @@ public class UI extends Module {
         if (getSetting(3).asToggle().state && !mc.options.debugEnabled) {
             PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
             int ping = playerEntry == null ? 0 : playerEntry.getLatency();
-            String ping1 = "Ping\u00a77: \u00a7r" + ping;
+            String ping1 = "Ping" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + ping;
             if (getSetting(3).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, ping1,
                         (int) getSetting(3).asToggle().getChild(0).asSlider().getValue(),
@@ -313,12 +314,12 @@ public class UI extends Module {
             String bps = decimalFormat.format((deltaX + deltaZ) * 20);
 
             if (getSetting(11).asToggle().getChild(2).asToggle().state) {
-                mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" + bps,
+                mc.textRenderer.drawWithShadow(event.matrix, "BPS" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + bps,
                     (int) getSetting(11).asToggle().getChild(0).asSlider().getValue(),
                     (int) getSetting(11).asToggle().getChild(1).asSlider().getValue(),
                     ColourThingy.guiColour());
             } else{
-                mc.textRenderer.drawWithShadow(event.matrix, "BPS\u00a77: \u00a7r" + bps,
+                mc.textRenderer.drawWithShadow(event.matrix, "BPS" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + bps,
                         (int) getSetting(11).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(bps),
                         (int) getSetting(11).asToggle().getChild(1).asSlider().getValue(),
                         ColourThingy.guiColour());
@@ -326,19 +327,19 @@ public class UI extends Module {
         }
 
         if (getSetting(5).asToggle().state && !mc.options.debugEnabled) {
-            String suffix = "\u00a77";
+            String suffix = (getSetting(19).asToggle().state ? "\u00a7f" : "\u00a77");
             if (lastPacket + 7500 < System.currentTimeMillis()) suffix += "....";
             else if (lastPacket + 5000 < System.currentTimeMillis()) suffix += "...";
             else if (lastPacket + 2500 < System.currentTimeMillis()) suffix += "..";
             else if (lastPacket + 1200 < System.currentTimeMillis()) suffix += ".";
-            String tps1 = getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix;
+            String tps1 = getColorString((int) tps, 18, 15, 12, 8, 4, false) + (getSetting(19).asToggle().state ? "\u00a7f" : "") + tps + suffix;
             if (getSetting(5).asToggle().getChild(2).asToggle().state) {
-                mc.textRenderer.drawWithShadow(event.matrix, "TPS\u00a77: \u00a7r" + tps1,
+                mc.textRenderer.drawWithShadow(event.matrix, "TPS" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + tps1,
                         (int) getSetting(5).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(5).asToggle().getChild(1).asSlider().getValue(),
                         ColourThingy.guiColour());
             } else{
-                mc.textRenderer.drawWithShadow(event.matrix, "TPS\u00a77: \u00a7r" + tps1,
+                mc.textRenderer.drawWithShadow(event.matrix, "TPS" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + tps1,
                         (int) getSetting(5).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(tps1),
                         (int) getSetting(5).asToggle().getChild(1).asSlider().getValue(),
                         ColourThingy.guiColour());
@@ -358,7 +359,7 @@ public class UI extends Module {
         }
 
         if (getSetting(13).asToggle().state && !mc.options.debugEnabled) {
-            String welcome = "Welcome\u00a77, \u00a7r" + mc.player.getName().asString();
+            String welcome = "Welcome" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77, \u00a7r") + mc.player.getName().asString();
             if (getSetting(13).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, welcome,
                     (int) getSetting(13).asToggle().getChild(0).asSlider().getValue(),
@@ -374,7 +375,7 @@ public class UI extends Module {
 
 
         if (getSetting(12).asToggle().state && !mc.options.debugEnabled) {
-            String playercount = "Online\u00a77: \u00a7r" + mc.player.networkHandler.getPlayerList().size();
+            String playercount = "Online" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + mc.player.networkHandler.getPlayerList().size();
             if (getSetting(12).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, playercount,
                         (int) getSetting(12).asToggle().getChild(0).asSlider().getValue(),
@@ -393,12 +394,12 @@ public class UI extends Module {
             String biome1 = biome.substring(0, 1).toUpperCase() + biome.substring(1);
 
             if (getSetting(14).asToggle().getChild(2).asToggle().state) {
-                mc.textRenderer.drawWithShadow(event.matrix, "Biome\u00a77: \u00a7r" + biome1,
+                mc.textRenderer.drawWithShadow(event.matrix, "Biome" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + biome1,
                         (int) getSetting(14).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
                         ColourThingy.guiColour());
             } else {
-                mc.textRenderer.drawWithShadow(event.matrix, "Biome\u00a77: \u00a7r" + biome1,
+                mc.textRenderer.drawWithShadow(event.matrix, "Biome" + (getSetting(19).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + biome1,
                         (int) getSetting(14).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(biome1),
                         (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
                         ColourThingy.guiColour());

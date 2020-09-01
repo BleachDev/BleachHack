@@ -17,6 +17,7 @@
  */
 package bleach.hack.gui.clickgui;
 
+import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.modulewindow.ClickGuiWindow;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
@@ -93,7 +94,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
         this.renderBackground(matrix);
-        textRenderer.drawWithShadow(matrix, "BleachHack 1.16 epearl edition", 3, 3, ColourThingy.guiColour());
+        textRenderer.drawWithShadow(matrix, "BleachHack epearl edition " + BleachHack.VERSION, 1, 1, ColourThingy.guiColour());
         if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
             textRenderer.drawWithShadow(matrix,
                     "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());

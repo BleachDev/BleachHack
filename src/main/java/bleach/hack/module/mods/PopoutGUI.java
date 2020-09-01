@@ -169,7 +169,7 @@ public class PopoutGUI extends Module {
         }
         module_list.setText(modules_string.toString());
 
-        String watermark = "BleachHack " + BleachHack.VERSION;
+        String watermark = "BleachHack epearl edition" + BleachHack.VERSION;
         String welcome = "Welcome, " + mc.player.getName().asString();
         String biome = mc.world.getBiome(mc.player.getBlockPos()).getCategory().getName();
         String biome1 = "Biome: " + biome.substring(0, 1).toUpperCase() + biome.substring(1);
