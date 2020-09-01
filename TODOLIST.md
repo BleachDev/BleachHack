@@ -28,7 +28,7 @@ Additions: Rename from greeter to Welcomer and add file with variables for custo
 20. AntiHurtcam: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/NoHurtCam.java>
 21. CursorBlockHighlight: <https://github.com/fr1kin/ForgeHax/blob/1.16/src/main/java/dev/fiki/forgehax/main/mods/render/BlockHighlightMod.java>
 
-Minor Adjustments:
+Minor Adjustments:  
 22. Make scaffold & surround turn off lock to blocks when nothing to place and surround returns to last item  
 23. Add Totem Pop Counter  
 24. Add Inventory Totem Counter  
