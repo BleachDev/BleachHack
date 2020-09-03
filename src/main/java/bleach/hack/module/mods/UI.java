@@ -150,13 +150,16 @@ public class UI extends Module {
                         new SettingSlider("y", 1, 3840, 459, 0).withDesc("y coordinates")),
                 new SettingToggle("Chunk Size", true).withDesc("Shows the size of the chunk you are standing in").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Saturation", true).withDesc("Shows your saturation level").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 300, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 300, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingToggle("Totems", true).withDesc("Shows your saturation level").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 310, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 310, 0).withDesc("y coordinates"),
+                        new SettingToggle("Right Align", true)),
                 new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
                 new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 16
                 new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 17
@@ -463,28 +466,54 @@ public class UI extends Module {
         }
 
         if (getSetting(16).asToggle().state && !mc.options.debugEnabled) {
-            mc.textRenderer.drawWithShadow(event.matrix, "Chunk Size" + (getSetting(22).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + (chunksize < 1000 ? chunksize + "B" : chunksize / 1000d + "KB"),
-                    (int) getSetting(16).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(16).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String chunksizevar = "Chunk Size" + (getSetting(22).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + (chunksize < 1000 ? chunksize + "B" : chunksize / 1000d + "KB");
+            if (getSetting(16).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, chunksizevar,
+                        (int) getSetting(16).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(16).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, chunksizevar,
+                        (int) getSetting(16).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(chunksizevar),
+                        (int) getSetting(16).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+
+            }
         }
 
         if (getSetting(17).asToggle().state && !mc.options.debugEnabled) {
             assert mc.player != null;
             float saturation_level = mc.player.getHungerManager().getSaturationLevel();
             DecimalFormat decimalFormat = new DecimalFormat("0.0");
-            mc.textRenderer.drawWithShadow(event.matrix, "Saturation" + (getSetting(22).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + decimalFormat.format(saturation_level),
-                    (int) getSetting(17).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(17).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String saturationlevelvar = "Saturation" + (getSetting(22).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + decimalFormat.format(saturation_level);
+            if (getSetting(17).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, saturationlevelvar,
+                        (int) getSetting(17).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(17).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, saturationlevelvar,
+                        (int) getSetting(17).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(saturationlevelvar),
+                        (int) getSetting(17).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+
+            }
         }
 
         if (getSetting(18).asToggle().state && !mc.options.debugEnabled) {
-            assert mc.player != null;
-            mc.textRenderer.drawWithShadow(event.matrix, "Totems" + (getSetting(22).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + this.getTotems(),
-                    (int) getSetting(18).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(18).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            String totemcountvar = "Totems" + (getSetting(22).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + this.getTotems();
+            if (getSetting(18).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, totemcountvar,
+                        (int) getSetting(18).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(18).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, totemcountvar,
+                        (int) getSetting(18).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(totemcountvar),
+                        (int) getSetting(18).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+
+            }
         }
 
         if (getSetting(9).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator() && !mc.options.debugEnabled) {
