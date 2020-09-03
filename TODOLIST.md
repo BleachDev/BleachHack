@@ -31,7 +31,6 @@ Additions: Rename from greeter to Welcomer and add file with variables for custo
 Minor Adjustments:  
 22. Make scaffold & surround turn off lock to blocks when nothing to place and surround returns to last item  
 23. Add Totem Pop Counter  
-24. Add Inventory Totem Counter  
 26. Add block highlight/search module  
 27. Vanilla Speed option  
 28. Donkey Detect module  
@@ -74,5 +73,7 @@ Minor Adjustments:
 69. Add way to slow down swimming speed for 2b2t  
 70. ncp bypass noslow mode for eating  
 71. add thing to auto turn off freecam when command #come is ran  
-72. move chunk size into UI modules  
 73. finish Logout Spots  
+74. Add announcer  
+77. Add chat parser  
+77. Add health to autoeat

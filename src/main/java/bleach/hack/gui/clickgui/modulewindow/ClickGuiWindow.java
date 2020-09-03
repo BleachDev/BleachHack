@@ -1,7 +1,10 @@
 package bleach.hack.gui.clickgui.modulewindow;
 
 import bleach.hack.gui.window.Window;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -43,7 +46,15 @@ public abstract class ClickGuiWindow extends Window {
         //DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2, y2, 0x90000000);
         //DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90000000);
         //DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
-        DrawableHelper.fill(matrix, x1, y1 + 12, x2, y1 + 13, ColourThingy.guiColour());
+        if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 0) {
+            DrawableHelper.fill(matrix, x1, y1 + 12, x2, y1 + 13, ColourThingy.guiColour());
+        } else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 1) {
+            int x0 = Math.min(x1, x2);
+            int y0 = Math.min(y1, y2);
+            int h = Math.max(y1, y2);
+            int w = Math.max(x1, x2);
+            RenderUtils.drawRect(x0, y0, w, h, ColourThingy.guiColour(), 0.2f);
+        }
         DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, ColourThingy.guiColour());
         DrawableHelper.fill(matrix, x1, y2, x2 + 1, y2 - 1, ColourThingy.guiColour());
         DrawableHelper.fill(matrix, x2, y1, x1, y1 + 1, ColourThingy.guiColour());

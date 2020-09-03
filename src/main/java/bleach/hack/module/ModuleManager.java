@@ -19,11 +19,13 @@ package bleach.hack.module;
 
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
+import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +52,6 @@ public class ModuleManager {
         new BookCrash(),
         new BowBot(),
         new ChestESP(),
-        new ChunkSize(),
         new BoxESP(),
         new ClickGui(),
         new ColorSigns(),

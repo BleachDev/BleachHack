@@ -92,9 +92,7 @@ public class ModuleWindow extends ClickGuiWindow {
                 //DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
                 //DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
             }
-
             DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY,
-                    //TODO make this color match GUI color selector but with 50% transparency
                     mouseOver(x, y + curY, x + len, y + 12 + curY) ? 0x70303070 : 0x00000000);
 
             textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
