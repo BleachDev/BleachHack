@@ -548,7 +548,7 @@ public class UI extends Module {
                             + (getSetting(23).asToggle().state ? "\u00a7r, \u00a7f" : ", ")
                             + totem_count
                             + (getSetting(23).asToggle().state ? " \u00a7r" : " ")
-                            + (totem_count > 1 ? "totems remaining" : "totem remaining");
+                            + (totem_count == 1 ? "totem remaining" : "totems remaining");
                     alertList.add(text);
                 }
             }
@@ -561,7 +561,7 @@ public class UI extends Module {
                             + (getSetting(23).asToggle().state ? "\u00a7r, \u00a7f" : ", ")
                             + bed_count
                             + (getSetting(23).asToggle().state ? " \u00a7r" : " ")
-                            + (bed_count > 1 ? "beds remaining" : "bed remaining");
+                            + (bed_count == 1 ? "bed remaining" : "beds remaining");
                     alertList.add(text);
                 }
             }
