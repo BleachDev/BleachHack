@@ -27,6 +27,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.module.mods.UI;
 import bleach.hack.utils.ColourThingy;
 import bleach.hack.utils.file.BleachFileHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -94,7 +95,8 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
 
         this.renderBackground(matrix);
-        textRenderer.drawWithShadow(matrix, "BleachHack epearl edition " + BleachHack.VERSION, 1, 1, ColourThingy.guiColour());
+        String watermark = "BleachHack epearl edition " + (ModuleManager.getModule(UI.class).getSetting(23).asToggle().state ? "\u00A7f" : "")  + BleachHack.VERSION + (ModuleManager.getModule(UI.class).getSetting(23).asToggle().state ? "+" : "");
+        textRenderer.drawWithShadow(matrix, watermark, 1, 1, ColourThingy.guiColour());
         if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
             textRenderer.drawWithShadow(matrix,
                     "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
