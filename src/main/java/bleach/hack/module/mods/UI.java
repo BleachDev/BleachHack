@@ -29,6 +29,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.ColourThingy;
 import bleach.hack.utils.FabricReflect;
+import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.shorts.ShortList;
@@ -131,7 +132,7 @@ public class UI extends Module {
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 230, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
-                new SettingToggle("BPS", true).withDesc("Shows your block per second speed (WORK IN PROGRESS)").withChildren( // 11
+                new SettingToggle("BPS", true).withDesc("Shows your block per second speed").withChildren( // 11
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 260, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
@@ -143,13 +144,14 @@ public class UI extends Module {
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 190, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
-                new SettingToggle("Biome", true).withDesc("Shows your current biome (WIP)").withChildren( // 14
+                new SettingToggle("Biome", true).withDesc("Shows your current biome").withChildren( // 14
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 280, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true)),
                 new SettingToggle("Inventory", true).withDesc("Shows your inventory on your screen").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 571, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 459, 0).withDesc("y coordinates")),
+                        new SettingSlider("y", 1, 3840, 459, 0).withDesc("y coordinates"),
+                        new SettingMode("Style", "GUI Color", "Black", "Clear").withDesc("How to show the armor durability")),
                 new SettingToggle("Chunk Size", true).withDesc("Shows the size of the chunk you are standing in").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates"),
@@ -229,7 +231,7 @@ public class UI extends Module {
 
                 int dist = (int) Math.round(mc.player.getPos().distanceTo(e.getPos()));
 
-                String text = "" + e.getDisplayName().getString() + " " + (getSetting(8).asToggle().getChild(4).asToggle().state ? "\u00a77\u01c0\u00a7r " + e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ() + " " : "")
+                String text = e.getDisplayName().getString() + (getSetting(8).asToggle().getChild(4).asToggle().state ? " \u00a77[\u00a7r" + e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ() + "\u00a77]\u00a7r " : " ")
                         + "\u00a77(\u00a7r" + dist + "m\u00a77)\u00a7r";
                 if (dist <= (int) getSetting(8).asToggle().getChild(5).asSlider().getValue()) {
                     if (getSetting(8).asToggle().getChild(2).asToggle().state) {
@@ -455,8 +457,24 @@ public class UI extends Module {
                 return;
 
             GL11.glPushMatrix();
-            //TODO ADD BACKGROUND!!
-            //RenderUtil.drawRect(this.getX(), this.getY(), this.getX() + this.getW(), this.getY() + this.getH(), 0x75101010); // background
+            if (getSetting(15).asToggle().getChild(2).asMode().mode == 0) {
+                RenderUtils.drawRect(
+                        (int) getSetting(15).asToggle().getChild(0).asSlider().getValue(),
+                        (int)getSetting(15).asToggle().getChild(1).asSlider().getValue(),
+                        (int) getSetting(15).asToggle().getChild(0).asSlider().getValue() + 146,
+                        (int) getSetting(15).asToggle().getChild(1).asSlider().getValue() + 50,
+                        ColourThingy.guiColour(),
+                        0.5f);
+            } else if (getSetting(15).asToggle().getChild(2).asMode().mode == 1) {
+                RenderUtils.drawRect(
+                        (int) getSetting(15).asToggle().getChild(0).asSlider().getValue(),
+                        (int)getSetting(15).asToggle().getChild(1).asSlider().getValue(),
+                        (int) getSetting(15).asToggle().getChild(0).asSlider().getValue() + 146,
+                        (int) getSetting(15).asToggle().getChild(1).asSlider().getValue() + 50,
+                        0x000000,
+                        0.5f);
+            }
+
             for (int i = 0; i < 27; i++) {
                 ItemStack itemStack = mc.player.inventory.main.get(i + 9);
                 int offsetX = (int) getSetting(15).asToggle().getChild(0).asSlider().getValue() + (i % 9) * 16;
@@ -538,17 +556,20 @@ public class UI extends Module {
 
         if (getSetting(6).asToggle().state || getSetting(19).asToggle().getChild(3).asToggle().state || getSetting(18).asToggle().getChild(3).asToggle().state) {
             alertList.clear();
-            DecimalFormat full_number = new DecimalFormat("0");
+            if (getSetting(6).asToggle().state) {
+                long time = System.currentTimeMillis();
+                if (time - lastPacket > 500) {
+                    DecimalFormat round = new DecimalFormat("0.0");
+
+                    String text = "Server Lagging For " + (getSetting(23).asToggle().state ? "\u00a7f" : "") + (round.format((time - lastPacket) / 1000d)) + "s";
+                    alertList.add(text);
+                }
+            }
             if (getSetting(18).asToggle().getChild(3).asToggle().state && getSetting(18).asToggle().state) {
                 double min_totems = getSetting(18).asToggle().getChild(3).asToggle().getChild(0).asSlider().getValue();
                 int totem_count = this.getTotems();
                 if (totem_count < min_totems) {
-                    String text = "Totems below " + (getSetting(23).asToggle().state ? "\u00a7f" : "")
-                            + full_number.format(min_totems)
-                            + (getSetting(23).asToggle().state ? "\u00a7r, \u00a7f" : ", ")
-                            + totem_count
-                            + (getSetting(23).asToggle().state ? " \u00a7r" : " ")
-                            + (totem_count == 1 ? "totem remaining" : "totems remaining");
+                    String text = (getSetting(23).asToggle().state ? "\u00a7f" : "") + totem_count + (getSetting(23).asToggle().state ? " \u00a7r" : " ") + (totem_count == 1 ? "Totem Remaining" : "Totems Remaining");
                     alertList.add(text);
                 }
             }
@@ -556,21 +577,7 @@ public class UI extends Module {
                 double min_beds = getSetting(19).asToggle().getChild(3).asToggle().getChild(0).asSlider().getValue();
                 int bed_count = this.getBeds();
                 if (bed_count < min_beds) {
-                    String text = "Beds below " + (getSetting(23).asToggle().state ? "\u00a7f" : "")
-                            + full_number.format(min_beds)
-                            + (getSetting(23).asToggle().state ? "\u00a7r, \u00a7f" : ", ")
-                            + bed_count
-                            + (getSetting(23).asToggle().state ? " \u00a7r" : " ")
-                            + (bed_count == 1 ? "bed remaining" : "beds remaining");
-                    alertList.add(text);
-                }
-            }
-            if (getSetting(6).asToggle().state) {
-                long time = System.currentTimeMillis();
-                if (time - lastPacket > 500) {
-                    DecimalFormat round = new DecimalFormat("0.0");
-
-                    String text = "Server Lagging For " + (getSetting(23).asToggle().state ? "\u00a7f" : "") + (round.format((time - lastPacket) / 1000d)) + "s";
+                    String text = (getSetting(23).asToggle().state ? "\u00a7f" : "") + bed_count + (getSetting(23).asToggle().state ? " \u00a7r" : " ") + (bed_count == 1 ? "Bed Remaining" : "Beds Remaining");
                     alertList.add(text);
                 }
             }

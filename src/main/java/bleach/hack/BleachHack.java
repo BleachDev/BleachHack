@@ -42,10 +42,10 @@ public class BleachHack implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        System.out.println(System.getProperty("java.runtime.version"));
-        System.out.println(System.getProperty("java.awt.headless"));
+        System.out.println("Detected JRE: " + System.getProperty("java.runtime.version"));
+        System.out.println("Pre headless toggle property: " + System.getProperty("java.awt.headless"));
         System.setProperty("java.awt.headless", "false");
-        System.out.println(System.getProperty("java.awt.headless"));
+        System.out.println("Post headless toggle property: " + System.getProperty("java.awt.headless"));
         BleachFileMang.init();
         BleachFileHelper.readModules();
 
@@ -73,6 +73,16 @@ public class BleachHack implements ModInitializer {
                     m.setDrawn(false);
                 }
             }
+        }
+        if (!BleachFileMang.fileExists("cleanchat.txt")) {
+            BleachFileMang.createFile("cleanchat.txt");
+            BleachFileMang.appendFile("nigger", "cleanchat.txt");
+            BleachFileMang.appendFile("fag", "cleanchat.txt");
+            BleachFileMang.appendFile("discord.gg", "cleanchat.txt");
+            BleachFileMang.appendFile("retard", "cleanchat.txt");
+            BleachFileMang.appendFile("autism", "cleanchat.txt");
+            BleachFileMang.appendFile("chink", "cleanchat.txt");
+            BleachFileMang.appendFile("tranny", "cleanchat.txt");
         }
     }
 }

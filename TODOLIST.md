@@ -1,7 +1,3 @@
-# BleachHack 1.16.2 epearl edition
-![](https://img.shields.io/github/last-commit/22s/bleachhack-1.16-epearl-edition.svg)
-![](https://img.shields.io/github/languages/code-size/22s/bleachhack-1.16-epearl-edition.svg)
-##Todo List
 Modules to add:
 1. AutoTrap: <https://github.com/dewysoftwareleaks/Ruhama/blob/master/src/main/java/bleach/a32k/module/modules/ObsidianTrap.java>  
 Additions: Need to add toggleable option for netherite and multiple variant trap types and an option for persistent
@@ -31,51 +27,50 @@ Additions: Rename from greeter to Welcomer and add file with variables for custo
 Minor Adjustments:  
 22. Make scaffold & surround turn off lock to blocks when nothing to place and surround returns to last item  
 23. Add Totem Pop Counter  
-26. Add block highlight/search module  
-27. Vanilla Speed option  
-28. Donkey Detect module  
-29. In armor hud add vertical alignment, text mode, and percentage mode  
-31. add panel for toggling modules into the popout gui  
-32. fix popout gui viafabric compatibility  
-33. fix tps counter in popout gui  
-34. fix crash when selecting text in the UI hud  
-35. improve autoopen on elytras to do via block hight not ticks  
-36. liquid remover module  
-37. Long jump module  
-38. Reach module  
-39. Auto cobweb (places cobweb in your block to stop player movement)  
-40. Make colors work right in wireframe esp  
-41. make drawn ignore syntax and allow you to send .drawn [module] without true/false to toggle true/false while still allowing true/false argument  
-43. Chat logger & file logger when detecting cactus placed in the nether  
-44. properly center the module description left of the module  
-45. map position esp (wireframe box of the chunks a map will render)  
-46. Auto Bed Bomb module  
-47. Fucker module / auto right click beds in nether/end module and auto charge and right click respawn anchors in overworld/end module and make it pull glowstone from inventory  
-49. Fix nametags not rendering armor & hand item properly and add player ping to nametags  
-50. Option to save/switch configurations  
-51. Implement a good Crystal Aura  
-52. Make auto-anvil and surround and autotrap ignore adjacent block checks  
-53. Make hovering over modules sync the color with the rainbow/colorselector but with 25% opacity (its currently static blue)  
-54. Fix auto-eat not stopping eating when triggering  
-55. Make elytrafly sync up/down speed with the world your in  
-56. Add alpha slider to HoleESP and make this not highlight per block and highlight entire hole either red or blue instead depending on surround type  
-57. Add background to inventory preview on UI  
-58. Add nearest player hud card like in impact+  
-59. Fix flight not turning off until relog  
-60. Make 2x3 tunnel nuker option  
-61. Fix zoom module messing up if held down  
-62. Implement rendering chunks and logging into stash finder  
-63. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
-64. VisualRange (notifies you in chat whenever someone appears or leaves in your render distance  
-65. add no entity collision and water push to velocity  
-66. make strength esp render over body not under and have toggle to alert in chat when someone drinks strength (it currently spams)  
-68. auto tnt ignite module  
-69. Add way to slow down swimming speed for 2b2t  
-70. ncp bypass noslow mode for eating  
-71. add thing to auto turn off freecam when command #come is ran  
-73. finish Logout Spots  
-74. Add announcer  
-77. Add chat parser 
-78. Add no render for beacon beams
-77. Add health to autoeat
-77. fix ambience being scuffed
+24. Add block highlight/search module  
+25. Vanilla Speed option  
+26. Donkey Detect module  
+27. In armor hud add vertical alignment, text mode, and percentage mode  
+28. add panel for toggling modules into the popout gui  
+29. fix popout gui viafabric compatibility  
+30. fix tps counter in popout gui  
+31. fix crash when selecting text in the UI hud  
+32. improve autoopen on elytras to do via block hight not ticks  
+33. liquid remover module  
+34. Long jump module  
+35. Reach module  
+36. Auto cobweb (places cobweb in your block to stop player movement)  
+37. Make colors work right in wireframe esp  
+38. make drawn ignore syntax and allow you to send .drawn [module] without true/false to toggle true/false while still allowing true/false argument  
+39. Chat logger & file logger when detecting cactus placed in the nether  
+40. properly center the module description left of the module  
+41. map position esp (wireframe box of the chunks a map will render)  
+42. Auto Bed Bomb module  
+43. Fucker module / auto right click beds in nether/end module and auto charge and right click respawn anchors in overworld/end module and make it pull glowstone from inventory  
+44. Fix nametags not rendering armor & hand item properly and add player ping to nametags  
+45. Option to save/switch configurations  
+46. Implement a good Crystal Aura  
+47. Make auto-anvil and surround and autotrap ignore adjacent block checks  
+48. Make hovering over modules sync the color with the rainbow/colorselector but with 25% opacity (its currently static blue)  
+49. Fix auto-eat not stopping eating when triggering  
+50. Make elytrafly sync up/down speed with the world your in  
+51. Add alpha slider to HoleESP and make this not highlight per block and highlight entire hole either red or blue instead depending on surround type  
+52. Add nearest player hud card like in impact+  
+53. Fix flight not turning off until relog  
+54. Make 2x3 tunnel nuker option  
+55. Fix zoom module messing up if held down  
+56. Implement rendering chunks and logging into stash finder  
+57. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
+58. VisualRange (notifies you in chat whenever someone appears or leaves in your render distance  
+59. add no entity collision and water push to velocity  
+60. make strength esp render over body not under and have toggle to alert in chat when someone drinks strength (it currently spams)  
+61. auto tnt ignite module  
+62. Add way to slow down swimming speed for 2b2t  
+63. ncp bypass noslow mode for eating  
+64. add thing to auto turn off freecam when command #come is ran  
+65. finish Logout Spots  
+66. Add announcer  
+67. Add no render for beacon beams
+68. Add health to autoeat
+69. fix ambience being scuffed
+70. disable freecam block collision

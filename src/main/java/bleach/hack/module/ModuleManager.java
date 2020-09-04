@@ -118,6 +118,7 @@ public class ModuleManager {
         new Xray(),
         new Yaw(),
         new Zoom(),
+        new CleanChat(),
         //new PopCounter(),
         //new FootXp(),
         //new TotemPopCounter(),
