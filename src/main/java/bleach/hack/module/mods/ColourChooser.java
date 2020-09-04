@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ColourChooser extends Module {
     public ColourChooser() {
-        super("ColourChooser", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "HUD color settings",
+        super("ColourChooser", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.CLIENT, "HUD color settings",
                 new SettingToggle("Rainbow", false),
                 new SettingSlider("Red", 0, 255, 85, 1),
                 new SettingSlider("Green", 0, 255, 85, 1),

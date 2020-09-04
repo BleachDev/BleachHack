@@ -75,5 +75,7 @@ Minor Adjustments:
 71. add thing to auto turn off freecam when command #come is ran  
 73. finish Logout Spots  
 74. Add announcer  
-77. Add chat parser  
+77. Add chat parser 
+78. Add no render for beacon beams
 77. Add health to autoeat
+77. fix ambience being scuffed

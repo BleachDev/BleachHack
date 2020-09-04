@@ -30,7 +30,7 @@ public class ClickGui extends Module {
     public static ClickGuiScreen clickGui = new ClickGuiScreen();
 
     public ClickGui() {
-        super("ClickGUI", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
+        super("ClickGUI", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.CLIENT, "Draws the clickgui",
                 new SettingSlider("Length", 70, 85, 85, 0),
                 new SettingToggle("Search bar", true),
                 new SettingToggle("Help", true),
