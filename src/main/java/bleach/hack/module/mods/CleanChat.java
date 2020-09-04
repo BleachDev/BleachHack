@@ -49,7 +49,7 @@ public class CleanChat extends Module {
             }
             for (Object s : blacklistedWords)
             {
-                if (parsed.toString().contains(s.toString())) {
+                if (parsed.toString().toLowerCase().contains(s.toString().toLowerCase())) {
                     event.setCancelled(true);
                 }
             }
