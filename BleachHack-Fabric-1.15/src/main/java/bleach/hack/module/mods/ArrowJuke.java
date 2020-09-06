@@ -27,7 +27,6 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -71,7 +70,7 @@ public class ArrowJuke extends Module {
 					for (Vec3d vel : new Vec3d[] { new Vec3d(1, 0, 0), new Vec3d(-1, 0, 0), new Vec3d(0, 0, 1) }) {
 						boolean contains = false;
 						for (Box b : boxes)
-							if (b.intersects(WorldUtils.moveBox(pBox, vel.x, vel.y, vel.z)))
+							if (b.intersects(pBox.offset(vel.x, vel.y, vel.z)))
 								contains = true;
 						if (!contains) {
 							if (mode == 0) {

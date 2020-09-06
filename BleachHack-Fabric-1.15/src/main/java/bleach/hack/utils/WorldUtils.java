@@ -107,10 +107,6 @@ public class WorldUtils {
 		return true;
 	}
 
-	public static Box moveBox(Box box, double x, double y, double z) {
-		return new Box(new Vec3d(box.x1, box.y1, box.z1).add(x, y, z), new Vec3d(box.x2, box.y2, box.z2).add(x, y, z));
-	}
-
 	public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack) {
 		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
 			return false;
