@@ -70,7 +70,8 @@ Minor Adjustments:
 64. add thing to auto turn off freecam when command #come is ran  
 65. finish Logout Spots  
 66. Add announcer  
-67. Add no render for beacon beams
-68. Add health to autoeat
-69. fix ambience being scuffed
-70. disable freecam block collision
+67. Add no render for beacon beams  
+68. Add health to autoeat  
+69. fix ambience being scuffed  
+70. disable freecam block collision  
+71. experiment with maybe making an auto dodge for blocks when autowalking (hint hint auto highway fly??)
