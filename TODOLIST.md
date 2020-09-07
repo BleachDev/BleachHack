@@ -63,7 +63,7 @@ Minor Adjustments:
 57. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
 58. VisualRange (notifies you in chat whenever someone appears or leaves in your render distance  
 59. add no entity collision and water push to velocity  
-60. make strength esp render over body not under and have toggle to alert in chat when someone drinks strength (it currently spams)  
+60. make strength esp render over body not under and have toggle to alert in chat when someone drinks strength and also check other players...  
 61. auto tnt ignite module  
 62. Add way to slow down swimming speed for 2b2t  
 63. ncp bypass noslow mode for eating  
