@@ -23,6 +23,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
@@ -38,8 +39,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 
-public class BoxESP extends Module {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+public class BoxESP extends Module {
+    public List<String> strength_alert = new ArrayList<>();
     public BoxESP() {
         super("BoxESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
                 new SettingToggle("Players", true).withDesc("Show Players").withChildren(
@@ -57,7 +62,9 @@ public class BoxESP extends Module {
                         new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
                 new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
                         new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")),
-                new SettingToggle("Strength", false).withDesc("Show red boxes around people with strength"));
+                new SettingToggle("Strength", false).withDesc("Show red boxes around people with strength").withChildren(
+                        new SettingToggle("Chat Alert", true).withDesc("Alerts you in chat when players in render drink strength")
+                ));
     }
 
 
@@ -102,6 +109,13 @@ public class BoxESP extends Module {
         } else if ((event.entity instanceof PlayerEntity) && ((PlayerEntity) event.entity).hasStatusEffect(StatusEffects.STRENGTH) && this.getSettings().get(7).asToggle().state) {
             RenderUtils.drawFilledBox(event.entity.getBoundingBox(), 1.0F, 0.0F, 0.0F, 1F);
         }
+        if (!strength_alert.toString().contains(event.entity.getUuidAsString()) && (event.entity instanceof PlayerEntity) && ((PlayerEntity) event.entity).hasStatusEffect(StatusEffects.STRENGTH) && this.getSettings().get(7).asToggle().state && this.getSettings().get(7).asToggle().getChild(0).asToggle().state) {
+            BleachLogger.infoMessage(event.entity.getEntityName() + " has drank strength!");
+            strength_alert.add(event.entity.getUuidAsString());
+        } else if (strength_alert.toString().contains(event.entity.getUuidAsString()) && (event.entity instanceof PlayerEntity) && !((PlayerEntity) event.entity).hasStatusEffect(StatusEffects.STRENGTH)) {
+            strength_alert.removeAll(Collections.singleton(event.entity.getUuidAsString()));
+            BleachLogger.infoMessage(event.entity.getEntityName() + " no longer has strength!");
+        }
 
     }
 
@@ -109,5 +123,10 @@ public class BoxESP extends Module {
         OutlineVertexConsumerProvider ovsp = buffers.getOutlineVertexConsumers();
         ovsp.setColor((int) (r * 255), (int) (g * 255), (int) (b * 255), 255);
         return ovsp;
+    }
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        strength_alert.clear();
     }
 }
