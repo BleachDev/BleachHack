@@ -121,7 +121,7 @@ public class ModuleManager {
         new Zoom(),
         new CleanChat(),
         //new PopCounter(),
-        //new FootXp(),
+        new FootXp(),
         //new TotemPopCounter(),
         //new WireframeESP(),
         //new AutoExplode(),
