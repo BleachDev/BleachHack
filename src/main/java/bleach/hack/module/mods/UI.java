@@ -40,6 +40,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -250,7 +252,7 @@ public class UI extends Module {
                                     new Color(85, 255, 255).getRGB());
                             playerarrayCount++;
                         } else {
-                            mc.textRenderer.drawWithShadow(event.matrix, text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
+                            mc.textRenderer.drawWithShadow(event.matrix, (((PlayerEntity) e).hasStatusEffect(StatusEffects.STRENGTH) ? "\u00a74" : "") + text, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(text), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue() + (playerarrayCount * (int) getSetting(8).asToggle().getChild(3).asSlider().getValue()),
                                     new Color(255, 85, 85).getRGB());
                             playerarrayCount++;
                         }
