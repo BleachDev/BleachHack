@@ -55,7 +55,7 @@ public class BoxESP extends Module {
                 new SettingToggle("Animals", false).withDesc("Show Animals").withChildren(
                         new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals")),
                 new SettingToggle("Items", true).withDesc("Show Items").withChildren(
-                        new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items")),
+                        new SettingColor("Color", 85, 85, 255, false).withDesc("Outline color for items")),
                 new SettingToggle("Crystals", true).withDesc("Show End Crystals").withChildren(
                         new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
                 new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
