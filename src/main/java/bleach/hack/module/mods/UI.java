@@ -565,10 +565,18 @@ public class UI extends Module {
             if (mc.player.getMainHandStack().isDamageable()) {dura = "Durability" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + (mc.player.getMainHandStack().getMaxDamage()-mc.player.getMainHandStack().getDamage());} else {
                 dura = "Durability" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + "-1";
             }
-            mc.textRenderer.drawWithShadow(event.matrix, dura,
-                    (int) getSetting(20).asToggle().getChild(0).asSlider().getValue(),
-                    (int) getSetting(20).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+            if (getSetting(20).asToggle().getChild(2).asToggle().state) {
+                mc.textRenderer.drawWithShadow(event.matrix, dura,
+                        (int) getSetting(20).asToggle().getChild(0).asSlider().getValue(),
+                        (int) getSetting(20).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+            } else{
+                mc.textRenderer.drawWithShadow(event.matrix, dura,
+                        (int) getSetting(20).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(dura),
+                        (int) getSetting(20).asToggle().getChild(1).asSlider().getValue(),
+                        ColourThingy.guiColour());
+
+            }
         }
 
         if (getSetting(6).asToggle().state || getSetting(19).asToggle().getChild(3).asToggle().state || getSetting(18).asToggle().getChild(3).asToggle().state) {
