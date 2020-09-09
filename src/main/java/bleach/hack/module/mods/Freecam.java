@@ -17,10 +17,7 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventClientMove;
-import bleach.hack.event.events.EventOpenScreen;
-import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.*;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
