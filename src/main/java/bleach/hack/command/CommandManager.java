@@ -18,10 +18,13 @@
 package bleach.hack.command;
 
 import bleach.hack.command.commands.*;
+import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandManager {
 
@@ -51,7 +54,8 @@ public class CommandManager {
             new CmdSetting(),
             new CmdSkull(),
             new CmdToggle(),
-            new CmdXray());
+            new CmdXray()
+    );
 
     public static List<Command> getCommands() {
         return commands;

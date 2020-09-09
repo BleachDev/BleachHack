@@ -19,14 +19,13 @@ package bleach.hack.module;
 
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.module.mods.*;
-import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,7 +59,7 @@ public class ModuleManager {
         new ColorSigns(),
         new ColourChooser(),
         new Criticals(),
-        new CrystalAura(),
+        new CrystalAuraRewrite(),
         new CustomChat(),
         new DiscordRPCMod(),
         new Dispenser32k(),
@@ -78,7 +77,7 @@ public class ModuleManager {
         new HandProgress(),
         new HoleESP(),
         new HoleTP(),
-        new HotbarCacheRewrite(),
+        new HotbarCache(),
         new Jesus(),
         new Killaura(),
         new MountBypass(),
@@ -121,9 +120,10 @@ public class ModuleManager {
         new Zoom(),
         new CleanChat(),
         new MobOwner(),
+        new TabFriends(),
         new FootXp(),
-        new FabritoneFix(),
-        new AutoDodge(),
+        //new FabritoneFix(),
+        //new AutoDodge(),
         //new PopCounter(),
         //new LogoutSpots(),
         //new TotemPopCounter(),
@@ -133,7 +133,7 @@ public class ModuleManager {
         //new AutoBreed(),
         //new Test(),
         new UI()
-    );
+    ).stream().sorted(Comparator.comparing(Module::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
 
     public static List<Module> getModules() {
         return mods;

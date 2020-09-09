@@ -10,6 +10,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -37,9 +38,9 @@ public class AutoDodge extends Module
         BlockPos player = mc.player.getBlockPos().north((int) this.getSettings().get(0).asSlider().getValue());
         if (this.mc.world.getBlockState(player).getBlock() != Blocks.AIR) {
             if (this.mc.world.getBlockState(mc.player.getBlockPos().east(1).north(1)).getBlock() == Blocks.AIR) {
-                mc.player.setVelocity(0.5, mc.player.getVelocity().y, 0);
+                mc.player.setVelocity(0.1, mc.player.getVelocity().y, 0);
             } else if (this.mc.world.getBlockState(mc.player.getBlockPos().west(1).north(1)).getBlock() == Blocks.AIR) {
-                mc.player.setVelocity(-0.5, mc.player.getVelocity().y, 0);
+                mc.player.setVelocity(-0.1, mc.player.getVelocity().y, 0);
             }
         }
     }

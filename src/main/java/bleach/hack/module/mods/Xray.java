@@ -101,10 +101,4 @@ public class Xray extends Module {
         mc.options.gamma = 69.420;
     }
 
-    // This ensures that if the game crashes, the Xray will not be saved as enabled. this will cause the game to crash every time it turns on
-    @Subscribe
-    private void EventDisconnect(EventReadPacket event) {
-        if (event.getPacket() instanceof CloseScreenS2CPacket || event.getPacket() instanceof DisconnectS2CPacket)
-            setToggled(false);
-    }
 }

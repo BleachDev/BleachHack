@@ -70,7 +70,7 @@ public class MobOwner extends Module {
             return;
         }
         for (final Entity e : mc.world.getEntities()) {
-            final boolean impact_toggle_state = ModuleManager.getModule(UI.class).getSetting(23).asToggle().state;
+            final boolean impact_toggle_state = ModuleManager.getModule(UI.class).getSetting(24).asToggle().state;
             if (e instanceof TameableEntity) {
                 if (((TameableEntity) e).isTamed() && ((TameableEntity) e).getOwnerUuid() != null) {
                     String ownername = getNameFromUUID(Objects.requireNonNull(((TameableEntity) e).getOwnerUuid()).toString());
