@@ -12,6 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.text.LiteralText;
 
 public class FootXp extends Module
@@ -20,15 +21,11 @@ public class FootXp extends Module
         super("FootXP", KEY_UNBOUND, Category.MOVEMENT, "Automatically points xp at feet");
     }
 
-    @EventHandler
-    private final Listener<EventReadPacket> footXpListener = new Listener<>(p_Event ->{
-        if(mc.world == null || mc.player == null){
-            return;
-        }
-        if(p_Event.getPacket() instanceof PlayerActionC2SPacket && mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE){
-            mc.inGameHud.getChatHud().addMessage(new LiteralText("bruh"));
+    @Subscribe
+    public void sendPacket(EventSendPacket event) {
+        if (mc.world == null || mc.player == null) return;
+        if (event.getPacket() instanceof PlayerInteractItemC2SPacket && mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE) {
             WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() - 2, mc.player.getZ());
         }
-
-    });
+    }
 }

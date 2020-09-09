@@ -27,6 +27,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,7 +124,7 @@ public class ModuleManager {
         new MobOwner(),
         new FootXp(),
         new FabritoneFix(),
-        new AutoDodge(),
+        //new AutoDodge(),
         //new PopCounter(),
         //new LogoutSpots(),
         //new TotemPopCounter(),
@@ -133,7 +134,7 @@ public class ModuleManager {
         //new AutoBreed(),
         //new Test(),
         new UI()
-    );
+    ).stream().sorted(Comparator.comparing(Module::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
 
     public static List<Module> getModules() {
         return mods;
