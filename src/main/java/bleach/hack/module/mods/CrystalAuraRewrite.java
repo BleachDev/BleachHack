@@ -47,7 +47,7 @@ public class CrystalAuraRewrite extends Module
 
     public CrystalAuraRewrite()
     {
-        super("CrystalAuraRewrite", KEY_UNBOUND, Category.MOVEMENT, "Improves the CA",
+        super("CrystalAuraRewrite", KEY_UNBOUND, Category.COMBAT, "Improves the CA",
                 new SettingMode("BreakMode", "Always", "Smart", "OnlyOwn").withDesc("Mode of break"),
                 new SettingMode("PlaceMode", "Most", "Lethal").withDesc("Mode of place"),
                 new SettingSlider("PlaceRadius", 0, 5, 4, 1).withDesc("Radius for place"),
