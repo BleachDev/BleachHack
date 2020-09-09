@@ -24,10 +24,10 @@ import bleach.hack.module.Module;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.item.Items;
 
-public class HotbarCacheRewrite extends Module {
+public class HotbarCache extends Module {
 
-    public HotbarCacheRewrite() {
-        super("HotbarCacheRewrite", KEY_UNBOUND, Category.MISC, "Autototem for items",
+    public HotbarCache() {
+        super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
                 new SettingMode("Item: ", "Pickaxe", "Crystal", "Gapple"));
     }
 
