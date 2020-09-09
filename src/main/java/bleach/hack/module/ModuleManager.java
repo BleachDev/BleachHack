@@ -122,6 +122,7 @@ public class ModuleManager {
         new Zoom(),
         new CleanChat(),
         new MobOwner(),
+        new TabFriends(),
         new FootXp(),
         //new FabritoneFix(),
         //new AutoDodge(),
