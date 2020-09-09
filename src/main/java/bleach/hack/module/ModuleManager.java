@@ -123,7 +123,7 @@ public class ModuleManager {
         new CleanChat(),
         new MobOwner(),
         new FootXp(),
-        new FabritoneFix(),
+        //new FabritoneFix(),
         //new AutoDodge(),
         //new PopCounter(),
         //new LogoutSpots(),
