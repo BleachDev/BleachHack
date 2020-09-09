@@ -2,18 +2,23 @@ package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
+import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class StashFinder extends Module {
@@ -39,7 +44,9 @@ public class StashFinder extends Module {
         if (this.startChunk != null) {
             this.range = ((int) Math.max(Math.abs(this.mc.player.getX() - (double) this.startChunk.getStartX()), Math.abs(this.mc.player.getZ() - (double) this.startChunk.getStartZ())) >> 4) - 1;
         } else {
-            this.startChunk = new ChunkPos(this.mc.player.getBlockPos());
+            if (this.mc.player != null) {
+                this.startChunk = new ChunkPos(this.mc.player.getBlockPos());
+            }
         }
         /*if (ToggleLog.getValue()) {
             final Module mod = ModuleManager.Get().GetMod(StashLoggerModule.class);
@@ -119,33 +126,39 @@ public class StashFinder extends Module {
         mc.options.keyForward.setPressed(false);
         super.onDisable();
     }
-    /*@Subscribe
+    @Subscribe
     public void onRenderWorld(EventWorldRender event) {
         if (this.getSettings().get(1).asToggle().state)
         {
-            Iterator chonkIter = this.chunks.iterator();
+            Iterator<ChunkPos> chonkIter = this.chunks.iterator();
 
             ChunkPos c;
             while (chonkIter.hasNext())
             {
-                c = (ChunkPos) chonkIter.next();
-                RenderUtils.drawFilledBox(new AxisAlignedBB(c.getCenterBlockPos(), c.getCenterBlockPos(), 1.0F, 0.0F, 0.0F, 0.3F);
+                c = chonkIter.next();
+                BlockPos start_coords = new BlockPos(c.getStartX(), 0, c.getStartZ());
+                BlockPos end_coords = new BlockPos(c.getEndX(), 0, c.getEndZ());
+                RenderUtils.drawFilledBox(new Box(start_coords, end_coords), 1.0F, 0.0F, 0.0F, 0.3F);
             }
 
             chonkIter = this.nextChunks.iterator();
 
             while (chonkIter.hasNext())
             {
-                c = (ChunkPos) chonkIter.next();
-                RenderUtils.drawFilledBox(new AxisAlignedBB(c.getCenterBlockPos(), c.getCenterBlockPos(), 0.0F, 0.0F, 1.0F, 0.3F);
+                c = chonkIter.next();
+                BlockPos start_coords = new BlockPos(c.getStartX(), 0, c.getStartZ());
+                BlockPos end_coords = new BlockPos(c.getEndX(), 0, c.getEndZ());
+                RenderUtils.drawFilledBox(new Box(start_coords, end_coords), 0.0F, 0.0F, 1.0F, 0.3F);
             }
 
             if (this.nextChunk != null)
             {
-                RenderUtils.drawFilledBox(new AxisAlignedBB(this.nextChunk.getCenterBlockPos(), this.nextChunk.getCenterBlockPos(), 0.0F, 1.0F, 0.0F, 0.3F);
+                BlockPos start_coords = new BlockPos(this.nextChunk.getStartX(), 0, this.nextChunk.getStartZ());
+                BlockPos end_coords = new BlockPos(this.nextChunk.getEndX(), 0, this.nextChunk.getEndZ());
+                RenderUtils.drawFilledBox(new Box(start_coords, end_coords), 0.0F, 1.0F, 0.0F, 0.3F);
             }
         }
-    }*/
+    }
 
     // This ensures that if the game crashes, the StashFinder will not be saved as enabled. this will cause the game to crash every time it turns on
     @Subscribe
