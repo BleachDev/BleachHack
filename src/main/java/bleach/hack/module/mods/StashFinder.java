@@ -128,7 +128,7 @@ public class StashFinder extends Module {
     }
     @Subscribe
     public void onRenderWorld(EventWorldRender event) {
-        if (this.getSettings().get(1).asToggle().state)
+        if (this.getSettings().get(0).asToggle().state)
         {
             Iterator<ChunkPos> chonkIter = this.chunks.iterator();
 

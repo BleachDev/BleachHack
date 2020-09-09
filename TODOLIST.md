@@ -52,7 +52,7 @@ Minor Adjustments:
 53. Fix flight not turning off until relog  
 54. Make 2x3 tunnel nuker option  
 55. Fix zoom module messing up if held down  
-56. Implement rendering chunks and logging into stash finder  
+56. Implement logging into stash finder  
 57. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
 58. VisualRange (notifies you in chat whenever someone appears or leaves in your render distance  
 59. add no entity collision and water push to velocity  
