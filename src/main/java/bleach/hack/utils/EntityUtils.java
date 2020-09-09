@@ -24,9 +24,13 @@ import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.FoodComponent;
+import net.minecraft.item.Items;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class EntityUtils {
 
@@ -97,4 +101,29 @@ public class EntityUtils {
         }
         return FacingDirection.North;
     }
+
+    public static Vec3d getInterpolatedAmount(Entity entity, double ticks)
+    {
+        return getInterpolatedAmount(entity, ticks);
+    }
+
+    public static double GetDistance(double p_X, double p_Y, double p_Z, double x, double y, double z)
+    {
+        double d0 = p_X - x;
+        double d1 = p_Y - y;
+        double d2 = p_Z - z;
+        return (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+    }
+
+    public static float getDamageAfterAbsorb(float damage, float totalArmor, float toughnessAttribute) {
+        float f = 2.0F + toughnessAttribute / 4.0F;
+        float f1 = MathHelper.clamp(totalArmor - damage / f, totalArmor * 0.2F, 20.0F);
+        return damage * (1.0F - f1 / 25.0F);
+    }
+
+    public static boolean IsEating()
+    {
+        return mc.player != null &&  mc.player.getActiveItem().getItem() == Items.GOLDEN_APPLE;
+    }
+
 }
