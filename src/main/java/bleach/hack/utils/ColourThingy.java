@@ -14,4 +14,13 @@ public class ColourThingy {
         blue = (int) ModuleManager.getModule(ColourChooser.class).getSetting(3).asSlider().getValue();
         return (0xff << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff);
     }
+    public static int textColor() {
+        int red;
+        int green;
+        int blue;
+        red = (int) ModuleManager.getModule(ColourChooser.class).getSetting(4).asSlider().getValue();
+        green = (int) ModuleManager.getModule(ColourChooser.class).getSetting(5).asSlider().getValue();
+        blue = (int) ModuleManager.getModule(ColourChooser.class).getSetting(6).asSlider().getValue();
+        return (0xff << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff);
+    }
 }

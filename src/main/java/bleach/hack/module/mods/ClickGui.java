@@ -35,7 +35,7 @@ public class ClickGui extends Module {
                 new SettingToggle("Search bar", true),
                 new SettingToggle("Help", true),
                 new SettingToggle("Static descriptions", true),
-                new SettingMode("Theme", "Wire", "Full"));
+                new SettingMode("Theme", "Wire", "Full", "SalHackSkid"));
     }
 
     public void onEnable() {
