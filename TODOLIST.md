@@ -30,7 +30,6 @@ Minor Adjustments:
 29. fix popout gui viafabric compatibility  
 30. fix tps counter in popout gui  
 32. improve autoopen on elytras to do via block hight not ticks  
-33. liquid remover module  
 34. Long jump module  
 35. Reach module  
 36. Auto cobweb (places cobweb in your block to stop player movement)  
@@ -68,3 +67,6 @@ Minor Adjustments:
 70. disable freecam block collision  
 71. experiment with maybe making an auto dodge for blocks when autowalking (hint hint auto highway fly??)
 72. add a streaming mode that censors the coords  
+73. allow nuker to use offhand  
+74. fix autoreconnect  
+75. make nuker bypass work in facing direction  
