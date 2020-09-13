@@ -62,7 +62,7 @@ public class LiquidRemover extends Module
                     BlockPos pos = player.add(x, y, z);
                     assert this.mc.world != null;
                     if (
-                            (this.mc.world.getBlockState(pos).getBlock() == Blocks.LAVA)
+                            (this.mc.world.getBlockState(pos).getBlock() == Blocks.LAVA && this.mc.world.getBlockState(pos).getFluidState().getLevel() == 8)
 
                     )
                     {
@@ -101,6 +101,7 @@ public class LiquidRemover extends Module
             this.drawFilledBlockBox(p, red, 0.7F, blue, 0.25F);
             for (int i = 0; i < 9; i++) {
                 if (mc.player.inventory.getStack(i).getItem() == Items.NETHERRACK) {
+
                     lastSlot = mc.player.inventory.selectedSlot;
                     mc.player.inventory.selectedSlot = i;
                     WorldUtils.placeBlock(p, -1, false, false);
