@@ -14,8 +14,12 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
@@ -62,7 +66,7 @@ public class LiquidRemover extends Module
                     BlockPos pos = player.add(x, y, z);
                     assert this.mc.world != null;
                     if (
-                            (this.mc.world.getBlockState(pos).getBlock() == Blocks.LAVA && this.mc.world.getBlockState(pos).getFluidState().getLevel() == 8)
+                            (this.mc.world.getBlockState(pos).getBlock() == Blocks.LAVA && this.mc.world.getBlockState(pos).getFluidState().getLevel() == 8 && this.mc.world.getBlockState(pos).getFluidState().isStill())
 
                     )
                     {
