@@ -80,14 +80,18 @@ public class NukerBypass extends Module {
 		switch (mode) {
 			case 0:
 				blocks = get1x3();
+				break;
 			case 1:
 				blocks = get2x3();
+				break;
 			case 2:
 				blocks = getCube();
+				break;
 			case 3:
 				blocks = getHighway4();
+				break;
 		}
-		double range = 3;
+		double range = 6;
 
 //		/* Add blocks around player */
 //		for (int x = (int) range; x >= (int) -range; x--) {
