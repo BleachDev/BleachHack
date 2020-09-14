@@ -17,6 +17,8 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -108,7 +110,7 @@ public class LiquidRemover extends Module
 
                     lastSlot = mc.player.inventory.selectedSlot;
                     mc.player.inventory.selectedSlot = i;
-                    WorldUtils.placeBlock(p, -1, false, false);
+                    mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(p), Direction.DOWN, p, true));
                     if (lastSlot != -1) {
                         mc.player.inventory.selectedSlot = lastSlot;
                         lastSlot = -1;
@@ -126,9 +128,9 @@ public class LiquidRemover extends Module
 
     public void drawFilledBlockBox(BlockPos blockPos, float r, float g, float b, float a)
     {
-        double x = (double) blockPos.getX();
-        double y = (double) blockPos.getY();
-        double z = (double) blockPos.getZ();
+        double x = blockPos.getX();
+        double y = blockPos.getY();
+        double z = blockPos.getZ();
         
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);
