@@ -13,8 +13,8 @@ public class ColourChooser extends Module {
                 new SettingSlider("Red", 0, 255, 85, 1),
                 new SettingSlider("Green", 0, 255, 85, 1),
                 new SettingSlider("Blue", 0, 255, 255, 1),
-                new SettingSlider("TextRed", 0, 255, 85, 1),
-                new SettingSlider("TextGreen", 0, 255, 85, 1),
+                new SettingSlider("TextRed", 0, 255, 255, 1),
+                new SettingSlider("TextGreen", 0, 255, 255, 1),
                 new SettingSlider("TextBlue", 0, 255, 255, 1));
     }
 
