@@ -1,6 +1,7 @@
 package bleach.hack.gui.clickgui.modulewindow;
 
 import bleach.hack.gui.window.Window;
+import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.ColourThingy;
@@ -49,11 +50,19 @@ public abstract class ClickGuiWindow extends Window {
         if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 0) {
             DrawableHelper.fill(matrix, x1, y1 + 12, x2, y1 + 13, ColourThingy.guiColour());
         } else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 1) {
-            int x0 = Math.min(x1, x2);
-            int y0 = Math.min(y1, y2);
-            int h = Math.max(y1, y2);
-            int w = Math.max(x1, x2);
-            RenderUtils.drawRect(x0, y0, w, h, ColourThingy.guiColour(), 0.2f);
+            int x1M = Math.min(x1, x2);
+            int y1M = Math.min(y1, y2);
+            int y2M = Math.max(y1, y2);
+            int x2M = Math.max(x1, x2);
+            RenderUtils.drawRect(x1M, y1M, x2M, y2M, ColourThingy.guiColour(), 0.2f);
+        }
+        else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 2){
+            int x1M = Math.min(x1, x2);
+            int y1M = Math.min(y1, y2);
+            int y2M = Math.max(y1, y2);
+            int x2M = Math.max(x1, x2);
+            RenderUtils.drawRect(x1M, y1M + 1, x2M, y1M + 12, ColourThingy.guiColour(), 1f);
+            RenderUtils.drawRect(x1M, y1M + 12, x2M, y2M, ColourThingy.guiColour(), 0.2f);
         }
         DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, ColourThingy.guiColour());
         DrawableHelper.fill(matrix, x1, y2, x2 + 1, y2 - 1, ColourThingy.guiColour());

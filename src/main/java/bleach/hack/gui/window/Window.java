@@ -17,6 +17,9 @@
  */
 package bleach.hack.gui.window;
 
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ClickGui;
+import bleach.hack.utils.ColourThingy;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -106,8 +109,10 @@ public class Window {
         }
 
         /* window title */
-        textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, -1);
-
+        if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 0 || ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 1)
+            textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, -1);
+        else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 2)
+            textRend.drawWithShadow(matrix, title, x1 - 1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, ColourThingy.textColor());
         if (inactiveTime >= 0) {
             inactiveTime--;
         }
