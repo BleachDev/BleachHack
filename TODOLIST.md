@@ -11,7 +11,6 @@ Additions: Rename from greeter to Welcomer and add file with variables for custo
 7. MoreInv/XCarry: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/MoreInvModule.java>
 8. Coord Logger: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/CoordLoggerModule.java>
 9. NoBreakAnimations: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/render/NoBreakAnimModule.java>
-11. Tablist Color Friends: <https://github.com/zeroeightysix/KAMI/commit/6752db8b83a080b843d5ad3ec3b45f9fed2b8df8>
 12. AntiForceLook: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/player/AntiForceLook.java>
 13. AntiFog: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/AntiFog.java>
 15. NewChunks (for 2b2t): <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/ChunkFinder.java>
@@ -70,3 +69,4 @@ Minor Adjustments:
 73. allow nuker to use offhand  
 74. fix autoreconnect  
 75. make nuker bypass work in facing direction  
+75. OreDeobfuscator for 1.16  
