@@ -39,7 +39,7 @@ public class LiquidRemover extends Module
     public LiquidRemover()
     {
         super("LiquidRemover", KEY_UNBOUND, Category.PLAYER, "ESP for tunnels off the highway",
-                new SettingSlider("Range", 0, 5, 4.5, 1),
+                new SettingSlider("Range", 0.1, 5, 4.5, 1),
                 new SettingSlider("R: ", 0.0D, 255.0D, 255.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 69.0D, 0),
                 new SettingSlider("B: ", 0.0D, 255.0D, 0.0D, 0),
