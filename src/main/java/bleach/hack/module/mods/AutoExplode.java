@@ -76,6 +76,22 @@ public class AutoExplode extends Module
                 }
             }
         }
+        for (BlockPos p : this.poses)
+        {
+            //this.drawFilledBlockBox(p, red, 0.7F, blue, 0.25F);
+            lastSlot = mc.player.inventory.selectedSlot;
+            for (int i = 0; i < 9; i++) {
+                if (mc.player.inventory.getStack(i).getItem() == Items.GLOWSTONE) {
+                    mc.player.inventory.selectedSlot = i;
+                }
+            }
+            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(p), Direction.UP, p, false));
+            if (lastSlot != -1) {
+                mc.player.inventory.selectedSlot = lastSlot;
+                lastSlot = -1;
+            }
+            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(p), Direction.UP, p, false));
+        }
     }
     @Subscribe
     public void onRender(EventWorldRender event) {
@@ -99,22 +115,6 @@ public class AutoExplode extends Module
         if (red > 1.0F)
         {
             red = 1.0F - red;
-        }
-
-        for (BlockPos p : this.poses)
-        {
-            this.drawFilledBlockBox(p, red, 0.7F, blue, 0.25F);
-            for (int i = 0; i < 9; i++) {
-                if (mc.player.inventory.getStack(i).getItem() == Items.GLOWSTONE) {
-                        lastSlot = mc.player.inventory.selectedSlot;
-                        mc.player.inventory.selectedSlot = i;
-                        mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(p), Direction.UP, p, false));
-                        if (lastSlot != -1) {
-                            mc.player.inventory.selectedSlot = lastSlot;
-                            lastSlot = -1;
-                        }
-                }
-            }
         }
 
         GL11.glEnable(2929);
