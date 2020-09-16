@@ -77,7 +77,7 @@ public class AutoBuild extends Module {
 	public void onTick(EventTick event) {
 
 		if (!active) {
-			ray = (BlockHitResult) mc.player.rayTrace(40, mc.getTickDelta(), false);
+			ray = (BlockHitResult) mc.player.raycast(40, mc.getTickDelta(), false);
 			Direction dir = ray.getSide();
 
 			if (dir.getAxis() == Axis.Y) {

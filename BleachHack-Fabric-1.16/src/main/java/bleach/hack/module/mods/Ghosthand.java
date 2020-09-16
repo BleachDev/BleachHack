@@ -44,7 +44,7 @@ public class Ghosthand extends Module {
 			return;
 
 		for (BlockEntity b : mc.world.blockEntities) {
-			if (new BlockPos(mc.player.rayTrace(4.25, mc.getTickDelta(), false).getPos()).equals(b.getPos()))
+			if (new BlockPos(mc.player.raycast(4.25, mc.getTickDelta(), false).getPos()).equals(b.getPos()))
 				return;
 		}
 

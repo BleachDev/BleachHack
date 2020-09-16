@@ -66,7 +66,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.RayTraceContext;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.explosion.Explosion;
 
 public class CrystalAura extends Module {
@@ -94,7 +94,7 @@ public class CrystalAura extends Module {
 						new SettingToggle("Slow", false).withDesc("Hits crystals slower")),
 				new SettingToggle("Place", true).withDesc("Place crystals").withChildren(
 						new SettingToggle("AutoSwitch", true).withDesc("Automatically switches to crystal when in combat"),
-						new SettingToggle("RayTrace", true).withDesc("Click on the most \"legit\" side of a block when possible"),
+						new SettingToggle("raycast", true).withDesc("Click on the most \"legit\" side of a block when possible"),
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
 				new SettingRotate(false).withDesc("Rotates to crystals"),
@@ -253,10 +253,10 @@ public class CrystalAura extends Module {
 							if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
 								f = Direction.UP;
 							} else {
-								BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
+								BlockHitResult result = mc.world.raycast(new RaycastContext(
 										new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
 										new Vec3d(q.getX() + 0.5D, q.getY() - 0.5D, q.getZ() + 0.5D),
-										RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
+										RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player));
 
 								if (result != null && result.getSide() != null) {
 									f = result.getSide();

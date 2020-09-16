@@ -62,7 +62,7 @@ public class ClickTp extends Module {
 			return;
 		}
 
-		BlockHitResult hit = (BlockHitResult) mc.player.rayTrace(100, mc.getTickDelta(), getSetting(1).asToggle().state);
+		BlockHitResult hit = (BlockHitResult) mc.player.raycast(100, mc.getTickDelta(), getSetting(1).asToggle().state);
 
 		boolean miss = hit.getType() == Type.MISS && !getSetting(0).asToggle().state;
 
