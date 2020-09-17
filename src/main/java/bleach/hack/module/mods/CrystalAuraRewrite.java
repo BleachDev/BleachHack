@@ -16,6 +16,7 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,9 +24,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -41,6 +44,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CrystalAuraRewrite extends Module
 {
@@ -462,55 +466,64 @@ public class CrystalAuraRewrite extends Module
             _rotations = EntityUtils.calculateLookAt(selectedPos.getX() + 0.5, selectedPos.getY() - 0.5, selectedPos.getZ() + 0.5, mc.player);
             _rotationResetTimer.reset();
 
+            if (getSetting(5).asRotate().state) {
+                WorldUtils.facePosAuto(crystal.getX(), crystal.getY(), crystal.getZ(), getSetting(5).asRotate());
+            }
+
+            mc.interactionManager.attackEntity(mc.player, crystal);
+            mc.player.swingHand(Hand.MAIN_HAND);
+
             // create a raytrace between player's position and the selected block position
 //            assert mc.world != null;
-//            RayTraceResult result = mc.world.rayTraceBlock(new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(EntityPose.STANDING), mc.player.getZ()), new Vec3d(selectedPos.getX() + 0.5, selectedPos.getY() - 0.5, selectedPos.getZ() + 0.5));
-//
+//            BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
+//                    new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
+//                    new Vec3d(crystal.getX() + 0.5D, crystal.getY() - 0.5D, crystal.getZ() + 0.5D),
+//                    RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
 //            // this will allow for bypassing placing through walls afaik
-//            EnumFacing facing;
+//            Direction facing;
 //
-//            if (result == null || result.sideHit == null)
-//                facing = EnumFacing.UP;
+//            if (result == null || result. == null)
+//                facing = Direction.UP;
 //            else
-//                facing = result.sideHit;
+//                facing = result.;
 //
-//            mc.getConnection().sendPacket(new CPacketPlayerTryUseItemOnBlock(selectedPos, facing,
-//                    mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, 0, 0, 0));
+//            mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(selectedPos, facing,
+//                    mc.player.getOffHandStack().getItem() == Items.END_CRYSTAL ? OFF_HAND : MAIN_HAND, 0, 0, 0));
 
             // if placedcrystals already contains this position, remove it because we need to have it at the back of the list
 
-            if (getSetting(5).asRotate().state) {
-                WorldUtils.facePosAuto(crystal.getX(), crystal.getY(), crystal.getZ(), getSetting(15).asRotate());
-            }
+//            if (getSetting(5).asRotate().state) {
+//                WorldUtils.facePosAuto(crystal.getX(), crystal.getY(), crystal.getZ(), getSetting(15).asRotate());
+//            }
 
-            Direction f;
-            if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
-                f = Direction.UP;
-            } else {
-                BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
-                        new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
-                        new Vec3d(crystal.getX() + 0.5D, crystal.getY() - 0.5D, crystal.getZ() + 0.5D),
-                        RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
-
-                if (_placedCrystals.contains(selectedPos))
-                    _placedCrystals.remove(selectedPos);
-
-                // adds the selectedPos to the back of the placed crystals list
-                _placedCrystals.add(selectedPos);
-
-                if (playerTarget != null) {
-                    float calculatedDamage = CrystalUtils.calculateDamage(mc.world, selectedPos.getX() + 0.5, selectedPos.getY() + 1.0, selectedPos.getZ() + 0.5, playerTarget, 0);
-
-                    _placedCrystalsDamage.put(selectedPos, calculatedDamage);
-                }
-
-                if (_lastPlaceLocation != BlockPos.ORIGIN && _lastPlaceLocation == selectedPos) {
-                    // reset ticks, we don't need to do more rotations for this position, so we can crystal faster.
-                    if (getSetting(1).asMode().mode == 1)
-                        _remainingTicks = 0;
-                } else // set this to our last place location
-                    _lastPlaceLocation = selectedPos;
-            }
+//            Direction f;
+//            if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
+//                f = Direction.UP;
+//            } else {
+//                BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
+//                        new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
+//                        new Vec3d(crystal.getX() + 0.5D, crystal.getY() - 0.5D, crystal.getZ() + 0.5D),
+//                        RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
+//
+//                if (_placedCrystals.contains(selectedPos))
+//                    _placedCrystals.remove(selectedPos);
+//
+//                // adds the selectedPos to the back of the placed crystals list
+//                _placedCrystals.add(selectedPos);
+//
+//                if (playerTarget != null) {
+//                    float calculatedDamage = CrystalUtils.calculateDamage(mc.world, selectedPos.getX() + 0.5, selectedPos.getY() + 1.0, selectedPos.getZ() + 0.5, playerTarget, 0);
+//
+//                    _placedCrystalsDamage.put(selectedPos, calculatedDamage);
+//                }
+//
+//                if (_lastPlaceLocation != BlockPos.ORIGIN && _lastPlaceLocation == selectedPos) {
+//                    // reset ticks, we don't need to do more rotations for this position, so we can crystal faster.
+//                    if (getSetting(1).asMode().mode == 1)
+//                        _remainingTicks = 0;
+//                } else // set this to our last place location
+//                    _lastPlaceLocation = selectedPos;
+//            }
         }
     }
 

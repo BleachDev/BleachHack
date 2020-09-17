@@ -34,7 +34,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.Objects;
 
 public class Nametags extends Module {
     public int theirPing;
@@ -92,20 +95,17 @@ public class Nametags extends Module {
                     Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1) :
                     Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1));
 
-            for (PlayerEntity player: mc.world.getPlayers()) {
-                PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(player.getGameProfile().getId());
-                theirPing = playerEntry == null ? 0 : playerEntry.getLatency();
-            }
 
             /* Drawing Nametags */
             if (getSetting(1).asMode().mode == 0) {
+                int ping = Objects.requireNonNull(mc.player.networkHandler.getPlayerListEntry(e.getName().getString())).getLatency();
                 if (BleachHack.friendMang.has(e.getName().getString())) {
-                    WorldRenderUtils.drawText("\u00A7b" + e.getName().getString() + " " + theirPing + "ms " + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()),
+                    WorldRenderUtils.drawText("\u00A7b" + e.getName().getString() + " " + getPingColor(ping) + ping + "ms " + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()),
                             e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
                             (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
                             e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
                 } else {
-                    WorldRenderUtils.drawText("\u00A7c" + e.getName().getString() + " " + getPingColor(theirPing) + theirPing + "ms " + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()),
+                    WorldRenderUtils.drawText("\u00A7c" + e.getName().getString() + " " + getPingColor(ping) + ping + "ms " + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()),
                             e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
                             (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + (0.5f * scale),
                             e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), scale);
@@ -143,39 +143,36 @@ public class Nametags extends Module {
             }
 
             /* Drawing Items */
-            double c = 0;
-            double higher = getSetting(1).asMode().mode == 1 ? 0.25 : 0;
-
-            if (getSetting(0).asMode().mode == 0) {
-                WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-                        (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
-                        e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-                WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-                        (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
-                        e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
-
-                for (ItemStack i: e.getArmorItems()) {
-                    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-                            (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
-                            e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), c+1.5, 0, scale, i);
-                    c--;
-                }
-            } else if (getSetting(0).asMode().mode == 1) {
-                WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-                        (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
-                        e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-                WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-                        (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
-                        e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
-
-                for (ItemStack i: e.getArmorItems()) {
-                    if (i.getCount() < 1) continue;
-                    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
-                            (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
-                            e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 0, c, scale, i);
-                    c++;
-                }
-            }
+            //double c = 0;
+            //double higher = getSetting(1).asMode().mode == 1 ? 0.25 : 0;
+            //if (getSetting(0).asMode().mode == 0) {
+            //    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+            //            (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+            //            e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -2.5, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+            //    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+            //            (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+            //            e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 2.5, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+            //    for (ItemStack i: e.getArmorItems()) {
+            //        WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+            //                (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+            //                e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), c+1.5, 0, scale, i);
+            //        c--;
+            //    }
+            //} else if (getSetting(0).asMode().mode == 1) {
+            //    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+            //            (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+            //            e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), -1.25, 0, scale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+            //    WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+            //            (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+            //            e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 1.25, 0, scale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+            //    for (ItemStack i: e.getArmorItems()) {
+            //        if (i.getCount() < 1) continue;
+            //        WorldRenderUtils.drawItem(e.prevX + (e.getX() - e.prevX) * mc.getTickDelta(),
+            //                (e.prevY + (e.getY() - e.prevY) * mc.getTickDelta()) + e.getHeight() + ((0.75 + higher) * scale),
+            //                e.prevZ + (e.getZ() - e.prevZ) * mc.getTickDelta(), 0, c, scale, i);
+            //        c++;
+            //    }
+            //}
 
             event.setCancelled(true);
         }

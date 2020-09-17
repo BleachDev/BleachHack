@@ -41,7 +41,6 @@
     "MixinSkyProperties",
     "MixinSoundSystem",
     "MixinTextRenderer",
-    "MixinTitleScreen",
     "MixinNoToolCooldown",
     "MixinWorldRenderer"
   ],

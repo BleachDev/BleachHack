@@ -120,7 +120,9 @@ public class Scaffold extends Module {
                 WorldUtils.facePosAuto(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5, getSetting(2).asRotate());
             }
 
-            if (WorldUtils.placeBlock(bp, -1, false, false)) {
+            if (
+                    WorldUtils.placeBlock(bp, -1, false, false)
+            ) {
                 cap++;
                 if (cap >= (int) getSetting(6).asSlider().getValue()) return;
             }

@@ -18,7 +18,6 @@
 package bleach.hack.mixin;
 
 import bleach.hack.gui.CleanUpScreen;
-import bleach.hack.gui.ProtocolScreen;
 import bleach.hack.gui.ServerScraperScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -44,9 +43,6 @@ public class MixinServerScreen extends Screen {
         }));
         addButton(new ButtonWidget(58, 7, 50, 20, new LiteralText("Cleanup"), button -> {
             client.openScreen(new CleanUpScreen((MultiplayerScreen) client.currentScreen));
-        }));
-        addButton(new ButtonWidget(111, 7, 50, 20, new LiteralText("Protocol"), button -> {
-            client.openScreen(new ProtocolScreen((MultiplayerScreen) client.currentScreen));
         }));
     }
 }

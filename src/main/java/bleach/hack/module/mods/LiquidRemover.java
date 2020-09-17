@@ -9,7 +9,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
 import com.google.common.eventbus.Subscribe;
@@ -30,26 +29,27 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoExplode extends Module
+public class LiquidRemover extends Module
 {
     private final List<BlockPos> poses = new ArrayList<>();
     public Vec3d prevPos;
     private double[] rPos;
     private int lastSlot = -1;
 
-    public AutoExplode()
+    public LiquidRemover()
     {
-        super("AutoExplode", KEY_UNBOUND, Category.PLAYER, "Automatically explodes respawn anchors",
+        super("LiquidRemover", KEY_UNBOUND, Category.PLAYER, "ESP for tunnels off the highway",
                 new SettingSlider("Range", 0.1, 5, 4.5, 1),
-                new SettingSlider("R: ", 0.0D, 255.0D, 148.0D, 0),
-                new SettingSlider("G: ", 0.0D, 255.0D, 0.0D, 0),
-                new SettingSlider("B: ", 0.0D, 255.0D, 201.0D, 0),
+                new SettingSlider("R: ", 0.0D, 255.0D, 255.0D, 0),
+                new SettingSlider("G: ", 0.0D, 255.0D, 69.0D, 0),
+                new SettingSlider("B: ", 0.0D, 255.0D, 0.0D, 0),
+                new SettingToggle("Air Interact", true),
                 new SettingSlider("Tick Delay: ", 0.0D, 40.0D, 10.0D, 0).withDesc("Ticks per block place to avoid kick for packet spam"));
     }
     @Subscribe
     public void onTick(EventTick event)
     {
-        if (this.isToggled() && !mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether"))
+        if (mc.player.age % 1 == 0 && this.isToggled())
         {
             this.update((int) this.getSettings().get(0).asSlider().getValue());
         }
@@ -69,28 +69,15 @@ public class AutoExplode extends Module
                 {
                     BlockPos pos = player.add(x, y, z);
                     assert this.mc.world != null;
-                    if (this.mc.world.getBlockState(pos).getBlock().getDefaultState().toString().equals("Block{minecraft:respawn_anchor}[charges=0]"))
+                    if (
+                            (this.mc.world.getBlockState(pos).getBlock() == Blocks.LAVA && this.mc.world.getBlockState(pos).getFluidState().getLevel() == 8 && this.mc.world.getBlockState(pos).getFluidState().isStill())
+
+                    )
                     {
                         this.poses.add(pos);
                     }
                 }
             }
-        }
-        for (BlockPos p : this.poses)
-        {
-            //this.drawFilledBlockBox(p, red, 0.7F, blue, 0.25F);
-            lastSlot = mc.player.inventory.selectedSlot;
-            for (int i = 0; i < 9; i++) {
-                if (mc.player.inventory.getStack(i).getItem() == Items.GLOWSTONE) {
-                    mc.player.inventory.selectedSlot = i;
-                }
-            }
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(p), Direction.UP, p, false));
-            if (lastSlot != -1) {
-                mc.player.inventory.selectedSlot = lastSlot;
-                lastSlot = -1;
-            }
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(p), Direction.UP, p, false));
         }
     }
     @Subscribe
@@ -117,6 +104,28 @@ public class AutoExplode extends Module
             red = 1.0F - red;
         }
 
+        for (BlockPos p : this.poses)
+        {
+            this.drawFilledBlockBox(p, red, 0.7F, blue, 0.25F);
+            for (int i = 0; i < 9; i++) {
+                if (mc.player.inventory.getStack(i).getItem() == Items.NETHERRACK) {
+                    if (mc.player.age % this.getSettings().get(5).asSlider().getValue() == 0) {
+                        lastSlot = mc.player.inventory.selectedSlot;
+                        mc.player.inventory.selectedSlot = i;
+                        if (this.getSettings().get(4).asToggle().state) {
+                            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(p), Direction.DOWN, p, true));
+                        } else {
+                            WorldUtils.placeBlock(p, -1, false, false);
+                        }
+                        if (lastSlot != -1) {
+                            mc.player.inventory.selectedSlot = lastSlot;
+                            lastSlot = -1;
+                        }
+                    }
+                }
+            }
+        }
+
         GL11.glEnable(2929);
         GL11.glEnable(3553);
         GL11.glDepthMask(true);
@@ -129,7 +138,7 @@ public class AutoExplode extends Module
         double x = blockPos.getX();
         double y = blockPos.getY();
         double z = blockPos.getZ();
-
+        
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);
         float ob = (float) (this.getSettings().get(3).asSlider().getValue() / 255.0D);
