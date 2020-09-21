@@ -99,7 +99,8 @@ public class Window {
         }
 
         /* window icon */
-        if (icon != null && selected) {
+        boolean drawIcon = icon != null && ModuleManager.getModule(ClickGui.class).getSetting(5).asToggle().state;
+        if (drawIcon) {
             GL11.glPushMatrix();
             GL11.glScaled(0.55, 0.55, 1);
             DiffuseLighting.enableGuiDepthLighting();
@@ -109,13 +110,37 @@ public class Window {
         }
 
         /* window title */
-        if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 0 || ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 1)
-            textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, -1);
-        else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 2)
-            textRend.drawWithShadow(matrix, title, x1 - 1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, ColourThingy.textColor());
+        int iconWidth = drawIcon ? (icon.getItem() == Items.ARMOR_STAND || icon.getItem() == Items.POTION ? 13 : 14) : 4;
+        textRend.drawWithShadow(matrix, title, x1 + iconWidth, y1 + 3, ColourThingy.textColor());
         if (inactiveTime >= 0) {
             inactiveTime--;
         }
+//        switch (title) {
+//            case "Combat":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.DIAMOND_SWORD ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//            case "Client":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.PUFFERFISH ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//            case "World":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.GRASS_BLOCK ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//            case "Misc":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.SPAWNER ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//            case "Movement":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.POTION ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//            case "Render":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.BEACON ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//            case "Exploits":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.BEDROCK ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//            case "Player":
+//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.ARMOR_STAND ? 4 : 15), y1 + 3, ColourThingy.textColor());
+//                break;
+//        }
     }
 
     protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
