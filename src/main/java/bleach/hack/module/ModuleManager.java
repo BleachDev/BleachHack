@@ -79,6 +79,7 @@ public class ModuleManager {
         new HoleTP(),
         new HotbarCache(),
         new Jesus(),
+        new KamiScaffold(),
         new Killaura(),
         new MountBypass(),
         new MouseFriend(),
