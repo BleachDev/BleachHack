@@ -115,32 +115,6 @@ public class Window {
         if (inactiveTime >= 0) {
             inactiveTime--;
         }
-//        switch (title) {
-//            case "Combat":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.DIAMOND_SWORD ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//            case "Client":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.PUFFERFISH ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//            case "World":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.GRASS_BLOCK ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//            case "Misc":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.SPAWNER ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//            case "Movement":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.POTION ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//            case "Render":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.BEACON ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//            case "Exploits":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.BEDROCK ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//            case "Player":
-//                textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.ARMOR_STAND ? 4 : 15), y1 + 3, ColourThingy.textColor());
-//                break;
-//        }
     }
 
     protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {

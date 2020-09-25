@@ -22,6 +22,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.utils.EntityUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.math.MathHelper;
 
@@ -83,22 +84,6 @@ public class Speed extends Module {
                 mc.player.jump();
                 mc.player.setSprinting(true);
             }
-        } else if (getSetting(0).asMode().mode == 3) {
-            if (mc.player.isRiding())
-                return;
-
-            if (mc.player.forwardSpeed != 0.0f || mc.player.sidewaysSpeed != 0.0f)
-            {
-                mc.player.setSprinting(true);
-
-                if (mc.player.isOnGround())
-                {
-                    mc.player.setVelocity((mc.player.getVelocity().x * (1 + speeds)), mc.player.getVelocity().y, (mc.player.getVelocity().x * (1 + speeds)));
-                }
-            }
-
-            if (mc.options.keyJump.isPressed() && mc.player.isOnGround())
-                mc.player.upwardSpeed = 0.405f;
         }
     }
 }
