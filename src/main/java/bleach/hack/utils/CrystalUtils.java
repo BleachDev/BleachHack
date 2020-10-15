@@ -111,7 +111,7 @@ public class CrystalUtils
 
         if (p_InterlopedAmount > 0)
         {
-            Vec3d l_Interloped = EntityUtils.getInterpolatedAmount(entity, p_InterlopedAmount);
+            Vec3d l_Interloped = EntityUtil.getInterpolatedAmount(entity, p_InterlopedAmount);
             l_Distance = EntityUtils.GetDistance(l_Interloped.x, l_Interloped.y, l_Interloped.z, posX, posY, posZ);
         }
 
@@ -127,7 +127,7 @@ public class CrystalUtils
          */
         if (entity instanceof LivingEntity)
         {
-            finald = getBlastReduction((PlayerEntity) entity, getDamageMultiplied(p_World, damage),
+            finald = damage - getBlastReduction((PlayerEntity) entity, getDamageMultiplied(p_World, damage),
                     new Explosion(p_World, null, posX, posY, posZ, 6F, false, Explosion.DestructionType.DESTROY));
         }
         return (float) finald;
@@ -140,7 +140,7 @@ public class CrystalUtils
             PlayerEntity ep = (PlayerEntity) entity;
             DamageSource ds = DamageSource.explosion(explosion);
             damage = EntityUtils.getDamageAfterAbsorb(damage, (float) ep.getArmor(),
-                    (float) EntityAttributes.GENERIC_ARMOR_TOUGHNESS.getDefaultValue());
+                    20);
 
             int k = EnchantmentHelper.getProtectionAmount(ep.getArmorItems(), ds);
             float f = MathHelper.clamp(k, 0.0F, 20.0F);
@@ -155,7 +155,7 @@ public class CrystalUtils
         }
 
         damage = EntityUtils.getDamageAfterAbsorb(damage, (float) entity.getArmor(),
-                (float) EntityAttributes.GENERIC_ARMOR_TOUGHNESS.getDefaultValue());
+                20);
         return damage;
     }
 

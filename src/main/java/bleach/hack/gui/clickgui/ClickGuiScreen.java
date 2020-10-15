@@ -113,7 +113,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
         this.renderBackground(matrix);
         String watermark = "BleachHack epearl edition " + (ModuleManager.getModule(UI.class).getSetting(24).asToggle().state ? "\u00A7f" : "")  + BleachHack.VERSION + (ModuleManager.getModule(UI.class).getSetting(24).asToggle().state ? "+" : "");
-        textRenderer.drawWithShadow(matrix, watermark, 1, 1, ColourThingy.guiColour());
+        textRenderer.drawWithSahadow(matrix, watermark, 1, 1, ColourThingy.guiColour());
         if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
             textRenderer.drawWithShadow(matrix,
                     "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
