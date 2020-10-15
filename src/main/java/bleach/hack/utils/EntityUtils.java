@@ -107,11 +107,6 @@ public class EntityUtils {
         return FacingDirection.North;
     }
 
-    public static Vec3d getInterpolatedAmount(Entity entity, double ticks)
-    {
-        return getInterpolatedAmount(entity, ticks);
-    }
-
     public static double GetDistance(double p_X, double p_Y, double p_Z, double x, double y, double z)
     {
         double d0 = p_X - x;
