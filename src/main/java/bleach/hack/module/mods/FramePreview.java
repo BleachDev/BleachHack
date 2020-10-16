@@ -36,6 +36,7 @@ public class FramePreview extends Module {
     }
 
     @Subscribe
+    public void onDrawOverlay(EventDrawOverlay event) {
         
         Entity e = MinecraftClient.getInstance().targetedEntity;
         if (e instanceof ItemFrameEntity && mc.player != null && ((ItemFrameEntity) e).getHeldItemStack().getItem().getName().toString().contains("shulker")) {
