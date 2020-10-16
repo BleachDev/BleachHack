@@ -76,6 +76,10 @@ public class BleachHack implements ModInitializer {
             BleachFileMang.appendFile("autism", "cleanchat.txt");
             BleachFileMang.appendFile("chink", "cleanchat.txt");
             BleachFileMang.appendFile("tranny", "cleanchat.txt");
+            BleachFileMang.appendFile("fuck", "cleanchat.txt");
+            BleachFileMang.appendFile("shit", "cleanchat.txt");
+            BleachFileMang.appendFile("nigga", "cleanchat.txt");
+
         }
     }
 }

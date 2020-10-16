@@ -24,6 +24,7 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.EntityUtils;
 import com.google.common.eventbus.Subscribe;
+import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class Speed extends Module {
@@ -40,6 +41,7 @@ public class Speed extends Module {
     public void onTick(EventTick event) {
         if (mc.options.keySneak.isPressed()) return;
         double speeds = getSetting(1).asSlider().getValue() / 30;
+        double speedstrafe = getSetting(1).asSlider().getValue() / 3;
 
         /* OnGround */
         if (getSetting(0).asMode().mode == 2) {
@@ -83,6 +85,27 @@ public class Speed extends Module {
                 mc.player.sidewaysSpeed += 3.0F;
                 mc.player.jump();
                 mc.player.setSprinting(true);
+            }
+        }
+        double forward = mc.player.forwardSpeed;
+        double strafe = mc.player.sidewaysSpeed;
+        float yaw = mc.player.yaw;
+
+        if (getSetting(0).asMode().mode == 3) {
+            if ((forward == 0.0D) && (strafe == 0.0D)) {
+                mc.player.setVelocity(0, mc.player.getVelocity().y, 0);
+            } else {
+                if (forward != 0.0D) {
+                    if (strafe > 0.0D) {
+                        yaw += (forward > 0.0D ? -45 : 45);
+                    } else if (strafe < 0.0D) yaw += (forward > 0.0D ? 45 : -45);
+                    strafe = 0.0D;
+                    if (forward > 0.0D) {
+                        forward = 1.0D;
+                    } else if (forward < 0.0D) forward = -1.0D;
+                }
+                mc.player.setVelocity((forward * speedstrafe * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speedstrafe * Math.sin(Math.toRadians(yaw + 90.0F))), mc.player.getVelocity().y,
+                        forward * speedstrafe * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speedstrafe * Math.cos(Math.toRadians(yaw + 90.0F)));
             }
         }
     }
