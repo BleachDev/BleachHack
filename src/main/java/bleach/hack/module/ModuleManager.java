@@ -124,6 +124,7 @@ public class ModuleManager {
         new TabFriends(),
         new FootXp(),
         new LiquidRemover(),
+        new FramePreview(),
         new AutoExplode(),
         //new FabritoneFix(),
         //new AutoDodge(),

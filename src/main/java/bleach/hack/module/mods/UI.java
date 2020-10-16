@@ -153,7 +153,7 @@ public class UI extends Module {
                 new SettingToggle("Inventory", true).withDesc("Shows your inventory on your screen").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 571, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 459, 0).withDesc("y coordinates"),
-                        new SettingMode("Style", "GUI Color", "Black", "Clear").withDesc("How to show the armor durability")),
+                        new SettingMode("Style", "GUI Color", "Black", "Clear").withDesc("Color of the background")),
                 new SettingToggle("Chunk Size", true).withDesc("Shows the size of the chunk you are standing in").withChildren( // 15
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 290, 0).withDesc("y coordinates"),
