@@ -55,6 +55,7 @@ public class PopoutGUI extends Module {
                 );
     }
     public void onEnable() {
+        if (mc.world == null) return;
         new b();
         super.onEnable();
     }

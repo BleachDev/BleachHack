@@ -65,6 +65,7 @@ public class Xray extends Module {
 
     @Override
     public void onEnable() {
+        if (mc.world == null) return;
         visibleBlocks.clear();
 
         for (String s : BleachFileMang.readFileLines("xrayblocks.txt")) {
