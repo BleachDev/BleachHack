@@ -20,7 +20,7 @@ import net.minecraft.util.math.Direction;
 public class AutoTrap extends Module {
 
     public AutoTrap() {
-        super("AutoTrap", KEY_UNBOUND, Category.CHAT, "autotrap fortnite. stolen from meteor client bc i cba placing block or doing maffs",
+        super("AutoTrap", KEY_UNBOUND, Category.CHAT, "autotraps other players near you, does not trap friends!",
                 new SettingMode("Mode", "Top", "Full", "Bed Aura")
             );
     }
