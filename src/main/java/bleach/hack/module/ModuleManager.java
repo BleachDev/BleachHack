@@ -127,6 +127,7 @@ public class ModuleManager {
         new LiquidRemover(),
         new ShulkerView(),
         new AutoExplode(),
+        new AutoEZ(),
         //new AutoWither(),
         //new AutoBaritone(),
         //new FabritoneFix(),

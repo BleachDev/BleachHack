@@ -7,6 +7,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.file.BleachFileHelper;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.entity.Entity;
@@ -43,11 +44,13 @@ public class MouseFriend extends Module {
                         BleachHack.friendMang.remove(e.getName().asString());
                         if (this.getSetting(1).asToggle().state) {
                             BleachLogger.infoMessage("Removed \"" + e.getName().asString() + "\" from the friend list");
+                            BleachFileHelper.SCHEDULE_SAVE_FRIENDS = true;
                         }
                     } else {
                         BleachHack.friendMang.add(e.getName().asString());
                         if (this.getSetting(1).asToggle().state) {
                             BleachLogger.infoMessage("Added \"" + e.getName().asString() + "\" to the friend list");
+                            BleachFileHelper.SCHEDULE_SAVE_FRIENDS = true;
                         }
                     }
                 }
@@ -56,4 +59,5 @@ public class MouseFriend extends Module {
             antiSpamClick = false;
         }
     }
+
 }
