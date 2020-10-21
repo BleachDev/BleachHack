@@ -1,6 +1,4 @@
 Modules to add:
-1. AutoTrap: <https://github.com/dewysoftwareleaks/Ruhama/blob/master/src/main/java/bleach/a32k/module/modules/ObsidianTrap.java>  
-Additions: Need to add toggleable option for netherite and multiple variant trap types and an option for persistent
 2. HoleFiller: <https://github.com/dewysoftwareleaks/Ruhama/blob/master/src/main/java/bleach/a32k/module/modules/HoleFiller.java>
 3. AutoBreed: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/BreedModule.java>  
 (Already in the filesystem commented out and partially completed)
@@ -41,14 +39,11 @@ Minor Adjustments:
 44. Fix nametags not rendering armor & hand item properly and add player ping to nametags  
 45. Option to save/switch configurations  
 46. Implement a good Crystal Aura  
-47. Make auto-anvil and surround and autotrap ignore adjacent block checks  
 48. Make hovering over modules sync the color with the rainbow/colorselector but with 25% opacity (its currently static blue)  
-49. Fix auto-eat not stopping eating when triggering  
 50. Make elytrafly sync up/down speed with the world your in  
 51. Add alpha slider to HoleESP and make this not highlight per block and highlight entire hole either red or blue instead depending on surround type  
 52. Add nearest player hud card like in impact+  
 53. Fix flight not turning off until relog  
-54. Make 2x3 tunnel nuker option  
 55. Fix zoom module messing up if held down  
 56. Implement logging into stash finder  
 57. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
@@ -61,13 +56,15 @@ Minor Adjustments:
 65. finish Logout Spots  
 66. Add announcer  
 67. Add no render for beacon beams  
-68. Add health to autoeat  
 69. fix ambience being scuffed  
 70. disable freecam block collision  
 71. experiment with maybe making an auto dodge for blocks when autowalking (hint hint auto highway fly??)
 72. add a streaming mode that censors the coords  
 73. allow nuker to use offhand  
-74. fix autoreconnect  
-75. make nuker bypass work in facing direction  
 75. OreDeobfuscator for 1.16  
 76. new client name??  
+77. pop shulker item frame preview out of the hud  
+78. fix excess block places in kami scaffold  
+79. hide potion hud in top right (norender)  
+80. fix toggle command not working  
+81. viewclip  

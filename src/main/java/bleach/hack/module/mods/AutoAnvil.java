@@ -1,123 +1,52 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.WorldUtils;
-import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Direction;
 
 public class AutoAnvil extends Module {
 
     public AutoAnvil() {
-        super("AutoAnvil", KEY_UNBOUND, Category.COMBAT, "Places 2 anvils above your head",
-                new SettingMode("Mode", "1x1", "Fit").withDesc("Mode, 1x1 places 4 blocks around you, fit fits the blocks around you so it doesn't place inside of you"),
-                new SettingToggle("Auto-center", false).withDesc("Autocenters you to the nearest block"),
-                new SettingToggle("Keep on", false).withDesc("Keeps the module on after placing the obsidian"),
-                new SettingToggle("Jump disable", true).withDesc("Disables the module if you jump"),
-                new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
-                new SettingRotate(false).withDesc("Rotates when placing"));
-    }
-    //TODO make this ignore checking adjacent blocks
-    public void onEnable() {
-        super.onEnable();
-
-        int obby = -1;
-        for (int i = 0; i < 9; i++) {
-            if (mc.player.inventory.getStack(i).getItem() == Items.ANVIL) {
-                obby = i;
-                break;
-            }
-        }
-
-        if (obby == -1) {
-            BleachLogger.errorMessage("No anvils in hotbar!");
-            setToggled(false);
-            return;
-        }
-
-        if (getSetting(1).asToggle().state) {
-            Vec3d centerPos = Vec3d.of(mc.player.getBlockPos()).add(0.5, 0.5, 0.5);
-            mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
-            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
-        }
-
-        placeTick(obby);
+        super("AutoAnvil", KEY_UNBOUND, Category.COMBAT, "automatically air places anvil to surround");
     }
 
     @Subscribe
     public void onTick(EventTick event) {
-        if (getSetting(3).asToggle().state && mc.options.keyJump.isPressed()) {
-            setToggled(false);
-            return;
-        }
-
-        int obby = -1;
-        for (int i = 0; i < 9; i++) {
-            if (mc.player.inventory.getStack(i).getItem() == Items.ANVIL) {
-                obby = i;
+        assert mc.player != null;
+        assert mc.interactionManager != null;
+        int blockSlot = -1;
+        PlayerEntity target = null;
+        for(int i = 0; i < 9; i++){
+            if (mc.player.inventory.getStack(i).getItem() == Blocks.ANVIL.asItem()){
+                blockSlot = i;
                 break;
             }
         }
-
-        if (obby == -1) {
-            BleachLogger.errorMessage("Ran out of anvils!");
-            setToggled(false);
-            return;
+        if (blockSlot == -1) return;
+        for(PlayerEntity player : mc.world.getPlayers()){
+            target = mc.player;
         }
-
-        placeTick(obby);
+        int prevSlot = mc.player.inventory.selectedSlot;
+        mc.player.inventory.selectedSlot = blockSlot;
+        BlockPos targetPos = target.getBlockPos().up();
+        if(mc.world.getBlockState(targetPos.add(0, 1, 0)).getMaterial().isReplaceable()){
+            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(target.getPos().add(0, 1, 0), Direction.UP, targetPos.add(0, 1, 0), false));
+            mc.player.swingHand(Hand.MAIN_HAND);
+        }
+        mc.player.inventory.selectedSlot = prevSlot;
+        ModuleManager.getModule(AutoAnvil.class).toggle();
     }
-
-    private void placeTick(int obsidian) {
-        int cap = 0;
-
-        if (getSetting(0).asMode().mode == 0) {
-            for (BlockPos b : new BlockPos[]{mc.player.getBlockPos().up(2)}) {
-
-                if (cap >= (int) getSetting(4).asSlider().getValue()) {
-                    return;
-                }
-
-                if (getSetting(5).asRotate().state) {
-                    WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
-                }
-
-                if (WorldUtils.placeBlock(b, obsidian, false, false)) {
-                    cap++;
-                }
-            }
-        } else {
-            Box box = mc.player.getBoundingBox();
-            for (BlockPos b : Sets.newHashSet(
-                    new BlockPos(box.minX, box.minY + 2, box.minZ))) {
-
-                if (cap >= (int) getSetting(4).asSlider().getValue()) {
-                    return;
-                }
-
-                if (getSetting(5).asRotate().state) {
-                    WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
-                }
-                if (WorldUtils.placeBlock(b, obsidian, false, false)) {
-                    cap++;
-                }
-            }
-        }
-
-        if (!getSetting(2).asToggle().state) {
-            setToggled(false);
-        }
-    }
-
 }

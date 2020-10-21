@@ -48,6 +48,9 @@ public class CmdOpenFolder extends Command {
     @Override
     public void onCommand(String command, String[] args) throws Exception {
         BleachLogger.infoMessage("Opening bleach folder");
+        if(!GraphicsEnvironment.isHeadless()) {
+            System.setProperty("java.awt.headless", "false");
+        }
         Desktop.getDesktop().open(new File(String.valueOf(Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/"))));
     }
 
