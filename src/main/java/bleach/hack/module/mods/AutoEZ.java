@@ -14,6 +14,9 @@ import com.google.common.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AutoEZ extends Module {
 
@@ -21,6 +24,8 @@ public class AutoEZ extends Module {
     private List<String> lines = new ArrayList<>();
     private int lineCount = 0;
     public List<String> dead_uuids = new ArrayList<>();
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
 
     public AutoEZ() {
         super("AutoEZ", KEY_UNBOUND, Category.CHAT, "auto ez bruh (edit in AutoEZ.txt)",
@@ -62,28 +67,27 @@ public class AutoEZ extends Module {
                     if (lineCount >= lines.size() - 1) lineCount = 0;
                     else lineCount++;
                     dead_uuids.add(event.getEntity().getUuidAsString());
+
+
                 } else if (
                     !event.getEntity().isAlive()
                     && event.getEntity().distanceTo(mc.player) > 8
                     && !dead_uuids.toString().contains(event.getEntity().getUuidAsString())
                 ) {
                     dead_uuids.add(event.getEntity().getUuidAsString());
+
                 }
 
         }
     }
 
     @Subscribe
-    public void onEntityRenderRemove(EventEntityRemoved event) {
-        System.out.println("[BH] TEST: " + event.GetEntity().getType().toString());
-        if (event.GetEntity().getType().toString().contains("entity.minecraft.player")){
-            if (dead_uuids.toString().contains(event.GetEntity().getUuidAsString())) {
-                dead_uuids.remove(event.GetEntity().getUuidAsString());
-            }
-
+    public void onTick(EventTick event) {
+        assert mc.world != null;
+        if (mc.player.age % 100 == 0) {
+            dead_uuids.clear();
         }
     }
-
     @Override
     public void onDisable() {
         dead_uuids.clear();
