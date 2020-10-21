@@ -47,6 +47,7 @@ public class AutoTrap extends Module {
             }
         }
         if (target == null) return;
+        if (target == mc.player) return;
         if (mc.player.distanceTo(target) < 5){
             int prevSlot = mc.player.inventory.selectedSlot;
             mc.player.inventory.selectedSlot = blockSlot;

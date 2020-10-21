@@ -33,6 +33,7 @@ public class CommandManager {
             new CmdCI(),
             new CmdOpenFolder(),
             new CmdCleanChat(),
+            new CmdCredits(),
             new CmdCustomChat(),
             new CmdDrawn(),
             new CmdDupe(),
