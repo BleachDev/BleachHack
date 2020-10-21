@@ -13,7 +13,7 @@ import static bleach.hack.module.Module.KEY_UNBOUND;
 public class DiscordsModule extends Module
 {
     public DiscordsModule() {
-        super("Join Discords", KEY_UNBOUND, Category.MISC, "join discord");
+        super("JoinDiscord", KEY_UNBOUND, Category.MISC, "join discord");
     }
 
     @Override
