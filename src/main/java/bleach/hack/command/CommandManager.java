@@ -31,6 +31,7 @@ public class CommandManager {
     private static List<Command> commands = Arrays.asList(
             new CmdBind(),
             new CmdCI(),
+            new CmdOpenFolder(),
             new CmdCleanChat(),
             new CmdCustomChat(),
             new CmdDrawn(),
