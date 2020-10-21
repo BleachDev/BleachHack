@@ -47,16 +47,16 @@ public abstract class ClickGuiWindow extends Window {
         //DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2, y2, 0x90000000);
         //DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90000000);
         //DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
-        if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 0) {
+        if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 1) {
             DrawableHelper.fill(matrix, x1, y1 + 12, x2, y1 + 13, ColourThingy.guiColour());
-        } else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 1) {
+        } else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 2) {
             int x1M = Math.min(x1, x2);
             int y1M = Math.min(y1, y2);
             int y2M = Math.max(y1, y2);
             int x2M = Math.max(x1, x2);
             RenderUtils.drawRect(x1M, y1M, x2M, y2M, ColourThingy.guiColour(), 0.2f);
         }
-        else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 2){
+        else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 0){
             int x1M = Math.min(x1, x2);
             int y1M = Math.min(y1, y2);
             int y2M = Math.max(y1, y2);
