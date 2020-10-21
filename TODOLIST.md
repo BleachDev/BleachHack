@@ -1,22 +1,22 @@
-Modules to add:
-2. HoleFiller: <https://github.com/dewysoftwareleaks/Ruhama/blob/master/src/main/java/bleach/a32k/module/modules/HoleFiller.java>
-3. AutoBreed: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/BreedModule.java>  
-(Already in the filesystem commented out and partially completed)
-4. LiquidInteract: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/world/LiquidInteractModule.java>
-5. EntityControl: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/movement/EntityControlModule.java>
+Modules to add:  
+2. HoleFiller: <https://github.com/dewysoftwareleaks/Ruhama/blob/master/src/main/java/bleach/a32k/module/modules/HoleFiller.java>  
+3. AutoBreed: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/BreedModule.java>    
+(Already in the filesystem commented out and partially completed)  
+4. LiquidInteract: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/world/LiquidInteractModule.java>  
+5. EntityControl: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/movement/EntityControlModule.java>  
 6. Welcomer: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/GreeterModule.java>  
-Additions: Rename from greeter to Welcomer and add file with variables for custom messages
-7. MoreInv/XCarry: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/MoreInvModule.java>
-8. Coord Logger: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/CoordLoggerModule.java>
-9. NoBreakAnimations: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/render/NoBreakAnimModule.java>
-12. AntiForceLook: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/player/AntiForceLook.java>
-13. AntiFog: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/AntiFog.java>
-15. NewChunks (for 2b2t): <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/ChunkFinder.java>
-16. AutoBuilder: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/AutoBuilderModule.java>
-17. EChest Farmer: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/EnderChestFarmer.java>
-18. AutoWither: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/AutoWitherModule.java>
-19. CityESP: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/render/CityESPModule.java>
-20. AntiHurtcam: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/NoHurtCam.java>
+Additions: Rename from greeter to Welcomer and add file with variables for custom messages  
+7. MoreInv/XCarry: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/MoreInvModule.java>  
+8. Coord Logger: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/CoordLoggerModule.java>  
+9. NoBreakAnimations: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/render/NoBreakAnimModule.java>  
+12. AntiForceLook: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/player/AntiForceLook.java>  
+13. AntiFog: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/AntiFog.java>  
+15. NewChunks (for 2b2t): <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/ChunkFinder.java>  
+16. AutoBuilder: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/AutoBuilderModule.java>  
+17. EChest Farmer: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/EnderChestFarmer.java>  
+18. AutoWither: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/AutoWitherModule.java>  
+19. CityESP: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/render/CityESPModule.java>  
+20. AntiHurtcam: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/NoHurtCam.java>  
 
 Minor Adjustments:  
 22. Make scaffold & surround turn off lock to blocks when nothing to place and surround returns to last item  
