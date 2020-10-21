@@ -50,7 +50,7 @@ public class AutoEZ extends Module {
     public void onEntityRender(EventEntityRender event) {
         if (lines.isEmpty()) return;
         if (event.getEntity().getType().toString().contains("entity.minecraft.player")){
-
+                if (event.getEntity() == mc.player) return;
                 if (
                     !event.getEntity().isAlive()
                     && event.getEntity().distanceTo(mc.player) <= 8
