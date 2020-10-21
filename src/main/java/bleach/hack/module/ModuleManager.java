@@ -63,6 +63,7 @@ public class ModuleManager {
         new CustomChat(),
         new DiscordRPCMod(),
         new Dispenser32k(),
+        new DiscordsModule(),
         new DonkeyAlert(),
         new ElytraFly(),
         new ElytraReplace(),
