@@ -170,7 +170,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
     protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
         super.drawBar(matrix, mX, mY, textRend);
-        textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 0), ColourThingy.guiColour());
+        textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 4 : 0), ColourThingy.textColor());
     }
 
     public Triple<Integer, Integer, String> getTooltip() {

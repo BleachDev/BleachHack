@@ -58,19 +58,6 @@ public class AutoTotem extends Module {
                     return;
                 }
             }
-        } else {
-            // If the player is in another inventory, atleast check the hotbar for anything to swap
-            for (int i = 0; i < 9; i++) {
-                if (mc.player.inventory.getStack(i).getItem() == Items.TOTEM_OF_UNDYING) {
-                    if (i != mc.player.inventory.selectedSlot) {
-                        mc.player.inventory.selectedSlot = i;
-                        mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
-                    }
-
-                    mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.DOWN));
-                    return;
-                }
-            }
         }
     }
 

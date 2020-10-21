@@ -24,7 +24,7 @@ import java.util.*;
 public class DonkeyAlert extends Module {
     public List<String> mob_uuids = new ArrayList<>();
     public DonkeyAlert(){
-        super("DonkeyAlert", KEY_UNBOUND, Category.WORLD, "Alerts you if a donkey appears in your render distance");
+        super("DonkeyAlert", KEY_UNBOUND, Category.CHAT, "Alerts you if a donkey appears in your render distance");
 
     }
 

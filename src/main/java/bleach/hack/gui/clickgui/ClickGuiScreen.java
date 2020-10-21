@@ -72,29 +72,32 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
 
         int i = 10;
-        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.CLIENT), i, 35, len,
-                StringUtils.capitalize(StringUtils.lowerCase(Category.CLIENT.toString())), new ItemStack(Items.PUFFERFISH)));
+        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER), i, 35, len,
+                StringUtils.capitalize(StringUtils.lowerCase(Category.PLAYER.toString())), new ItemStack(Items.ARMOR_STAND)));
         i += len + 5;
         windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT), i, 35, len,
                 StringUtils.capitalize(StringUtils.lowerCase(Category.COMBAT.toString())), new ItemStack(Items.DIAMOND_SWORD)));
         i += len + 5;
-        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC), i, 35, len,
-                StringUtils.capitalize(StringUtils.lowerCase(Category.MISC.toString())), new ItemStack(Items.SPAWNER)));
+        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER), i, 35, len,
+                StringUtils.capitalize(StringUtils.lowerCase(Category.RENDER.toString())), new ItemStack(Items.BEACON)));
         i += len + 5;
         windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD), i, 35, len,
                 StringUtils.capitalize(StringUtils.lowerCase(Category.WORLD.toString())), new ItemStack(Items.GRASS_BLOCK)));
         i += len + 5;
+        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT), i, 35, len,
+                StringUtils.capitalize(StringUtils.lowerCase(Category.MOVEMENT.toString())), new ItemStack(Items.POTION)));
+        i += len + 5;
         windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS), i, 35, len,
                 StringUtils.capitalize(StringUtils.lowerCase(Category.EXPLOITS.toString())), new ItemStack(Items.BEDROCK)));
         i += len + 5;
-        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER), i, 35, len,
-                StringUtils.capitalize(StringUtils.lowerCase(Category.RENDER.toString())), new ItemStack(Items.BEACON)));
+        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.CHAT), i, 35, len,
+                StringUtils.capitalize(StringUtils.lowerCase(Category.CHAT.toString())), new ItemStack(Items.WRITABLE_BOOK)));
         i += len + 5;
-        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER), i, 35, len,
-                StringUtils.capitalize(StringUtils.lowerCase(Category.PLAYER.toString())), new ItemStack(Items.ARMOR_STAND)));
+        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC), i, 35, len,
+                StringUtils.capitalize(StringUtils.lowerCase(Category.MISC.toString())), new ItemStack(Items.SPAWNER)));
         i += len + 5;
-        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT), i, 35, len,
-                StringUtils.capitalize(StringUtils.lowerCase(Category.MOVEMENT.toString())), new ItemStack(Items.POTION)));
+        windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.CLIENT), i, 35, len,
+                StringUtils.capitalize(StringUtils.lowerCase(Category.CLIENT.toString())), new ItemStack(Items.PUFFERFISH)));
     }
 
     public boolean isPauseScreen() {

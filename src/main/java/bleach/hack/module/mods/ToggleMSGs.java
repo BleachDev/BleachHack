@@ -7,6 +7,6 @@ public class ToggleMSGs extends Module{
 
     public ToggleMSGs()
     {
-        super("ToggleMSGs", KEY_UNBOUND, Category.MISC, "Messages in chat when you turn on/off a module");
+        super("ToggleMSGs", KEY_UNBOUND, Category.CHAT, "Messages in chat when you turn on/off a module");
     }
 }

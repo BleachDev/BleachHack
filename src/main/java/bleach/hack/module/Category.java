@@ -25,5 +25,6 @@ public enum Category {
     EXPLOITS,
     MISC,
     WORLD,
+    CHAT,
     CLIENT
 }

@@ -19,7 +19,7 @@ public class PopCounter extends Module
 {
     public PopCounter()
     {
-        super("PopCounter", KEY_UNBOUND, Category.COMBAT, "Counts how many times a person has popped");
+        super("PopCounter", KEY_UNBOUND, Category.CHAT, "Counts how many times a person has popped");
     }
 
     private HashMap<String, Integer> popList = new HashMap<>();

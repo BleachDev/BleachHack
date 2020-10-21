@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class CleanChat extends Module {
 
     public CleanChat() {
-        super("CleanChat", KEY_UNBOUND, Category.MISC, "checks messages you receive and removes ones with bad words in them! To add words \"" + Command.PREFIX + "cleanchat add/del [word]\"");
+        super("CleanChat", KEY_UNBOUND, Category.CHAT, "checks messages you receive and removes ones with bad words in them! To add words \"" + Command.PREFIX + "cleanchat add/del [word]\"");
     }
     ArrayList blacklistedWords = new ArrayList<String>();
     @Override

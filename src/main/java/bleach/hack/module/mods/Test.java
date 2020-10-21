@@ -9,7 +9,7 @@ import com.google.common.eventbus.Subscribe;
 public class Test extends Module {
 
     public Test() {
-        super("Test", KEY_UNBOUND, Category.WORLD, "dumps variables into console");
+        super("Test", KEY_UNBOUND, Category.CHAT, "dumps variables into console");
     }
 
     @Subscribe
