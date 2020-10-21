@@ -5,15 +5,12 @@ import java.net.URI;
 
 import bleach.hack.module.Category;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.setting.base.SettingMode;
 import bleach.hack.module.Module;
 
-import static bleach.hack.module.Module.KEY_UNBOUND;
-
-public class DiscordsModule extends Module
+public class Discord extends Module
 {
-    public DiscordsModule() {
-        super("JoinDiscord", KEY_UNBOUND, Category.MISC, "join discord");
+    public Discord() {
+        super("Discord", KEY_UNBOUND, Category.MISC, "join discord");
     }
 
     @Override
@@ -21,10 +18,10 @@ public class DiscordsModule extends Module
     {
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                Desktop.getDesktop().browse(new URI("https://www.discord.gg/VXJ7eY9"));
+                Desktop.getDesktop().browse(new URI("https://discord.gg/WkdpPZ6"));
             }
         } catch (Exception e) {e.printStackTrace();}
-        ModuleManager.getModule(DiscordsModule.class).toggle();
+        ModuleManager.getModule(Discord.class).toggle();
     }
 
 }
