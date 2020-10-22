@@ -96,9 +96,9 @@ public class AutoWither extends Module {
         }
         if (ticksPassed == 2) {
             if(
-                    mc.world.getBlockState(targetPos.add(1, 3, 0)).getMaterial().isReplaceable() &&
-                            mc.world.getBlockState(targetPos.add(1, 3, 1)).getMaterial().isReplaceable() &&
-                            mc.world.getBlockState(targetPos.add(1, 3, -1)).getMaterial().isReplaceable()
+                mc.world.getBlockState(targetPos.add(2, 2, 0)).getMaterial().isReplaceable() &&
+                mc.world.getBlockState(targetPos.add(2, 2, 1)).getMaterial().isReplaceable() &&
+                mc.world.getBlockState(targetPos.add(2, 2, -1)).getMaterial().isReplaceable()
             ) {
                 if (getSetting(1).asToggle().state) {
                     BleachLogger.warningMessage("Attempting to place wither skulls");
@@ -113,12 +113,13 @@ public class AutoWither extends Module {
                 WorldUtils.facePos(mc.player.getPos().x, mc.player.getPos().y - 2, mc.player.getPos().z);
                 WorldUtils.facePosPacket(mc.player.getPos().x, mc.player.getPos().y - 2, mc.player.getPos().z);
 
-                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, 0), Direction.EAST, targetPos.add(1, 2, 0), false));
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, 0), Direction.DOWN, targetPos.add(1, 2, 0), false));
                 mc.player.swingHand(Hand.MAIN_HAND);
-                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, 1), Direction.EAST, targetPos.add(1, 2, 1), false));
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, 1), Direction.DOWN, targetPos.add(1, 2, 1), false));
                 mc.player.swingHand(Hand.MAIN_HAND);
-                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, -1), Direction.DOWN, targetPos.add(1, 2, -1), false));
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, -1), Direction.DOWN, targetPos.add(1, 2, -1), false));
                 mc.player.swingHand(Hand.MAIN_HAND);
+
 
                 WorldUtils.facePos(mc.player.getPos().x + 1, mc.player.getPos().y + 1, mc.player.getPos().z);
                 WorldUtils.facePosPacket(mc.player.getPos().x + 1, mc.player.getPos().y + 1, mc.player.getPos().z);
