@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RayTraceContext;
+import net.minecraft.world.RaycastContext;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
@@ -103,15 +103,15 @@ public class ProjectileSimulator {
         for (int i = 0; i < 100; i++) {
             Vec3d vel = spoofE.velocity;
             Vec3d newVec = spoofE.getPos().add(vel);
-            //EntityHitResult entityHit = ProjectileUtil.rayTrace(mc.player, e.getPos(), newVec, e.getBoundingBox(), null, 1f);
+            //EntityHitResult entityHit = ProjectileUtil.raycast(mc.player, e.getPos(), newVec, e.getBoundingBox(), null, 1f);
             List<Entity> entities = mc.world.getOtherEntities(null, spoofE.getBoundingBox().expand(0.15));
             entities.removeAll(Arrays.asList(mc.player, e, spoofE));
             if (!entities.isEmpty()) {
                 return Triple.of(vecs, entities.get(0), null);
             }
 
-            BlockHitResult blockHit = mc.world.rayTrace(
-                    new RayTraceContext(spoofE.getPos(), newVec, RayTraceContext.ShapeType.COLLIDER, RayTraceContext.FluidHandling.NONE, e));
+            BlockHitResult blockHit = mc.world.raycast(
+                    new RaycastContext(spoofE.getPos(), newVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, e));
             if (blockHit.getType() != HitResult.Type.MISS) {
                 return Triple.of(vecs, null, blockHit.getBlockPos());
             }

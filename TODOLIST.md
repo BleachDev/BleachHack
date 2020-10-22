@@ -67,3 +67,4 @@ Minor Adjustments:
 79. hide potion hud in top right (norender)  
 80. fix toggle command not working  
 81. viewclip  
+81. fix autowither not spawning tingy  
