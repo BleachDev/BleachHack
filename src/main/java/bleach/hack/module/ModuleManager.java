@@ -129,7 +129,7 @@ public class ModuleManager {
         new AutoExplode(),
         new AutoEZ(),
         new AutoTrap(),
-        //new AutoWither(),
+        new AutoWither(),
         //new AutoBaritone(),
         //new FabritoneFix(),
         //new AutoDodge(),

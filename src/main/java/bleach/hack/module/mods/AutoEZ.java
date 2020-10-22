@@ -28,7 +28,7 @@ public class AutoEZ extends Module {
 
 
     public AutoEZ() {
-        super("AutoEZ", KEY_UNBOUND, Category.CHAT, "auto ez bruh (edit in AutoEZ.txt)",
+        super("AutoEZ", KEY_UNBOUND, Category.COMBAT, "auto ez bruh (edit in AutoEZ.txt)",
                 new SettingMode("Read", "Random", "Order"),
                 new SettingToggle("Ignore Friends", true)
         );
