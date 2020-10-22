@@ -14,7 +14,6 @@ Additions: Rename from greeter to Welcomer and add file with variables for custo
 15. NewChunks (for 2b2t): <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/ChunkFinder.java>  
 16. AutoBuilder: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/AutoBuilderModule.java>  
 17. EChest Farmer: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/EnderChestFarmer.java>  
-18. AutoWither: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/world/AutoWitherModule.java>  
 19. CityESP: <https://github.com/ionar2/salhack/blob/master/src/main/java/me/ionar/salhack/module/render/CityESPModule.java>  
 20. AntiHurtcam: <https://github.com/zeroeightysix/KAMI/blob/fabric/src/main/java/me/zeroeightsix/kami/feature/module/render/NoHurtCam.java>  
 

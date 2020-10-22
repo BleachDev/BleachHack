@@ -18,10 +18,24 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class AutoWither extends Module {
+    int ticksPassed;
+    int soulSandSlot = -1;
+    int skullSlot = -1;
 
     public AutoWither() {
         super("AutoWither", KEY_UNBOUND, Category.PLAYER, "automatically air places anvil to surround",
-                new SettingToggle("Center", false));
+                new SettingToggle("Center", false),
+                new SettingToggle("Debug", false)
+                );
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        ticksPassed = 0;
+        if (getSetting(1).asToggle().state) {
+            BleachLogger.warningMessage("Setting ticks passed to 0");
+        }
     }
 
     @Subscribe
@@ -29,8 +43,7 @@ public class AutoWither extends Module {
         assert mc.player != null;
         assert mc.interactionManager != null;
         assert mc.world != null;
-        int soulSandSlot = -1;
-        int skullSlot = -1;
+        ticksPassed++;
         for(int i = 0; i < 9; i++){
             if (mc.player.inventory.getStack(i).getItem() == Blocks.SOUL_SAND.asItem()){
                 soulSandSlot = i;
@@ -54,53 +67,64 @@ public class AutoWither extends Module {
             return;
         }
         int prevSlot = mc.player.inventory.selectedSlot;
-        float[] startRot = new float[]{mc.player.yaw, mc.player.pitch};
         BlockPos targetPos = mc.player.getBlockPos();
-        if(
-            //mc.world.getBlockState(targetPos.add(1, 0, 1)).getMaterial().toString().contains("AIR") &&
-            //mc.world.getBlockState(targetPos.add(1, 0, -1)).getMaterial().toString().contains("AIR") &&
-            mc.world.getBlockState(targetPos.add(1, 0, 0)).getMaterial().isReplaceable() &&
-            mc.world.getBlockState(targetPos.add(1, 1, 0)).getMaterial().isReplaceable() &&
-            mc.world.getBlockState(targetPos.add(1, 1, 1)).getMaterial().isReplaceable() &&
-            mc.world.getBlockState(targetPos.add(1, 1, -1)).getMaterial().isReplaceable() &&
-            mc.world.getBlockState(targetPos.add(1, 2, 0)).getMaterial().isReplaceable() &&
-            mc.world.getBlockState(targetPos.add(1, 2, 1)).getMaterial().isReplaceable() &&
-            mc.world.getBlockState(targetPos.add(1, 2, -1)).getMaterial().isReplaceable()
-        ){
-            BleachLogger.warningMessage("Attempting to place wither");
-            mc.player.inventory.selectedSlot = soulSandSlot;
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 0, 0), Direction.UP, targetPos.add(1, 0, 0), false));
-            mc.player.swingHand(Hand.MAIN_HAND);
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, 0), Direction.UP, targetPos.add(1, 1, 0), false));
-            mc.player.swingHand(Hand.MAIN_HAND);
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, 1), Direction.UP, targetPos.add(1, 1, 1), false));
-            mc.player.swingHand(Hand.MAIN_HAND);
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, -1), Direction.UP, targetPos.add(1, 1, -1), false));
-            mc.player.swingHand(Hand.MAIN_HAND);
-            mc.player.inventory.selectedSlot = skullSlot;
-
-
-            if (getSetting(0).asToggle().state) {
-                Vec3d centerPos = Vec3d.of(mc.player.getBlockPos()).add(0.5, 0.5, 0.5);
-                mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
-                mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
+        if (ticksPassed == 1) {
+            if(
+                //mc.world.getBlockState(targetPos.add(1, 0, 1)).getMaterial().toString().contains("AIR") &&
+                //mc.world.getBlockState(targetPos.add(1, 0, -1)).getMaterial().toString().contains("AIR") &&
+                    mc.world.getBlockState(targetPos.add(1, 0, 0)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 1, 0)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 1, 1)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 1, -1)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 2, 0)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 2, 1)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 2, -1)).getMaterial().isReplaceable()
+            ){
+                if (getSetting(1).asToggle().state) {
+                    BleachLogger.warningMessage("Attempting to place wither body");
+                }
+                mc.player.inventory.selectedSlot = soulSandSlot;
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 0, 0), Direction.UP, targetPos.add(1, 0, 0), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, 0), Direction.UP, targetPos.add(1, 1, 0), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, 1), Direction.UP, targetPos.add(1, 1, 1), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 1, -1), Direction.UP, targetPos.add(1, 1, -1), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
             }
-
-            WorldUtils.facePos(mc.player.getPos().x, mc.player.getPos().y-2, mc.player.getPos().z);
-            WorldUtils.facePosPacket(mc.player.getPos().x, mc.player.getPos().y-2, mc.player.getPos().z);
-
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, 0), Direction.EAST, targetPos.add(1, 2, 0), false));
-            mc.player.swingHand(Hand.MAIN_HAND);
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, 1), Direction.EAST, targetPos.add(1, 2, 1), false));
-            mc.player.swingHand(Hand.MAIN_HAND);
-            mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, -1), Direction.DOWN, targetPos.add(1, 2, -1), false));
-            mc.player.swingHand(Hand.MAIN_HAND);
-
-            WorldUtils.facePos(mc.player.getPos().x+1, mc.player.getPos().y+1, mc.player.getPos().z);
-            WorldUtils.facePosPacket(mc.player.getPos().x+1, mc.player.getPos().y+1, mc.player.getPos().z);
-
         }
-        mc.player.inventory.selectedSlot = prevSlot;
-        ModuleManager.getModule(AutoWither.class).toggle();
+        if (ticksPassed == 2) {
+            if(
+                    mc.world.getBlockState(targetPos.add(1, 3, 0)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 3, 1)).getMaterial().isReplaceable() &&
+                            mc.world.getBlockState(targetPos.add(1, 3, -1)).getMaterial().isReplaceable()
+            ) {
+                if (getSetting(1).asToggle().state) {
+                    BleachLogger.warningMessage("Attempting to place wither skulls");
+                }
+                mc.player.inventory.selectedSlot = skullSlot;
+                if (getSetting(0).asToggle().state) {
+                    Vec3d centerPos = Vec3d.of(mc.player.getBlockPos()).add(0.5, 0.5, 0.5);
+                    mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
+                    mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
+                }
+
+                WorldUtils.facePos(mc.player.getPos().x, mc.player.getPos().y - 2, mc.player.getPos().z);
+                WorldUtils.facePosPacket(mc.player.getPos().x, mc.player.getPos().y - 2, mc.player.getPos().z);
+
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, 0), Direction.EAST, targetPos.add(1, 2, 0), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, 1), Direction.EAST, targetPos.add(1, 2, 1), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos().add(2, 2, -1), Direction.DOWN, targetPos.add(1, 2, -1), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+
+                WorldUtils.facePos(mc.player.getPos().x + 1, mc.player.getPos().y + 1, mc.player.getPos().z);
+                WorldUtils.facePosPacket(mc.player.getPos().x + 1, mc.player.getPos().y + 1, mc.player.getPos().z);
+            }
+            mc.player.inventory.selectedSlot = prevSlot;
+            ModuleManager.getModule(AutoWither.class).toggle();
+        }
     }
 }
