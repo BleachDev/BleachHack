@@ -29,14 +29,15 @@ public class ClickGui extends Module {
 
     public static ClickGuiScreen clickGui = new ClickGuiScreen();
 
-    public ClickGui() {
+     public ClickGui() {
         super("ClickGUI", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.CLIENT, "Draws the clickgui",
                 new SettingSlider("Length", 70, 85, 85, 0),
                 new SettingToggle("Search bar", true),
                 new SettingToggle("Help", true),
                 new SettingToggle("Static descriptions", true),
                 new SettingMode("Theme", "SalHackSkid", "Wire", "Full", "Clear"),
-                new SettingToggle("Icons", true));
+                new SettingToggle("Icons", true),
+                new SettingToggle("Enable Padding", true));
     }
 
     public void onEnable() {
