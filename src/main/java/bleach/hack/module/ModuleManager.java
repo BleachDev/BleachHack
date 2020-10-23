@@ -60,6 +60,7 @@ public class ModuleManager {
         new ColourChooser(),
         new Criticals(),
         //new CrystalAuraRewrite(),
+        new CrystalAura(),
         new CustomChat(),
         new DiscordRPCMod(),
         new Dispenser32k(),
