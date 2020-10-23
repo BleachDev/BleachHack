@@ -189,6 +189,7 @@ public class WorldUtils {
             facePos(x, y, z);
     }
 
+
     public static void facePos(double x, double y, double z) {
         double diffX = x - mc.player.getX();
         double diffY = y - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));

@@ -34,7 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RayTraceContext;
+import net.minecraft.world.RaycastContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -475,10 +475,10 @@ public class CrystalAuraRewrite extends Module
 
             // create a raytrace between player's position and the selected block position
 //            assert mc.world != null;
-//            BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
+//            BlockHitResult result = mc.world.raycast(new RaycastContext(
 //                    new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
 //                    new Vec3d(crystal.getX() + 0.5D, crystal.getY() - 0.5D, crystal.getZ() + 0.5D),
-//                    RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
+//                    RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player));
 //            // this will allow for bypassing placing through walls afaik
 //            Direction facing;
 //
@@ -500,10 +500,10 @@ public class CrystalAuraRewrite extends Module
 //            if (!getSetting(4).asToggle().getChild(1).asToggle().state) {
 //                f = Direction.UP;
 //            } else {
-//                BlockHitResult result = mc.world.rayTrace(new RayTraceContext(
+//                BlockHitResult result = mc.world.raycast(new RaycastContext(
 //                        new Vec3d(mc.player.getX(), mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()), mc.player.getZ()),
 //                        new Vec3d(crystal.getX() + 0.5D, crystal.getY() - 0.5D, crystal.getZ() + 0.5D),
-//                        RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player));
+//                        RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player));
 //
 //                if (_placedCrystals.contains(selectedPos))
 //                    _placedCrystals.remove(selectedPos);

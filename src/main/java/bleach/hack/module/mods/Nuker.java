@@ -36,7 +36,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.RayTraceContext;
+import net.minecraft.world.RaycastContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,8 +148,8 @@ public class Nuker extends Module {
                 MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F));
 
         Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
-        return mc.world.rayTrace(new RayTraceContext(mc.player.getCameraPosVec(mc.getTickDelta()),
-                rayVec, RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, mc.player))
+        return mc.world.raycast(new RaycastContext(mc.player.getCameraPosVec(mc.getTickDelta()),
+                rayVec, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player))
                 .getBlockPos().equals(pos);
     }
 

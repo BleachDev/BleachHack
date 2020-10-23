@@ -29,7 +29,7 @@ import net.fabricmc.api.ModInitializer;
 
 public class BleachHack implements ModInitializer {
 
-    public static final String VERSION = "b2200";
+    public static final String VERSION = "b2300";
     public static final int INTVERSION = 24;
 
     public static EventBus eventBus = new EventBus();
@@ -76,6 +76,10 @@ public class BleachHack implements ModInitializer {
             BleachFileMang.appendFile("autism", "cleanchat.txt");
             BleachFileMang.appendFile("chink", "cleanchat.txt");
             BleachFileMang.appendFile("tranny", "cleanchat.txt");
+            BleachFileMang.appendFile("fuck", "cleanchat.txt");
+            BleachFileMang.appendFile("shit", "cleanchat.txt");
+            BleachFileMang.appendFile("nigga", "cleanchat.txt");
+
         }
     }
 }

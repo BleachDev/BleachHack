@@ -82,7 +82,8 @@ public class StashFinder extends Module {
                     if (this.nextChunks.contains(c)) {
                         this.nextChunks.remove(c);
                         if (!sorted) {
-                            this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
+                            //this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
+                            this.nextChunks.sort(Comparator.comparingDouble(a -> a.getStartPos().getSquaredDistance(this.mc.player.getBlockPos())));
                             sorted = true;
                         }
                     }
@@ -116,7 +117,8 @@ public class StashFinder extends Module {
                 }
             }
 
-            this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
+            //this.nextChunks.sort(Comparator.comparingDouble(a -> a.getCenterBlockPos().getSquaredDistance(this.mc.player.getBlockPos())));
+            this.nextChunks.sort(Comparator.comparingDouble(a -> a.getStartPos().getSquaredDistance(this.mc.player.getBlockPos())));
         }
     }
 

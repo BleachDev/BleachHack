@@ -60,7 +60,7 @@ public class CustomChat extends Module {
     public String suffix = " \u01c0 \u0299\u029f\u1d07\u1d00\u1d04\u029c\u029c\u1d00\u1d04\u1d0b \u005b\uff45\uff50\uff45\uff41\uff52\uff4c \uff45\uff44\uff49\uff54\uff49\uff4f\uff4e\u005d";
 
     public CustomChat() {
-        super("CustomChat", KEY_UNBOUND, Category.MISC, "Customizes your chat messages, use the \"customchat\" command to edit the stuff",
+        super("CustomChat", KEY_UNBOUND, Category.CHAT, "Customizes your chat messages, use the \"customchat\" command to edit the stuff",
                 new SettingToggle("CustomFont", true).withDesc("Adds a custom font in your messages"),
                 new SettingMode("Font", "\uff41\uff42\uff43\uff44\uff45", "\u1D00\u0299\u1d04\u1d05\u1d07",
                         "\u24d0\u24d1\u24d2\u24d3\u24d4", "\u039bb\u1455d\u03A3", "\u03b1\u0432c\u2202\u0454").withDesc("Custom font to use"),

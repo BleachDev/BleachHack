@@ -55,6 +55,9 @@ public class PopoutGUI extends Module {
                 );
     }
     public void onEnable() {
+        if(!GraphicsEnvironment.isHeadless()) {
+            System.setProperty("java.awt.headless", "false");
+        }
         new b();
         super.onEnable();
     }

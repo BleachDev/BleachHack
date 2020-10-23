@@ -73,7 +73,6 @@ public class Scaffold extends Module {
 
         if (slot == -1) return;
 
-        mc.player.inventory.selectedSlot = slot;
         double range = getSetting(0).asSlider().getValue();
         int mode = getSetting(1).asMode().mode;
 
@@ -116,6 +115,7 @@ public class Scaffold extends Module {
 
         int cap = 0;
         for (BlockPos bp : blocks) {
+            mc.player.inventory.selectedSlot = slot;
             if (getSetting(2).asRotate().state) {
                 WorldUtils.facePosAuto(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5, getSetting(2).asRotate());
             }
@@ -127,8 +127,8 @@ public class Scaffold extends Module {
                 if (cap >= (int) getSetting(6).asSlider().getValue()) return;
             }
         }
-
         mc.player.inventory.selectedSlot = prevSlot;
+
     }
 
     @Subscribe

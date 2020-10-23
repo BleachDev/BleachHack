@@ -81,6 +81,10 @@ public class EntityUtils {
         South,
         East,
         West,
+        SouthEast,
+        SouthWest,
+        NorthWest,
+        NorthEast,
     }
 
     public static FacingDirection GetFacing()
@@ -98,13 +102,9 @@ public class EntityUtils {
             case 6:
             case 7:
                 return FacingDirection.East;
+            case 8:
         }
         return FacingDirection.North;
-    }
-
-    public static Vec3d getInterpolatedAmount(Entity entity, double ticks)
-    {
-        return getInterpolatedAmount(entity, ticks);
     }
 
     public static double GetDistance(double p_X, double p_Y, double p_Z, double x, double y, double z)
@@ -124,6 +124,33 @@ public class EntityUtils {
     public static boolean IsEating()
     {
         return mc.player != null &&  mc.player.getActiveItem().getItem() == Items.GOLDEN_APPLE;
+    }
+
+    public static float GetRotationYawForCalc()
+    {
+        float rotationYaw = mc.player.yaw;
+        if (mc.player.forwardSpeed < 0.0f)
+        {
+            rotationYaw += 180.0f;
+        }
+        float n = 1.0f;
+        if (mc.player.forwardSpeed < 0.0f)
+        {
+            n = -0.5f;
+        }
+        else if (mc.player.forwardSpeed > 0.0f)
+        {
+            n = 0.5f;
+        }
+        if (mc.player.sidewaysSpeed > 0.0f)
+        {
+            rotationYaw -= 90.0f * n;
+        }
+        if (mc.player.sidewaysSpeed < 0.0f)
+        {
+            rotationYaw += 90.0f * n;
+        }
+        return rotationYaw * 0.017453292f;
     }
 
 }

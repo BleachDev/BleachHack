@@ -42,7 +42,7 @@ public class Ghosthand extends Module {
         if (!mc.options.keyUse.isPressed() || mc.player.isSneaking()) return;
 
         for (BlockEntity b : mc.world.blockEntities) {
-            if (new BlockPos(mc.player.rayTrace(4.25, mc.getTickDelta(), false).getPos()).equals(b.getPos())) return;
+            if (new BlockPos(mc.player.raycast(4.25, mc.getTickDelta(), false).getPos()).equals(b.getPos())) return;
         }
 
         List<BlockPos> posList = new ArrayList<>();

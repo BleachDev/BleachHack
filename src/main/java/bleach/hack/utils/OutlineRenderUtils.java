@@ -101,7 +101,7 @@ public class OutlineRenderUtils {
 
         if (fbo != null) {
             // Checks if screen has been resized or new FBO has been created
-            if (fbo.method_30278() > -1) {
+            if (fbo.getDepthAttachment() > -1) {
                 // Sets up the FBO with depth and stencil extensions (24/8 bit)
                 setupFBO(fbo);
                 // Reset the ID to prevent multiple FBO's
@@ -112,7 +112,7 @@ public class OutlineRenderUtils {
 
     public static void setupFBO(Framebuffer fbo) {
         // Deletes old render buffer extensions such as depth
-        EXTFramebufferObject.glDeleteRenderbuffersEXT(fbo.method_30278());
+        EXTFramebufferObject.glDeleteRenderbuffersEXT(fbo.getDepthAttachment());
         // Generates a new render buffer ID for the depth and stencil extension
         int stencil_depth_buffer_ID = EXTFramebufferObject.glGenRenderbuffersEXT();
         // Binds new render buffer by ID
