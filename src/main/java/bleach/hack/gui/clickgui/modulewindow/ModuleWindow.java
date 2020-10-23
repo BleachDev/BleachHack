@@ -92,11 +92,20 @@ public class ModuleWindow extends ClickGuiWindow {
                 //DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
                 //DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
             }
-            DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY,
+            DrawableHelper.fill(matrix, x, y + curY, x + len + 1, y + 13 + curY,
                     mouseOver(x, y + curY, x + len, y + 12 + curY) ? 0x70303070 : 0x00000000);
 
+            if(ModuleManager.getModule(ClickGui.class).getSetting(6).asToggle().state) {
+                DrawableHelper.fill(matrix, x + 1, y + curY, x + len, y + 12 + curY,
+                        m.getKey().isToggled() ? ColourThingy.guiColour() : 0x00ff0000);
+            }else
+                {
+                    DrawableHelper.fill(matrix, x, y + curY, x + len + 1, y + 12 + curY,
+                            m.getKey().isToggled() ? ColourThingy.guiColour() : 0x00ff0000);
+                }
+
             textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
-                    x + 2, y + 2 + curY, m.getKey().isToggled() ? ColourThingy.guiColour() : 0xc0c0c0);
+                    x + 3, y + 2 + curY, m.getKey().isToggled() ? 0xFFFFFF : 0xc0c0c0);
 
             //If they match: Module gets marked red
             if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
