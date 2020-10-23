@@ -144,6 +144,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
         }
 
         int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
+
         for (Window w : windows) {
             if (w instanceof ClickGuiWindow) {
                 if (w instanceof ModuleWindow) {
