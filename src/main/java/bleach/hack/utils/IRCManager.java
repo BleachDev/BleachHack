@@ -43,7 +43,10 @@ public class IRCManager {
         public void onUserJoinChannel(ChannelJoinEvent event) {
             BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77] \u00A7f"+event.getUser().getNick()+" \u00A79joined the IRC chat");
             if(event.getUser().getNick().equals(MinecraftClient.getInstance().getSession().getUsername()) && ModuleManager.getModule(IRCMod.class).getSetting(1).asToggle().state) {
-                BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77] \u00A79Welcome to the IRC! Use the \u00A7f\"+\" \u00A79prefix to send a message, \u00A7f\"+pm {username}\" \u00A79to private message an IRC member, and \u00A7f\"+channel #{example} \u00A79to set a custom channel. If you don't want to see the IRC, you can turn it off in the modules!");
+                BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77] \u00A79Welcome to the IRC! Use the \"+\" prefix to send a message,");
+                BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77] \u00A79\"+pm {username}\" to private message an IRC member,");
+                BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77] \u00A79and \"+channel #{example} to set a custom channel.");
+                BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77] \u00A79If you don't want to see the IRC, you can turn it off in the modules!");
             }
         }
         @Handler
