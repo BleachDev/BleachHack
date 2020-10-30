@@ -57,7 +57,7 @@ public class IRCManager {
         public void onChannelMessage(ChannelMessageEvent event) {
             if (lastMessage.equals(event.getMessage())) return;
             lastMessage = event.getMessage();
-            BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77]\u00A7f "+(ModuleManager.getModule(IRCMod.class).getSetting(2).asToggle().state ? event.getChannel().toString()+" <" : "<")+event.getActor().getNick()+"> "+event.getMessage());
+            BleachLogger.noPrefixMessage("\u00A77[\u00A79IRC\u00A77]\u00A7f "+(ModuleManager.getModule(IRCMod.class).getSetting(2).asToggle().state ? CustomChannel+" <" : "<")+event.getActor().getNick()+"> "+event.getMessage());
         }
         @Handler
         public void onPrivateMessage(PrivateMessageEvent event) {
