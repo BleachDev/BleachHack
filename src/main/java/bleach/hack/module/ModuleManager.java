@@ -65,6 +65,7 @@ public class ModuleManager {
         new DiscordRPCMod(),
         new Dispenser32k(),
         new Discord(),
+        new IRCMod(),
         new DonkeyAlert(),
         new ElytraFly(),
         new ElytraReplace(),
