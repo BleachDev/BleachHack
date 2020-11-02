@@ -12,8 +12,8 @@ import net.minecraft.client.render.SkyProperties;
 @Mixin(SkyProperties.class)
 public class MixinSkyProperties {
 
-	@Inject(at = @At("HEAD"), method = "getSkyColor", cancellable = true)
-	public void getSkyColor(float skyAngle, float tickDelta, CallbackInfoReturnable<float[]> ci) {
+	@Inject(at = @At("HEAD"), method = "getFogColorOverride", cancellable = true)
+	public void getFogColorOverride(float skyAngle, float tickDelta, CallbackInfoReturnable<float[]> ci) {
 		EventSkyColor.SkyColor event = new EventSkyColor.SkyColor(tickDelta);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) {

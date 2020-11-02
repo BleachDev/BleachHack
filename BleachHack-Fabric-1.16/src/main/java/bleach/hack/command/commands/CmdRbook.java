@@ -30,7 +30,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.packet.c2s.play.BookUpdateC2SPacket;
-import net.minecraft.util.Hand;
 
 public class CmdRbook extends Command {
 
@@ -72,7 +71,7 @@ public class CmdRbook extends Command {
 			textSplit.add(StringTag.of(text.substring(t * pageChars, (t + 1) * pageChars)));
 
 		item.getOrCreateTag().put("pages", textSplit);
-		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, Hand.MAIN_HAND));
+		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, mc.player.inventory.selectedSlot));
 	}
 
 }

@@ -114,8 +114,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Inject(at = @At("HEAD"), method = "method_30673", cancellable = true)
-	protected void method_30673(double double_1, double double_2, CallbackInfo ci) {
+	@Inject(at = @At("HEAD"), method = "pushOutOfBlocks", cancellable = true)
+	protected void pushOutOfBlocks(double double_1, double double_2, CallbackInfo ci) {
 		if (ModuleManager.getModule(Freecam.class).isToggled()) {
 			ci.cancel();
 		}
