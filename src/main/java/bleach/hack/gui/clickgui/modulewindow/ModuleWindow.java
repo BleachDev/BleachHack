@@ -21,7 +21,7 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.setting.base.SettingBase;
-import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.ColorUtils;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -97,11 +97,11 @@ public class ModuleWindow extends ClickGuiWindow {
 
             if(ModuleManager.getModule(ClickGui.class).getSetting(6).asToggle().state) {
                 DrawableHelper.fill(matrix, x + 1, y + curY, x + len, y + 12 + curY,
-                        m.getKey().isToggled() ? ColourThingy.guiColour() : 0x00ff0000);
+                        m.getKey().isToggled() ? ColorUtils.guiColour() : 0x00ff0000);
             }else
                 {
                     DrawableHelper.fill(matrix, x, y + curY, x + len + 1, y + 12 + curY,
-                            m.getKey().isToggled() ? ColourThingy.guiColour() : 0x00ff0000);
+                            m.getKey().isToggled() ? ColorUtils.guiColour() : 0x00ff0000);
                 }
 
             textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
@@ -179,7 +179,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
     protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
         super.drawBar(matrix, mX, mY, textRend);
-        textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 4 : 0), ColourThingy.textColor());
+        textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 4 : 0), ColorUtils.textColor());
     }
 
     public Triple<Integer, Integer, String> getTooltip() {

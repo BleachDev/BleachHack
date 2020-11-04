@@ -18,7 +18,7 @@
 package bleach.hack.setting.base;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
-import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.ColorUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.client.MinecraftClient;
@@ -69,7 +69,7 @@ public class SettingSlider extends SettingBase {
     public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
         int pixels = (int) Math.round(MathHelper.clamp((len - 2) * ((getValue() - min) / (max - min)), 0, len - 2));
         //TODO make it fill the slider w/ static selected color instead of pasting it twice into a gradient LMFAO also implement rainbow
-        window.fillGradient(matrix, x + 1, y, x + pixels, y + 12, ColourThingy.guiColour(), ColourThingy.guiColour());
+        window.fillGradient(matrix, x + 1, y, x + pixels, y + 12, ColorUtils.guiColour(), ColorUtils.guiColour());
 
         MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
                 text + ": " + (decimals == 0 && getValue() > 100 ? Integer.toString((int) getValue()) : getValue()),

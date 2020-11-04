@@ -60,7 +60,7 @@ public class ModuleManager {
         new TablistTweaks(),
         new ClickTp(),
         new ColorSigns(),
-        new ColourChooser(),
+        new Colours(),
         new Criticals(),
         new CustomChat(),
         new DiscordRPCMod(),
