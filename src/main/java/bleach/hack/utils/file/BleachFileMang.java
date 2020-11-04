@@ -38,6 +38,7 @@ public class BleachFileMang {
         if (!dir.toFile().exists()) {
             dir.toFile().mkdirs();
             ModuleManager.getModuleByName("UI").setToggled(true);
+            ModuleManager.getModuleByName("IRC").setToggled(true);
         }
     }
 

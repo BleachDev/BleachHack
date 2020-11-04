@@ -59,6 +59,8 @@ public class EntityUtil {
 //        return getInterpolatedPos(entity, ticks).subtract(renderPos);
 //    }
 
+
+
     public static boolean isInWater(Entity entity) {
         if(entity == null) return false;
 
