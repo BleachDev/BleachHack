@@ -106,7 +106,12 @@ public class UI extends Module {
                 new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords").withChildren( // 4
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 200, 0).withDesc("y coordinates"),
-                        new SettingToggle("Right Align", true)),
+                        new SettingToggle("Right Align", true),
+                        new SettingToggle("Show X", true),
+                        new SettingToggle("Show Y", true),
+                        new SettingToggle("Show Z", true),
+                        new SettingToggle("Show Nether", true)
+                ),
                 new SettingToggle("TPS", true).withDesc("Shows the estimated server tps").withChildren( // 5
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
                         new SettingSlider("y", 1, 3840, 210, 0).withDesc("y coordinates"),
@@ -296,7 +301,21 @@ public class UI extends Module {
             Vec3d vec = mc.player.getPos();
             BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
                     : new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
-            String coords = "XYZ" + (getSetting(24).asToggle().state ? " \u00A7f" : "\u00a77: \u00a7r") + pos.getX() + " " + pos.getY() + " " + pos.getZ() + (getSetting(24).asToggle().state ? " \u00a77[\u00a7f" : " \u00a77[\u00a7r") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]";
+
+            String nether_coords = (getSetting(24).asToggle().state ? "\u00a77[\u00a7f" : " \u00a77[\u00a7r")
+                    + (getSetting(4).asToggle().getChild(3).asToggle().state ? pos2.getX()+" " : "")
+                    + (getSetting(4).asToggle().getChild(4).asToggle().state ? pos2.getY()+" " : "")
+                    + (getSetting(4).asToggle().getChild(5).asToggle().state ? pos2.getZ()+"" : "")
+                    + "\u00a77]";
+            String coords = (getSetting(4).asToggle().getChild(3).asToggle().state ? "X" : "")
+                    + (getSetting(4).asToggle().getChild(4).asToggle().state ? "Y" : "")
+                    + (getSetting(4).asToggle().getChild(5).asToggle().state ? "Z" : "")
+                    + (getSetting(24).asToggle().state ? " \u00A7f" : "\u00a77: \u00a7r")
+                    + (getSetting(4).asToggle().getChild(3).asToggle().state ? pos.getX()+" " : "")
+                    + (getSetting(4).asToggle().getChild(4).asToggle().state ? pos.getY()+" " : "")
+                    + (getSetting(4).asToggle().getChild(5).asToggle().state ? pos.getZ()+" " : "")
+                    + (getSetting(4).asToggle().getChild(6).asToggle().state ? nether_coords : "");
+
             if (getSetting(4).asToggle().getChild(2).asToggle().state) {
                 mc.textRenderer.drawWithShadow(event.matrix, coords,
                         (int) getSetting(4).asToggle().getChild(0).asSlider().getValue(),

@@ -78,6 +78,9 @@ public class Nuker extends Module {
                     BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
                     if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos))
                         continue;
+                    if (!mc.player.abilities.creativeMode && mc.world.getBlockState(pos).getBlock() == Blocks.BEDROCK) {
+                        return;
+                    }
                     blocks.add(pos);
                 }
             }
