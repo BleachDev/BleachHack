@@ -39,6 +39,7 @@ public class ModuleManager {
         new AutoAnvil(),
         new AutoArmor(),
         new AutoDonkeyDupe(),
+        new AutoDox(),
         new AutoEat(),
         new AutoFish(),
         new AutoLog(),
