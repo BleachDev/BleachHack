@@ -229,6 +229,7 @@ public class PopoutGUI extends Module {
         ui_lines.add(playercount + "\n\n");
         ui_lines.add(radar_title + "\n");
         ui_lines.add(radar_player_list + "\n");
+        ui_lines.add("Snowballs: "+NoRender.snowballsRemoved + "\n");
         StringBuilder ui_string = new StringBuilder();
         for (String s : ui_lines)
         {

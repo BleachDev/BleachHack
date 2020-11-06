@@ -1,19 +1,20 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.*;
+import bleach.hack.utils.BleachLogger;
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventParticle;
-import bleach.hack.event.events.EventSignBlockEntityRender;
-import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.client.particle.ExplosionLargeParticle;
+import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.particle.ParticleTypes;
 
 public class NoRender extends Module {
+    public static int snowballsRemoved;
 
     public NoRender() {
         super("NoRender", KEY_UNBOUND, Category.RENDER, "Blocks certain elements from rendering",
@@ -28,19 +29,30 @@ public class NoRender extends Module {
                 new SettingToggle("Wobble", true).withDesc("Removes the nausea effect"), // 6
                 new SettingToggle("BossBar", false).withDesc("Removes bossbars"), // 7
                 new SettingToggle("Totem", false).withDesc("Removes the totem animation").withChildren(
-                        new SettingToggle("Particles", true).withDesc("Removes the yellow-green particles when a totem is used"),
-                        new SettingToggle("Sound", false).withDesc("Removes the totem sound when a totem is used")),
+                new SettingToggle("Particles", true).withDesc("Removes the yellow-green particles when a totem is used"),
+                new SettingToggle("Sound", false).withDesc("Removes the totem sound when a totem is used")),
                 new SettingToggle("Shield-WIP", false).withDesc("Removes your sheild"), // 9
                 new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse"),
                 new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)"),
                 new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"),
                 new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren(
-                        new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")));
+                new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
+                new SettingToggle("Snowball", false).withDesc("Disables rendering snowballs"));
     }
 
     @Subscribe
     public void signRender(EventSignBlockEntityRender event) {
         if (this.getSetting(5).asToggle().state) {
+            event.setCancelled(true);
+        }
+    }
+
+
+    @Subscribe
+    public void onRenderSnowball(EventWorldRenderEntity event) {
+        if (this.getSetting(14).asToggle().state && event.entity instanceof SnowballEntity) {
+            event.entity.remove();
+            snowballsRemoved++;
             event.setCancelled(true);
         }
     }
@@ -70,5 +82,11 @@ public class NoRender extends Module {
         } else if (getSetting(10).asToggle().state && event.instance.getId().getPath().equals("entity.elder_guardian.curse")) {
             event.setCancelled(true);
         }
+    }
+
+    @Override
+    public void onDisable() {
+        snowballsRemoved = 0;
+        super.onDisable();
     }
 }
