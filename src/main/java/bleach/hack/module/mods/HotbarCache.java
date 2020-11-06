@@ -35,7 +35,7 @@ public class HotbarCache extends Module {
 
     public HotbarCache() {
         super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
-                new SettingMode("Item: ", "Pickaxe", "Crystal", "Gapple"),
+                new SettingMode("Item: ", "Pickaxe", "Crystal", "Gapple", "Snowball"),
                 new SettingMode("Mode: ", "Switch", "Pull"));
     }
 
@@ -80,20 +80,47 @@ public class HotbarCache extends Module {
                         }
                     }
                     break;
-            }
-        }
-        if (getSettings().get(1).asMode().mode == 1) {
-            for (int c = 0; c > 9; c++)
-                if (mc.player.inventory.getStack(c).getItem() != Items.DIAMOND_PICKAXE || mc.player.inventory.getStack(c).getItem() != Items.NETHERITE_PICKAXE) {
-                    for (int i = 9; i < 45; i++) {
-                        if (mc.player.inventory.getStack(i).getItem() == Items.DIAMOND_PICKAXE || mc.player.inventory.getStack(i).getItem() == Items.NETHERITE_PICKAXE) {
-                            mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
-                            mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, c, 0, SlotActionType.PICKUP, mc.player);
-                            mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
-                            return;
+                case 3:
+
+                    /* Inventory */
+                    if (mc.player.inventory.getStack(0).isEmpty() || mc.player.inventory.getStack(0).getItem() != Items.SNOWBALL) {
+                        for (int i = 0; i < 9; i++) {
+                            if (mc.player.inventory.getStack(i).getItem() == Items.SNOWBALL) {
+                                mc.player.inventory.selectedSlot = i;
+                                return;
+                            }
                         }
                     }
-                }
+                    break;
+            }
+        }
+        if (getSetting(1).asMode().mode == 1) {
+            if (getSetting(0).asMode().mode == 0) {
+                for (int c = 0; c > 9; c++)
+                    if (mc.player.inventory.getStack(c).getItem() != Items.DIAMOND_PICKAXE || mc.player.inventory.getStack(c).getItem() != Items.NETHERITE_PICKAXE) {
+                        for (int i = 9; i < 45; i++) {
+                            if (mc.player.inventory.getStack(i).getItem() == Items.DIAMOND_PICKAXE || mc.player.inventory.getStack(i).getItem() == Items.NETHERITE_PICKAXE) {
+                                mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
+                                mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, c, 0, SlotActionType.PICKUP, mc.player);
+                                mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
+                                return;
+                            }
+                        }
+                    }
+            } else if (getSetting(0).asMode().mode == 3) {
+                for (int c = 0; c > 9; c++)
+                    if (mc.player.inventory.getStack(c).getItem() != Items.SNOWBALL) {
+                        for (int i = 9; i < 45; i++) {
+                            if (mc.player.inventory.getStack(i).getItem() == Items.SNOWBALL) {
+                                mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
+                                mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, c, 0, SlotActionType.PICKUP, mc.player);
+                                mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
+                                return;
+                            }
+                        }
+                    }
+            }
+
         }
     }
 
