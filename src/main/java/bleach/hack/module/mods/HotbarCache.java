@@ -22,6 +22,7 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.Timer;
 import bleach.hack.utils.Wrapper;
 import com.google.common.eventbus.Subscribe;
@@ -42,6 +43,25 @@ public class HotbarCache extends Module {
 
     public HotbarCache() {
         super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
+                new SettingMode("Item", "Pickaxe", "Crystal", "Gapple"),
+                new SettingMode("Mode", "Switch", "Pull", "Refill"));
+    }
+
+    private ArrayList<Item> Hotbar = new ArrayList<Item>();
+    private Timer timer = new Timer();
+
+    public void onEnable() {
+        Hotbar.clear();
+
+        for (int l_I = 0; l_I < 9; ++l_I)
+        {
+            ItemStack l_Stack = mc.player.inventory.getStack(l_I);
+
+            if (!l_Stack.isEmpty() && !Hotbar.contains(l_Stack.getItem()))
+                Hotbar.add(l_Stack.getItem());
+            else
+                Hotbar.add(Items.AIR);
+        }
     }
 
     @Subscribe
@@ -101,6 +121,25 @@ public class HotbarCache extends Module {
                     break;
             }
         }
+        if (mc.currentScreen != null)
+            return;
+        if (!timer.passed(getSettings().get(0).asSlider().getValue() * 1000))
+            return;
+        if (getSettings().get(1).asMode().mode == 1) {
+            for (int l_I = 0; l_I < 9; ++l_I) {
+                if (SwitchSlotIfNeed(l_I)) {
+                    timer.reset();
+                    return;
+                }
+            }
+        }
+        if (getSettings().get(1).asMode().mode == 2) {
+            for (int l_I = 0; l_I < 9; ++l_I) {
+                if (RefillSlotIfNeed(l_I)) {
+                    timer.reset();
+                    return;
+                }
+            }
         }
     }
     private boolean SwitchSlotIfNeed(int p_Slot)
