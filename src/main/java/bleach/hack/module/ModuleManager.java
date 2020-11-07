@@ -41,6 +41,7 @@ public class ModuleManager {
         new AutoDonkeyDupe(),
         new AutoEat(),
         new AutoFish(),
+        new AutoAlign(),
         new AutoLog(),
         new AutoReconnect(),
         new AutoRespawn(),
@@ -131,6 +132,7 @@ public class ModuleManager {
         new AutoEZ(),
         new AutoTrap(),
         new AutoWither(),
+
         //new AutoBaritone(),
         //new FabritoneFix(),
         //new AutoDodge(),
@@ -141,6 +143,7 @@ public class ModuleManager {
         //new AutoBreed(),
         //new Test(),
         new UI()
+
     ).stream().sorted(Comparator.comparing(Module::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
 
     public static List<Module> getModules() {

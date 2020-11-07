@@ -188,7 +188,7 @@ public class UI extends Module {
                 new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
                 new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 16
                 new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 17
-                new SettingToggle("Impact+", true)
+                new SettingToggle("Impact+", true),
         );
     }
 
@@ -269,6 +269,7 @@ public class UI extends Module {
                 }
             }
         }
+
 
         if (getSetting(10).asToggle().state && !mc.options.debugEnabled) {
             if (getSetting(10).asToggle().getChild(7).asToggle().state) {
