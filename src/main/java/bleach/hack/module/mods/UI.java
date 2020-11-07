@@ -188,7 +188,8 @@ public class UI extends Module {
                 new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 15
                 new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 16
                 new SettingSlider("HueSpeed", 0.1, 50, 10, 1).withDesc("Rainbow Speed"), // 17
-                new SettingToggle("Impact+", true)
+                new SettingToggle("Impact+", true),
+                new SettingToggle("Test", true)
         );
     }
 
@@ -269,6 +270,7 @@ public class UI extends Module {
                 }
             }
         }
+
 
         if (getSetting(10).asToggle().state && !mc.options.debugEnabled) {
             if (getSetting(10).asToggle().getChild(7).asToggle().state) {
@@ -676,6 +678,9 @@ public class UI extends Module {
                     }
 
                     GL11.glPopMatrix();
+                }
+                if (getSetting(25).asToggle().state && !mc.options.debugEnabled) {
+                    mc.textRenderer.drawWithShadow(event.matrix, mc.player.inventory.getStack(0).getItem().toString() + mc.player.inventory.getStack(1).getItem().toString() + mc.player.inventory.getStack(2).getItem().toString() + mc.player.inventory.getStack(3).getItem().toString() + mc.player.inventory.getStack(4).getItem().toString() + mc.player.inventory.getStack(5).getItem().toString() + mc.player.inventory.getStack(6).getItem().toString() + mc.player.inventory.getStack(7).getItem().toString() + mc.player.inventory.getStack(8).getItem().toString(), 1, 350, ColourThingy.guiColour());
                 }
             }
 
