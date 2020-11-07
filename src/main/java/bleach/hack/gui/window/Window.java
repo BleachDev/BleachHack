@@ -19,7 +19,7 @@ package bleach.hack.gui.window;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
-import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.ColorUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -111,7 +111,7 @@ public class Window {
 
         /* window title */
         int iconWidth = drawIcon ? (icon.getItem() == Items.ARMOR_STAND || icon.getItem() == Items.POTION ? 13 : 14) : 4;
-        textRend.drawWithShadow(matrix, title, x1 + iconWidth, y1 + 3, ColourThingy.textColor());
+        textRend.drawWithShadow(matrix, title, x1 + iconWidth, y1 + 3, ColorUtils.textColor());
         if (inactiveTime >= 0) {
             inactiveTime--;
         }
