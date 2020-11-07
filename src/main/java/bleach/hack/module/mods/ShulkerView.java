@@ -6,7 +6,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.ColorUtils;
 import bleach.hack.utils.ItemContentUtils;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
@@ -41,7 +41,7 @@ public class ShulkerView extends Module {
                         (int) getSetting(1).asSlider().getValue(),
                         (int) getSetting(0).asSlider().getValue() + 146,
                         (int) getSetting(1).asSlider().getValue() + 50,
-                        ColourThingy.guiColour(),
+                        ColorUtils.guiColour(),
                         0.5f);
             } else if (getSetting(2).asMode().mode == 1) {
                 RenderUtils.drawRect(
@@ -73,7 +73,7 @@ public class ShulkerView extends Module {
         //                    (int) getSetting(1).asSlider().getValue(),
         //                    (int) getSetting(0).asSlider().getValue() + 146,
         //                    (int) getSetting(1).asSlider().getValue() + 50,
-        //                    ColourThingy.guiColour(),
+        //                    ColorUtils.guiColour(),
         //                    0.5f);
         //        } else if (getSetting(2).asMode().mode == 1) {
         //            RenderUtils.drawRect(
