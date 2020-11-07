@@ -4,7 +4,7 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
-import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.ColorUtils;
 import bleach.hack.utils.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -48,26 +48,26 @@ public abstract class ClickGuiWindow extends Window {
         //DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90000000);
         //DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
         if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 1) {
-            DrawableHelper.fill(matrix, x1, y1 + 12, x2, y1 + 13, ColourThingy.guiColour());
+            DrawableHelper.fill(matrix, x1, y1 + 12, x2, y1 + 13, ColorUtils.guiColour());
         } else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 2) {
             int x1M = Math.min(x1, x2);
             int y1M = Math.min(y1, y2);
             int y2M = Math.max(y1, y2);
             int x2M = Math.max(x1, x2);
-            RenderUtils.drawRect(x1M, y1M, x2M, y2M, ColourThingy.guiColour(), 0.2f);
+            RenderUtils.drawRect(x1M, y1M, x2M, y2M, ColorUtils.guiColour(), 0.2f);
         }
         else if (ModuleManager.getModule(ClickGui.class).getSetting(4).asMode().mode == 0){
             int x1M = Math.min(x1, x2);
             int y1M = Math.min(y1, y2);
             int y2M = Math.max(y1, y2);
             int x2M = Math.max(x1, x2);
-            RenderUtils.drawRect(x1M, y1M + 1, x2M, y1M + 12, ColourThingy.guiColour(), 1f);
-            RenderUtils.drawRect(x1M, y1M + 12, x2M, y2M, ColourThingy.guiColour(), 0.2f);
+            RenderUtils.drawRect(x1M, y1M + 1, x2M, y1M + 12, ColorUtils.guiColour(), 1f);
+            RenderUtils.drawRect(x1M, y1M + 12, x2M, y2M, ColorUtils.guiColour(), 0.2f);
         }
-        DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, ColourThingy.guiColour());
-        DrawableHelper.fill(matrix, x1, y2, x2 + 1, y2 - 1, ColourThingy.guiColour());
-        DrawableHelper.fill(matrix, x2, y1, x1, y1 + 1, ColourThingy.guiColour());
-        DrawableHelper.fill(matrix, x2, y2, x2 + 1, y1, ColourThingy.guiColour());
+        DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, ColorUtils.guiColour());
+        DrawableHelper.fill(matrix, x1, y2, x2 + 1, y2 - 1, ColorUtils.guiColour());
+        DrawableHelper.fill(matrix, x2, y1, x1, y1 + 1, ColorUtils.guiColour());
+        DrawableHelper.fill(matrix, x2, y2, x2 + 1, y1, ColorUtils.guiColour());
     }
 
     public boolean mouseOver(int minX, int minY, int maxX, int maxY) {

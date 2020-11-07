@@ -28,7 +28,7 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.module.mods.UI;
-import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.ColorUtils;
 import bleach.hack.utils.file.BleachFileHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -116,12 +116,12 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
         this.renderBackground(matrix);
         String watermark = "BleachHack epearl edition " + (ModuleManager.getModule(UI.class).getSetting(24).asToggle().state ? "\u00A7f" : "")  + BleachHack.VERSION + (ModuleManager.getModule(UI.class).getSetting(24).asToggle().state ? "+" : "");
-        textRenderer.drawWithShadow(matrix, watermark, 1, 1, ColourThingy.guiColour());
+        textRenderer.drawWithShadow(matrix, watermark, 1, 1, ColorUtils.guiColour());
         if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
             textRenderer.drawWithShadow(matrix,
-                    "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColourThingy.guiColour());
+                    "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, ColorUtils.guiColour());
             textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10,
-                    ColourThingy.guiColour());
+                    ColorUtils.guiColour());
 
         }
         if (ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
@@ -180,7 +180,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
                             int start = tooltipY - lines.size() * 10;
                             for (int l = 0; l < lines.size(); l++) {
-                                textRenderer.drawWithShadow(matrix, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), ColourThingy.guiColour());
+                                textRenderer.drawWithShadow(matrix, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), ColorUtils.guiColour());
                             }
 
                             tooltipY -= lines.size() * 10;
@@ -191,14 +191,14 @@ public class ClickGuiScreen extends AbstractWindowScreen {
                 if (w instanceof ClickGuiWindow) {
                     Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
                     if (tooltip != null) {
-                        textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 11, ColourThingy.guiColour());
+                        textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 11, ColorUtils.guiColour());
                     }
                 }
             } else if (ModuleManager.getModule(ClickGui.class).getSetting(3).asToggle().state && ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
                 if (w instanceof ClickGuiWindow) {
                     Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
                     if (tooltip != null) {
-                        textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 30, ColourThingy.guiColour());
+                        textRenderer.drawWithShadow(matrix, tooltip.getRight(), 2, height - 30, ColorUtils.guiColour());
                     }
                 }
             }

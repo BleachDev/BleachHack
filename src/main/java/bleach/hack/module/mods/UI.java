@@ -27,7 +27,7 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.ColourThingy;
+import bleach.hack.utils.ColorUtils;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
@@ -210,7 +210,7 @@ public class UI extends Module {
                     //if (s.equals("ElytraFly")) {
                     //    s = "ElytraFly" + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether") ? " \u00a77[\u00a7rNether\u00a77]" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end") ? " \u00a77[\u00a7rEnd\u00a77]" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("overworld") ? " \u00a77[\u00a7rOverworld\u00a77]" : "");
                     //}
-                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColourThingy.guiColour());
+                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColorUtils.guiColour());
                     arrayCount++;
                 }
             } else{
@@ -218,7 +218,7 @@ public class UI extends Module {
                     //if (s.equals("ElytraFly")) {
                     //    s = (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether") ? "\u00a77[\u00a7rNether\u00a77] \u00a7r" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end") ? "\u00a77[\u00a7rEnd\u00a77] \u00a7r" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("overworld") ? "\u00a77[\u00a7rOverworld\u00a77] \u00a7r" : "") + "ElytraFly";
                     //}
-                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(s), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColourThingy.guiColour());
+                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(s), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColorUtils.guiColour());
                     arrayCount++;
                 }
             }
@@ -229,9 +229,9 @@ public class UI extends Module {
         if (getSetting(8).asToggle().state && !mc.options.debugEnabled) {
             String radar_title = "Player Radar" + (getSetting(24).asToggle().state ? "" : "\u00a77:\u00a7r");
             if (getSetting(8).asToggle().getChild(2).asToggle().state) {
-                mc.textRenderer.drawWithShadow(event.matrix, radar_title, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+                mc.textRenderer.drawWithShadow(event.matrix, radar_title, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColorUtils.guiColour());
             } else {
-                mc.textRenderer.drawWithShadow(event.matrix, radar_title, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(radar_title), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+                mc.textRenderer.drawWithShadow(event.matrix, radar_title, (int) getSetting(8).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(radar_title), (int) getSetting(8).asToggle().getChild(1).asSlider().getValue(), ColorUtils.guiColour());
             }
 
                 playerarrayCount++;
@@ -276,22 +276,22 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, "Time" + (getSetting(24).asToggle().state ? " \u00A7f" : "\u00a77: \u00a7r") + time_now,
                         (int) getSetting(10).asToggle().getChild(5).asSlider().getValue(),
                         (int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 String time_now = new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "") + (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "") + "h:mm" + (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "") + (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "") + (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date());
                 mc.textRenderer.drawWithShadow(event.matrix, "Time" + (getSetting(24).asToggle().state ? " \u00A7f" : "\u00a77: \u00a7r") + time_now,
                         (int) getSetting(10).asToggle().getChild(5).asSlider().getValue() - mc.textRenderer.getWidth(time_now),
                         (int) getSetting(10).asToggle().getChild(6).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             }
         }
 
         if (getSetting(1).asToggle().state && !mc.options.debugEnabled) {
             String watermark = "BleachHack epearl edition " + (getSetting(24).asToggle().state ? "\u00A7f" : "")  + BleachHack.VERSION + (getSetting(24).asToggle().state ? "+" : "");
             if (getSetting(1).asToggle().getChild(2).asToggle().state) {
-                mc.textRenderer.drawWithShadow(event.matrix, watermark, (int) getSetting(1).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(1).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+                mc.textRenderer.drawWithShadow(event.matrix, watermark, (int) getSetting(1).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(1).asToggle().getChild(1).asSlider().getValue(), ColorUtils.guiColour());
             } else{
-                mc.textRenderer.drawWithShadow(event.matrix, watermark, (int) getSetting(1).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(watermark), (int) getSetting(1).asToggle().getChild(1).asSlider().getValue(), ColourThingy.guiColour());
+                mc.textRenderer.drawWithShadow(event.matrix, watermark, (int) getSetting(1).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(watermark), (int) getSetting(1).asToggle().getChild(1).asSlider().getValue(), ColorUtils.guiColour());
             }
         }
 
@@ -320,12 +320,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, coords,
                         (int) getSetting(4).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(4).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, coords,
                         (int) getSetting(4).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(coords),
                         (int) getSetting(4).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -337,12 +337,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, server1,
                         (int) getSetting(7).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(7).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, server1,
                         (int) getSetting(7).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(server1),
                         (int) getSetting(7).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             }
         }
 
@@ -354,12 +354,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, fps1,
                         (int) getSetting(2).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(2).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, fps1,
                         (int) getSetting(2).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(fps1),
                         (int) getSetting(2).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -374,12 +374,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, ping1,
                         (int) getSetting(3).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(3).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, ping1,
                         (int) getSetting(3).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(ping1),
                         (int) getSetting(3).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -394,12 +394,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, "BPS" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + bps,
                     (int) getSetting(11).asToggle().getChild(0).asSlider().getValue(),
                     (int) getSetting(11).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+                    ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, "BPS" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + bps,
                         (int) getSetting(11).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(bps),
                         (int) getSetting(11).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             }
         }
 
@@ -414,12 +414,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, "TPS" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + tps1,
                         (int) getSetting(5).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(5).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, "TPS" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + tps1,
                         (int) getSetting(5).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(tps1),
                         (int) getSetting(5).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             }
 
         }
@@ -433,12 +433,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, welcome,
                     (int) getSetting(13).asToggle().getChild(0).asSlider().getValue(),
                     (int) getSetting(13).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+                    ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, welcome,
                     (int) getSetting(13).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(welcome),
                     (int) getSetting(13).asToggle().getChild(1).asSlider().getValue(),
-                    ColourThingy.guiColour());
+                    ColorUtils.guiColour());
             }
         }
 
@@ -449,12 +449,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, playercount,
                         (int) getSetting(12).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(12).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else {
                 mc.textRenderer.drawWithShadow(event.matrix, playercount,
                         (int) getSetting(12).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(playercount),
                         (int) getSetting(12).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             }
         }
 
@@ -466,12 +466,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, "Biome" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + biome1,
                         (int) getSetting(14).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else {
                 mc.textRenderer.drawWithShadow(event.matrix, "Biome" + (getSetting(24).asToggle().state ? " \u00a7f" : "\u00a77: \u00a7r") + biome1,
                         (int) getSetting(14).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(biome1),
                         (int) getSetting(14).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             }
         }
 
@@ -488,7 +488,7 @@ public class UI extends Module {
                         (int)getSetting(15).asToggle().getChild(1).asSlider().getValue(),
                         (int) getSetting(15).asToggle().getChild(0).asSlider().getValue() + 146,
                         (int) getSetting(15).asToggle().getChild(1).asSlider().getValue() + 50,
-                        ColourThingy.guiColour(),
+                        ColorUtils.guiColour(),
                         0.5f);
             } else if (getSetting(15).asToggle().getChild(2).asMode().mode == 1) {
                 RenderUtils.drawRect(
@@ -518,12 +518,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, chunksizevar,
                         (int) getSetting(16).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(16).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, chunksizevar,
                         (int) getSetting(16).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(chunksizevar),
                         (int) getSetting(16).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -537,12 +537,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, saturationlevelvar,
                         (int) getSetting(17).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(17).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, saturationlevelvar,
                         (int) getSetting(17).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(saturationlevelvar),
                         (int) getSetting(17).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -553,12 +553,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, totemcountvar,
                         (int) getSetting(18).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(18).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, totemcountvar,
                         (int) getSetting(18).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(totemcountvar),
                         (int) getSetting(18).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -569,12 +569,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, bedcountvar,
                         (int) getSetting(19).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(19).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, bedcountvar,
                         (int) getSetting(19).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(bedcountvar),
                         (int) getSetting(19).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -588,12 +588,12 @@ public class UI extends Module {
                 mc.textRenderer.drawWithShadow(event.matrix, dura,
                         (int) getSetting(20).asToggle().getChild(0).asSlider().getValue(),
                         (int) getSetting(20).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
             } else{
                 mc.textRenderer.drawWithShadow(event.matrix, dura,
                         (int) getSetting(20).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(dura),
                         (int) getSetting(20).asToggle().getChild(1).asSlider().getValue(),
-                        ColourThingy.guiColour());
+                        ColorUtils.guiColour());
 
             }
         }
@@ -628,7 +628,7 @@ public class UI extends Module {
             int count2 = 0;
             for (String s : alertList) {
                 mc.textRenderer.drawWithShadow(event.matrix, s, mc.getWindow().getScaledWidth() / 2 - mc.textRenderer.getWidth(s) / 2,
-                        2 + (count2 * 10), ColourThingy.guiColour());
+                        2 + (count2 * 10), ColorUtils.guiColour());
                 count2++;
             }
 
@@ -662,11 +662,11 @@ public class UI extends Module {
                     GL11.glPushMatrix();
                     GL11.glScaled(0.75, 0.75, 0.75);
                     String s = is.getCount() > 1 ? "x" + is.getCount() : "";
-                    mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, ColourThingy.guiColour());
+                    mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, ColorUtils.guiColour());
 
                     if (is.isDamageable()) {
                         String dur = is.getMaxDamage() - is.getDamage() + "";
-                        int durcolor = ColourThingy.guiColour();
+                        int durcolor = ColorUtils.guiColour();
                         try {
                             durcolor = MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F);
                         } catch (Exception e) {
