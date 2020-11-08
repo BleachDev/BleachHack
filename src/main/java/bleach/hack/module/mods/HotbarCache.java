@@ -43,19 +43,10 @@ public class HotbarCache extends Module {
 
     public HotbarCache() {
         super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
-                new SettingMode("Item", "Pickaxe", "Crystal", "Gapple", "Snowball"),
-                new SettingMode("Mode", "Switch", "Pull", "Refill"));
-    }
-
-    private ArrayList<Item> Hotbar = new ArrayList<Item>();
-    private Timer timer = new Timer();
-
-    public void onEnable() {
         Hotbar.clear();
 
         for (int l_I = 0; l_I < 9; ++l_I)
         {
-            ItemStack l_Stack = mc.player.inventory.getStack(l_I);
 
             if (!l_Stack.isEmpty() && !Hotbar.contains(l_Stack.getItem()))
                 Hotbar.add(l_Stack.getItem());
@@ -107,37 +98,8 @@ public class HotbarCache extends Module {
                         }
                     }
                     break;
-                case 3:
-
-                    /* Inventory */
-                    if (mc.player.inventory.getStack(0).isEmpty() || mc.player.inventory.getStack(0).getItem() != Items.SNOWBALL) {
-                        for (int i = 0; i < 9; i++) {
-                            if (mc.player.inventory.getStack(i).getItem() == Items.SNOWBALL) {
-                                mc.player.inventory.selectedSlot = i;
-                                return;
-                            }
-                        }
-                    }
-                    break;
             }
         }
-        if (mc.currentScreen != null)
-            return;
-        if (!timer.passed(getSettings().get(0).asSlider().getValue() * 1000))
-            return;
-        if (getSettings().get(1).asMode().mode == 1) {
-            for (int l_I = 0; l_I < 9; ++l_I) {
-                if (SwitchSlotIfNeed(l_I)) {
-                    timer.reset();
-                    return;
-                }
-            }
-        }
-        if (getSettings().get(1).asMode().mode == 2) {
-            for (int l_I = 0; l_I < 9; ++l_I) {
-                if (RefillSlotIfNeed(l_I)) {
-                    timer.reset();
-                    return;
                 }
             }
         }
