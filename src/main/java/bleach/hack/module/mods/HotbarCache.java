@@ -21,20 +21,13 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.Timer;
-import bleach.hack.utils.Wrapper;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.ToolItem;
-import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 
 import java.util.ArrayList;
@@ -43,10 +36,23 @@ public class HotbarCache extends Module {
 
     public HotbarCache() {
         super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
+                new SettingMode("Item", "Pickaxe", "Crystal", "Gapple"),
+                new SettingMode("Mode", "Switch", "Pull", "Refill"));
+    }
+
+    private ArrayList<Item> Hotbar = new ArrayList<Item>();
+    private Timer timer = new Timer();
+
+    public void onEnable() {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        PlayerEntity player = mc.player;
+        if (mc.world == null) return;
+
         Hotbar.clear();
 
         for (int l_I = 0; l_I < 9; ++l_I)
         {
+            ItemStack l_Stack = player.inventory.getStack(l_I);
 
             if (!l_Stack.isEmpty() && !Hotbar.contains(l_Stack.getItem()))
                 Hotbar.add(l_Stack.getItem());
@@ -98,8 +104,37 @@ public class HotbarCache extends Module {
                         }
                     }
                     break;
+                case 3:
+
+                    /* Inventory */
+                    if (mc.player.inventory.getStack(0).isEmpty() || mc.player.inventory.getStack(0).getItem() != Items.SNOWBALL) {
+                        for (int i = 0; i < 9; i++) {
+                            if (mc.player.inventory.getStack(i).getItem() == Items.SNOWBALL) {
+                                mc.player.inventory.selectedSlot = i;
+                                return;
+                            }
+                        }
+                    }
+                    break;
             }
         }
+        if (mc.currentScreen != null)
+            return;
+        if (!timer.passed(getSettings().get(0).asSlider().getValue() * 1000))
+            return;
+        if (getSettings().get(1).asMode().mode == 1) {
+            for (int l_I = 0; l_I < 9; ++l_I) {
+                if (SwitchSlotIfNeed(l_I)) {
+                    timer.reset();
+                    return;
+                }
+            }
+        }
+        if (getSettings().get(1).asMode().mode == 2) {
+            for (int l_I = 0; l_I < 9; ++l_I) {
+                if (RefillSlotIfNeed(l_I)) {
+                    timer.reset();
+                    return;
                 }
             }
         }
