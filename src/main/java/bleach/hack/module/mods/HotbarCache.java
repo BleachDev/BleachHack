@@ -22,6 +22,7 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.Timer;
 import bleach.hack.utils.Wrapper;
 import com.google.common.eventbus.Subscribe;
@@ -42,26 +43,10 @@ public class HotbarCache extends Module {
 
     public HotbarCache() {
         super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
-                new SettingMode("Item: ", "Pickaxe", "Crystal", "Gapple").withDesc("This is for the switch mode"),
-                new SettingMode("Mode: ", "Switch", "Pull", "Refill"),
-                new SettingSlider("Delay", 0, 2, 0.1, 1));
-    }
-    private ArrayList<Item> Hotbar = new ArrayList<Item>();
-    private bleach.hack.utils.Timer timer = new Timer();
-
-    public void onEnable()
-    {
-        if (mc.world == null) return;
-
-        MinecraftClient mc = MinecraftClient.getInstance();
-        PlayerEntity player = mc.player;
-        super.onEnable();
-
         Hotbar.clear();
 
         for (int l_I = 0; l_I < 9; ++l_I)
         {
-            ItemStack l_Stack = player.inventory.getStack(l_I);
 
             if (!l_Stack.isEmpty() && !Hotbar.contains(l_Stack.getItem()))
                 Hotbar.add(l_Stack.getItem());
@@ -115,37 +100,6 @@ public class HotbarCache extends Module {
                     break;
             }
         }
-        if (getSettings().get(1).asMode().mode == 1) {
-//            for (int c = 0; c > 9; c++) {
-//                if (player.inventory.getStack(c).getItem() != Items.DIAMOND_PICKAXE || player.inventory.getStack(c).getItem() != Items.NETHERITE_PICKAXE) {
-//                    for (int i = 9; i < 45; i++) {
-//                        if (player.inventory.getStack(i).getItem() == Items.DIAMOND_PICKAXE || player.inventory.getStack(i).getItem() == Items.NETHERITE_PICKAXE) {
-//                            player.inventory.swapSlotWithHotbar(9);
-//                            player.inventory.selectedSlot = 9;
-//                        }
-//                    }
-//                }
-//            }
-            if (mc.currentScreen != null)
-                return;
-
-            if (!timer.passed(getSetting(2).asSlider().getValue() * 1000))
-                return;
-
-            if (getSettings().get(1).asMode().mode == 1) {
-                for (int l_I = 0; l_I < 9; ++l_I) {
-                    if (SwitchSlotIfNeed(l_I)) {
-                        timer.reset();
-                        return;
-                    }
-                }
-            }
-            if (getSettings().get(1).asMode().mode == 2) {
-                for (int l_I = 0; l_I < 9; ++l_I) {
-                    if (RefillSlotIfNeed(l_I)) {
-                        timer.reset();
-                        return;
-                    }
                 }
             }
         }
