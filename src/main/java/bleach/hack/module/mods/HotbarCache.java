@@ -43,7 +43,7 @@ public class HotbarCache extends Module {
 
     public HotbarCache() {
         super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
-                new SettingMode("Item", "Pickaxe", "Crystal", "Gapple"),
+                new SettingMode("Item", "Pickaxe", "Crystal", "Gapple", "Snowball"),
                 new SettingMode("Mode", "Switch", "Pull", "Refill"));
     }
 
