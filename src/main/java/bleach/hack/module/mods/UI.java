@@ -270,6 +270,7 @@ public class UI extends Module {
             }
         }
 
+
         if (getSetting(10).asToggle().state && !mc.options.debugEnabled) {
             if (getSetting(10).asToggle().getChild(7).asToggle().state) {
                 String time_now = new SimpleDateFormat((getSetting(10).asToggle().getChild(2).asToggle().state ? "MMM dd " : "") + (getSetting(10).asToggle().getChild(1).asToggle().state ? "yyyy " : "") + "h:mm" + (getSetting(10).asToggle().getChild(3).asToggle().state ? ":ss" : "") + (getSetting(10).asToggle().getChild(4).asToggle().state ? " a" : "") + (getSetting(10).asToggle().getChild(0).asToggle().state ? " zzz" : "")).format(new Date());
