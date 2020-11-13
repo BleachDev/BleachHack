@@ -18,10 +18,10 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.Timer;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;

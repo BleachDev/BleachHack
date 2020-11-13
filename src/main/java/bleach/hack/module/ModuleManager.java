@@ -48,6 +48,7 @@ public class ModuleManager {
         new AutoReplenish(),
         new AutoSign(),
         new AutoTool(),
+        new AutoTunnel(),
         new AutoTotem(),
         new CrystalAura(),
         new AutoWalk(),
