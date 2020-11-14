@@ -21,6 +21,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.Timer;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
@@ -37,7 +38,8 @@ public class HotbarCache extends Module {
     public HotbarCache() {
         super("HotbarCache", KEY_UNBOUND, Category.MISC, "Autototem for items",
                 new SettingMode("Item", "Pickaxe", "Crystal", "Gapple"),
-                new SettingMode("Mode", "Switch", "Pull", "Refill"));
+                new SettingMode("Mode", "Switch", "Pull", "Refill"),
+                new SettingSlider("Delay", 0.0, 1.0, 0.003, 3));
     }
 
     private ArrayList<Item> Hotbar = new ArrayList<Item>();
@@ -59,6 +61,9 @@ public class HotbarCache extends Module {
             else
                 Hotbar.add(Items.AIR);
         }
+    }
+    public void onDisable() {
+        Hotbar.clear();
     }
 
     @Subscribe
@@ -120,8 +125,10 @@ public class HotbarCache extends Module {
         }
         if (mc.currentScreen != null)
             return;
-        if (!timer.passed(getSettings().get(0).asSlider().getValue() * 1000))
+
+        if (!timer.passed(getSettings().get(2).asSlider().getValue() * 1000))
             return;
+
         if (getSettings().get(1).asMode().mode == 1) {
             for (int l_I = 0; l_I < 9; ++l_I) {
                 if (SwitchSlotIfNeed(l_I)) {
@@ -139,27 +146,27 @@ public class HotbarCache extends Module {
             }
         }
     }
-    private boolean SwitchSlotIfNeed(int p_Slot)
+    private boolean SwitchSlotIfNeed(int targetSlot)
     {
         MinecraftClient mc = MinecraftClient.getInstance();
         PlayerEntity player = mc.player;
-        Item l_Item = Hotbar.get(p_Slot);
+        Item itemFromCache = Hotbar.get(targetSlot);
 
-        if (l_Item == Items.AIR)
+        if (itemFromCache == Items.AIR)
             return false;
 
-        if (!player.inventory.getStack(p_Slot).isEmpty() && player.inventory.getStack(p_Slot).getItem() == l_Item)
+        if (!player.inventory.getStack(targetSlot).isEmpty() && player.inventory.getStack(targetSlot).getItem() == itemFromCache)
             return false;
 
-        int l_Slot = GetItemSlot(l_Item);
+        int slotFromCache = GetItemSlot(itemFromCache);
 
-        if (l_Slot != -1 && l_Slot != 45)
+        if (slotFromCache != -1 && slotFromCache != 45)
         {
-            mc.interactionManager.clickSlot(player.currentScreenHandler.syncId, l_Slot, 0,
+            mc.interactionManager.clickSlot(player.currentScreenHandler.syncId, slotFromCache, 0,
                     SlotActionType.PICKUP, player);
-            mc.interactionManager.clickSlot(player.currentScreenHandler.syncId, p_Slot+36, 0, SlotActionType.PICKUP,
+            mc.interactionManager.clickSlot(player.currentScreenHandler.syncId, targetSlot+36, 0, SlotActionType.PICKUP,
                     player);
-            mc.interactionManager.clickSlot(player.currentScreenHandler.syncId, l_Slot, 0,
+            mc.interactionManager.clickSlot(player.currentScreenHandler.syncId, slotFromCache, 0,
                     SlotActionType.PICKUP, player);
             return true;
         }
@@ -192,17 +199,17 @@ public class HotbarCache extends Module {
         return -1;
     }
 
-    private boolean RefillSlotIfNeed(int p_Slot)
+    private boolean RefillSlotIfNeed(int targetSlot)
     {
-        ItemStack l_Stack = mc.player.inventory.getStack(p_Slot);
+        ItemStack itemInTargetSlot = mc.player.inventory.getStack(targetSlot);
 
-        if (l_Stack.isEmpty() || l_Stack.getItem() == Items.AIR)
+        if (itemInTargetSlot.isEmpty() || itemInTargetSlot.getItem() == Items.AIR)
             return false;
 
-        if (!l_Stack.isStackable())
+        if (!itemInTargetSlot.isStackable())
             return false;
 
-        if (l_Stack.getCount() >= l_Stack.getMaxCount())
+        if (itemInTargetSlot.getCount() >= itemInTargetSlot.getMaxCount())
             return false;
 
         /// We're going to search the entire inventory for the same stack, WITH THE SAME NAME, and use quick move.
@@ -213,7 +220,7 @@ public class HotbarCache extends Module {
             if (l_Item.isEmpty())
                 continue;
 
-            if (CanItemBeMergedWith(l_Stack, l_Item))
+            if (CanItemBeMergedWith(itemInTargetSlot, l_Item))
             {
                 mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, l_I, 0,
                         SlotActionType.QUICK_MOVE, mc.player);
