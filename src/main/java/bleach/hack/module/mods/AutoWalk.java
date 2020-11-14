@@ -24,10 +24,11 @@ public class AutoWalk extends Module {
     @Subscribe
     public void onTick(EventTick event) {
         boolean pause = ((AutoTunnel) ModuleManager.getModule(AutoTunnel.class)).PauseAutoWalk();
-        if (!pause) {
+        AutoTunnel at = ((AutoTunnel) ModuleManager.getModule(AutoTunnel.class));
+        if (!pause && at.isToggled()) {
             mc.options.keyForward.setPressed(true);
         }
-        else if (pause) {
+        else if (pause || !at.isToggled()) {
             mc.options.keyForward.setPressed(false);
         }
     }

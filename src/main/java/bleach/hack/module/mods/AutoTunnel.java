@@ -358,10 +358,10 @@ public class AutoTunnel extends Module
         {
             event.setCancelled(true);
 
-            float[] rotations = EntityUtils.getLegitRotations(new Vec3d(toDestroy.getX(), toDestroy.getY(), toDestroy.getZ()));
-
-            mc.player.yaw = rotations[1];
-            mc.player.pitch = rotations[0];
+//            float[] rotations = EntityUtils.getLegitRotations(new Vec3d(toDestroy.getX(), toDestroy.getY(), toDestroy.getZ()));
+//
+//            mc.player.yaw = rotations[1];
+//            mc.player.pitch = rotations[0];
 
             switch (getSetting(1).asMode().mode)
             {
