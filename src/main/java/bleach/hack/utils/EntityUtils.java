@@ -103,10 +103,6 @@ public class EntityUtils {
         South,
         East,
         West,
-        SouthEast,
-        SouthWest,
-        NorthWest,
-        NorthEast,
     }
 
     public static FacingDirection GetFacing()
@@ -116,6 +112,7 @@ public class EntityUtils {
             case 0:
             case 1:
                 return FacingDirection.South;
+            case 2:
             case 3:
                 return FacingDirection.West;
             case 4:
@@ -128,51 +125,4 @@ public class EntityUtils {
         }
         return FacingDirection.North;
     }
-
-    public static double GetDistance(double p_X, double p_Y, double p_Z, double x, double y, double z)
-    {
-        double d0 = p_X - x;
-        double d1 = p_Y - y;
-        double d2 = p_Z - z;
-        return (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-    }
-
-    public static float getDamageAfterAbsorb(float damage, float totalArmor, float toughnessAttribute) {
-        float f = 2.0F + toughnessAttribute / 4.0F;
-        float f1 = MathHelper.clamp(totalArmor - damage / f, totalArmor * 0.2F, 20.0F);
-        return damage * (1.0F - f1 / 25.0F);
-    }
-
-    public static boolean IsEating()
-    {
-        return mc.player != null &&  mc.player.getActiveItem().getItem() == Items.GOLDEN_APPLE;
-    }
-
-    public static float GetRotationYawForCalc()
-    {
-        float rotationYaw = mc.player.yaw;
-        if (mc.player.forwardSpeed < 0.0f)
-        {
-            rotationYaw += 180.0f;
-        }
-        float n = 1.0f;
-        if (mc.player.forwardSpeed < 0.0f)
-        {
-            n = -0.5f;
-        }
-        else if (mc.player.forwardSpeed > 0.0f)
-        {
-            n = 0.5f;
-        }
-        if (mc.player.sidewaysSpeed > 0.0f)
-        {
-            rotationYaw -= 90.0f * n;
-        }
-        if (mc.player.sidewaysSpeed < 0.0f)
-        {
-            rotationYaw += 90.0f * n;
-        }
-        return rotationYaw * 0.017453292f;
-    }
-
 }
