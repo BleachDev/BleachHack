@@ -92,7 +92,7 @@ public class Speed extends Module {
         double strafe = mc.player.sidewaysSpeed;
         float yaw = mc.player.yaw;
 
-        if (getSetting(0).asMode().mode == 3 || !mc.player.isFallFlying()) {
+        if (getSetting(0).asMode().mode == 3 && !mc.player.isFallFlying()) {
             if ((forward == 0.0D) && (strafe == 0.0D)) {
                 mc.player.setVelocity(0, mc.player.getVelocity().y, 0);
             } else {
