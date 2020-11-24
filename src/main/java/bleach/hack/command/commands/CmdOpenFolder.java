@@ -18,11 +18,8 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.command.CommandManager;
 import bleach.hack.utils.BleachLogger;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
 
 import java.awt.*;
 import java.io.File;

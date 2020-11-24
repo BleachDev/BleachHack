@@ -1,21 +1,13 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;

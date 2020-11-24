@@ -68,7 +68,6 @@ public class ModuleManager {
         new DiscordRPCMod(),
         new Dispenser32k(),
         new Discord(),
-        new IRCMod(),
         new DonkeyAlert(),
         new ElytraFly(),
         new ElytraReplace(),
@@ -85,7 +84,6 @@ public class ModuleManager {
         new HoleTP(),
         new HotbarCache(),
         new Jesus(),
-        //new KamiScaffold(),
         new Killaura(),
         new MountBypass(),
         new MouseFriend(),
@@ -130,11 +128,13 @@ public class ModuleManager {
         new FootXp(),
         new LiquidRemover(),
         new ShulkerView(),
-        new AutoExplode(),
         new AutoEZ(),
         new AutoTrap(),
-        new AutoWither(),
 
+        //new IRCMod(),
+        //new KamiScaffold(),
+        //new AutoExplode(),
+        //new AutoWither(),
         //new AutoBaritone(),
         //new FabritoneFix(),
         //new AutoDodge(),
@@ -144,6 +144,7 @@ public class ModuleManager {
         //new WireframeESP(),
         //new AutoBreed(),
         //new Test(),
+
         new UI()
 
     ).stream().sorted(Comparator.comparing(Module::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());

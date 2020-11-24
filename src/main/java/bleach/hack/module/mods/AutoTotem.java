@@ -24,12 +24,7 @@ import bleach.hack.setting.base.SettingToggle;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
-import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 
 public class AutoTotem extends Module {
 

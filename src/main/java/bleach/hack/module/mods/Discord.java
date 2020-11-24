@@ -1,11 +1,11 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.module.Category;
+import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
+
 import java.awt.*;
 import java.net.URI;
-
-import bleach.hack.module.Category;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.Module;
 
 public class Discord extends Module
 {

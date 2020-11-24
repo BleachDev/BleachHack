@@ -17,8 +17,6 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -27,9 +25,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.OutlineRenderUtils;
-import net.minecraft.client.render.BufferBuilderStorage;
-import net.minecraft.client.render.OutlineVertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumerProvider;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;

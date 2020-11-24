@@ -26,8 +26,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.render.BufferBuilder;
 
 public class RenderUtils {
 

@@ -1,13 +1,13 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.event.events.EventTick;
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.mixin.IMinecraftClient;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.mixin.IMinecraftClient;
 import bleach.hack.utils.EntityUtil;
 import bleach.hack.utils.Wrapper;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;

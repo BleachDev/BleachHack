@@ -44,7 +44,7 @@ Minor Adjustments:
 52. Add nearest player hud card like in impact+  
 53. Fix flight not turning off until relog  
 55. Fix zoom module messing up if held down  
-56. Implement logging into stash finder  
+56. Implement logging into stash finder including beacons and stuff  
 57. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
 58. VisualRange (notifies you in chat whenever someone appears or leaves in your render distance  
 59. add no entity collision and water push to velocity  
@@ -68,3 +68,4 @@ Minor Adjustments:
 80. fix toggle command not working  
 81. viewclip  
 81. fix autowither not spawning tingy  
+82. coord spoofer  

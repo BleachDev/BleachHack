@@ -1,18 +1,15 @@
 package bleach.hack.mixin;
 
 import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoToolCooldown;
-import bleach.hack.module.mods.Timer;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import net.minecraft.client.MinecraftClient;
-
-import bleach.hack.module.ModuleManager;
-import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RenderTickCounter.class)

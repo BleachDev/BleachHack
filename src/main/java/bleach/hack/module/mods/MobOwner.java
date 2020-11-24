@@ -4,22 +4,20 @@ import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.utils.BleachLogger;
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonParser;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
-import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.text.Text;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class MobOwner extends Module {

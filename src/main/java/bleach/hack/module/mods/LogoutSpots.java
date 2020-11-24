@@ -22,21 +22,12 @@ import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
 
 public class LogoutSpots extends Module {
 

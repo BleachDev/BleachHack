@@ -1,11 +1,8 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.event.Event;
-import bleach.hack.event.events.EventTick;
-import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.setting.base.SettingSlider;
 
 public class NoToolCooldown extends Module {
 
