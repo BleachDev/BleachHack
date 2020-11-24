@@ -5,7 +5,6 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NukerBypass;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 

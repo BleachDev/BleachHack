@@ -22,7 +22,6 @@ public class AutoEZ extends Module {
     private List<String> lines = new ArrayList<>();
     private int lineCount = 0;
     public List<String> dead_uuids = new ArrayList<>();
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 
     public AutoEZ() {

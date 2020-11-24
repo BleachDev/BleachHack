@@ -17,42 +17,39 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import bleach.hack.module.ModuleManager;
-import com.google.common.collect.Maps;
-import com.google.common.eventbus.Subscribe;
-
 import bleach.hack.event.events.EventTick;
+import bleach.hack.module.Category;
+import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.module.Category;
-import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.util.math.Vec3d;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import bleach.hack.utils.file.BleachFileMang;
+import com.google.common.collect.Maps;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
 
-public class NukerBypass extends Module {
+import java.util.ArrayList;
+import java.util.List;
+
+public class HighwayNuker extends Module {
 
 	private List<Block> blockList = new ArrayList<>();
 
-	public NukerBypass() {
-		super("NukerBypass", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
+	public HighwayNuker() {
+		super("HighwayNuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
 				new SettingMode("Mode: ", "Normal", "Multi", "Instant"),
 				new SettingMode("Blocks: ", "1x3", "2x3", "3x3", "Highway"),
 				new SettingSlider("Cooldown: ", 0, 4, 0, 0),

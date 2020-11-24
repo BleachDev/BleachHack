@@ -68,4 +68,5 @@ Minor Adjustments:
 80. fix toggle command not working  
 81. viewclip  
 81. fix autowither not spawning tingy  
-82. coord spoofer  
+82. F3 coord spoofer  
+83. add first run welcome message  
