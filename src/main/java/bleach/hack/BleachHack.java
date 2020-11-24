@@ -38,10 +38,10 @@ public class BleachHack implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        System.out.println("Detected JRE: " + System.getProperty("java.runtime.version"));
-        System.out.println("Pre headless toggle property: " + System.getProperty("java.awt.headless"));
-        System.setProperty("java.awt.headless", "false");
-        System.out.println("Post headless toggle property: " + System.getProperty("java.awt.headless"));
+        //System.out.println("Detected JRE: " + System.getProperty("java.runtime.version"));
+        //System.out.println("Pre headless toggle property: " + System.getProperty("java.awt.headless"));
+        //System.setProperty("java.awt.headless", "false");
+        //System.out.println("Post headless toggle property: " + System.getProperty("java.awt.headless"));
         BleachFileMang.init();
         BleachFileHelper.readModules();
 
