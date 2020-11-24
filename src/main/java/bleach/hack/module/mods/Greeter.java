@@ -51,7 +51,7 @@ public class Greeter extends Module {
 
     @Subscribe
     public void onPacketRead(EventReadPacket event) {
-        if (event.getPacket() instanceof PlayerListS2CPacket && ((PlayerListS2CPacket) event.getPacket()).getAction().toString().equals("ADD_PLAYER")) {
+        if (event.getPacket() instanceof PlayerListS2CPacket && ((PlayerListS2CPacket) event.getPacket()).getAction().name().equals("ADD_PLAYER")) {
             player = ((PlayerListS2CPacket) event.getPacket()).getEntries().get(0).getProfile().getName();
         }
         if (lines.isEmpty()) return;
