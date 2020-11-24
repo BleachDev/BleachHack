@@ -20,6 +20,7 @@ package bleach.hack.module.mods;
 import java.util.ArrayList;
 import java.util.List;
 
+import bleach.hack.module.ModuleManager;
 import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
 
@@ -60,7 +61,8 @@ public class NukerBypass extends Module {
 				new SettingToggle("Rotate", false),
 				new SettingToggle("NoParticles", false),
 				new SettingMode("Sort: ", "Normal", "Hardness"),
-				new SettingSlider("Multi: ", 1, 10, 2, 0));
+				new SettingSlider("Multi: ", 1, 10, 2, 0),
+				new SettingToggle("PauseAutoWalk", true));
 	}
 
 	public void onEnable() {
@@ -69,28 +71,41 @@ public class NukerBypass extends Module {
 			blockList.add(Registry.BLOCK.get(new Identifier(s)));
 
 		super.onEnable();
+		pauseAutoWalk = false;
 	}
 
+	public void onDisable() {
+		pauseAutoWalk = false;
+	}
+
+	private boolean pauseAutoWalk;
 	private BlockPos lastPlayerPos = null;
+
+	private List<BlockPos> getBlocks() {
+		int mode = getSettings().get(1).asMode().mode;
+		List<BlockPos> blocks = new ArrayList<>();
+		if (this.isToggled()) {
+			switch (mode) {
+				case 0:
+					blocks = get1x3();
+					break;
+				case 1:
+					blocks = get2x3();
+					break;
+				case 2:
+					blocks = getCube();
+					break;
+				case 3:
+					blocks = getHighway4();
+					break;
+			}
+		}
+		return blocks;
+	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		int mode = getSettings().get(1).asMode().mode;
-		List<BlockPos> blocks = new ArrayList<>();
-		switch (mode) {
-			case 0:
-				blocks = get1x3();
-				break;
-			case 1:
-				blocks = get2x3();
-				break;
-			case 2:
-				blocks = getCube();
-				break;
-			case 3:
-				blocks = getHighway4();
-				break;
-		}
+		List<BlockPos> blocks = getBlocks();
 		double range = 6;
 
 //		/* Add blocks around player */
@@ -467,5 +482,18 @@ public class NukerBypass extends Module {
 				break;
 		}
 		return cubeBlocks;
+	}
+	public boolean pauseAutoWalk() {
+		if (getSetting(9).asToggle().state) {
+			for (int i = 0; i < getBlocks().size(); i++) {
+				if (mc.world.getBlockState(getBlocks().get(i)).getBlock() == Blocks.NETHERRACK) {
+					pauseAutoWalk = false;
+					continue;
+				} else {
+					pauseAutoWalk = true;
+				}
+			}
+		}
+		return pauseAutoWalk;
 	}
 }

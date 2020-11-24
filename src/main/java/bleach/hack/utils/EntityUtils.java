@@ -75,6 +75,28 @@ public class EntityUtils {
         return new double[]
                 { yaw, pitch };
     }
+
+    public static float[] getLegitRotations(Vec3d vec)
+    {
+        Vec3d eyesPos = getEyesPos();
+
+        double diffX = vec.x - eyesPos.x;
+        double diffY = vec.y - eyesPos.y;
+        double diffZ = vec.z - eyesPos.z;
+
+        double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+        float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
+        float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
+
+        return new float[]
+                { MinecraftClient.getInstance().player.yaw + MathHelper.wrapDegrees(yaw - MinecraftClient.getInstance().player.yaw),
+                        MinecraftClient.getInstance().player.pitch + MathHelper.wrapDegrees(pitch - MinecraftClient.getInstance().player.pitch) };
+    }
+    private static Vec3d getEyesPos()
+    {
+        return new Vec3d(MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + MinecraftClient.getInstance().player.getEyeHeight(mc.player.getPose()), MinecraftClient.getInstance().player.getZ());
+    }
     public enum FacingDirection
     {
         North,
