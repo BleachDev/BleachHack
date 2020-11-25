@@ -31,7 +31,7 @@ public class LiquidRemover extends Module
 
     public LiquidRemover()
     {
-        super("LiquidRemover", KEY_UNBOUND, Category.PLAYER, "ESP for tunnels off the highway",
+        super("LiquidRemover", KEY_UNBOUND, Category.WORLD, "automatically places netherrack where lava is",
                 new SettingSlider("Range", 0.1, 5, 4.5, 1),
                 new SettingSlider("R: ", 0.0D, 255.0D, 255.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 69.0D, 0),

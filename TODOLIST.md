@@ -4,8 +4,6 @@ Modules to add:
 (Already in the filesystem commented out and partially completed)  
 4. LiquidInteract: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/world/LiquidInteractModule.java>  
 5. EntityControl: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/movement/EntityControlModule.java>  
-6. Welcomer: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/GreeterModule.java>  
-Additions: Rename from greeter to Welcomer and add file with variables for custom messages  
 7. MoreInv/XCarry: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/MoreInvModule.java>  
 8. Coord Logger: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/CoordLoggerModule.java>  
 9. NoBreakAnimations: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/render/NoBreakAnimModule.java>  
