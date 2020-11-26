@@ -346,7 +346,7 @@ public class AutoTunnel extends Module
         {
             BlockState state = mc.world.getBlockState(pos);
 
-            if (state.getBlock() == Blocks.AIR || state.getBlock() == Blocks.WATER || state.getBlock() == Blocks.LAVA || state.getBlock() == Blocks.BEDROCK || state.getBlock() == Blocks.NETHERRACK)
+            if (state.getBlock() == Blocks.AIR || state.getBlock() == Blocks.WATER || state.getBlock() == Blocks.LAVA || state.getBlock() == Blocks.BEDROCK || state.getBlock() == Blocks.NETHERRACK || state.getBlock() == Blocks.CAVE_AIR || state.getBlock() == Blocks.VOID_AIR)
                 continue;
 
             toDestroy = pos;
@@ -355,21 +355,15 @@ public class AutoTunnel extends Module
 
         if (toDestroy != null)
         {
-            event.setCancelled(true);
+//            event.setCancelled(true);
 
 //            float[] rotations = EntityUtils.getLegitRotations(new Vec3d(toDestroy.getX(), toDestroy.getY(), toDestroy.getZ()));
 //
-//            mc.player.yaw = rotations[1];
-//            mc.player.pitch = rotations[0];
+//            mc.player.yaw = rotations[0];
+//            mc.player.pitch = rotations[1];
 
             switch (getSetting(1).asMode().mode)
             {
-                case 1:
-                    if (BlockUtils.GetCurrBlock() == null)
-                        BlockUtils.SetCurrentBlock(toDestroy);
-
-                    BlockUtils.Update(5.0f, true);
-                    break;
                 case 0:
                     mc.player.swingHand(MAIN_HAND);
                     mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(
@@ -387,19 +381,19 @@ public class AutoTunnel extends Module
             _needPause = false;
     }
 
-    @Subscribe
-    public void onTick(EventTick event){
-        if (getSetting(4).asToggle().state) {
-            if (!_needPause && pauseTimer.passed(getSetting(2).asSlider().getValue() * 1000)) {
-                _needPause = true;
-                pauseTimer.reset();
-            }
-            if (_needPause && pauseTimer.passed(5500)) {
-                _needPause = false;
-                pauseTimer.reset();
-            }
-        }
-    }
+//    @Subscribe
+//    public void onTick(EventTick event){
+//        if (getSetting(4).asToggle().state) {
+//            if (!_needPause && pauseTimer.passed(getSetting(2).asSlider().getValue() * 1000)) {
+//                _needPause = true;
+//                pauseTimer.reset();
+//            }
+//            if (_needPause && pauseTimer.passed(5500)) {
+//                _needPause = false;
+//                pauseTimer.reset();
+//            }
+//        }
+//    }
 
     public boolean PauseAutoWalk()
     {

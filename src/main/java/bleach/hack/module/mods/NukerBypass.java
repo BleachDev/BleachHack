@@ -58,9 +58,8 @@ public class NukerBypass extends Module {
 				new SettingToggle("Rotate", false),
 				new SettingToggle("NoParticles", false),
 				new SettingMode("Sort: ", "Normal", "Hardness"),
-				new SettingSlider("Multi: ", 1, 10, 2, 0),
-				new SettingToggle("PauseAutoWalk", true));
-	}
+				new SettingSlider("Multi: ", 1, 10, 2, 0));
+    }
 
 	public void onEnable() {
 		blockList.clear();
@@ -68,14 +67,8 @@ public class NukerBypass extends Module {
 			blockList.add(Registry.BLOCK.get(new Identifier(s)));
 
 		super.onEnable();
-		pauseAutoWalk = false;
 	}
 
-	public void onDisable() {
-		pauseAutoWalk = false;
-	}
-
-	private boolean pauseAutoWalk;
 	private BlockPos lastPlayerPos = null;
 
 	private List<BlockPos> getBlocks() {
@@ -98,6 +91,26 @@ public class NukerBypass extends Module {
 			}
 		}
 		return blocks;
+	}
+	public boolean canSeeBlock(BlockPos pos) {
+		double diffX = pos.getX() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).x;
+		double diffY = pos.getY() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).y;
+		double diffZ = pos.getZ() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).z;
+
+		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+		float yaw = mc.player.yaw + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90 - mc.player.yaw);
+		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
+
+		Vec3d rotation = new Vec3d(
+				(double) (MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)),
+				(double) (-MathHelper.sin(pitch * 0.017453292F)),
+				(double) (MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)));
+
+		Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
+		return mc.world.raycast(new RaycastContext(mc.player.getCameraPosVec(mc.getTickDelta()),
+				rayVec, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player))
+				.getBlockPos().equals(pos);
 	}
 
 	@Subscribe
@@ -132,8 +145,9 @@ public class NukerBypass extends Module {
 
 		int broken = 0;
 		for (BlockPos pos : blocks) {
-			if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || mc.world.getBlockState(pos).getBlock() == Blocks.BEDROCK || mc.world.getBlockState(pos).getBlock() == Blocks.LAVA || WorldUtils.isFluid(pos))
+			if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() != Blocks.NETHERRACK)
 				continue;
+
 			if (!getSettings().get(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock()))
 				continue;
 
@@ -172,27 +186,6 @@ public class NukerBypass extends Module {
 					|| (getSettings().get(0).asMode().mode == 1 && broken >= (int) getSettings().get(8).asSlider().getValue()))
 				return;
 		}
-	}
-
-	public boolean canSeeBlock(BlockPos pos) {
-		double diffX = pos.getX() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).x;
-		double diffY = pos.getY() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).y;
-		double diffZ = pos.getZ() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).z;
-
-		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-		float yaw = mc.player.yaw + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90 - mc.player.yaw);
-		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
-
-		Vec3d rotation = new Vec3d(
-				(double) (MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)),
-				(double) (-MathHelper.sin(pitch * 0.017453292F)),
-				(double) (MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)));
-
-		Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
-		return mc.world.raycast(new RaycastContext(mc.player.getCameraPosVec(mc.getTickDelta()),
-				rayVec, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player))
-				.getBlockPos().equals(pos);
 	}
 
 	public List<BlockPos> getCube() {
@@ -480,17 +473,5 @@ public class NukerBypass extends Module {
 		}
 		return cubeBlocks;
 	}
-	public boolean pauseAutoWalk() {
-		if (getSetting(9).asToggle().state) {
-			for (int i = 0; i < getBlocks().size(); i++) {
-				if (mc.world.getBlockState(getBlocks().get(i)).getBlock() == Blocks.NETHERRACK) {
-					pauseAutoWalk = false;
-					continue;
-				} else {
-					pauseAutoWalk = true;
-				}
-			}
-		}
-		return pauseAutoWalk;
-	}
+
 }

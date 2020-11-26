@@ -84,6 +84,7 @@ public class ModuleManager {
         new HoleTP(),
         new HotbarCache(),
         new Jesus(),
+        new KamiScaffold(),
         new Killaura(),
         new MountBypass(),
         new MouseFriend(),
@@ -134,7 +135,6 @@ public class ModuleManager {
         new AutoTrap(),
 
         //new IRCMod(),
-        //new KamiScaffold(),
         //new AutoExplode(),
         //new AutoWither(),
         //new AutoBaritone(),

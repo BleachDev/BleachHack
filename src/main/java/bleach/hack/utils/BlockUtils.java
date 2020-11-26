@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.math.Direction.UP;
 
@@ -76,4 +75,5 @@ public class BlockUtils
 
         return true;
     }
+
 }
