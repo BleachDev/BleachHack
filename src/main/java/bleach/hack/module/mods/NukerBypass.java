@@ -44,11 +44,11 @@ import net.minecraft.world.RaycastContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HighwayNuker extends Module {
+public class NukerBypass extends Module {
 
 	private List<Block> blockList = new ArrayList<>();
 
-	public HighwayNuker() {
+	public NukerBypass() {
 		super("HighwayNuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
 				new SettingMode("Mode: ", "Normal", "Multi", "Instant"),
 				new SettingMode("Blocks: ", "1x3", "2x3", "3x3", "Highway"),
