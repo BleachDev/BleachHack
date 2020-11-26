@@ -6,19 +6,11 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
 import com.google.common.eventbus.Subscribe;
-import com.google.gson.JsonParser;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Formatting;
-import org.apache.commons.io.IOUtils;
+import net.minecraft.entity.passive.AbstractDonkeyEntity;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DonkeyAlert extends Module {

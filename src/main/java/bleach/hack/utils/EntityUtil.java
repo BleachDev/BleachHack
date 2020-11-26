@@ -1,14 +1,12 @@
 package bleach.hack.utils;
 
 import net.minecraft.block.FluidBlock;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;

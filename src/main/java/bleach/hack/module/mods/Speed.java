@@ -22,10 +22,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.utils.EntityUtils;
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.entity.vehicle.MinecartEntity;
-import net.minecraft.util.math.MathHelper;
 
 public class Speed extends Module {
 

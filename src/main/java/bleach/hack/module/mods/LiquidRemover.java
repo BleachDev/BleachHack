@@ -1,23 +1,16 @@
 package bleach.hack.module.mods;
 
-import baritone.api.BaritoneAPI;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.mixin.IKeyBinding;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.options.KeyBinding;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +31,7 @@ public class LiquidRemover extends Module
 
     public LiquidRemover()
     {
-        super("LiquidRemover", KEY_UNBOUND, Category.PLAYER, "ESP for tunnels off the highway",
+        super("LiquidRemover", KEY_UNBOUND, Category.WORLD, "automatically places netherrack where lava is",
                 new SettingSlider("Range", 0.1, 5, 4.5, 1),
                 new SettingSlider("R: ", 0.0D, 255.0D, 255.0D, 0),
                 new SettingSlider("G: ", 0.0D, 255.0D, 69.0D, 0),

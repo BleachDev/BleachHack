@@ -68,7 +68,6 @@ public class ModuleManager {
         new DiscordRPCMod(),
         new Dispenser32k(),
         new Discord(),
-        new IRCMod(),
         new DonkeyAlert(),
         new ElytraFly(),
         new ElytraReplace(),
@@ -99,6 +98,8 @@ public class ModuleManager {
         new NoToolCooldown(),
         new NoVelocity(),
         new Nuker(),
+        new LiquidInteract(),
+        new Greeter(),
         new NukerBypass(),
         new OffhandCrash(),
         new PacketFly(),
@@ -130,11 +131,12 @@ public class ModuleManager {
         new FootXp(),
         new LiquidRemover(),
         new ShulkerView(),
-        new AutoExplode(),
         new AutoEZ(),
         new AutoTrap(),
-        new AutoWither(),
 
+        //new IRCMod(),
+        //new AutoExplode(),
+        //new AutoWither(),
         //new AutoBaritone(),
         //new FabritoneFix(),
         //new AutoDodge(),
@@ -144,6 +146,7 @@ public class ModuleManager {
         //new WireframeESP(),
         //new AutoBreed(),
         //new Test(),
+
         new UI()
 
     ).stream().sorted(Comparator.comparing(Module::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());

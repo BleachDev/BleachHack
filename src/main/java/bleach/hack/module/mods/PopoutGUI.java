@@ -1,38 +1,24 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.Event;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.FabricReflect;
 import com.google.common.eventbus.Subscribe;
-import com.mojang.brigadier.Command;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.ClientChatListener;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-import net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket;
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -43,7 +29,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import javax.swing.UIManager.*;
 
 
 

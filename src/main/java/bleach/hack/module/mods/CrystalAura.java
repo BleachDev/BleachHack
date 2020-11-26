@@ -1,19 +1,5 @@
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.lwjgl.glfw.GLFW;
-
-import com.google.common.collect.Streams;
-import com.google.common.eventbus.Subscribe;
-
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
@@ -25,6 +11,8 @@ import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
+import com.google.common.collect.Streams;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -43,14 +31,13 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.explosion.Explosion;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CrystalAura extends Module {
 

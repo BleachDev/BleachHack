@@ -123,7 +123,7 @@ public class UI extends Module {
                         new SettingToggle("Right Align", true)),
                 new SettingToggle("Players", true).withDesc("Lists all the players in your render distance").withChildren( // 8
                         new SettingSlider("x", 1, 3840, 1, 0).withDesc("x coordinates"),
-                        new SettingSlider("y", 1, 3840, 340, 0).withDesc("y coordinates"),
+                        new SettingSlider("y", 1, 3840, 350, 0).withDesc("y coordinates"),
                         new SettingToggle("Right Align", true),
                         new SettingSlider("Text Gap", 1, 10, 10, 0).withDesc("new line space distance"),
                         new SettingToggle("Show coordinates", false).withDesc("shows xyz coords of players near you"),

@@ -1,8 +1,5 @@
 package bleach.hack.module.mods;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
@@ -18,7 +15,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.math.Direction.UP;

@@ -4,8 +4,6 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.BleachQueue;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 

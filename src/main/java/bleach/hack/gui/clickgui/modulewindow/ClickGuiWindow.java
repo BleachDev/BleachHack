@@ -1,7 +1,6 @@
 package bleach.hack.gui.clickgui.modulewindow;
 
 import bleach.hack.gui.window.Window;
-import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.ColorUtils;

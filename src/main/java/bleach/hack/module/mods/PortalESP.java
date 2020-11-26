@@ -4,7 +4,6 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.BleachLogger;
@@ -15,7 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.CallbackI;
 
 import java.util.ArrayList;
 import java.util.List;

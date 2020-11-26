@@ -27,14 +27,10 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.WorldRenderUtils;
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Objects;
