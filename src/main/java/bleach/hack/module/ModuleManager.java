@@ -100,7 +100,7 @@ public class ModuleManager {
         new Nuker(),
         new LiquidInteract(),
         new Greeter(),
-        new NukerBypass(),
+        new HighwayNuker(),
         new OffhandCrash(),
         new PacketFly(),
         new Peek(),
