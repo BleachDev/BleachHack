@@ -30,7 +30,7 @@ public class Speed extends Module {
 
     public Speed() {
         super("Speed", KEY_UNBOUND, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
-                new SettingMode("Mode", "Bhop", "MiniHop", "OnGround", "Strafe"),
+                new SettingMode("Mode", "Bhop", "MiniHop", "OnGround", "Vanilla"),
                 new SettingSlider("Move Speed", 0.1, 10, 2, 2));
     }
 

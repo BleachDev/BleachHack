@@ -1,27 +1,18 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.window.Window;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Greeter extends Module {
 

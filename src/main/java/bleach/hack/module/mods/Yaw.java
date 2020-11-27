@@ -5,7 +5,6 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;

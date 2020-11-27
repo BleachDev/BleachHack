@@ -27,7 +27,6 @@ public class DonkeyAlert extends Module {
         }
         for (final Entity e : mc.world.getEntities()) {
             if (e instanceof AbstractDonkeyEntity && !mob_uuids.toString().contains(e.getUuidAsString())) {
-                final AbstractDonkeyEntity abstractDonkeyEntity = (AbstractDonkeyEntity) e;
                 final boolean impact_toggle_state = ModuleManager.getModule(UI.class).getSetting(24).asToggle().state;
                 final String coords = (impact_toggle_state ? "\u00A7f" : "") + (int) e.getX() + (impact_toggle_state ? "\u00A79" : "") + " Z: " + (impact_toggle_state ? "\u00A7f" : "") + (int) e.getZ();
                 switch (e.getType().toString()) {

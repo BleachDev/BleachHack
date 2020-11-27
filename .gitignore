@@ -36,5 +36,6 @@ bin
 #other
 
 logs/
+private_modules/
 .fabric/
 .mixin.out/
