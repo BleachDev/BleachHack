@@ -79,7 +79,7 @@ public class ModuleManager {
         new Freecam(),
         new Fullbright(),
         new Ghosthand(),
-        new HandProgress(),
+        new OldAnimations(),
         new HoleESP(),
         new HoleTP(),
         new HotbarCache(),
