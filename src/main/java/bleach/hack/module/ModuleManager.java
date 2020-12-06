@@ -45,7 +45,7 @@ public class ModuleManager {
         new AutoLog(),
         new AutoReconnect(),
         new AutoRespawn(),
-        new AutoReplenish(),
+        //new AutoReplenish(),
         new AutoSign(),
         new AutoTool(),
         new AutoTunnel(),
