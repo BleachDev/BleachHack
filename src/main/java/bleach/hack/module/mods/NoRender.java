@@ -11,13 +11,13 @@ import bleach.hack.setting.base.SettingToggle;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.client.particle.ExplosionLargeParticle;
+import net.minecraft.client.render.entity.model.ArmorStandEntityModel;
 import net.minecraft.entity.FallingBlockEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.particle.ParticleTypes;
 
 public class NoRender extends Module {
-    public static int snowballsRemoved;
-    public static int fallingBlocksRemoved;
 
     public NoRender() {
         super("NoRender", KEY_UNBOUND, Category.RENDER, "Blocks certain elements from rendering",
@@ -41,7 +41,8 @@ public class NoRender extends Module {
                 new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren(
                 new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
                 new SettingToggle("Snowball", false).withDesc("Disables rendering snowballs"),
-                new SettingToggle("Falling Blocks", false).withDesc("Disables rendering falling blocks"));
+                new SettingToggle("Falling Blocks", false).withDesc("Disables rendering falling blocks"),
+                new SettingToggle("Armor Stands", false).withDesc("Disables rendering armor stands"));
     }
 
     @Subscribe
@@ -56,12 +57,14 @@ public class NoRender extends Module {
     public void onRenderSnowball(EventWorldRenderEntity event) {
         if (this.getSetting(14).asToggle().state && event.entity instanceof SnowballEntity) {
             event.entity.remove();
-            snowballsRemoved++;
             event.setCancelled(true);
         }
         if (this.getSetting(15).asToggle().state && event.entity instanceof FallingBlockEntity) {
             event.entity.remove();
-            fallingBlocksRemoved++;
+            event.setCancelled(true);
+        }
+        if (this.getSetting(16).asToggle().state && event.entity instanceof ArmorStandEntity) {
+            event.entity.remove();
             event.setCancelled(true);
         }
     }
@@ -93,10 +96,4 @@ public class NoRender extends Module {
         }
     }
 
-    @Override
-    public void onDisable() {
-        snowballsRemoved = 0;
-        fallingBlocksRemoved = 0;
-        super.onDisable();
-    }
 }
