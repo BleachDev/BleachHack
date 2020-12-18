@@ -50,7 +50,7 @@ public class ModuleManager {
         new AutoTool(),
         new AutoTunnel(),
         new AutoTotem(),
-        new CrystalAura(),
+        //new CrystalAura(),
         new AutoWalk(),
         new BetterPortal(),
         new BlockParty(),
@@ -132,6 +132,7 @@ public class ModuleManager {
         new ShulkerView(),
         new AutoEZ(),
         new AutoTrap(),
+        new AutoCrystal(),
 
         //new IRCMod(),
         //new AutoExplode(),
