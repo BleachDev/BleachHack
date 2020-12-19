@@ -1,22 +1,18 @@
 package bleach.hack.module.mods;
 
-import baritone.api.event.events.WorldEvent;
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.*;
+import bleach.hack.event.events.EventEntityRender;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class AutoEZ extends Module {
 
@@ -24,7 +20,6 @@ public class AutoEZ extends Module {
     private List<String> lines = new ArrayList<>();
     private int lineCount = 0;
     public List<String> dead_uuids = new ArrayList<>();
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 
     public AutoEZ() {

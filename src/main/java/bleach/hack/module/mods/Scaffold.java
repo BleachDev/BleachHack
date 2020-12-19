@@ -52,7 +52,9 @@ public class Scaffold extends Module {
                 new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
                         new SettingColor("Color", 0.3f, 0.2f, 1f, false).withDesc("Color for the block highlight"),
                         new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed")),
-                new SettingSlider("BPT", 1, 10, 2, 0).withDesc("Blocks Per Tick, how many blocks to place per tick"));
+                new SettingSlider("BPT", 1, 10, 2, 0).withDesc("Blocks Per Tick, how many blocks to place per tick"),
+                new SettingSlider("Down", 0, 3, 0, 0)
+                );
     }
 
     @Subscribe
@@ -76,7 +78,7 @@ public class Scaffold extends Module {
         double range = getSetting(0).asSlider().getValue();
         int mode = getSetting(1).asMode().mode;
 
-        Vec3d placeVec = mc.player.getPos().add(0, -0.85, 0);
+        Vec3d placeVec = mc.player.getPos().add(0, -0.85-getSetting(7).asSlider().getValue(), 0);
         Set<BlockPos> blocks = (mode == 0
                 ? new LinkedHashSet<>(Arrays.asList(new BlockPos(placeVec), new BlockPos(placeVec.add(range, 0, 0)), new BlockPos(placeVec.add(-range, 0, 0)),
                 new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))

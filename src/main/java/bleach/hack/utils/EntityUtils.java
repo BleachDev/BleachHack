@@ -24,11 +24,8 @@ import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Items;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -75,16 +72,34 @@ public class EntityUtils {
         return new double[]
                 { yaw, pitch };
     }
+
+    public static float[] getLegitRotations(Vec3d vec)
+    {
+        Vec3d eyesPos = getEyesPos();
+
+        double diffX = vec.x - eyesPos.x;
+        double diffY = vec.y - eyesPos.y;
+        double diffZ = vec.z - eyesPos.z;
+
+        double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+        float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
+        float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
+
+        return new float[]
+                { MinecraftClient.getInstance().player.yaw + MathHelper.wrapDegrees(yaw - MinecraftClient.getInstance().player.yaw),
+                        MinecraftClient.getInstance().player.pitch + MathHelper.wrapDegrees(pitch - MinecraftClient.getInstance().player.pitch) };
+    }
+    private static Vec3d getEyesPos()
+    {
+        return new Vec3d(MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + MinecraftClient.getInstance().player.getEyeHeight(mc.player.getPose()), MinecraftClient.getInstance().player.getZ());
+    }
     public enum FacingDirection
     {
         North,
         South,
         East,
         West,
-        SouthEast,
-        SouthWest,
-        NorthWest,
-        NorthEast,
     }
 
     public static FacingDirection GetFacing()
@@ -94,6 +109,7 @@ public class EntityUtils {
             case 0:
             case 1:
                 return FacingDirection.South;
+            case 2:
             case 3:
                 return FacingDirection.West;
             case 4:
@@ -106,51 +122,4 @@ public class EntityUtils {
         }
         return FacingDirection.North;
     }
-
-    public static double GetDistance(double p_X, double p_Y, double p_Z, double x, double y, double z)
-    {
-        double d0 = p_X - x;
-        double d1 = p_Y - y;
-        double d2 = p_Z - z;
-        return (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-    }
-
-    public static float getDamageAfterAbsorb(float damage, float totalArmor, float toughnessAttribute) {
-        float f = 2.0F + toughnessAttribute / 4.0F;
-        float f1 = MathHelper.clamp(totalArmor - damage / f, totalArmor * 0.2F, 20.0F);
-        return damage * (1.0F - f1 / 25.0F);
-    }
-
-    public static boolean IsEating()
-    {
-        return mc.player != null &&  mc.player.getActiveItem().getItem() == Items.GOLDEN_APPLE;
-    }
-
-    public static float GetRotationYawForCalc()
-    {
-        float rotationYaw = mc.player.yaw;
-        if (mc.player.forwardSpeed < 0.0f)
-        {
-            rotationYaw += 180.0f;
-        }
-        float n = 1.0f;
-        if (mc.player.forwardSpeed < 0.0f)
-        {
-            n = -0.5f;
-        }
-        else if (mc.player.forwardSpeed > 0.0f)
-        {
-            n = 0.5f;
-        }
-        if (mc.player.sidewaysSpeed > 0.0f)
-        {
-            rotationYaw -= 90.0f * n;
-        }
-        if (mc.player.sidewaysSpeed < 0.0f)
-        {
-            rotationYaw += 90.0f * n;
-        }
-        return rotationYaw * 0.017453292f;
-    }
-
 }

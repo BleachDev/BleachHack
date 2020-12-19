@@ -22,7 +22,6 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileMang;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.List;
 

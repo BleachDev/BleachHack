@@ -3,7 +3,6 @@ package bleach.hack.utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**

@@ -38,6 +38,8 @@ public class StashFinder extends Module {
     public List<ChunkPos> chunks = new ArrayList<>();
     public List<ChunkPos> nextChunks = new ArrayList<>();
 
+
+
     public void onEnable() {
         super.onEnable();
 
@@ -58,6 +60,7 @@ public class StashFinder extends Module {
 
     @Subscribe
     public void onTick(EventTick event){
+        if (getSetting(1).asToggle().state)
         mc.options.keyForward.setPressed(true);
         if (this.startChunk == null) {
             this.startChunk = new ChunkPos(this.mc.player.getBlockPos());
@@ -166,4 +169,6 @@ public class StashFinder extends Module {
         if (event.getPacket() instanceof CloseScreenS2CPacket || event.getPacket() instanceof DisconnectS2CPacket)
             setToggled(false);
     }
+
+
 }

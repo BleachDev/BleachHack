@@ -22,10 +22,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.utils.EntityUtils;
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.entity.vehicle.MinecartEntity;
-import net.minecraft.util.math.MathHelper;
 
 public class Speed extends Module {
 
@@ -33,7 +30,7 @@ public class Speed extends Module {
 
     public Speed() {
         super("Speed", KEY_UNBOUND, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
-                new SettingMode("Mode", "Bhop", "MiniHop", "OnGround", "Strafe"),
+                new SettingMode("Mode", "Bhop", "MiniHop", "OnGround", "Vanilla"),
                 new SettingSlider("Move Speed", 0.1, 10, 2, 2));
     }
 
@@ -87,11 +84,12 @@ public class Speed extends Module {
                 mc.player.setSprinting(true);
             }
         }
+        /* Strafe */
         double forward = mc.player.forwardSpeed;
         double strafe = mc.player.sidewaysSpeed;
         float yaw = mc.player.yaw;
 
-        if (getSetting(0).asMode().mode == 3) {
+        if (getSetting(0).asMode().mode == 3 && !mc.player.isFallFlying()) {
             if ((forward == 0.0D) && (strafe == 0.0D)) {
                 mc.player.setVelocity(0, mc.player.getVelocity().y, 0);
             } else {

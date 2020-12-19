@@ -3,18 +3,14 @@ package bleach.hack.module.mods;
 import baritone.api.BaritoneAPI;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.mixin.IKeyBinding;
-import bleach.hack.mixin.IMinecraftClient;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.options.KeyBinding;
-import net.minecraft.entity.player.HungerManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 
 import java.util.Objects;
 

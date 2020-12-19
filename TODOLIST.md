@@ -4,8 +4,6 @@ Modules to add:
 (Already in the filesystem commented out and partially completed)  
 4. LiquidInteract: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/world/LiquidInteractModule.java>  
 5. EntityControl: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/movement/EntityControlModule.java>  
-6. Welcomer: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/GreeterModule.java>  
-Additions: Rename from greeter to Welcomer and add file with variables for custom messages  
 7. MoreInv/XCarry: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/MoreInvModule.java>  
 8. Coord Logger: <https://raw.githubusercontent.com/seppukudevelopment/seppuku/master/src/main/java/me/rigamortis/seppuku/impl/module/misc/CoordLoggerModule.java>  
 9. NoBreakAnimations: <https://github.com/seppukudevelopment/seppuku/blob/master/src/main/java/me/rigamortis/seppuku/impl/module/render/NoBreakAnimModule.java>  
@@ -44,7 +42,7 @@ Minor Adjustments:
 52. Add nearest player hud card like in impact+  
 53. Fix flight not turning off until relog  
 55. Fix zoom module messing up if held down  
-56. Implement logging into stash finder  
+56. Implement logging into stash finder including beacons and stuff  
 57. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
 58. VisualRange (notifies you in chat whenever someone appears or leaves in your render distance  
 59. add no entity collision and water push to velocity  
@@ -68,3 +66,5 @@ Minor Adjustments:
 80. fix toggle command not working  
 81. viewclip  
 81. fix autowither not spawning tingy  
+82. F3 coord spoofer  
+83. add first run welcome message  

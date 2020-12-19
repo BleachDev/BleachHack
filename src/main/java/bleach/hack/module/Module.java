@@ -24,8 +24,6 @@ import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.file.BleachFileHelper;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Formatting;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

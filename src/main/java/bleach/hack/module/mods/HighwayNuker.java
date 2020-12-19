@@ -17,41 +17,39 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.collect.Maps;
-import com.google.common.eventbus.Subscribe;
-
 import bleach.hack.event.events.EventTick;
+import bleach.hack.module.Category;
+import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.module.Category;
-import bleach.hack.module.Module;
 import bleach.hack.utils.EntityUtils;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.util.math.Vec3d;
 import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.WorldUtils;
 import bleach.hack.utils.file.BleachFileMang;
+import com.google.common.collect.Maps;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
 
-public class NukerBypass extends Module {
+import java.util.ArrayList;
+import java.util.List;
+
+public class HighwayNuker extends Module {
 
 	private List<Block> blockList = new ArrayList<>();
 
-	public NukerBypass() {
-		super("NukerBypass", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
+	public HighwayNuker() {
+		super("HighwayNuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
 				new SettingMode("Mode: ", "Normal", "Multi", "Instant"),
 				new SettingMode("Blocks: ", "1x3", "2x3", "3x3", "Highway"),
 				new SettingSlider("Cooldown: ", 0, 4, 0, 0),
@@ -61,7 +59,7 @@ public class NukerBypass extends Module {
 				new SettingToggle("NoParticles", false),
 				new SettingMode("Sort: ", "Normal", "Hardness"),
 				new SettingSlider("Multi: ", 1, 10, 2, 0));
-	}
+    }
 
 	public void onEnable() {
 		blockList.clear();
@@ -73,24 +71,51 @@ public class NukerBypass extends Module {
 
 	private BlockPos lastPlayerPos = null;
 
-	@Subscribe
-	public void onTick(EventTick event) {
+	private List<BlockPos> getBlocks() {
 		int mode = getSettings().get(1).asMode().mode;
 		List<BlockPos> blocks = new ArrayList<>();
-		switch (mode) {
-			case 0:
-				blocks = get1x3();
-				break;
-			case 1:
-				blocks = get2x3();
-				break;
-			case 2:
-				blocks = getCube();
-				break;
-			case 3:
-				blocks = getHighway4();
-				break;
+		if (this.isToggled()) {
+			switch (mode) {
+				case 0:
+					blocks = get1x3();
+					break;
+				case 1:
+					blocks = get2x3();
+					break;
+				case 2:
+					blocks = getCube();
+					break;
+				case 3:
+					blocks = getHighway4();
+					break;
+			}
 		}
+		return blocks;
+	}
+	public boolean canSeeBlock(BlockPos pos) {
+		double diffX = pos.getX() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).x;
+		double diffY = pos.getY() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).y;
+		double diffZ = pos.getZ() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).z;
+
+		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+		float yaw = mc.player.yaw + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90 - mc.player.yaw);
+		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
+
+		Vec3d rotation = new Vec3d(
+				(double) (MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)),
+				(double) (-MathHelper.sin(pitch * 0.017453292F)),
+				(double) (MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)));
+
+		Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
+		return mc.world.raycast(new RaycastContext(mc.player.getCameraPosVec(mc.getTickDelta()),
+				rayVec, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player))
+				.getBlockPos().equals(pos);
+	}
+
+	@Subscribe
+	public void onTick(EventTick event) {
+		List<BlockPos> blocks = getBlocks();
 		double range = 6;
 
 //		/* Add blocks around player */
@@ -120,8 +145,9 @@ public class NukerBypass extends Module {
 
 		int broken = 0;
 		for (BlockPos pos : blocks) {
-			if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || mc.world.getBlockState(pos).getBlock() == Blocks.BEDROCK || mc.world.getBlockState(pos).getBlock() == Blocks.LAVA || WorldUtils.isFluid(pos))
+			if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() != Blocks.NETHERRACK)
 				continue;
+
 			if (!getSettings().get(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock()))
 				continue;
 
@@ -160,27 +186,6 @@ public class NukerBypass extends Module {
 					|| (getSettings().get(0).asMode().mode == 1 && broken >= (int) getSettings().get(8).asSlider().getValue()))
 				return;
 		}
-	}
-
-	public boolean canSeeBlock(BlockPos pos) {
-		double diffX = pos.getX() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).x;
-		double diffY = pos.getY() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).y;
-		double diffZ = pos.getZ() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).z;
-
-		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-		float yaw = mc.player.yaw + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90 - mc.player.yaw);
-		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
-
-		Vec3d rotation = new Vec3d(
-				(double) (MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)),
-				(double) (-MathHelper.sin(pitch * 0.017453292F)),
-				(double) (MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)));
-
-		Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
-		return mc.world.raycast(new RaycastContext(mc.player.getCameraPosVec(mc.getTickDelta()),
-				rayVec, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player))
-				.getBlockPos().equals(pos);
 	}
 
 	public List<BlockPos> getCube() {
@@ -468,4 +473,5 @@ public class NukerBypass extends Module {
 		}
 		return cubeBlocks;
 	}
+
 }
