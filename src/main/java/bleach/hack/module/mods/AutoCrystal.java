@@ -54,7 +54,7 @@ public class AutoCrystal extends Module {
                 new SettingSlider("WaitTicks", 0, 20, 5, 0),
                 new SettingToggle("1.13 Place", true),
                 new SettingColor("Color", 0.6f, 0.6f, 0.6f, false),
-                new SettingSlider("Range", 0, 6, 4, 0)
+                new SettingSlider("Range", 0, 6, 4, 2)
         );
         ArrayList<BlockPos> blocksRangeAdder = new ArrayList<BlockPos>();
         int range = (int) getSetting(10).asSlider().getValue();
