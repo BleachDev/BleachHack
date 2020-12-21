@@ -98,7 +98,7 @@ public class ModuleManager {
         new NoToolCooldown(),
         new NoVelocity(),
         new Nuker(),
-        new LiquidInteract(),
+        //new LiquidInteract(),
         new Greeter(),
         new HighwayNuker(),
         new OffhandCrash(),
