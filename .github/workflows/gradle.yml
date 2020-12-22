@@ -26,7 +26,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: BH-epearlEdition-MacOS
-        path: build/libs/bleachhack-epearl-edition-2400.jar
+        path: build/libs/bleachhack-epearl-edition-2500.jar
 
   build2:
 
@@ -46,4 +46,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: BH-epearlEdition-Windows
-        path: build/libs/bleachhack-epearl-edition-2400.jar
+        path: build/libs/bleachhack-epearl-edition-2500.jar

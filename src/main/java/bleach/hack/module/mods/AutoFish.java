@@ -10,6 +10,7 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 
 public class AutoFish extends Module {
 
@@ -40,11 +41,11 @@ public class AutoFish extends Module {
             ticksPassed--;
         }
         if (pullFish && ticksPassed == (int) getSetting(0).asSlider().getValue() * 20 - 5) {
-            ((IMinecraftClient) mc).callDoItemUse();
+            //use item packet goes here
             pullFish = false;
         }
         if (ticksPassed == 1) {
-            ((IMinecraftClient) mc).callDoItemUse();
+            //use item packet goes here
             ticksPassed = 0;
         }
     }

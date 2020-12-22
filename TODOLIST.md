@@ -19,14 +19,12 @@ Minor Adjustments:
 22. Make scaffold & surround turn off lock to blocks when nothing to place and surround returns to last item  
 23. Add Totem Pop Counter  
 24. Add block highlight/search module  
-25. Vanilla Speed option  
 27. In armor hud add vertical alignment, text mode, and percentage mode  
 29. fix popout gui viafabric compatibility  
 30. fix tps counter in popout gui  
 32. improve autoopen on elytras to do via block hight not ticks  
 34. Long jump module  
 35. Reach module  
-36. Auto cobweb (places cobweb in your block to stop player movement)  
 37. Make colors work right in wireframe esp  
 39. Chat logger & file logger when detecting cactus placed in the nether  
 40. properly center the module description left of the module  
@@ -35,17 +33,14 @@ Minor Adjustments:
 43. Fucker module / auto right click beds in nether/end module and auto charge and right click respawn anchors in overworld/end module and make it pull glowstone from inventory  
 44. Fix nametags not rendering armor & hand item properly and add player ping to nametags  
 45. Option to save/switch configurations  
-46. Implement a good Crystal Aura  
 48. Make hovering over modules sync the color with the rainbow/colorselector but with 25% opacity (its currently static blue)  
 50. Make elytrafly sync up/down speed with the world your in  
 51. Add alpha slider to HoleESP and make this not highlight per block and highlight entire hole either red or blue instead depending on surround type  
 52. Add nearest player hud card like in impact+  
 53. Fix flight not turning off until relog  
 55. Fix zoom module messing up if held down  
-56. Implement logging into stash finder including beacons and stuff  
 57. Make a check on game crash to disable Xray and Stashfinder (them being enabled during start up causes crash.)  
 58. VisualRange (notifies you in chat whenever someone appears or leaves in your render distance  
-59. add no entity collision and water push to velocity  
 60. make strength esp render over body not under and also check other players...  
 61. auto tnt ignite module  
 62. Add way to slow down swimming speed for 2b2t  
@@ -68,3 +63,5 @@ Minor Adjustments:
 81. fix autowither not spawning tingy  
 82. F3 coord spoofer  
 83. add first run welcome message  
+84. rebase client  
+85. extra tab  

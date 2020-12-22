@@ -20,7 +20,7 @@ package bleach.hack.mixin;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.LiquidInteract;
+//import bleach.hack.module.mods.LiquidInteract;
 import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -73,9 +73,9 @@ public class MixinGameRenderer {
         return 0;
     }
 
-    @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
-    private HitResult updateTargetedEntityEntityRayTraceProxy(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {
-        if (ModuleManager.getModule(LiquidInteract.class).isToggled()) return entity.raycast(maxDistance, tickDelta, true);
-        return entity.raycast(maxDistance, tickDelta, includeFluids);
-    }
+    //@Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
+    //private HitResult updateTargetedEntityEntityRayTraceProxy(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {
+    //    if (ModuleManager.getModule(LiquidInteract.class).isToggled()) return entity.raycast(maxDistance, tickDelta, true);
+    //    return entity.raycast(maxDistance, tickDelta, includeFluids);
+    //}
 }

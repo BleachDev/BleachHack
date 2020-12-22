@@ -39,6 +39,8 @@ public class AutoCrystal extends Module {
     private BlockPos targetBlock;
 
 
+//TODO: antisuicide
+//TODO: silent crystal swap
 
     public AutoCrystal() {
         super("AutoCrystal", KEY_UNBOUND, Category.COMBAT, "Auto crystal chungus",
@@ -51,10 +53,11 @@ public class AutoCrystal extends Module {
                 new SettingSlider("FacePlace", 0, 20, 6, 0),
                 new SettingSlider("WaitTicks", 0, 20, 5, 0),
                 new SettingToggle("1.13 Place", true),
-                new SettingColor("Color", 0.6f, 0.6f, 0.6f, false)
+                new SettingColor("Color", 0.6f, 0.6f, 0.6f, false),
+                new SettingSlider("Range", 0, 6, 4, 2)
         );
         ArrayList<BlockPos> blocksRangeAdder = new ArrayList<BlockPos>();
-        int range = 4;
+        int range = (int) getSetting(10).asSlider().getValue();
         for(int x = range; x >= -range; x--)
         {
             for(int y = range; y >= -range; y--)
@@ -128,6 +131,7 @@ public class AutoCrystal extends Module {
         //calculate the block that does the most damage to the target
         targetBlock = blocks.parallelStream()
                 .filter(block -> CrystalUtils.getCrystalDamage(mc.player, block) < getSetting(4).asSlider().getValue())
+                //.filter(block -> CrystalUtils.getCrystalDamage(mc.player, block) < mc.player.getHealth())
                 .filter(block -> {
                     LivingEntity livingEntity = (LivingEntity) target;
                     if(livingEntity.getHealth() + livingEntity.getAbsorptionAmount() < getSetting(6).asSlider().getValue())
@@ -145,6 +149,8 @@ public class AutoCrystal extends Module {
 
         if(getSetting(3).asToggle().state && mc.player.getMainHandStack().getItem() != Items.END_CRYSTAL)
             oldSlot = CrystalUtils.changeHotbarSlotToItem(Items.END_CRYSTAL);
+
+        if (mc.player.getMainHandStack().getItem() != Items.END_CRYSTAL) {return;}
 
         CrystalUtils.placeBlock(new Vec3d(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ()), Hand.MAIN_HAND, Direction.UP);
         mc.interactionManager.attackEntity(mc.player, crystal);
