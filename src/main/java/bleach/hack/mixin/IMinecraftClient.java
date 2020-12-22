@@ -8,14 +8,14 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(MinecraftClient.class)
 public interface IMinecraftClient {
 
-    @Accessor
-    void setItemUseCooldown(int itemUseCooldown);
+    //@Accessor
+    //void setItemUseCooldown(int itemUseCooldown);
 
-    @Invoker
-    void callDoAttack();
+    //@Invoker
+    //void callDoAttack();
 
-    @Invoker
-    void callDoItemUse();
+    //@Invoker
+    //void callDoItemUse();
 
     @Accessor
     static int getCurrentFps() {
