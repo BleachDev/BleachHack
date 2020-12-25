@@ -53,6 +53,7 @@ public class ModuleManager {
         new AutoWalk(),
         new BetterPortal(),
         new BlockParty(),
+        new CompatibilitySwim(),
         new BookCrash(),
         new BowBot(),
         new BoxESP(),
