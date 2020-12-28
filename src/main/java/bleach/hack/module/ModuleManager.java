@@ -54,6 +54,7 @@ public class ModuleManager {
         new BetterPortal(),
         new BlockParty(),
         new CompatibilitySwim(),
+        new AutoBedrockBreak(),
         new BookCrash(),
         new BowBot(),
         new BoxESP(),
