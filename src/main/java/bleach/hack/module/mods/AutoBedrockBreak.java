@@ -5,6 +5,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.CrystalUtils;
 import bleach.hack.utils.WorldUtils;
@@ -32,7 +33,8 @@ public class AutoBedrockBreak extends Module {
 
     public AutoBedrockBreak() {
         super("AutoBedrockBreak", KEY_UNBOUND, Category.EXPLOITS, "automatically breaks bedrock (IN DEVELOPMENT)",
-                new SettingMode("Type", "Piston", "Sticky Piston"));
+                new SettingMode("Type", "Piston", "Sticky Piston"),
+                new SettingToggle("Debug", true));
     }
 
     @Override
@@ -232,7 +234,9 @@ public class AutoBedrockBreak extends Module {
                         CrystalUtils.placeBlock(new Vec3d(coords.getX(), coords.getY(), coords.getZ()+1), Hand.MAIN_HAND, Direction.EAST);
                         break;
                 }
-                BleachLogger.infoMessage("WAITING FOR PISTON TO BREAK! CURRENT BLOCKSTATE: "+mc.world.getBlockState(pistonPos).getBlock().toString());
+                if (getSetting(1).asToggle().state) {
+                    BleachLogger.infoMessage("WAITING FOR PISTON TO BREAK! CURRENT BLOCKSTATE: "+mc.world.getBlockState(pistonPos).getBlock().toString());
+                }
             } else {
                 BleachLogger.infoMessage("SUCCESSFULLY BROKE BEDROCK");
                 enabled = false;
