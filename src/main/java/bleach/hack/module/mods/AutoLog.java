@@ -35,7 +35,7 @@ public class AutoLog extends Module {
                 new SettingSlider("CrystalRange: ", 0.0D, 8.0D, 4.0D, 2),
                 new SettingToggle("Nearby Player", false),
                 new SettingSlider("Range: ", 0.0D, 100.0D, 20.0D, 1),
-                new SettingMode("Nearby Mode:","Range","Render"));
+                new SettingMode("Nearby Mode","Range","Render"));
     }
 
 
