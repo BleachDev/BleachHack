@@ -1,5 +1,6 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRenderEntity;
@@ -41,7 +42,7 @@ public class AutoLog extends Module {
     @Subscribe
     public void onLivingLabelRender(EventEntityRender.Label event) {
         if (event.getEntity() instanceof PlayerEntity && getSetting(6).asToggle().state && getSetting(8).asMode().mode == 1) {
-            if (!event.getEntity().getName().equals(this.mc.player.getName()))
+            if (!event.getEntity().getName().equals(this.mc.player.getName()) && !BleachHack.friendMang.has(event.getEntity().getDisplayName().asString()))
             {
                 this.logOut(event.getEntity().getDisplayName().asString()+" entered render distance, logged off.");
             }
@@ -104,7 +105,7 @@ public class AutoLog extends Module {
                     {
                         Entity e = (Entity) entityIter.next();
 
-                        if (!e.getName().equals(this.mc.player.getName()) && (double) this.mc.player.distanceTo(e) <= this.getSettings().get(7).asSlider().getValue())
+                        if (!e.getName().equals(this.mc.player.getName()) && (double) this.mc.player.distanceTo(e) <= this.getSettings().get(7).asSlider().getValue() && !BleachHack.friendMang.has(e.getDisplayName().asString()))
                         {
                             this.logOut("Logged Out " + this.mc.player.distanceTo(e) + " Blocks Away From A Player (" + e.getDisplayName().asString() + ")");
                         }
