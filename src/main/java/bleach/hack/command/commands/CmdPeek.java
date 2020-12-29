@@ -20,6 +20,7 @@ package bleach.hack.command.commands;
 import java.util.List;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.commands.CmdPeek.PeekShulkerScreen;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.BleachQueue;
 import bleach.hack.utils.ItemContentUtils;

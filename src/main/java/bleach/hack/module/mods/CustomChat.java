@@ -12,6 +12,7 @@ import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.module.mods.CustomChat.CustomFont;
 import bleach.hack.module.mods.CustomChat.CustomFont.CharMap;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
