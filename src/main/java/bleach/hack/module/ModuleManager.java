@@ -28,9 +28,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ModuleManager {
-    private static final List<Module> mods = Arrays.asList(
+    private static final List<Module> mods = Stream.of(
         new AllahHaram(),
         new Ambience(),
         new AntiChunkBan(),
@@ -136,6 +137,7 @@ public class ModuleManager {
         new ShulkerView(),
         new AutoEZ(),
         new AutoTrap(),
+        new BedReplenish(),
         new AutoCrystal(),
 
         //new IRCMod(),
@@ -153,7 +155,7 @@ public class ModuleManager {
 
         new UI()
 
-    ).stream().sorted(Comparator.comparing(Module::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
+    ).sorted(Comparator.comparing(Module::getName, String.CASE_INSENSITIVE_ORDER)).collect(Collectors.toList());
 
     public static List<Module> getModules() {
         return mods;

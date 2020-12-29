@@ -8,6 +8,8 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
@@ -41,11 +43,11 @@ public class AutoFish extends Module {
             ticksPassed--;
         }
         if (pullFish && ticksPassed == (int) getSetting(0).asSlider().getValue() * 20 - 5) {
-            //use item packet goes here
+            mc.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND));
             pullFish = false;
         }
         if (ticksPassed == 1) {
-            //use item packet goes here
+            mc.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND));
             ticksPassed = 0;
         }
     }
