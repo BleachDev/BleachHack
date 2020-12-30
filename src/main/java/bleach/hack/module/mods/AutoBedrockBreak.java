@@ -36,7 +36,7 @@ public class AutoBedrockBreak extends Module {
         super("AutoBedrockBreak", KEY_UNBOUND, Category.EXPLOITS, "automatically breaks bedrock (IN DEVELOPMENT)",
                 new SettingMode(" Piston Type", "Piston", "Sticky Piston"),
                 new SettingToggle("Debug", true),
-                new SettingMode("Structure Type", "Obsidian", "Cobblestone")
+                new SettingMode("Structure Type", "Obsidian", "Cobblestone", "Iron Block")
         );
     }
 
@@ -103,6 +103,9 @@ public class AutoBedrockBreak extends Module {
                 case 1:
                     CrystalUtils.changeHotbarSlotToItem(Items.COBBLESTONE);
                     break;
+                case 2:
+                    CrystalUtils.changeHotbarSlotToItem(Items.IRON_BLOCK);
+                    break;
             }
             active = true;
             switch(direction) {
@@ -127,6 +130,9 @@ public class AutoBedrockBreak extends Module {
                     break;
                 case 1:
                     CrystalUtils.changeHotbarSlotToItem(Items.COBBLESTONE);
+                    break;
+                case 2:
+                    CrystalUtils.changeHotbarSlotToItem(Items.IRON_BLOCK);
                     break;
             }
             switch(direction) {
@@ -242,15 +248,15 @@ public class AutoBedrockBreak extends Module {
                 switch(direction) {
                     case "west":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
-                        CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()+1), Hand.MAIN_HAND, Direction.SOUTH);
+                        CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()+1), Hand.MAIN_HAND, Direction.DOWN);
                         break;
                     case "east":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
-                        CrystalUtils.placeBlock(new Vec3d(coords.getX()+1, coords.getY(), coords.getZ()-1), Hand.MAIN_HAND, Direction.NORTH);
+                        CrystalUtils.placeBlock(new Vec3d(coords.getX()+1, coords.getY(), coords.getZ()-1), Hand.MAIN_HAND, Direction.DOWN);
                         break;
                     case "north":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
-                        CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()-1), Hand.MAIN_HAND, Direction.WEST);
+                        CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()-1), Hand.MAIN_HAND, Direction.DOWN);
                         break;
                     case "south":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
