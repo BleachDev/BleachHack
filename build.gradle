@@ -37,7 +37,7 @@ dependencies {
     modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
     include 'com.github.Vatuu:discord-rpc:1.6.2'
 	
-	// This should add Baritone if I'm not dumb
+	// This is probably the worst way to include Baritone
 	modImplementation("com.github.cabaletta:baritone:v1.6.2") {
 		exclude(group: "org.lwjgl.lwjgl", module: "lwjgl-platform") 
 		exclude(group: "net.java.jinput", module: "jinput-platform") 
