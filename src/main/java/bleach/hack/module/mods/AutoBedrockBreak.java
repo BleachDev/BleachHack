@@ -27,7 +27,6 @@ public class AutoBedrockBreak extends Module {
     boolean enabled = false;
     boolean active = false;
     Item pistonType;
-    Item blockType;
     BlockPos pistonPos;
     BlockPos coords;
     String direction;
@@ -47,6 +46,12 @@ public class AutoBedrockBreak extends Module {
         enabled = true;
         active = false;
         ticksPassed = 0;
+        if (mc.player == null) {
+            super.setToggled(false);
+            return;
+        }
+        direction = mc.player.getHorizontalFacing().getName();
+        coords = mc.player.getBlockPos();
         //super.setToggled(false);
     }
 
@@ -58,8 +63,6 @@ public class AutoBedrockBreak extends Module {
         ticksPassed++;
         if (!enabled) return;
 
-        direction = mc.player.getHorizontalFacing().getName();
-        coords = mc.player.getBlockPos();
 
         switch(this.getSetting(0).asMode().mode) {
             case 0:
