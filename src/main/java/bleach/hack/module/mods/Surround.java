@@ -32,6 +32,11 @@ public class Surround extends Module {
     public void onEnable() {
         super.onEnable();
 
+        if (mc.player == null) {
+            super.setToggled(false);
+            return;
+        }
+
         int obby = -1;
         for (int i = 0; i < 9; i++) {
             if (mc.player.inventory.getStack(i).getItem() == Items.NETHERITE_BLOCK || mc.player.inventory.getStack(i).getItem() == Items.OBSIDIAN) {
