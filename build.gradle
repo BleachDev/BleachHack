@@ -30,21 +30,14 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	
+	implementation "com.gitlab.CDAGaming:fabritone:fabric~1.16.3-SNAPSHOT"
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
 	// This adds Discord RPC, wtf does it do?
     modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
     include 'com.github.Vatuu:discord-rpc:1.6.2'
-	
-	// This is probably the worst way to include Baritone
-	modImplementation("com.github.cabaletta:baritone:v1.6.2") {
-		exclude(group: "org.lwjgl.lwjgl", module: "lwjgl-platform") 
-		exclude(group: "net.java.jinput", module: "jinput-platform") 
-		exclude(group: "net.java.jinput", module: "jinput") 
-		exclude(group: "net.sf.jopt-simple", module: "jopt-simple") 
-	}
-	include("com.github.cabaletta:baritone:v1.6.2")
 }
 
 processResources {
