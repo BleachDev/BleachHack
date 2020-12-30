@@ -5,9 +5,20 @@ plugins {
 
 
 repositories {
-		maven { 
-			url 'https://jitpack.io' 
-		}
+	maven { 
+		url 'https://jitpack.io' 
+	}
+	maven {
+        name = 'spongepowered-repo'
+        url = 'http://repo.spongepowered.org/maven/'
+    }
+    maven {
+        name = 'impactdevelopment-repo'
+        url = 'https://impactdevelopment.github.io/maven/'
+    }
+	maven {
+        url = 'https://server.bbkr.space/artifactory/libs-release'
+    }
 }
 
 
@@ -22,12 +33,22 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	
+	//implementation "nl.matsv:viabackwards-all:3.2.0-1.16.4-rc1"
+    //implementation "us.myles:viaversion:3.2.0-1.16.4-rc1"
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
 	// This adds Discord RPC, wtf does it do?
     modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
     include 'com.github.Vatuu:discord-rpc:1.6.2'
+	
+	// This should add Baritone if I'm not dumb
+	modImplementation 'cabaletta:baritone-standalone:1.6'
+    include 'cabaletta:baritone-standalone:1.6'
+	
+	modImplementation 'com.github.ViaVersion:ViaFabric:build-662.1'
+    include 'com.github.ViaVersion:ViaFabric:build-662.1'
 }
 
 processResources {
