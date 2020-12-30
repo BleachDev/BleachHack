@@ -27,14 +27,17 @@ public class AutoBedrockBreak extends Module {
     boolean enabled = false;
     boolean active = false;
     Item pistonType;
+    Item blockType;
     BlockPos pistonPos;
     BlockPos coords;
     String direction;
 
     public AutoBedrockBreak() {
         super("AutoBedrockBreak", KEY_UNBOUND, Category.EXPLOITS, "automatically breaks bedrock (IN DEVELOPMENT)",
-                new SettingMode("Type", "Piston", "Sticky Piston"),
-                new SettingToggle("Debug", true));
+                new SettingMode(" Piston Type", "Piston", "Sticky Piston"),
+                new SettingToggle("Debug", true),
+                new SettingMode("Structure Type", "Obsidian", "Cobblestone")
+        );
     }
 
     @Override
@@ -66,6 +69,8 @@ public class AutoBedrockBreak extends Module {
                 pistonType = Items.STICKY_PISTON;
                 break;
         }
+
+
         switch(direction) {
             case "west":
                 pistonPos = new BlockPos(coords.getX()-1, coords.getY(), coords.getZ()+1);
@@ -91,7 +96,14 @@ public class AutoBedrockBreak extends Module {
 
 
         if (ticksPassed == 1) {
-            CrystalUtils.changeHotbarSlotToItem(Items.OBSIDIAN);
+            switch(this.getSetting(2).asMode().mode) {
+                case 0:
+                    CrystalUtils.changeHotbarSlotToItem(Items.OBSIDIAN);
+                    break;
+                case 1:
+                    CrystalUtils.changeHotbarSlotToItem(Items.COBBLESTONE);
+                    break;
+            }
             active = true;
             switch(direction) {
                 case "west":
@@ -109,7 +121,14 @@ public class AutoBedrockBreak extends Module {
             }
         }
         if (ticksPassed == 2) {
-            CrystalUtils.changeHotbarSlotToItem(Items.NETHERRACK);
+            switch(this.getSetting(2).asMode().mode) {
+                case 0:
+                    CrystalUtils.changeHotbarSlotToItem(Items.NETHERRACK);
+                    break;
+                case 1:
+                    CrystalUtils.changeHotbarSlotToItem(Items.COBBLESTONE);
+                    break;
+            }
             switch(direction) {
                 case "west":
                     CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()), Hand.MAIN_HAND, Direction.UP);
@@ -223,19 +242,19 @@ public class AutoBedrockBreak extends Module {
                 switch(direction) {
                     case "west":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
-                        CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()), Hand.MAIN_HAND, Direction.SOUTH);
+                        CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()+1), Hand.MAIN_HAND, Direction.SOUTH);
                         break;
                     case "east":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
-                        CrystalUtils.placeBlock(new Vec3d(coords.getX()+1, coords.getY(), coords.getZ()), Hand.MAIN_HAND, Direction.NORTH);
+                        CrystalUtils.placeBlock(new Vec3d(coords.getX()+1, coords.getY(), coords.getZ()-1), Hand.MAIN_HAND, Direction.NORTH);
                         break;
                     case "north":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
-                        CrystalUtils.placeBlock(new Vec3d(coords.getX(), coords.getY(), coords.getZ()-1), Hand.MAIN_HAND, Direction.WEST);
+                        CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY(), coords.getZ()-1), Hand.MAIN_HAND, Direction.WEST);
                         break;
                     case "south":
                         WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() + 2, mc.player.getZ());
-                        CrystalUtils.placeBlock(new Vec3d(coords.getX(), coords.getY(), coords.getZ()+1), Hand.MAIN_HAND, Direction.EAST);
+                        CrystalUtils.placeBlock(new Vec3d(coords.getX()+1, coords.getY(), coords.getZ()+1), Hand.MAIN_HAND, Direction.DOWN);
                         break;
                 }
                 if (getSetting(1).asToggle().state) {
@@ -249,6 +268,5 @@ public class AutoBedrockBreak extends Module {
                 super.setToggled(false);
             }
         }
-        // TODO: add flick lever and look upwards feature
     }
 }
