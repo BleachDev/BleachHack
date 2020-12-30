@@ -16,21 +16,6 @@ repositories {
         name = 'impactdevelopment-repo'
         url = 'https://impactdevelopment.github.io/maven/'
     }
-	 maven {
-		url = "https://server.bbkr.space/artifactory/libs-release"
-	 }
-	 maven {
-		url = "https://repo.viaversion.com/"
-	 }
-	 maven {
-		url = "https://maven.fabricmc.net/"
-	 }
-	 maven {
-		url = "https://oss.sonatype.org/content/repositories/snapshots"
-	 }
-	 maven {
-		url = "https://maven.extracraftx.com"
-	 }
 }
 
 
@@ -45,13 +30,8 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	
-	implementation "us.myles:viaversion:3.2.1"
-    include "us.myles:viaversion:3.2.1"
-    implementation "org.yaml:snakeyaml:1.26"
-    include "org.yaml:snakeyaml:1.26"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
 	// This adds Discord RPC, wtf does it do?
     modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
@@ -65,9 +45,6 @@ dependencies {
 		exclude(group: "net.sf.jopt-simple", module: "jopt-simple") 
 	}
 	include("com.github.cabaletta:baritone:v1.6.2")
-	
-	modImplementation 'com.github.ViaVersion:ViaFabric:build-662.1'
-    include 'com.github.ViaVersion:ViaFabric:build-662.1'
 }
 
 processResources {
