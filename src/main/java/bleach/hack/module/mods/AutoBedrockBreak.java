@@ -209,19 +209,19 @@ public class AutoBedrockBreak extends Module {
             CrystalUtils.changeHotbarSlotToItem(pistonType);
             switch(direction) {
                 case "west":
-                    WorldUtils.facePosPacket(coords.getX()-1, coords.getY()-1, coords.getZ()+1);
+                    WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() - 2, mc.player.getZ());
                     CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY()-1, coords.getZ()+1), Hand.MAIN_HAND, Direction.UP);
                     break;
                 case "east":
-                    WorldUtils.facePosPacket(coords.getX()+1, coords.getY()-1, coords.getZ()-1);
+                    WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() - 2, mc.player.getZ());
                     CrystalUtils.placeBlock(new Vec3d(coords.getX()+1, coords.getY()-1, coords.getZ()-1), Hand.MAIN_HAND, Direction.UP);
                     break;
                 case "north":
-                    WorldUtils.facePosPacket(coords.getX()-1, coords.getY()-1, coords.getZ()-1);
+                    WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() - 2, mc.player.getZ());
                     CrystalUtils.placeBlock(new Vec3d(coords.getX()-1, coords.getY()-1, coords.getZ()-1), Hand.MAIN_HAND, Direction.UP);
                     break;
                 case "south":
-                    WorldUtils.facePosPacket(coords.getX()+1, coords.getY()-1, coords.getZ()+1);
+                    WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY() - 2, mc.player.getZ());
                     CrystalUtils.placeBlock(new Vec3d(coords.getX()+1, coords.getY()-1, coords.getZ()+1), Hand.MAIN_HAND, Direction.UP);
                     break;
             }
