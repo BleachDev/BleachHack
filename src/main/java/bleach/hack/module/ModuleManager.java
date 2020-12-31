@@ -139,6 +139,7 @@ public class ModuleManager {
         new AutoTrap(),
         new BedReplenish(),
         new AutoCrystal(),
+        new BlockHighlight(),
 
         //new IRCMod(),
         //new AutoExplode(),

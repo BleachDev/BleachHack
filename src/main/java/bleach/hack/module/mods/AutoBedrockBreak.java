@@ -17,6 +17,7 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -28,6 +29,7 @@ public class AutoBedrockBreak extends Module {
     boolean active = false;
     Item pistonType;
     BlockPos pistonPos;
+    BlockPos lookingCoords;
     BlockPos coords;
     String direction;
 
@@ -50,9 +52,25 @@ public class AutoBedrockBreak extends Module {
             super.setToggled(false);
             return;
         }
+
+        if (mc.crosshairTarget == null || mc.crosshairTarget.getType() != HitResult.Type.BLOCK) {return;}
+        lookingCoords = mc.crosshairTarget.getType() == HitResult.Type.BLOCK ? ((BlockHitResult) mc.crosshairTarget).getBlockPos() : null;
         direction = mc.player.getHorizontalFacing().getName();
-        coords = mc.player.getBlockPos();
-        //super.setToggled(false);
+        switch(direction) {
+            case "west":
+                coords = lookingCoords.north().east().up();
+                break;
+            case "east":
+                coords = lookingCoords.south().west().up();
+                break;
+            case "north":
+                coords = lookingCoords.east().south().up();
+                break;
+            case "south":
+                coords = lookingCoords.west().north().up();
+                break;
+        }
+        //BleachLogger.infoMessage(lookingCoords.toString() + "||" + coords);
     }
 
     @Subscribe
@@ -246,6 +264,16 @@ public class AutoBedrockBreak extends Module {
             }
         }
         if (ticksPassed > 60 && enabled) {
+            //if (
+            //        mc.world.getBlockState(pistonPos.down(1)).getBlock() == Blocks.BEDROCK &&
+            //                mc.world.getBlockState(pistonPos).getEntries().toString().contains("DirectionProperty{name=facing, clazz=class net.minecraft.util.math.Direction, values=[north, east, south, west, up, down]}=down")
+            //) {
+            //    BleachLogger.infoMessage("FAILED TO BREAK BEDROCK.");
+            //    enabled = false;
+            //    ticksPassed = 0;
+            //    active = false;
+            //    super.setToggled(false);
+            //}
             if (mc.world.getBlockState(pistonPos.down(1)).getBlock() == Blocks.BEDROCK) {
                 CrystalUtils.changeHotbarSlotToItem(pistonType);
                 switch(direction) {
