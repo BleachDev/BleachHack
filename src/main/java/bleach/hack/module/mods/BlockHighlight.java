@@ -93,7 +93,4 @@ public class BlockHighlight extends Module
         RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
         RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
     }
-    public void onDisable () {
-        this.poses.clear();
-    }
 }
