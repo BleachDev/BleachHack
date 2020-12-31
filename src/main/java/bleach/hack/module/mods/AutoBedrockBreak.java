@@ -114,9 +114,43 @@ public class AutoBedrockBreak extends Module {
             return;
         }
 
-
-
         if (ticksPassed == 1) {
+            switch(this.getSetting(2).asMode().mode) {
+                case 0:
+                    CrystalUtils.changeHotbarSlotToItem(Items.NETHERRACK);
+                    break;
+                case 1:
+                    CrystalUtils.changeHotbarSlotToItem(Items.COBBLESTONE);
+                    break;
+                case 2:
+                    CrystalUtils.changeHotbarSlotToItem(Items.IRON_BLOCK);
+                    break;
+            }
+            switch(direction) {
+                case "west":
+                    if (this.mc.world.getBlockState(lookingCoords.north()).getBlock() == Blocks.AIR) {
+                        CrystalUtils.placeBlock(new Vec3d(lookingCoords.getX(), lookingCoords.getY(), lookingCoords.getZ()), Hand.MAIN_HAND, Direction.NORTH);
+                    }
+                    break;
+                case "east":
+                    if (this.mc.world.getBlockState(lookingCoords.south()).getBlock() == Blocks.AIR) {
+                        CrystalUtils.placeBlock(new Vec3d(lookingCoords.getX(), lookingCoords.getY(), lookingCoords.getZ()), Hand.MAIN_HAND, Direction.SOUTH);
+                    }
+                    break;
+                case "north":
+                    if (this.mc.world.getBlockState(lookingCoords.east()).getBlock() == Blocks.AIR) {
+                        CrystalUtils.placeBlock(new Vec3d(lookingCoords.getX(), lookingCoords.getY(), lookingCoords.getZ()), Hand.MAIN_HAND, Direction.EAST);
+                    }
+                    break;
+                case "south":
+                    if (this.mc.world.getBlockState(lookingCoords.west()).getBlock() == Blocks.AIR) {
+                        CrystalUtils.placeBlock(new Vec3d(lookingCoords.getX(), lookingCoords.getY(), lookingCoords.getZ()), Hand.MAIN_HAND, Direction.WEST);
+                    }
+            }
+        }
+
+
+        if (ticksPassed == 2) {
             switch(this.getSetting(2).asMode().mode) {
                 case 0:
                     CrystalUtils.changeHotbarSlotToItem(Items.OBSIDIAN);
@@ -144,7 +178,7 @@ public class AutoBedrockBreak extends Module {
                     break;
             }
         }
-        if (ticksPassed == 2) {
+        if (ticksPassed == 3) {
             switch(this.getSetting(2).asMode().mode) {
                 case 0:
                     CrystalUtils.changeHotbarSlotToItem(Items.NETHERRACK);
@@ -171,7 +205,7 @@ public class AutoBedrockBreak extends Module {
                     break;
             }
         }
-        if (ticksPassed == 3) {
+        if (ticksPassed == 4) {
             CrystalUtils.changeHotbarSlotToItem(Items.TNT);
             switch(direction) {
                 case "west":
@@ -188,7 +222,7 @@ public class AutoBedrockBreak extends Module {
                     break;
             }
         }
-        if (ticksPassed == 4) {
+        if (ticksPassed == 5) {
             CrystalUtils.changeHotbarSlotToItem(Items.LEVER);
             switch(direction) {
                 case "west":
@@ -205,7 +239,7 @@ public class AutoBedrockBreak extends Module {
                     break;
             }
         }
-        if (ticksPassed == 5) {
+        if (ticksPassed == 6) {
             CrystalUtils.changeHotbarSlotToItem(pistonType);
             switch(direction) {
                 case "west":
@@ -226,7 +260,7 @@ public class AutoBedrockBreak extends Module {
                     break;
             }
         }
-        if (ticksPassed == 6) {
+        if (ticksPassed == 7) {
             CrystalUtils.changeHotbarSlotToItem(Items.TNT);
             switch(direction) {
                 case "west":
@@ -243,7 +277,7 @@ public class AutoBedrockBreak extends Module {
                     break;
             }
         }
-        if (ticksPassed == 7) {
+        if (ticksPassed == 8) {
             switch(direction) {
                 case "west":
                     mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
