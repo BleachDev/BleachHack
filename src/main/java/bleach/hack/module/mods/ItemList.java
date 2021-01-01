@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.file.BleachFileMang;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 
@@ -37,9 +38,7 @@ public class ItemList extends Module {
     @Override
     public void onEnable() {
         super.onEnable();
-        try {
-            FileWriter myWriter = new FileWriter("./bleach/itemlist.txt");
-            // Thank you very much Have King
+            BleachFileMang.createFile("itemlist.txt");
             boolean first = true;
             StringBuilder builder = new StringBuilder();
             for (Item item : Registry.ITEM) {
@@ -50,13 +49,8 @@ public class ItemList extends Module {
                 builder.append(Registry.ITEM.getId(item).getPath());
                 builder.append('\n');
             }
-            myWriter.write(builder.toString());
-            myWriter.close();
+            BleachFileMang.appendFile(builder.toString(),"itemlist.txt");
             BleachLogger.infoMessage("Saved item list as: itemlist.txt");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
     }
 
     @Override
