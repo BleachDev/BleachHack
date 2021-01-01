@@ -49,7 +49,7 @@ public class ItemList extends Module {
                 builder.append(Registry.ITEM.getId(item).getPath());
                 builder.append('\n');
             }
-            BleachFileMang.appendFile(builder.toString(),"itemlist.txt");
+            BleachFileMang.appendFile(builder.toString(),"item.txt");
             BleachLogger.infoMessage("Saved item list as: itemlist.txt");
     }
 
