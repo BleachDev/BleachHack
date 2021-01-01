@@ -39,7 +39,7 @@ public class ItemList extends Module {
         super.onEnable();
         try {
             FileWriter myWriter = new FileWriter("./bleach/itemlist.txt");
-            // Thank you very much Have King
+            // Thank you very much Haven King
             boolean first = true;
             StringBuilder builder = new StringBuilder();
             for (Item item : Registry.ITEM) {
