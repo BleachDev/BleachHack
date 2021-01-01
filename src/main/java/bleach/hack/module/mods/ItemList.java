@@ -30,7 +30,6 @@ import net.minecraft.util.registry.Registry;
 public class ItemList extends Module {
 
 
-
     public ItemList() {
         super("ItemList", KEY_UNBOUND, Category.DEV, "Makes a txt file with all item IDs");
     }
@@ -38,19 +37,19 @@ public class ItemList extends Module {
     @Override
     public void onEnable() {
         super.onEnable();
-            BleachFileMang.createFile("itemlist.txt");
-            boolean first = true;
-            StringBuilder builder = new StringBuilder();
-            for (Item item : Registry.ITEM) {
-                if (!first) {
-                    builder.append(",");
-                    first = false;
-                }
-                builder.append(Registry.ITEM.getId(item).getPath());
-                builder.append('\n');
+        BleachFileMang.createFile("itemlist.txt");
+        boolean first = true;
+        StringBuilder builder = new StringBuilder();
+        for (Item item : Registry.ITEM) {
+            if (!first) {
+                builder.append(",");
+                first = false;
             }
-            BleachFileMang.appendFile(builder.toString(),"item.txt");
-            BleachLogger.infoMessage("Saved item list as: itemlist.txt");
+            builder.append(Registry.ITEM.getId(item).getPath());
+            builder.append('\n');
+        }
+        BleachFileMang.appendFile(builder.toString(), "itemlist.txt");
+        BleachLogger.infoMessage("Saved item list as: itemlist.txt");
     }
 
     @Override
