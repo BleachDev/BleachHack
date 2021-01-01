@@ -14,6 +14,8 @@ import bleach.hack.utils.RenderUtils;
 import bleach.hack.utils.WorldUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
@@ -63,40 +65,41 @@ public class AutoBedrockBreak extends Module {
 
         if (mc.crosshairTarget == null || mc.crosshairTarget.getType() != HitResult.Type.BLOCK) {return;}
         lookingCoords = mc.crosshairTarget.getType() == HitResult.Type.BLOCK ? ((BlockHitResult) mc.crosshairTarget).getBlockPos() : null;
+        Box box = new Box(lookingCoords.east());
         if(
                 WorldUtils.isBlockEmpty(lookingCoords.up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2)) &&
                 WorldUtils.isBlockEmpty(lookingCoords.up().east()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().east().up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().east().east()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().east().east().up())
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).east()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().east(2)) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).east(2))
         ) {
             direction = "north";
         } else if (
                 WorldUtils.isBlockEmpty(lookingCoords.up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2)) &&
                 WorldUtils.isBlockEmpty(lookingCoords.up().south()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().south().up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().south().south()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().south().south().up())
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).south()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().south(2)) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).south(2))
         ) {
             direction = "east";
         } else if (
                 WorldUtils.isBlockEmpty(lookingCoords.up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2)) &&
                 WorldUtils.isBlockEmpty(lookingCoords.up().west()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().west().up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().west().west()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().west().west().up())
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).west()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().west(2)) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).west(2))
         ) {
             direction = "south";
         } else if (
                 WorldUtils.isBlockEmpty(lookingCoords.up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2)) &&
                 WorldUtils.isBlockEmpty(lookingCoords.up().north()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().north().up()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().north().north()) &&
-                WorldUtils.isBlockEmpty(lookingCoords.up().north().north().up())
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).north()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().north(2)) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up(2).north(2))
         ) {
             direction = "west";
         } else {
@@ -346,7 +349,7 @@ public class AutoBedrockBreak extends Module {
                     break;
             }
         }
-        if (ticksPassed > 60 && enabled) {
+        if (ticksPassed > 83 && enabled) {
             //if (
             //        mc.world.getBlockState(pistonPos.down(1)).getBlock() == Blocks.BEDROCK &&
             //                mc.world.getBlockState(pistonPos).getEntries().toString().contains("DirectionProperty{name=facing, clazz=class net.minecraft.util.math.Direction, values=[north, east, south, west, up, down]}=down")

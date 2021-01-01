@@ -160,6 +160,7 @@ public class WorldUtils {
         return true;
     }
 
+
     public static boolean canPlaceBlock(BlockPos pos) {
         if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
             return false;
