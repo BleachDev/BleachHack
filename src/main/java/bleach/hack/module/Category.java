@@ -24,5 +24,6 @@ public enum Category {
 	MOVEMENT,
 	EXPLOITS,
 	MISC,
-	WORLD
+	WORLD,
+	DEV
 }
