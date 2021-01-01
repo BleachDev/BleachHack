@@ -9,13 +9,13 @@ repositories {
 		url 'https://jitpack.io' 
 	}
 	maven {
-        name = 'spongepowered-repo'
-        url = 'http://repo.spongepowered.org/maven/'
-    }
-    maven {
-        name = 'impactdevelopment-repo'
-        url = 'https://impactdevelopment.github.io/maven/'
-    }
+		name = 'spongepowered-repo'
+		url = 'http://repo.spongepowered.org/maven/'
+	}
+	maven {
+		name = 'impactdevelopment-repo'
+		url = 'https://impactdevelopment.github.io/maven/'
+	}
 }
 
 
@@ -32,20 +32,20 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+
 	// This adds Discord RPC, wtf does it do?
-    modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
-    include 'com.github.Vatuu:discord-rpc:1.6.2'
-		
+	modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
+	include 'com.github.Vatuu:discord-rpc:1.6.2'
+	
 	// This is the easiest way I could find to implement Baritone
 	// TODO this is dumb
 	modImplementation("com.gitlab.CDAGaming:fabritone:fabric~1.16.3-SNAPSHOT")  {
 		// This is a stupid fix but I don't have time for cleaner implementation
-    	exclude(group: "org.lwjgl.lwjgl", module: "lwjgl-platform")
+		exclude(group: "org.lwjgl.lwjgl", module: "lwjgl-platform")
 		exclude(group: "net.java.jinput", module: "jinput-platform")
 		exclude(group: "net.java.jinput", module: "jinput")
 		exclude(group: "net.sf.jopt-simple", module: "jopt-simple")
-    } 
+	} 
 	include("com.gitlab.CDAGaming:fabritone:fabric~1.16.3-SNAPSHOT")
 }
 
