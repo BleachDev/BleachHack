@@ -37,7 +37,7 @@ public class AutoBedrockBreak extends Module {
     BlockPos lookingCoords;
     BlockPos coords;
     String direction;
-
+    // TODO: make player obstructing check && make sufficient blocks check
     public AutoBedrockBreak() {
         super("AutoBedrockBreak", KEY_UNBOUND, Category.EXPLOITS, "automatically breaks bedrock (IN DEVELOPMENT)",
                 new SettingMode("Piston Type", "Piston", "Sticky Piston"),
@@ -63,7 +63,49 @@ public class AutoBedrockBreak extends Module {
 
         if (mc.crosshairTarget == null || mc.crosshairTarget.getType() != HitResult.Type.BLOCK) {return;}
         lookingCoords = mc.crosshairTarget.getType() == HitResult.Type.BLOCK ? ((BlockHitResult) mc.crosshairTarget).getBlockPos() : null;
-        direction = mc.player.getHorizontalFacing().getName();
+        if(
+                WorldUtils.isBlockEmpty(lookingCoords.up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().east()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().east().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().east().east()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().east().east().up())
+        ) {
+            direction = "north";
+        } else if (
+                WorldUtils.isBlockEmpty(lookingCoords.up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().south()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().south().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().south().south()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().south().south().up())
+        ) {
+            direction = "east";
+        } else if (
+                WorldUtils.isBlockEmpty(lookingCoords.up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().west()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().west().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().west().west()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().west().west().up())
+        ) {
+            direction = "south";
+        } else if (
+                WorldUtils.isBlockEmpty(lookingCoords.up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().north()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().north().up()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().north().north()) &&
+                WorldUtils.isBlockEmpty(lookingCoords.up().north().north().up())
+        ) {
+            direction = "west";
+        } else {
+            BleachLogger.infoMessage("NO BEDROCK BREAK POSITION FOUND!");
+            enabled = false;
+            ticksPassed = 0;
+            active = false;
+            super.setToggled(false);
+        }
         switch(direction) {
             case "west":
                 coords = lookingCoords.north().east().up();
@@ -78,7 +120,6 @@ public class AutoBedrockBreak extends Module {
                 coords = lookingCoords.west().north().up();
                 break;
         }
-        //BleachLogger.infoMessage(lookingCoords.toString() + "||" + coords);
     }
 
     @Subscribe
@@ -407,5 +448,10 @@ public class AutoBedrockBreak extends Module {
         RenderUtils.drawFilledBox(new Box(x, y, z, x + 1.0D, y, z + 1.0D), or, og, ob, a * 1.5F);
         RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a);
         RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
+    }
+
+    private boolean checkAir(BlockPos blockPos)
+    {
+        return this.mc.world.getBlockState(blockPos).getBlock() == Blocks.AIR;
     }
 }
