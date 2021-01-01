@@ -104,7 +104,8 @@ public class ModuleManager {
 			new Trajectories(),
 			new UI(),
 			new Xray(),
-			new Zoom());
+			new Zoom(),
+			new ItemList());
 
 	public static List<Module> getModules() {
 		return mods;

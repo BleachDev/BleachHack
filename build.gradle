@@ -41,7 +41,7 @@ dependencies {
 	// TODO this is dumb
 	modImplementation("com.gitlab.CDAGaming:fabritone:fabric~1.16.3-SNAPSHOT")  {
 		// This is a stupid fix but I don't have time for cleaner implementation
-        exclude(group: "org.lwjgl.lwjgl", module: "lwjgl-platform")
+    	exclude(group: "org.lwjgl.lwjgl", module: "lwjgl-platform")
 		exclude(group: "net.java.jinput", module: "jinput-platform")
 		exclude(group: "net.java.jinput", module: "jinput")
 		exclude(group: "net.sf.jopt-simple", module: "jopt-simple")

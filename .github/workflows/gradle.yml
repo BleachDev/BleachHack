@@ -5,9 +5,9 @@ name: bleachhack daily soviet union builds
 
 on:
   push:
-    branches: [ master ]
+    branches: [ fabric-1.16 ]
   pull_request:
-    branches: [ master ]
+    branches: [ fabric-1.16 ]
 
 jobs:
   build:
