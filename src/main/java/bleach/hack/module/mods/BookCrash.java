@@ -30,7 +30,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.network.packet.c2s.play.ClickWindowC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
@@ -106,7 +106,7 @@ public class BookCrash extends Module {
 
             for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
                 if (getSetting(0).asMode().mode == 0) {
-                    mc.player.networkHandler.sendPacket(new ClickWindowC2SPacket(0, 0, 0, SlotActionType.PICKUP, bookObj, (short) 0));
+                    mc.player.networkHandler.sendPacket(new ClickSlotC2SPacket(0, 0, 0, SlotActionType.PICKUP, bookObj, (short) 0));
                 } else {
                     mc.player.networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(0, bookObj));
                 }
