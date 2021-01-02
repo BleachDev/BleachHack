@@ -39,3 +39,4 @@ logs/
 private_modules/
 .fabric/
 .mixin.out/
+src/main/java/bleach/hack/module/mods/MultiAutoBedrockBreak.java

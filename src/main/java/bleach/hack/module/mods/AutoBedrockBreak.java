@@ -65,7 +65,6 @@ public class AutoBedrockBreak extends Module {
 
         if (mc.crosshairTarget == null || mc.crosshairTarget.getType() != HitResult.Type.BLOCK) {return;}
         lookingCoords = mc.crosshairTarget.getType() == HitResult.Type.BLOCK ? ((BlockHitResult) mc.crosshairTarget).getBlockPos() : null;
-        Box box = new Box(lookingCoords.east());
         if(
                 WorldUtils.isBlockEmpty(lookingCoords.up()) &&
                 WorldUtils.isBlockEmpty(lookingCoords.up(2)) &&
@@ -453,8 +452,4 @@ public class AutoBedrockBreak extends Module {
         RenderUtils.drawFilledBox(new Box(x, y + 1.0D, z, x + 1.0D, y + 1.0D, z + 1.0D), or, og, ob, a * 1.5F);
     }
 
-    private boolean checkAir(BlockPos blockPos)
-    {
-        return this.mc.world.getBlockState(blockPos).getBlock() == Blocks.AIR;
-    }
 }
