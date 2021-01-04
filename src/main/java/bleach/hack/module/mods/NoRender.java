@@ -9,6 +9,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import com.google.common.eventbus.Subscribe;
+import net.minecraft.client.particle.CampfireSmokeParticle;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.client.particle.ExplosionLargeParticle;
 import net.minecraft.client.render.entity.model.ArmorStandEntityModel;
@@ -42,7 +43,9 @@ public class NoRender extends Module {
                 new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
                 new SettingToggle("Snowball", false).withDesc("Disables rendering snowballs"),
                 new SettingToggle("Falling Blocks", false).withDesc("Disables rendering falling blocks"),
-                new SettingToggle("Armor Stands", false).withDesc("Disables rendering armor stands"));
+                new SettingToggle("Armor Stands", false).withDesc("Disables rendering armor stands"),
+                new SettingToggle("Campfire Smoke", false).withDesc("Disables rendering armor stands")
+        );
     }
 
     @Subscribe
@@ -77,6 +80,8 @@ public class NoRender extends Module {
             if (Math.abs(event.particle.getBoundingBox().hashCode() % 101) >= (int) getSetting(13).asToggle().getChild(0).asSlider().getValue()) {
                 event.setCancelled(true);
             }
+        } else if (getSetting(17).asToggle().state && event.particle instanceof CampfireSmokeParticle) {
+                event.setCancelled(true);
         }
     }
 
