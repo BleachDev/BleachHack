@@ -1,14 +1,21 @@
 package bleach.hack.module.mods;
 
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.EntityUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.LiteralText;
@@ -27,8 +34,21 @@ public class AutoLog extends Module {
                 new SettingMode("Crystal: ", "None", "Near", "Near+No Totem", "Near+Health"),
                 new SettingSlider("CrystalRange: ", 0.0D, 8.0D, 4.0D, 2),
                 new SettingToggle("Nearby Player", false),
-                new SettingSlider("Range: ", 0.0D, 100.0D, 20.0D, 1));
+                new SettingSlider("Range: ", 0.0D, 100.0D, 20.0D, 1),
+                new SettingMode("Nearby Mode","Range","Render"));
     }
+
+
+    @Subscribe
+    public void onLivingLabelRender(EventEntityRender.Label event) {
+        if (event.getEntity() instanceof PlayerEntity && getSetting(6).asToggle().state && getSetting(8).asMode().mode == 1) {
+            if (!event.getEntity().getName().equals(this.mc.player.getName()) && !BleachHack.friendMang.has(event.getEntity().getDisplayName().asString()))
+            {
+                this.logOut(event.getEntity().getDisplayName().asString()+" entered render distance, logged off.");
+            }
+        }
+    }
+
     @Subscribe
     public void onTick(EventTick event)
     {
@@ -85,9 +105,9 @@ public class AutoLog extends Module {
                     {
                         Entity e = (Entity) entityIter.next();
 
-                        if (!e.getName().equals(this.mc.player.getName()) && (double) this.mc.player.distanceTo(e) <= this.getSettings().get(7).asSlider().getValue())
+                        if (!e.getName().equals(this.mc.player.getName()) && (double) this.mc.player.distanceTo(e) <= this.getSettings().get(7).asSlider().getValue() && !BleachHack.friendMang.has(e.getDisplayName().asString()))
                         {
-                            this.logOut("Logged Out " + this.mc.player.distanceTo(e) + " Blocks Away From A Player (" + e.getName() + ")");
+                            this.logOut("Logged Out " + this.mc.player.distanceTo(e) + " Blocks Away From A Player (" + e.getDisplayName().asString() + ")");
                         }
                     }
                 }
@@ -116,4 +136,5 @@ public class AutoLog extends Module {
         this.mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(new LiteralText(reason)));
         this.setToggled(false);
     }
+
 }

@@ -5,6 +5,7 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.utils.BleachLogger;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.Entity;
@@ -15,6 +16,8 @@ import java.util.HashMap;
 public class PopCounter extends Module {
 
     private HashMap<String, Integer> pops = new HashMap<>();
+
+    public boolean impact_toggle_state;
 
     public PopCounter() {
         super("PopCounter", KEY_UNBOUND, Category.COMBAT, "Counts totem pops");
@@ -49,6 +52,7 @@ public class PopCounter extends Module {
     public void
     onTick(EventTick tick)
     {
+        impact_toggle_state  = ModuleManager.getModule(UI.class).getSetting(24).asToggle().state;
         if(mc.world == null)
             return;
 
@@ -57,7 +61,7 @@ public class PopCounter extends Module {
             {
                 if(pops.containsKey(player.getEntityName()))
                 {
-                    BleachLogger.infoMessage(player.getEntityName() + " died after popping " + pops.get(player.getEntityName()) + " totems");
+                    BleachLogger.infoMessage((impact_toggle_state ? "\u00A7f" : "\u00A79") + player.getEntityName() + " \u00A79died after popping " + (impact_toggle_state ? "\u00A7f" : "\u00A79") + pops.get(player.getEntityName()) + " \u00A79totems");
                     pops.remove(player.getEntityName(), pops.get(player.getEntityName()));
                 }
             }
@@ -76,14 +80,14 @@ public class PopCounter extends Module {
         if(pops.get(entity.getEntityName()) == null)
         {
             pops.put(entity.getEntityName(), 1);
-            BleachLogger.infoMessage(entity.getEntityName() + " popped 1 totem");
+            BleachLogger.infoMessage((impact_toggle_state ? "\u00A7f" : "\u00A79") + entity.getEntityName() + " \u00A79popped "+(impact_toggle_state ? "\u00A7f" : "\u00A79")+"1 \u00A79totem");
         }
         else if(!(pops.get(entity.getEntityName()) == null))
         {
             int popc = pops.get(entity.getEntityName());
             popc += 1;
             pops.put(entity.getEntityName(), popc);
-            BleachLogger.infoMessage(entity.getEntityName() + " popped " + popc + " totems");
+            BleachLogger.infoMessage((impact_toggle_state ? "\u00A7f" : "\u00A79") + entity.getEntityName() + " \u00A79popped " + (impact_toggle_state ? "\u00A7f" : "\u00A79") + popc + " \u00A79totems");
         }
     }
 

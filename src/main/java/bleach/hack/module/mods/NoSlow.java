@@ -30,7 +30,7 @@ import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.network.packet.c2s.play.ClickWindowC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.math.BlockPos;
@@ -157,7 +157,7 @@ public class NoSlow extends Module {
 
     @Subscribe
     public void onSendPacket(EventSendPacket event) {
-        if (event.getPacket() instanceof ClickWindowC2SPacket && getSetting(6).asToggle().asToggle().getChild(1).asToggle().state) {
+        if (event.getPacket() instanceof ClickSlotC2SPacket && getSetting(6).asToggle().asToggle().getChild(1).asToggle().state) {
             mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
         }
     }

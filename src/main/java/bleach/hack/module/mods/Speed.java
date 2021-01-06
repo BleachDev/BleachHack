@@ -84,7 +84,7 @@ public class Speed extends Module {
                 mc.player.setSprinting(true);
             }
         }
-        /* Strafe */
+        /* Vanilla */
         double forward = mc.player.forwardSpeed;
         double strafe = mc.player.sidewaysSpeed;
         float yaw = mc.player.yaw;

@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
+import java.io.File;
 
 public class NotebotStealer extends Module {
 
@@ -58,8 +59,17 @@ public class NotebotStealer extends Module {
         int i = 0;
         String s = "";
 
-        while (BleachFileMang.fileExists("notebot", "notebot" + i + ".txt")) i++;
-        for (List<Integer> i1 : notes) s += i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
+        // TODO: Figure out how to use BleachFileMang instead
+        File theDir = new File("./bleach/notebot");
+        if (!theDir.exists()) {
+            theDir.mkdirs();
+        }
+
+        while (BleachFileMang.fileExists("notebot", "notebot" + i + ".txt"))
+            i++;
+        for (List<Integer> i1 : notes)
+            s += i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
+        BleachFileMang.createFile("notebot", "notebot" + i + ".txt");
         BleachFileMang.appendFile(s, "notebot", "notebot" + i + ".txt");
         BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
     }
