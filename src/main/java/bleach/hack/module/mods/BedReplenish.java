@@ -25,6 +25,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.InvUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.item.BedItem;
 import net.minecraft.item.Items;
 import net.minecraft.screen.slot.SlotActionType;
 
@@ -35,49 +36,15 @@ public class BedReplenish extends Module {
                 new SettingToggle("Override", true).withDesc("Equips a bed even if theres another item in the offhand"),
                 new SettingSlider("Slot: ", 0, 8, 8, 0));
     }
-    // TODO: ADD DIFFERENT BED COLOR TYPES!!
+    //NO WAY EPEARL WROTE OUT EVERY BED COLOR :BRUH:
     @Subscribe
     public void onTick(EventTick event) {
         int slot = (int) getSetting(1).asSlider().getValue();
-        if (mc.player.inventory.getStack(slot).getItem() == Items.BLACK_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.BLUE_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.BROWN_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.CYAN_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.GRAY_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.GREEN_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.LIGHT_BLUE_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.LIGHT_GRAY_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.LIME_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.MAGENTA_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.ORANGE_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.PINK_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.PURPLE_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.RED_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.WHITE_BED
-                || mc.player.inventory.getStack(slot).getItem() == Items.YELLOW_BED
-                || (!mc.player.inventory.getStack(slot).isEmpty() && !getSetting(0).asToggle().state)
-        )
+        if (mc.player.inventory.getStack(slot).getItem() instanceof BedItem)
             return;
-
         if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
             for (int i = 9; i < 45; i++) {
-                if (mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.BLACK_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.BLUE_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.BROWN_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.CYAN_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.GRAY_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.GREEN_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.LIGHT_BLUE_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.LIGHT_GRAY_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.LIME_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.MAGENTA_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.ORANGE_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.PINK_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.PURPLE_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.RED_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.WHITE_BED
-                        || mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.YELLOW_BED
-                )
+                if (mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() instanceof BedItem)
                 {
                     moveItems(i, slot, false);
                     return;
