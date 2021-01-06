@@ -36,15 +36,16 @@ public class NoRender extends Module {
                 new SettingToggle("Particles", true).withDesc("Removes the yellow-green particles when a totem is used"),
                 new SettingToggle("Sound", false).withDesc("Removes the totem sound when a totem is used")),
                 new SettingToggle("Shield-WIP", false).withDesc("Removes your sheild"), // 9
-                new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse"),
-                new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)"),
-                new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"),
+                new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse"), // 10
+                new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)"), // 11
+                new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"), // 12
                 new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren(
                 new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
-                new SettingToggle("Snowball", false).withDesc("Disables rendering snowballs"),
-                new SettingToggle("Falling Blocks", false).withDesc("Disables rendering falling blocks"),
-                new SettingToggle("Armor Stands", false).withDesc("Disables rendering armor stands"),
-                new SettingToggle("Campfire Smoke", false).withDesc("Disables rendering armor stands")
+                new SettingToggle("Snowball", false).withDesc("Disables rendering snowballs"), // 14
+                new SettingToggle("Falling Blocks", false).withDesc("Disables rendering falling blocks"), // 15
+                new SettingToggle("Armor Stands", false).withDesc("Disables rendering armor stands"), // 16
+                new SettingToggle("Campfire Smoke", false).withDesc("Disables rendering armor stands"), // 17
+                new SettingToggle("Enchanting bible", false).withDesc("Disables rendering of flying enchanting book") // 18
         );
     }
 
