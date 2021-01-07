@@ -21,9 +21,11 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWindowResize;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.setting.base.SettingBase;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -34,6 +36,7 @@ import com.google.common.eventbus.Subscribe;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.shorts.ShortList;
 import it.unimi.dsi.fastutil.shorts.ShortListIterator;
+import net.fabricmc.loader.game.MinecraftGameProvider;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
@@ -199,6 +202,14 @@ public class UI extends Module {
         if (getSetting(0).asToggle().state && !mc.options.debugEnabled || getSetting(1).asToggle().state && !mc.options.debugEnabled) {
             List<String> lines = new ArrayList<>();
 
+            // Used to fix alignment mess
+            int x = (int) getSetting(0).asToggle().getChild(0).asSlider().getValue();
+            // y is not used but x feels alone without it
+            int y = (int) getSetting(0).asToggle().getChild(1).asSlider().getValue();
+            // I can do it for other modules as well but it will indroduce more spaghetti code
+            // so id rather not do it. All drawing specified to toggle should be probably
+            // moved to separate class. (not sure if it the best way)
+
             if (getSetting(0).asToggle().state) {
                 for (Module m : ModuleManager.getModules())
                     if (m.isToggled() && m.isDrawn() && !m.getName().equals("UI")) lines.add(m.getName());
@@ -207,18 +218,29 @@ public class UI extends Module {
             }
             if (getSetting(0).asToggle().getChild(2).asToggle().state) {
                 for (String s : lines) {
+                    x = (int) MathHelper.clamp(x,
+                            getSetting(0).asToggle().getChild(0).asSlider().min,
+                            getSetting(0).asToggle().getChild(0).asSlider().max - 1 - mc.textRenderer.getWidth(s));
                     //if (s.equals("ElytraFly")) {
                     //    s = "ElytraFly" + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether") ? " \u00a77[\u00a7rNether\u00a77]" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end") ? " \u00a77[\u00a7rEnd\u00a77]" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("overworld") ? " \u00a77[\u00a7rOverworld\u00a77]" : "");
                     //}
-                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColorUtils.guiColour());
+                    mc.textRenderer.drawWithShadow(event.matrix, s, x,
+                            y + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()),
+                            ColorUtils.guiColour());
                     arrayCount++;
                 }
             } else{
                 for (String s : lines) {
+                    x = (int) MathHelper.clamp(x,
+                            getSetting(0).asToggle().getChild(0).asSlider().min + 1 + mc.textRenderer.getWidth(s),
+                            getSetting(0).asToggle().getChild(0).asSlider().max);
                     //if (s.equals("ElytraFly")) {
                     //    s = (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_nether") ? "\u00a77[\u00a7rNether\u00a77] \u00a7r" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("the_end") ? "\u00a77[\u00a7rEnd\u00a77] \u00a7r" : "") + (mc.world.getRegistryKey().getValue().getPath().equalsIgnoreCase("overworld") ? "\u00a77[\u00a7rOverworld\u00a77] \u00a7r" : "") + "ElytraFly";
                     //}
-                    mc.textRenderer.drawWithShadow(event.matrix, s, (int) getSetting(0).asToggle().getChild(0).asSlider().getValue() - mc.textRenderer.getWidth(s), (int) getSetting(0).asToggle().getChild(1).asSlider().getValue() + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()), ColorUtils.guiColour());
+                    mc.textRenderer.drawWithShadow(event.matrix, s,
+                            x - mc.textRenderer.getWidth(s),
+                            y + (arrayCount * (int) getSetting(0).asToggle().getChild(3).asSlider().getValue()),
+                            ColorUtils.guiColour());
                     arrayCount++;
                 }
             }
@@ -601,7 +623,7 @@ public class UI extends Module {
 
         if (getSetting(6).asToggle().state || getSetting(19).asToggle().getChild(3).asToggle().state || getSetting(18).asToggle().getChild(3).asToggle().state) {
             alertList.clear();
-            if (getSetting(6).asToggle().state) {
+            if (getSetting(6).asToggle().state && !MinecraftClient.getInstance().isInSingleplayer()) { // Because this probably should not appear on single player
                 long time = System.currentTimeMillis();
                 if (time - lastPacket > 500) {
                     DecimalFormat round = new DecimalFormat("0.0");
@@ -978,5 +1000,38 @@ public class UI extends Module {
                 (float) ui.getSetting(22).asSlider().getValue(),
                 ui.getSetting(23).asSlider().getValue(),
                 offset);
+    }
+
+    // This thing should remap current windows position to fit in new screen scale but i am lazy as fuck
+    // IMPORTANT: When right alignment disabled mix value should be increased by drawed text width
+    // When enabled, max value should be decreased by drawed text width
+    @Subscribe
+    public static void fixResolution(EventWindowResize e) {
+        Module ui = ModuleManager.getModule(UI.class);
+
+        if (ui == null)
+            return;
+
+        int maxWidth = MinecraftClient.getInstance().getWindow().getScaledWidth();
+        int maxHeight = MinecraftClient.getInstance().getWindow().getScaledHeight()
+                - MinecraftClient.getInstance().textRenderer.fontHeight;
+
+        List<SettingBase> settings = ui.getSettings();
+        for(SettingBase set : settings) {
+            try {
+                SettingToggle mode = set.asToggle();
+                for (int i = 0; i < 10; i++) {
+                    try {
+                        SettingSlider slider = mode.getChild(i).asSlider();
+                        if (slider.getName().equals("x"))
+                            slider.max = maxWidth;
+                        if (slider.getName().equals("y"))
+                            slider.max = maxHeight;
+                    } catch (IndexOutOfBoundsException ignored) {
+                        break;
+                    }
+                }
+            } catch (ClassCastException ignored) { }
+        }
     }
 }

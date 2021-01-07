@@ -5,6 +5,7 @@
   "mixins": [
   ],
   "client": [
+    "MixinEnchantingTableBlockEntityRenderer",
     "FirstPersonRendererAccessor",
     "MixinBackgroundRenderer",
     "MixinAbstractBlock",

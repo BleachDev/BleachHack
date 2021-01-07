@@ -78,6 +78,8 @@ public class SettingSlider extends SettingBase {
         if (window.mouseOver(x + 1, y, x + len - 2, y + 12)) {
             if (window.lmHeld) {
                 int percent = ((window.mouseX - x) * 100) / (len - 2);
+                if (percent == 1) // This is definitely a spaghetti fix but this way it fits in this code style lmao
+                    percent = 0;
 
                 setValue(round(percent * ((max - min) / 100) + min, decimals));
             }
