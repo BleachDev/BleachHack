@@ -19,6 +19,7 @@ package bleach.hack.mixin;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventOpenScreen;
+import bleach.hack.event.events.EventWindowResize;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,5 +35,10 @@ public class MixinMinecraftClient {
         EventOpenScreen event = new EventOpenScreen(screen);
         BleachHack.eventBus.post(event);
         if (event.isCancelled()) info.cancel();
+    }
+
+    @Inject(at = @At("RETURN"), method = "onResolutionChanged()V", cancellable = true)
+    public void onResolutionChanged(CallbackInfo ci) {
+        BleachHack.eventBus.post(new EventWindowResize());
     }
 }

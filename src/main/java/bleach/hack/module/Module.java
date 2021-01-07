@@ -121,6 +121,20 @@ public class Module {
         return defaultKey;
     }
 
+    public void toggleNoSave()
+    {
+        this.setToggled(!this.isToggled());
+        if (this.isToggled())
+        {
+            this.onEnable();
+        }
+        else
+        {
+            this.onDisable();
+        }
+        this.onEnable();
+    }
+
     public List<SettingBase> getSettings() {
         return settings;
     }
