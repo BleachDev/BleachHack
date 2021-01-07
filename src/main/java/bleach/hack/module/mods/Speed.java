@@ -105,11 +105,6 @@ public class Speed extends Module {
                         forward = 1.0D;
                     } else if (forward < 0.0D) forward = -1.0D;
                 }
-                if(getSetting(2).asToggle().state){
-                    if(mc.player.isOnGround() && forward > 0.0 || strafe > 0.0){
-                        mc.player.jump();
-                    }
-                }
                 mc.player.setVelocity((forward * speedstrafe * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speedstrafe * Math.sin(Math.toRadians(yaw + 90.0F))), mc.player.getVelocity().y,
                         forward * speedstrafe * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speedstrafe * Math.cos(Math.toRadians(yaw + 90.0F)));
             }
