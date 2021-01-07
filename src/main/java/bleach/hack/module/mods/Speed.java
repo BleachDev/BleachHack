@@ -22,6 +22,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
 import com.google.common.eventbus.Subscribe;
 
 public class Speed extends Module {
@@ -31,7 +32,9 @@ public class Speed extends Module {
     public Speed() {
         super("Speed", KEY_UNBOUND, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
                 new SettingMode("Mode", "Bhop", "MiniHop", "OnGround", "Vanilla"),
-                new SettingSlider("Move Speed", 0.1, 10, 2, 2));
+                new SettingSlider("Move Speed", 0.1, 10, 2, 2),
+                new SettingToggle("AutoJump", false)
+                );
     }
 
     @Subscribe
@@ -101,6 +104,11 @@ public class Speed extends Module {
                     if (forward > 0.0D) {
                         forward = 1.0D;
                     } else if (forward < 0.0D) forward = -1.0D;
+                }
+                if(getSetting(2).asToggle().state){
+                    if(mc.player.isOnGround() && forward > 0.0 || strafe > 0.0){
+                        mc.player.jump();
+                    }
                 }
                 mc.player.setVelocity((forward * speedstrafe * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speedstrafe * Math.sin(Math.toRadians(yaw + 90.0F))), mc.player.getVelocity().y,
                         forward * speedstrafe * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speedstrafe * Math.cos(Math.toRadians(yaw + 90.0F)));
