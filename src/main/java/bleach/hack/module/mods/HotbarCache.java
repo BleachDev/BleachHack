@@ -45,6 +45,10 @@ public class HotbarCache extends Module {
     private ArrayList<Item> Hotbar = new ArrayList<Item>();
     private Timer timer = new Timer();
 
+    public void toggleNoSave() {
+
+    }
+
     public void onEnable() {
         MinecraftClient mc = MinecraftClient.getInstance();
         PlayerEntity player = mc.player;
@@ -69,60 +73,6 @@ public class HotbarCache extends Module {
     @Subscribe
     public void onTick(EventTick event) {
         MinecraftClient mc = MinecraftClient.getInstance();
-        PlayerEntity player = mc.player;
-        if (getSettings().get(1).asMode().mode == 0) {
-            int mode = getSettings().get(0).asMode().mode;
-            switch (mode) {
-                case 0:
-                    /* Inventory */
-                    if (player.inventory.getMainHandStack().isEmpty() || player.inventory.getMainHandStack().getItem() != Items.DIAMOND_PICKAXE || player.inventory.getMainHandStack().getItem() != Items.NETHERITE_PICKAXE) {
-                        for (int i = 0; i < 9; i++) {
-                            if (player.inventory.getStack(i).getItem() == Items.DIAMOND_PICKAXE || player.inventory.getStack(i).getItem() == Items.NETHERITE_PICKAXE) {
-                                player.inventory.selectedSlot = i;
-                                //                            player.inventory.swapSlotWithHotbar(i);
-                                return;
-                            }
-                        }
-                    }
-                    break;
-
-                case 1:
-                    /* Inventory */
-                    if (player.inventory.getStack(0).isEmpty() || player.inventory.getStack(0).getItem() != Items.END_CRYSTAL) {
-                        for (int i = 0; i < 9; i++) {
-                            if (player.inventory.getStack(i).getItem() == Items.END_CRYSTAL) {
-                                player.inventory.selectedSlot = i;
-                                return;
-                            }
-                        }
-                    }
-                    break;
-                case 2:
-
-                    /* Inventory */
-                    if (player.inventory.getStack(0).isEmpty() || player.inventory.getStack(0).getItem() != Items.ENCHANTED_GOLDEN_APPLE) {
-                        for (int i = 0; i < 9; i++) {
-                            if (player.inventory.getStack(i).getItem() == Items.ENCHANTED_GOLDEN_APPLE) {
-                                player.inventory.selectedSlot = i;
-                                return;
-                            }
-                        }
-                    }
-                    break;
-                case 3:
-
-                    /* Inventory */
-                    if (mc.player.inventory.getStack(0).isEmpty() || mc.player.inventory.getStack(0).getItem() != Items.SNOWBALL) {
-                        for (int i = 0; i < 9; i++) {
-                            if (mc.player.inventory.getStack(i).getItem() == Items.SNOWBALL) {
-                                mc.player.inventory.selectedSlot = i;
-                                return;
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
         if (mc.currentScreen != null)
             return;
 
