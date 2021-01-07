@@ -21,6 +21,7 @@ import net.minecraft.util.math.Vec3d;
 public class Surround extends Module {
 
     BlockPos coords;
+    int currentSlot;
 
     public Surround() {
         super("Surround", KEY_UNBOUND, Category.COMBAT, "Surrounds yourself with obsidian",
@@ -105,9 +106,12 @@ public class Surround extends Module {
                     WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
                 }
 
+                currentSlot = mc.player.inventory.selectedSlot;
                 if (WorldUtils.placeBlock(b, obsidian, false, false)) {
                     cap++;
+
                 }
+                mc.player.inventory.selectedSlot = currentSlot;
             }
         } else if (getSetting(0).asMode().mode == 1) {
             for (BlockPos b : new BlockPos[]{
@@ -124,7 +128,9 @@ public class Surround extends Module {
                     WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
                 }
                 if (WorldUtils.isBlockEmpty(b)) {
+                    currentSlot = mc.player.inventory.selectedSlot;
                     WorldUtils.placeBlock(b, obsidian, false, false);
+                    mc.player.inventory.selectedSlot = currentSlot;
                     cap++;
                 }
             }
