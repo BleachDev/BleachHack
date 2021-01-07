@@ -46,6 +46,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.BedItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.*;
@@ -951,22 +952,7 @@ public class UI extends Module {
 
         for (int i = 0; i < 45; ++i)
         {
-            if (this.mc.player.inventory.getStack(i).getItem() == Items.BLACK_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.BLUE_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.BROWN_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.CYAN_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.GRAY_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.GREEN_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.LIGHT_BLUE_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.LIGHT_GRAY_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.LIME_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.MAGENTA_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.ORANGE_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.PINK_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.PURPLE_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.RED_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.WHITE_BED
-                    || this.mc.player.inventory.getStack(i).getItem() == Items.YELLOW_BED
+            if (mc.player.inventory.getStack(i).getItem() instanceof BedItem
             )
             {
                 ++c;
