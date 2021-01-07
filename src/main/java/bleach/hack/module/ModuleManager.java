@@ -126,6 +126,7 @@ public class ModuleManager {
         new Trajectories(),
         new TunnelESP(),
         new VoidESP(),
+        new AutoBedBomb(),
         new Xray(),
         new Yaw(),
         new Zoom(),
