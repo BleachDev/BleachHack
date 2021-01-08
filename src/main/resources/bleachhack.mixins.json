@@ -5,8 +5,8 @@
   "mixins": [
   ],
   "client": [
+    "MixinBookModel",
     "MixinClientChunkManager",
-    "MixinEnchantingTableBlockEntityRenderer",
     "FirstPersonRendererAccessor",
     "MixinBackgroundRenderer",
     "MixinAbstractBlock",

@@ -79,7 +79,7 @@ public class SettingSlider extends SettingBase {
             if (window.lmHeld) {
                 int percent = ((window.mouseX - x) * 100) / (len - 2);
                 if (percent == 1) // This is definitely a spaghetti fix but this way it fits in this code style lmao
-                    percent = 0;
+                    percent = 0; // Someone needs to fix it so gui modules x and y pos can reach its min value
 
                 setValue(round(percent * ((max - min) / 100) + min, decimals));
             }

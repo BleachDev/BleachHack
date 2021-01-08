@@ -24,9 +24,11 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.source.BiomeArray;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.world.dimension.DimensionType;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -34,7 +36,8 @@ import java.util.concurrent.SynchronousQueue;
 
 public class PortalESP extends Module
 {
-    private final ArrayBlockingQueue<BlockPos> portals = new ArrayBlockingQueue<BlockPos>(65535); // Man, race condition is killing me wtf
+    private final HashMap<DimensionType, ArrayBlockingQueue<BlockPos>> portals = new HashMap<DimensionType, ArrayBlockingQueue<BlockPos>>();
+    // Man, race condition is killing me wtf
     public Vec3d prevPos;
     private double[] rPos;
     private Stack<WorldChunk> chunkStack = new Stack<>(); // Lol stacks is so cool
@@ -53,8 +56,13 @@ public class PortalESP extends Module
         new Thread(this::chunkyBoi).start();
     }
 
-    private boolean shown(BlockPos pos) {
-        for (BlockPos p : portals) {
+    private boolean shown(BlockPos pos, DimensionType d) {
+        ArrayBlockingQueue<BlockPos> booga = portals.get(d);
+        if (booga == null) {
+            portals.put(d, new ArrayBlockingQueue<BlockPos>(65455));
+            return shown(pos, d);
+        }
+        for(BlockPos p : portals.get(d)) {
             if (p.equals(pos))
                 return true;
         }
@@ -74,8 +82,8 @@ public class PortalESP extends Module
                         for (int k = 0; k < 255; k++) {
                             BlockPos pos = new BlockPos(cPos.x * 16 + i, k, cPos.z * 16 + j);
                             BlockState state = chunk.getBlockState(pos);
-                            if (state.getBlock().is(Blocks.NETHER_PORTAL) && !shown(pos))
-                                portals.add(pos);
+                            if (state.getBlock().is(Blocks.NETHER_PORTAL) && !shown(pos, mc.world.getDimension()))
+                                portals.get(mc.world.getDimension()).add(pos);
                         }
                     }
                 }
@@ -88,12 +96,17 @@ public class PortalESP extends Module
         if (e.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
             ChunkDeltaUpdateS2CPacket p = (ChunkDeltaUpdateS2CPacket)e.getPacket();
             p.visitUpdates((bp, bs) -> {
-                if (shown(bp)) {
-                    if (!bs.getBlock().is(Blocks.NETHER_PORTAL))
-                        portals.remove(bp);
+                DimensionType dimension = mc.player.world.getDimension();
+                if (portals.containsKey(dimension)) {
+                    if (shown(bp, dimension)) {
+                        if (!bs.getBlock().is(Blocks.NETHER_PORTAL))
+                            this.portals.get(dimension).remove(bp);
+                    } else {
+                        if (bs.getBlock().is(Blocks.NETHER_PORTAL))
+                            this.portals.get(dimension).add(new BlockPos(bp.getX(), bp.getY(), bp.getZ())); // do not event touch it
+                    }
                 } else {
-                    if (bs.getBlock().is(Blocks.NETHER_PORTAL))
-                        portals.add(new BlockPos(bp.getX(), bp.getY(), bp.getZ())); // don't even touch it
+                    portals.put(dimension, new ArrayBlockingQueue<BlockPos>(65455));
                 }
             });
         }
@@ -103,6 +116,11 @@ public class PortalESP extends Module
     public void chunkLoaded(EventLoadChunk e) {
         WorldChunk chunk = e.getChunk();
         chunkStack.push(chunk);
+    }
+
+    @Subscribe
+    public void chunkUnloaded(EventUnloadChunk e) {
+
     }
 
     @Subscribe
@@ -125,8 +143,12 @@ public class PortalESP extends Module
         if (red > 1.0F)
             red = 1.0F - red;
 
-        for (BlockPos p : portals)
-            this.drawFilledBlockBox(p, red, 0.7F, blue, 0.25F);
+        ArrayBlockingQueue<BlockPos> portals = this.portals.get(mc.player.world.getDimension());
+        if (portals != null) {
+            for (BlockPos p : portals)
+                if (mc.player.getPos().distanceTo(Vec3d.ofCenter(p)) < 128) // put max range here
+                    this.drawFilledBlockBox(p, red, 0.7F, blue, 0.25F);
+        }
 
         GL11.glEnable(2929);
         GL11.glEnable(3553);
