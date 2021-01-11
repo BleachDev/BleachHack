@@ -98,6 +98,8 @@ public class SearchESP extends Module
         if (e.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
             ChunkDeltaUpdateS2CPacket p = (ChunkDeltaUpdateS2CPacket)e.getPacket();
             p.visitUpdates((bp, bs) -> {
+                if (mc.player == null)
+                    return;
                 DimensionType dimension = mc.player.world.getDimension();
                 if (blocks.containsKey(dimension)) {
                     if (shown(bp, dimension)) {
