@@ -24,7 +24,7 @@ dependencies {
     modImplementation 'com.github.ZeroMemes:Alpine:1.9'
     modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
     modImplementation 'com.gitlab.CDAGaming:fabritone:fabritone~1.16.x-Fabric-SNAPSHOT'
-    modImplementation "com.github.jellysquid3:sodium-fabric:1.16.x~stable-SNAPSHOT"
+    //modImplementation "com.github.jellysquid3:sodium-fabric:1.16.x~stable-SNAPSHOT"
     //modImplementation 'org.kitteh.irc:client-lib:7.3.0'
     //modImplementation 'net.engio:mbassador:1.3.2'
     include 'com.github.Vatuu:discord-rpc:1.6.2'

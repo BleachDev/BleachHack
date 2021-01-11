@@ -82,6 +82,7 @@ public class ModuleManager {
         new Fullbright(),
         new Ghosthand(),
         new OldAnimations(),
+        new SearchESP(),
         new HoleESP(),
         new HoleTP(),
         new HotbarCache(),

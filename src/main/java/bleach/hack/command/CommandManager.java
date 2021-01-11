@@ -34,6 +34,7 @@ public class CommandManager {
             new CmdCustomChat(),
             new CmdDrawn(),
             new CmdDupe(),
+            new CmdSearch(),
             new CmdEnchant(),
             new CmdEntityStats(),
             new CmdFriends(),
