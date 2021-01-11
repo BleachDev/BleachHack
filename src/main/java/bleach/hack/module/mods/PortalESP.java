@@ -121,12 +121,9 @@ public class PortalESP extends Module
     }
 
     @Subscribe
-    public void chunkUnloaded(EventUnloadChunk e) {
-
-    }
-
-    @Subscribe
     public void onRender(EventWorldRender event) {
+        if (!isToggled()) // Temp fix lmao, idk why is that even called when disabled.
+            return;  // Also when enabled chunks need to be reloaded in the way so they can get to chunkyBoi thread
 
         GL11.glPushMatrix();
         GL11.glBlendFunc(770, 771);

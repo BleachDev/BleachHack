@@ -141,6 +141,7 @@ public class ModuleManager {
         new BedReplenish(),
         new AutoCrystal(),
         new BlockHighlight(),
+        new Baconator(),
 
         //new LiquidInteract(),
         //new IRCMod(),
