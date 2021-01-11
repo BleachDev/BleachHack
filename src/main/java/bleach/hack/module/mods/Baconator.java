@@ -46,17 +46,16 @@ public class Baconator extends Module {
 
         ticks += 1; flint += 1;
         for (Entity ent : mc.world.getEntities()) {
-            if (    !(ent instanceof ChickenEntity) &&
-                    !(ent instanceof SheepEntity) &&
-                    !(ent instanceof CowEntity) &&
-                    !(ent instanceof PigEntity) &&
-                    !(ent instanceof RabbitEntity))
-                continue;
-
-            AnimalEntity animal = (AnimalEntity)ent;
             if (mc.player.getPos().distanceTo(ent.getPos()) > 5)
                 continue;
 
+            if (!(ent instanceof ChickenEntity) &&
+                !(ent instanceof SheepEntity) &&
+                !(ent instanceof CowEntity) &&
+                !(ent instanceof PigEntity) &&
+                !(ent instanceof RabbitEntity)) continue;
+
+            AnimalEntity animal = (AnimalEntity)ent;
             Block block = mc.world.getBlockState(ent.getBlockPos()).getBlock();
             Block bottom = mc.world.getBlockState(ent.getBlockPos().down()).getBlock();
             if (block.is(Blocks.WATER) || bottom.is(Blocks.GRASS_PATH))
