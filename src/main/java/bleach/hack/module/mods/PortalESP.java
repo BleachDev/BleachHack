@@ -93,6 +93,7 @@ public class PortalESP extends Module
 
     @Subscribe
     public void onPacket(EventReadPacket e) {
+        if (!isToggled()) return;
         if (e.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
             ChunkDeltaUpdateS2CPacket p = (ChunkDeltaUpdateS2CPacket)e.getPacket();
             p.visitUpdates((bp, bs) -> {

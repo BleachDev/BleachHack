@@ -95,6 +95,7 @@ public class SearchESP extends Module
 
     @Subscribe
     public void onPacket(EventReadPacket e) {
+        if (!isToggled()) return;
         if (e.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
             ChunkDeltaUpdateS2CPacket p = (ChunkDeltaUpdateS2CPacket)e.getPacket();
             p.visitUpdates((bp, bs) -> {
@@ -129,6 +130,7 @@ public class SearchESP extends Module
 
     @Subscribe
     public void onRender(EventWorldRender event) {
+        if (!isToggled()) return;
 
         GL11.glPushMatrix();
         GL11.glBlendFunc(770, 771);
