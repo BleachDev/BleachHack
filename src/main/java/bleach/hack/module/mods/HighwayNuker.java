@@ -46,7 +46,7 @@ import java.util.List;
 
 public class HighwayNuker extends Module {
 
-	private List<Block> blockList = new ArrayList<>();
+	private final List<Block> blockList = new ArrayList<>();
 
 	public HighwayNuker() {
 		super("HighwayNuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
@@ -69,7 +69,7 @@ public class HighwayNuker extends Module {
 		super.onEnable();
 	}
 
-	private BlockPos lastPlayerPos = null;
+	private final BlockPos lastPlayerPos = null;
 
 	private List<BlockPos> getBlocks() {
 		int mode = getSettings().get(1).asMode().mode;
@@ -103,9 +103,9 @@ public class HighwayNuker extends Module {
 		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
 
 		Vec3d rotation = new Vec3d(
-				(double) (MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)),
-				(double) (-MathHelper.sin(pitch * 0.017453292F)),
-				(double) (MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F)));
+				MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F),
+				-MathHelper.sin(pitch * 0.017453292F),
+				MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F));
 
 		Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
 		return mc.world.raycast(new RaycastContext(mc.player.getCameraPosVec(mc.getTickDelta()),

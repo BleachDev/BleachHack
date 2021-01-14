@@ -139,10 +139,10 @@ public class TunnelESP extends Module
 
     public void drawFilledBlockBox(BlockPos blockPos, float r, float g, float b, float a)
     {
-        double x = (double) blockPos.getX();
-        double y = (double) blockPos.getY();
-        double z = (double) blockPos.getZ();
-        double y2 = (double) blockPos.up(1).getY();
+        double x = blockPos.getX();
+        double y = blockPos.getY();
+        double z = blockPos.getZ();
+        double y2 = blockPos.up(1).getY();
         
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);

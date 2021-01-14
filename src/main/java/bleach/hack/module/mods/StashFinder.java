@@ -96,7 +96,7 @@ public class StashFinder extends Module {
 
         if (!this.nextChunks.isEmpty()) {
             this.nextChunk = this.nextChunks.get(0);
-            final double rotations[] = EntityUtils.calculateLookAt(
+            final double[] rotations = EntityUtils.calculateLookAt(
                     nextChunk.getStartX() + 8,
                     64,
                     nextChunk.getStartZ() + 8,

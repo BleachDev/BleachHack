@@ -42,8 +42,8 @@ public class HotbarCache extends Module {
                 new SettingSlider("Delay", 0.0, 1.0, 0.003, 3));
     }
 
-    private ArrayList<Item> Hotbar = new ArrayList<Item>();
-    private Timer timer = new Timer();
+    private final ArrayList<Item> Hotbar = new ArrayList<Item>();
+    private final Timer timer = new Timer();
 
     public void toggleNoSave() {
 

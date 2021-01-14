@@ -35,7 +35,7 @@ public class SearchESP extends Module
     // Man, race condition is killing me wtf
     public Vec3d prevPos;
     private double[] rPos;
-    private Stack<WorldChunk> chunkStack = new Stack<>(); // Lol stacks is so cool
+    private final Stack<WorldChunk> chunkStack = new Stack<>(); // Lol stacks is so cool
     private boolean running;
 
     private final Set<Block> highlightBlocks = new HashSet<>();

@@ -36,7 +36,6 @@ import net.minecraft.util.math.MathHelper;
 import java.util.Objects;
 
 public class Nametags extends Module {
-    public int theirPing;
     public Nametags() {
         super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
                 new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor"),

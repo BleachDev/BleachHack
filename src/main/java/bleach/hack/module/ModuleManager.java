@@ -48,7 +48,6 @@ public class ModuleManager {
         new AutoRespawn(),
         new AutoSign(),
         new AutoTool(),
-        new AutoTunnel(),
         new AutoTotem(),
         new AutoWalk(),
         new BetterPortal(),

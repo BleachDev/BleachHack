@@ -40,7 +40,7 @@ public class PortalESP extends Module
     // Man, race condition is killing me wtf
     public Vec3d prevPos;
     private double[] rPos;
-    private Stack<WorldChunk> chunkStack = new Stack<>(); // Lol stacks is so cool
+    private final Stack<WorldChunk> chunkStack = new Stack<>(); // Lol stacks is so cool
     private boolean running;
 
     public PortalESP()
@@ -159,9 +159,9 @@ public class PortalESP extends Module
 
     public void drawFilledBlockBox(BlockPos blockPos, float r, float g, float b, float a)
     {
-        double x = (double) blockPos.getX();
-        double y = (double) blockPos.getY();
-        double z = (double) blockPos.getZ();
+        double x = blockPos.getX();
+        double y = blockPos.getY();
+        double z = blockPos.getZ();
 
         float or = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(2).asSlider().getValue() / 255.0D);

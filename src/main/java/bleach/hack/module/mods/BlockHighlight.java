@@ -73,9 +73,9 @@ public class BlockHighlight extends Module
 
     public void drawFilledBlockBox(BlockPos blockPos, float r, float g, float b, float a)
     {
-        double x = (double) blockPos.getX();
-        double y = (double) blockPos.getY();
-        double z = (double) blockPos.getZ();
+        double x = blockPos.getX();
+        double y = blockPos.getY();
+        double z = blockPos.getZ();
 
         float or = (float) (this.getSettings().get(0).asSlider().getValue() / 255.0D);
         float og = (float) (this.getSettings().get(1).asSlider().getValue() / 255.0D);
