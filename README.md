@@ -20,7 +20,7 @@ Extract the zip and put the jar into your mods folder
 
 Bubbyclient for the AutoCrystal https://github.com/BubbyRoosh1/BubbyClient-Fabric-1.16/
 
-# Follow the devs!!
+### Follow the devs!!
 
 https://github.com/BubbyRoosh1 \
 https://github.com/jakepriddle 
