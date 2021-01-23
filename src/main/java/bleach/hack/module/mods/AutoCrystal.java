@@ -41,6 +41,8 @@ public class AutoCrystal extends Module {
 
 //TODO: antisuicide
 //TODO: silent crystal swap
+    
+//see https://github.com/BubbyRoosh1/BubbyClient-Fabric-1.16/
 
     public AutoCrystal() {
         super("AutoCrystal", KEY_UNBOUND, Category.COMBAT, "Auto crystal chungus",

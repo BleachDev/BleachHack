@@ -16,6 +16,16 @@ Download the lastest compiled version of bleachhack for your Minecraft version [
 IF IT SAYS ERROR 404 OR NOT FOUND ETC ETC LOG INTO A GITHUB ACCOUNT AND TRY AGAIN!!  
 Extract the zip and put the jar into your mods folder  
 
+## Credit
+
+Bubbyclient for the AutoCrystal https://github.com/BubbyRoosh1/BubbyClient-Fabric-1.16/
+
+### Follow the devs!!
+
+https://github.com/BubbyRoosh1 \
+https://github.com/jakepriddle 
+
+
 ## Images
 
 ![GUI](https://media.discordapp.net/attachments/745366273168244906/745372657423351808/unknown.png)  
