@@ -6,6 +6,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -100,7 +101,7 @@ public class AutoCrystal extends Module {
     onTick(EventTick event)
     {
         counter++;
-        if(counter < getSetting(7).asSlider().getValue())
+        if(counter < getSetting(7).asSlider().getValue() || ModuleManager.getModule(AutoBedBomb.class).isToggled())
             return;
         counter = 0;
 
@@ -122,6 +123,10 @@ public class AutoCrystal extends Module {
                 .findFirst()
                 .orElse(null);
 
+        if(target.isInvulnerable()) {
+            BleachLogger.infoMessage(target.getDisplayName().asString()+" target is invulnerable");
+            return;
+        }
         if(target == null)
             return;
 
@@ -133,6 +138,10 @@ public class AutoCrystal extends Module {
         //calculate the block that does the most damage to the target
         targetBlock = blocks.parallelStream()
                 .filter(block -> CrystalUtils.getCrystalDamage(mc.player, block) < getSetting(4).asSlider().getValue())
+                //.filter(block -> {
+                //    LivingEntity livingEntity = (LivingEntity) target;
+                //    return livingEntity.getBoundingBox().getCenter().distanceTo(Vec3d.ofCenter(block)) < 2.5;
+                //})
                 //.filter(block -> CrystalUtils.getCrystalDamage(mc.player, block) < mc.player.getHealth())
                 .filter(block -> {
                     LivingEntity livingEntity = (LivingEntity) target;

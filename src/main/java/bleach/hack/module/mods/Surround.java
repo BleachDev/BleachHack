@@ -14,8 +14,11 @@ import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class Surround extends Module {
@@ -25,7 +28,7 @@ public class Surround extends Module {
 
     public Surround() {
         super("Surround", KEY_UNBOUND, Category.COMBAT, "Surrounds yourself with obsidian",
-                new SettingMode("Mode", "1x1", "2x2").withDesc("Mode, 1x1 places 4 blocks around you"),
+                new SettingMode("Mode", "1x1", "2x2", "trap").withDesc("Mode, 1x1 places 4 blocks around you"),
                 new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block"),
                 new SettingToggle("Keep on", true).withDesc("Keeps the module on after placing the obsidian"),
                 new SettingToggle("Jump disable", true).withDesc("Disables the module if you jump"),
@@ -95,6 +98,8 @@ public class Surround extends Module {
 
         if (getSetting(0).asMode().mode == 0) {
             for (BlockPos b : new BlockPos[]{
+                    coords.down().north(), coords.down().east(),
+                    coords.down().south(), coords.down().west(),
                     coords.north(), coords.east(),
                     coords.south(), coords.west()}) {
 
@@ -115,6 +120,8 @@ public class Surround extends Module {
             }
         } else if (getSetting(0).asMode().mode == 1) {
             for (BlockPos b : new BlockPos[]{
+                    coords.down().north(), coords.down().east(),
+                    coords.down().south(), coords.down().west(),
                     coords.north(), coords.east(),
                     coords.south(), coords.west(),
                     coords.up().north(), coords.up().east(),
@@ -133,6 +140,37 @@ public class Surround extends Module {
                     mc.player.inventory.selectedSlot = currentSlot;
                     cap++;
                 }
+            }
+        } else if (getSetting(0).asMode().mode == 2) {
+            for (BlockPos b : new BlockPos[]{
+                    coords.down().north(), coords.down().east(),
+                    coords.down().south(), coords.down().west(),
+                    coords.north(), coords.east(),
+                    coords.south(), coords.west(),
+                    coords.up().north(), coords.up().east(),
+                    coords.up().south(), coords.up().west()}) {
+
+                if (cap >= (int) getSetting(4).asSlider().getValue()) {
+                    return;
+                }
+
+                if (getSetting(5).asRotate().state) {
+                    WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
+                }
+                if (WorldUtils.isBlockEmpty(b)) {
+                    currentSlot = mc.player.inventory.selectedSlot;
+                    WorldUtils.placeBlock(b, obsidian, false, false);
+                    mc.player.inventory.selectedSlot = currentSlot;
+                    //mc.interactionManager.attackBlock(b, Direction.UP);
+                    cap++;
+                }
+            }
+            if(mc.world.getBlockState(coords.up(2)).getMaterial().isReplaceable()){
+                currentSlot = mc.player.inventory.selectedSlot;
+                mc.player.inventory.selectedSlot = obsidian;
+                mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(coords.up(1)), Direction.UP, coords.up(2), false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+                mc.player.inventory.selectedSlot = currentSlot;
             }
         }
 

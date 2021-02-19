@@ -65,13 +65,19 @@ public class AutoBedBomb extends Module {
         targetPlayer = Streams.stream(mc.world.getEntities())
                 .filter(e -> e instanceof PlayerEntity)
                 .filter(e -> !(BleachHack.friendMang.has(e.getName().asString())) && e != mc.player)
+                .filter(e -> e.getBlockPos() != mc.player.getBlockPos())
                 .filter(e -> mc.player.distanceTo(e) < getSetting(1).asSlider().getValue())
                 .filter(e -> !((PlayerEntity) e).isDead())
+                .filter(e -> (mc.world.getBlockState(((PlayerEntity) e).getBlockPos()).getBlock() == Blocks.AIR||mc.world.getBlockState(((PlayerEntity) e).getBlockPos()).getBlock() == Blocks.LAVA))
                 .sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player)))
                 .findFirst()
                 .orElse(null);
         if(targetPlayer == null)
             return;
+        if(targetPlayer.isInvulnerable()) {
+            BleachLogger.infoMessage(targetPlayer.getDisplayName().asString()+" target is invulnerable");
+            return;
+        }
         targetPlayerPos = targetPlayer.getBlockPos().up();
 
 
@@ -93,7 +99,7 @@ public class AutoBedBomb extends Module {
         
         currentSlot = mc.player.inventory.selectedSlot;
 
-        if (this.mc.world.getBlockState(targetPlayerPos.north()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.north()).getBlock() == Blocks.FIRE) {
+        if (this.mc.world.getBlockState(targetPlayerPos.north()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.north()).getBlock() == Blocks.FIRE || mc.world.getBlockState(targetPlayerPos.north()).getBlock() == Blocks.LAVA) {
             mc.player.inventory.selectedSlot = bed;
 
             WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY(), mc.player.getZ()+1);
@@ -102,7 +108,7 @@ public class AutoBedBomb extends Module {
                     new BlockHitResult(mc.player.getPos(), Direction.UP, targetPlayerPos.north(), true));
 
             mc.player.inventory.selectedSlot = currentSlot;
-        } else if (this.mc.world.getBlockState(targetPlayerPos.south()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.south()).getBlock() == Blocks.FIRE) {
+        } else if (this.mc.world.getBlockState(targetPlayerPos.south()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.south()).getBlock() == Blocks.FIRE || mc.world.getBlockState(targetPlayerPos.south()).getBlock() == Blocks.LAVA) {
             mc.player.inventory.selectedSlot = bed;
 
             WorldUtils.facePosPacket(mc.player.getX(), mc.player.getY(), mc.player.getZ()-1);
@@ -111,7 +117,7 @@ public class AutoBedBomb extends Module {
                     new BlockHitResult(mc.player.getPos(), Direction.UP, targetPlayerPos.south(), true));
 
             mc.player.inventory.selectedSlot = currentSlot;
-        } else if (this.mc.world.getBlockState(targetPlayerPos.east()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.east()).getBlock() == Blocks.FIRE) {
+        } else if (this.mc.world.getBlockState(targetPlayerPos.east()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.east()).getBlock() == Blocks.FIRE || mc.world.getBlockState(targetPlayerPos.east()).getBlock() == Blocks.LAVA) {
             mc.player.inventory.selectedSlot = bed;
 
             WorldUtils.facePosPacket(mc.player.getX()-1, mc.player.getY(), mc.player.getZ());
@@ -120,7 +126,7 @@ public class AutoBedBomb extends Module {
                     new BlockHitResult(mc.player.getPos(), Direction.UP, targetPlayerPos.east(), true));
 
             mc.player.inventory.selectedSlot = currentSlot;
-        } else if (this.mc.world.getBlockState(targetPlayerPos.west()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.west()).getBlock() == Blocks.FIRE) {
+        } else if (this.mc.world.getBlockState(targetPlayerPos.west()).getBlock() == Blocks.AIR || this.mc.world.getBlockState(targetPlayerPos.west()).getBlock() == Blocks.FIRE || mc.world.getBlockState(targetPlayerPos.west()).getBlock() == Blocks.LAVA) {
             mc.player.inventory.selectedSlot = bed;
 
             WorldUtils.facePosPacket(mc.player.getX()+1, mc.player.getY(), mc.player.getZ());
