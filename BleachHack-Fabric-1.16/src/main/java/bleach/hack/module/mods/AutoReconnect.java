@@ -53,8 +53,8 @@ public class AutoReconnect extends Module {
 	@Subscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (event.getScreen() instanceof DisconnectedScreen
-				&& !(event.getScreen() instanceof newDisconnectScreen)) {
-			mc.openScreen(new newDisconnectScreen((DisconnectedScreen) event.getScreen()));
+				&& !(event.getScreen() instanceof NewDisconnectScreen)) {
+			mc.openScreen(new NewDisconnectScreen((DisconnectedScreen) event.getScreen()));
 			event.setCancelled(true);
 		}
 	}
@@ -72,22 +72,19 @@ public class AutoReconnect extends Module {
 	@Subscribe
 	public void sendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof HandshakeC2SPacket) {
-			try {
-				server = new ServerInfo("Server",
-						(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
-								+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"),
-								false);
-			} catch (Exception e) {
-			}
+			server = new ServerInfo("Server",
+					(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
+							+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"),
+							false);
 		}
 	}
 
-	public class newDisconnectScreen extends DisconnectedScreen {
+	public class NewDisconnectScreen extends DisconnectedScreen {
 
 		public long reconnectTime = Long.MAX_VALUE - 1000000L;
 		public int reasonH = 0;
 
-		public newDisconnectScreen(DisconnectedScreen screen) {
+		public NewDisconnectScreen(DisconnectedScreen screen) {
 			super((Screen) FabricReflect.getFieldValue(screen, "field_2456", "parent"), new LiteralText("Disconnect"),
 					(Text) FabricReflect.getFieldValue(screen, "field_2457", "reason"));
 			reasonH = (int) FabricReflect.getFieldValue(screen, "field_2454", "reasonHeight");

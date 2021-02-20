@@ -24,6 +24,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 
 public class FabricReflect {
 
+	@SuppressWarnings("deprecation")
 	public static Field getField(final Class<?> cls, String obfName, String deobfName) {
 		if (cls == null)
 			return null;
@@ -39,7 +40,7 @@ public class FabricReflect {
 					continue;
 				}
 			}
-
+			
 			if (!field.isAccessible()) {
 				field.setAccessible(true);
 			}
@@ -64,6 +65,7 @@ public class FabricReflect {
 		throw new RuntimeException("Error reflecting field: " + deobfName + "/" + obfName + " @" + cls.getSimpleName());
 	}
 
+	@SuppressWarnings("deprecation")
 	public static Object getFieldValue(final Object target, String obfName, String deobfName) {
 		if (target == null)
 			return null;
@@ -113,6 +115,7 @@ public class FabricReflect {
 		throw new RuntimeException("Error getting reflected field value: " + deobfName + "/" + obfName + " @" + target.getClass().getSimpleName());
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void writeField(final Object target, final Object value, String obfName, String deobfName) {
 		if (target == null)
 			return;

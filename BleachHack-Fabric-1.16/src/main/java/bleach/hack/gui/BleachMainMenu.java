@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.lwjgl.opengl.GL11;
 
 import bleach.hack.BleachHack;
@@ -61,7 +62,7 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	public static boolean customTitleScreen = true;
 
 	public static String splash = "";
-	public static List<String> versions = new ArrayList<>();
+	public static final List<String> versions = new ArrayList<>();
 
 	/* login manager variables */
 	public TextFieldWidget userField;
@@ -318,13 +319,10 @@ public class BleachMainMenu extends AbstractWindowScreen {
 	}
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		try {
-			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
-				if (double_1 > width / 2 - 80 && double_1 < width / 2 + 80 && double_2 > 0 && double_2 < 20) {
-					Util.getOperatingSystem().open(new URI("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
-				}
+		if (versions.size() >= 2 && NumberUtils.toInt(versions.get(1), Integer.MAX_VALUE) > BleachHack.INTVERSION) {
+			if (double_1 > width / 2 - 80 && double_1 < width / 2 + 80 && double_2 > 0 && double_2 < 20) {
+				Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
 			}
-		} catch (Exception e) {
 		}
 
 		if (double_1 > 0 && double_1 < 20 && double_2 > height - 14 && double_2 < height) {

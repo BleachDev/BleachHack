@@ -40,6 +40,7 @@ import org.apache.commons.io.IOUtils;
 import com.google.common.base.Charsets;
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 
@@ -357,13 +358,13 @@ public class Nametags extends Module {
 			public String call() throws Exception {
 				try {
 					String response = IOUtils.toString(
-							new URI("https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names"), Charsets.UTF_8);
+							URI.create("https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names"), Charsets.UTF_8);
 					System.out.println("bruh uuid time https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names");
 					
 					JsonArray ja = new JsonParser().parse(response).getAsJsonArray();
 					
 					return ja.get(ja.size() - 1).getAsJsonObject().get("name").getAsString();
-				} catch (Exception e) {
+				} catch (JsonParseException e) {
 					e.printStackTrace();
 					return null;
 				}

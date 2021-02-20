@@ -51,7 +51,7 @@ public class ArrowJuke extends Module {
 			List<Box> boxes = new ArrayList<>();
 
 			for (int i = 0; i < 100; i++) {
-				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5));
+				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5d));
 				boxes.add(new Box(
 						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
 						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2)));
@@ -61,7 +61,7 @@ public class ArrowJuke extends Module {
 			double speed = getSetting(1).asSlider().getValue();
 
 			for (int i = 0; i < 75; i++) {
-				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5));
+				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5d));
 				Box nextBox = new Box(
 						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
 						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2));

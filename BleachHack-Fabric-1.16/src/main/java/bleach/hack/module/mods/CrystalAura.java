@@ -402,9 +402,6 @@ public class CrystalAura extends Module {
 				double double_11 = target.getZ() - crystalPos.z;
 				double double_12 = MathHelper.sqrt(double_9 * double_9 + double_10 * double_10 + double_11 * double_11);
 				if (double_12 != 0.0D) {
-					double_9 /= double_12;
-					double_10 /= double_12;
-					double_11 /= double_12;
 					double double_13 = Explosion.getExposure(crystalPos, target);
 					double double_14 = (1.0D - double_8) * double_13;
 

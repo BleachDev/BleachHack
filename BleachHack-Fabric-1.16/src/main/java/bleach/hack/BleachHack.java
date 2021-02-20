@@ -33,7 +33,7 @@ public class BleachHack implements ModInitializer {
 	public static final String VERSION = "B14.2";
 	public static final int INTVERSION = 24;
 
-	public static EventBus eventBus = new EventBus();
+	public static final EventBus eventBus = new EventBus();
 
 	public static FriendManager friendMang;
 

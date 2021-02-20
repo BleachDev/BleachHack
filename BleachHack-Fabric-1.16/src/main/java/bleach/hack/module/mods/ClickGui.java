@@ -27,7 +27,7 @@ import bleach.hack.setting.base.SettingToggle;
 
 public class ClickGui extends Module {
 
-	public static ClickGuiScreen clickGui = new ClickGuiScreen();
+	public static final ClickGuiScreen clickGui = new ClickGuiScreen();
 
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",

@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 
 public abstract class Operation {
 
-	protected static MinecraftClient mc = MinecraftClient.getInstance();
+	protected static final MinecraftClient mc = MinecraftClient.getInstance();
 
 	public BlockPos pos;
 	public abstract boolean canExecute();

@@ -166,7 +166,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 				fillButton(matrix, x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mX, mY);
 				fillButton(matrix, x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mX, mY);
 
-				int pixels = (int) Math.round(MathHelper.clamp((w / 4) * ((double) entry.playTick / (double) entry.length), 0, w / 4));
+				int pixels = (int) Math.round(MathHelper.clamp((w / 4d) * ((double) entry.playTick / (double) entry.length), 0, w / 4d));
 				fill(matrix, x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
 
 				drawCenteredString(matrix, textRenderer, "Delete", (int) (x + w - w / 2.8), y + h - 14, 0xff0000);
@@ -202,10 +202,7 @@ public class NotebotScreen extends AbstractWindowScreen {
 			if (double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15)
 				page++;
 			if (double_1 > x + w - 44 && double_1 < x + w && double_2 > y + 3 && double_2 < y + 15) {
-				try {
-					Util.getOperatingSystem().open(new URI("https://www.youtube.com/watch?v=Z6O80jItoAk"));
-				} catch (Exception e) {
-				}
+				Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"));
 			}
 			if (double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
 				NotebotUtils.downloadSongs(true);
