@@ -39,8 +39,8 @@ public class BlockParty extends Module {
 
 	public BlockParty() {
 		super("Blockparty", KEY_UNBOUND, Category.MISC, "Wins You Blockparty",
-				new SettingToggle("Jump", true),
-				new SettingToggle("AutoSpeed", true));
+				new SettingToggle("Jump", true).withDesc("Automatically jumps"),
+				new SettingToggle("AutoSpeed", true).withDesc("Gives you speed if you are far away from the right block"));
 	}
 
 	@Subscribe

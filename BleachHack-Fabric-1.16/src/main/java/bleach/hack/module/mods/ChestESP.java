@@ -54,18 +54,18 @@ public class ChestESP extends Module {
 
 	public ChestESP() {
 		super("ChestESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.",
-				new SettingToggle("Chests", true),
-				new SettingToggle("EndChests", true),
-				new SettingToggle("Furnaces", true),
-				new SettingToggle("Dispensers", true),
-				new SettingToggle("Hoppers", true),
-				new SettingToggle("Shulkers", true),
-				new SettingToggle("BrewStands", true),
-				new SettingToggle("ChestCarts", true),
-				new SettingToggle("FurnaceCarts", true),
-				new SettingToggle("HopperCarts", true),
-				new SettingToggle("ItemFrames", true),
-				new SettingToggle("ArmorStands", true));
+				new SettingToggle("Chests", true).withDesc("Highlights chests"),
+				new SettingToggle("EndChests", true).withDesc("Highlights enderchests"),
+				new SettingToggle("Furnaces", true).withDesc("Highlights furnaces"),
+				new SettingToggle("Dispensers", true).withDesc("Highlights dispensers"),
+				new SettingToggle("Hoppers", true).withDesc("Highlights hoppers"),
+				new SettingToggle("Shulkers", true).withDesc("Highlights shulkers"),
+				new SettingToggle("BrewStands", true).withDesc("Highlights brewing stands"),
+				new SettingToggle("ChestCarts", true).withDesc("Highlights chests in minecarts"),
+				new SettingToggle("FurnaceCarts", true).withDesc("Highlights furnaces in minecarts"),
+				new SettingToggle("HopperCarts", true).withDesc("Highlights hoppers in minecarts"),
+				new SettingToggle("ItemFrames", true).withDesc("Highlights item frames"),
+				new SettingToggle("ArmorStands", true).withDesc("Highlights armor stands"));
 	}
 
 	@Subscribe

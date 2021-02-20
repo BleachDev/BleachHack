@@ -40,7 +40,7 @@ public class Step extends Module {
 
 	public Step() {
 		super("Step", KEY_UNBOUND, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
-				new SettingMode("Mode", "Packet", "Vanilla", "Spider", "Jump"),
+				new SettingMode("Mode", "Packet", "Vanilla", "Spider", "Jump").withDesc("Step mode"),
 				new SettingSlider("Height", 0.1, 20, 2, 1).withDesc("How high to be able to step (Vanilla only)"),
 				new SettingToggle("Cooldown", false).withDesc("Adds a cooldown between stepping to bypass some anticheats").withChildren(
 						new SettingSlider("Amount", 0.01, 1, 0.1, 2).withDesc("How long the cooldown is in seconds")));

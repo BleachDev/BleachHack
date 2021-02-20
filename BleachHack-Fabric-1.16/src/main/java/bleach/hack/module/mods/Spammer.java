@@ -38,8 +38,8 @@ public class Spammer extends Module {
 
 	public Spammer() {
 		super("Spammer", KEY_UNBOUND, Category.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
-				new SettingMode("Read", "Random", "Order"),
-				new SettingSlider("Delay", 1, 120, 20, 0));
+				new SettingMode("Read", "Random", "Order").withDesc("How to read the spammer file"),
+				new SettingSlider("Delay", 1, 120, 20, 0).withDesc("Delay between messages"));
 	}
 
 	@Override

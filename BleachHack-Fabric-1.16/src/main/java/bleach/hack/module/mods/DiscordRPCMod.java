@@ -29,10 +29,10 @@ public class DiscordRPCMod extends Module {
 
 	public DiscordRPCMod() {
 		super("DiscordRPC", KEY_UNBOUND, Category.MISC, "Dicord RPC, use the \"rpc\" command to set a custom status",
-				new SettingMode("Text 1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%"),
-				new SettingMode("Text 2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%"),
-				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None"),
-				new SettingToggle("Silent", false));
+				new SettingMode("Text 1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%").withDesc("Line 1"),
+				new SettingMode("Text 2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%").withDesc("Line 2"),
+				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None").withDesc("How to show elapsed time"),
+				new SettingToggle("Silent", false).withDesc("Use a generic Minecraft title and image"));
 	}
 
 	public void init() {

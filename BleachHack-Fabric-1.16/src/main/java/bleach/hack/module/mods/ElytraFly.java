@@ -35,8 +35,8 @@ public class ElytraFly extends Module {
 
 	public ElytraFly() {
 		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
-				new SettingMode("Mode", "Normal", "Control", "Bruh Momentum"),
-				new SettingSlider("Speed", 0, 5, 0.8, 2));
+				new SettingMode("Mode", "Normal", "Control", "Bruh Momentum").withDesc("Elytrafly mode"),
+				new SettingSlider("Speed", 0, 5, 0.8, 2).withDesc("Elytra speed"));
 	}
 
 	@Subscribe

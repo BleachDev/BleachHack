@@ -27,6 +27,7 @@ import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.FabricReflect;
 import net.minecraft.block.entity.SignBlockEntity;
@@ -39,7 +40,8 @@ public class AutoSign extends Module {
 
 	public AutoSign() {
 		super("AutoSign", KEY_UNBOUND, Category.PLAYER, "Automatically writes on signs",
-				new SettingToggle("Random", false));
+				new SettingToggle("Random", false).withDesc("Writes random unicode in the sign").withChildren(
+						new SettingSlider("Length", 1, 1000, 500, 0).withDesc("How many characters to write per line")));
 	}
 
 	public void onDisable() {
@@ -66,7 +68,10 @@ public class AutoSign extends Module {
 				text = new String[] {};
 				while (text.length < 4) {
 					IntStream chars = new Random().ints(0, 0x10FFFF);
-					text = chars.limit(1000).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining()).split("(?<=\\G.{250})");
+					int amount = (int) getSetting(0).asToggle().getChild(0).asSlider().getValue();
+					text = chars.limit(amount * 5)
+							.mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining())
+							.split("(?<=\\G.{" + amount + "})");
 				}
 			}
 

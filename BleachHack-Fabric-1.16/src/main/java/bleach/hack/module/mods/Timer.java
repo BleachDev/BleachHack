@@ -8,7 +8,7 @@ public class Timer extends Module {
 
 	public Timer() {
 		super("Timer", KEY_UNBOUND, Category.WORLD, "more speeds",
-				new SettingSlider("Speed", 0.01, 20, 1, 2));
+				new SettingSlider("Speed", 0.01, 20, 1, 2).withDesc("How fast to set timer"));
 	}
 
 	// See MixinRenderTickCounter for code

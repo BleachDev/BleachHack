@@ -7,6 +7,7 @@ public class SettingRotate extends SettingToggle {
 
 	public SettingRotate(boolean state) {
 		super("Rotate", state);
+		description = "Rotate server/clientside";
 		children.add(new SettingMode("Mode", "Server", "Client").withDesc("How to rotate"));
 	}
 

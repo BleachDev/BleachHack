@@ -48,15 +48,15 @@ public class Nuker extends Module {
 
 	public Nuker() {
 		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
-				new SettingMode("Mode", "Normal", "Multi", "Instant"),
-				new SettingSlider("Range", 1, 6, 4.2, 1),
-				new SettingSlider("Cooldown", 0, 4, 0, 0),
-				new SettingToggle("All Blocks", true),
-				new SettingToggle("Flatten", false),
+				new SettingMode("Mode", "Normal", "Multi", "Instant").withDesc("How many blocks to mine at once"),
+				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range"),
+				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
+				new SettingToggle("All Blocks", true).withDesc("Mine all blocks instead of the whitelist"),
+				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
 				new SettingRotate(false),
-				new SettingToggle("NoParticles", false),
-				new SettingMode("Sort", "Normal", "Hardness"),
-				new SettingSlider("Multi", 1, 10, 2, 0));
+				new SettingToggle("NoParticles", false).withDesc("Removes paritcles"),
+				new SettingMode("Sort", "Normal", "Hardness").withDesc("Which order to mine blocks in"),
+				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if multi mode is on"));
 	}
 
 	public void onEnable() {

@@ -45,11 +45,11 @@ public class PacketFly extends Module {
 
 	public PacketFly() {
 		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.",
-				new SettingMode("Mode", "Phase", "Packet"),
-				new SettingSlider("HSpeed", 0.05, 2, 0.5, 2),
-				new SettingSlider("VSpeed", 0.05, 2, 0.5, 2),
-				new SettingSlider("Fall", 0, 40, 20, 0),
-				new SettingToggle("Packet Cancel", false));
+				new SettingMode("Mode", "Phase", "Packet").withDesc("Packetfly mode"),
+				new SettingSlider("HSpeed", 0.05, 2, 0.5, 2).withDesc("Horizontal speed"),
+				new SettingSlider("VSpeed", 0.05, 2, 0.5, 2).withDesc("Vertical speed"),
+				new SettingSlider("Fall", 0, 40, 20, 0).withDesc("How often to fall (antikick)"),
+				new SettingToggle("Packet Cancel", false).withDesc("Cancel rubberband packets clientside"));
 	}
 
 	@Override

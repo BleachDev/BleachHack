@@ -67,7 +67,7 @@ public class CustomChat extends Module {
 						"\u24d0\u24d1\u24d2\u24d3\u24d4", "\u039bb\u1455d\u03A3", "\u03b1\u0432c\u2202\u0454").withDesc("Custom font to use"),
 				new SettingToggle("Prefix", false).withDesc("Message prepended to the message, set with \"customchat prefix [message]\""),
 				new SettingToggle("Suffix", false).withDesc("Message appended to the message, set with \"customchat suffix [message]\""),
-				new SettingMode("KillText", "None", "Ez", "GG"));
+				new SettingMode("KillText", "None", "Ez", "GG").withDesc("Send a chat message when you kill someone"));
 	}
 
 	public void init() {

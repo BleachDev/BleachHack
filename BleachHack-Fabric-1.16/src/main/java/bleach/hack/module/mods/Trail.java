@@ -41,10 +41,10 @@ public class Trail extends Module {
 
 	public Trail() {
 		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
-				new SettingToggle("Trail", true),
-				new SettingToggle("Keep Trail", false),
-				new SettingMode("Color", "Red", "Green", "Blue", "B2G", "R2B"),
-				new SettingSlider("Thick", 0.1, 10, 3, 1));
+				new SettingToggle("Trail", true).withDesc("Enable trailing"),
+				new SettingToggle("Keep Trail", false).withDesc("Keep the trail after turning the module off"),
+				new SettingMode("Color", "Red", "Green", "Blue", "B2G", "R2B").withDesc("The color of the trail"),
+				new SettingSlider("Thick", 0.1, 10, 3, 1).withDesc("Thickness of the trail"));
 	}
 
 	@Override

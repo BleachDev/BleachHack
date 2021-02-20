@@ -42,17 +42,20 @@ public class FastUse extends Module {
 
 	public FastUse() {
 		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster",
-				new SettingMode("Mode", "Single", "Multi"),
-				new SettingSlider("Multi", 1, 100, 20, 0),
-				new SettingToggle("Throwables Only", true),
-				new SettingToggle("XP Only", false));
+				new SettingMode("Mode", "Single", "Multi").withDesc("Whether to throw once per tick or multiple times"),
+				new SettingSlider("Multi", 1, 100, 20, 0).withDesc("How many items to user per tick if on multi mode"),
+				new SettingToggle("Throwables Only", true).withDesc("Only use throwables").withChildren(
+						new SettingToggle("XP Only", false).withDesc("Only use XP bottles")));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if ((getSetting(2).asToggle().state && !THROWABLE.contains(mc.player.getMainHandStack().getItem()))
-				|| (getSetting(3).asToggle().state && mc.player.getMainHandStack().getItem() != Items.EXPERIENCE_BOTTLE)) {
-			return;
+		if (getSetting(2).asToggle().state) {
+			if (!(THROWABLE.contains(mc.player.getMainHandStack().getItem())
+					&& (!getSetting(2).asToggle().getChild(0).asToggle().state 
+						|| mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE))) {
+				return;
+			}
 		}
 
 		/* set rightClickDelay to 0 */

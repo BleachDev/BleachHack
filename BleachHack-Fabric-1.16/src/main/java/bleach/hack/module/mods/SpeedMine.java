@@ -32,12 +32,12 @@ public class SpeedMine extends Module {
 
 	public SpeedMine() {
 		super("SpeedMine", KEY_UNBOUND, Category.EXPLOITS, "Allows you to mine at sanic speeds",
-				new SettingMode("Mode", "Haste", "OG"),
-				new SettingSlider("Haste Lvl", 1, 3, 1, 0),
-				new SettingSlider("Cooldown", 0, 4, 1, 0),
-				new SettingSlider("Multiplier", 1, 3, 1.3, 1),
-				new SettingToggle("AntiFatigue", true),
-				new SettingToggle("AntiOffGround", true));
+				new SettingMode("Mode", "Haste", "OG").withDesc("Haste mode"),
+				new SettingSlider("Haste Lvl", 1, 3, 1, 0).withDesc("Haste Level"),
+				new SettingSlider("Cooldown", 0, 4, 1, 0).withDesc("Cooldown between mining blocks"),
+				new SettingSlider("Multiplier", 1, 3, 1.3, 1).withDesc("OG Mode multiplier"),
+				new SettingToggle("AntiFatigue", true).withDesc("Removes the fatigue effect"),
+				new SettingToggle("AntiOffGround", true).withDesc("Removing mining slowness from being offground"));
 	}
 
 	@Override

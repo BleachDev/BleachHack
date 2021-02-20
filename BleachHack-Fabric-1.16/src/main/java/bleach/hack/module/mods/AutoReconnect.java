@@ -46,8 +46,8 @@ public class AutoReconnect extends Module {
 
 	public AutoReconnect() {
 		super("AutoReconnect", KEY_UNBOUND, Category.MISC, "Shows reconnect options when disconnecting from a server",
-				new SettingToggle("Auto", true),
-				new SettingSlider("Time", 0.2, 10, 5, 2));
+				new SettingToggle("Auto", true).withDesc("Automatically reconnects").withChildren(
+						new SettingSlider("Time", 0.2, 10, 5, 2).withDesc("How long to wait before reconnecting")));
 	}
 
 	@Subscribe
@@ -99,7 +99,7 @@ public class AutoReconnect extends Module {
 			}));
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
 					new LiteralText((getSetting(0).asToggle().state ? "\u00a7a" : "\u00a7c") + "AutoReconnect ["
-							+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
+							+ ((reconnectTime + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000) - System.currentTimeMillis())
 							+ "]"),
 					button -> {
 						getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
@@ -111,10 +111,10 @@ public class AutoReconnect extends Module {
 			super.render(matrix, mouseX, mouseY, delta);
 
 			buttons.get(2).setMessage(new LiteralText((getSetting(0).asToggle().state ? "\u00a7aAutoReconnect ["
-					+ ((reconnectTime + getSetting(1).asSlider().getValue() * 1000) - System.currentTimeMillis())
-					+ "]" : "\u00a7cAutoReconnect [" + getSetting(1).asSlider().getValue() * 1000 + "]")));
+					+ ((reconnectTime + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000) - System.currentTimeMillis())
+					+ "]" : "\u00a7cAutoReconnect [" + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000 + "]")));
 
-			if (reconnectTime + getSetting(1).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSetting(0).asToggle().state) {
+			if (reconnectTime + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSetting(0).asToggle().state) {
 				if (server != null)
 					client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
 				reconnectTime = System.currentTimeMillis();

@@ -21,7 +21,7 @@ public class MouseFriend extends Module {
 
 	public MouseFriend() {
 		super("MouseFriend", KEY_UNBOUND, Category.MISC, "Add/Remove friends with mouse buttons",
-				new SettingMode("Button", "Middle", "Right", "MOUSE4", "MOUSE5", "MOUSE6"));
+				new SettingMode("Button", "Middle", "Right", "MOUSE4", "MOUSE5", "MOUSE6").withDesc("What mouse button to use"));
 	}
 
 	@Subscribe

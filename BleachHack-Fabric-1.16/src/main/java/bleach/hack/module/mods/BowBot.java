@@ -42,9 +42,9 @@ public class BowBot extends Module {
 
 	public BowBot() {
 		super("BowBot", KEY_UNBOUND, Category.COMBAT, "Automatically aims and shoots at entities",
-				new SettingToggle("Shoot", true),
-				new SettingSlider("Charge", 0.1, 1, 0.5, 2),
-				new SettingToggle("Aim", false));
+				new SettingToggle("Shoot", true).withDesc("Automatically shoots arrows"),
+				new SettingSlider("Charge", 0.1, 1, 0.5, 2).withDesc("How much to charge the bow"),
+				new SettingToggle("Aim", false).withDesc("Automatically aims"));
 	}
 
 	@Subscribe

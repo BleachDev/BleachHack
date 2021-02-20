@@ -38,10 +38,10 @@ public class FakeLag extends Module {
 
 	public FakeLag() {
 		super("FakeLag", KEY_UNBOUND, Category.MOVEMENT, "Stores up movement packets",
-				new SettingMode("Mode", "Always", "Pulse"),
-				new SettingToggle("Limit", false),
-				new SettingSlider("Limit", 0, 15, 5, 1),
-				new SettingSlider("Pulse", 0, 5, 1, 1));
+				new SettingMode("Mode", "Always", "Pulse").withDesc("Lag mode"),
+				new SettingToggle("Limit", false).withDesc("Disable lag after x seconds").withChildren(
+						new SettingSlider("Limit", 0, 15, 5, 1).withDesc("How muny seconds before disabling")),
+				new SettingSlider("Pulse", 0, 5, 1, 1).withDesc("Pulse interval"));
 	}
 
 	@Override
@@ -72,10 +72,10 @@ public class FakeLag extends Module {
 	public void onTick(EventTick event) {
 		if (getSetting(0).asMode().mode == 0) {
 			if (getSetting(1).asToggle().state &&
-					System.currentTimeMillis() - startTime > getSetting(2).asSlider().getValue() * 1000)
+					System.currentTimeMillis() - startTime > getSetting(1).asToggle().getChild(0).asSlider().getValue() * 1000)
 				setToggled(false);
 		} else if (getSetting(0).asMode().mode == 1) {
-			if (System.currentTimeMillis() - startTime > getSetting(3).asSlider().getValue() * 1000) {
+			if (System.currentTimeMillis() - startTime > getSetting(2).asSlider().getValue() * 1000) {
 				setToggled(false);
 				setToggled(true);
 			}

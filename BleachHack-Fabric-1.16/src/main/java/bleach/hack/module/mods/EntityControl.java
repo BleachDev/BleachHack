@@ -28,7 +28,6 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.math.BlockPos;
@@ -38,13 +37,14 @@ public class EntityControl extends Module {
 
 	public EntityControl() {
 		super("EntityControl", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Manipulate Entities.",
-				new SettingToggle("EntitySpeed", true),
-				new SettingSlider("Speed", 0, 5, 1.2, 2),
-				new SettingToggle("EntityFly", false),
-				new SettingSlider("Ascend", 0, 2, 0.3, 2),
-				new SettingSlider("Descend", 0, 2, 0.5, 2),
-				new SettingToggle("Ground Snap", false),
-				new SettingToggle("AntiStuck", false));
+				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entites").withChildren(
+						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("Entity speed")),
+				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entites").withChildren(
+					new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed"),
+					new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed")),
+				new SettingToggle("Ground Snap", false).withDesc("Snaps the entity to the ground when going down blocks"),
+				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding whewn going up blocks"),
+				new SettingToggle("NoAI", true).withDesc("Disables the entities AI"));
 	}
 
 	@Subscribe
@@ -53,65 +53,58 @@ public class EntityControl extends Module {
 			return;
 
 		Entity e = mc.player.getVehicle();
-		e.yaw = mc.player.yaw;
-		double speed = getSetting(1).asSlider().getValue();
-
-		if (getSetting(6).asToggle().state && e instanceof HorseBaseEntity) {
-			HorseBaseEntity h = (HorseBaseEntity) e;
-			h.saddle(null);
-			h.setTame(true);
-			h.setAiDisabled(true);
-		}
-
-		if (e instanceof LlamaEntity) {
-			((LlamaEntity) e).headYaw = mc.player.headYaw;
-		}
-
+		double speed = getSetting(0).asToggle().getChild(0).asSlider().getValue();
+		
 		double forward = mc.player.forwardSpeed;
 		double strafe = mc.player.sidewaysSpeed;
 		float yaw = mc.player.yaw;
 
+		e.yaw = mc.player.yaw;
+		if (e instanceof LlamaEntity) {
+			((LlamaEntity) e).headYaw = mc.player.headYaw;
+		}
+		
+		if (getSetting(4).asToggle().state && forward == 0 && strafe == 0) {
+			e.setVelocity(new Vec3d(0, e.getVelocity().y, 0));
+		}
+
 		if (getSetting(0).asToggle().state) {
-			if ((forward == 0.0D) && (strafe == 0.0D)) {
-				e.setVelocity(0, e.getVelocity().y, 0);
+			if (forward != 0.0D) {
+				if (strafe > 0.0D) {
+					yaw += (forward > 0.0D ? -45 : 45);
+				} else if (strafe < 0.0D)
+					yaw += (forward > 0.0D ? 45 : -45);
+				strafe = 0.0D;
+				if (forward > 0.0D) {
+					forward = 1.0D;
+				} else if (forward < 0.0D)
+					forward = -1.0D;
+			}
+			e.setVelocity((forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F))), e.getVelocity().y,
+					forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F)));
+			if (e instanceof MinecartEntity) {
+				MinecartEntity em = (MinecartEntity) e;
+				em.setVelocity((forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F))), em.getVelocity().y,
+						(forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F))));
+			}
+		}
+
+		if (getSetting(1).asToggle().state) {
+			if (mc.options.keyJump.isPressed()) {
+				e.setVelocity(e.getVelocity().x, getSetting(1).asToggle().getChild(0).asSlider().getValue(), e.getVelocity().z);
 			} else {
-				if (forward != 0.0D) {
-					if (strafe > 0.0D) {
-						yaw += (forward > 0.0D ? -45 : 45);
-					} else if (strafe < 0.0D)
-						yaw += (forward > 0.0D ? 45 : -45);
-					strafe = 0.0D;
-					if (forward > 0.0D) {
-						forward = 1.0D;
-					} else if (forward < 0.0D)
-						forward = -1.0D;
-				}
-				e.setVelocity((forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F))), e.getVelocity().y,
-						forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F)));
-				if (e instanceof MinecartEntity) {
-					MinecartEntity em = (MinecartEntity) e;
-					em.setVelocity((forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F))), em.getVelocity().y,
-							(forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F))));
-				}
+				e.setVelocity(e.getVelocity().x, -getSetting(1).asToggle().getChild(1).asSlider().getValue(), e.getVelocity().z);
 			}
 		}
 
 		if (getSetting(2).asToggle().state) {
-			if (mc.options.keyJump.isPressed()) {
-				e.setVelocity(e.getVelocity().x, getSetting(3).asSlider().getValue(), e.getVelocity().z);
-			} else {
-				e.setVelocity(e.getVelocity().x, -getSetting(4).asSlider().getValue(), e.getVelocity().z);
-			}
-		}
-
-		if (getSetting(5).asToggle().state) {
 			BlockPos p = new BlockPos(e.getPos());
 			if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
 				e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}
 
-		if (getSetting(6).asToggle().state) {
+		if (getSetting(3).asToggle().state) {
 			Vec3d vel = e.getVelocity().multiply(2);
 			if (!WorldUtils.isBoxEmpty(e.getBoundingBox().offset(vel.x, 0, vel.z))) {
 				for (int i = 2; i < 10; i++) {

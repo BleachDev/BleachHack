@@ -46,12 +46,12 @@ public class NoSlow extends Module {
 
 	public NoSlow() {
 		super("NoSlow", KEY_UNBOUND, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
-				new SettingToggle("Slowness", true),
-				new SettingToggle("Soul Sand", true),
-				new SettingToggle("Slime Blocks", true),
-				new SettingToggle("Webs", true),
-				new SettingToggle("Berry Bush", true),
-				new SettingToggle("Items", true),
+				new SettingToggle("Slowness", true).withDesc("Removes slowness effects"),
+				new SettingToggle("Soul Sand", true).withDesc("Removes the soul sand slowness"),
+				new SettingToggle("Slime Blocks", true).withDesc("Removes the slimeblock slowness"),
+				new SettingToggle("Webs", true).withDesc("Removes the web slowness"),
+				new SettingToggle("Berry Bush", true).withDesc("Removes the berry bush slowness"),
+				new SettingToggle("Items", true).withDesc("Removes the slowness while eating items"),
 				new SettingToggle("Inventory", true).withDesc("Allows you to move in inventories").withChildren(
 						new SettingToggle("Sneaking", false).withDesc("Enabled the sneak key while in a inventory"),
 						new SettingToggle("NCP Bypass", false).withDesc("Allows you to move items around while running on NCP"),

@@ -65,11 +65,11 @@ public class Notebot extends Module {
 
 	public Notebot() {
 		super("Notebot", KEY_UNBOUND, Category.MISC, "Plays those noteblocks nicely",
-				new SettingToggle("Tune", true),
-				new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All"),
-				new SettingToggle("Loop", false),
-				new SettingToggle("NoInstruments", false),
-				new SettingToggle("AutoPlay", false));
+				new SettingToggle("Tune", true).withDesc("Tune the noteblocks before and while playing").withChildren(
+						new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All").withDesc("How to tune the noteblocks")),
+				new SettingToggle("Loop", false).withDesc("Loop the song you are playing"),
+				new SettingToggle("NoInstruments", false).withDesc("Ignores intruments"),
+				new SettingToggle("AutoPlay", false).withDesc("Auto plays a random song after one is fininshed"));
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class Notebot extends Module {
 						BlockPos pos = mc.player.getBlockPos().add(x, y, z);
 						if (!isNoteblock(pos))
 							continue;
-						if (getSetting(3).asToggle().state) {
+						if (getSetting(2).asToggle().state) {
 							if (blockTunes.get(pos) != null)
 								if (!blockTunes.get(pos).equals(i.get(0)))
 									continue;
@@ -116,7 +116,7 @@ public class Notebot extends Module {
 				blockTunes.put(found, i.get(0));
 		}
 
-		if (tunes.size() > blockTunes.size() && !getSetting(3).asToggle().state) {
+		if (tunes.size() > blockTunes.size() && !getSetting(2).asToggle().state) {
 			BleachLogger.warningMessage("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
 		}
 	}
@@ -138,23 +138,23 @@ public class Notebot extends Module {
 		if (getSetting(0).asToggle().state) {
 			for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 				if (getNote(e.getKey()) != e.getValue()) {
-					if (getSetting(1).asMode().mode <= 2) {
-						if (getSetting(1).asMode().mode >= 1) {
+					if (getSetting(0).asToggle().getChild(0).asMode().mode <= 2) {
+						if (getSetting(0).asToggle().getChild(0).asMode().mode >= 1) {
 							if (mc.player.age % 2 == 0 ||
-									(mc.player.age % 3 == 0 && getSetting(1).asMode().mode == 2))
+									(mc.player.age % 3 == 0 && getSetting(0).asToggle().getChild(0).asMode().mode == 2))
 								return;
 						}
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
 								new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
-					} else if (getSetting(1).asMode().mode >= 3) {
-						if (tuneDelay < (getSetting(1).asMode().mode == 3 ? 3 : 5)) {
+					} else if (getSetting(0).asToggle().getChild(0).asMode().mode >= 3) {
+						if (tuneDelay < (getSetting(0).asToggle().getChild(0).asMode().mode == 3 ? 3 : 5)) {
 							tuneDelay++;
 							return;
 						}
 
 						int tunes = getNote(e.getKey());
 						int reqTunes = 0;
-						for (int i = 0; i < (getSetting(1).asMode().mode == 3 ? 5 : 25); i++) {
+						for (int i = 0; i < (getSetting(0).asToggle().getChild(0).asMode().mode == 3 ? 5 : 25); i++) {
 							if (tunes == 25)
 								tunes = 0;
 							if (tunes == e.getValue())
@@ -183,7 +183,7 @@ public class Notebot extends Module {
 		}
 
 		if (loopityloop) {
-			if (getSetting(4).asToggle().state) {
+			if (getSetting(3).asToggle().state) {
 				try {
 					List<String> files = new ArrayList<>();
 					Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
@@ -195,7 +195,7 @@ public class Notebot extends Module {
 					BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
 				} catch (IOException e) {
 				}
-			} else if (getSetting(2).asToggle().state) {
+			} else if (getSetting(1).asToggle().state) {
 				timer = -10;
 			}
 		}
@@ -213,7 +213,7 @@ public class Notebot extends Module {
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 			for (List<Integer> i : curNotes) {
 				if (isNoteblock(e.getKey()) && (i.get(1) == (getNote(e.getKey()))
-						&& (getSetting(3).asToggle().state
+						&& (getSetting(2).asToggle().state
 								|| i.get(2) == (getInstrument(e.getKey()).ordinal()))))
 					playBlock(e.getKey());
 			}

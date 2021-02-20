@@ -34,8 +34,8 @@ public class OffhandCrash extends Module {
 
 	public OffhandCrash() {
 		super("OffhandCrash", KEY_UNBOUND, Category.EXPLOITS, "Lags people using the snowball exploit",
-				new SettingSlider("Switches", 0, 2000, 420, 0),
-				new SettingToggle("Player Packet", true));
+				new SettingSlider("Switches", 0, 2000, 420, 0).withDesc("How many switches per tick"),
+				new SettingToggle("Player Packet", true).withDesc("Send player packets between switches"));
 	}
 
 	@Subscribe

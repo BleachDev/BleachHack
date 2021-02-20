@@ -40,9 +40,9 @@ public class Flight extends Module {
 
 	public Flight() {
 		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
-				new SettingMode("Mode", "Normal", "Static", "Jetpack", "ec.me"),
-				new SettingSlider("Speed", 0, 5, 1, 1),
-				new SettingMode("AntiKick", "Off", "Fall", "Bob", "Packet"));
+				new SettingMode("Mode", "Normal", "Static", "Jetpack", "ec.me").withDesc("Flight mode"),
+				new SettingSlider("Speed", 0, 5, 1, 1).withDesc("Slight speed"),
+				new SettingMode("AntiKick", "Off", "Fall", "Bob", "Packet").withDesc("How to bypass \"you have been kicked for flying\" kicks"));
 	}
 
 	@Override

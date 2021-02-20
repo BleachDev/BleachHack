@@ -56,12 +56,12 @@ public class Dispenser32k extends Module {
 
 	public Dispenser32k() {
 		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020",
-				new SettingToggle("Legit Place", true),
-				new SettingToggle("Killaura", true),
-				new SettingSlider("CPS", 0, 20, 20, 0),
-				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay"),
-				new SettingToggle("Timeout", false),
-				new SettingMode("Place", "Auto", "Looking"));
+				new SettingToggle("Legit Place", true).withDesc("Places the dispener more \"legit\""),
+				new SettingToggle("Killaura", true).withDesc("Automatically attacks"),
+				new SettingSlider("CPS", 0, 20, 20, 0).withDesc("Attack Speed"),
+				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay").withDesc("How to interperet CPS"),
+				new SettingToggle("Timeout", false).withDesc("Stops attacks after a few ticks"),
+				new SettingMode("Place", "Auto", "Looking").withDesc("Where to place the dispenser"));
 	}
 
 	public void onEnable() {

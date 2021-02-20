@@ -94,7 +94,7 @@ public class CrystalAura extends Module {
 						new SettingToggle("Slow", false).withDesc("Hits crystals slower")),
 				new SettingToggle("Place", true).withDesc("Place crystals").withChildren(
 						new SettingToggle("AutoSwitch", true).withDesc("Automatically switches to crystal when in combat"),
-						new SettingToggle("raycast", true).withDesc("Click on the most \"legit\" side of a block when possible"),
+						new SettingToggle("Raycast", true).withDesc("Click on the most \"legit\" side of a block when possible"),
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
 				new SettingRotate(false).withDesc("Rotates to crystals"),

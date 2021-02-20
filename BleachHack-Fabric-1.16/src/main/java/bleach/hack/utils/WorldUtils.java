@@ -17,9 +17,9 @@
  */
 package bleach.hack.utils;
 
-import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 
 import bleach.hack.setting.other.SettingRotate;
 import net.minecraft.block.Block;
@@ -43,12 +43,12 @@ public class WorldUtils {
 
 	protected static final MinecraftClient mc = MinecraftClient.getInstance();
 
-	public static final List<Block> NONSOLID_BLOCKS = ImmutableList.of(
+	public static final Set<Block> NONSOLID_BLOCKS = Sets.newHashSet(
 			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
 			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
 			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE, Blocks.VOID_AIR);
 
-	public static final List<Block> RIGHTCLICKABLE_BLOCKS = ImmutableList.of(
+	public static final Set<Block> RIGHTCLICKABLE_BLOCKS = Sets.newHashSet(
 			Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
 			Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX,
 			Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX,
@@ -76,7 +76,7 @@ public class WorldUtils {
 			Blocks.JUNGLE_SIGN, Blocks.JUNGLE_WALL_SIGN, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN,
 			Blocks.SPRUCE_SIGN, Blocks.SPRUCE_WALL_SIGN);
 	
-	public static final List<Material> FLUIDS = ImmutableList.of(
+	public static final Set<Material> FLUIDS = Sets.newHashSet(
 			Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
 
 	public static boolean isFluid(BlockPos pos) {

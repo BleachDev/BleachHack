@@ -24,7 +24,7 @@ public class AutoTool extends Module {
 
 	public AutoTool() {
 		super("AutoTool", KEY_UNBOUND, Category.PLAYER, "Automatically uses best tool",
-				new SettingToggle("Anti Break", false).withDesc("Deosn't use tool if its about to break"),
+				new SettingToggle("Anti Break", false).withDesc("Doesn't use tool if its about to break"),
 				new SettingToggle("Switch Back", true).withDesc("Switches back to your previous item when done breaking"),
 				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damagable item if possible"));
 	}

@@ -34,7 +34,7 @@ public class Nofall extends Module {
 
 	public Nofall() {
 		super("Nofall", KEY_UNBOUND, Category.PLAYER, "Prevents you from taking fall damage.",
-				new SettingMode("Mode", "Simple", "Packet", "ec.me").withDesc("Mode"));
+				new SettingMode("Mode", "Simple", "Packet", "ec.me").withDesc("What nofall mode to use"));
 	}
 
 	@Subscribe
