@@ -32,7 +32,9 @@ import com.google.gson.JsonPrimitive;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 
 public class SettingToggle extends SettingBase {
 
@@ -56,35 +58,16 @@ public class SettingToggle extends SettingBase {
 	}
 
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
-		String color2;
-
-		if (state) {
-			if (window.mouseOver(x, y, x + len, y + 12))
-				color2 = "\u00a72";
-			else
-				color2 = "\u00a7a";
-		} else {
-			if (window.mouseOver(x, y, x + len, y + 12))
-				color2 = "\u00a74";
-			else
-				color2 = "\u00a7c";
+		String color2 = state ? "\u00a7a" : "\u00a7c";
+		
+		if (window.mouseOver(x, y, x + len, y + 12)) {
+			DrawableHelper.fill(matrix, x + 1, y, x + len - 1, y + 12, 0x70303070);
 		}
 
 		if (!children.isEmpty()) {
 			if (window.rmDown && window.mouseOver(x, y, x + len, y + 12))
 				expanded = !expanded;
 
-			/* if (expanded) { window.fillGreySides(x + 1, y, x + len - 2, y + 12);
-			 * window.fillGreySides(x, y + 11, x + len - 1, y + getHeight(len));
-			 * DrawableHelper.fill(x, y, x + len - 3, y + 1, 0x90000000);
-			 * DrawableHelper.fill(x + 1, y + getHeight(len) - 2, x + 2, y + getHeight(len)
-			 * - 1, 0x90000000); DrawableHelper.fill(x + 2, y + getHeight(len) - 1, x + len
-			 * - 2, y + getHeight(len), 0x90b0b0b0);
-			 *
-			 * int h = y + 12; for (SettingBase s: children) { s.render(window, x + 1, h,
-			 * len - 2);
-			 *
-			 * h += s.getHeight(len - 2); } } */
 			if (expanded) {
 				DrawableHelper.fill(matrix, x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
 
@@ -105,8 +88,11 @@ public class SettingToggle extends SettingBase {
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, color2 + text, x + 3, y + 2, 0xffffff);
 
-		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown)
+		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			state = !state;
+			MinecraftClient.getInstance().getSoundManager().play(
+					PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+		}
 	}
 
 	public int getHeight(int len) {

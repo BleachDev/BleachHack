@@ -25,7 +25,10 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
 public class SettingSlider extends SettingBase {
@@ -67,12 +70,18 @@ public class SettingSlider extends SettingBase {
 	}
 
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
+		boolean mo = window.mouseOver(x, y, x + len, y + 12);
+		if (mo) {
+			DrawableHelper.fill(matrix, x + 1, y, x + len - 1, y + 12, 0x70303070);
+		}
+		
 		int pixels = (int) Math.round(MathHelper.clamp((len - 2) * ((getValue() - min) / (max - min)), 0, len - 2));
-		window.fillGradient(matrix, x + 1, y, x + pixels, y + 12, 0xf03080a0, 0xf02070b0);
+		window.fillGradient(matrix, x + 1, y, x + pixels, y + 12,
+				mo ? 0xf03078b0 : 0xf03080a0, mo ? 0xf02068c0 : 0xf02070b0);
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
-				text + ": " + (decimals == 0 && getValue() > 100 ? Integer.toString((int) getValue()) : getValue()),
-				x + 2, y + 2, window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
+				text + ": " + (decimals == 0 ? Integer.toString((int) getValue()) : getValue()),
+				x + 2, y + 2, 0xcfe0cf);
 
 		if (window.mouseOver(x + 1, y, x + len - 2, y + 12)) {
 			if (window.lmHeld) {
@@ -85,6 +94,8 @@ public class SettingSlider extends SettingBase {
 				double units = 1 / (Math.pow(10, decimals));
 
 				setValue(MathHelper.clamp(getValue() + units * window.mwScroll, min, max));
+				MinecraftClient.getInstance().getSoundManager().play(
+						PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
 			}
 		}
 	}

@@ -22,7 +22,10 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
 public class SettingMode extends SettingBase {
@@ -49,11 +52,17 @@ public class SettingMode extends SettingBase {
 	}
 
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text + ": " + modes[mode], x + 2, y + 2,
-				window.mouseOver(x, y, x + len, y + 12) ? 0xcfc3cf : 0xcfe0cf);
+		if (window.mouseOver(x, y, x + len, y + 12)) {
+			DrawableHelper.fill(matrix, x + 1, y, x + len - 1, y + 12, 0x70303070);
+		}
+		
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text + ": " + modes[mode], x + 2, y + 2, 0xcfe0cf);
 
-		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown)
+		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			mode = getNextMode();
+			MinecraftClient.getInstance().getSoundManager().play(
+					PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+		}
 	}
 
 	public SettingMode withDesc(String desc) {
