@@ -164,7 +164,7 @@ public class CmdEnchant extends Command {
 
 		ListTag listnbt = item.getTag().getList("Enchantments", 10);
 		CompoundTag compoundnbt = new CompoundTag();
-		compoundnbt.putString("id", String.valueOf(Registry.ENCHANTMENT.getRawId(e)));
+		compoundnbt.putString("id", String.valueOf(Registry.ENCHANTMENT.getId(e)));
 		compoundnbt.putInt("lvl", level);
 		listnbt.add(compoundnbt);
 	}
