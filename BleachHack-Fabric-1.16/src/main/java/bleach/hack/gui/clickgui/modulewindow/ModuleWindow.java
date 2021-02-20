@@ -92,7 +92,12 @@ public class ModuleWindow extends ClickGuiWindow {
 			}
 
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
-				DrawableHelper.fill(matrix, x + 1, y + curY + 1, x + len - 3, y + 12 + curY, 0x70303070);
+				DrawableHelper.fill(matrix,
+						x + (m.getValue() ? 1 : 0),
+						y + curY + (m.getValue() ? 1 : 0),
+						x + len - (m.getValue() ? 3 : 0),
+						y + 12 + curY,
+						0x70303070);
 			}
 
 			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
