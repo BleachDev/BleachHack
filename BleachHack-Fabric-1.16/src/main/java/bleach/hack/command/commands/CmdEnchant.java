@@ -72,6 +72,8 @@ public class CmdEnchant extends Command {
 			for (Enchantment e : Registry.ENCHANTMENT) {
 				enchant(item, e, level);
 			}
+			
+			return;
 		}
 		
 		int i = NumberUtils.toInt(args[0], -1);
