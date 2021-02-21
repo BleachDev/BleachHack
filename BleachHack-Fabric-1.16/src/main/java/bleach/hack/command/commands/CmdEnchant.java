@@ -17,6 +17,8 @@
  */
 package bleach.hack.command.commands;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
 import net.minecraft.enchantment.Enchantment;
@@ -40,7 +42,7 @@ public class CmdEnchant extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "enchant [enchant] [level] | enchant all [level] | enchant list";
+		return "enchant [enchant/id] [level] | enchant all [level] | enchant list";
 	}
 
 	@Override
@@ -53,7 +55,8 @@ public class CmdEnchant extends Command {
 					+ "\u00a75[Looting/Loot] \u00a7d[Loyalty] \u00a75[Luck_Of_The_Sea/Luck] \u00a7d[Lure] \u00a75[Mending/Mend] \u00a7d[Multishot] "
 					+ "\u00a75[Piercing] \u00a7d[Power] \u00a75[Projectile_Prot/Proj_Prot] \u00a7d[Protection/Prot] "
 					+ "\u00a75[Punch] \u00a7d[Quick_Charge/Charge] \u00a75[Respiration/Resp] \u00a7d[Riptide] "
-					+ "\u00a75[Sharpness/Sharp] \u00a7d[Silk_Touch/Silk] \u00a75[Smite] \u00a7d[Sweeping_Edge/Sweep] \u00a75[Thorns] \u00a7d[Unbreaking]");
+					+ "\u00a75[Sharpness/Sharp] \u00a7d[Silk_Touch/Silk] \u00a75[Smite] \u007d[Soul_Speed/Soul] "
+					+ "\u00a75[Sweeping_Edge/Sweep] \u00a7d[Thorns] \u00a75[Unbreaking]");
 			return;
 		}
 
@@ -70,92 +73,126 @@ public class CmdEnchant extends Command {
 				enchant(item, e, level);
 			}
 		}
-
-		if (doesEqual(args[0], "Aqua_Affinity", "Aqua"))
-			enchant(item, Enchantments.AQUA_AFFINITY, level);
-		if (doesEqual(args[0], "Arthropods"))
-			enchant(item, Enchantments.BANE_OF_ARTHROPODS, level);
-		if (doesEqual(args[0], "Blast", "Blast_Prot"))
-			enchant(item, Enchantments.BLAST_PROTECTION, level);
-		if (doesEqual(args[0], "Channeling"))
-			enchant(item, Enchantments.CHANNELING, level);
-		if (doesEqual(args[0], "Curse_Binding", "Binding"))
-			enchant(item, Enchantments.BINDING_CURSE, level);
-		if (doesEqual(args[0], "Curse_Vanish", "Vanish"))
-			enchant(item, Enchantments.VANISHING_CURSE, level);
-		if (doesEqual(args[0], "Depth_Strider", "Strider"))
-			enchant(item, Enchantments.DEPTH_STRIDER, level);
-		if (doesEqual(args[0], "Efficiency", "Eff"))
-			enchant(item, Enchantments.EFFICIENCY, level);
-		if (doesEqual(args[0], "Feather_Falling", "Fall"))
-			enchant(item, Enchantments.FEATHER_FALLING, level);
-		if (doesEqual(args[0], "Fire_Aspect"))
-			enchant(item, Enchantments.FIRE_ASPECT, level);
-		if (doesEqual(args[0], "Fire_Prot"))
-			enchant(item, Enchantments.FIRE_PROTECTION, level);
-		if (doesEqual(args[0], "Flame"))
-			enchant(item, Enchantments.FLAME, level);
-		if (doesEqual(args[0], "Fortune"))
-			enchant(item, Enchantments.FORTUNE, level);
-		if (doesEqual(args[0], "Frost_Walker", "Frost"))
-			enchant(item, Enchantments.FROST_WALKER, level);
-		if (doesEqual(args[0], "Impaling"))
-			enchant(item, Enchantments.IMPALING, level);
-		if (doesEqual(args[0], "Infinity"))
-			enchant(item, Enchantments.INFINITY, level);
-		if (doesEqual(args[0], "Knockback", "Knock"))
-			enchant(item, Enchantments.KNOCKBACK, level);
-		if (doesEqual(args[0], "Looting", "Loot"))
-			enchant(item, Enchantments.LOOTING, level);
-		if (doesEqual(args[0], "Loyalty"))
-			enchant(item, Enchantments.LOYALTY, level);
-		if (doesEqual(args[0], "Luck_Of_The_Sea", "Luck"))
-			enchant(item, Enchantments.LUCK_OF_THE_SEA, level);
-		if (doesEqual(args[0], "Lure"))
-			enchant(item, Enchantments.LURE, level);
-		if (doesEqual(args[0], "Mending", "Mend"))
-			enchant(item, Enchantments.MENDING, level);
-		if (doesEqual(args[0], "Multishot"))
-			enchant(item, Enchantments.MULTISHOT, level);
-		if (doesEqual(args[0], "Piercing"))
-			enchant(item, Enchantments.PIERCING, level);
-		if (doesEqual(args[0], "Power"))
-			enchant(item, Enchantments.POWER, level);
-		if (doesEqual(args[0], "Projectile_Prot", "Proj_Prot"))
-			enchant(item, Enchantments.PROJECTILE_PROTECTION, level);
-		if (doesEqual(args[0], "Protection", "Prot"))
-			enchant(item, Enchantments.PROTECTION, level);
-		if (doesEqual(args[0], "Punch"))
-			enchant(item, Enchantments.PUNCH, level);
-		if (doesEqual(args[0], "Quick_Charge", "Charge"))
-			enchant(item, Enchantments.QUICK_CHARGE, level);
-		if (doesEqual(args[0], "Respiration", "Resp"))
-			enchant(item, Enchantments.RESPIRATION, level);
-		if (doesEqual(args[0], "Riptide"))
-			enchant(item, Enchantments.RIPTIDE, level);
-		if (doesEqual(args[0], "Sharpness", "Sharp"))
-			enchant(item, Enchantments.SHARPNESS, level);
-		if (doesEqual(args[0], "Silk_Touch", "Silk"))
-			enchant(item, Enchantments.SILK_TOUCH, level);
-		if (doesEqual(args[0], "Smite"))
-			enchant(item, Enchantments.SMITE, level);
-		if (doesEqual(args[0], "Sweeping_Edge", "Sweep"))
-			enchant(item, Enchantments.SWEEPING, level);
-		if (doesEqual(args[0], "Thorns"))
-			enchant(item, Enchantments.THORNS, level);
-		if (doesEqual(args[0], "Unbreaking"))
-			enchant(item, Enchantments.UNBREAKING, level);
-	}
-
-	public boolean doesEqual(String a, String... b) {
-		for (String element : b) {
-			if (a.equalsIgnoreCase(element))
-				return true;
+		
+		int i = NumberUtils.toInt(args[0], -1);
+		
+		if (i != -1) {
+			enchant(item, Enchantment.byRawId(i), level);
+		} else {
+			enchant(item, fromString(args[0]), level);
 		}
-		return false;
+	}
+	
+	public Enchantment fromString(String s) {
+		// programming
+		switch (s.toLowerCase()) {
+			case "aqua_affinity":
+			case "aqua":
+				return Enchantments.AQUA_AFFINITY;
+			case "arthropods":
+				return Enchantments.BANE_OF_ARTHROPODS;
+			case "blast":
+			case "blast_prot":
+				return Enchantments.BLAST_PROTECTION;
+			case "channeling":
+				return Enchantments.CHANNELING;
+			case "curse_binding":
+			case "binding":
+				return Enchantments.BINDING_CURSE;
+			case "curse_vanish":
+			case "vanish":
+				return Enchantments.VANISHING_CURSE;
+			case "depth_strider":
+			case "strider":
+				return Enchantments.DEPTH_STRIDER;
+			case "efficiency":
+			case "eff":
+				return Enchantments.EFFICIENCY;
+			case "feather_falling":
+			case "fall":
+				return Enchantments.FEATHER_FALLING;
+			case "fire_aspect":
+				return Enchantments.FIRE_ASPECT;
+			case "fire_prot":
+				return Enchantments.FIRE_PROTECTION;
+			case "flame":
+				return Enchantments.FLAME;
+			case "fortune":
+				return Enchantments.FORTUNE;
+			case "frost_walker":
+			case "frost":
+				return Enchantments.FROST_WALKER;
+			case "impaling":
+				return Enchantments.IMPALING;
+			case "infinity":
+				return Enchantments.INFINITY;
+			case "knockback":
+			case "knock":
+				return Enchantments.KNOCKBACK;
+			case "looting":
+			case "loot":
+				return Enchantments.LOOTING;
+			case "loyalty":
+				return Enchantments.LOYALTY;
+			case "luck_of_the_sea":
+			case "luck":
+				return Enchantments.LUCK_OF_THE_SEA;
+			case "lure":
+				return Enchantments.LURE;
+			case "mending":
+			case "mend":
+				return Enchantments.MENDING;
+			case "multishot":
+				return Enchantments.MULTISHOT;
+			case "piercing":
+				return Enchantments.PIERCING;
+			case "power":
+				return Enchantments.POWER;
+			case "projectile_prot":
+			case "proj_prot":
+				return Enchantments.PROJECTILE_PROTECTION;
+			case "protection":
+			case "prot":
+				return Enchantments.PROTECTION;
+			case "punch":
+				return Enchantments.PUNCH;
+			case "quick_charge":
+			case "charge":
+				return Enchantments.QUICK_CHARGE;
+			case "respiration":
+			case "resp":
+				return Enchantments.RESPIRATION;
+			case "riptide":
+				return Enchantments.RIPTIDE;
+			case "sharpness":
+			case "sharp":
+				return Enchantments.SHARPNESS;
+			case "silk_touch":
+			case "silk":
+				return Enchantments.SILK_TOUCH;
+			case "smite":
+				return Enchantments.SMITE;
+			case "soul_speed":
+			case "soul":
+				return Enchantments.SOUL_SPEED;
+			case "sweeping_edge":
+			case "sweep":
+				return Enchantments.SWEEPING;
+			case "thorns":
+				return Enchantments.THORNS;
+			case "unbreaking":
+				return Enchantments.UNBREAKING;
+			default:
+				return null;
+		}
 	}
 
 	public void enchant(ItemStack item, Enchantment e, int level) {
+		if (e == null) {
+			BleachLogger.errorMessage("Invalid enchantment!");
+			return;
+		}
+		
 		if (item.getTag() == null)
 			item.setTag(new CompoundTag());
 		if (!item.getTag().contains("Enchantments", 9)) {
