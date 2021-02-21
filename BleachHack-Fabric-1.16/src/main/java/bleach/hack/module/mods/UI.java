@@ -57,11 +57,11 @@ public class UI extends Module {
 
 	public UI() {
 		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
-				new SettingToggle("Arraylist", true).withDesc("Shows the module list").withChildren( // 0
-						new SettingToggle("Extra Line", true).withDesc("Adds an extra line to the front of the arraylist"), // 0-0
-						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the arraylist"), // 0-1
-						new SettingToggle("Fill", true).withDesc("Adds a black fill ehind the arraylist"), // 0-2
-						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the arraylist"), // 0-2
+				new SettingToggle("Modulelist", true).withDesc("Shows the module list").withChildren( // 0
+						new SettingToggle("Extra Line", true).withDesc("Adds an extra line to the front of the module list"), // 0-0
+						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the module list"), // 0-1
+						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list"), // 0-2
+						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list"), // 0-2
 						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 0-3
 						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 0-4
 						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("Rainbow Speed")), // 0-5
