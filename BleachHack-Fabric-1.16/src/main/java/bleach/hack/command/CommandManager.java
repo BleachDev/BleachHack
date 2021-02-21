@@ -65,8 +65,7 @@ public class CommandManager {
 					c.onCommand(command, args.split(" "));
 				} catch (Exception e) {
 					e.printStackTrace();
-					BleachLogger.errorMessage("Invalid Syntax!");
-					BleachLogger.infoMessage(c.getSyntax());
+					c.printSyntaxError();
 				}
 				return;
 			}

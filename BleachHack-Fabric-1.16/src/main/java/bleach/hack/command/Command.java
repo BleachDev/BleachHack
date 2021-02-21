@@ -17,7 +17,11 @@
  */
 package bleach.hack.command;
 
+import bleach.hack.utils.BleachLogger;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 
 public abstract class Command {
 
@@ -30,6 +34,16 @@ public abstract class Command {
 	public abstract String getDescription();
 
 	public abstract String getSyntax();
+	
+	public void printSyntaxError() {
+		BleachLogger.errorMessage("Invalid Syntax!");
+		//BleachLogger.infoMessage("Syntax:");
+		
+		MutableText text = new LiteralText("\u00a73" + PREFIX + getAlias() + " -> \u00a7b" + getSyntax());
+		BleachLogger.infoMessage(text.setStyle(text.getStyle().withHoverEvent(
+						new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+								new LiteralText("\u00a7b" + PREFIX + getAlias() + "\n\u00a73" + getSyntax() + "\n\u00a7b" + getDescription())))));
+	}
 
 	public abstract void onCommand(String command, String[] args) throws Exception;
 }

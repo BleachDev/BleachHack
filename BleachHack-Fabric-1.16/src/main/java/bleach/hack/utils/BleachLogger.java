@@ -19,36 +19,52 @@ package bleach.hack.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class BleachLogger {
+	
+	public static void infoMessage(MutableText t) {
+		try {
+			MinecraftClient.getInstance().inGameHud.getChatHud()
+			.addMessage(new LiteralText(getBHText(Formatting.DARK_AQUA) + "\u00a73\u00a7lINFO: \u00a73")
+					.append(t.formatted(Formatting.DARK_AQUA)));
+		} catch (Exception e) {
+			System.out.println("[BH] INFO: " + t.asString());
+		}
+	}
 
 	public static void infoMessage(String s) {
-		try {
-			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.BLUE) + "\u00a79\u00a7lINFO: \u00a79" + s));
-		} catch (Exception e) {
-			System.out.println("[BH] INFO: " + s);
-		}
+		infoMessage(new LiteralText(s));
 	}
 
+	public static void warningMessage(MutableText t) {
+		try {
+			MinecraftClient.getInstance().inGameHud.getChatHud()
+			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e")
+					.append(t.formatted(Formatting.YELLOW)));
+		} catch (Exception e) {
+			System.out.println("[BH] WARN: " + t.asString());
+		}
+	}
+	
 	public static void warningMessage(String s) {
-		try {
-			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e" + s));
-		} catch (Exception e) {
-			System.out.println("[BH] WARN: " + s);
-		}
+		warningMessage(new LiteralText(s));
 	}
 
-	public static void errorMessage(String s) {
+	public static void errorMessage(MutableText t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c" + s));
+			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c")
+					.append(t.formatted(Formatting.RED)));
 		} catch (Exception e) {
-			System.out.println("[BH] ERROR: " + s);
+			System.out.println("[BH] ERROR: " + t.asString());
 		}
+	}
+	
+	public static void errorMessage(String s) {
+		errorMessage(new LiteralText(s));
 	}
 
 	public static void noPrefixMessage(String s) {
