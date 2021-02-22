@@ -34,6 +34,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
+import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.text.LiteralText;
@@ -52,35 +53,48 @@ public abstract class MixinContainerScreen extends Screen {
 
 	@Inject(at = @At("RETURN"), method = "init()V")
 	protected void init(CallbackInfo info) {
-		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
-			AbstractDonkeyEntity entity = (AbstractDonkeyEntity) client.player.getVehicle();
-
-			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 82, (height - backgroundHeight) / 2 + 4, 44, 12, new LiteralText("AutoDupe"), button -> {
-				ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
-			}));
-
-			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 130, (height - backgroundHeight) / 2 + 4, 39, 12, new LiteralText("Dupe"), button -> {
-				ModuleManager.getModule(MountBypass.class).dontCancel = true;
-
-				MinecraftClient.getInstance().player.networkHandler.sendPacket(
-						new PlayerInteractEntityC2SPacket(
-								entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
-
-				ModuleManager.getModule(MountBypass.class).dontCancel = false;
+		if (client.player.getVehicle() instanceof HorseBaseEntity) {
+			int rightside = (width + backgroundWidth) / 2 + 2;
+			int leftside = (width - backgroundWidth) / 2 - 2;
+			int topside = (height - backgroundHeight) / 2;
+			
+			HorseBaseEntity entity = (HorseBaseEntity) client.player.getVehicle();
+			
+			addButton(new ButtonWidget(leftside - 50, topside + 12, 50, 14, new LiteralText("HorseLag"), button -> {
+				for (int i = 0; i < 100000; i++) {
+					entity.setPos(MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
+					MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
+				}
 			}));
 			
-			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 130, (height - backgroundHeight) / 2 - 16, 39, 12, new LiteralText("cum"), button -> {
-				for (int i = 0; i < 1000; i++) {
-					entity.setPos(
-							MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
-					MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
-					//MinecraftClient.getInstance().player.getVehicle().setPos(
-					//		MinecraftClient.getInstance().player.getX() - 5, MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ() - 5);
-					//MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
-				}
+			if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
+				addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
+					ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
+				}));
+	
+				addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {
+					ModuleManager.getModule(MountBypass.class).dontCancel = true;
+	
+					MinecraftClient.getInstance().player.networkHandler.sendPacket(
+							new PlayerInteractEntityC2SPacket(
+									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
+	
+					ModuleManager.getModule(MountBypass.class).dontCancel = false;
+				}));
 				
-				//MinecraftClient.getInstance().player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
-			}));
+				addButton(new ButtonWidget(rightside, topside + 66, 50, 14, new LiteralText("Dupe"), button -> {
+					for (int i = 0; i < 1000; i++) {
+						entity.setPos(
+								MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
+						MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
+						//MinecraftClient.getInstance().player.getVehicle().setPos(
+						//		MinecraftClient.getInstance().player.getX() - 5, MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ() - 5);
+						//MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
+					}
+					
+					//MinecraftClient.getInstance().player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
+				}));
+			}
 		}
 	}
 	
@@ -88,8 +102,16 @@ public abstract class MixinContainerScreen extends Screen {
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		EventDrawContainer event = new EventDrawContainer(
 				(HandledScreen<?>) client.currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
+		
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();
+		
+		int rightside = (width + backgroundWidth) / 2 + 2;
+		int topside = (height - backgroundHeight) / 2;
+		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
+			textRenderer.drawWithShadow(matrix, "IS Dupe:", rightside, topside + 2, -1);
+			textRenderer.drawWithShadow(matrix, "ec.me Dupe:", rightside, topside + 56, -1);
+		}
 	}
 }
