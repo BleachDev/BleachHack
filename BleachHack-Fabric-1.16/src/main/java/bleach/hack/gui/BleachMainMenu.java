@@ -47,6 +47,7 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.options.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.realms.gui.screen.RealmsBridgeScreen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -104,8 +105,14 @@ public class BleachMainMenu extends AbstractWindowScreen {
 				new WindowButton(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
 					client.openScreen(new MultiplayerScreen(this));
 				}));
+		
 		windows.get(0).buttons.add(
-				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 - 2, h / 4 + 106, "MC Menu", () -> {
+				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 - 2, h / 4 + 106, I18n.translate("menu.online"), () -> {
+					RealmsBridgeScreen realmsBridgeScreen = new RealmsBridgeScreen();
+				    realmsBridgeScreen.switchToRealms(this);
+				}));
+		windows.get(0).buttons.add(
+				new WindowButton(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
 					customTitleScreen = !customTitleScreen;
 					BleachFileHelper.saveMiscSetting("customTitleScreen", "false");
 					client.openScreen(new TitleScreen(false));
