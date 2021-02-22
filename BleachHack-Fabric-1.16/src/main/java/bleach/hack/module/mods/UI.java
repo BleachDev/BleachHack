@@ -193,8 +193,7 @@ public class UI extends Module {
 		}
 		
 		if (getSetting(1).asToggle().getChild(8).asToggle().state) {
-			mc.textRenderer.drawWithShadow(event.matrix, "Chunk: "
-					+ (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"), 120, 5, -1);
+			infoList.add("Chunk: \u00a7f" + (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"));
 			
 			if (System.currentTimeMillis() - 1500 > chunkTimer) {
 				chunkTimer = System.currentTimeMillis();

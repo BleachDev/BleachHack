@@ -51,7 +51,6 @@ public class ModuleManager {
 			new BookCrash(),
 			new BowBot(),
 			new ChestESP(),
-			new ChunkSize(),
 			new ClickGui(),
 			new ClickTp(),
 			new ColorSigns(),
