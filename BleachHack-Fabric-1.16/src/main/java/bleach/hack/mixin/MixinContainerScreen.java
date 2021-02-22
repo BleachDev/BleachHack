@@ -28,6 +28,7 @@ import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
+import bleach.hack.utils.ClientChunkSerializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -71,15 +72,9 @@ public abstract class MixinContainerScreen extends Screen {
 			}));
 			
 			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 130, (height - backgroundHeight) / 2 - 16, 39, 12, new LiteralText("cum"), button -> {
-				a(entity);
+				ClientChunkSerializer.a(entity);
 			}));
 		}
-	}
-	
-	public void a(Entity e) {
-		MinecraftClient.getInstance().player.getVehicle().setPos(
-				MinecraftClient.getInstance().player.getX() + 5, MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ() + 5);
-		MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
 	}
 
 	@Inject(at = @At("RETURN"), method = "render")
