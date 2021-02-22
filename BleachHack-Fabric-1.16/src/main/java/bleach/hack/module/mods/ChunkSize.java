@@ -104,7 +104,7 @@ public class ChunkSize extends Module {
 		}).start();
 	}
 
-	private CompoundTag serialize(ClientWorld world, Chunk chunk) {
+	public CompoundTag serialize(ClientWorld world, Chunk chunk) {
 		ChunkPos chunkPos = chunk.getPos();
 		CompoundTag compoundTag = new CompoundTag();
 		CompoundTag compoundTag2 = new CompoundTag();

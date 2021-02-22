@@ -18,11 +18,16 @@
 package bleach.hack.module.mods;
 
 import java.awt.Color;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.DeflaterOutputStream;
 
 import org.lwjgl.opengl.GL11;
 
@@ -37,12 +42,16 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.ClientChunkSerializer;
 import bleach.hack.utils.FabricReflect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -54,6 +63,9 @@ public class UI extends Module {
 	private long prevTime = 0;
 	private double tps = 20;
 	private long lastPacket = 0;
+	
+	private long chunkTimer = 0;
+	private int chunkSize = 0;
 
 	public UI() {
 		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
@@ -61,23 +73,25 @@ public class UI extends Module {
 						new SettingToggle("Extra Line", true).withDesc("Adds an extra line to the front of the module list"), // 0-0
 						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the module list"), // 0-1
 						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list"), // 0-2
-						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list"), // 0-2
-						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 0-3
-						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 0-4
-						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("Rainbow Speed")), // 0-5
-				new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 1
-				new SettingToggle("Ping", true).withDesc("Shows your ping"), // 2
-				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 3
-				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 4
-				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server is lagging"), // 5
-				new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 6
-				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), // 7
-				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 8
-						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")), // 8-0
-				new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 9
-						new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"), // 9-0
-						new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 9-1
-				new SettingMode("Info", "BL", "TR", "BR").withDesc("Where on the screan to show the info")); // 10
+						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list"), // 0-3
+						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 0-4
+						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 0-5
+						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("Rainbow Speed")), // 0-6
+				new SettingToggle("Info", true).withDesc("Shows info/stats in a corner of the screen").withChildren( // 1
+					new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 1-0
+					new SettingToggle("Ping", true).withDesc("Shows your ping"), // 1-1
+					new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 1-2
+					new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 1-3
+					new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 1-4
+					new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), // 1-5
+					new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 1-6
+							new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")), // 1-6-0
+					new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 1-7
+							new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"), // 1-7-0
+							new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 1-7-1
+					new SettingToggle("Chunk Size", false).withDesc("Shows the data size of the chunk you are standing in"), // 1-8
+					new SettingMode("Corner", "BL", "TR", "BR").withDesc("Where on the screen to show the info")), // 1-9
+				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server is lagging")); // 2
 	}
 
 	@Subscribe
@@ -134,7 +148,7 @@ public class UI extends Module {
 			}
 		}
 
-		if (getSetting(7).asToggle().state && !mc.options.debugEnabled) {
+		if (getSetting(1).asToggle().getChild(5).asToggle().state && !mc.options.debugEnabled) {
 			mc.textRenderer.drawWithShadow(event.matrix, "Players:", 2, 4 + arrayCount * 10, 0xff0000);
 			arrayCount++;
 
@@ -156,13 +170,13 @@ public class UI extends Module {
 			}
 		}
 
-		if (getSetting(9).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(7).asToggle().state) {
 			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
-					+ (getSetting(9).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-					+ (getSetting(9).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
+					+ (getSetting(1).asToggle().getChild(7).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+					+ (getSetting(1).asToggle().getChild(7).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
 		}
 
-		if (getSetting(3).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(2).asToggle().state) {
 			boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 			BlockPos pos = mc.player.getBlockPos();
 			Vec3d vec = mc.player.getPos();
@@ -173,23 +187,47 @@ public class UI extends Module {
 			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
 
-		if (getSetting(6).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(4).asToggle().state) {
 			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
 			infoList.add("\u00a77Server: \u00a7d" + server);
 		}
+		
+		if (getSetting(1).asToggle().getChild(8).asToggle().state) {
+			mc.textRenderer.drawWithShadow(event.matrix, "Chunk: "
+					+ (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"), 120, 5, -1);
+			
+			if (System.currentTimeMillis() - 1500 > chunkTimer) {
+				chunkTimer = System.currentTimeMillis();
 
-		if (getSetting(1).asToggle().state) {
+				if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
+					new Thread(() -> {
+						CompoundTag tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
+						DataOutputStream output = new DataOutputStream(
+								new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
+						try {
+							NbtIo.writeCompressed(tag, output);
+						} catch (IOException e) {
+							BleachLogger.errorMessage("[ChunkSize] Error serializing chunk");
+						}
+						
+						chunkSize = output.size();
+					}).start();
+				}
+			}
+		}
+
+		if (getSetting(1).asToggle().getChild(0).asToggle().state) {
 			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
 			infoList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
 		}
 
-		if (getSetting(2).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(1).asToggle().state) {
 			PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
 			int ping = playerEntry == null ? 0 : playerEntry.getLatency();
 			infoList.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
 		}
 
-		if (getSetting(4).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(3).asToggle().state) {
 			String suffix = "\u00a77";
 			if (lastPacket + 7500 < System.currentTimeMillis())
 				suffix += "....";
@@ -203,7 +241,7 @@ public class UI extends Module {
 			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 		}
 
-		if (getSetting(5).asToggle().state) {
+		if (getSetting(2).asToggle().state) {
 			long time = System.currentTimeMillis();
 			if (time - lastPacket > 500) {
 				String text = "Server Lagging For: " + ((time - lastPacket) / 1000d) + "s";
@@ -212,7 +250,7 @@ public class UI extends Module {
 			}
 		}
 
-		if (getSetting(8).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
+		if (getSetting(1).asToggle().getChild(6).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
 			GL11.glPushMatrix();
 			// GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -230,14 +268,14 @@ public class UI extends Module {
 				mc.getItemRenderer().zOffset = 200F;
 				mc.getItemRenderer().renderGuiItemIcon(is, x, y);
 
-				if (getSetting(8).asToggle().getChild(0).asMode().mode > 0) {
+				if (getSetting(1).asToggle().getChild(6).asToggle().getChild(0).asMode().mode > 0) {
 					mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, is, x, y);
 				}
 
 				mc.getItemRenderer().zOffset = 0F;
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-				if (getSetting(8).asToggle().getChild(0).asMode().mode != 1) {
+				if (getSetting(1).asToggle().getChild(6).asToggle().getChild(0).asMode().mode != 1) {
 					GL11.glPushMatrix();
 					GL11.glScaled(0.75, 0.75, 0.75);
 					String s = is.getCount() > 1 ? "x" + is.getCount() : "";
@@ -263,7 +301,7 @@ public class UI extends Module {
 		}
 
 		int count2 = 0;
-		int infoMode = getSetting(10).asMode().mode;
+		int infoMode = getSetting(1).asToggle().getChild(9).asMode().mode;
 		for (String s : infoList) {
 			mc.textRenderer.drawWithShadow(event.matrix, s,
 					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,

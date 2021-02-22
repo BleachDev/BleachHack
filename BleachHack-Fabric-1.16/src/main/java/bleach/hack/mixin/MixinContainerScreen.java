@@ -28,13 +28,11 @@ import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
-import bleach.hack.utils.ClientChunkSerializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
@@ -72,24 +70,20 @@ public abstract class MixinContainerScreen extends Screen {
 			}));
 			
 			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 130, (height - backgroundHeight) / 2 - 16, 39, 12, new LiteralText("cum"), button -> {
-				a(entity);
+				for (int i = 0; i < 1000; i++) {
+					entity.setPos(
+							MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
+					MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
+					//MinecraftClient.getInstance().player.getVehicle().setPos(
+					//		MinecraftClient.getInstance().player.getX() - 5, MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ() - 5);
+					//MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
+				}
+				
+				//MinecraftClient.getInstance().player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
 			}));
 		}
 	}
 	
-	public static void a(Entity e) {
-		for (int i = 0; i < 1000; i++) {
-			e.setPos(
-					MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
-			MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
-			//MinecraftClient.getInstance().player.getVehicle().setPos(
-			//		MinecraftClient.getInstance().player.getX() - 5, MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ() - 5);
-			//MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
-		}
-		
-		//MinecraftClient.getInstance().player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
-	}
-
 	@Inject(at = @At("RETURN"), method = "render")
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		EventDrawContainer event = new EventDrawContainer(
