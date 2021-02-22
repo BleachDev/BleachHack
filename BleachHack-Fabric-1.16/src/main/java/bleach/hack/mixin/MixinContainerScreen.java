@@ -28,7 +28,6 @@ import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -61,9 +60,10 @@ public abstract class MixinContainerScreen extends Screen {
 			HorseBaseEntity entity = (HorseBaseEntity) client.player.getVehicle();
 			
 			addButton(new ButtonWidget(leftside - 50, topside + 12, 50, 14, new LiteralText("HorseLag"), button -> {
+				double start = client.player.getY();
 				for (int i = 0; i < 100000; i++) {
-					entity.setPos(MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
-					MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
+					entity.setPos(client.player.getX(), start + i / 5d, client.player.getZ());
+					client.player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
 				}
 			}));
 			
@@ -75,7 +75,7 @@ public abstract class MixinContainerScreen extends Screen {
 				addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {
 					ModuleManager.getModule(MountBypass.class).dontCancel = true;
 	
-					MinecraftClient.getInstance().player.networkHandler.sendPacket(
+					client.player.networkHandler.sendPacket(
 							new PlayerInteractEntityC2SPacket(
 									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
 	
@@ -83,16 +83,16 @@ public abstract class MixinContainerScreen extends Screen {
 				}));
 				
 				addButton(new ButtonWidget(rightside, topside + 66, 50, 14, new LiteralText("Dupe"), button -> {
+					double start = client.player.getY();
 					for (int i = 0; i < 1000; i++) {
-						entity.setPos(
-								MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
-						MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
-						//MinecraftClient.getInstance().player.getVehicle().setPos(
-						//		MinecraftClient.getInstance().player.getX() - 5, MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ() - 5);
-						//MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
+						entity.setPos(client.player.getX(), start + i / 5d, client.player.getZ());
+						client.player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
+						//client.player.getVehicle().setPos(
+						//		client.player.getX() - 5, client.player.getY(), client.player.getZ() - 5);
+						//client.player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
 					}
 					
-					//MinecraftClient.getInstance().player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
+					//client.player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
 				}));
 			}
 		}
