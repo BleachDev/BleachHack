@@ -72,9 +72,22 @@ public abstract class MixinContainerScreen extends Screen {
 			}));
 			
 			addButton(new ButtonWidget((width - backgroundWidth) / 2 + 130, (height - backgroundHeight) / 2 - 16, 39, 12, new LiteralText("cum"), button -> {
-				ClientChunkSerializer.a(entity);
+				a(entity);
 			}));
 		}
+	}
+	
+	public static void a(Entity e) {
+		for (int i = 0; i < 1000; i++) {
+			e.setPos(
+					MinecraftClient.getInstance().player.getX(), MinecraftClient.getInstance().player.getY() + i / 5d, MinecraftClient.getInstance().player.getZ());
+			MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
+			//MinecraftClient.getInstance().player.getVehicle().setPos(
+			//		MinecraftClient.getInstance().player.getX() - 5, MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ() - 5);
+			//MinecraftClient.getInstance().player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
+		}
+		
+		//MinecraftClient.getInstance().player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
 	}
 
 	@Inject(at = @At("RETURN"), method = "render")
