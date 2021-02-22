@@ -17,6 +17,8 @@
  */
 package bleach.hack.mixin;
 
+import java.util.Arrays;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -110,8 +112,23 @@ public abstract class MixinContainerScreen extends Screen {
 		int rightside = (width + backgroundWidth) / 2 + 2;
 		int topside = (height - backgroundHeight) / 2;
 		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
-			textRenderer.drawWithShadow(matrix, "IS Dupe:", rightside, topside + 2, -1);
-			textRenderer.drawWithShadow(matrix, "ec.me Dupe:", rightside, topside + 56, -1);
+			textRenderer.drawWithShadow(matrix, "IS Dupe: \u00a79[?]", rightside, topside + 2, -1);
+			textRenderer.drawWithShadow(matrix, "ec.me Dupe: \u00a79[?]", rightside, topside + 56, -1);
+			
+			if (mouseX >= rightside + textRenderer.getWidth("IS Dupe: ") && mouseX <= rightside + textRenderer.getWidth("IS Dupe: ") + 15
+					&& mouseY >= topside + 1 && mouseY <= topside + 11) {
+				renderTooltip(matrix, Arrays.asList(
+						new LiteralText("\u00a79IllegalStack dupe/Old endcrystal.me dupe"),
+						new LiteralText("\u00a79Only works on servers running IllegalStack <= 2.1.0")), mouseX, mouseY);
+			}
+			
+			if (mouseX >= rightside + textRenderer.getWidth("ec.me Dupe: ") && mouseX <= rightside + textRenderer.getWidth("ec.me Dupe: ") + 15
+					&& mouseY >= topside + 55 && mouseY <= topside + 65) {
+				renderTooltip(matrix, Arrays.asList(
+						new LiteralText("\u00a79Endcrystal.me dupe"),
+						new LiteralText("\u00a79\u00a7lONLY WORKS ON ENDCRYSTAL\u00a79, there has to be no blocks"),
+						new LiteralText("\u00a79above you up to world height for it to work")), mouseX, mouseY);
+			}
 		}
 	}
 }
