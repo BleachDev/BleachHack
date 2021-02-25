@@ -17,6 +17,7 @@
  */
 package bleach.hack.module.mods;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import org.apache.commons.io.IOUtils;
 import com.google.common.base.Charsets;
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonParseException;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 
@@ -106,6 +107,13 @@ public class Nametags extends Module {
 		failedUUIDs.clear();
 		uuidExecutor.shutdownNow();
 		uuidFutures.clear();
+		
+		Map<UUID, String> cacheCopy = new HashMap<>(uuidCache);
+		uuidCache.clear();
+		
+		cacheCopy.forEach((u, s) -> {
+			if (!s.startsWith("\u00a7c")) uuidCache.put(u, s);
+		});
 		
 		super.onDisable();
 	}
@@ -357,16 +365,23 @@ public class Nametags extends Module {
 			@Override
 			public String call() throws Exception {
 				try {
-					String response = IOUtils.toString(
-							URI.create("https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names"), Charsets.UTF_8);
-					System.out.println("bruh uuid time https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names");
+					String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
+					String response = IOUtils.toString(URI.create(url), Charsets.UTF_8);
+					System.out.println("bruh uuid time: " + url);
 					
-					JsonArray ja = new JsonParser().parse(response).getAsJsonArray();
+					JsonElement json = new JsonParser().parse(response);
+					
+					if (!json.isJsonArray()) {
+						System.out.println("[Nametags] Invalid Owner UUID: " + uuid.toString());
+						return "\u00a7c[Invalid]";
+					}
+					
+					JsonArray ja = json.getAsJsonArray();
 					
 					return ja.get(ja.size() - 1).getAsJsonObject().get("name").getAsString();
-				} catch (JsonParseException e) {
-					e.printStackTrace();
-					return null;
+				} catch (IOException e) {
+					System.out.println("[Nametags] Error Getting Owner UUID: " + uuid.toString());
+					return "\u00a7c[Error]";
 				}
 			}
 		}));
