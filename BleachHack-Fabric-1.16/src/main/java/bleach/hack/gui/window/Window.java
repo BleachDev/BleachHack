@@ -32,6 +32,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
@@ -95,19 +96,23 @@ public class Window {
 					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0xff959595 : 0xff858585);
 			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 		}
+		
+		boolean blockItem = icon != null && icon.getItem() instanceof BlockItem;
 
 		/* window icon */
-		if (icon != null && selected) {
+		if (icon != null) {
 			GL11.glPushMatrix();
-			GL11.glScaled(0.55, 0.55, 1);
+			GL11.glScaled(0.6, 0.6, 1);
 			DiffuseLighting.enableGuiDepthLighting();
-			MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(icon, (int) ((x1 + 3) * 1 / 0.55), (int) ((y1 + 3) * 1 / 0.55));
+			MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(
+					icon, (int) ((x1 + (blockItem ? 3 : 2)) * 1 / 0.6), (int) ((y1 + 2) * 1 / 0.6));
 			DiffuseLighting.disableGuiDepthLighting();
 			GL11.glPopMatrix();
 		}
 
 		/* window title */
-		textRend.drawWithShadow(matrix, title, x1 + (icon == null || !selected || icon.getItem() == Items.AIR ? 4 : 15), y1 + 3, -1);
+		textRend.drawWithShadow(matrix, title,
+				x1 + (icon == null || icon.getItem() == Items.AIR ? 4 : (blockItem ? 15 : 14)), y1 + 3, -1);
 
 		if (inactiveTime >= 0) {
 			inactiveTime--;

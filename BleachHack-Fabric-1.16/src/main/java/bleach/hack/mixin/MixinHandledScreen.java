@@ -18,7 +18,6 @@
 package bleach.hack.mixin;
 
 import java.util.Arrays;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,12 +42,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 
 @Mixin(HandledScreen.class)
-public abstract class MixinContainerScreen extends Screen {
+public abstract class MixinHandledScreen extends Screen {
 
 	@Shadow protected int backgroundWidth;
 	@Shadow protected int backgroundHeight;
 
-	protected MixinContainerScreen(Text title) {
+	protected MixinHandledScreen(Text title) {
 		super(title);
 	}
 
@@ -56,18 +55,9 @@ public abstract class MixinContainerScreen extends Screen {
 	protected void init(CallbackInfo info) {
 		if (client.player.getVehicle() instanceof HorseBaseEntity) {
 			int rightside = (width + backgroundWidth) / 2 + 2;
-			int leftside = (width - backgroundWidth) / 2 - 2;
 			int topside = (height - backgroundHeight) / 2;
 			
 			HorseBaseEntity entity = (HorseBaseEntity) client.player.getVehicle();
-			
-			addButton(new ButtonWidget(leftside - 50, topside + 12, 50, 14, new LiteralText("HorseLag"), button -> {
-				double start = client.player.getY();
-				for (int i = 0; i < 100000; i++) {
-					entity.setPos(client.player.getX(), start + i / 5d, client.player.getZ());
-					client.player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
-				}
-			}));
 			
 			if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 				addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
@@ -119,15 +109,17 @@ public abstract class MixinContainerScreen extends Screen {
 					&& mouseY >= topside + 1 && mouseY <= topside + 11) {
 				renderTooltip(matrix, Arrays.asList(
 						new LiteralText("\u00a79IllegalStack dupe/Old endcrystal.me dupe"),
-						new LiteralText("\u00a79Only works on servers running IllegalStack <= 2.1.0")), mouseX, mouseY);
+						new LiteralText("\u00a79Only works on servers running IllegalStack <= 2.1.0")),
+						mouseX, mouseY);
 			}
 			
 			if (mouseX >= rightside + textRenderer.getWidth("ec.me Dupe: ") && mouseX <= rightside + textRenderer.getWidth("ec.me Dupe: ") + 15
 					&& mouseY >= topside + 55 && mouseY <= topside + 65) {
 				renderTooltip(matrix, Arrays.asList(
 						new LiteralText("\u00a79Endcrystal.me dupe"),
-						new LiteralText("\u00a79\u00a7lONLY WORKS ON ENDCRYSTAL\u00a79, there has to be no blocks"),
-						new LiteralText("\u00a79above you up to world height for it to work")), mouseX, mouseY);
+						new LiteralText("\u00a79Endcrystal donkey dc dupe that was active for 2 days, patched 23/02/21"),
+						new LiteralText("\u00a79there has to be no blocks above you up to world height for it to work")),
+						mouseX, mouseY);
 			}
 		}
 	}

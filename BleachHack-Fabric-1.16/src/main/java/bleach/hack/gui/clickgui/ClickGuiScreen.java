@@ -25,8 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.lwjgl.opengl.GL11;
 
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
@@ -70,13 +70,27 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	public void initWindows() {
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
 
-		int i = 10;
-		for (Category c : Category.values()) {
-			windows.add(new ModuleWindow(ModuleManager.getModulesInCat(c), i, 35, len,
-					StringUtils.capitalize(StringUtils.lowerCase(c.toString())), new ItemStack(Items.AIR)));
-
-			i += len + 5;
-		}
+		int startX = 10;
+		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER),
+				startX, 35, len, "Player", new ItemStack(Items.ARMOR_STAND)));
+		
+		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER),
+				startX + len + 5, 35, len, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
+		
+		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT),
+				startX + len * 2 + 10, 35, len, "Combat", new ItemStack(Items.TOTEM_OF_UNDYING)));
+		
+		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT),
+				startX + len * 3 + 15, 35, len, "Movement", new ItemStack(Items.POTION)));
+		
+		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS),
+				startX + len * 2 + 20, 35, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
+		
+		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC),
+				startX + len * 2 + 25, 35, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
+		
+		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD),
+				startX + len * 2 + 30, 35, len, "World", new ItemStack(Items.GRASS_BLOCK)));
 	}
 
 	public boolean isPauseScreen() {
@@ -137,6 +151,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		for (Window w : windows) {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
+				GL11.glTranslated(0, 0, 300);
 				if (tooltip != null) {
 					int tooltipY = tooltip.getMiddle();
 
@@ -165,6 +180,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 						tooltipY -= lines.size() * 10;
 					}
 				}
+				GL11.glTranslated(0, 0, -300);
 			}
 		}
 
