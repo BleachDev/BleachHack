@@ -65,8 +65,11 @@ public class SettingToggle extends SettingBase {
 		}
 
 		if (!children.isEmpty()) {
-			if (window.rmDown && window.mouseOver(x, y, x + len, y + 12))
+			if (window.rmDown && window.mouseOver(x, y, x + len, y + 12)) {
 				expanded = !expanded;
+				MinecraftClient.getInstance().getSoundManager().play(
+						PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+			}
 
 			if (expanded) {
 				DrawableHelper.fill(matrix, x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
