@@ -51,6 +51,16 @@ public class BleachQueue {
 	public static void cancelQueue(String id) {
 		queues.remove(id);
 	}
+	
+	public static void runAllInQueue(String id) {
+		if (queues.containsKey(id)) {
+			while (!queues.get(id).isEmpty()) {
+				queues.get(id).poll().left.run();
+			}
+			
+			queues.remove(id);
+		}
+	}
 
 	public static boolean isEmpty(String id) {
 		return !queues.containsKey(id);

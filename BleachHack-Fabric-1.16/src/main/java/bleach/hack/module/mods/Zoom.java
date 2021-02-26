@@ -40,7 +40,7 @@ public class Zoom extends Module {
 
 	public void onEnable() {
 		super.onEnable();
-		BleachQueue.cancelQueue("zoom");
+		BleachQueue.runAllInQueue("zoom");
 
 		prevFov = mc.options.fov;
 		prevSens = mc.options.mouseSensitivity;
