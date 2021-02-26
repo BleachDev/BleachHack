@@ -59,7 +59,7 @@ public class Fullbright extends Module {
 				mc.options.gamma = Math.max(mc.options.gamma - 1, getSetting(1).asSlider().getValue());
 			}
 		} else if (getSetting(0).asMode().mode == 1) {
-			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 1, 5));
+			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 500, 0));
 		} /* else if (getSetting(0).toMode().mode == 2) { for (int i = 0; i < 16; i++) {
 		 * if (mc.world.dimension.getLightLevelToBrightness()[i] != 1) {
 		 * mc.world.dimension.getLightLevelToBrightness()[i] = 1; } } } */
