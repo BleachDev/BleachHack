@@ -8,6 +8,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.utils.BleachQueue;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -16,7 +17,8 @@ public class Fullbright extends Module {
 
 	public Fullbright() {
 		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.",
-				new SettingMode("Mode", "Gamma", "Potion").withDesc("Fullbright mode"));
+				new SettingMode("Mode", "Gamma", "Potion").withDesc("Fullbright mode"),
+				new SettingSlider("Gamma", 1, 12, 7.5, 1).withDesc("How much to turn the gamma up when using gamma mode"));
 	}
 
 	// table setting [B]roke
@@ -29,9 +31,9 @@ public class Fullbright extends Module {
 			double g = mc.options.gamma;
 
 			while (g > 1) {
-				double nextStep = Math.max(g - 2, 1);
+				double nextStep = Math.max(g - 1.6, 1);
 				BleachQueue.add("fullbright", () -> mc.options.gamma = nextStep);
-				g -= 2;
+				g -= 1.6;
 			}
 		}
 
@@ -51,8 +53,11 @@ public class Fullbright extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asMode().mode == 0) {
-			if (mc.options.gamma < 16)
-				mc.options.gamma += 1.2;
+			if (mc.options.gamma < getSetting(1).asSlider().getValue()) {
+				mc.options.gamma = Math.min(mc.options.gamma + 1, getSetting(1).asSlider().getValue());
+			} else if (mc.options.gamma > getSetting(1).asSlider().getValue()) {
+				mc.options.gamma = Math.max(mc.options.gamma - 1, getSetting(1).asSlider().getValue());
+			}
 		} else if (getSetting(0).asMode().mode == 1) {
 			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 1, 5));
 		} /* else if (getSetting(0).toMode().mode == 2) { for (int i = 0; i < 16; i++) {
