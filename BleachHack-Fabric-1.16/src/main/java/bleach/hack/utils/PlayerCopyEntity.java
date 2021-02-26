@@ -17,25 +17,30 @@
  */
 package bleach.hack.utils;
 
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class PlayerCopyEntity extends OtherClientPlayerEntity {
 
 	public PlayerCopyEntity() {
-		this(MinecraftClient.getInstance().player.getGameProfile());
+		this(MinecraftClient.getInstance().player);
 	}
 
-	public PlayerCopyEntity(GameProfile profile) {
-		this(profile, MinecraftClient.getInstance().player.getX(),
-				MinecraftClient.getInstance().player.getY(), MinecraftClient.getInstance().player.getZ());
+	public PlayerCopyEntity(PlayerEntity player) {
+		this(player, player.getX(), player.getY(), player.getZ());
 	}
 
-	public PlayerCopyEntity(GameProfile profile, double x, double y, double z) {
-		super(MinecraftClient.getInstance().world, profile);
-		setPos(x, y, z);
+	public PlayerCopyEntity(PlayerEntity player, double x, double y, double z) {
+		super(MinecraftClient.getInstance().world, player.getGameProfile());
+		copyPositionAndRotation(player);
+		yaw = headYaw = bodyYaw = player.yaw;
+		inventory.main.set(inventory.selectedSlot, player.getMainHandStack());
+		inventory.offHand.set(0, player.getOffHandStack());
+		inventory.armor.set(0, player.inventory.armor.get(0));
+		inventory.armor.set(1, player.inventory.armor.get(1));
+		inventory.armor.set(2, player.inventory.armor.get(2));
+		inventory.armor.set(3, player.inventory.armor.get(3));
 	}
 
 	public void spawn() {
