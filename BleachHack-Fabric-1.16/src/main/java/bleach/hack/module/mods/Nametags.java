@@ -37,6 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.commons.io.IOUtils;
+import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Charsets;
 import com.google.common.eventbus.Subscribe;
@@ -52,16 +53,22 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.EntityUtils;
 import bleach.hack.utils.WorldRenderUtils;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -130,13 +137,7 @@ public class Nametags extends Module {
 			if (f.getValue().isDone()) {
 				try {
 					String s = f.getValue().get();
-					
-					if (s != null) {
-						uuidCache.put(f.getKey(), s);
-					} else {
-						BleachLogger.errorMessage("Error Getting Owner UUID: " + f.getKey().toString());
-						failedUUIDs.add(f.getKey());
-					}
+					uuidCache.put(f.getKey(), s);
 					
 					uuidFutures.remove(f.getKey());
 				} catch (InterruptedException | ExecutionException e) {
@@ -164,6 +165,8 @@ public class Nametags extends Module {
 	public void onLivingRender(EventEntityRender.Render event) {
 		List<String> lines = new ArrayList<>();
 		double scale = 0;
+		
+		Vec3d rPos = getRenderPos(event.getEntity());
 
 		if (event.getEntity() instanceof ItemEntity && getSetting(5).asToggle().state) {
 			ItemEntity e = (ItemEntity) event.getEntity();
@@ -223,55 +226,32 @@ public class Nametags extends Module {
 							+ (getSetting(3).asToggle().getChild(2).asToggle().state ? health : ""));
 				}
 
-				if (e instanceof TameableEntity) {
-					TameableEntity te = (TameableEntity) e;
+				if (e instanceof HorseBaseEntity || e instanceof TameableEntity) {
+					boolean tame = e instanceof HorseBaseEntity
+							? ((HorseBaseEntity) e).isTame() : ((TameableEntity) e).isTamed();
+					
+					UUID ownerUUID = e instanceof HorseBaseEntity
+							? ((HorseBaseEntity) e).getOwnerUuid() : ((TameableEntity) e).getOwnerUuid();
 
-					if (getSetting(3).asToggle().getChild(3).asToggle().state && !te.isBaby()
-							&& (getSetting(3).asToggle().getChild(3).asToggle().getChild(0).asMode().mode != 1 || te.isTamed()))
-						lines.add(0, te.isTamed() ? Formatting.GREEN + "Tamed: Yes" : Formatting.RED + "Tamed: No");
+					if (getSetting(3).asToggle().getChild(3).asToggle().state && !e.isBaby()
+							&& (getSetting(3).asToggle().getChild(3).asToggle().getChild(0).asMode().mode != 1 || tame))
+						lines.add(0, tame ? Formatting.GREEN + "Tamed: Yes" : Formatting.RED + "Tamed: No");
 
-					if (getSetting(3).asToggle().getChild(4).asToggle().state && te.getOwnerUuid() != null) {
-						if (uuidCache.containsKey(te.getOwnerUuid())) {
-							lines.add(0, Formatting.GREEN + "Owner: " + uuidCache.get(te.getOwnerUuid()));
-						} else if (failedUUIDs.contains(te.getOwnerUuid())) {
+					if (getSetting(3).asToggle().getChild(4).asToggle().state && ownerUUID != null) {
+						if (uuidCache.containsKey(ownerUUID)) {
+							lines.add(0, Formatting.GREEN + "Owner: " + uuidCache.get(ownerUUID));
+						} else if (failedUUIDs.contains(ownerUUID)) {
 							lines.add(0, Formatting.GREEN + "Owner: " + Formatting.GRAY + "Invalid UUID!");
 						} else {
 							// Try to see if the owner is online on the server before calling the mojang api
 							Optional<GameProfile> owner = mc.player.networkHandler.getPlayerList().stream()
-									.filter(en -> en.getProfile() != null && te.getOwnerUuid().equals(en.getProfile().getId()) && en.getProfile().getName() != null)
+									.filter(en -> en.getProfile() != null && ownerUUID.equals(en.getProfile().getId()) && en.getProfile().getName() != null)
 									.map(en -> en.getProfile()).findFirst();
 							
 							if (owner.isPresent()) {
-								uuidCache.put(te.getOwnerUuid(), owner.get().getName());
-							} else if (!uuidQueue.contains(te.getOwnerUuid()) && !uuidFutures.containsKey(te.getOwnerUuid())) {
-								uuidQueue.add(te.getOwnerUuid());
-							}
-							
-							lines.add(0, Formatting.GREEN + "Owner: " + Formatting.GRAY + "Loading...");
-						}
-					}
-				} else if (e instanceof HorseBaseEntity) {
-					HorseBaseEntity he = (HorseBaseEntity) e;
-
-					if (getSetting(3).asToggle().getChild(3).asToggle().state && !he.isBaby()
-							&& (getSetting(3).asToggle().getChild(3).asToggle().getChild(0).asMode().mode != 1 || he.isTame()))
-						lines.add(0, he.isTame() ? Formatting.GREEN + "Tamed: Yes" : Formatting.RED + "Tamed: No");
-
-					if (getSetting(3).asToggle().getChild(4).asToggle().state && he.getOwnerUuid() != null) {
-						if (uuidCache.containsKey(he.getOwnerUuid())) {
-							lines.add(0, Formatting.GREEN + "Owner: " + uuidCache.get(he.getOwnerUuid()));
-						} else if (failedUUIDs.contains(he.getOwnerUuid())) {
-							lines.add(0, Formatting.GREEN + "Owner: " + Formatting.GRAY + "Invalid UUID!");
-						} else {
-							// Try to see if the owner is online on the server before calling the mojang api
-							Optional<GameProfile> owner = mc.player.networkHandler.getPlayerList().stream()
-									.filter(en -> en.getProfile() != null && he.getOwnerUuid().equals(en.getProfile().getId()) && en.getProfile().getName() != null)
-									.map(en -> en.getProfile()).findFirst();
-							
-							if (owner.isPresent()) {
-								uuidCache.put(he.getOwnerUuid(), owner.get().getName());
-							} else if (!uuidQueue.contains(he.getOwnerUuid()) && !uuidFutures.containsKey(he.getOwnerUuid())) {
-								uuidQueue.add(he.getOwnerUuid());
+								uuidCache.put(ownerUUID, owner.get().getName());
+							} else if (!uuidQueue.contains(ownerUUID) && !uuidFutures.containsKey(ownerUUID)) {
+								uuidQueue.add(ownerUUID);
 							}
 							
 							lines.add(0, Formatting.GREEN + "Owner: " + Formatting.GRAY + "Loading...");
@@ -296,18 +276,71 @@ public class Nametags extends Module {
 			}
 
 			/* Drawing Items */
+			double c = 0;
+			double lscale = scale * 0.4;
+			double up = ((0.3 + lines.size() * 0.25) * scale) + lscale / 2;
+
+			if (getSetting(0).asMode().mode == 0) {
+				drawItem(rPos.x, rPos.y + up, rPos.z, -2.5, 0, lscale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+				drawItem(rPos.x, rPos.y + up, rPos.z, 2.5, 0, lscale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+
+				for (ItemStack i : e.getArmorItems()) {
+					drawItem(rPos.x, rPos.y + up, rPos.z, c + 1.5, 0, lscale, i);
+					c--;
+				}
+			} else if (getSetting(0).asMode().mode == 1) {
+				drawItem(rPos.x, rPos.y + up, rPos.z, -1.25, 0, lscale, e.getEquippedStack(EquipmentSlot.MAINHAND));
+				drawItem(rPos.x, rPos.y + up, rPos.z, 1.25, 0, lscale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+
+				for (ItemStack i : e.getArmorItems()) {
+					drawItem(rPos.x, rPos.y + up, rPos.z, 0, c, lscale, i);
+					c++;
+				}
+			}
 			// drawing items died
 		}
 
 		if (!lines.isEmpty()) {
-			Vec3d pos = getRenderPos(event.getEntity());
 			float offset = 0.25f + lines.size() * 0.25f;
 
 			for (String s: lines) {
-				WorldRenderUtils.drawText(s, pos.x, pos.y + (offset * scale), pos.z, scale);
+				WorldRenderUtils.drawText(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
 				offset -= 0.25f;
 			}
 		}
+	}
+	
+	private void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
+		MatrixStack matrix = WorldRenderUtils.drawGuiItem(x, y, z, offX, offY, scale, item);
+		
+		matrix.scale(-0.05F, -0.05F, 1f);
+
+		//System.out.println(item);
+		GL11.glDepthFunc(GL11.GL_ALWAYS);
+		if (!item.isEmpty()) {
+			int w = mc.textRenderer.getWidth("x" + item.getCount()) / 2;
+			mc.textRenderer.drawWithShadow(matrix, "x" + item.getCount(), 7 - w, 3, 0xffffff);
+		}
+
+		matrix.scale(0.85F, 0.85F, 1F);
+
+		int c = 0;
+		for (Entry<Enchantment, Integer> m : EnchantmentHelper.get(item).entrySet()) {
+			String text = I18n.translate(m.getKey().getName(2).getString());
+
+			if (text.isEmpty())
+				continue;
+
+			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
+
+			int w1 = mc.textRenderer.getWidth(subText) / 2;
+			mc.textRenderer.drawWithShadow(matrix,
+					subText, -2 - w1, c * 10 - 19,
+					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0);
+			c--;
+		}
+		
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
 	}
 
 	private Vec3d getRenderPos(Entity e) {
