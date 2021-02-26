@@ -95,8 +95,7 @@ public class CmdBind extends Command {
 
 			BleachLogger.errorMessage("Could Not Find Module \"" + args[1] + "\"");
 		} else {
-			BleachLogger.errorMessage("Invalid Syntax!");
-			BleachLogger.infoMessage(getSyntax());
+			printSyntaxError();
 		}
 	}
 

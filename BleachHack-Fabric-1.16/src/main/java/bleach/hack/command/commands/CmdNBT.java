@@ -37,14 +37,13 @@ public class CmdNBT extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "nbt [get/copy/set/wipe] <nbt>";
+		return "nbt get | nbt copy | nbt set <nbt> | nbt wipe";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if (args[0].isEmpty()) {
-			BleachLogger.errorMessage("Invalid Syntax!");
-			BleachLogger.infoMessage(getSyntax());
+			printSyntaxError();
 			return;
 		}
 		ItemStack item = mc.player.inventory.getMainHandStack();
@@ -57,15 +56,13 @@ public class CmdNBT extends Command {
 		} else if (args[0].equalsIgnoreCase("set")) {
 			try {
 				if (args[1].isEmpty()) {
-					BleachLogger.errorMessage("Invalid Syntax!");
-					BleachLogger.infoMessage(getSyntax());
+					printSyntaxError();
 					return;
 				}
 				item.setTag(StringNbtReader.parse(args[1]));
 				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName() + "to\n\u00a7f" + (item.getTag()));
 			} catch (Exception e) {
-				BleachLogger.errorMessage("Invalid Syntax!");
-				BleachLogger.infoMessage(getSyntax());
+				printSyntaxError();
 			}
 		} else if (args[0].equalsIgnoreCase("wipe")) {
 			item.setTag(new CompoundTag());

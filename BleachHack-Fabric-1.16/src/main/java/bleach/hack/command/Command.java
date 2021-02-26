@@ -36,8 +36,11 @@ public abstract class Command {
 	public abstract String getSyntax();
 	
 	public void printSyntaxError() {
-		BleachLogger.errorMessage("Invalid Syntax!");
-		//BleachLogger.infoMessage("Syntax:");
+		printSyntaxError("Invalid Syntax!");
+	}
+	
+	public void printSyntaxError(String reason) {
+		BleachLogger.errorMessage(reason);
 		
 		MutableText text = new LiteralText("\u00a73" + PREFIX + getAlias() + " -> \u00a7b" + getSyntax());
 		BleachLogger.infoMessage(text.setStyle(text.getStyle().withHoverEvent(

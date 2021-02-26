@@ -1,8 +1,8 @@
 package bleach.hack.utils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import net.minecraft.util.Formatting;
 
@@ -11,7 +11,7 @@ public class FriendManager {
 	private Set<String> friends;
 
 	public FriendManager(List<String> names) {
-		friends = new HashSet<>(names);
+		friends = new TreeSet<String>(names);
 	}
 
 	public void add(String name) {
