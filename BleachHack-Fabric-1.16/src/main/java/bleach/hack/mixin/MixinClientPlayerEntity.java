@@ -18,6 +18,7 @@
 package bleach.hack.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,6 +33,7 @@ import bleach.hack.event.events.EventMovementTick;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.BetterPortal;
+import bleach.hack.module.mods.EntityControl;
 import bleach.hack.module.mods.Freecam;
 import bleach.hack.module.mods.NoSlow;
 import bleach.hack.module.mods.SafeWalk;
@@ -52,6 +54,9 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
 		super(world, profile);
 	}
+	
+	@Shadow
+	private float field_3922;
 
 	@Shadow
 	protected MinecraftClient client;
@@ -139,5 +144,11 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	protected boolean clipAtLedge() {
 		return super.clipAtLedge() || ModuleManager.getModule(SafeWalk.class).isToggled()
 				|| (ModuleManager.getModule(Scaffold.class).isToggled() && ModuleManager.getModule(Scaffold.class).getSetting(3).asToggle().state);
+	}
+	
+	@Overwrite
+	public float method_3151() {
+		return ModuleManager.getModule(EntityControl.class).isToggled()
+				&& ModuleManager.getModule(EntityControl.class).getSetting(2).asToggle().state ? 1F : field_3922;
 	}
 }

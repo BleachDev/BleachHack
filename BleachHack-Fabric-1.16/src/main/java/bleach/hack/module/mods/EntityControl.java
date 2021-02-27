@@ -42,8 +42,9 @@ public class EntityControl extends Module {
 				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entites").withChildren(
 					new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed"),
 					new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed")),
-				new SettingToggle("Ground Snap", false).withDesc("Snaps the entity to the ground when going down blocks"),
-				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding whewn going up blocks"),
+				new SettingToggle("HorseJump", true).withDesc("Always makes your horse do the highest jump it can"),
+				new SettingToggle("GroundSnap", false).withDesc("Snaps the entity to the ground when going down blocks"),
+				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding when going up blocks"),
 				new SettingToggle("NoAI", true).withDesc("Disables the entities AI"));
 	}
 
@@ -64,7 +65,7 @@ public class EntityControl extends Module {
 			((LlamaEntity) e).headYaw = mc.player.headYaw;
 		}
 		
-		if (getSetting(4).asToggle().state && forward == 0 && strafe == 0) {
+		if (getSetting(5).asToggle().state && forward == 0 && strafe == 0) {
 			e.setVelocity(new Vec3d(0, e.getVelocity().y, 0));
 		}
 
@@ -97,14 +98,14 @@ public class EntityControl extends Module {
 			}
 		}
 
-		if (getSetting(2).asToggle().state) {
+		if (getSetting(3).asToggle().state) {
 			BlockPos p = new BlockPos(e.getPos());
 			if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
 				e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}
 
-		if (getSetting(3).asToggle().state) {
+		if (getSetting(4).asToggle().state) {
 			Vec3d vel = e.getVelocity().multiply(2);
 			if (!WorldUtils.isBoxEmpty(e.getBoundingBox().offset(vel.x, 0, vel.z))) {
 				for (int i = 2; i < 10; i++) {
@@ -116,4 +117,6 @@ public class EntityControl extends Module {
 			}
 		}
 	}
+	
+	// HorseJump handled in MixinClientPlayerEntity.method_3151
 }
