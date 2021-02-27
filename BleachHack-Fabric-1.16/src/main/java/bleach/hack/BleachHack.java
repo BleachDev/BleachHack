@@ -19,6 +19,7 @@ package bleach.hack;
 
 import com.google.common.eventbus.EventBus;
 
+import bleach.hack.command.CommandManager;
 import bleach.hack.gui.BleachMainMenu;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -44,9 +45,9 @@ public class BleachHack implements ModInitializer {
 
 		ClickGui.clickGui.initWindows();
 		BleachFileHelper.readClickGui();
-		BleachFileHelper.readPrefix();
 		BleachFileHelper.readFriends();
 
+		CommandManager.readPrefix();
 		for (Module m : ModuleManager.getModules())
 			m.init();
 

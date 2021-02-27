@@ -42,7 +42,7 @@ public class CmdEnchant extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "enchant [enchant/id] [level] | enchant all [level] | enchant list";
+		return "enchant <enchant/id> <level> | enchant all <level> | enchant list";
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class CmdEnchant extends Command {
 		}
 
 		if (!mc.player.abilities.creativeMode) {
-			BleachLogger.errorMessage("Not In Creative Mode!");
+			printSyntaxError("Not In Creative Mode!");
 			return;
 		}
 
@@ -191,7 +191,7 @@ public class CmdEnchant extends Command {
 
 	public void enchant(ItemStack item, Enchantment e, int level) {
 		if (e == null) {
-			BleachLogger.errorMessage("Invalid enchantment!");
+			printSyntaxError("Invalid enchantment!");
 			return;
 		}
 		

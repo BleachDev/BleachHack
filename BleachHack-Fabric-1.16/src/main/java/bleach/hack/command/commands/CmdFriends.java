@@ -26,7 +26,7 @@ public class CmdFriends extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "friends add [user] | friends remove [user] | friends list | friends clear";
+		return "friends add <user> | friends remove <user> | friends list | friends clear";
 	}
 
 	@Override

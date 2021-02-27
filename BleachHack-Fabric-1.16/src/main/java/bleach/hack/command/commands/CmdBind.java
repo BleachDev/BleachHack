@@ -37,7 +37,7 @@ public class CmdBind extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "bind set [Module] [Key] | bind del [Module] | bind clear";
+		return "bind set <Module> <Key> | bind del <Module> | bind clear";
 	}
 
 	@Override
@@ -66,18 +66,18 @@ public class CmdBind extends Command {
 								try {
 									key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase().replaceFirst("right", "right.")).getCode();
 								} catch (IllegalArgumentException e1) {
-									BleachLogger.errorMessage("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("right", "right."));
+									printSyntaxError("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("right", "right."));
 									return;
 								}
 							} else if (args[2].toLowerCase().startsWith("r")) {
 								try {
 									key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase().replaceFirst("r", "right.")).getCode();
 								} catch (IllegalArgumentException e1) {
-									BleachLogger.errorMessage("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("r", "right."));
+									printSyntaxError("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("r", "right."));
 									return;
 								}
 							} else {
-								BleachLogger.errorMessage("Unknown key: " + args[2]);
+								printSyntaxError("Unknown key: " + args[2]);
 								return;
 							}
 						}
@@ -93,7 +93,7 @@ public class CmdBind extends Command {
 				}
 			}
 
-			BleachLogger.errorMessage("Could Not Find Module \"" + args[1] + "\"");
+			printSyntaxError("Could Not Find Module \"" + args[1] + "\"");
 		} else {
 			printSyntaxError();
 		}

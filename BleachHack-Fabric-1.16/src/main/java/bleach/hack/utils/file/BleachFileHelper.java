@@ -26,7 +26,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
-import bleach.hack.command.Command;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -158,12 +157,6 @@ public class BleachFileHelper {
 			}
 		} catch (Exception e) {
 		}
-	}
-
-	public static void readPrefix() {
-		List<String> lines = BleachFileMang.readFileLines("prefix.txt");
-		if (!lines.isEmpty())
-			Command.PREFIX = lines.get(0);
 	}
 
 	public static void readFriends() {

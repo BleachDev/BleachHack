@@ -45,7 +45,7 @@ public class CmdRbook extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "rbook [pages] [start char] [end char] [chrs/page]";
+		return "rbook <pages> <start char> <end char> <chrs/page>";
 	}
 
 	@Override

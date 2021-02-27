@@ -19,7 +19,7 @@ package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
 import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.file.BleachFileMang;
+import bleach.hack.utils.file.BleachFileHelper;
 
 public class CmdPrefix extends Command {
 
@@ -35,18 +35,17 @@ public class CmdPrefix extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "prefix [Char]";
+		return "prefix <char>";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if (args[0].isEmpty()) {
-			BleachLogger.errorMessage("Prefix Cannot Be Empty");
+			printSyntaxError("Prefix Cannot Be Empty");
 			return;
 		}
 
-		BleachFileMang.createEmptyFile("prefix.txt");
-		BleachFileMang.appendFile(args[0], "prefix.txt");
+		BleachFileHelper.saveMiscSetting("prefix", args[0]);
 		PREFIX = args[0];
 		BleachLogger.infoMessage("Set Prefix To: \"" + args[0] + "\"");
 	}

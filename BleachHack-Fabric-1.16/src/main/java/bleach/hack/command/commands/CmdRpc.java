@@ -20,13 +20,13 @@ public class CmdRpc extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "rpc [top text] [bottom text]";
+		return "rpc <top text> <bottom text>";
 	}
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		if (args.length != 2) {
-			BleachLogger.errorMessage(getSyntax());
+			printSyntaxError();
 		}
 
 		ModuleManager.getModule(DiscordRPCMod.class).setText(args[0], args[1]);

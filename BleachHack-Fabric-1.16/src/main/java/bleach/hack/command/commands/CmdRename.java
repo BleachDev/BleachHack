@@ -36,7 +36,7 @@ public class CmdRename extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "rename [name]";
+		return "rename <name>";
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import java.util.List;
 
 import bleach.hack.command.commands.*;
 import bleach.hack.utils.BleachLogger;
+import bleach.hack.utils.file.BleachFileHelper;
 
 public class CommandManager {
 
@@ -52,6 +53,12 @@ public class CommandManager {
 
 	public static List<Command> getCommands() {
 		return commands;
+	}
+	
+	public static void readPrefix() {
+		String prefix = BleachFileHelper.readMiscSetting("prefix");
+		if (prefix != null)
+			Command.PREFIX = prefix;
 	}
 
 	public static void callCommand(String input) {

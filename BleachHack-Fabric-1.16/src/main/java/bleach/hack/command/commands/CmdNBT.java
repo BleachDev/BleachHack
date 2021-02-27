@@ -59,6 +59,7 @@ public class CmdNBT extends Command {
 					printSyntaxError();
 					return;
 				}
+
 				item.setTag(StringNbtReader.parse(args[1]));
 				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName() + "to\n\u00a7f" + (item.getTag()));
 			} catch (Exception e) {

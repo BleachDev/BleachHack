@@ -35,7 +35,7 @@ public class CmdGamemode extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "gm [0-3]";
+		return "gm <0-3>";
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CmdGamemode extends Command {
 		try {
 			gm = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			BleachLogger.errorMessage("Unable to parse gamemode.");
+			printSyntaxError("Unable to parse gamemode.");
 			return;
 		}
 
@@ -66,7 +66,7 @@ public class CmdGamemode extends Command {
 			mc.interactionManager.setGameMode(GameMode.SPECTATOR);
 			BleachLogger.infoMessage("Set gamemode to spectator.");
 		} else {
-			BleachLogger.warningMessage("Unknown Gamemode Number.");
+			printSyntaxError("Unknown Gamemode Number.");
 		}
 	}
 
