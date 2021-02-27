@@ -80,14 +80,14 @@ public class WorldUtils {
 			Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
 
 	public static boolean isFluid(BlockPos pos) {
-		return FLUIDS.contains(MinecraftClient.getInstance().world.getBlockState(pos).getMaterial());
+		return FLUIDS.contains(mc.world.getBlockState(pos).getMaterial());
 	}
 
 	public static boolean doesBoxTouchBlock(Box box, Block block) {
 		for (int x = (int) Math.floor(box.minX); x < Math.ceil(box.maxX); x++) {
 			for (int y = (int) Math.floor(box.minY); y < Math.ceil(box.maxY); y++) {
 				for (int z = (int) Math.floor(box.minZ); z < Math.ceil(box.maxZ); z++) {
-					if (MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock() == block) {
+					if (mc.world.getBlockState(new BlockPos(x, y, z)).getBlock() == block) {
 						return true;
 					}
 				}
@@ -100,7 +100,7 @@ public class WorldUtils {
 		for (int x = (int) Math.floor(box.minX); x < Math.ceil(box.maxX); x++) {
 			for (int y = (int) Math.floor(box.minY); y < Math.ceil(box.maxY); y++) {
 				for (int z = (int) Math.floor(box.minZ); z < Math.ceil(box.maxZ); z++) {
-					if (!NONSOLID_BLOCKS.contains(MinecraftClient.getInstance().world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
+					if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
 						return false;
 					}
 				}
@@ -212,9 +212,12 @@ public class WorldUtils {
 		float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
 		float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
 
-		mc.player.headYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
-		mc.player.bodyYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
-		mc.player.renderPitch = mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch);
+		if (!mc.player.hasVehicle()) {
+			mc.player.headYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
+			mc.player.bodyYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
+			mc.player.renderPitch = mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch);
+		}
+
 		mc.player.networkHandler.sendPacket(
 				new PlayerMoveC2SPacket.LookOnly(
 						mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),
