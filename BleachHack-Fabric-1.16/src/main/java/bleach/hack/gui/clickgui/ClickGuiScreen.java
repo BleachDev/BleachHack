@@ -84,13 +84,13 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				startX + len * 3 + 15, 35, len, "Movement", new ItemStack(Items.POTION)));
 		
 		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS),
-				startX + len * 2 + 20, 35, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
+				startX + len * 4 + 20, 35, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
 		
 		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC),
-				startX + len * 2 + 25, 35, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
+				startX + len * 5 + 25, 35, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
 		
 		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD),
-				startX + len * 2 + 30, 35, len, "World", new ItemStack(Items.GRASS_BLOCK)));
+				startX + len * 6 + 30, 35, len, "World", new ItemStack(Items.GRASS_BLOCK)));
 	}
 
 	public boolean isPauseScreen() {
@@ -225,10 +225,10 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 	}
 
 	public void resetGui() {
-		int x = 30;
+		int x = 10;
 		for (Window m : windows) {
 			m.x1 = x;
-			m.y2 = 35;
+			m.y1 = 35;
 			x += (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue() + 5;
 		}
 	}

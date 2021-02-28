@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.window.Window;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
@@ -54,9 +55,9 @@ public class SettingColor extends SettingBase {
 		int sx = x + 3,
 				sy = y + 2,
 				ex = x + len - 18,
-				ey = y + getHeight(len) - 3;
+				ey = y + getHeight(len) - 2;
 
-		window.fillReverseGrey(matrix, sx - 1, sy - 1, ex + 1, ey + 1);
+		Window.drawRect(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
 
 		DrawableHelper.fill(matrix, sx, sy, ex, ey, -1);
 		Color satColor = Color.getHSBColor(1f - hue, 1f, 1f);
@@ -64,7 +65,7 @@ public class SettingColor extends SettingBase {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(7425);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		Tessellator tessellator_1 = Tessellator.getInstance();
 		BufferBuilder bufferBuilder_1 = Tessellator.getInstance().getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
@@ -80,7 +81,7 @@ public class SettingColor extends SettingBase {
 		bufferBuilder_1.vertex(sx, ey, 0).color(0, 0, 0, 255).next();
 		bufferBuilder_1.vertex(ex, ey, 0).color(0, 0, 0, 255).next();
 		tessellator_1.draw();
-		GL11.glShadeModel(7424);
+		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -104,7 +105,7 @@ public class SettingColor extends SettingBase {
 
 		sx = ex + 5;
 		ex = ex + 12;
-		window.fillReverseGrey(matrix, sx - 1, sy - 1, ex + 1, ey + 1);
+		Window.drawRect(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
 
 		for (int i = sy; i < ey; i++) {
 			float curHue = 1f / ((float) (ey - sy) / (i - sy));
@@ -128,7 +129,7 @@ public class SettingColor extends SettingBase {
 	}
 
 	public int getHeight(int len) {
-		return len - len / 4;
+		return len - len / 4 - 1;
 	}
 
 	public void readSettings(JsonElement settings) {

@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import bleach.hack.gui.BleachMainMenu;
+import bleach.hack.gui.BleachTitleScreen;
 import bleach.hack.utils.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -40,11 +40,11 @@ public class MixinTitleScreen extends Screen {
 
 	@Inject(at = @At("HEAD"), method = "init()V")
 	private void init(CallbackInfo info) {
-		if (BleachMainMenu.customTitleScreen) {
-			MinecraftClient.getInstance().openScreen(new BleachMainMenu());
+		if (BleachTitleScreen.customTitleScreen) {
+			MinecraftClient.getInstance().openScreen(new BleachTitleScreen());
 		} else {
 			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
-				BleachMainMenu.customTitleScreen = !BleachMainMenu.customTitleScreen;
+				BleachTitleScreen.customTitleScreen = !BleachTitleScreen.customTitleScreen;
 				BleachFileHelper.saveMiscSetting("customTitleScreen", "true");
 				client.openScreen(new TitleScreen(false));
 			}));

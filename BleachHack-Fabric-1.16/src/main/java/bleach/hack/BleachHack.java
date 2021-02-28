@@ -20,7 +20,7 @@ package bleach.hack;
 import com.google.common.eventbus.EventBus;
 
 import bleach.hack.command.CommandManager;
-import bleach.hack.gui.BleachMainMenu;
+import bleach.hack.gui.BleachTitleScreen;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -60,7 +60,7 @@ public class BleachHack implements ModInitializer {
 
 		String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
-			BleachMainMenu.customTitleScreen = false;
+			BleachTitleScreen.customTitleScreen = false;
 		}
 	}
 }

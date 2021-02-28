@@ -90,10 +90,9 @@ public class Window {
 			int bx2 = x1 + w.x2;
 			int by2 = y1 + w.y2;
 
-			DrawableHelper.fill(matrix, bx1, by1, bx2 - 1, by2 - 1, 0xffb0b0b0);
-			DrawableHelper.fill(matrix, bx1 + 1, by1 + 1, bx2, by2, 0xff000000);
-			DrawableHelper.fill(matrix, bx1 + 1, by1 + 1, bx2 - 1, by2 - 1,
-					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0xff959595 : 0xff858585);
+			drawRect(matrix, bx1, by1, bx2, by2,
+					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0x4fb070f0 : 0x00000000);
+
 			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 		}
 		
@@ -120,16 +119,23 @@ public class Window {
 	}
 
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
-		/* background and title bar */
-		fillGrey(matrix, x1, y1, x2, y2);
-		fillGradient(matrix, x1 + 2, y1 + 2, x2 - 2, y1 + 12, (selected ? 0xff0000ff : 0xff606060), (selected ? 0xff4080ff : 0xffa0a0a0));
-
+		/* background */
+		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
+		horizonalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
+		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
+		horizonalGradient(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
+		
+		/* title bar */
+		horizonalGradient(matrix, x1 + 1, y1 + 1, x2 - 1, y1 + 12, (selected ? 0xff6060b0 : 0xff606060), (selected ? 0xff8070b0 : 0xffa0a0a0));
+		
 		/* buttons */
-		fillGrey(matrix, x2 - 12, y1 + 3, x2 - 4, y1 + 11);
-		textRend.draw(matrix, "x", x2 - 11, y1 + 2, 0x000000);
+		//fillGrey(matrix, x2 - 12, y1 + 3, x2 - 4, y1 + 11);
+		textRend.draw(matrix, "x", x2 - 10, y1 + 3, 0);
+		textRend.draw(matrix, "x", x2 - 11, y1 + 2, -1);
 
-		fillGrey(matrix, x2 - 22, y1 + 3, x2 - 14, y1 + 11);
-		textRend.draw(matrix, "_", x2 - 21, y1 + 1, 0x000000);
+		//fillGrey(matrix, x2 - 22, y1 + 3, x2 - 14, y1 + 11);
+		textRend.draw(matrix, "_", x2 - 21, y1 + 2, 0);
+		textRend.draw(matrix, "_", x2 - 22, y1 + 1, -1);
 	}
 
 	public boolean shouldClose(int mX, int mY) {
@@ -159,13 +165,23 @@ public class Window {
 		dragging = false;
 	}
 
-	public void fillGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		DrawableHelper.fill(matrix, x1, y1, x2 - 1, y2 - 1, 0xffb0b0b0);
-		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2, y2, 0xff000000);
-		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff858585);
+	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+		drawRect(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, 0x00000000);
+	}
+	
+	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2, int fill) {
+		drawRect(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, fill);
+	}
+	
+	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2, int colTop, int colBot, int colFill) {
+		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, colTop);
+		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, colTop);
+		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, colBot);
+		DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, colBot);
+		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, colFill);
 	}
 
-	public void fillGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
+	public static void horizonalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
 		float float_1 = (color1 >> 24 & 255) / 255.0F;
 		float float_2 = (color1 >> 16 & 255) / 255.0F;
 		float float_3 = (color1 >> 8 & 255) / 255.0F;
@@ -178,7 +194,7 @@ public class Window {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(7425);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		Tessellator tessellator_1 = Tessellator.getInstance();
 		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
@@ -187,7 +203,35 @@ public class Window {
 		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
 		bufferBuilder_1.vertex(x2, y1, 0).color(float_6, float_7, float_8, float_5).next();
 		tessellator_1.draw();
-		GL11.glShadeModel(7424);
+		GL11.glShadeModel(GL11.GL_FLAT);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	public static void verticalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
+		float float_1 = (color1 >> 24 & 255) / 255.0F;
+		float float_2 = (color1 >> 16 & 255) / 255.0F;
+		float float_3 = (color1 >> 8 & 255) / 255.0F;
+		float float_4 = (color1 & 255) / 255.0F;
+		float float_5 = (color2 >> 24 & 255) / 255.0F;
+		float float_6 = (color2 >> 16 & 255) / 255.0F;
+		float float_7 = (color2 >> 8 & 255) / 255.0F;
+		float float_8 = (color2 & 255) / 255.0F;
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		Tessellator tessellator_1 = Tessellator.getInstance();
+		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
+		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder_1.vertex(x2, y1, 0).color(float_2, float_3, float_4, float_1).next();
+		bufferBuilder_1.vertex(x1, y1, 0).color(float_2, float_3, float_4, float_1).next();
+		bufferBuilder_1.vertex(x1, y2, 0).color(float_6, float_7, float_8, float_5).next();
+		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
+		tessellator_1.draw();
+		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

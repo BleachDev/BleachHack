@@ -61,7 +61,7 @@ public class SettingToggle extends SettingBase {
 		String color2 = state ? "\u00a7a" : "\u00a7c";
 		
 		if (window.mouseOver(x, y, x + len, y + 12)) {
-			DrawableHelper.fill(matrix, x + 1, y, x + len - 1, y + 12, 0x70303070);
+			DrawableHelper.fill(matrix, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 
 		if (!children.isEmpty()) {
@@ -72,13 +72,13 @@ public class SettingToggle extends SettingBase {
 			}
 
 			if (expanded) {
-				DrawableHelper.fill(matrix, x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0x90b0b0b0);
+				DrawableHelper.fill(matrix, x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0xff8070b0);
 
 				int h = y + 12;
 				for (SettingBase s : children) {
 					s.render(window, matrix, x + 2, h, len - 2);
 
-					h += s.getHeight(len - 2);
+					h += s.getHeight(len - 3);
 				}
 			}
 

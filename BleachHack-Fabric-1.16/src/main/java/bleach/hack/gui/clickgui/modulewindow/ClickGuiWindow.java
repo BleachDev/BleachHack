@@ -32,17 +32,14 @@ public abstract class ClickGuiWindow extends Window {
 	}
 
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
-		/* background and title bar */
-		fillGrey(matrix, x1, y1, x2, y2);
-		fillGradient(matrix, x1 + 1, y1 + 1, x2 - 2, y1 + 12, 0xff0000ff, 0xff4080ff);
-	}
+		/* background */
+		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
+		horizonalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
+		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
+		horizonalGradient(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
 
-	public void fillGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2, y2, 0x90000000);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90000000);
-		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
+		/* title bar */
+		horizonalGradient(matrix, x1 + 1, y1 + 1, x2 - 1, y1 + 12, 0xff6060b0, 0xff8070b0);
 	}
 
 	public boolean mouseOver(int minX, int minY, int maxX, int maxY) {

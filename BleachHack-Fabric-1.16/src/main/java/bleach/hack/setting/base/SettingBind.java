@@ -29,7 +29,7 @@ public class SettingBind extends SettingBase {
 	@Override
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
 		if (window.mouseOver(x, y, x + len, y + 12)) {
-			DrawableHelper.fill(matrix, x + 1, y, x + len - 1, y + 12, 0x70303070);
+			DrawableHelper.fill(matrix, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 		
 		if (window.keyDown >= 0 && window.mouseOver(x, y, x + len, y + 12)) {
@@ -45,7 +45,7 @@ public class SettingBind extends SettingBase {
 			name = "NONE";
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(
-				matrix, "Bind: " + name + (window.mouseOver(x, y, x + len, y + 12) ? "..." : ""), x + 2, y + 2, 0xcfe0cf);
+				matrix, "Bind: " + name + (window.mouseOver(x, y, x + len, y + 12) ? "..." : ""), x + 3, y + 2, 0xcfe0cf);
 	}
 
 	public SettingBind withDesc(String desc) {

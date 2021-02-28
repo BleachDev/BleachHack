@@ -84,20 +84,8 @@ public class ModuleWindow extends ClickGuiWindow {
 
 		int curY = 0;
 		for (Entry<Module, Boolean> m : new LinkedHashMap<>(mods).entrySet()) {
-			if (m.getValue()) {
-				// fillReverseGrey(x, y + curY, x+len-1, y + 12 + curY);
-				fillGreySides(matrix, x, y + curY, x + len - 1, y + 12 + curY);
-				DrawableHelper.fill(matrix, x, y + curY, x + len - 2, y + curY + 1, 0x90000000);
-				DrawableHelper.fill(matrix, x + len - 3, y + curY + 1, x + len - 2, y + curY + 12, 0x90b0b0b0);
-			}
-
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
-				DrawableHelper.fill(matrix,
-						x + (m.getValue() ? 1 : 0),
-						y + curY + (m.getValue() ? 1 : 0),
-						x + len - (m.getValue() ? 3 : 0),
-						y + 12 + curY,
-						0x70303070);
+				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x70303070);
 			}
 
 			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
@@ -105,8 +93,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 			// If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
-				DrawableHelper.fill(matrix, m.getValue() ? x + 1 : x, y + curY + (m.getValue() ? 1 : 0),
-						m.getValue() ? x + len - 3 : x + len, y + 12 + curY, 0x50ff0000);
+				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x50ff0000);
 			}
 
 			/* Set which module settings show on */
@@ -125,38 +112,29 @@ public class ModuleWindow extends ClickGuiWindow {
 
 			/* draw settings */
 			if (m.getValue()) {
+				//horizonalGradient(matrix, x + 2, y + curY - 12, x + len - 2, y + curY - 11, 0xff6060b0, 0xff8070b0);
+				
 				for (SettingBase s : m.getKey().getSettings()) {
-					s.render(this, matrix, x, y + curY, len);
+					s.render(this, matrix, x + 1, y + curY, len - 1);
 
-					if (!s.getDesc().isEmpty() && mouseOver(x, y + curY, x + len, y + s.getHeight(len) + curY)) {
-						tooltip = s.getGuiDesc(this, x, y + curY, len);
+					if (!s.getDesc().isEmpty() && mouseOver(x + 2, y + curY, x + len, y + s.getHeight(len) + curY)) {
+						tooltip = s.getGuiDesc(this, x + 1, y + curY, len - 1);
 					}
 
-					fillGreySides(matrix, x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
+					//fillGreySides(matrix, x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
+					DrawableHelper.fill(matrix, x + 1, y + curY, x + 2, y + curY + s.getHeight(len), 0xff8070b0);
 
 					curY += s.getHeight(len);
 				}
 
-				DrawableHelper.fill(matrix, x + 1, y + curY - 1, x + len - 2, y + curY, 0x90b0b0b0);
+				//horizonalGradient(matrix, x + 2, y + curY - 1, x + len - 2, y + curY, 0xff6060b0, 0xff8070b0);
 			}
 		}
 	}
 
-	public void fillReverseGrey(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0x90000000);
-		DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2, y2, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0x90b0b0b0);
-		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff505059);
-	}
-
-	private void fillGreySides(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2 - 1, 0x90000000);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2, 0x90b0b0b0);
-	}
-
 	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
 		super.drawBar(matrix, mX, mY, textRend);
+		textRend.draw(matrix, hiding ? "+" : "_", x2 - 10, y1 + (hiding ? 4 : 2), 0x000000);
 		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
 	}
 
