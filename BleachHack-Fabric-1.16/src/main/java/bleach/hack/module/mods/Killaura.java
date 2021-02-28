@@ -17,9 +17,7 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import java.util.Optional;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
@@ -65,20 +63,24 @@ public class Killaura extends Module {
 		delay++;
 		int reqDelay = (int) Math.round(20 / getSetting(8).asSlider().getValue());
 
-		List<Entity> targets = Streams.stream(mc.world.getEntities())
-				.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state
-						&& !BleachHack.friendMang.has(e.getName().getString()))
+		Optional<Entity> target = Streams.stream(mc.world.getEntities())
+				.filter(e -> e instanceof LivingEntity
+						&& !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
+						&& mc.player.distanceTo(e) <= getSetting(7).asSlider().getValue()
+						&& ((LivingEntity) e).getHealth() >= 0 
+						&& !e.getEntityName().equals(mc.getSession().getUsername())
+						&& e != mc.player.getVehicle()
+						&& (mc.player.canSee(e) || getSetting(5).asToggle().state))
+				.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state)
 						|| (e instanceof Monster && getSetting(1).asToggle().state)
 						|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state)
 						|| (e instanceof ArmorStandEntity && getSetting(3).asToggle().state))
-				.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
+				.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player)))
+				.findFirst();
 
-		for (Entity e : targets) {
-			if (mc.player.distanceTo(e) > getSetting(7).asSlider().getValue()
-					|| ((LivingEntity) e).getHealth() <= 0 || e.getEntityName().equals(mc.getSession().getUsername()) || e == mc.player.getVehicle()
-					|| (!mc.player.canSee(e) && !getSetting(5).asToggle().state))
-				continue;
-
+		if (target.isPresent()) {
+			Entity e = target.get();
+			
 			if (getSetting(4).asRotate().state) {
 				WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(4).asRotate());
 			}
