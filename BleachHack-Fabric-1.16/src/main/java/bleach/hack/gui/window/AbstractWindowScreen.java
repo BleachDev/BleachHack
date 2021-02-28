@@ -20,7 +20,6 @@ package bleach.hack.gui.window;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -28,17 +27,9 @@ import net.minecraft.text.Text;
 public abstract class AbstractWindowScreen extends Screen {
 
 	public List<Window> windows = new ArrayList<>();
-	public int overlapColor;
-	public boolean useOverlap = false;
 
 	public AbstractWindowScreen(Text text_1) {
 		super(text_1);
-	}
-	
-	public AbstractWindowScreen(Text text_1, int overlapColor) {
-		super(text_1);
-		this.overlapColor = overlapColor;
-		useOverlap = true;
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
@@ -76,22 +67,6 @@ public abstract class AbstractWindowScreen extends Screen {
 	}
 
 	public void onRenderWindow(MatrixStack matrix, int window, int mX, int mY) {
-		if (useOverlap && windows.get(window).selected) {
-			Window sel = windows.get(window);
-			for (Window cur: windows) {
-				if (!cur.selected && !cur.closed) {
-					if (cur.x1 < sel.x2 && cur.y1 < sel.y2 && cur.x2 > sel.x1 && cur.y2 > sel.y1) {
-						DrawableHelper.fill(matrix,
-								Math.max(cur.x1, sel.x1) + 1,
-								Math.max(cur.y1, sel.y1) + 1,
-								Math.min(cur.x2, sel.x2) - 1,
-								Math.min(cur.y2, sel.y2) - 1,
-								overlapColor);
-					}
-				}
-			}
-		}
-		
 		if (!windows.get(window).closed) {
 			windows.get(window).render(matrix, mX, mY);
 		}

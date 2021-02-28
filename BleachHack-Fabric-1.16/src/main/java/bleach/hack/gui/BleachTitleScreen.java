@@ -80,7 +80,7 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 	private List<List<String>> entries = new ArrayList<>();
 
 	public BleachTitleScreen() {
-		super(new TranslatableText("narrator.screen.title"), 0xff40098e);
+		super(new TranslatableText("narrator.screen.title"));
 	}
 
 	public void init() {
