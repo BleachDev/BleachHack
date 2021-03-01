@@ -67,7 +67,7 @@ public class Killaura extends Module {
 				.filter(e -> e instanceof LivingEntity
 						&& !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
 						&& mc.player.distanceTo(e) <= getSetting(7).asSlider().getValue()
-						&& ((LivingEntity) e).getHealth() >= 0 
+						&& ((LivingEntity) e).getHealth() > 0 
 						&& !e.getEntityName().equals(mc.getSession().getUsername())
 						&& e != mc.player.getVehicle()
 						&& (mc.player.canSee(e) || getSetting(5).asToggle().state))

@@ -154,6 +154,7 @@ public class WorldUtils {
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
 
+			mc.player.swingHand(Hand.MAIN_HAND);
 			mc.interactionManager.interactBlock(
 					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.offset(d), false));
 
