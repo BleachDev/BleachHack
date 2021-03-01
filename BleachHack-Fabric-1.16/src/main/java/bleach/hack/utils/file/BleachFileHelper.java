@@ -139,7 +139,7 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("clickgui.txt");
 
 		String text = "";
-		for (Window w : ClickGui.clickGui.windows)
+		for (Window w : ClickGui.clickGui.getWindows())
 			text += w.x1 + ":" + w.y1 + "\n";
 
 		BleachFileMang.appendFile(text, "clickgui.txt");
@@ -150,7 +150,7 @@ public class BleachFileHelper {
 
 		try {
 			int c = 0;
-			for (Window w : ClickGui.clickGui.windows) {
+			for (Window w : ClickGui.clickGui.getWindows()) {
 				w.x1 = Integer.parseInt(lines.get(c).split(":")[0]);
 				w.y1 = Integer.parseInt(lines.get(c).split(":")[1]);
 				c++;

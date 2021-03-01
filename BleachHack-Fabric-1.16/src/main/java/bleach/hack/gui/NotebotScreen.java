@@ -34,6 +34,7 @@ import org.lwjgl.opengl.GL11;
 
 import bleach.hack.gui.window.AbstractWindowScreen;
 import bleach.hack.gui.window.Window;
+import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.Notebot;
 import bleach.hack.utils.NotebotUtils;
 import bleach.hack.utils.file.BleachFileMang;
@@ -68,8 +69,28 @@ public class NotebotScreen extends AbstractWindowScreen {
 		} catch (IOException e) {
 		}
 
-		windows.clear();
-		windows.add(new Window(width / 4, height / 4 - 10, width / 4 + width / 2, height / 4 + height / 2, "Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
+		clearWindows();
+		addWindow(new Window(
+				width / 4,
+				height / 4 - 10,
+				width / 4 + width / 2,
+				height / 4 + height / 2,
+				"Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
+		
+		getWindow(0).buttons.add(new WindowButton(22, 14, 32, 24, "<", () -> {
+			if (page > 0)
+				page--;
+		}));
+		
+		getWindow(0).buttons.add(new WindowButton(77, 14, 87, 24, ">", () -> {
+			page++;
+		}));
+		
+		int yEnd = getWindow(0).x2 - getWindow(0).x1;
+		
+		getWindow(0).buttons.add(new WindowButton(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () -> {
+			Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"));
+		}));
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
@@ -81,18 +102,16 @@ public class NotebotScreen extends AbstractWindowScreen {
 		super.onRenderWindow(matrix, window, mX, mY);
 
 		if (window == 0) {
-			int x = windows.get(0).x1,
-					y = windows.get(0).y1 + 10,
+			int x = getWindow(0).x1,
+					y = getWindow(0).y1 + 10,
 					w = width / 2,
 					h = height / 2;
-
-			drawCenteredString(matrix, textRenderer, "Tutorial..", x + w - 24, y + 4, 0x9090c0);
 
 			int pageEntries = 0;
 			for (int i = y + 20; i < y + h - 27; i += 10)
 				pageEntries++;
 
-			drawCenteredString(matrix, textRenderer, "<  Page " + (page + 1) + "  >", x + 55, y + 5, 0xc0c0ff);
+			drawCenteredString(matrix, textRenderer, "Page " + (page + 1), x + 55, y + 5, 0xc0c0ff);
 
 			fillButton(matrix, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mX, mY);
 			drawCenteredString(matrix, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
@@ -190,20 +209,12 @@ public class NotebotScreen extends AbstractWindowScreen {
 	}
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		if (!windows.get(0).closed) {
-			int x = windows.get(0).x1,
-					y = windows.get(0).y1 + 10,
+		if (!getWindow(0).closed) {
+			int x = getWindow(0).x1,
+					y = getWindow(0).y1 + 10,
 					w = width / 2,
 					h = height / 2;
-
-			if (double_1 > x + 20 && double_1 < x + 35 && double_2 > y + 5 && double_2 < y + 15)
-				if (page > 0)
-					page--;
-			if (double_1 > x + 77 && double_1 < x + 92 && double_2 > y + 5 && double_2 < y + 15)
-				page++;
-			if (double_1 > x + w - 44 && double_1 < x + w && double_2 > y + 3 && double_2 < y + 15) {
-				Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"));
-			}
+			
 			if (double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
 				NotebotUtils.downloadSongs(true);
 			}

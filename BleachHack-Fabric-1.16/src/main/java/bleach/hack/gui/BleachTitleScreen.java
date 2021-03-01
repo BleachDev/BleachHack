@@ -84,60 +84,60 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 	}
 
 	public void init() {
-		windows.clear();
-		windows.add(new Window(width / 8,
+		clearWindows();
+		addWindow(new Window(width / 8,
 				height / 8,
 				width / 8 + (width - width / 4),
 				height / 8 + (height - height / 4), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)));
-		windows.add(new Window(width / 8 + 15,
+		addWindow(new Window(width / 8 + 15,
 				height / 8 + 15,
 				width / 8 + 15 + (width - width / 2),
 				height / 8 + 15 + (height - height / 2), "Login Manager", new ItemStack(Items.PAPER), true));
-		windows.add(new Window(width / 8 + 30,
+		addWindow(new Window(width / 8 + 30,
 				height / 8 + 30,
 				width / 8 + 30 + (width - width / 2),
 				height / 8 + 30 + (height - height / 2), "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
 
-		int w = windows.get(0).x2 - windows.get(0).x1,
-				h = windows.get(0).y2 - windows.get(0).y1;
+		int w = getWindow(0).x2 - getWindow(0).x1,
+				h = getWindow(0).y2 - getWindow(0).y1;
 		int maxY = MathHelper.clamp(h / 4 + 119, 0, h - 22);
 
-		windows.get(0).buttons.add(
+		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
 					client.openScreen(new SelectWorldScreen(this));
 				}));
-		windows.get(0).buttons.add(
+		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
 					client.openScreen(new MultiplayerScreen(this));
 				}));
 		
-		windows.get(0).buttons.add(
+		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 - 2, h / 4 + 106, I18n.translate("menu.online"), () -> {
 					RealmsBridgeScreen realmsBridgeScreen = new RealmsBridgeScreen();
 				    realmsBridgeScreen.switchToRealms(this);
 				}));
-		windows.get(0).buttons.add(
+		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
 					customTitleScreen = !customTitleScreen;
 					BleachFileHelper.saveMiscSetting("customTitleScreen", "false");
 					client.openScreen(new TitleScreen(false));
 				}));
-		windows.get(0).buttons.add(
+		getWindow(0).buttons.add(
 				new WindowButton(w / 2 + 2, h / 4 + 86, w / 2 + 100, h / 4 + 106, "Login Manager", () -> {
-					windows.get(1).closed = false;
+					getWindow(1).closed = false;
 					selectWindow(1);
 				}));
-		windows.get(0).buttons.add(
+		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
 					client.openScreen(new OptionsScreen(this, client.options));
 				}));
-		windows.get(0).buttons.add(
+		getWindow(0).buttons.add(
 				new WindowButton(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
 					client.scheduleStop();
 				}));
 
-		int x = windows.get(1).x1;
-		int y = windows.get(1).y1;
+		int x = getWindow(1).x1;
+		int y = getWindow(1).y1;
 		w = width - width / 2;
 		h = height - height / 2;
 
@@ -156,17 +156,17 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 		userField.setMaxLength(32767);
 		passField.setMaxLength(32767);
 
-		windows.get(1).buttons.add(
+		getWindow(1).buttons.add(
 				new WindowButton(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
-					windows.get(1).closed = true;
-					selectWindow(1);
+					getWindow(1).closed = true;
+					//selectWindow(1);
 				}));
-		windows.get(1).buttons.add(
+		getWindow(1).buttons.add(
 				new WindowButton(w / 2 - 100, h / 3 + 62, w / 2 - 2, h / 3 + 82, "Accounts", () -> {
-					windows.get(2).closed = false;
+					getWindow(2).closed = false;
 					selectWindow(2);
 				}));
-		windows.get(1).buttons.add(
+		getWindow(1).buttons.add(
 				new WindowButton(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
 					for (String s : BleachFileMang.readFileLines("logins.txt")) {
 						entries.add(new ArrayList<>(Arrays.asList(s.split(":"))));
@@ -256,16 +256,15 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 		textRenderer.draw(matrix, "\u00a7cX", 7, height - 10, -1);
 
 		int wid = 20;
-		for (Window w : windows) {
-			if (w.closed)
-				continue;
-			
-			DrawableHelper.fill(matrix, wid, height - 13, wid + 79, height - 12, 0xff6060b0);
-			DrawableHelper.fill(matrix, wid, height - 13, wid + 1, height, 0xff6060b0);
-			DrawableHelper.fill(matrix, wid + 80 - 1, height - 12, wid + 80, height, 0xff6060b0);
-			
-			textRenderer.draw(matrix, w.title, wid + 3, height - 11, w.selected ? 0xffccff : 0xffffff);
-			wid += 80;
+		for (Window w : getWindows()) {
+			if (!w.closed) {
+				DrawableHelper.fill(matrix, wid, height - 13, wid + 79, height - 12, 0xff6060b0);
+				DrawableHelper.fill(matrix, wid, height - 13, wid + 1, height, 0xff6060b0);
+				DrawableHelper.fill(matrix, wid + 80 - 1, height - 12, wid + 80, height, 0xff6060b0);
+				
+				textRenderer.draw(matrix, w.title, wid + 3, height - 11, w.selected ? 0xffccff : 0xffffff);
+				wid += 80;
+			}
 		}
 
 		super.render(matrix, mouseX, mouseY, delta);
@@ -279,8 +278,8 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 		super.onRenderWindow(matrix, window, mX, mY);
 
 		if (window == 0) {
-			int x = windows.get(0).x1,
-					y = windows.get(0).y1 - 10,
+			int x = getWindow(0).x1,
+					y = getWindow(0).y1 - 10,
 					w = width - width / 4,
 					h = height - height / 4;
 
@@ -312,8 +311,8 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
 			GL11.glPopMatrix();
 		} else if (window == 1) {
-			int x = windows.get(1).x1,
-					y = windows.get(1).y1 - 10,
+			int x = getWindow(1).x1,
+					y = getWindow(1).y1 - 10,
 					w = width - width / 2,
 					h = height - height / 2;
 
@@ -333,8 +332,8 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 			passField.render(matrix, mX, mY, 1f);
 			checkBox.render(matrix, mX, mY, 1f);
 		} else if (window == 2) {
-			int x = windows.get(2).x1,
-					y = windows.get(2).y1 - 10,
+			int x = getWindow(2).x1,
+					y = getWindow(2).y1 - 10,
 					w = width - width / 2,
 					h = height - height / 2;
 
@@ -369,27 +368,27 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 
 		if (double_2 > height - 14 && double_2 < height) {
 			int count = 0;
-			for (Window w : windows) {
+			for (Window w : getWindows()) {
 				if (!w.closed)
 					count++;
 				if (count == (int) ((double_1 + 60) / 80)) {
-					selectWindow(windows.indexOf(w));
+					selectWindow(getWindows().indexOf(w));
 					// w.selected = true;
 					break;
 				}
 			}
 		}
 
-		if (!windows.get(1).closed && windows.get(1).selected) {
+		if (!getWindow(1).closed && getWindow(1).selected) {
 			userField.mouseClicked(double_1, double_2, int_1);
 			passField.mouseClicked(double_1, double_2, int_1);
 
 			if (double_1 > checkBox.x && double_1 < checkBox.x + 10 && double_2 > checkBox.y && double_2 < checkBox.y + 10) {
 				checkBox.checked = !checkBox.checked;
 			}
-		} else if (!windows.get(2).closed && windows.get(2).selected) {
-			int x = windows.get(2).x1,
-					y = windows.get(2).y1 - 10,
+		} else if (!getWindow(2).closed && getWindow(2).selected) {
+			int x = getWindow(2).x1,
+					y = getWindow(2).y1 - 10,
 					w = width - width / 2,
 					h = height - height / 2;
 
@@ -412,8 +411,8 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 						passField.setText("");
 						e1.printStackTrace();
 					}
-					windows.get(2).closed = true;
-					windows.get(1).closed = false;
+					getWindow(2).closed = true;
+					getWindow(1).closed = false;
 					selectWindow(1);
 				}
 
@@ -440,7 +439,7 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 	}
 
 	public boolean charTyped(char char_1, int int_1) {
-		if (!windows.get(1).closed) {
+		if (!getWindow(1).closed) {
 			if (userField.isFocused())
 				userField.charTyped(char_1, int_1);
 			if (passField.isFocused())
@@ -451,14 +450,14 @@ public class BleachTitleScreen extends AbstractWindowScreen {
 	}
 
 	public void tick() {
-		if (!windows.get(1).closed) {
+		if (!getWindow(1).closed) {
 			userField.tick();
 			passField.tick();
 		}
 	}
 
 	public boolean keyPressed(int int_1, int int_2, int int_3) {
-		if (!windows.get(1).closed) {
+		if (!getWindow(1).closed) {
 			if (userField.isFocused())
 				userField.keyPressed(int_1, int_2, int_3);
 			if (passField.isFocused())

@@ -91,7 +91,7 @@ public class Window {
 			int by2 = y1 + w.y2;
 
 			drawRect(matrix, bx1, by1, bx2, by2,
-					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0x4fb070f0 : 0x00000000);
+					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0x4fb070f0 : 0x60606090);
 
 			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 		}

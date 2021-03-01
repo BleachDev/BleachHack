@@ -71,25 +71,25 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
 
 		int startX = 10;
-		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER),
+		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER),
 				startX, 35, len, "Player", new ItemStack(Items.ARMOR_STAND)));
 		
-		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER),
+		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER),
 				startX + len + 5, 35, len, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
 		
-		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT),
+		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT),
 				startX + len * 2 + 10, 35, len, "Combat", new ItemStack(Items.TOTEM_OF_UNDYING)));
 		
-		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT),
+		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT),
 				startX + len * 3 + 15, 35, len, "Movement", new ItemStack(Items.POTION)));
 		
-		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS),
+		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS),
 				startX + len * 4 + 20, 35, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
 		
-		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC),
+		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC),
 				startX + len * 5 + 25, 35, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
 		
-		windows.add(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD),
+		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD),
 				startX + len * 6 + 30, 35, len, "World", new ItemStack(Items.GRASS_BLOCK)));
 	}
 
@@ -128,7 +128,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 				}
 			}
 
-			for (Window w : windows) {
+			for (Window w : getWindows()) {
 				if (w instanceof ModuleWindow) {
 					((ModuleWindow) w).setSearchedModule(seachMods);
 				}
@@ -136,7 +136,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 		}
 
 		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
-		for (Window w : windows) {
+		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
 				if (w instanceof ModuleWindow) {
 					((ModuleWindow) w).setLen(len);
@@ -148,7 +148,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 		super.render(matrix, mX, mY, float_1);
 
-		for (Window w : windows) {
+		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
 				GL11.glTranslated(0, 0, 300);
@@ -198,7 +198,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 			rmDown = true;
 
 		// Fix having to double click windows to move them
-		for (Window w : windows) {
+		for (Window w : getWindows()) {
 			if (double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
 				w.onMousePressed((int) double_1, (int) double_2);
 				break;
@@ -226,7 +226,7 @@ public class ClickGuiScreen extends AbstractWindowScreen {
 
 	public void resetGui() {
 		int x = 10;
-		for (Window m : windows) {
+		for (Window m : getWindows()) {
 			m.x1 = x;
 			m.y1 = 35;
 			x += (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue() + 5;

@@ -18,7 +18,12 @@
 package bleach.hack.gui.window;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -26,42 +31,75 @@ import net.minecraft.text.Text;
 
 public abstract class AbstractWindowScreen extends Screen {
 
-	public List<Window> windows = new ArrayList<>();
+	private List<Window> windows = new ArrayList<>();
+	
+	/* [Layer, Window Index] */
+	private SortedMap<Integer, Integer> windowOrder = new TreeMap<>(); 
 
 	public AbstractWindowScreen(Text text_1) {
 		super(text_1);
 	}
+	
+	public void addWindow(Window window) {
+		windows.add(window);
+		windowOrder.put(windows.size() - 1, windows.size() - 1);
+	}
+	
+	public Window getWindow(int i) {
+		return windows.get(i);
+	}
+	
+	public void clearWindows() {
+		windows.clear();
+		windowOrder.clear();
+	}
+	
+	public List<Window> getWindows() {
+		return windows;
+	}
+	
+	protected List<Integer> getWindowsBackToFront() {
+		return windowOrder.values().stream().collect(Collectors.toList());
+	}
+		
+	protected List<Integer> getWindowsFrontToBack() {
+		List<Integer> w = getWindowsBackToFront();
+		Collections.reverse(w);
+		return w;
+	}
+	
+	protected int getSelectedWindow() {
+		for (int i = 0; i < windows.size(); i++) {
+			if (!getWindow(i).closed && getWindow(i).selected) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		boolean close = true;
-		int noneSelected = -1;
-		int selected = -1;
-		int count = 0;
-		for (Window w : windows) {
-			if (!w.closed) {
-				close = false;
-				if (!w.selected) {
-					onRenderWindow(matrix, count, mouseX, mouseY);
-				} else {
-					selected = count;
+		int sel = getSelectedWindow();
+		
+		if (sel == -1) {
+			for (int i: getWindowsFrontToBack()) {
+				if (!getWindow(i).closed) {
+					selectWindow(i);
+					break;
 				}
-
-				if (noneSelected >= -1)
-					noneSelected = count;
 			}
-
-			if (w.selected && !w.closed) {
-				noneSelected = -2;
-			}
-			count++;
 		}
 
-		if (selected >= 0)
-			onRenderWindow(matrix, selected, mouseX, mouseY);
-		if (noneSelected >= 0)
-			windows.get(noneSelected).selected = true;
-		if (close)
-			this.onClose();
+		boolean close = true;
+		
+		for (int w: getWindowsBackToFront()) {
+			if (!getWindow(w).closed) {
+				close = false;
+				onRenderWindow(matrix, w, mouseX, mouseY);
+			}
+		}
+		
+		if (close) this.onClose();
 
 		super.render(matrix, mouseX, mouseY, delta);
 	}
@@ -73,46 +111,60 @@ public abstract class AbstractWindowScreen extends Screen {
 	}
 
 	public void selectWindow(int window) {
-		int count = 0;
-		for (Window w : windows) {
+		for (Window w: windows) {
 			if (w.selected) {
 				w.inactiveTime = 2;
 			}
+			
+			w.selected = false;
+		}
+		
+		for (int i = 0; i < windows.size(); i++) {
+			Window w = windows.get(i);
 
-			w.selected = (count == window);
-			count++;
+			if (i == window) {
+				w.selected = true;
+				int index = -1;
+				for (Entry<Integer, Integer> e: windowOrder.entrySet()) {
+					if (e.getValue() == window) {
+						index = e.getKey();
+						break;
+					}
+				}
+
+				windowOrder.remove(index);
+				for (Entry<Integer, Integer> e: new TreeMap<>(windowOrder).entrySet()) {
+					if (e.getKey() > index) {
+						windowOrder.remove(e.getKey());
+						windowOrder.put(e.getKey() - 1, e.getValue());
+					}
+				}
+
+				windowOrder.put(windowOrder.size(), window);
+			}
 		}
 	}
 
 	public boolean mouseClicked(double double_1, double double_2, int int_1) {
 		/* Handle what window will be selected when clicking */
-		int count = 0;
-		int nextSelected = -1;
-		for (Window w : windows) {
-			if (w.selected) {
-				w.onMousePressed((int) double_1, (int) double_2);
-			}
-
-			if (w.shouldClose((int) double_1, (int) double_2))
-				w.closed = true;
+		for (int wi: getWindowsFrontToBack()) {
+			Window w = getWindow(wi);
 
 			if (w.inactiveTime <= 0 && double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
-				if (w.selected) {
-					nextSelected = -1;
+				if (w.shouldClose((int) double_1, (int) double_2)) {
+					w.closed = true;
 					break;
-				} else {
-					nextSelected = count;
 				}
+				
+				if (w.selected) {
+					w.onMousePressed((int) double_1, (int) double_2);
+				} else {
+					selectWindow(wi);
+				}
+				
+				break;
 			}
-			count++;
 		}
-
-		if (nextSelected >= 0) {
-			for (Window w : windows)
-				w.selected = false;
-			windows.get(nextSelected).selected = true;
-		}
-
 		return super.mouseClicked(double_1, double_2, int_1);
 	}
 
