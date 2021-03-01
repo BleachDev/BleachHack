@@ -29,7 +29,7 @@ public class PlaceOperation extends Operation {
 	public boolean execute() {
 		for (int i = 0; i < 9; i++) {
 			if (mc.player.inventory.getStack(i).getItem() == item) {
-				return WorldUtils.placeBlock(pos, i, false, false);
+				return WorldUtils.placeBlock(pos, i, false, false, false);
 			}
 		}
 

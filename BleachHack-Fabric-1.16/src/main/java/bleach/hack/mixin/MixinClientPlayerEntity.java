@@ -143,7 +143,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Override
 	protected boolean clipAtLedge() {
 		return super.clipAtLedge() || ModuleManager.getModule(SafeWalk.class).isToggled()
-				|| (ModuleManager.getModule(Scaffold.class).isToggled() && ModuleManager.getModule(Scaffold.class).getSetting(3).asToggle().state);
+				|| (ModuleManager.getModule(Scaffold.class).isToggled() && ModuleManager.getModule(Scaffold.class).getSetting(4).asToggle().state);
 	}
 	
 	@Overwrite

@@ -52,7 +52,9 @@ public class Scaffold extends Module {
 				new SettingSlider("Range", 0, 1, 0.3, 1).withDesc("How far to place ahead of you in Normal mode"),
 				new SettingMode("Mode", "Normal", "3x3", "5x5", "7x7").withDesc("How big of an area to scaffold"),
 				new SettingRotate(false).withDesc("Rotates when placing blocks"),
-				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier"),
+				new SettingToggle("Legit Place", false).withDesc("Only places on sides you can see"),
+				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier").withChildren(
+						new SettingToggle("Legit", false).withDesc("Slower mode that bypasses some anticheats")),
 				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
 						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight"),
@@ -90,6 +92,24 @@ public class Scaffold extends Module {
 						new BlockPos(placeVec.add(0, 0, range)), new BlockPos(placeVec.add(0, 0, -range))))
 						: getSpiral(mode, new BlockPos(placeVec)));
 
+		if (getSetting(4).asToggle().state
+				&& InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
+
+			if (WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock())
+					&& !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down(2)).getBlock())
+					&& mc.player.getVelocity().y > 0) {
+				mc.player.setVelocity(mc.player.getVelocity().x, -0.1, mc.player.getVelocity().z);
+				
+				if (!getSetting(4).asToggle().getChild(0).asToggle().state) {
+					mc.player.jump();
+				}
+			}
+			
+			if (getSetting(4).asToggle().getChild(0).asToggle().state && mc.player.isOnGround()) {
+				mc.player.jump();
+			}
+		}
+		
 		// Don't bother doing anything if there aren't any blocks to place on
 		boolean empty = true;
 		for (BlockPos bp : blocks) {
@@ -102,21 +122,9 @@ public class Scaffold extends Module {
 		if (empty)
 			return;
 
-		if (getSetting(3).asToggle().state
-				&& WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock())
-				&& !WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down(2)).getBlock())) {
-			double toBlock = (int) mc.player.getY() - mc.player.getY();
-
-			if (toBlock < 0.05 && InputUtil.isKeyPressed(
-					mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
-				mc.player.setVelocity(mc.player.getVelocity().x, -toBlock, mc.player.getVelocity().z);
-				mc.player.jump();
-			}
-		}
-
-		if (getSetting(5).asToggle().state) {
+		if (getSetting(6).asToggle().state) {
 			for (BlockPos bp : blocks) {
-				if (getSetting(5).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
+				if (getSetting(6).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
 					renderBlocks.add(bp);
 				}
 			}
@@ -139,9 +147,9 @@ public class Scaffold extends Module {
 				}
 			}
 
-			if (WorldUtils.placeBlock(bp, -1, false, false)) {
+			if (WorldUtils.placeBlock(bp, -1, false, false, getSetting(3).asToggle().state)) {
 				cap++;
-				if (cap >= (int) getSetting(6).asSlider().getValue())
+				if (cap >= (int) getSetting(7).asSlider().getValue())
 					return;
 			}
 		}
@@ -151,8 +159,8 @@ public class Scaffold extends Module {
 
 	@Subscribe
 	public void onWorldRender(EventWorldRender event) {
-		if (getSetting(5).asToggle().state) {
-			float[] col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
+		if (getSetting(6).asToggle().state) {
+			float[] col = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
 			for (BlockPos bp : renderBlocks) {
 				RenderUtils.drawFilledBox(bp, col[0], col[1], col[2], 0.7f);
 

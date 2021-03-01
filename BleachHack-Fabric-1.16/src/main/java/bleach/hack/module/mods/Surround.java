@@ -98,7 +98,7 @@ public class Surround extends Module {
 							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 						}
 
-						WorldUtils.placeBlock(b.down(), obsidian, false, false);
+						WorldUtils.placeBlock(b.down(), obsidian, false, false, false);
 						cap++;
 
 						if (cap >= (int) getSetting(4).asSlider().getValue()) {
@@ -112,7 +112,7 @@ public class Surround extends Module {
 						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 					}
 
-					WorldUtils.placeBlock(b, obsidian, false, false);
+					WorldUtils.placeBlock(b, obsidian, false, false, false);
 					cap++;
 				}
 			}
@@ -135,7 +135,7 @@ public class Surround extends Module {
 							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 						}
 
-						WorldUtils.placeBlock(b.down(), obsidian, false, false);
+						WorldUtils.placeBlock(b.down(), obsidian, false, false, false);
 						cap++;
 
 						if (cap >= (int) getSetting(4).asSlider().getValue()) {
@@ -149,7 +149,7 @@ public class Surround extends Module {
 						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
 					}
 
-					WorldUtils.placeBlock(b, obsidian, false, false);
+					WorldUtils.placeBlock(b, obsidian, false, false, false);
 					cap++;
 				}
 			}

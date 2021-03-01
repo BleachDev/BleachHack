@@ -33,11 +33,14 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Direction.Axis;
+import net.minecraft.world.RaycastContext;
 
 public class WorldUtils {
 
@@ -78,7 +81,7 @@ public class WorldUtils {
 			Blocks.WARPED_SIGN, Blocks.WARPED_WALL_SIGN, Blocks.BLAST_FURNACE, Blocks.SMOKER,
 			Blocks.CARTOGRAPHY_TABLE, Blocks.GRINDSTONE, Blocks.LECTERN, Blocks.LOOM,
 			Blocks.STONECUTTER, Blocks.SMITHING_TABLE);
-	
+
 	public static final Set<Material> FLUIDS = Sets.newHashSet(
 			Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
 
@@ -112,7 +115,7 @@ public class WorldUtils {
 		return true;
 	}
 
-	public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack) {
+	public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack, boolean forceLegit) {
 		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
 			return false;
 
@@ -124,33 +127,77 @@ public class WorldUtils {
 				continue;
 
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-
-			Vec3d vec = new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
-					pos.getY() + 0.5 + d.getOffsetY() * 0.5,
-					pos.getZ() + 0.5 + d.getOffsetZ() * 0.5);
-
-			if (NONSOLID_BLOCKS.contains(neighborBlock)
-					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(vec) > 4.55)
+			
+			if (NONSOLID_BLOCKS.contains(neighborBlock))
 				continue;
 
+			Vec3d vec = getLegitLookPos(pos.offset(d), d.getOpposite(), true, 5);
+
+			if (vec == null) {
+				if (forceLegit) {
+					continue;
+				}
+				
+				vec = getLegitLookPos(pos.offset(d), d.getOpposite(), false, 5);
+				
+				if (vec == null) {
+					continue;
+				}
+			}
+
 			float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
+			System.out.println(neighborBlock);
 
 			if (rotate)
 				facePosPacket(vec.x, vec.y, vec.z);
+
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
 
-			System.out.println(mc.world.getBlockState(pos.offset(d)) + " | " + pos.offset(d));
 			mc.interactionManager.interactBlock(
 					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.offset(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
+
 			if (rotateBack)
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(rot[0], rot[1], mc.player.isOnGround()));
+
 			return true;
 		}
+
 		return false;
+	}
+	
+	public static Vec3d getLegitLookPos(BlockPos pos, Direction dir, boolean raycast, int res) {
+		Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
+		Vec3d blockPos = Vec3d.of(pos).add(
+				(dir == Direction.WEST ? -0.01 : dir.getOffsetX() * 1.01),
+				(dir == Direction.DOWN ? -0.01 : dir.getOffsetY() * 1.01),
+				(dir == Direction.NORTH ? -0.01 : dir.getOffsetZ() * 1.01));
+
+		for (double i = 0; i <= 1; i += 1d / (double) res) {
+			for (double j = 0; j <= 1; j += 1d / (double) res) {
+				Vec3d lookPos = blockPos.add(
+						(dir.getAxis() == Axis.X ? 0 : i),
+						(dir.getAxis() == Axis.Y ? 0 : dir.getAxis() == Axis.Z ? j : i),
+						(dir.getAxis() == Axis.Z ? 0 : j));
+				
+				if (eyePos.distanceTo(lookPos) > 4.55)
+					continue;
+				
+				if (raycast) {
+					if (mc.world.raycast(new RaycastContext(eyePos, lookPos,
+							RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player)).getType() == HitResult.Type.MISS) {
+						return lookPos;
+					}
+				} else {
+					return lookPos;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public static boolean isBlockEmpty(BlockPos pos) {

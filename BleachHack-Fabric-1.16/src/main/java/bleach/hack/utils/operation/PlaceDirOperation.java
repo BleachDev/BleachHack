@@ -33,7 +33,7 @@ public class PlaceDirOperation extends PlaceOperation {
 						return false;
 					}
 
-					return WorldUtils.placeBlock(pos, i, false, false);
+					return WorldUtils.placeBlock(pos, i, false, false, false);
 				}
 			}
 		}
