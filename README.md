@@ -3,7 +3,6 @@
 ![](https://img.shields.io/tokei/lines/github/BleachDrinker420/bleachhack-1.14)
 ![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14)
 ![](https://img.shields.io/github/last-commit/bleachdrinker420/bleachhack-1.14)
-![](https://img.shields.io/github/commit-activity/w/BleachDrinker420/bleachhack-1.14)
 ![](https://img.shields.io/badge/daily%20commit-yes-blue)
 
 Very cool client.  
