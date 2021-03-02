@@ -40,7 +40,7 @@ public class CmdNuker extends Command {
 
 	@Override
 	public String getDescription() {
-		return "Edit Nuker Blocks";
+		return "Edit Nuker whitelist/blacklist blocks";
 	}
 
 	@Override

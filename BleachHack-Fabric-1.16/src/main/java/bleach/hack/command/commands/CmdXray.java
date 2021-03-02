@@ -31,7 +31,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class CmdXray extends Command {
-	// brb stealing your nuker command
+
 	@Override
 	public String getAlias() {
 		return "xray";

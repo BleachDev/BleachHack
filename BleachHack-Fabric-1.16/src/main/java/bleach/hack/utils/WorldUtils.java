@@ -115,7 +115,11 @@ public class WorldUtils {
 		return true;
 	}
 
-	public static boolean placeBlock(BlockPos pos, int slot, boolean rotate, boolean rotateBack, boolean forceLegit) {
+	public static boolean placeBlock(BlockPos pos, int slot, SettingRotate sr, boolean forceLegit, boolean swingHand) {
+		return placeBlock(pos, slot, !sr.state ? 0 : sr.getRotateMode() + 1, forceLegit, swingHand);
+	}
+
+	public static boolean placeBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean swingHand) {
 		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
 			return false;
 
@@ -145,14 +149,15 @@ public class WorldUtils {
 				}
 			}
 
-			float[] rot = new float[] { mc.player.yaw, mc.player.pitch };
-			System.out.println(neighborBlock);
-
-			if (rotate)
+			if (rotateMode == 1) {
 				facePosPacket(vec.x, vec.y, vec.z);
+			} else if (rotateMode == 2) {
+				facePos(vec.x, vec.y, vec.z);
+			}
 
-			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
+			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) {
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
+			}
 
 			mc.player.swingHand(Hand.MAIN_HAND);
 			mc.interactionManager.interactBlock(
@@ -160,9 +165,6 @@ public class WorldUtils {
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
-
-			if (rotateBack)
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(rot[0], rot[1], mc.player.isOnGround()));
 
 			return true;
 		}

@@ -52,7 +52,7 @@ import net.minecraft.util.registry.Registry;
 
 public class Nuker extends Module {
 
-	private Set<Block> blockList = new HashSet<>();
+	private Set<Block> filterBlocks = new HashSet<>();
 
 	public Nuker() {
 		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
@@ -65,26 +65,26 @@ public class Nuker extends Module {
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
 				new SettingRotate(false),
 				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
-				new SettingMode("Sort", "Distance", "Hardness", "None").withDesc("Which order to mine blocks in"));
+				new SettingMode("Sort", "Closest", "Furthest", "Hardness", "None").withDesc("Which order to mine blocks in"));
 	}
 
-	public void addBlocks(Block... blocks) {
-		Collections.addAll(this.blockList, blocks);
+	public void addFilterBlocks(Block... blocks) {
+		Collections.addAll(this.filterBlocks, blocks);
 	}
 
-	public void removeBlocks(Block... blocks) {
-		this.blockList.removeAll(Arrays.asList(blocks));
+	public void removeFilterBlocks(Block... blocks) {
+		this.filterBlocks.removeAll(Arrays.asList(blocks));
 	}
 
-	public Set<Block> getBlocks() {
-		return blockList;
+	public Set<Block> getFilterBlocks() {
+		return filterBlocks;
 	}
 
 	public void onEnable() {
-		blockList.clear();
+		filterBlocks.clear();
 
 		BleachFileMang.readFileLines("nukerblocks.txt").stream().filter(s -> !StringUtils.isBlank(s)).forEach(s -> {
-			addBlocks(Registry.BLOCK.get(new Identifier(s)));
+			addFilterBlocks(Registry.BLOCK.get(new Identifier(s)));
 		});
 
 		super.onEnable();
@@ -116,14 +116,14 @@ public class Nuker extends Module {
 		if (blocks.isEmpty())
 			return;
 
-		if (getSetting(8).asMode().mode != 2) {
+		if (getSetting(8).asMode().mode != 3) {
 			Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
 
 			blocks = blocks.entrySet().stream()
-					.sorted((a, b) -> getSetting(8).asMode().mode == 0 ?
+					.sorted((a, b) -> getSetting(8).asMode().mode <= 1 ?
 							Double.compare(
-									eyePos.distanceTo(a.getValue().getLeft()),
-									eyePos.distanceTo(b.getValue().getLeft()))
+									eyePos.distanceTo((getSetting(8).asMode().mode == 0 ? a : b).getValue().getLeft()),
+									eyePos.distanceTo((getSetting(8).asMode().mode == 0 ? b : a).getValue().getLeft()))
 							: Float.compare(
 									mc.world.getBlockState(a.getKey()).getHardness(mc.world, a.getKey()),
 									mc.world.getBlockState(b.getKey()).getHardness(mc.world, b.getKey())))
@@ -141,16 +141,16 @@ public class Nuker extends Module {
 		int broken = 0;
 		for (Entry<BlockPos, Pair<Vec3d, Direction>> pos : blocks.entrySet()) {
 			if (getSetting(4).asToggle().state) {
-				boolean contains = blockList.contains(mc.world.getBlockState(pos.getKey()).getBlock());
+				boolean contains = filterBlocks.contains(mc.world.getBlockState(pos.getKey()).getBlock());
 
 				if ((getSetting(4).asToggle().getChild(0).asMode().mode == 0 && contains)
 						|| (getSetting(4).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
 					continue;
 				}
 			}
-			
+
 			float hardness = mc.world.getBlockState(pos.getKey()).calcBlockBreakingDelta(mc.player, mc.world, pos.getKey());
-			
+
 			if (getSetting(0).asMode().mode == 1 && hardness <= 1f && broken > 0) {
 				return;
 			}

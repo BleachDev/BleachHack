@@ -13,6 +13,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.utils.BleachLogger;
 import bleach.hack.utils.WorldUtils;
 import net.minecraft.block.Block;
@@ -56,7 +57,7 @@ public class Dispenser32k extends Module {
 
 	public Dispenser32k() {
 		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020",
-				new SettingToggle("Legit Place", true).withDesc("Places the dispener more \"legit\""),
+				new SettingRotate(true),
 				new SettingToggle("Killaura", true).withDesc("Automatically attacks"),
 				new SettingSlider("CPS", 0, 20, 20, 0).withDesc("Attack Speed"),
 				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay").withDesc("How to interperet CPS"),
@@ -131,13 +132,11 @@ public class Dispenser32k extends Module {
 				return;
 			}
 
-			boolean rotate = getSetting(0).asToggle().state;
-
-			WorldUtils.placeBlock(pos, block, rotate, false, false);
+			WorldUtils.placeBlock(pos, block, getSetting(0).asRotate(), false, true);
 
 			WorldUtils.facePosPacket(
 					pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
-			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false, false);
+			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, 0, false, true);
 			return;
 
 		} else {
@@ -183,8 +182,8 @@ public class Dispenser32k extends Module {
 		if (ticksPassed == 1) {
 			// boolean rotate = getSetting(0).toToggle().state;
 
-			WorldUtils.placeBlock(pos, block, false, false, false);
-			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, false, false, false);
+			WorldUtils.placeBlock(pos, block, 0, false, true);
+			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, 0, false, true);
 			mc.player.yaw = startRot[0];
 			mc.player.pitch = startRot[1];
 
@@ -259,12 +258,12 @@ public class Dispenser32k extends Module {
 
 		if (dispenserTicks == 1) {
 			mc.openScreen(null);
-			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSetting(0).asToggle().state, false, false);
+			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSetting(0).asRotate(), false, true);
 		}
 
 		if (mc.world.getBlockState(pos.add(rot[0], 1, rot[1])).getBlock() instanceof ShulkerBoxBlock
 				&& mc.world.getBlockState(pos.add(rot[0], 0, rot[1])).getBlock() != Blocks.HOPPER) {
-			WorldUtils.placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSetting(0).asToggle().state, false, false);
+			WorldUtils.placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSetting(0).asRotate(), false, true);
 			openBlock(pos.add(rot[0], 0, rot[1]));
 		}
 

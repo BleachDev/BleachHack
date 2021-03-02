@@ -94,11 +94,7 @@ public class Surround extends Module {
 
 				if (!WorldUtils.canPlaceBlock(b)) {
 					if (WorldUtils.canPlaceBlock(b.down())) {
-						if (getSetting(5).asRotate().state) {
-							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
-						}
-
-						WorldUtils.placeBlock(b.down(), obsidian, false, false, false);
+						WorldUtils.placeBlock(b.down(), obsidian, getSetting(5).asRotate(), false, true);
 						cap++;
 
 						if (cap >= (int) getSetting(4).asSlider().getValue()) {
@@ -107,12 +103,7 @@ public class Surround extends Module {
 					}
 				}
 
-				if (WorldUtils.canPlaceBlock(b)) {
-					if (getSetting(5).asRotate().state) {
-						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
-					}
-
-					WorldUtils.placeBlock(b, obsidian, false, false, false);
+				if (WorldUtils.placeBlock(b, obsidian, getSetting(5).asRotate(), false, true)) {
 					cap++;
 				}
 			}
@@ -131,11 +122,7 @@ public class Surround extends Module {
 
 				if (!WorldUtils.canPlaceBlock(b)) {
 					if (WorldUtils.canPlaceBlock(b.down())) {
-						if (getSetting(5).asRotate().state) {
-							WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() - 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
-						}
-
-						WorldUtils.placeBlock(b.down(), obsidian, false, false, false);
+						WorldUtils.placeBlock(b.down(), obsidian, getSetting(5).asRotate(), false, true);
 						cap++;
 
 						if (cap >= (int) getSetting(4).asSlider().getValue()) {
@@ -144,12 +131,7 @@ public class Surround extends Module {
 					}
 				}
 
-				if (WorldUtils.canPlaceBlock(b)) {
-					if (getSetting(5).asRotate().state) {
-						WorldUtils.facePosAuto(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, getSetting(5).asRotate());
-					}
-
-					WorldUtils.placeBlock(b, obsidian, false, false, false);
+				if (WorldUtils.placeBlock(b, obsidian, getSetting(5).asRotate(), false, true)) {
 					cap++;
 				}
 			}
