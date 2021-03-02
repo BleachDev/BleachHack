@@ -156,19 +156,19 @@ public abstract class WindowScreen extends Screen {
 		}
 	}
 
-	public boolean mouseClicked(double double_1, double double_2, int int_1) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		/* Handle what window will be selected when clicking */
 		for (int wi: getWindowsFrontToBack()) {
 			Window w = getWindow(wi);
 
-			if (w.inactiveTime <= 0 && double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
-				if (w.shouldClose((int) double_1, (int) double_2)) {
+			if (w.inactiveTime <= 0 && mouseX > w.x1 && mouseX < w.x2 && mouseY > w.y1 && mouseY < w.y2 && !w.closed) {
+				if (w.shouldClose((int) mouseX, (int) mouseY)) {
 					w.closed = true;
 					break;
 				}
 				
 				if (w.selected) {
-					w.onMousePressed((int) double_1, (int) double_2);
+					w.onMousePressed((int) mouseX, (int) mouseY);
 				} else {
 					selectWindow(wi);
 				}
@@ -176,15 +176,15 @@ public abstract class WindowScreen extends Screen {
 				break;
 			}
 		}
-		return super.mouseClicked(double_1, double_2, int_1);
+		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	public boolean mouseReleased(double double_1, double double_2, int int_1) {
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
 		for (Window w : windows) {
-			w.onMouseReleased((int) double_1, (int) double_2);
+			w.onMouseReleased((int) mouseX, (int) mouseY);
 		}
 
-		return super.mouseReleased(double_1, double_2, int_1);
+		return super.mouseReleased(mouseX, mouseY, button);
 	}
 	
 	public void renderBackgroundTexture(int vOffset) {

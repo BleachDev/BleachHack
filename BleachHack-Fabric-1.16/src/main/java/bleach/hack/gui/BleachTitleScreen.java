@@ -66,14 +66,6 @@ public class BleachTitleScreen extends WindowScreen {
 				height / 8,
 				width / 8 + (width - width / 4),
 				height / 8 + (height - height / 4), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)));
-		addWindow(new Window(width / 8 + 15,
-				height / 8 + 15,
-				width / 8 + 15 + (width - width / 2),
-				height / 8 + 15 + (height - height / 2), "Login Manager", new ItemStack(Items.PAPER), true));
-		addWindow(new Window(width / 8 + 30,
-				height / 8 + 30,
-				width / 8 + 30 + (width - width / 2),
-				height / 8 + 30 + (height - height / 2), "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
 
 		int w = getWindow(0).x2 - getWindow(0).x1,
 				h = getWindow(0).y2 - getWindow(0).y1;
@@ -184,13 +176,13 @@ public class BleachTitleScreen extends WindowScreen {
 		}
 	}
 
-	public boolean mouseClicked(double double_1, double double_2, int int_1) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (versions.size() >= 2 && NumberUtils.toInt(versions.get(1), Integer.MAX_VALUE) > BleachHack.INTVERSION) {
-			if (double_1 > width / 2 - 80 && double_1 < width / 2 + 80 && double_2 > 0 && double_2 < 20) {
+			if (mouseX > width / 2 - 80 && mouseX < width / 2 + 80 && mouseY > 0 && mouseY < 20) {
 				Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
 			}
 		}
 
-		return super.mouseClicked(double_1, double_2, int_1);
+		return super.mouseClicked(mouseX, mouseY, button);
 	}
 }

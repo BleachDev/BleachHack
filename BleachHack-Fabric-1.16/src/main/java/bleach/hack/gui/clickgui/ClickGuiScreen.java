@@ -190,38 +190,38 @@ public class ClickGuiScreen extends WindowScreen {
 		mwScroll = 0;
 	}
 
-	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		if (int_1 == 0) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if (button == 0) {
 			lmDown = true;
 			lmHeld = true;
-		} else if (int_1 == 1)
+		} else if (button == 1)
 			rmDown = true;
 
 		// Fix having to double click windows to move them
 		for (Window w : getWindows()) {
-			if (double_1 > w.x1 && double_1 < w.x2 && double_2 > w.y1 && double_2 < w.y2 && !w.closed) {
-				w.onMousePressed((int) double_1, (int) double_2);
+			if (mouseX > w.x1 && mouseX < w.x2 && mouseY > w.y1 && mouseY < w.y2 && !w.closed) {
+				w.onMousePressed((int) mouseX, (int) mouseY);
 				break;
 			}
 		}
 
-		return super.mouseClicked(double_1, double_2, int_1);
+		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	public boolean mouseReleased(double double_1, double double_2, int int_1) {
-		if (int_1 == 0)
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		if (button == 0)
 			lmHeld = false;
-		return super.mouseReleased(double_1, double_2, int_1);
+		return super.mouseReleased(mouseX, mouseY, button);
 	}
 
-	public boolean keyPressed(int int_1, int int_2, int int_3) {
-		keyDown = int_1;
-		return super.keyPressed(int_1, int_2, int_3);
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		keyDown = keyCode;
+		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
-	public boolean mouseScrolled(double double_1, double double_2, double double_3) {
-		mwScroll = (int) double_3;
-		return super.mouseScrolled(double_1, double_2, double_3);
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		mwScroll = (int) amount;
+		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 
 	public void resetGui() {

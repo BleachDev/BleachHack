@@ -208,28 +208,28 @@ public class NotebotScreen extends WindowScreen {
 		return false;
 	}
 
-	public boolean mouseClicked(double double_1, double double_2, int int_1) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (!getWindow(0).closed) {
 			int x = getWindow(0).x1,
 					y = getWindow(0).y1 + 10,
 					w = width / 2,
 					h = height / 2;
 			
-			if (double_1 > x + 10 && double_1 < x + 99 && double_2 > y + h - 13 && double_2 < y + h - 3) {
+			if (mouseX > x + 10 && mouseX < x + 99 && mouseY > y + h - 13 && mouseY < y + h - 3) {
 				NotebotUtils.downloadSongs(true);
 			}
 
 			if (entry != null) {
 				/* Pfft why use buttons when you can use meaningless rectangles with messy
 				 * code */
-				if (double_1 > x + w - w / 2 + 10 && double_1 < x + w - w / 4 && double_2 > y + h - 15 && double_2 < y + h - 5) {
+				if (mouseX > x + w - w / 2 + 10 && mouseX < x + w - w / 4 && mouseY > y + h - 15 && mouseY < y + h - 5) {
 					BleachFileMang.deleteFile("notebot", entry.fileName);
 					client.openScreen(this);
 				}
-				if (double_1 > x + w - w / 4 + 5 && double_1 < x + w - 5 && double_2 > y + h - 15 && double_2 < y + h - 5) {
+				if (mouseX > x + w - w / 4 + 5 && mouseX < x + w - 5 && mouseY > y + h - 15 && mouseY < y + h - 5) {
 					Notebot.filePath = entry.fileName;
 				}
-				if (double_1 > x + w - w / 4 - w / 8 && double_1 < x + w - w / 4 + w / 8 && double_2 > y + h - 27 && double_2 < y + h - 17) {
+				if (mouseX > x + w - w / 4 - w / 8 && mouseX < x + w - w / 4 + w / 8 && mouseY > y + h - 27 && mouseY < y + h - 17) {
 					entry.playing = !entry.playing;
 				}
 			}
@@ -244,7 +244,7 @@ public class NotebotScreen extends WindowScreen {
 				c1++;
 				if (c1 < page * pageEntries)
 					continue;
-				if (double_1 > x + 5 && double_1 < x + 105 && double_2 > y + 15 + c * 10 && double_2 < y + 25 + c * 10) {
+				if (mouseX > x + 5 && mouseX < x + 105 && mouseY > y + 15 + c * 10 && mouseY < y + 25 + c * 10) {
 					entry = new NotebotEntry(s);
 					selected = s;
 				}
@@ -252,7 +252,7 @@ public class NotebotScreen extends WindowScreen {
 			}
 		}
 
-		return super.mouseClicked(double_1, double_2, int_1);
+		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
 	private void fillButton(MatrixStack matrix, int x1, int y1, int x2, int y2, int color, int colorHover, int mX, int mY) {

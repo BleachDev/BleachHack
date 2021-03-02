@@ -4,7 +4,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
@@ -20,11 +22,12 @@ import net.minecraft.text.Text;
 
 public class WindowManagerScreen extends Screen {
 
-	public Pair<WindowScreen, String>[] windows;
+	/** [Window Screen, Name, Icon] **/
+	public Triple<WindowScreen, String, ItemStack>[] windows;
 	private int selected = 0;
 
 	@SafeVarargs
-	public WindowManagerScreen(Pair<WindowScreen, String>... windows) {
+	public WindowManagerScreen(Triple<WindowScreen, String, ItemStack>... windows) {
 		super(LiteralText.EMPTY);
 		this.windows = windows;
 	}
@@ -36,6 +39,14 @@ public class WindowManagerScreen extends Screen {
 
 	public WindowScreen getSelectedScreen() {
 		return windows[selected].getLeft();
+	}
+	
+	public String getSelectedTitle() {
+		return windows[selected].getMiddle();
+	}
+	
+	public ItemStack getSelectedIcon() {
+		return windows[selected].getRight();
 	}
 
 	public Text getTitle() {
@@ -51,13 +62,19 @@ public class WindowManagerScreen extends Screen {
 		textRenderer.draw(matrices, "\u00a7cX", 7, height - 10, -1);
 
 		int wid = 20;
+		int size = 90;
 		for (int i = 0; i < windows.length; i++) {
-			DrawableHelper.fill(matrices, wid, height - 13, wid + 79, height - 12, 0xff6060b0);
+			DrawableHelper.fill(matrices, wid, height - 13, wid + size - 1, height - 12, 0xff6060b0);
 			DrawableHelper.fill(matrices, wid, height - 13, wid + 1, height, 0xff6060b0);
-			DrawableHelper.fill(matrices, wid + 80 - 1, height - 12, wid + 80, height, 0xff6060b0);
+			DrawableHelper.fill(matrices, wid + size - 1, height - 12, wid + size, height, 0xff6060b0);
 
-			textRenderer.draw(matrices, windows[i].getRight(), wid + 4, height - 10, selected == i ? 0xffccff : 0xffffff);
-			wid += 80;
+			GL11.glPushMatrix();
+			GL11.glScaled(0.7, 0.7, 1);
+			itemRenderer.renderGuiItemIcon(windows[i].getRight(), (int) ((wid + 2) * (1 / 0.7)), (int) ((height - 12) * (1 / 0.7)));
+			GL11.glPopMatrix();
+
+			textRenderer.draw(matrices, windows[i].getMiddle(), wid + 16, height - 10, selected == i ? 0xffccff : 0xffffff);
+			wid += size;
 		}
 	}
 
@@ -168,7 +185,7 @@ public class WindowManagerScreen extends Screen {
 		}
 
 		if (mouseY > height - 14 && mouseY < height && mouseX > 20) {
-			int sel = ((int) mouseX - 20) / 80;
+			int sel = ((int) mouseX - 20) / 90;
 
 			if (sel >= 0 && sel < windows.length) {
 				selectWindow(sel);

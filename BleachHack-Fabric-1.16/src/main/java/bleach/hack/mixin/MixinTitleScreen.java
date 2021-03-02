@@ -17,7 +17,7 @@
  */
 package bleach.hack.mixin;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,6 +33,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
@@ -48,9 +50,9 @@ public class MixinTitleScreen extends Screen {
 		if (BleachTitleScreen.customTitleScreen) {
 			MinecraftClient.getInstance().openScreen(
 					new WindowManagerScreen(
-							ImmutablePair.of(new BleachTitleScreen(), "BleachHack"),
-							ImmutablePair.of(new AccountManagerScreen(), "Account Mang"),
-							ImmutablePair.of(ClickGui.clickGui, "Clickgui")) {
+							Triple.of(new BleachTitleScreen(), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)),
+							Triple.of(new AccountManagerScreen(), "Account Mang", new ItemStack(Items.PAPER)),
+							Triple.of(ClickGui.clickGui, "ClickGui", new ItemStack(Items.TOTEM_OF_UNDYING))) {
 						
 						public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 							if (keyCode == ModuleManager.getModule(ClickGui.class).getKey()) {

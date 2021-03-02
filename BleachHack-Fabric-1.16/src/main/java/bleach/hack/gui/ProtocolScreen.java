@@ -87,60 +87,60 @@ public class ProtocolScreen extends Screen {
 		client.openScreen(serverScreen);
 	}
 
-	public boolean mouseClicked(double double_1, double double_2, int int_1) {
-		if (double_1 >= nameField.x && double_1 <= nameField.x + nameField.getWidth()
-		&& double_2 >= nameField.y && double_2 <= nameField.y + 18) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if (mouseX >= nameField.x && mouseX <= nameField.x + nameField.getWidth()
+		&& mouseY >= nameField.y && mouseY <= nameField.y + 18) {
 			nameField.changeFocus(true);
 			protocolField.setSelected(false);
 			targetField.setSelected(false);
 			packVerField.setSelected(false);
 		}
-		if (double_1 >= protocolField.x && double_1 <= protocolField.x + protocolField.getWidth()
-		&& double_2 >= protocolField.y && double_2 <= protocolField.y + 18) {
+		if (mouseX >= protocolField.x && mouseX <= protocolField.x + protocolField.getWidth()
+		&& mouseY >= protocolField.y && mouseY <= protocolField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.changeFocus(true);
 			targetField.setSelected(false);
 			packVerField.setSelected(false);
 		}
-		if (double_1 >= targetField.x && double_1 <= targetField.x + targetField.getWidth()
-		&& double_2 >= targetField.y && double_2 <= targetField.y + 18) {
+		if (mouseX >= targetField.x && mouseX <= targetField.x + targetField.getWidth()
+		&& mouseY >= targetField.y && mouseY <= targetField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.setSelected(false);
 			targetField.changeFocus(true);
 			packVerField.setSelected(false);
 		}
-		if (double_1 >= packVerField.x && double_1 <= packVerField.x + packVerField.getWidth()
-		&& double_2 >= packVerField.y && double_2 <= packVerField.y + 18) {
+		if (mouseX >= packVerField.x && mouseX <= packVerField.x + packVerField.getWidth()
+		&& mouseY >= packVerField.y && mouseY <= packVerField.y + 18) {
 			nameField.setSelected(false);
 			protocolField.setSelected(false);
 			targetField.setSelected(false);
 			packVerField.changeFocus(true);
 		}
-		return super.mouseClicked(double_1, double_2, int_1);
+		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
+	public boolean charTyped(char chr, int modifiers) {
 		if (nameField.isFocused())
-			nameField.charTyped(p_charTyped_1_, p_charTyped_2_);
+			nameField.charTyped(chr, modifiers);
 		if (protocolField.isFocused())
-			protocolField.charTyped(p_charTyped_1_, p_charTyped_2_);
+			protocolField.charTyped(chr, modifiers);
 		if (targetField.isFocused())
-			targetField.charTyped(p_charTyped_1_, p_charTyped_2_);
+			targetField.charTyped(chr, modifiers);
 		if (packVerField.isFocused())
-			packVerField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
+			packVerField.charTyped(chr, modifiers);
+		return super.charTyped(chr, modifiers);
 	}
 
-	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (nameField.isFocused())
-			nameField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+			nameField.keyPressed(keyCode, scanCode, modifiers);
 		if (protocolField.isFocused())
-			protocolField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+			protocolField.keyPressed(keyCode, scanCode, modifiers);
 		if (targetField.isFocused())
-			targetField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+			targetField.keyPressed(keyCode, scanCode, modifiers);
 		if (packVerField.isFocused())
-			packVerField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+			packVerField.keyPressed(keyCode, scanCode, modifiers);
+		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	public void tick() {

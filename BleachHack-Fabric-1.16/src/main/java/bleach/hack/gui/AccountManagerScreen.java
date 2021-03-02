@@ -28,6 +28,8 @@ import bleach.hack.gui.window.WindowButton;
 import bleach.hack.utils.Decrypter;
 import bleach.hack.utils.LoginManager;
 import bleach.hack.utils.file.BleachFileMang;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -122,6 +124,12 @@ public class AccountManagerScreen extends WindowScreen {
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrix);
+		
+		textRenderer.drawWithShadow(matrix, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
+				4, height - 30, -1);
+		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
+		textRenderer.drawWithShadow(matrix, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
+		
 		super.render(matrix, mouseX, mouseY, delta);
 	}
 
@@ -173,27 +181,27 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 	}
 
-	public boolean mouseClicked(double double_1, double double_2, int int_1) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (!getWindow(0).closed && getWindow(0).selected) {
-			userField.mouseClicked(double_1, double_2, int_1);
-			passField.mouseClicked(double_1, double_2, int_1);
+			userField.mouseClicked(mouseX, mouseY, button);
+			passField.mouseClicked(mouseX, mouseY, button);
 
-			if (double_1 > checkBox.x && double_1 < checkBox.x + 10 && double_2 > checkBox.y && double_2 < checkBox.y + 10) {
+			if (mouseX > checkBox.x && mouseX < checkBox.x + 10 && mouseY > checkBox.y && mouseY < checkBox.y + 10) {
 				checkBox.checked = !checkBox.checked;
 			}
 		} else if (!getWindow(1).closed && getWindow(1).selected) {
 			int x = getWindow(1).x1,
-					y = getWindow(1).y1 - 10,
-					w = width - width / 2,
-					h = height - height / 2;
+					y = getWindow(1).y1,
+					w = width - width / 4,
+					h = height - height / 4;
 
 			int c = 0;
 			for (List<String> e : new ArrayList<>(entries)) {
 				String text = (e.size() > 1 ? "\u00a7a" + e.get(0) + ":***" : "\u00a76" + e.get(0));
 				int length = client.textRenderer.getWidth(text);
 
-				if (double_1 > x + w / 2 - length / 2 - 1 && double_1 < x + w / 2 + length / 2 + 1 && double_2 > y + h / 4 + c * 14 - 2
-						&& double_2 < y + h / 4 + c * 14 + 11) {
+				if (mouseX > x + w / 2 - length / 2 - 1 && mouseX < x + w / 2 + length / 2 + 1 && mouseY > y + h / 4 + c * 14 - 2
+						&& mouseY < y + h / 4 + c * 14 + 11) {
 					try {
 						userField.setText(e.get(0));
 					} catch (Exception e1) {
@@ -211,8 +219,8 @@ public class AccountManagerScreen extends WindowScreen {
 					selectWindow(0);
 				}
 
-				if (double_1 > x + w / 2 + length / 2 + 4 && double_1 < x + w / 2 + length / 2 + 14 && double_2 > y + h / 4 + c * 14 - 2
-						&& double_2 < y + h / 4 + c * 14 + 11) {
+				if (mouseX > x + w / 2 + length / 2 + 4 && mouseX < x + w / 2 + length / 2 + 14 && mouseY > y + h / 4 + c * 14 - 2
+						&& mouseY < y + h / 4 + c * 14 + 11) {
 					int c1 = 0;
 					String lines = "";
 					for (String l : BleachFileMang.readFileLines("logins.txt")) {
@@ -230,16 +238,16 @@ public class AccountManagerScreen extends WindowScreen {
 			}
 		}
 
-		return super.mouseClicked(double_1, double_2, int_1);
+		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	public boolean charTyped(char char_1, int int_1) {
+	public boolean charTyped(char chr, int modifiers) {
 		if (!getWindow(0).closed) {
-			if (userField.isFocused()) userField.charTyped(char_1, int_1);
-			if (passField.isFocused()) passField.charTyped(char_1, int_1);
+			if (userField.isFocused()) userField.charTyped(chr, modifiers);
+			if (passField.isFocused()) passField.charTyped(chr, modifiers);
 		}
 
-		return super.charTyped(char_1, int_1);
+		return super.charTyped(chr, modifiers);
 	}
 
 	public void tick() {
@@ -249,12 +257,12 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 	}
 
-	public boolean keyPressed(int int_1, int int_2, int int_3) {
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (!getWindow(0).closed) {
-			if (userField.isFocused()) userField.keyPressed(int_1, int_2, int_3);
-			if (passField.isFocused()) passField.keyPressed(int_1, int_2, int_3);
+			if (userField.isFocused()) userField.keyPressed(keyCode, scanCode, modifiers);
+			if (passField.isFocused()) passField.keyPressed(keyCode, scanCode, modifiers);
 		}
 
-		return super.keyPressed(int_1, int_2, int_3);
+		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 }

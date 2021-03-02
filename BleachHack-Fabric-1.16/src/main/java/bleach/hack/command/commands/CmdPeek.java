@@ -87,7 +87,7 @@ public class CmdPeek extends Command {
 			super(handler, inventory, title);
 		}
 
-		public boolean mouseClicked(double double_1, double double_2, int int_1) {
+		public boolean mouseClicked(double mouseX, double mouseY, int button) {
 			return false;
 		}
 	}
