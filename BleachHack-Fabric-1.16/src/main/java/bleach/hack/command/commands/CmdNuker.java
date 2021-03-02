@@ -51,10 +51,10 @@ public class CmdNuker extends Command {
 		BleachFileMang.createFile("nukerblocks.txt");
 
 		List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
-		lines.removeIf(String::isEmpty);
+		lines.removeIf(String::isBlank);
 
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
-			Module mod = ModuleManager.getModule(Nuker.class);
+			Module nuker = ModuleManager.getModule(Nuker.class);
 			String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
 
 			if (args[0].equalsIgnoreCase("add")) {
@@ -68,9 +68,9 @@ public class CmdNuker extends Command {
 
 				BleachFileMang.appendFile(block, "nukerblocks.txt");
 
-				if (mod.isToggled()) {
-					mod.toggle();
-					mod.toggle();
+				if (nuker.isToggled()) {
+					nuker.toggle();
+					nuker.toggle();
 				}
 
 				BleachLogger.infoMessage("Added Block: " + block);
@@ -86,9 +86,9 @@ public class CmdNuker extends Command {
 					BleachFileMang.createEmptyFile("nukerblocks.txt");
 					BleachFileMang.appendFile(s, "nukerblocks.txt");
 
-					if (mod.isToggled()) {
-						mod.toggle();
-						mod.toggle();
+					if (nuker.isToggled()) {
+						nuker.toggle();
+						nuker.toggle();
 					}
 
 					BleachLogger.infoMessage("Removed Block: " + block);
@@ -102,7 +102,7 @@ public class CmdNuker extends Command {
 		} else if (args[0].equalsIgnoreCase("list")) {
 			String s = "";
 			for (String l : lines) {
-				s += "\n\u00a76" + l;
+				s += "\n\u00a7b" + l;
 			}
 
 			BleachLogger.infoMessage(s);

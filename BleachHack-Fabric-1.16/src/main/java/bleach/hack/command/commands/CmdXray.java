@@ -50,8 +50,7 @@ public class CmdXray extends Command {
 		BleachFileMang.createFile("xrayblocks.txt");
 
 		List<String> lines = BleachFileMang.readFileLines("xrayblocks.txt");
-		lines.removeIf(String::isEmpty);
-		System.out.println(lines);
+		lines.removeIf(String::isBlank);
 
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
 			Xray xray = ModuleManager.getModule(Xray.class);
@@ -75,7 +74,7 @@ public class CmdXray extends Command {
 
 				BleachLogger.infoMessage("Added Block: " + args[1]);
 
-			} else if (args[0].equalsIgnoreCase("remove")) {
+			} else {
 				if (lines.contains(block)) {
 					lines.remove(block);
 
@@ -102,7 +101,7 @@ public class CmdXray extends Command {
 		} else if (args[0].equalsIgnoreCase("list")) {
 			String s = "";
 			for (String l : lines) {
-				s += "\n\u00a76" + l;
+				s += "\n\u00a7b" + l;
 			}
 
 			BleachLogger.infoMessage(s);

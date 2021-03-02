@@ -17,11 +17,20 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -37,49 +46,68 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.RaycastContext;
 
 public class Nuker extends Module {
 
-	private List<Block> blockList = new ArrayList<>();
+	private Set<Block> blockList = new HashSet<>();
 
 	public Nuker() {
 		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
-				new SettingMode("Mode", "Normal", "Multi", "Instant").withDesc("How many blocks to mine at once"),
+				new SettingMode("Mode", "Normal", "SurvMulti", "Multi", "Instant").withDesc("Mining mode"),
+				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if Multi/SurvMulti mode is on"),
 				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range"),
 				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
-				new SettingToggle("All Blocks", true).withDesc("Mine all blocks instead of the whitelist"),
+				new SettingToggle("Filter", false).withDesc("Filters blocks based on the " + Command.PREFIX + "nuker list").withChildren(
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list")),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
 				new SettingRotate(false),
-				new SettingToggle("NoParticles", false).withDesc("Removes paritcles"),
-				new SettingMode("Sort", "Normal", "Hardness").withDesc("Which order to mine blocks in"),
-				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if multi mode is on"));
+				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
+				new SettingMode("Sort", "Distance", "Hardness", "None").withDesc("Which order to mine blocks in"));
+	}
+
+	public void addBlocks(Block... blocks) {
+		Collections.addAll(this.blockList, blocks);
+	}
+
+	public void removeBlocks(Block... blocks) {
+		this.blockList.removeAll(Arrays.asList(blocks));
+	}
+
+	public Set<Block> getBlocks() {
+		return blockList;
 	}
 
 	public void onEnable() {
 		blockList.clear();
-		for (String s : BleachFileMang.readFileLines("nukerblocks.txt"))
-			blockList.add(Registry.BLOCK.get(new Identifier(s)));
+
+		BleachFileMang.readFileLines("nukerblocks.txt").stream().filter(s -> !s.isBlank()).forEach(s -> {
+			addBlocks(Registry.BLOCK.get(new Identifier(s)));
+		});
 
 		super.onEnable();
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		double range = getSetting(1).asSlider().getValue();
-		List<BlockPos> blocks = new ArrayList<>();
+		double range = getSetting(2).asSlider().getValue();
+
+		LinkedHashMap<BlockPos, Pair<Vec3d, Direction>> blocks = new LinkedHashMap<>();
 
 		/* Add blocks around player */
 		for (int x = (int) range; x >= (int) -range; x--) {
-			for (int y = (int) range; y >= (getSetting(4).asToggle().state ? 0 : (int) -range); y--) {
+			for (int y = (int) range; y >= (getSetting(5).asToggle().state ? 0 : (int) -range); y--) {
 				for (int z = (int) range; z >= (int) -range; z--) {
-					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.1, z));
-					if (!canSeeBlock(pos) || mc.world.getBlockState(pos).getBlock() == Blocks.AIR || WorldUtils.isFluid(pos))
-						continue;
-					blocks.add(pos);
+					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.2, z));
+
+					if (mc.world.getBlockState(pos).getBlock() != Blocks.AIR && !WorldUtils.isFluid(pos)) {
+						Pair<Vec3d, Direction> vec = getBlockAngle(pos);
+
+						if (vec != null) {
+							blocks.put(pos, vec);
+						}
+					}
 				}
 			}
 		}
@@ -87,76 +115,76 @@ public class Nuker extends Module {
 		if (blocks.isEmpty())
 			return;
 
-		if (getSetting(7).asMode().mode == 1)
-			blocks.sort((a, b) -> Float.compare(
-					mc.world.getBlockState(a).getHardness(null, a), mc.world.getBlockState(b).getHardness(null, b)));
+		if (getSetting(8).asMode().mode != 2) {
+			Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
+
+			blocks = blocks.entrySet().stream()
+					.sorted((a, b) -> getSetting(8).asMode().mode == 0 ?
+							Double.compare(
+									eyePos.distanceTo(a.getValue().getLeft()),
+									eyePos.distanceTo(b.getValue().getLeft()))
+							: Float.compare(
+									mc.world.getBlockState(a.getKey()).getHardness(mc.world, a.getKey()),
+									mc.world.getBlockState(b.getKey()).getHardness(mc.world, b.getKey())))
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
+		}
 
 		/* Move the block under the player to last so it doesn't mine itself down
 		 * without clearing everything above first */
-		if (blocks.contains(mc.player.getBlockPos().down())) {
+		if (blocks.containsKey(mc.player.getBlockPos().down())) {
+			Pair<Vec3d, Direction> v = blocks.get(mc.player.getBlockPos().down());
 			blocks.remove(mc.player.getBlockPos().down());
-			blocks.add(mc.player.getBlockPos().down());
+			blocks.put(mc.player.getBlockPos().down(), v);
 		}
 
-		Vec3d eyePos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0);
-
 		int broken = 0;
-		for (BlockPos pos : blocks) {
-			if (!getSetting(3).asToggle().state && !blockList.contains(mc.world.getBlockState(pos).getBlock()))
-				continue;
+		for (Entry<BlockPos, Pair<Vec3d, Direction>> pos : blocks.entrySet()) {
+			if (getSetting(4).asToggle().state) {
+				boolean contains = blockList.contains(mc.world.getBlockState(pos.getKey()).getBlock());
 
-			Vec3d vec = Vec3d.of(pos).add(0.5, 0.5, 0.5);
-
-			if (eyePos.distanceTo(vec) > range + 0.5)
-				continue;
-
-			Direction dir = null;
-			double dist = Double.MAX_VALUE;
-			for (Direction d : Direction.values()) {
-				double dist2 = eyePos.distanceTo(Vec3d.of(pos.offset(d)).add(0.5, 0.5, 0.5));
-				if (dist2 > range || WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock()) || dist2 > dist)
+				if ((getSetting(4).asToggle().getChild(0).asMode().mode == 0 && contains)
+						|| (getSetting(4).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
 					continue;
-				dist = dist2;
-				dir = d;
+				}
+			}
+			
+			float hardness = mc.world.getBlockState(pos.getKey()).calcBlockBreakingDelta(mc.player, mc.world, pos.getKey());
+			
+			if (getSetting(0).asMode().mode == 1 && hardness <= 1f && broken > 0) {
+				return;
 			}
 
-			if (dir == null)
-				continue;
-
-			if (getSetting(5).asRotate().state) {
-				WorldUtils.facePosAuto(vec.x, vec.y, vec.z, getSetting(5).asRotate());
+			if (getSetting(6).asRotate().state) {
+				Vec3d v = pos.getValue().getLeft();
+				WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(6).asRotate());
 			}
 
-			mc.interactionManager.updateBlockBreakingProgress(pos, dir);
+			mc.interactionManager.updateBlockBreakingProgress(pos.getKey(), pos.getValue().getRight());
 
 			mc.player.swingHand(Hand.MAIN_HAND);
 
 			broken++;
 			if (getSetting(0).asMode().mode == 0
-					|| (getSetting(0).asMode().mode == 1 && broken >= (int) getSetting(8).asSlider().getValue()))
+					|| (getSetting(0).asMode().mode == 1 && hardness <= 1f)
+					|| (getSetting(0).asMode().mode == 1 && broken >= (int) getSetting(1).asSlider().getValue())
+					|| (getSetting(0).asMode().mode == 2 && broken >= (int) getSetting(1).asSlider().getValue())) {
 				return;
+			}
 		}
 	}
 
-	public boolean canSeeBlock(BlockPos pos) {
-		double diffX = pos.getX() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).x;
-		double diffY = pos.getY() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).y;
-		double diffZ = pos.getZ() + 0.5 - mc.player.getCameraPosVec(mc.getTickDelta()).z;
+	public Pair<Vec3d, Direction> getBlockAngle(BlockPos pos) {
+		for (Direction d: Direction.values()) {
+			if (mc.world.getBlockState(pos.offset(d)).getBlock() == Blocks.AIR) {
+				Vec3d vec = WorldUtils.getLegitLookPos(pos, d, true, 5);
 
-		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+				if (vec != null) {
+					return Pair.of(vec, d);
+				}
+			}
+		}
 
-		float yaw = mc.player.yaw + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90 - mc.player.yaw);
-		float pitch = mc.player.pitch + MathHelper.wrapDegrees((float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) - mc.player.pitch);
-
-		Vec3d rotation = new Vec3d(
-				MathHelper.sin(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F),
-				(-MathHelper.sin(pitch * 0.017453292F)),
-				MathHelper.cos(-yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F));
-
-		Vec3d rayVec = mc.player.getCameraPosVec(mc.getTickDelta()).add(rotation.x * 6, rotation.y * 6, rotation.z * 6);
-		return mc.world.raycast(new RaycastContext(mc.player.getCameraPosVec(mc.getTickDelta()),
-				rayVec, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, mc.player))
-				.getBlockPos().equals(pos);
+		return null;
 	}
 
 }

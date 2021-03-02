@@ -47,7 +47,7 @@ public class MixinParticleManager {
 	/** Mojang is retarded and makes this and ONLY this thread-unsafe **/
 	@Inject(at = @At("HEAD"), method = "addBlockBreakParticles", cancellable = true)
 	public void addBlockBreakParticles(BlockPos blockPos_1, BlockState blockState_1, CallbackInfo ci) {
-		if (ModuleManager.getModule(Nuker.class).isToggled() && ModuleManager.getModule(Nuker.class).getSetting(6).asToggle().state) {
+		if (ModuleManager.getModule(Nuker.class).isToggled() && ModuleManager.getModule(Nuker.class).getSetting(7).asToggle().state) {
 			ci.cancel();
 		}
 	}

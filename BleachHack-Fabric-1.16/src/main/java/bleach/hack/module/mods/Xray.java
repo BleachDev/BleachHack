@@ -66,9 +66,30 @@ public class Xray extends Module {
 	public void onEnable() {
 		visibleBlocks.clear();
 
-		for (String s : BleachFileMang.readFileLines("xrayblocks.txt")) {
-			setVisible(Registry.BLOCK.get(new Identifier(s)));
+		if (!BleachFileMang.fileExists("xrayblocks.txt")) {
+			BleachFileMang.createEmptyFile("xrayblocks.txt");
+			BleachFileMang.appendFile(
+					"minecraft:iron_ore\n" +
+					"minecraft:gold_ore\n" +
+					"minecraft:lapis_ore\n" +
+					"minecraft:redstone_ore\n" +
+					"minecraft:diamond_ore\n" +
+					"minecraft:emerald_ore\n" +
+					"minecraft:iron_block\n" +
+					"minecraft:gold_block\n" +
+					"minecraft:lapis_block\n" +
+					"minecraft:redstone_block\n" +
+					"minecraft:diamond_block\n" +
+					"minecraft:emerald_block\n" +
+					"minecraft:nether_gold_ore\n" +
+					"minecraft:nether_quartz_ore\n" +
+					"minecraft:ancient_debris" +
+					"xrayblocks.txt");
 		}
+
+		BleachFileMang.readFileLines("xrayblocks.txt").stream().filter(s -> !s.isBlank()).forEach(s -> {
+			setVisible(Registry.BLOCK.get(new Identifier(s)));
+		});
 
 		mc.worldRenderer.reload();
 
