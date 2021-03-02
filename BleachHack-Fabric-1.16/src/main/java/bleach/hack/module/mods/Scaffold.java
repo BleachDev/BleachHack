@@ -180,7 +180,7 @@ public class Scaffold extends Module {
 
 		int cap = 0;
 		for (BlockPos bp : blocks) {
-			if (WorldUtils.placeBlock(bp, -1, getSetting(3).asRotate(), getSetting(4).asToggle().state, getSetting(8).asToggle().state)) {
+			if (WorldUtils.placeBlock(bp, -1, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(8).asToggle().state)) {
 				cap++;
 
 				if (cap >= (int) getSetting(1).asSlider().getValue()) {
