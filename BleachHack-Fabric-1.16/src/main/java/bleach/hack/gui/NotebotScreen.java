@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
-import bleach.hack.gui.window.AbstractWindowScreen;
+import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.Notebot;
@@ -47,7 +47,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
-public class NotebotScreen extends AbstractWindowScreen {
+public class NotebotScreen extends WindowScreen {
 
 	public List<String> files;
 	public NotebotEntry entry;

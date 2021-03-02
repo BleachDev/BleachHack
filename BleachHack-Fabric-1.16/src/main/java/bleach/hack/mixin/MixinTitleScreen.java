@@ -17,12 +17,17 @@
  */
 package bleach.hack.mixin;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import bleach.hack.gui.AccountManagerScreen;
 import bleach.hack.gui.BleachTitleScreen;
+import bleach.hack.gui.window.WindowManagerScreen;
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -41,7 +46,20 @@ public class MixinTitleScreen extends Screen {
 	@Inject(at = @At("HEAD"), method = "init()V")
 	private void init(CallbackInfo info) {
 		if (BleachTitleScreen.customTitleScreen) {
-			MinecraftClient.getInstance().openScreen(new BleachTitleScreen());
+			MinecraftClient.getInstance().openScreen(
+					new WindowManagerScreen(
+							ImmutablePair.of(new BleachTitleScreen(), "BleachHack"),
+							ImmutablePair.of(new AccountManagerScreen(), "Account Mang"),
+							ImmutablePair.of(ClickGui.clickGui, "Clickgui")) {
+						
+						public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+							if (keyCode == ModuleManager.getModule(ClickGui.class).getKey()) {
+								selectWindow(2);
+							}
+
+							return super.keyPressed(keyCode, scanCode, modifiers);
+						}
+					});
 		} else {
 			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
 				BleachTitleScreen.customTitleScreen = !BleachTitleScreen.customTitleScreen;

@@ -32,7 +32,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.modulewindow.ClickGuiWindow;
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
-import bleach.hack.gui.window.AbstractWindowScreen;
+import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -45,7 +45,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 
-public class ClickGuiScreen extends AbstractWindowScreen {
+public class ClickGuiScreen extends WindowScreen {
 
 	private int keyDown = -1;
 	private boolean lmDown = false;

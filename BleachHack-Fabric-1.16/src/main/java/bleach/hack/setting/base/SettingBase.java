@@ -68,6 +68,14 @@ public abstract class SettingBase {
 			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
+	
+	public SettingBind asBind() {
+		try {
+			return (SettingBind) this;
+		} catch (Exception e) {
+			throw new ClassCastException("Execption parsing setting: " + this);
+		}
+	}
 
 	public abstract String getName();
 
