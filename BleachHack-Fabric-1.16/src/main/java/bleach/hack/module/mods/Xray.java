@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
@@ -87,7 +88,7 @@ public class Xray extends Module {
 					"xrayblocks.txt");
 		}
 
-		BleachFileMang.readFileLines("xrayblocks.txt").stream().filter(s -> !s.isBlank()).forEach(s -> {
+		BleachFileMang.readFileLines("xrayblocks.txt").stream().filter(s -> !StringUtils.isBlank(s)).forEach(s -> {
 			setVisible(Registry.BLOCK.get(new Identifier(s)));
 		});
 

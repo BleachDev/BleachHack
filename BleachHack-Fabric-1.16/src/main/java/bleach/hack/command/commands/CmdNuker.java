@@ -19,6 +19,8 @@ package bleach.hack.command.commands;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import bleach.hack.command.Command;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -51,7 +53,7 @@ public class CmdNuker extends Command {
 		BleachFileMang.createFile("nukerblocks.txt");
 
 		List<String> lines = BleachFileMang.readFileLines("nukerblocks.txt");
-		lines.removeIf(String::isBlank);
+		lines.removeIf(StringUtils::isBlank);
 
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
 			Module nuker = ModuleManager.getModule(Nuker.class);

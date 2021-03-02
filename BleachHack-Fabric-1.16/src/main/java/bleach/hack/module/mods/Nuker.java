@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
@@ -82,7 +83,7 @@ public class Nuker extends Module {
 	public void onEnable() {
 		blockList.clear();
 
-		BleachFileMang.readFileLines("nukerblocks.txt").stream().filter(s -> !s.isBlank()).forEach(s -> {
+		BleachFileMang.readFileLines("nukerblocks.txt").stream().filter(s -> !StringUtils.isBlank(s)).forEach(s -> {
 			addBlocks(Registry.BLOCK.get(new Identifier(s)));
 		});
 

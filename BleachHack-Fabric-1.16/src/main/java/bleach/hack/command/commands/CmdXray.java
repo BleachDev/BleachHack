@@ -19,6 +19,8 @@ package bleach.hack.command.commands;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import bleach.hack.command.Command;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.Xray;
@@ -50,7 +52,7 @@ public class CmdXray extends Command {
 		BleachFileMang.createFile("xrayblocks.txt");
 
 		List<String> lines = BleachFileMang.readFileLines("xrayblocks.txt");
-		lines.removeIf(String::isBlank);
+		lines.removeIf(StringUtils::isBlank);
 
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
 			Xray xray = ModuleManager.getModule(Xray.class);
