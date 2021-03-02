@@ -1,7 +1,9 @@
 # BleachHack-1.14
-[![Github All Releases](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total.svg)]()
-![](https://img.shields.io/github/last-commit/bleachdrinker420/bleachhack-1.14.svg)
-![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14.svg)
+![](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total)
+![](https://img.shields.io/tokei/lines/github/BleachDrinker420/bleachhack-1.14)
+![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14)
+![](https://img.shields.io/github/last-commit/bleachdrinker420/bleachhack-1.14)
+![](https://img.shields.io/github/commit-activity/m/BleachDrinker420/bleachhack-1.14)
 ![](https://img.shields.io/badge/daily%20commit-yes-blue)
 
 Very cool client.  
