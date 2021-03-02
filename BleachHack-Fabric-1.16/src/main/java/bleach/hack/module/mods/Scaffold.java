@@ -64,6 +64,7 @@ public class Scaffold extends Module {
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list")),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier").withChildren(
 						new SettingToggle("Legit", false).withDesc("Slower mode that bypasses some anticheats")),
+				new SettingToggle("AirPlace", false).withDesc("Places blocks in the air without support blocks"),
 				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
 				new SettingToggle("NoSwing", false).withDesc("Doesn't swing your hand clientside"),
 				new SettingToggle("EmptyToggle", false).withDesc("Turns off when you run out of blocks"),
@@ -113,7 +114,7 @@ public class Scaffold extends Module {
 		}
 
 		if (slot == -1) {
-			if (getSetting(9).asToggle().state) {
+			if (getSetting(10).asToggle().state) {
 				setToggled(false);
 			}
 
@@ -125,7 +126,7 @@ public class Scaffold extends Module {
 
 			if ((getSetting(5).asToggle().getChild(0).asMode().mode == 0 && contains)
 					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
-				if (getSetting(9).asToggle().state) {
+				if (getSetting(10).asToggle().state) {
 					setToggled(false);
 				}
 
@@ -169,9 +170,9 @@ public class Scaffold extends Module {
 			return;
 		}
 
-		if (getSetting(10).asToggle().state) {
+		if (getSetting(11).asToggle().state) {
 			for (BlockPos bp : blocks) {
-				if (getSetting(10).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
+				if (getSetting(11).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
 					renderBlocks.add(bp);
 				}
 			}
@@ -179,7 +180,13 @@ public class Scaffold extends Module {
 
 		int cap = 0;
 		for (BlockPos bp : blocks) {
-			if (WorldUtils.placeBlock(bp, slot, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(8).asToggle().state)) {
+			boolean placed = WorldUtils.placeBlock(bp, slot, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(9).asToggle().state);
+			
+			if (!placed && getSetting(7).asToggle().state) {
+				WorldUtils.airPlaceBlock(bp, slot, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(9).asToggle().state);
+			}
+
+			if (placed) {
 				mc.player.inventory.selectedSlot = prevSlot;
 
 				cap++;
@@ -193,8 +200,8 @@ public class Scaffold extends Module {
 
 	@Subscribe
 	public void onWorldRender(EventWorldRender event) {
-		if (getSetting(10).asToggle().state) {
-			float[] col = getSetting(10).asToggle().getChild(0).asColor().getRGBFloat();
+		if (getSetting(11).asToggle().state) {
+			float[] col = getSetting(11).asToggle().getChild(0).asColor().getRGBFloat();
 			for (BlockPos bp : renderBlocks) {
 				RenderUtils.drawFilledBox(bp, col[0], col[1], col[2], 0.7f);
 

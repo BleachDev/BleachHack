@@ -128,14 +128,16 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
 	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0))
 	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
-		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+		if (!ModuleManager.getModule(BetterPortal.class).isToggled()
+				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
 			closeHandledScreen();
 		}
 	}
 
 	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0))
 	private void updateNausea_openScreen(MinecraftClient player, Screen screen_1) {
-		if (!ModuleManager.getModule(BetterPortal.class).isToggled() || !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+		if (!ModuleManager.getModule(BetterPortal.class).isToggled()
+				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
 			client.openScreen(screen_1);
 		}
 	}
@@ -143,7 +145,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Override
 	protected boolean clipAtLedge() {
 		return super.clipAtLedge() || ModuleManager.getModule(SafeWalk.class).isToggled()
-				|| (ModuleManager.getModule(Scaffold.class).isToggled() && ModuleManager.getModule(Scaffold.class).getSetting(7).asToggle().state);
+				|| (ModuleManager.getModule(Scaffold.class).isToggled()
+						&& ModuleManager.getModule(Scaffold.class).getSetting(8).asToggle().state);
 	}
 	
 	@Overwrite
