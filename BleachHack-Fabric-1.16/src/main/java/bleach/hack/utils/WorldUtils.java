@@ -50,7 +50,8 @@ public class WorldUtils {
 	public static final Set<Block> NONSOLID_BLOCKS = Sets.newHashSet(
 			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
 			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
-			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE, Blocks.VOID_AIR);
+			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE, Blocks.VOID_AIR,
+			Blocks.CAVE_AIR);
 
 	public static final Set<Block> RIGHTCLICKABLE_BLOCKS = Sets.newHashSet(
 			Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
@@ -74,11 +75,13 @@ public class WorldUtils {
 			Blocks.DARK_OAK_DOOR, Blocks.CAKE, Blocks.ENCHANTING_TABLE,
 			Blocks.DRAGON_EGG, Blocks.HOPPER, Blocks.REPEATING_COMMAND_BLOCK,
 			Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.CRAFTING_TABLE,
-			Blocks.ACACIA_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR,
-			Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.CAKE, Blocks.ACACIA_SIGN, Blocks.ACACIA_WALL_SIGN,
-			Blocks.BIRCH_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.DARK_OAK_SIGN, Blocks.DARK_OAK_WALL_SIGN,
-			Blocks.JUNGLE_SIGN, Blocks.JUNGLE_WALL_SIGN, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN,
-			Blocks.SPRUCE_SIGN, Blocks.SPRUCE_WALL_SIGN, Blocks.CRIMSON_SIGN, Blocks.CRIMSON_WALL_SIGN,
+			Blocks.ACACIA_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR,
+			Blocks.JUNGLE_TRAPDOOR, Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR,
+			Blocks.CAKE, Blocks.ACACIA_SIGN, Blocks.ACACIA_WALL_SIGN,
+			Blocks.BIRCH_SIGN, Blocks.BIRCH_WALL_SIGN, Blocks.DARK_OAK_SIGN,
+			Blocks.DARK_OAK_WALL_SIGN, Blocks.JUNGLE_SIGN, Blocks.JUNGLE_WALL_SIGN,
+			Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.SPRUCE_SIGN,
+			Blocks.SPRUCE_WALL_SIGN, Blocks.CRIMSON_SIGN, Blocks.CRIMSON_WALL_SIGN,
 			Blocks.WARPED_SIGN, Blocks.WARPED_WALL_SIGN, Blocks.BLAST_FURNACE, Blocks.SMOKER,
 			Blocks.CARTOGRAPHY_TABLE, Blocks.GRINDSTONE, Blocks.LECTERN, Blocks.LOOM,
 			Blocks.STONECUTTER, Blocks.SMITHING_TABLE);
@@ -210,13 +213,15 @@ public class WorldUtils {
 	}
 
 	public static boolean isBlockEmpty(BlockPos pos) {
-		if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock()))
+		if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) {
 			return false;
+		}
 
 		Box box = new Box(pos);
 		for (Entity e : mc.world.getEntities()) {
-			if (e instanceof LivingEntity && box.intersects(e.getBoundingBox()))
+			if (e instanceof LivingEntity && box.intersects(e.getBoundingBox())) {
 				return false;
+			}
 		}
 
 		return true;

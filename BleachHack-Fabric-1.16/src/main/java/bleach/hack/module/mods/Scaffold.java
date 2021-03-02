@@ -133,7 +133,6 @@ public class Scaffold extends Module {
 			}
 		}
 
-		mc.player.inventory.selectedSlot = slot;
 		double range = getSetting(2).asSlider().getValue();
 		int mode = getSetting(0).asMode().mode;
 
@@ -166,7 +165,7 @@ public class Scaffold extends Module {
 		}
 
 		// Don't bother doing anything if there aren't any blocks to place on
-		if (blocks.stream().allMatch(b -> !WorldUtils.canPlaceBlock(b))) {
+		if (blocks.stream().allMatch(b -> !WorldUtils.isBlockEmpty(b))) {
 			return;
 		}
 
@@ -180,7 +179,9 @@ public class Scaffold extends Module {
 
 		int cap = 0;
 		for (BlockPos bp : blocks) {
-			if (WorldUtils.placeBlock(bp, -1, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(8).asToggle().state)) {
+			if (WorldUtils.placeBlock(bp, slot, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(8).asToggle().state)) {
+				mc.player.inventory.selectedSlot = prevSlot;
+
 				cap++;
 
 				if (cap >= (int) getSetting(1).asSlider().getValue()) {
@@ -188,8 +189,6 @@ public class Scaffold extends Module {
 				}
 			}
 		}
-
-		mc.player.inventory.selectedSlot = prevSlot;
 	}
 
 	@Subscribe
