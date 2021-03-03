@@ -79,17 +79,19 @@ public class Step extends Module {
 
 		if (getSetting(0).asMode().mode == 0 && mc.player.horizontalCollision && mc.player.isOnGround()) {
 			if (!isTouchingWall(mc.player.getBoundingBox().offset(0, 1, 0)) || !isTouchingWall(mc.player.getBoundingBox().offset(0, 1.5, 0))) {
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 0.42, mc.player.getZ(), true));
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 0.753, mc.player.getZ(), true));
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1, mc.player.getZ(), true));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 0.42, mc.player.getZ(), false));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 0.75, mc.player.getZ(), false));
 				
 				if (isTouchingWall(mc.player.getBoundingBox().offset(0, 1, 0)) && !isTouchingWall(mc.player.getBoundingBox().offset(0, 1.5, 0))) {
-					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1.17, mc.player.getZ(), true));
-					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1.25, mc.player.getZ(), true));
-					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1.17, mc.player.getZ(), true));
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1, mc.player.getZ(), false));
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1.15, mc.player.getZ(), false));
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1.24, mc.player.getZ(), false));
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() + 1.15, mc.player.getZ(), true));
+					mc.player.updatePosition(mc.player.getX(), mc.player.getY() + 1.0, mc.player.getZ());
+				} else {
+					mc.player.updatePosition(mc.player.getX(), mc.player.getY() + 1, mc.player.getZ());
 				}
-				
-				mc.player.updatePosition(mc.player.getX(), mc.player.getY() + 1, mc.player.getZ());
+
 				lastStep = mc.player.age;
 			}
 		} else if (getSetting(0).asMode().mode == 2) {

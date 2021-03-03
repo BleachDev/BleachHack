@@ -59,8 +59,8 @@ public class AccountManagerScreen extends WindowScreen {
 				height / 8 + (height - height / 4), "Login Manager", new ItemStack(Items.PAPER), false));
 		addWindow(new Window(width / 8 + 15,
 				height / 8 + 15,
-				width / 8 + 15 + (width - width / 4),
-				height / 8 + 15 + (height - height / 4), "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
+				width / 8 + 15 + (width - width / 3),
+				height / 8 + 15 + (height - height / 3), "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
 
 		int x = getWindow(0).x1;
 		int y = getWindow(0).y1;
@@ -160,8 +160,8 @@ public class AccountManagerScreen extends WindowScreen {
 		} else if (window == 1) {
 			int x = getWindow(1).x1,
 					y = getWindow(1).y1,
-					w = width - width / 4,
-					h = height - height / 4;
+					w = width - width / 3,
+					h = height - height / 3;
 
 			drawCenteredString(matrix, textRenderer, "\u00a7cTemporary\u2122 alt manager", x + w / 2, y + h / 4 - 30, -1);
 
@@ -192,8 +192,8 @@ public class AccountManagerScreen extends WindowScreen {
 		} else if (!getWindow(1).closed && getWindow(1).selected) {
 			int x = getWindow(1).x1,
 					y = getWindow(1).y1,
-					w = width - width / 4,
-					h = height - height / 4;
+					w = width - width / 3,
+					h = height - height / 3;
 
 			int c = 0;
 			for (List<String> e : new ArrayList<>(entries)) {
