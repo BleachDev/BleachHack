@@ -56,7 +56,7 @@ public class Speed extends Module {
 				}
 
 				mc.player.setVelocity(new Vec3d(0, mc.player.getVelocity().y, 0));
-				mc.player.updateVelocity((float) getSetting(3).asSlider().getValue(),
+				mc.player.updateVelocity((float) getSetting(0).asSlider().getValue(),
 						new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
 				
 				double vel = Math.abs(mc.player.getVelocity().getX()) + Math.abs(mc.player.getVelocity().getZ());
