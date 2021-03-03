@@ -26,27 +26,50 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.util.math.Vec3d;
 
-public class SpeedHack extends Module {
+public class Speed extends Module {
 
 	private boolean jumping;
 
-	public SpeedHack() {
-		super("SpeedHack", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
-				new SettingMode("Mode", "OnGround", "MiniHop", "Bhop").withDesc("Speed mode"),
-				new SettingSlider("Speed", 0.1, 10, 2, 1).withDesc("How speedy"));
+	public Speed() {
+		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
+				new SettingMode("Mode", "StrafeHop", "Strafe", "OnGround", "MiniHop", "Bhop").withDesc("Speed mode"),
+				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround Speed"),
+				new SettingSlider("MiniHop", 0.1, 10, 2, 1).withDesc("MiniHop Speed"),
+				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop Speed"));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		//System.out.println(mc.player.forwardSpeed + " | " + mc.player.sidewaysSpeed);
 		if (mc.options.keySneak.isPressed())
 			return;
-		double speeds = getSetting(1).asSlider().getValue() / 30;
 
-		/* OnGround */
-		if (getSetting(0).asMode().mode == 0) {
+			/* Strafe */
+		if (getSetting(0).asMode().mode <= 1) {
+			if ((mc.player.forwardSpeed != 0 || mc.player.sidewaysSpeed != 0) && mc.player.isOnGround()) {
+				if (!mc.player.isSprinting()) {
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+				}
+
+				mc.player.updateVelocity(0.01f, new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
+				double vel = Math.abs(mc.player.getVelocity().getX()) + Math.abs(mc.player.getVelocity().getZ());
+				
+				if (getSetting(0).asMode().mode == 0 && vel >= 0.12) {
+					mc.player.updateVelocity(vel >= 0.3 ? 0.0f : (mc.player.input.pressingForward ? 0.01f : 0.15f),
+							new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
+					mc.player.jump();
+				}
+			}
+			
+			/* OnGround */
+		} else if (getSetting(0).asMode().mode == 2) {
 			if (mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25)
 				return;
+			
+			double speeds = 0.85 + getSetting(1).asSlider().getValue() / 30;
 
 			if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
@@ -56,7 +79,7 @@ public class SpeedHack extends Module {
 
 			if (mc.player.forwardSpeed != 0.0F && !mc.player.horizontalCollision) {
 				if (mc.player.verticalCollision) {
-					mc.player.setVelocity(mc.player.getVelocity().x * (0.85 + speeds), mc.player.getVelocity().y, mc.player.getVelocity().z * (0.85 + speeds));
+					mc.player.setVelocity(mc.player.getVelocity().x * speeds, mc.player.getVelocity().y, mc.player.getVelocity().z * speeds);
 					jumping = true;
 					mc.player.jump();
 					// 1.0379
@@ -70,21 +93,26 @@ public class SpeedHack extends Module {
 			}
 
 			/* MiniHop */
-		} else if (getSetting(0).asMode().mode == 1) {
+		} else if (getSetting(0).asMode().mode == 3) {
 			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0)
 				return;
-			if (mc.player.isOnGround())
+			
+			double speeds = 0.9 + getSetting(2).asSlider().getValue() / 30;
+			
+			if (mc.player.isOnGround()) {
 				mc.player.jump();
-			else if (mc.player.getVelocity().y > 0) {
-				mc.player.setVelocity(mc.player.getVelocity().x * (0.9 + speeds), -1, mc.player.getVelocity().z * (0.9 + speeds));
+			} else if (mc.player.getVelocity().y > 0) {
+				mc.player.setVelocity(mc.player.getVelocity().x * speeds, -1, mc.player.getVelocity().z * speeds);
 				mc.player.input.movementSideways += 1.5F;
 			}
 
 			/* Bhop */
-		} else if (getSetting(0).asMode().mode == 2) {
+		} else if (getSetting(0).asMode().mode == 4) {
 			if (mc.player.forwardSpeed > 0 && mc.player.isOnGround()) {
+				double speeds = 0.65 + getSetting(3).asSlider().getValue() / 30;
+				
 				mc.player.jump();
-				mc.player.setVelocity(mc.player.getVelocity().x * (0.65 + speeds), 0.255556, mc.player.getVelocity().z * (0.65 + speeds));
+				mc.player.setVelocity(mc.player.getVelocity().x * speeds, 0.255556, mc.player.getVelocity().z * speeds);
 				mc.player.sidewaysSpeed += 3.0F;
 				mc.player.jump();
 				mc.player.setSprinting(true);
