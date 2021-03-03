@@ -91,7 +91,8 @@ public class Step extends Module {
 				} else {
 					mc.player.updatePosition(mc.player.getX(), mc.player.getY() + 1, mc.player.getZ());
 				}
-
+				
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
 				lastStep = mc.player.age;
 			}
 		} else if (getSetting(0).asMode().mode == 2) {
