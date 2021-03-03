@@ -36,9 +36,10 @@ public class Speed extends Module {
 	public Speed() {
 		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
 				new SettingMode("Mode", "StrafeHop", "Strafe", "OnGround", "MiniHop", "Bhop").withDesc("Speed mode"),
-				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround Speed"),
-				new SettingSlider("MiniHop", 0.1, 10, 2, 1).withDesc("MiniHop Speed"),
-				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop Speed"));
+				new SettingSlider("Strafe", 0.15, 0.4, 0.27, 2).withDesc("Strafe speed"),
+				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround speed"),
+				new SettingSlider("MiniHop", 0.1, 10, 2, 1).withDesc("MiniHop speed"),
+				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop speed"));
 	}
 
 	@Subscribe
@@ -49,17 +50,19 @@ public class Speed extends Module {
 
 			/* Strafe */
 		if (getSetting(0).asMode().mode <= 1) {
-			if ((mc.player.forwardSpeed != 0 || mc.player.sidewaysSpeed != 0) && mc.player.isOnGround()) {
+			if ((mc.player.forwardSpeed != 0 || mc.player.sidewaysSpeed != 0) /*&& mc.player.isOnGround()*/) {
 				if (!mc.player.isSprinting()) {
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
 				}
 
-				mc.player.updateVelocity(0.01f, new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
+				mc.player.setVelocity(new Vec3d(0, mc.player.getVelocity().y, 0));
+				mc.player.updateVelocity((float) getSetting(3).asSlider().getValue(),
+						new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
+				
 				double vel = Math.abs(mc.player.getVelocity().getX()) + Math.abs(mc.player.getVelocity().getZ());
 				
-				if (getSetting(0).asMode().mode == 0 && vel >= 0.12) {
-					mc.player.updateVelocity(vel >= 0.3 ? 0.0f : (mc.player.input.pressingForward ? 0.01f : 0.15f),
-							new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
+				if (getSetting(0).asMode().mode == 0 && vel >= 0.12 && mc.player.isOnGround()) {
+					mc.player.updateVelocity(vel >= 0.3 ? 0.0f : 0.15f, new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
 					mc.player.jump();
 				}
 			}
@@ -69,7 +72,7 @@ public class Speed extends Module {
 			if (mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25)
 				return;
 			
-			double speeds = 0.85 + getSetting(1).asSlider().getValue() / 30;
+			double speeds = 0.85 + getSetting(2).asSlider().getValue() / 30;
 
 			if (jumping && mc.player.getY() >= mc.player.prevY + 0.399994D) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.9, mc.player.getVelocity().z);
@@ -97,7 +100,7 @@ public class Speed extends Module {
 			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0)
 				return;
 			
-			double speeds = 0.9 + getSetting(2).asSlider().getValue() / 30;
+			double speeds = 0.9 + getSetting(3).asSlider().getValue() / 30;
 			
 			if (mc.player.isOnGround()) {
 				mc.player.jump();
@@ -109,7 +112,7 @@ public class Speed extends Module {
 			/* Bhop */
 		} else if (getSetting(0).asMode().mode == 4) {
 			if (mc.player.forwardSpeed > 0 && mc.player.isOnGround()) {
-				double speeds = 0.65 + getSetting(3).asSlider().getValue() / 30;
+				double speeds = 0.65 + getSetting(4).asSlider().getValue() / 30;
 				
 				mc.player.jump();
 				mc.player.setVelocity(mc.player.getVelocity().x * speeds, 0.255556, mc.player.getVelocity().z * speeds);
