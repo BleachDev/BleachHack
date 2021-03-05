@@ -83,15 +83,16 @@ public class CrystalAura extends Module {
 				new SettingToggle("Place", true).withDesc("Place crystals").withChildren(
 						new SettingToggle("AutoSwitch", true).withDesc("Automatically switches to crystal when in combat").withChildren(
 								new SettingToggle("SwitchBack", true).withDesc("Switches back to your previous item")),
+						new SettingToggle("1.12 Place", false).withDesc("Only places on blocks with 2 air blocks above instead of 1 because of an extra check in 1.12"),
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
-						new SettingSlider("MinDamg", 1, 20, 2, 0).withDesc("Minimun damage for the target to place crystals"),
+						new SettingToggle("Force Legit", false).withDesc("Only places a crystal if you can see it"),
+						new SettingSlider("MinDamg", 1, 20, 2, 0).withDesc("Minimun damage to the target to place crystals"),
 						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimun damage ratio to place a crystal at (Target damg/Player damg)"),
 						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to place per tick"),
 						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before placing the next batch of crystals"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
 				new SettingToggle("SameTick", false).withDesc("Enables exploding and placing crystals at the same tick"),
-				new SettingRotate(false).withDesc("Rotates to crystals").withChildren(
-						new SettingToggle("Force Legit", false).withDesc("Only places/explodes a crystal if you can see it")),
+				new SettingRotate(false).withDesc("Rotates to crystals"),
 				new SettingSlider("Range", 0, 6, 4.5, 2).withDesc("Range to place and attack crystals"));
 	}
 
@@ -149,10 +150,6 @@ public class CrystalAura extends Module {
 						if (vd != null && eyeVec.distanceTo(vd) <= eyeVec.distanceTo(v)) {
 							v = vd;
 						}
-					}
-
-					if (getSetting(6).asRotate().getChild(1).asToggle().state && v.equals(new Vec3d(c.getX(), c.getY() + 0.5, c.getZ()))) {
-						return;
 					}
 
 					WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(6).asRotate());
@@ -214,10 +211,10 @@ public class CrystalAura extends Module {
 
 					float targetDamg = ExplosionUtils.getExplosionDamage(v, 6f, e);
 
-					if (targetDamg >= getSetting(4).asToggle().getChild(2).asSlider().getValue()) {
+					if (targetDamg >= getSetting(4).asToggle().getChild(4).asSlider().getValue()) {
 						float ratio = playerDamg == 0 ? targetDamg : targetDamg / playerDamg;
 
-						if (ratio > getSetting(4).asToggle().getChild(3).asSlider().getValue()) {
+						if (ratio > getSetting(4).asToggle().getChild(5).asSlider().getValue()) {
 							placeBlocks.put(new BlockPos(v).down(), ratio);
 						}
 					}
@@ -234,7 +231,7 @@ public class CrystalAura extends Module {
 				BlockPos block = e.getKey();
 
 				Vec3d eyeVec = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
-				
+
 				Vec3d vec = new Vec3d(block.getX(), block.getY() + 0.5, block.getZ());
 				Direction dir = Direction.UP;
 				for (Direction d: Direction.values()) {
@@ -244,12 +241,12 @@ public class CrystalAura extends Module {
 					}
 				}
 
-				if (getSetting(6).asRotate().state) {
-					if (getSetting(6).asRotate().getChild(1).asToggle().state
-							&& vec.equals(new Vec3d(block.getX(), block.getY() + 0.5, block.getZ()))) {
-						return;
-					}
+				if (getSetting(4).asToggle().getChild(3).asToggle().state
+						&& vec.equals(new Vec3d(block.getX(), block.getY() + 0.5, block.getZ()))) {
+					return;
+				}
 
+				if (getSetting(6).asRotate().state) {
 					WorldUtils.facePosAuto(vec.x, vec.y, vec.z, getSetting(6).asRotate());
 				}
 
@@ -259,7 +256,7 @@ public class CrystalAura extends Module {
 				mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(vec, dir, block, false));
 
 				places++;
-				if (places >= (int) getSetting(4).asToggle().getChild(4).asSlider().getValue()) {
+				if (places >= (int) getSetting(4).asToggle().getChild(6).asSlider().getValue()) {
 					break;
 				}
 			}
@@ -270,7 +267,7 @@ public class CrystalAura extends Module {
 					mc.player.inventory.selectedSlot = oldSlot;
 				}
 
-				placeCooldown = (int) getSetting(4).asToggle().getChild(5).asSlider().getValue() + 1;
+				placeCooldown = (int) getSetting(4).asToggle().getChild(7).asSlider().getValue() + 1;
 			}
 		}
 	}
@@ -278,7 +275,7 @@ public class CrystalAura extends Module {
 	@Subscribe
 	public void onRenderWorld(EventWorldRender event) {
 		if (this.render != null) {
-			float[] col = getSetting(4).asToggle().getChild(6).asColor().getRGBFloat();
+			float[] col = getSetting(4).asToggle().getChild(8).asColor().getRGBFloat();
 			RenderUtils.drawFilledBox(render, col[0], col[1], col[2], 0.4f);
 		}
 	}
@@ -292,10 +289,10 @@ public class CrystalAura extends Module {
 				for (int z = -range; z <= range; z++) {
 					BlockPos basePos = mc.player.getBlockPos().add(x, y, z);
 
-					if (!canPlace(basePos) || (blackList.containsKey(basePos) && getSetting(4).asToggle().getChild(1).asToggle().state))
+					if (!canPlace(basePos) || (blackList.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().state))
 						continue;
 
-					if (getSetting(6).asRotate().getChild(1).asToggle().state) {
+					if (getSetting(4).asToggle().getChild(3).asToggle().state) {
 						boolean allBad = true;
 						for (Direction d: Direction.values()) {
 							if (WorldUtils.getLegitLookPos(basePos, d, true, 5) != null) {
@@ -324,10 +321,11 @@ public class CrystalAura extends Module {
 		if (baseState.getBlock() != Blocks.BEDROCK && baseState.getBlock() != Blocks.OBSIDIAN)
 			return false;
 
+		boolean oldPlace = getSetting(4).asToggle().getChild(1).asToggle().state;
 		BlockPos placePos = basePos.up();
-		if (!mc.world.isAir(placePos))
+		if (!mc.world.isAir(placePos) || (oldPlace && !mc.world.isAir(placePos.up())))
 			return false;
 
-		return mc.world.getOtherEntities((Entity) null, new Box(placePos).stretch(0, 1, 0)).isEmpty();
+		return mc.world.getOtherEntities((Entity) null, new Box(placePos).stretch(0, oldPlace ? 2 : 1, 0)).isEmpty();
 	}
 }
