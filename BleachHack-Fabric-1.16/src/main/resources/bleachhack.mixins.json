@@ -9,6 +9,7 @@
     "MixinBackgroundRenderer",
   	"MixinAbstractBlock",
   	"MixinBeaconScreen",
+  	"MixinBiomeColors",
     "MixinBlock",
     "MixinBlockModelRenderer",
     "MixinBossBarHud",

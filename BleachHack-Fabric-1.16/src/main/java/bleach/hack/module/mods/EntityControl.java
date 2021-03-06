@@ -44,8 +44,8 @@ public class EntityControl extends Module {
 				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entites").withChildren(
 						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("Entity speed")),
 				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entites").withChildren(
-					new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed"),
-					new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed")),
+						new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed"),
+						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed")),
 				new SettingToggle("HorseJump", true).withDesc("Always makes your horse do the highest jump it can"),
 				new SettingToggle("GroundSnap", false).withDesc("Snaps the entity to the ground when going down blocks"),
 				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding when going up blocks"),
@@ -63,7 +63,7 @@ public class EntityControl extends Module {
 
 		Entity e = mc.player.getVehicle();
 		double speed = getSetting(0).asToggle().getChild(0).asSlider().getValue();
-		
+
 		double forward = mc.player.forwardSpeed;
 		double strafe = mc.player.sidewaysSpeed;
 		float yaw = mc.player.yaw;
@@ -72,7 +72,7 @@ public class EntityControl extends Module {
 		if (e instanceof LlamaEntity) {
 			((LlamaEntity) e).headYaw = mc.player.headYaw;
 		}
-		
+
 		if (getSetting(5).asToggle().state && forward == 0 && strafe == 0) {
 			e.setVelocity(new Vec3d(0, e.getVelocity().y, 0));
 		}
@@ -81,20 +81,27 @@ public class EntityControl extends Module {
 			if (forward != 0.0D) {
 				if (strafe > 0.0D) {
 					yaw += (forward > 0.0D ? -45 : 45);
-				} else if (strafe < 0.0D)
+				} else if (strafe < 0.0D) {
 					yaw += (forward > 0.0D ? 45 : -45);
-				strafe = 0.0D;
+				}
+
 				if (forward > 0.0D) {
 					forward = 1.0D;
-				} else if (forward < 0.0D)
+				} else if (forward < 0.0D) {
 					forward = -1.0D;
+				}
+
+				strafe = 0.0D;
 			}
-			e.setVelocity((forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F))), e.getVelocity().y,
+			e.setVelocity(forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F)),
+					e.getVelocity().y,
 					forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F)));
+
 			if (e instanceof MinecartEntity) {
 				MinecartEntity em = (MinecartEntity) e;
-				em.setVelocity((forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F))), em.getVelocity().y,
-						(forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F))));
+				em.setVelocity(forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F)),
+						em.getVelocity().y,
+						forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F)));
 			}
 		}
 
@@ -125,14 +132,14 @@ public class EntityControl extends Module {
 			}
 		}
 	}
-	
+
 	@Subscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (getSetting(6).asToggle().state) {
-			 if (event.getPacket() instanceof VehicleMoveC2SPacket) {
+			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
 				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(0).asSlider().getValue(), "field_12898", "yaw");
 				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(1).asSlider().getValue(), "field_12896", "pitch");
-			 } else if (event.getPacket() instanceof PlayerMoveC2SPacket
+			} else if (event.getPacket() instanceof PlayerMoveC2SPacket
 					&& mc.player.hasVehicle()
 					&& getSetting(6).asToggle().getChild(2).asToggle().state) {
 				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(0).asSlider().getValue(), "field_12887", "yaw");
@@ -140,6 +147,6 @@ public class EntityControl extends Module {
 			}
 		}
 	}
-	
+
 	// HorseJump handled in MixinClientPlayerEntity.method_3151
 }
