@@ -70,17 +70,21 @@ public class NoVelocity extends Module {
 			if (packet.getId() == mc.player.getEntityId()) {
 				double velXZ = getSetting(0).asToggle().getChild(0).asSlider().getValue() / 100;
 				double velY = getSetting(0).asToggle().getChild(1).asSlider().getValue() / 100;
+				
+				double pvelX = (packet.getVelocityX() / 8000d - mc.player.getVelocity().x) * velXZ;
+				double pvelY = (packet.getVelocityY() / 8000d - mc.player.getVelocity().y) * velY;
+				double pvelZ = (packet.getVelocityZ() / 8000d - mc.player.getVelocity().z) * velXZ;
 
-				FabricReflect.writeField(packet, (int) (packet.getVelocityX() * velXZ), "field_12563", "velocityX");
-				FabricReflect.writeField(packet, (int) (packet.getVelocityY() * velY), "field_12562", "velocityY");
-				FabricReflect.writeField(packet, (int) (packet.getVelocityZ() * velXZ), "field_12561", "velocityZ");
+				FabricReflect.writeField(packet, (int) (pvelX * 8000 + mc.player.getVelocity().x * 8000), "field_12563", "velocityX");
+				FabricReflect.writeField(packet, (int) (pvelY * 8000 + mc.player.getVelocity().y * 8000), "field_12562", "velocityY");
+				FabricReflect.writeField(packet, (int) (pvelZ * 8000 + mc.player.getVelocity().z * 8000), "field_12561", "velocityZ");
 			}
 		} else if (event.getPacket() instanceof ExplosionS2CPacket && getSetting(1).asToggle().state) {
 			ExplosionS2CPacket packet = (ExplosionS2CPacket) event.getPacket();
 
 			double velXZ = getSetting(1).asToggle().getChild(0).asSlider().getValue() / 100;
 			double velY = getSetting(1).asToggle().getChild(1).asSlider().getValue() / 100;
-
+			
 			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityX() * velXZ), "field_12176", "playerVelocityX");
 			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityY() * velY), "field_12182", "playerVelocityY");
 			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityZ() * velXZ), "field_12183", "playerVelocityZ");

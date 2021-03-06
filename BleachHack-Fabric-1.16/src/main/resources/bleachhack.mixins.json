@@ -27,6 +27,7 @@
     "MixinIngameHud",
     "MixinInGameOverlayRenderer",
     "MixinKeyboard",
+    "MixinLivingEntity",
     "MixinLlamaEntity",
     "MixinMapRenderer",
     "MixinMinecraftClient",
