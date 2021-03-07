@@ -122,7 +122,7 @@ public class Notebot extends Module {
 	}
 
 	@Subscribe
-	public void onRender(EventWorldRender event) {
+	public void onRender(EventWorldRender.Post event) {
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
 				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);

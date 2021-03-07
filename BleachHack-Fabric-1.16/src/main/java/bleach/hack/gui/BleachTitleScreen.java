@@ -61,6 +61,8 @@ public class BleachTitleScreen extends WindowScreen {
 	}
 
 	public void init() {
+		super.init();
+
 		clearWindows();
 		addWindow(new Window(width / 8,
 				height / 8,

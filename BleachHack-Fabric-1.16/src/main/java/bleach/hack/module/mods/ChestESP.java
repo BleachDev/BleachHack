@@ -69,7 +69,7 @@ public class ChestESP extends Module {
 	}
 
 	@Subscribe
-	public void onRender(EventWorldRender event) {
+	public void onRender(EventWorldRender.Post event) {
 		List<BlockPos> linkedChests = new ArrayList<>();
 
 		for (BlockEntity e : mc.world.blockEntities) {

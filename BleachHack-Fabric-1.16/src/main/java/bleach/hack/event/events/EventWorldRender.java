@@ -21,9 +21,25 @@ import bleach.hack.event.Event;
 
 public class EventWorldRender extends Event {
 
-	public final float partialTicks;
+	protected float partialTicks;
+	
+	public static class Pre extends EventWorldRender {
 
-	public EventWorldRender(float partialTicks) {
-		this.partialTicks = partialTicks;
+		public Pre(float partialTicks) {
+			this.partialTicks = partialTicks;
+		}
+		
+	}
+	
+	public static class Post extends EventWorldRender {
+
+		public Post(float partialTicks) {
+			this.partialTicks = partialTicks;
+		}
+		
+	}
+
+	public float getPartialTicks() {
+		return partialTicks;
 	}
 }

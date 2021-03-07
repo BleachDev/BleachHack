@@ -273,7 +273,7 @@ public class CrystalAura extends Module {
 	}
 
 	@Subscribe
-	public void onRenderWorld(EventWorldRender event) {
+	public void onRenderWorld(EventWorldRender.Post event) {
 		if (this.render != null) {
 			float[] col = getSetting(4).asToggle().getChild(8).asColor().getRGBFloat();
 			RenderUtils.drawFilledBox(render, col[0], col[1], col[2], 0.4f);

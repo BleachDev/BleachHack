@@ -50,6 +50,8 @@ public class ServerScraperScreen extends Screen {
 	}
 
 	public void init() {
+		super.init();
+
 		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, new LiteralText("Scrape"), button -> {
 			try {
 				if (pingers.size() > 0)

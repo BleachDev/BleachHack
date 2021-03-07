@@ -95,7 +95,7 @@ public class Trajectories extends Module {
 	}
 
 	@Subscribe
-	public void onWorldRender(EventWorldRender event) {
+	public void onWorldRender(EventWorldRender.Post event) {
 		float[] col = getSetting(6).asColor().getRGBFloat();
 
 		for (Triple<List<Vec3d>, Entity, BlockPos> t : poses) {

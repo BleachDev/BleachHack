@@ -59,6 +59,8 @@ public class NotebotScreen extends WindowScreen {
 	}
 
 	public void init() {
+		super.init();
+
 		files = new ArrayList<>();
 
 		try {

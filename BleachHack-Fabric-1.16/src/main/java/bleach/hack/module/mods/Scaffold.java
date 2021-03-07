@@ -199,7 +199,7 @@ public class Scaffold extends Module {
 	}
 
 	@Subscribe
-	public void onWorldRender(EventWorldRender event) {
+	public void onWorldRender(EventWorldRender.Post event) {
 		if (getSetting(11).asToggle().state) {
 			float[] col = getSetting(11).asToggle().getChild(0).asColor().getRGBFloat();
 			for (BlockPos bp : renderBlocks) {

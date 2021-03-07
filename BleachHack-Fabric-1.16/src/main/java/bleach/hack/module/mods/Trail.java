@@ -67,7 +67,7 @@ public class Trail extends Module {
 	}
 
 	@Subscribe
-	public void onRender(EventWorldRender event) {
+	public void onRender(EventWorldRender.Post event) {
 		Color clr = Color.BLACK;
 		if (getSetting(2).asMode().mode == 0)
 			clr = new Color(200, 50, 50);

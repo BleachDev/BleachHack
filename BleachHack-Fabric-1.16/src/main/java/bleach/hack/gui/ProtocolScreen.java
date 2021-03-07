@@ -40,6 +40,8 @@ public class ProtocolScreen extends Screen {
 	}
 
 	public void init() {
+		super.init();
+
 		addButton(new ButtonWidget(width / 2 - 100, height / 2 + 50, 98, 20, new LiteralText("Update"), button -> {
 			try {
 				int i = Integer.parseInt(protocolField.getText());
@@ -91,29 +93,29 @@ public class ProtocolScreen extends Screen {
 		if (mouseX >= nameField.x && mouseX <= nameField.x + nameField.getWidth()
 		&& mouseY >= nameField.y && mouseY <= nameField.y + 18) {
 			nameField.changeFocus(true);
-			protocolField.setSelected(false);
-			targetField.setSelected(false);
-			packVerField.setSelected(false);
+			protocolField.changeFocus(false);
+			targetField.changeFocus(false);
+			packVerField.changeFocus(false);
 		}
 		if (mouseX >= protocolField.x && mouseX <= protocolField.x + protocolField.getWidth()
 		&& mouseY >= protocolField.y && mouseY <= protocolField.y + 18) {
-			nameField.setSelected(false);
+			nameField.changeFocus(false);
 			protocolField.changeFocus(true);
-			targetField.setSelected(false);
-			packVerField.setSelected(false);
+			targetField.changeFocus(false);
+			packVerField.changeFocus(false);
 		}
 		if (mouseX >= targetField.x && mouseX <= targetField.x + targetField.getWidth()
 		&& mouseY >= targetField.y && mouseY <= targetField.y + 18) {
-			nameField.setSelected(false);
-			protocolField.setSelected(false);
+			nameField.changeFocus(false);
+			protocolField.changeFocus(false);
 			targetField.changeFocus(true);
-			packVerField.setSelected(false);
+			packVerField.changeFocus(false);
 		}
 		if (mouseX >= packVerField.x && mouseX <= packVerField.x + packVerField.getWidth()
 		&& mouseY >= packVerField.y && mouseY <= packVerField.y + 18) {
-			nameField.setSelected(false);
-			protocolField.setSelected(false);
-			targetField.setSelected(false);
+			nameField.changeFocus(false);
+			protocolField.changeFocus(false);
+			targetField.changeFocus(false);
 			packVerField.changeFocus(true);
 		}
 		return super.mouseClicked(mouseX, mouseY, button);

@@ -41,7 +41,7 @@ public final class LoginManager {
 				return "\u00a7cNo Username/Email!";
 
 			if (password.isEmpty()) {
-				FabricReflect.writeField(MinecraftClient.getInstance().getSession(), email, "a", "username");
+				FabricReflect.writeField(MinecraftClient.getInstance().getSession(), email, "field_1982", "username");
 				return "\u00a76Logged in as an unverified account"; /* Idk this sound weird */
 			}
 

@@ -99,7 +99,7 @@ public class AutoBuild extends Module {
 	}
 
 	@Subscribe
-	public void onRender(EventWorldRender event) {
+	public void onRender(EventWorldRender.Post event) {
 		if (current != null) {
 			//RenderUtils.drawOutlineBox(current.getBox(), 1f, 1f, 0f, 0.5f);
 

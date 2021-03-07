@@ -110,6 +110,8 @@ public class WindowManagerScreen extends Screen {
 	}
 
 	public void init(MinecraftClient client, int width, int height) {
+		super.init(client, width, height);
+
 		this.client = client;
 		this.itemRenderer = client.getItemRenderer();
 		this.textRenderer = client.textRenderer;

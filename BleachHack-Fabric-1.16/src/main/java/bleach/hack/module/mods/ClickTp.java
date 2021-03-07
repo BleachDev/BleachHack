@@ -44,7 +44,7 @@ public class ClickTp extends Module {
 	}
 
 	@Subscribe
-	public void onWorldRender(EventWorldRender event) {
+	public void onWorldRender(EventWorldRender.Post event) {
 		if (pos != null && dir != null) {
 			float[] col = getSetting(4).asColor().getRGBFloat();
 			RenderUtils.drawFilledBox(new Box(

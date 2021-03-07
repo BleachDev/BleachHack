@@ -17,17 +17,21 @@
  */
 package bleach.hack.mixin;
 
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventWorldRender;
+import bleach.hack.event.events.EventRenderShader;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoRender;
-import net.minecraft.client.render.Camera;
+import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -36,14 +40,9 @@ import net.minecraft.util.math.MathHelper;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
-
-	@Inject(at = @At("HEAD"), method = "renderHand", cancellable = true)
-	private void renderHand(MatrixStack matrixStack_1, Camera camera, float tickDelta, CallbackInfo info) {
-		EventWorldRender event = new EventWorldRender(tickDelta);
-		BleachHack.eventBus.post(event);
-		if (event.isCancelled())
-			info.cancel();
-	}
+	
+	@Shadow
+	private ShaderEffect shader;
 
 	@Inject(at = @At("HEAD"), method = "bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
@@ -58,11 +57,31 @@ public class MixinGameRenderer {
 			ci.cancel();
 	}
 
-	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0), method = "renderWorld(FJLnet/minecraft/client/util/math/MatrixStack;)V")
+	@Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0))
 	private float nauseaWobble(float delta, float first, float second) {
 		if (!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state))
 			return MathHelper.lerp(delta, first, second);
 
 		return 0;
+	}
+	
+	@Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;shader:Lnet/minecraft/client/gl/ShaderEffect;", ordinal = 0))
+	private ShaderEffect render_Shader(GameRenderer renderer, float tickDelta) {
+		EventRenderShader event = new EventRenderShader(shader);
+		BleachHack.eventBus.post(event);
+		
+		if (event.getEffect() != null) {
+			RenderSystem.disableBlend();
+            RenderSystem.disableDepthTest();
+            RenderSystem.disableAlphaTest();
+            RenderSystem.enableTexture();
+            RenderSystem.matrixMode(GL11.GL_TEXTURE);
+            RenderSystem.pushMatrix();
+            RenderSystem.loadIdentity();
+            event.getEffect().render(tickDelta);
+            RenderSystem.popMatrix();
+		}
+		
+		return null;
 	}
 }

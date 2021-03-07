@@ -48,6 +48,8 @@ public class CleanUpScreen extends Screen {
 	}
 
 	public void init() {
+		super.init();
+
 		try {
 			serverList = serverScreen.getServerList();
 			for (int i = 0; i < serverList.size(); i++)
