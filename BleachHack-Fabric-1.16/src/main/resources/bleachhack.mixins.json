@@ -38,6 +38,7 @@
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinServerScreen",
+    "MixinShaderEffect",
     "MixinSharedConstants",
     "MixinSignBlockEntityRenderer",
     "MixinSkyProperties",

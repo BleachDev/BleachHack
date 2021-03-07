@@ -38,6 +38,10 @@ public class RenderUtils {
 	}
 
 	public static void drawFilledBox(Box box, float r, float g, float b, float a) {
+		drawFilledBox(box, r, g, b, a, 2.5f);
+	}
+
+	public static void drawFilledBox(Box box, float r, float g, float b, float a, float width) {
 		gl11Setup();
 
 		// Fill
@@ -50,6 +54,7 @@ public class RenderUtils {
 		tessellator.draw();
 
 		// Outline
+		GL11.glLineWidth(width);
 		buffer.begin(3, VertexFormats.POSITION_COLOR);
 		buffer.vertex(box.minX, box.minY, box.minZ).color(r, g, b, a).next();
 		buffer.vertex(box.minX, box.minY, box.maxZ).color(r, g, b, a).next();
@@ -71,14 +76,38 @@ public class RenderUtils {
 
 		gl11Cleanup();
 	}
+	
+	public static void drawFill(BlockPos blockPos, float r, float g, float b, float a) {
+		drawFill(new Box(blockPos), r, g, b, a);
+	}
+
+	public static void drawFill(Box box, float r, float g, float b, float a) {
+		gl11Setup();
+
+		// Fill
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+		buffer.begin(5, VertexFormats.POSITION_COLOR);
+		WorldRenderer.drawBox(buffer,
+				box.minX, box.minY, box.minZ,
+				box.maxX, box.maxY, box.maxZ, r, g, b, a / 2f);
+		tessellator.draw();
+
+		gl11Cleanup();
+	}
 
 	public static void drawOutlineBox(BlockPos blockPos, float r, float g, float b, float a) {
 		drawOutlineBox(new Box(blockPos), r, g, b, a);
 	}
-
+	
 	public static void drawOutlineBox(Box box, float r, float g, float b, float a) {
+		drawOutlineBox(box, r, g, b, a, 2.5f);
+	}
+
+	public static void drawOutlineBox(Box box, float r, float g, float b, float a, float width) {
 		gl11Setup();
 
+		GL11.glLineWidth(width);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 

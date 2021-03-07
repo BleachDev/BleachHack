@@ -17,20 +17,27 @@
  */
 package bleach.hack.module.mods;
 
+import java.io.IOException;
+
 import com.google.common.eventbus.Subscribe;
+import com.google.gson.JsonSyntaxException;
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
+import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
-import bleach.hack.utils.OutlineRenderUtils;
+import bleach.hack.utils.FabricReflect;
+import bleach.hack.utils.RenderUtils;
+import bleach.hack.utils.shader.StringShaderEffect;
+import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -42,51 +49,45 @@ import net.minecraft.entity.vehicle.BoatEntity;
 
 public class ESP extends Module {
 	
+	private static final String OUTLINE_SHADER = "{\"targets\":[\"swap\",\"final\"],\"passes\":[{\"name\":\"entity_outline\",\"intarget\":\"final\",\"outtarget\":\"swap\"},{\"name\":\"blit\",\"intarget\":\"swap\",\"outtarget\":\"final\"}]}";
+	private static final String MC_SHADER_UNFOMATTED = "{\"targets\":[\"swap\",\"final\"],\"passes\":[{\"name\":\"entity_outline\",\"intarget\":\"final\",\"outtarget\":\"swap\"},{\"name\":\"blur\",\"intarget\":\"swap\",\"outtarget\":\"final\",\"uniforms\":[{\"name\":\"BlurDir\",\"values\":[%2,0]},{\"name\":\"Radius\",\"values\":[%1]}]},{\"name\":\"blur\",\"intarget\":\"final\",\"outtarget\":\"swap\",\"uniforms\":[{\"name\":\"BlurDir\",\"values\":[0,%2]},{\"name\":\"Radius\",\"values\":[%1]}]},{\"name\":\"blit\",\"intarget\":\"swap\",\"outtarget\":\"final\"}]}";
+
 	public boolean drawOutlineLayer = false;
+
+	private int lastWidth;
+	private int lastHeight;
+	private double lastShaderWidth;
+	private int lastShaderMode;
+	private boolean shaderUnloaded = true;
 
 	public ESP() {
 		super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
+				new SettingMode("Render", "Outline", "Shader", "Box+Fill", "Box", "Fill"),
+				new SettingSlider("Shader", 0, 3, 1.5, 1).withDesc("The thickness of the shader outline"),
+				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
+				new SettingSlider("Fill", 0, 1, 0.5, 2).withDesc("The opacity of the fill"),
+				new SettingToggle("DrawBehind", false).withDesc("Draws the box/fill behind the entity (definitely not a bug turned into a feature)"),
+
 				new SettingToggle("Players", true).withDesc("Show Players").withChildren(
-						new SettingToggle("Glow", true).withDesc("Adds glow ESP to players"),
-						new SettingToggle("Outline", false).withDesc("Adds outline ESP to players, yes its white idk").withChildren(
-								new SettingSlider("Width", 0.1, 10, 2.5, 2).withDesc("How thick the lines should be")),
 						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Outline color for players"),
 						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Outline color for friends")),
-				
+
 				new SettingToggle("Mobs", false).withDesc("Show Mobs").withChildren(
-						new SettingToggle("Glow", true).withDesc("Adds glow ESP to mobs"),
-						new SettingToggle("Outline", false).withDesc("Adds outline ESP to mobs, yes its white idk").withChildren(
-								new SettingSlider("Width", 0.1, 10, 2.5, 2).withDesc("How thick the lines should be")),
 						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Outline color for mobs")),
-				
+
 				new SettingToggle("Animals", false).withDesc("Show Animals").withChildren(
-						new SettingToggle("Glow", true).withDesc("Adds glow ESP to animals"),
-						new SettingToggle("Outline", false).withDesc("Adds outline ESP to animals, yes its white idk").withChildren(
-								new SettingSlider("Width", 0.1, 10, 2.5, 2).withDesc("How thick the lines should be")),
 						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals")),
-				
+
 				new SettingToggle("Items", true).withDesc("Show Items").withChildren(
-						new SettingToggle("Glow", true).withDesc("Adds glow ESP to items"),
-						new SettingToggle("Outline", false).withDesc("Adds outline ESP to items, yes its white idk").withChildren(
-								new SettingSlider("Width", 0.1, 10, 2.5, 2).withDesc("How thick the lines should be")),
 						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items")),
-				
+
 				new SettingToggle("Crystals", true).withDesc("Show End Crystals").withChildren(
-						new SettingToggle("Glow", true).withDesc("Adds glow ESP to crystals"),
-						new SettingToggle("Outline", false).withDesc("Adds outline ESP to crystals, yes its white idk").withChildren(
-								new SettingSlider("Width", 0.1, 10, 2.5, 2).withDesc("How thick the lines should be")),
 						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
-				
+
 				new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
-						new SettingToggle("Glow", true).withDesc("Adds glow ESP to vehicles"),
-						new SettingToggle("Outline", false).withDesc("Adds outline ESP to vehicles, yes its white idk").withChildren(
-								new SettingSlider("Width", 0.1, 10, 2.5, 2).withDesc("How thick the lines should be")),
 						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
-				
+
 				new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
-						new SettingToggle("Glow", true).withDesc("Adds glow ESP to donkeys"),
-						new SettingToggle("Outline", false).withDesc("Adds outline ESP to donkeys, yes its white idk").withChildren(
-								new SettingSlider("Width", 0.1, 10, 2.5, 2).withDesc("How thick the lines should be")),
 						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
@@ -95,76 +96,118 @@ public class ESP extends Module {
 		super.onDisable();
 		for (Entity e : mc.world.getEntities()) {
 			if (e != mc.player) {
-				if (e.isGlowing())
+				if (e.isGlowing()) {
 					e.setGlowing(false);
+				}
 			}
+		}
+	}
+
+	@Subscribe
+	public void onWorldRenderPre(EventWorldRender.Pre event) {
+		if (getSetting(0).asMode().mode <= 1) {
+			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
+					|| lastShaderWidth != getSetting(1).asSlider().getValue() || lastShaderMode != getSetting(0).asMode().mode) {
+				try {
+					ShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
+							getSetting(0).asMode().mode == 0 ? OUTLINE_SHADER : MC_SHADER_UNFOMATTED
+									.replace("%1", "" + getSetting(1).asSlider().getValue())
+									.replace("%2", "" + (getSetting(1).asSlider().getValue() / 2)));
+
+					shader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
+					lastWidth = mc.getWindow().getFramebufferWidth();
+					lastHeight = mc.getWindow().getFramebufferHeight();
+					lastShaderWidth = getSetting(1).asSlider().getValue();
+					lastShaderMode = getSetting(0).asMode().mode;
+					shaderUnloaded = false;
+	
+					ShaderEffect se = (ShaderEffect) FabricReflect.getFieldValue(mc.worldRenderer, "field_4059", "entityOutlineShader"); 
+					if (se != null) {
+						se.close();
+					}
+	
+					FabricReflect.writeField(mc.worldRenderer, shader, "field_4059", "entityOutlineShader");
+					FabricReflect.writeField(mc.worldRenderer, shader.getSecondaryTarget("final"), "field_4101", "entityOutlinesFramebuffer");
+				} catch (JsonSyntaxException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} else if (!shaderUnloaded) {
+			mc.worldRenderer.loadEntityOutlineShader();
+			shaderUnloaded = true;
 		}
 	}
 	
 	@Subscribe
+	public void onWorldRenderPost(EventWorldRender.Post event) {
+		if (!getSetting(4).asToggle().state) {
+			for (Entity e: mc.world.getEntities()) {
+				if (e == mc.player || e == mc.player.getVehicle()) {
+					continue;
+				}
+
+				float[] color = getColorForEntity(e);
+				if (color != null) {
+					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
+						RenderUtils.drawOutlineBox(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(2).asSlider().getValue());
+					}
+					
+					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
+						RenderUtils.drawFill(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
+					}
+				}
+			}
+		}
+	}
+
+	@Subscribe
 	public void onWorldEntityRender(EventWorldRenderEntity event) {
-		if (event.entity instanceof PlayerEntity && event.entity != mc.player && getSetting(0).asToggle().state) {
-			// Manually draw on players because of 2 colors
-			float[] col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(event.entity.getName().getString()) ? 3 : 2).asColor().getRGBFloat();
-			
-			if (getSetting(0).asToggle().getChild(0).asToggle().state) {
-				event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
+		float[] color = getColorForEntity(event.entity);
+		
+		if (color != null) {
+			if (getSetting(4).asToggle().state) {
+				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
+					RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
+				}
+				
+				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
+					RenderUtils.drawFill(event.entity.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
+				}
+			}
+
+			if (getSetting(0).asMode().mode <= 1) {
+				event.vertex = getOutline(event.buffers, color[0], color[1], color[2]);
 				event.entity.setGlowing(true);
 			} else {
 				event.entity.setGlowing(false);
 			}
-			
-			if (getSetting(0).asToggle().getChild(1).asToggle().state) {
-				drawOutline(event.entity, event.matrix, (float) getSetting(0).asToggle().getChild(1).asToggle().getChild(0).asSlider().getValue());
-			}
-		} else if (event.entity instanceof Monster && getSetting(1).asToggle().state) {
-			handleEsp(1, event);
-		} // Before animals to prevent animals from overlapping donkeys
-		else if (event.entity instanceof AbstractDonkeyEntity && getSetting(6).asToggle().state) {
-			handleEsp(6, event);
-		} else if (EntityUtils.isAnimal(event.entity) && getSetting(2).asToggle().state) {
-			handleEsp(2, event);
-		} else if (event.entity instanceof ItemEntity && getSetting(3).asToggle().state) {
-			handleEsp(3, event);
-		} else if (event.entity instanceof EndCrystalEntity && getSetting(4).asToggle().state) {
-			handleEsp(4, event);
-		} else if ((event.entity instanceof BoatEntity || event.entity instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
-			handleEsp(5, event);
 		}
 	}
 	
-	private void handleEsp(int setting, EventWorldRenderEntity event) {
-		float[] col = getSetting(setting).asToggle().getChild(2).asColor().getRGBFloat();
-
-		if (getSetting(setting).asToggle().getChild(0).asToggle().state) {
-			event.vertex = getOutline(event.buffers, col[0], col[1], col[2]);
-			event.entity.setGlowing(true);
-		} else {
-			event.entity.setGlowing(false);
+	private float[] getColorForEntity(Entity entity) {
+		if (entity instanceof PlayerEntity && entity != mc.player && getSetting(5).asToggle().state) {
+			return getSetting(5).asToggle().getChild(BleachHack.friendMang.has(entity.getName().getString()) ? 1 : 0).asColor().getRGBFloat();
+		} else if (entity instanceof Monster && getSetting(6).asToggle().state) {
+			return getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
+		} // Before animals to prevent animals from overlapping donkeys
+		else if (entity instanceof AbstractDonkeyEntity && getSetting(11).asToggle().state) {
+			return getSetting(11).asToggle().getChild(0).asColor().getRGBFloat();
+		} else if (EntityUtils.isAnimal(entity) && getSetting(7).asToggle().state) {
+			return getSetting(7).asToggle().getChild(0).asColor().getRGBFloat();
+		} else if (entity instanceof ItemEntity && getSetting(8).asToggle().state) {
+			return getSetting(8).asToggle().getChild(0).asColor().getRGBFloat();
+		} else if (entity instanceof EndCrystalEntity && getSetting(9).asToggle().state) {
+			return getSetting(9).asToggle().getChild(0).asColor().getRGBFloat();
+		} else if ((entity instanceof BoatEntity || entity instanceof AbstractMinecartEntity) && getSetting(10).asToggle().state) {
+			return getSetting(10).asToggle().getChild(0).asColor().getRGBFloat();
 		}
 		
-		if (getSetting(setting).asToggle().getChild(1).asToggle().state) {
-			drawOutline(event.entity, event.matrix, (float) getSetting(setting).asToggle().getChild(1).asToggle().getChild(0).asSlider().getValue());
-		}
+		return null;
 	}
 
 	private VertexConsumerProvider getOutline(BufferBuilderStorage buffers, float r, float g, float b) {
 		OutlineVertexConsumerProvider ovsp = buffers.getOutlineVertexConsumers();
 		ovsp.setColor((int) (r * 255), (int) (g * 255), (int) (b * 255), 255);
 		return ovsp;
-	}
-	
-	
-	private void drawOutline(Entity entity, MatrixStack matrices, float l) {
-		matrices.push();
-		OutlineRenderUtils.renderPass(entity, matrices, 1f, 1f, 1f, 0f);
-		OutlineRenderUtils.renderOne(l);
-		OutlineRenderUtils.renderPass(entity, matrices, 1f, 1f, 1f, 0f);
-		OutlineRenderUtils.renderTwo();
-		OutlineRenderUtils.renderPass(entity, matrices, 1f, 1f, 1f, 0f);
-		OutlineRenderUtils.renderThree();
-		OutlineRenderUtils.renderPass(entity, matrices, 1f, 1f, 1f, 0f);
-		OutlineRenderUtils.renderFour();
-		matrices.pop();
 	}
 }
