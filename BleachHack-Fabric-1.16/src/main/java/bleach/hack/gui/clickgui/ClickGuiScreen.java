@@ -60,6 +60,8 @@ public class ClickGuiScreen extends WindowScreen {
 	}
 
 	public void init() {
+		super.init();
+
 		searchField = new TextFieldWidget(textRenderer, 2, 14, 100, 12, LiteralText.EMPTY /* @LasnikProgram is author lol */);
 		searchField.visible = false;
 		searchField.setMaxLength(20);
