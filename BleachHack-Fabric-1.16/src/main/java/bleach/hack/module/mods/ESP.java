@@ -31,10 +31,9 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.utils.EntityUtils;
-import bleach.hack.utils.FabricReflect;
 import bleach.hack.utils.RenderUtils;
+import bleach.hack.utils.shader.StaticShaders;
 import bleach.hack.utils.shader.StringShaderEffect;
-import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -48,11 +47,6 @@ import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 
 public class ESP extends Module {
-	
-	private static final String OUTLINE_SHADER = "{\"targets\":[\"swap\",\"final\"],\"passes\":[{\"name\":\"entity_outline\",\"intarget\":\"final\",\"outtarget\":\"swap\"},{\"name\":\"blit\",\"intarget\":\"swap\",\"outtarget\":\"final\"}]}";
-	private static final String MC_SHADER_UNFOMATTED = "{\"targets\":[\"swap\",\"final\"],\"passes\":[{\"name\":\"entity_outline\",\"intarget\":\"final\",\"outtarget\":\"swap\"},{\"name\":\"blur\",\"intarget\":\"swap\",\"outtarget\":\"final\",\"uniforms\":[{\"name\":\"BlurDir\",\"values\":[%2,0]},{\"name\":\"Radius\",\"values\":[%1]}]},{\"name\":\"blur\",\"intarget\":\"final\",\"outtarget\":\"swap\",\"uniforms\":[{\"name\":\"BlurDir\",\"values\":[0,%2]},{\"name\":\"Radius\",\"values\":[%1]}]},{\"name\":\"blit\",\"intarget\":\"swap\",\"outtarget\":\"final\"}]}";
-
-	public boolean drawOutlineLayer = false;
 
 	private int lastWidth;
 	private int lastHeight;
@@ -65,7 +59,7 @@ public class ESP extends Module {
 				new SettingMode("Render", "Outline", "Shader", "Box+Fill", "Box", "Fill"),
 				new SettingSlider("Shader", 0, 3, 1.5, 1).withDesc("The thickness of the shader outline"),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
-				new SettingSlider("Fill", 0, 1, 0.5, 2).withDesc("The opacity of the fill"),
+				new SettingSlider("Fill", 0, 1, 0.75, 2).withDesc("The opacity of the fill"),
 				new SettingToggle("DrawBehind", false).withDesc("Draws the box/fill behind the entity (definitely not a bug turned into a feature)"),
 
 				new SettingToggle("Players", true).withDesc("Show Players").withChildren(
@@ -93,7 +87,6 @@ public class ESP extends Module {
 
 	@Override
 	public void onDisable() {
-		super.onDisable();
 		for (Entity e : mc.world.getEntities()) {
 			if (e != mc.player) {
 				if (e.isGlowing()) {
@@ -101,6 +94,8 @@ public class ESP extends Module {
 				}
 			}
 		}
+
+		super.onDisable();
 	}
 
 	@Subscribe
@@ -109,8 +104,8 @@ public class ESP extends Module {
 			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
 					|| lastShaderWidth != getSetting(1).asSlider().getValue() || lastShaderMode != getSetting(0).asMode().mode) {
 				try {
-					ShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
-							getSetting(0).asMode().mode == 0 ? OUTLINE_SHADER : MC_SHADER_UNFOMATTED
+					StringShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
+							getSetting(0).asMode().mode == 0 ? StaticShaders.OUTLINE_SHADER : StaticShaders.MC_SHADER_UNFOMATTED
 									.replace("%1", "" + getSetting(1).asSlider().getValue())
 									.replace("%2", "" + (getSetting(1).asSlider().getValue() / 2)));
 
@@ -120,14 +115,8 @@ public class ESP extends Module {
 					lastShaderWidth = getSetting(1).asSlider().getValue();
 					lastShaderMode = getSetting(0).asMode().mode;
 					shaderUnloaded = false;
-	
-					ShaderEffect se = (ShaderEffect) FabricReflect.getFieldValue(mc.worldRenderer, "field_4059", "entityOutlineShader"); 
-					if (se != null) {
-						se.close();
-					}
-	
-					FabricReflect.writeField(mc.worldRenderer, shader, "field_4059", "entityOutlineShader");
-					FabricReflect.writeField(mc.worldRenderer, shader.getSecondaryTarget("final"), "field_4101", "entityOutlinesFramebuffer");
+
+					shader.loadToWorldRenderer();
 				} catch (JsonSyntaxException | IOException e) {
 					e.printStackTrace();
 				}
@@ -137,7 +126,7 @@ public class ESP extends Module {
 			shaderUnloaded = true;
 		}
 	}
-	
+
 	@Subscribe
 	public void onWorldRenderPost(EventWorldRender.Post event) {
 		if (!getSetting(4).asToggle().state) {
@@ -149,9 +138,9 @@ public class ESP extends Module {
 				float[] color = getColorForEntity(e);
 				if (color != null) {
 					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-						RenderUtils.drawOutlineBox(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(2).asSlider().getValue());
+						RenderUtils.drawOutline(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(2).asSlider().getValue());
 					}
-					
+
 					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
 						RenderUtils.drawFill(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
 					}
@@ -163,15 +152,15 @@ public class ESP extends Module {
 	@Subscribe
 	public void onWorldEntityRender(EventWorldRenderEntity event) {
 		float[] color = getColorForEntity(event.entity);
-		
+
 		if (color != null) {
 			if (getSetting(4).asToggle().state) {
-				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawOutlineBox(event.entity.getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
-				}
-				
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
 					RenderUtils.drawFill(event.entity.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
+				}
+
+				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
+					RenderUtils.drawOutline(event.entity.getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
 				}
 			}
 
@@ -183,7 +172,7 @@ public class ESP extends Module {
 			}
 		}
 	}
-	
+
 	private float[] getColorForEntity(Entity entity) {
 		if (entity instanceof PlayerEntity && entity != mc.player && getSetting(5).asToggle().state) {
 			return getSetting(5).asToggle().getChild(BleachHack.friendMang.has(entity.getName().getString()) ? 1 : 0).asColor().getRGBFloat();
@@ -201,7 +190,7 @@ public class ESP extends Module {
 		} else if ((entity instanceof BoatEntity || entity instanceof AbstractMinecartEntity) && getSetting(10).asToggle().state) {
 			return getSetting(10).asToggle().getChild(0).asColor().getRGBFloat();
 		}
-		
+
 		return null;
 	}
 

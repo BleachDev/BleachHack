@@ -96,15 +96,15 @@ public class RenderUtils {
 		gl11Cleanup();
 	}
 
-	public static void drawOutlineBox(BlockPos blockPos, float r, float g, float b, float a) {
-		drawOutlineBox(new Box(blockPos), r, g, b, a);
+	public static void drawOutline(BlockPos blockPos, float r, float g, float b, float a) {
+		drawOutline(new Box(blockPos), r, g, b, a);
 	}
 	
-	public static void drawOutlineBox(Box box, float r, float g, float b, float a) {
-		drawOutlineBox(box, r, g, b, a, 2.5f);
+	public static void drawOutline(Box box, float r, float g, float b, float a) {
+		drawOutline(box, r, g, b, a, 2.5f);
 	}
 
-	public static void drawOutlineBox(Box box, float r, float g, float b, float a, float width) {
+	public static void drawOutline(Box box, float r, float g, float b, float a, float width) {
 		gl11Setup();
 
 		GL11.glLineWidth(width);

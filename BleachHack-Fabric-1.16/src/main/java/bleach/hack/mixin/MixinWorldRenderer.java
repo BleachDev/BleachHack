@@ -4,7 +4,6 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,7 +32,7 @@ public class MixinWorldRenderer {
 	@Shadow
 	private BufferBuilderStorage bufferBuilders;
 
-	@Inject(at = @At(value = "HEAD", shift = Shift.BY, by = 3), method = "renderEntity", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "renderEntity", cancellable = true)
 	private void renderEntity(Entity entity_1, double double_1, double double_2, double double_3, float float_1, MatrixStack matrixStack_1,
 			VertexConsumerProvider vertexConsumerProvider_1, CallbackInfo ci) {
 		EventWorldRenderEntity event = new EventWorldRenderEntity(entity_1, matrixStack_1, vertexConsumerProvider_1, bufferBuilders);

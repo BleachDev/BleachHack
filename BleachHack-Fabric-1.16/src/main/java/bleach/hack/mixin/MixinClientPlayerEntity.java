@@ -30,7 +30,6 @@ import com.mojang.authlib.GameProfile;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventMovementTick;
-import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.BetterPortal;
 import bleach.hack.module.mods.EntityControl;
@@ -38,8 +37,6 @@ import bleach.hack.module.mods.Freecam;
 import bleach.hack.module.mods.NoSlow;
 import bleach.hack.module.mods.SafeWalk;
 import bleach.hack.module.mods.Scaffold;
-import bleach.hack.utils.BleachQueue;
-import bleach.hack.utils.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -65,34 +62,14 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	protected void autoJump(float float_1, float float_2) {
 	}
 
-	@Inject(at = @At("RETURN"), method = "tick()V", cancellable = true)
-	public void tick(CallbackInfo info) {
-		try {
-			if (MinecraftClient.getInstance().player.age % 100 == 0) {
-				if (BleachFileHelper.SCHEDULE_SAVE_MODULES)
-					BleachFileHelper.saveModules();
-				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI)
-					BleachFileHelper.saveClickGui();
-				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS)
-					BleachFileHelper.saveFriends();
-			}
-
-			BleachQueue.nextQueue();
-		} catch (Exception e) {
-		}
-
-		EventTick event = new EventTick();
-		BleachHack.eventBus.post(event);
-		if (event.isCancelled())
-			info.cancel();
-	}
-
 	@Inject(at = @At("HEAD"), method = "sendMovementPackets()V", cancellable = true)
 	public void sendMovementPackets(CallbackInfo info) {
 		EventMovementTick event = new EventMovementTick();
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled())
+
+		if (event.isCancelled()) {
 			info.cancel();
+		}
 	}
 
 	@Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))

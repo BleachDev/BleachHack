@@ -6,10 +6,15 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventSkyRender;
+import bleach.hack.event.events.EventTick;
+import bleach.hack.utils.BleachQueue;
+import bleach.hack.utils.file.BleachFileHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +26,28 @@ public class MixinClientWorld {
 	@Final
 	@Shadow
 	private SkyProperties skyProperties;
+	
+	@Inject(at = @At("HEAD"), method = "tickEntities", cancellable = true)
+	public void tickEntities(CallbackInfo info) {
+		try {
+			if (MinecraftClient.getInstance().player.age % 100 == 0) {
+				if (BleachFileHelper.SCHEDULE_SAVE_MODULES)
+					BleachFileHelper.saveModules();
+				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI)
+					BleachFileHelper.saveClickGui();
+				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS)
+					BleachFileHelper.saveFriends();
+			}
+
+			BleachQueue.nextQueue();
+		} catch (Exception e) {
+		}
+
+		EventTick event = new EventTick();
+		BleachHack.eventBus.post(event);
+		if (event.isCancelled())
+			info.cancel();
+	}
 
 	@Inject(at = @At("HEAD"), method = "method_23777", cancellable = true)
 	public void method_23777(BlockPos blockPos, float f, CallbackInfoReturnable<Vec3d> ci) {

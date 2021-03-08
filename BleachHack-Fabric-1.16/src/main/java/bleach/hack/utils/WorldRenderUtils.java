@@ -107,7 +107,7 @@ public class WorldRenderUtils {
 		return matrix;
 	}
 	
-	private static MatrixStack matrixFrom(double x, double y, double z) {
+	public static MatrixStack matrixFrom(double x, double y, double z) {
 		MatrixStack matrix = new MatrixStack();
 		
 		Camera camera = mc.gameRenderer.getCamera();
