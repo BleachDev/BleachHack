@@ -8,7 +8,7 @@ import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.WorldUtils;
+import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.particle.PortalParticle;
 

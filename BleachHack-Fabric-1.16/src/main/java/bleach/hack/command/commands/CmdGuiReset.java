@@ -19,7 +19,7 @@ package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
 import bleach.hack.module.mods.ClickGui;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.util.BleachLogger;
 
 public class CmdGuiReset extends Command {
 

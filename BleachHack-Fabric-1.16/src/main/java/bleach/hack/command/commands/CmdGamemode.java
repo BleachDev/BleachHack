@@ -18,7 +18,7 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.util.BleachLogger;
 import net.minecraft.world.GameMode;
 
 public class CmdGamemode extends Command {

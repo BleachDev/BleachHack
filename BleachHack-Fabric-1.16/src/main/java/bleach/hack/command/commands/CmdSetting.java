@@ -24,7 +24,7 @@ import bleach.hack.setting.base.SettingBase;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.util.BleachLogger;
 
 public class CmdSetting extends Command {
 

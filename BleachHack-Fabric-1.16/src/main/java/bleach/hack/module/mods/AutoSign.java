@@ -29,7 +29,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.FabricReflect;
+import bleach.hack.util.FabricReflect;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;

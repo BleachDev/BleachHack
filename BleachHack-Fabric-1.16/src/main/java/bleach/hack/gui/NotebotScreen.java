@@ -36,8 +36,8 @@ import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.Notebot;
-import bleach.hack.utils.NotebotUtils;
-import bleach.hack.utils.file.BleachFileMang;
+import bleach.hack.util.NotebotUtils;
+import bleach.hack.util.file.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.util.math.MatrixStack;
@@ -219,6 +219,7 @@ public class NotebotScreen extends WindowScreen {
 			
 			if (mouseX > x + 10 && mouseX < x + 99 && mouseY > y + h - 13 && mouseY < y + h - 3) {
 				NotebotUtils.downloadSongs(true);
+				init();
 			}
 
 			if (entry != null) {

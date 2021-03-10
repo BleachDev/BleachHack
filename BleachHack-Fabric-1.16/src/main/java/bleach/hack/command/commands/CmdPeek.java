@@ -20,9 +20,9 @@ package bleach.hack.command.commands;
 import java.util.List;
 
 import bleach.hack.command.Command;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.BleachQueue;
-import bleach.hack.utils.ItemContentUtils;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.BleachQueue;
+import bleach.hack.util.ItemContentUtils;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HopperBlock;

@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;

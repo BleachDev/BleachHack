@@ -15,7 +15,7 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.util.BleachLogger;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.ingame.HorseScreen;
 import net.minecraft.client.util.InputUtil;

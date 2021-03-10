@@ -3,8 +3,8 @@ package bleach.hack.command.commands;
 import bleach.hack.command.Command;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.DiscordRPCMod;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.file.BleachFileHelper;
 
 public class CmdRpc extends Command {
 

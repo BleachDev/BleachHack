@@ -38,7 +38,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;

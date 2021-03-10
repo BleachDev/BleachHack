@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.command.commands.*;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.file.BleachFileHelper;
 
 public class CommandManager {
 

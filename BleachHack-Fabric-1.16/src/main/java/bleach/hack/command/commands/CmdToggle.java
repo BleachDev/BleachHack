@@ -20,8 +20,8 @@ package bleach.hack.command.commands;
 import bleach.hack.command.Command;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.BleachQueue;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.BleachQueue;
 
 public class CmdToggle extends Command {
 

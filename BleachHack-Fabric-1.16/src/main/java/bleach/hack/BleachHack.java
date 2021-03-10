@@ -23,9 +23,9 @@ import bleach.hack.command.CommandManager;
 import bleach.hack.gui.BleachTitleScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
-import bleach.hack.utils.FriendManager;
-import bleach.hack.utils.file.BleachFileHelper;
-import bleach.hack.utils.file.BleachFileMang;
+import bleach.hack.util.FriendManager;
+import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.file.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
 
 public class BleachHack implements ModInitializer {

@@ -28,7 +28,7 @@ import bleach.hack.gui.BleachTitleScreen;
 import bleach.hack.gui.window.WindowManagerScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;

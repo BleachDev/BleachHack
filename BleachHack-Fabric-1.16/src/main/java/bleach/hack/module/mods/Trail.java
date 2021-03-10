@@ -32,7 +32,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.RenderUtils;
+import bleach.hack.util.RenderUtils;
 import net.minecraft.util.math.Vec3d;
 
 public class Trail extends Module {

@@ -21,10 +21,10 @@ import java.util.List;
 
 import bleach.hack.command.Command;
 import bleach.hack.gui.NotebotScreen;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.BleachQueue;
-import bleach.hack.utils.Midi2Notebot;
-import bleach.hack.utils.file.BleachFileMang;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.BleachQueue;
+import bleach.hack.util.Midi2Notebot;
+import bleach.hack.util.file.BleachFileMang;
 
 public class CmdNotebot extends Command {
 

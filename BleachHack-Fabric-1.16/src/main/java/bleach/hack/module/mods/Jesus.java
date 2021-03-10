@@ -24,7 +24,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.utils.WorldUtils;
+import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 

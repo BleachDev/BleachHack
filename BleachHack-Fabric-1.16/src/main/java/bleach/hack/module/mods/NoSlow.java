@@ -27,7 +27,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.WorldUtils;
+import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.options.KeyBinding;

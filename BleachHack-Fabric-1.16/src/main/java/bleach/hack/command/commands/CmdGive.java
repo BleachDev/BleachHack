@@ -24,7 +24,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import bleach.hack.command.Command;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.util.BleachLogger;
 import net.minecraft.item.AirBlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

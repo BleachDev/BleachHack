@@ -1,6 +1,6 @@
 package bleach.hack.gui.widget;
 
-import bleach.hack.utils.FabricReflect;
+import bleach.hack.util.FabricReflect;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;

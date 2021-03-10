@@ -23,11 +23,11 @@ import java.util.List;
 import bleach.hack.gui.widget.BleachCheckbox;
 import bleach.hack.gui.widget.TextPassFieldWidget;
 import bleach.hack.gui.window.WindowScreen;
+import bleach.hack.util.auth.LoginCrypter;
+import bleach.hack.util.auth.LoginManager;
+import bleach.hack.util.file.BleachFileMang;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
-import bleach.hack.utils.Decrypter;
-import bleach.hack.utils.LoginManager;
-import bleach.hack.utils.file.BleachFileMang;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -101,7 +101,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 					loginResult = LoginManager.login(userField.getText(), passField.getText());
 					try {
-						Decrypter decrypter = new Decrypter(Decrypter.getPassPhrase());
+						LoginCrypter decrypter = new LoginCrypter(LoginCrypter.getPassPhrase());
 						String text = userField.getText() + ":" + decrypter.encrypt(passField.getText());
 
 						if (checkBox.checked && (loginResult.equals("\u00a7aLogin Successful")
@@ -210,7 +210,7 @@ public class AccountManagerScreen extends WindowScreen {
 						userField.setText("");
 					}
 					try {
-						Decrypter decrypter = new Decrypter(Decrypter.getPassPhrase());
+						LoginCrypter decrypter = new LoginCrypter(LoginCrypter.getPassPhrase());
 						passField.setText(decrypter.decrypt(e.get(1)));
 					} catch (Exception e1) {
 						passField.setText("");

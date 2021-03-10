@@ -17,7 +17,7 @@
  */
 package bleach.hack.gui;
 
-import bleach.hack.utils.FabricReflect;
+import bleach.hack.util.FabricReflect;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;

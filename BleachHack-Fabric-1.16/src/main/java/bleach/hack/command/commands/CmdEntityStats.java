@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import bleach.hack.command.Command;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.util.BleachLogger;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 

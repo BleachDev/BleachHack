@@ -29,9 +29,9 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.FabricReflect;
-import bleach.hack.utils.file.BleachFileMang;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.FabricReflect;
+import bleach.hack.util.file.BleachFileMang;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 

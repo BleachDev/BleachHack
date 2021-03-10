@@ -32,7 +32,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.file.BleachFileMang;
+import bleach.hack.util.file.BleachFileMang;
 import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;

@@ -18,8 +18,8 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.file.BleachFileHelper;
 
 public class CmdPrefix extends Command {
 

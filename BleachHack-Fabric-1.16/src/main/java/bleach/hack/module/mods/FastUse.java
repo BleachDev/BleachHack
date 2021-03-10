@@ -30,7 +30,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.utils.FabricReflect;
+import bleach.hack.util.FabricReflect;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 

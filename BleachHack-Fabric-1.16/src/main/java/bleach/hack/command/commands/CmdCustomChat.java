@@ -5,8 +5,8 @@ import java.util.Arrays;
 import bleach.hack.command.Command;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.CustomChat;
-import bleach.hack.utils.BleachLogger;
-import bleach.hack.utils.file.BleachFileHelper;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.file.BleachFileHelper;
 
 public class CmdCustomChat extends Command {
 

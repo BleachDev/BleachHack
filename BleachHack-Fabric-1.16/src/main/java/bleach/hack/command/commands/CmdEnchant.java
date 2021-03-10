@@ -20,7 +20,7 @@ package bleach.hack.command.commands;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
-import bleach.hack.utils.BleachLogger;
+import bleach.hack.util.BleachLogger;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
