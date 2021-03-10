@@ -13,19 +13,12 @@ import net.minecraft.client.render.RenderTickCounter;
 @Mixin(RenderTickCounter.class)
 public class MixinRenderTickCounter {
 
-	@Shadow
-	public float lastFrameDuration;
+	@Shadow public float lastFrameDuration;
+	@Shadow public float tickDelta;
+	@Shadow private long prevTimeMillis;
+	@Shadow private float tickTime;
 
-	@Shadow
-	public float tickDelta;
-
-	@Shadow
-	private long prevTimeMillis;
-
-	@Shadow
-	private float tickTime;
-
-	@Inject(at = @At("HEAD"), method = "beginRenderTick", cancellable = true)
+	@Inject(method = "beginRenderTick", at = @At("HEAD"), cancellable = true)
 	public void beginRenderTick(long timeMillis, CallbackInfoReturnable<Integer> ci) {
 		if (ModuleManager.getModule(Timer.class).isToggled()) {
 			this.lastFrameDuration = (float) (((timeMillis - this.prevTimeMillis) / this.tickTime)
@@ -36,7 +29,6 @@ public class MixinRenderTickCounter {
 			this.tickDelta -= i;
 
 			ci.setReturnValue(i);
-			ci.cancel();
 		}
 	}
 

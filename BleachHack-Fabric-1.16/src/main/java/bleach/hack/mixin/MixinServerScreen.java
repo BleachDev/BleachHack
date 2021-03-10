@@ -38,7 +38,7 @@ public class MixinServerScreen extends Screen {
 		super(text_1);
 	}
 
-	@Inject(at = @At("HEAD"), method = "init()V")
+	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
 		addButton(new ButtonWidget(5, 7, 50, 20, new LiteralText("Scraper"), button -> {
 			client.openScreen(new ServerScraperScreen((MultiplayerScreen) client.currentScreen));

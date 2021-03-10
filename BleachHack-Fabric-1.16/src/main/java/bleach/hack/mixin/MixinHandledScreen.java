@@ -51,29 +51,29 @@ public abstract class MixinHandledScreen extends Screen {
 		super(title);
 	}
 
-	@Inject(at = @At("RETURN"), method = "init()V")
+	@Inject(method = "init()V", at = @At("RETURN"))
 	protected void init(CallbackInfo info) {
 		if (client.player.getVehicle() instanceof HorseBaseEntity) {
 			int rightside = (width + backgroundWidth) / 2 + 2;
 			int topside = (height - backgroundHeight) / 2;
-			
+
 			HorseBaseEntity entity = (HorseBaseEntity) client.player.getVehicle();
-			
+
 			if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 				addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
 					ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
 				}));
-	
+
 				addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {
 					ModuleManager.getModule(MountBypass.class).dontCancel = true;
-	
+
 					client.player.networkHandler.sendPacket(
 							new PlayerInteractEntityC2SPacket(
 									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
-	
+
 					ModuleManager.getModule(MountBypass.class).dontCancel = false;
 				}));
-				
+
 				addButton(new ButtonWidget(rightside, topside + 66, 50, 14, new LiteralText("Dupe"), button -> {
 					double start = client.player.getY();
 					for (int i = 0; i < 1000; i++) {
@@ -83,28 +83,28 @@ public abstract class MixinHandledScreen extends Screen {
 						//		client.player.getX() - 5, client.player.getY(), client.player.getZ() - 5);
 						//client.player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
 					}
-					
+
 					//client.player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
 				}));
 			}
 		}
 	}
-	
-	@Inject(at = @At("RETURN"), method = "render")
+
+	@Inject(method = "render", at = @At("RETURN"))
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		EventDrawContainer event = new EventDrawContainer(
 				(HandledScreen<?>) client.currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
-		
+
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();
-		
+
 		int rightside = (width + backgroundWidth) / 2 + 2;
 		int topside = (height - backgroundHeight) / 2;
 		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 			textRenderer.drawWithShadow(matrix, "IS Dupe: \u00a79[?]", rightside, topside + 2, -1);
 			textRenderer.drawWithShadow(matrix, "ec.me Dupe: \u00a79[?]", rightside, topside + 56, -1);
-			
+
 			if (mouseX >= rightside + textRenderer.getWidth("IS Dupe: ") && mouseX <= rightside + textRenderer.getWidth("IS Dupe: ") + 15
 					&& mouseY >= topside + 1 && mouseY <= topside + 11) {
 				renderTooltip(matrix, Arrays.asList(
@@ -112,7 +112,7 @@ public abstract class MixinHandledScreen extends Screen {
 						new LiteralText("\u00a79Only works on servers running IllegalStack <= 2.1.0")),
 						mouseX, mouseY);
 			}
-			
+
 			if (mouseX >= rightside + textRenderer.getWidth("ec.me Dupe: ") && mouseX <= rightside + textRenderer.getWidth("ec.me Dupe: ") + 15
 					&& mouseY >= topside + 55 && mouseY <= topside + 65) {
 				renderTooltip(matrix, Arrays.asList(

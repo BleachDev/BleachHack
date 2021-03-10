@@ -30,8 +30,7 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 @Mixin(ClientPlayerInteractionManager.class)
 public class MixinClientPlayerInteractionManager {
 
-	@Shadow
-	private int blockBreakingCooldown;
+	@Shadow private int blockBreakingCooldown;
 	
 	private int getCooldown() {
 		return (ModuleManager.getModule(Nuker.class).isToggled()

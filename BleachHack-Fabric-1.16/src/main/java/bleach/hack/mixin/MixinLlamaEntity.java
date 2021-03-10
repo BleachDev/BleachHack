@@ -29,7 +29,7 @@ import net.minecraft.entity.passive.LlamaEntity;
 @Mixin(LlamaEntity.class)
 public abstract class MixinLlamaEntity {
 
-	@Inject(at = @At("HEAD"), method = "canBeControlledByRider()Z", cancellable = true)
+	@Inject(method = "canBeControlledByRider", at = @At("HEAD"), cancellable = true)
 	public void canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
 		info.setReturnValue(ModuleManager.getModule(EntityControl.class).isToggled());
 	}

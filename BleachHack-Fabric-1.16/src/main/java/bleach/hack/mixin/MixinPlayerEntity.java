@@ -24,14 +24,13 @@ import net.minecraft.world.World;
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity extends LivingEntity {
 
-	@Shadow
-	public PlayerInventory inventory;
+	@Shadow public PlayerInventory inventory;
 
 	protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType_1, World world_1) {
 		super(entityType_1, world_1);
 	}
 
-	@Inject(at = @At("HEAD"), method = "getBlockBreakingSpeed", cancellable = true)
+	@Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
 	public void getBlockBreakingSpeed(BlockState blockState_1, CallbackInfoReturnable<Float> ci) {
 		Module mod = ModuleManager.getModule(SpeedMine.class);
 
@@ -85,7 +84,6 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				float_1 *= (float) mod.getSetting(3).asSlider().getValue();
 
 			ci.setReturnValue(float_1);
-			ci.cancel();
 		}
 	}
 }

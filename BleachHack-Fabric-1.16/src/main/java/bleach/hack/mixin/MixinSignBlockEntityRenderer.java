@@ -20,8 +20,10 @@ public class MixinSignBlockEntityRenderer {
 			int int_2, CallbackInfo ci) {
 		EventSignBlockEntityRender event = new EventSignBlockEntityRender(signBlockEntity_1);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled())
+
+		if (event.isCancelled()) {
 			ci.cancel();
+		}
 	}
 
 }

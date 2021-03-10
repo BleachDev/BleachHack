@@ -20,7 +20,7 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.BiomeColorEvent;
-import bleach.hack.event.events.EventMovementTick;
+import bleach.hack.event.events.EventSendMovementPackets;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.module.Category;
@@ -89,7 +89,7 @@ public class Ambience extends Module {
 	}
 
 	@Subscribe
-	public void onPreTick(EventMovementTick event) {
+	public void onPreTick(EventSendMovementPackets event) {
 		if (getSetting(0).asToggle().state) {
 			if (getSetting(0).asToggle().getChild(0).asMode().mode == 0) {
 				mc.world.setRainGradient(0f);

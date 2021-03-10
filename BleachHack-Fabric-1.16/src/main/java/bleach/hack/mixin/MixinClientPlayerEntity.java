@@ -29,7 +29,7 @@ import com.mojang.authlib.GameProfile;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventClientMove;
-import bleach.hack.event.events.EventMovementTick;
+import bleach.hack.event.events.EventSendMovementPackets;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.BetterPortal;
 import bleach.hack.module.mods.EntityControl;
@@ -48,23 +48,19 @@ import net.minecraft.util.math.Vec3d;
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
+	@Shadow private float field_3922;
+
+	@Shadow protected MinecraftClient client;
+
 	public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
 		super(world, profile);
 	}
-	
-	@Shadow
-	private float field_3922;
 
-	@Shadow
-	protected MinecraftClient client;
+	@Shadow protected void autoJump(float float_1, float float_2) {}
 
-	@Shadow
-	protected void autoJump(float float_1, float float_2) {
-	}
-
-	@Inject(at = @At("HEAD"), method = "sendMovementPackets()V", cancellable = true)
+	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
 	public void sendMovementPackets(CallbackInfo info) {
-		EventMovementTick event = new EventMovementTick();
+		EventSendMovementPackets event = new EventSendMovementPackets();
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -72,7 +68,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Redirect(method = "tickMovement()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
+	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
 	private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
 		if (ModuleManager.getModule(NoSlow.class).isToggled() && ModuleManager.getModule(NoSlow.class).getSetting(5).asToggle().state) {
 			return false;
@@ -81,7 +77,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		return player.isUsingItem();
 	}
 
-	@Inject(at = @At("HEAD"), method = "move", cancellable = true)
+	@Inject(method = "move", at = @At("HEAD"), cancellable = true)
 	public void move(MovementType movementType_1, Vec3d vec3d_1, CallbackInfo info) {
 		EventClientMove event = new EventClientMove(movementType_1, vec3d_1);
 		BleachHack.eventBus.post(event);
@@ -96,14 +92,14 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Inject(at = @At("HEAD"), method = "pushOutOfBlocks", cancellable = true)
+	@Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
 	protected void pushOutOfBlocks(double double_1, double double_2, CallbackInfo ci) {
 		if (ModuleManager.getModule(Freecam.class).isToggled()) {
 			ci.cancel();
 		}
 	}
 
-	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0))
+	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0))
 	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled()
 				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
@@ -111,7 +107,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Redirect(method = "updateNausea()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0))
+	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0))
 	private void updateNausea_openScreen(MinecraftClient player, Screen screen_1) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled()
 				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
@@ -125,7 +121,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 				|| (ModuleManager.getModule(Scaffold.class).isToggled()
 						&& ModuleManager.getModule(Scaffold.class).getSetting(8).asToggle().state);
 	}
-	
+
 	@Overwrite
 	public float method_3151() {
 		return ModuleManager.getModule(EntityControl.class).isToggled()

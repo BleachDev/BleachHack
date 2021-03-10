@@ -23,11 +23,9 @@ import net.minecraft.util.math.Vec3d;
 @Mixin(ClientWorld.class)
 public class MixinClientWorld {
 	
-	@Final
-	@Shadow
-	private SkyProperties skyProperties;
+	@Final @Shadow private SkyProperties skyProperties;
 	
-	@Inject(at = @At("HEAD"), method = "tickEntities", cancellable = true)
+	@Inject(method = "tickEntities", at = @At("HEAD"), cancellable = true)
 	public void tickEntities(CallbackInfo info) {
 		try {
 			if (MinecraftClient.getInstance().player.age % 100 == 0) {
@@ -49,7 +47,7 @@ public class MixinClientWorld {
 			info.cancel();
 	}
 
-	@Inject(at = @At("HEAD"), method = "method_23777", cancellable = true)
+	@Inject(method = "method_23777", at = @At("HEAD"), cancellable = true)
 	public void method_23777(BlockPos blockPos, float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyRender.Color.SkyColor event = new EventSkyRender.Color.SkyColor(f);
 		BleachHack.eventBus.post(event);
@@ -60,7 +58,7 @@ public class MixinClientWorld {
 		}
 	}
 
-	@Inject(at = @At("HEAD"), method = "getCloudsColor", cancellable = true)
+	@Inject(method = "getCloudsColor", at = @At("HEAD"), cancellable = true)
 	public void getCloudsColor(float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyRender.Color.CloudColor event = new EventSkyRender.Color.CloudColor(f);
 		BleachHack.eventBus.post(event);

@@ -30,11 +30,13 @@ import net.minecraft.client.gui.screen.Screen;
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
 
-	@Inject(at = @At("HEAD"), method = "openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", cancellable = true)
+	@Inject(method = "openScreen", at = @At("HEAD"), cancellable = true)
 	public void openScreen(Screen screen, CallbackInfo info) {
 		EventOpenScreen event = new EventOpenScreen(screen);
 		BleachHack.eventBus.post(event);
-		if (event.isCancelled())
+
+		if (event.isCancelled()) {
 			info.cancel();
+		}
 	}
 }

@@ -42,12 +42,10 @@ import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
-	@Shadow
-	private Channel channel;
 
-	@Shadow
-	private void sendImmediately(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1) {
-	}
+	@Shadow private Channel channel;
+
+	@Shadow private void sendImmediately(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1) {}
 
 	@Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
 	public void channelRead0(ChannelHandlerContext channelHandlerContext_1, Packet<?> packet_1, CallbackInfo callback) {

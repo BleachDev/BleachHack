@@ -14,7 +14,7 @@ import net.minecraft.fluid.Fluids;
 @Mixin(Camera.class)
 public class MixinCamera {
 
-	@Inject(at = @At("HEAD"), method = "getSubmergedFluidState()Lnet/minecraft/fluid/FluidState;", cancellable = true)
+	@Inject(method = "getSubmergedFluidState", at = @At("HEAD"), cancellable = true)
 	private void getSubmergedFluidState(CallbackInfoReturnable<FluidState> cir) {
 		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(3).asToggle().state) {
 			cir.setReturnValue(Fluids.EMPTY.getDefaultState());

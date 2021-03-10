@@ -15,7 +15,7 @@ import net.minecraft.item.map.MapState;
 @Mixin(MapRenderer.class)
 public class MixinMapRenderer {
 
-	@Inject(at = @At("HEAD"), method = "draw", cancellable = true)
+	@Inject(method = "draw", at = @At("HEAD"), cancellable = true)
 	public void draw(MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, MapState mapState_1, boolean boolean_1, int int_1, CallbackInfo ci) {
 		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(11).asToggle().state) {
 			ci.cancel();

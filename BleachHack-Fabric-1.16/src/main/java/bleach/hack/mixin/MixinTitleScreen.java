@@ -45,7 +45,7 @@ public class MixinTitleScreen extends Screen {
 		super(text_1);
 	}
 
-	@Inject(at = @At("HEAD"), method = "init()V")
+	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
 		if (BleachTitleScreen.customTitleScreen) {
 			MinecraftClient.getInstance().openScreen(

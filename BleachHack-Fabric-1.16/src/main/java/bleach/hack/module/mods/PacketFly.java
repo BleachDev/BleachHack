@@ -21,7 +21,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventMovementTick;
+import bleach.hack.event.events.EventSendMovementPackets;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
@@ -61,7 +61,7 @@ public class PacketFly extends Module {
 	}
 
 	@Subscribe
-	public void onMovement(EventMovementTick event) {
+	public void onMovement(EventSendMovementPackets event) {
 		mc.player.setVelocity(0, 0, 0);
 		event.setCancelled(true);
 	}

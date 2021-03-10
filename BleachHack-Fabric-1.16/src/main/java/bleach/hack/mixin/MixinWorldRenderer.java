@@ -29,10 +29,9 @@ import net.minecraft.util.math.Matrix4f;
 @Mixin(WorldRenderer.class)
 public class MixinWorldRenderer {
 
-	@Shadow
-	private BufferBuilderStorage bufferBuilders;
+	@Shadow private BufferBuilderStorage bufferBuilders;
 
-	@Inject(at = @At("HEAD"), method = "renderEntity", cancellable = true)
+	@Inject(method = "renderEntity", at = @At("HEAD"), cancellable = true)
 	private void renderEntity(Entity entity_1, double double_1, double double_2, double double_3, float float_1, MatrixStack matrixStack_1,
 			VertexConsumerProvider vertexConsumerProvider_1, CallbackInfo ci) {
 		EventWorldRenderEntity event = new EventWorldRenderEntity(entity_1, matrixStack_1, vertexConsumerProvider_1, bufferBuilders);
@@ -43,7 +42,7 @@ public class MixinWorldRenderer {
 		}
 	}
 	
-	@Inject(at = @At("HEAD"), method = "render", cancellable = true)
+	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	private void render_head(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
 			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
 		EventWorldRender.Pre event = new EventWorldRender.Pre(tickDelta);
@@ -54,7 +53,7 @@ public class MixinWorldRenderer {
 		}
 	}
 	
-	@Inject(at = @At("RETURN"), method = "render")
+	@Inject(method = "render", at = @At("RETURN"))
 	private void render_return(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
 			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
 		RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);
@@ -77,6 +76,7 @@ public class MixinWorldRenderer {
 
 	/*@Redirect(method = "loadEntityOutlineShader", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
 	private Identifier loadEntityOutlineShader_newIdentifier(String id) {
+		nigeria
 		return new Identifier("bleachhack", "shaders/post/bh_entity_outline.json");
 	}*/
 

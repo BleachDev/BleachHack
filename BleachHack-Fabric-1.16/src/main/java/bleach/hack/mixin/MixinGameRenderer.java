@@ -40,48 +40,50 @@ import net.minecraft.util.math.MathHelper;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
-	
-	@Shadow
-	private ShaderEffect shader;
 
-	@Inject(at = @At("HEAD"), method = "bobViewWhenHurt(Lnet/minecraft/client/util/math/MatrixStack;F)V", cancellable = true)
+	@Shadow private ShaderEffect shader;
+
+	@Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
-		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(2).asToggle().state)
+		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(2).asToggle().state) {
 			ci.cancel();
+		}
 	}
 
-	@Inject(at = @At("HEAD"), method = "showFloatingItem", cancellable = true)
+	@Inject(method = "showFloatingItem", at = @At("HEAD"), cancellable = true)
 	private void showFloatingItem(ItemStack itemStack_1, CallbackInfo ci) {
 		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(8).asToggle().state
-				&& itemStack_1.getItem() == Items.TOTEM_OF_UNDYING)
+				&& itemStack_1.getItem() == Items.TOTEM_OF_UNDYING) {
 			ci.cancel();
+		}
 	}
 
 	@Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0))
 	private float nauseaWobble(float delta, float first, float second) {
-		if (!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state))
+		if (!(ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(6).asToggle().state)) {
 			return MathHelper.lerp(delta, first, second);
+		}
 
 		return 0;
 	}
-	
+
 	@Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;shader:Lnet/minecraft/client/gl/ShaderEffect;", ordinal = 0))
 	private ShaderEffect render_Shader(GameRenderer renderer, float tickDelta) {
 		EventRenderShader event = new EventRenderShader(shader);
 		BleachHack.eventBus.post(event);
-		
+
 		if (event.getEffect() != null) {
 			RenderSystem.disableBlend();
-            RenderSystem.disableDepthTest();
-            RenderSystem.disableAlphaTest();
-            RenderSystem.enableTexture();
-            RenderSystem.matrixMode(GL11.GL_TEXTURE);
-            RenderSystem.pushMatrix();
-            RenderSystem.loadIdentity();
-            event.getEffect().render(tickDelta);
-            RenderSystem.popMatrix();
+			RenderSystem.disableDepthTest();
+			RenderSystem.disableAlphaTest();
+			RenderSystem.enableTexture();
+			RenderSystem.matrixMode(GL11.GL_TEXTURE);
+			RenderSystem.pushMatrix();
+			RenderSystem.loadIdentity();
+			event.getEffect().render(tickDelta);
+			RenderSystem.popMatrix();
 		}
-		
+
 		return null;
 	}
 }

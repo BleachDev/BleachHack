@@ -35,11 +35,8 @@ public class MixinChunkOcclusionGraphBuilder {
 	// they're in your FOV.
 	@Inject(method = "markClosed", at = @At("HEAD"), cancellable = true)
 	public void markClosed(BlockPos pos, CallbackInfo callback) {
-		try {
-			if (ModuleManager.getModule(Xray.class).isToggled()) {
-				callback.cancel();
-			}
-		} catch (Exception ignored) {
+		if (ModuleManager.getModule(Xray.class).isToggled()) {
+			callback.cancel();
 		}
 	}
 }
