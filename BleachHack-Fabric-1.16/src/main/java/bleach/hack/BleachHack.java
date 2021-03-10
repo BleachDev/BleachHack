@@ -21,7 +21,6 @@ import com.google.common.eventbus.EventBus;
 
 import bleach.hack.command.CommandManager;
 import bleach.hack.gui.BleachTitleScreen;
-import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.utils.FriendManager;
@@ -48,8 +47,6 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readFriends();
 
 		CommandManager.readPrefix();
-		for (Module m : ModuleManager.getModules())
-			m.init();
 
 		// v This makes a scat fetishist look like housekeeping.
 		eventBus.register(new ModuleManager());

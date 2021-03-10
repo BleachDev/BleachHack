@@ -37,13 +37,10 @@ public class MixinBlock {
 	@Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
 	private static void shouldDrawSide(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, Direction direction_1,
 			CallbackInfoReturnable<Boolean> callback) {
-		try {
-			Xray xray = ModuleManager.getModule(Xray.class);
-			if (xray.isToggled()) {
-				callback.setReturnValue(xray.isVisible(blockState_1.getBlock()));
-				callback.cancel();
-			}
-		} catch (Exception ignored) {
+		Xray xray = ModuleManager.getModule(Xray.class);
+		if (xray.isToggled()) {
+			callback.setReturnValue(xray.isVisible(blockState_1.getBlock()));
+			callback.cancel();
 		}
 	}
 

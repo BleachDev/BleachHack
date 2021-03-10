@@ -68,16 +68,12 @@ public class CustomChat extends Module {
 				new SettingToggle("Prefix", false).withDesc("Message prepended to the message, set with \"customchat prefix [message]\""),
 				new SettingToggle("Suffix", false).withDesc("Message appended to the message, set with \"customchat suffix [message]\""),
 				new SettingMode("KillText", "None", "Ez", "GG").withDesc("Send a chat message when you kill someone"));
-	}
-
-	public void init() {
+		
 		String pfx = BleachFileHelper.readMiscSetting("customChatPrefix");
-		if (pfx != null)
-			prefix = pfx;
+		if (pfx != null) prefix = pfx;
 
 		String sfx = BleachFileHelper.readMiscSetting("customChatSuffix");
-		if (sfx != null)
-			suffix = sfx;
+		if (sfx != null) suffix = sfx;
 	}
 
 	@Subscribe

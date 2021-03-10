@@ -5,7 +5,7 @@
   "mixins": [
   ],
   "client": [
-    "IMixinFirstPersonRenderer",
+    "IMixinHeldItemRenderer",
     "MixinBackgroundRenderer",
   	"MixinAbstractBlock",
   	"MixinBeaconScreen",

@@ -34,7 +34,7 @@ public class Module {
 
 	public final static int KEY_UNBOUND = -2;
 
-	protected MinecraftClient mc = MinecraftClient.getInstance();
+	protected final MinecraftClient mc = MinecraftClient.getInstance();
 	private String name;
 	private int key;
 	private int defaultKey;
@@ -44,22 +44,31 @@ public class Module {
 	private List<SettingBase> settings = new ArrayList<>();
 
 	public Module(String nm, int k, Category c, String d, SettingBase... s) {
+		this(nm, k, c, false, d, s);
+	}
+
+	public Module(String nm, int k, Category c, boolean toggled, String d, SettingBase... s) {
 		name = nm;
 		setKey(k);
 		defaultKey = getKey();
 		category = c;
 		desc = d;
 		settings = new ArrayList<>(Arrays.asList(s));
+		
+		if (toggled) {
+			setToggled(true);
+		}
 
 		settings.add(new SettingBind(this));
 	}
 
 	public void toggle() {
 		toggled = !toggled;
-		if (toggled)
+		if (toggled) {
 			onEnable();
-		else
+		} else {
 			onDisable();
+		}
 	}
 
 	public void onEnable() {
@@ -86,9 +95,6 @@ public class Module {
 		} catch (Exception this_didnt_get_registered_hmm_weird) {
 			this_didnt_get_registered_hmm_weird.printStackTrace();
 		}
-	}
-
-	public void init() {
 	}
 
 	public String getName() {
@@ -134,10 +140,11 @@ public class Module {
 
 	public void setToggled(boolean toggled) {
 		this.toggled = toggled;
-		if (toggled)
+		if (toggled) {
 			onEnable();
-		else
+		} else {
 			onDisable();
+		}
 	}
 
 }

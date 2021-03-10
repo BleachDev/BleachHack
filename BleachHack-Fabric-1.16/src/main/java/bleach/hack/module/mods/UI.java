@@ -68,7 +68,7 @@ public class UI extends Module {
 	private int chunkSize = 0;
 
 	public UI() {
-		super("UI", KEY_UNBOUND, Category.RENDER, "Shows stuff onscreen.",
+		super("UI", KEY_UNBOUND, Category.RENDER, true, "Shows stuff onscreen.",
 				new SettingToggle("Modulelist", true).withDesc("Shows the module list").withChildren( // 0
 						new SettingToggle("Extra Line", true).withDesc("Adds an extra line to the front of the module list"), // 0-0
 						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the module list"), // 0-1
