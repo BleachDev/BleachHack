@@ -217,7 +217,7 @@ public class AccountManagerScreen extends WindowScreen {
 			int x = getWindow(1).x1,
 					y = getWindow(1).y1,
 					w = width - width / 3;
-					//h = height - height / 3;
+			//h = height - height / 3;
 
 			int c = 0;
 			for (Account a: accounts.getAccounts()) {
@@ -241,23 +241,41 @@ public class AccountManagerScreen extends WindowScreen {
 
 		drawStringWithShadow(matrix, textRenderer, "\u00a7cx", x + width + 2, y + 2, -1);
 
-		drawStringWithShadow(matrix, textRenderer, "\u00a77Name: " + (acc.username == null ? "\u00a78Unknown" : acc.username), x + height, y + 4, -1);
-		drawStringWithShadow(matrix, textRenderer,
-				(acc.pass == null ? "\u00aeCracked" : acc.username == null ? "\u00a78Unchecked" : "\u00a7aWorking"), x + height, y + height - 11, -1);
-
 		GL11.glEnable(GL11.GL_BLEND);
 		if (acc.bindSkin()) {
-			int fSize = height - 6;
-			DrawableHelper.fill(matrix, x + 2, y + 2, x + height - 2, y + height - 2, 0x60d86ceb);
-			DrawableHelper.drawTexture(matrix, x + 3, y + 3, fSize, fSize, fSize, fSize, fSize * 8, fSize * 8);
+			double pixelSize = (height - 6) / 8d;
+			DrawableHelper.fill(matrix,
+					x + 2, y + 2,
+					x + height - 2, y + height - 2,
+					0x60d86ceb);
+			DrawableHelper.drawTexture(matrix,
+					x + 3, y + 3,
+					(int) (pixelSize * 8), (int) (pixelSize * 8),
+					(int) (pixelSize * 8), (int) (pixelSize * 8),
+					(int) (pixelSize * 64), (int) (pixelSize * 64));
 		}
-		
-		// TODO: don't care mate
-		/*if (acc.bindCape()) {
-			int cSize = height - 6;
-			DrawableHelper.drawTexture(matrix, x + 3, y + 3, 0, 0, cSize, (int) (cSize * 1.4545), cSize * 8, (int) (cSize * 5.5));
-		}*/
-		
+
+		boolean extendText = acc.bindCape();
+		if (extendText) {
+			double pixelSize = ((height - 6) / 10d) * 0.625;
+			DrawableHelper.fill(matrix,
+					x + height - 1, y + 2,
+					(int) (x + height + pixelSize * 10 + 1), y + height - 2,
+					0x60d86ceb);
+			DrawableHelper.drawTexture(matrix,
+					x + height, y + 3,
+					(int) Math.ceil(pixelSize), (int) Math.ceil(pixelSize),
+					(int) (pixelSize * 10), (int) (pixelSize * 16),
+					(int) (pixelSize * 64), (int) (pixelSize * 32));
+		}
+
+		double pixelSize = ((height - 6) / 10d) * 0.625;
+		drawStringWithShadow(matrix, textRenderer, "\u00a77Name: " + (acc.username == null ? "\u00a78Unknown" : acc.username),
+				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + 4, -1);
+		drawStringWithShadow(matrix, textRenderer,
+				(acc.pass == null ? "\u00aeCracked" : acc.username == null ? "\u00a78Unchecked" : "\u00a7aWorking"),
+				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + height - 11, -1);
+
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
@@ -431,15 +449,15 @@ public class AccountManagerScreen extends WindowScreen {
 
 			return true;
 		}
-		
-		/*public boolean bindCape() {
+
+		public boolean bindCape() {
 			if (textures.containsKey(Type.CAPE)) {
 				MinecraftClient.getInstance().getTextureManager().bindTexture(textures.get(Type.CAPE));
 				return true;
 			}
 
 			return false;
-		}*/
+		}
 
 		@Override
 		public boolean equals(Object obj) {
