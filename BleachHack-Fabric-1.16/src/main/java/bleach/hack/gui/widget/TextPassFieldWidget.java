@@ -1,5 +1,7 @@
 package bleach.hack.gui.widget;
 
+import java.lang.reflect.Field;
+
 import bleach.hack.util.FabricReflect;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -15,8 +17,10 @@ public class TextPassFieldWidget extends TextFieldWidget {
 	public void renderButton(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		String realText = getText();
 
+		Field textField = FabricReflect.getField(TextFieldWidget.class, "field_2092", "text");
+
 		try {
-			FabricReflect.getField(TextFieldWidget.class, "field_2092", "text").set(this, new String(new char[realText.length()]).replace("\0", "\u2022"));
+			textField.set(this, new String(new char[realText.length()]).replace("\0", "\u2022"));
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			System.err.println("Error reflecting text");
 		}
@@ -24,7 +28,7 @@ public class TextPassFieldWidget extends TextFieldWidget {
 		super.renderButton(matrix, mouseX, mouseY, delta);
 
 		try {
-			FabricReflect.getField(TextFieldWidget.class, "field_2092", "text").set(this, realText);
+			textField.set(this, realText);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			System.err.println("Error reflecting text");
 		}

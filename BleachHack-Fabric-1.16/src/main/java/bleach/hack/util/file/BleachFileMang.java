@@ -34,8 +34,9 @@ public class BleachFileMang {
 
 	public static void init() {
 		dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/");
-		if (!dir.toFile().exists())
+		if (!dir.toFile().exists()) {
 			dir.toFile().mkdirs();
+		}
 	}
 
 	/** Gets the bleach directory in your minecraft folder. **/
@@ -60,10 +61,10 @@ public class BleachFileMang {
 	/** Creates a file, doesn't do anything if the file already exists. **/
 	public static void createFile(String... file) {
 		try {
-			if (fileExists(file))
-				return;
-			dir.toFile().mkdirs();
-			Files.createFile(stringsToPath(file));
+			if (!fileExists(file)) {
+				dir.toFile().mkdirs();
+				Files.createFile(stringsToPath(file));
+			}
 		} catch (Exception e) {
 			System.out.println("Error Creating File: " + Arrays.toString(file));
 			e.printStackTrace();

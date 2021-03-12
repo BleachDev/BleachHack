@@ -19,10 +19,11 @@ package bleach.hack.util.file;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
+import org.apache.commons.io.IOUtils;
 
 public class BleachGithubReader {
 
@@ -31,11 +32,7 @@ public class BleachGithubReader {
 	public static List<String> readFileLines(String file) {
 		List<String> st = new ArrayList<>();
 		try {
-			URL fileUrl = url.resolve(file).toURL();
-			Scanner sc = new Scanner(fileUrl.openStream());
-			while (sc.hasNextLine())
-				st.add(sc.nextLine());
-			sc.close();
+			return Arrays.asList(IOUtils.toString(url.resolve(file).toURL(), StandardCharsets.UTF_8).replace("\r", "").split("\n"));
 		} catch (IOException e) {
 		}
 		return st;

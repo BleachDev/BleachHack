@@ -23,8 +23,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import bleach.hack.gui.AccountManagerScreen;
-import bleach.hack.gui.BleachTitleScreen;
+import bleach.hack.gui.title.AccountManagerScreen;
+import bleach.hack.gui.title.BleachTitleScreen;
 import bleach.hack.gui.window.WindowManagerScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;

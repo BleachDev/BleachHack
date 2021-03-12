@@ -19,6 +19,8 @@ package bleach.hack.util.auth;
 
 import java.net.Proxy;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
@@ -30,7 +32,15 @@ import net.minecraft.client.util.Session;
 
 public final class LoginManager {
 
-	public static String login(String email, String password) {
+	public static Pair<String, Session> login(String email, String password) {
+		if (email.isEmpty())
+			return Pair.of("\u00a7cNo Username/Email!", null);
+
+		if (password.isEmpty()) {
+			FabricReflect.writeField(MinecraftClient.getInstance().getSession(), email, "field_1982", "username");
+			return Pair.of("\u00a76Logged in as an unverified account", null); /* Idk this sound weird */
+		}
+
 		YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(
 				Proxy.NO_PROXY, "").createUserAuthentication(Agent.MINECRAFT);
 
@@ -38,38 +48,42 @@ public final class LoginManager {
 		auth.setPassword(password);
 
 		try {
-			if (email.isEmpty())
-				return "\u00a7cNo Username/Email!";
-
-			if (password.isEmpty()) {
-				FabricReflect.writeField(MinecraftClient.getInstance().getSession(), email, "field_1982", "username");
-				return "\u00a76Logged in as an unverified account"; /* Idk this sound weird */
-			}
-
-			if (!email.isEmpty() && !password.isEmpty())
-				auth.logIn();
-
-			Session newsession = new Session(auth.getSelectedProfile().getName(),
-					auth.getSelectedProfile().getId().toString(),
-					auth.getAuthenticatedToken(), "mojang");
-
-			FabricReflect.writeField(MinecraftClient.getInstance(), newsession, "field_1726", "session");
-			return "\u00a7aLogin Successful";
-
-		} catch (SecurityException e) {
-			return "\u00a7cReflection Error";
+			Session session = createSession(email, password);
+			FabricReflect.writeField(MinecraftClient.getInstance(), session, "field_1726", "session");
+			return Pair.of("\u00a7aLogin Successful", session);
 
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
-			if (e.getMessage().contains("Invalid username or password.")
-					|| e.getMessage().toLowerCase().contains("account migrated"))
-				return "\u00a74Wrong password!";
-			else
-				return "\u00a7cCannot contact authentication server!";
+
+			if (e.getMessage().toLowerCase().contains("invalid username or password") || e.getMessage().toLowerCase().contains("account migrated")) {
+				return Pair.of("\u00a74Wrong password!", null);
+			} else {
+				return Pair.of("\u00a7cCannot contact authentication server!", null);
+			}
 
 		} catch (NullPointerException e) {
-			return "\u00a74Wrong password!";
-
+			return Pair.of("\u00a74Wrong password!", null);
 		}
+	}
+
+	public static Session createSessionSilent(String email, String password) {
+		try {
+			return createSession(email, password);
+		} catch (AuthenticationException e) {
+			return null;
+		}
+	}
+
+	public static Session createSession(String email, String password) throws AuthenticationException {
+		YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(
+				Proxy.NO_PROXY, "").createUserAuthentication(Agent.MINECRAFT);
+
+		auth.setUsername(email);
+		auth.setPassword(password);
+		auth.logIn();
+
+		return new Session(auth.getSelectedProfile().getName(),
+				auth.getSelectedProfile().getId().toString(),
+				auth.getAuthenticatedToken(), "mojang");
 	}
 }

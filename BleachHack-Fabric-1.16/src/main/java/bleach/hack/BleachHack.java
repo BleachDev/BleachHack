@@ -20,7 +20,7 @@ package bleach.hack;
 import com.google.common.eventbus.EventBus;
 
 import bleach.hack.command.CommandManager;
-import bleach.hack.gui.BleachTitleScreen;
+import bleach.hack.gui.title.BleachTitleScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.FriendManager;

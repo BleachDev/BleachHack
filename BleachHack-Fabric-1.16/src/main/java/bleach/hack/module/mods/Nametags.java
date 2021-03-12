@@ -19,6 +19,7 @@ package bleach.hack.module.mods;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,6 @@ import java.util.concurrent.Future;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 
-import com.google.common.base.Charsets;
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -132,7 +132,7 @@ public class Nametags extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		// collecting that revenue from all them future copies
+		// collect revenue from all the future copies
 		for (Entry<UUID, Future<String>> f: new HashMap<>(uuidFutures).entrySet()) {
 			if (f.getValue().isDone()) {
 				try {
@@ -297,7 +297,6 @@ public class Nametags extends Module {
 					c++;
 				}
 			}
-			// drawing items died
 		}
 
 		if (!lines.isEmpty()) {
@@ -399,7 +398,7 @@ public class Nametags extends Module {
 			public String call() throws Exception {
 				try {
 					String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
-					String response = IOUtils.toString(URI.create(url), Charsets.UTF_8);
+					String response = IOUtils.toString(URI.create(url), StandardCharsets.UTF_8);
 					System.out.println("bruh uuid time: " + url);
 					
 					JsonElement json = new JsonParser().parse(response);
