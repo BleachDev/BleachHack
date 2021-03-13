@@ -33,7 +33,6 @@ import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.world.EntityUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,14 +59,17 @@ public class Killaura extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		if (!mc.player.isAlive()) {
+			return;
+		}
+
 		delay++;
 		int reqDelay = (int) Math.round(20 / getSetting(8).asSlider().getValue());
 
 		Optional<Entity> target = Streams.stream(mc.world.getEntities())
-				.filter(e -> e instanceof LivingEntity
-						&& !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
+				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
 						&& mc.player.distanceTo(e) <= getSetting(7).asSlider().getValue()
-						&& ((LivingEntity) e).getHealth() > 0 
+						&& e.isAlive() 
 						&& !e.getEntityName().equals(mc.getSession().getUsername())
 						&& e != mc.player.getVehicle()
 						&& (mc.player.canSee(e) || getSetting(5).asToggle().state))
