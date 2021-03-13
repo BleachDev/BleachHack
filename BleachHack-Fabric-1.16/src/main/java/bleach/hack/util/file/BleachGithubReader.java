@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
+import com.google.common.io.Resources;
 
 public class BleachGithubReader {
 
@@ -32,7 +32,7 @@ public class BleachGithubReader {
 	public static List<String> readFileLines(String file) {
 		List<String> st = new ArrayList<>();
 		try {
-			return Arrays.asList(IOUtils.toString(url.resolve(file).toURL(), StandardCharsets.UTF_8).replace("\r", "").split("\n"));
+			return Arrays.asList(Resources.toString(url.resolve(file).toURL(), StandardCharsets.UTF_8).replace("\r", "").split("\n"));
 		} catch (IOException e) {
 		}
 		return st;

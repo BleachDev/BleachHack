@@ -53,9 +53,9 @@ public class NotebotUtils {
 				count++;
 				ZipEntry file = files.nextElement();
 				File outFile = BleachFileMang.getDir().resolve("notebot").resolve(file.getName()).toFile();
-				if (file.isDirectory())
+				if (file.isDirectory()) {
 					outFile.mkdirs();
-				else {
+				} else {
 					outFile.getParentFile().mkdirs();
 					InputStream in = zip.getInputStream(file);
 					FileOutputStream out = new FileOutputStream(outFile);

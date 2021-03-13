@@ -117,19 +117,16 @@ public class BleachTitleScreen extends WindowScreen {
 		this.renderBackground(matrix);
 
 		int copyWidth = this.textRenderer.getWidth("Copyright Mojang AB. Do not distribute!") + 2;
-
+		//System.out.println(versions);
 		textRenderer.drawWithShadow(matrix, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
 		textRenderer.drawWithShadow(matrix, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
 				4, height - 30, -1);
 		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
 		textRenderer.drawWithShadow(matrix, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
 
-		try {
-			if (Integer.parseInt(versions.get(1)) > BleachHack.INTVERSION) {
-				drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack Version!", width / 2, 2, -1);
-				drawCenteredString(matrix, this.textRenderer, "\00a74\u00a7n[Update]", width / 2, 11, -1);
-			}
-		} catch (Exception e) {
+		if (NumberUtils.toInt(versions.get(1), Integer.MAX_VALUE) > BleachHack.INTVERSION) {
+			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack Version!", width / 2, 2, -1);
+			drawCenteredString(matrix, this.textRenderer, "\u00a76[ \u00a7nUpdate\u00a76 ]", width / 2, 11, -1);
 		}
 
 		super.render(matrix, mouseX, mouseY, delta);

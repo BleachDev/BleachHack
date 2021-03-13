@@ -18,7 +18,7 @@
 package bleach.hack.module.mods;
 
 import java.io.IOException;
-import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -37,10 +37,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.eventbus.Subscribe;
+import com.google.common.io.Resources;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -398,7 +398,7 @@ public class Nametags extends Module {
 			public String call() throws Exception {
 				try {
 					String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
-					String response = IOUtils.toString(URI.create(url), StandardCharsets.UTF_8);
+					String response = Resources.toString(new URL(url), StandardCharsets.UTF_8);
 					System.out.println("bruh uuid time: " + url);
 					
 					JsonElement json = new JsonParser().parse(response);
