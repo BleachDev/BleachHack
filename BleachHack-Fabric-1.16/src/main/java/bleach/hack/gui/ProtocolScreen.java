@@ -90,33 +90,29 @@ public class ProtocolScreen extends Screen {
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (mouseX >= nameField.x && mouseX <= nameField.x + nameField.getWidth()
-		&& mouseY >= nameField.y && mouseY <= nameField.y + 18) {
-			nameField.changeFocus(true);
-			protocolField.changeFocus(false);
-			targetField.changeFocus(false);
-			packVerField.changeFocus(false);
+		if (mouseX >= nameField.x && mouseX <= nameField.x + nameField.getWidth() && mouseY >= nameField.y && mouseY <= nameField.y + 18) {
+			nameField.setTextFieldFocused(true);
+			protocolField.setTextFieldFocused(false);
+			targetField.setTextFieldFocused(false);
+			packVerField.setTextFieldFocused(false);
 		}
-		if (mouseX >= protocolField.x && mouseX <= protocolField.x + protocolField.getWidth()
-		&& mouseY >= protocolField.y && mouseY <= protocolField.y + 18) {
-			nameField.changeFocus(false);
-			protocolField.changeFocus(true);
-			targetField.changeFocus(false);
-			packVerField.changeFocus(false);
+		if (mouseX >= protocolField.x && mouseX <= protocolField.x + protocolField.getWidth() && mouseY >= protocolField.y && mouseY <= protocolField.y + 18) {
+			nameField.setTextFieldFocused(false);
+			protocolField.setTextFieldFocused(true);
+			targetField.setTextFieldFocused(false);
+			packVerField.setTextFieldFocused(false);
 		}
-		if (mouseX >= targetField.x && mouseX <= targetField.x + targetField.getWidth()
-		&& mouseY >= targetField.y && mouseY <= targetField.y + 18) {
-			nameField.changeFocus(false);
-			protocolField.changeFocus(false);
-			targetField.changeFocus(true);
-			packVerField.changeFocus(false);
+		if (mouseX >= targetField.x && mouseX <= targetField.x + targetField.getWidth() && mouseY >= targetField.y && mouseY <= targetField.y + 18) {
+			nameField.setTextFieldFocused(false);
+			protocolField.setTextFieldFocused(false);
+			targetField.setTextFieldFocused(true);
+			packVerField.setTextFieldFocused(false);
 		}
-		if (mouseX >= packVerField.x && mouseX <= packVerField.x + packVerField.getWidth()
-		&& mouseY >= packVerField.y && mouseY <= packVerField.y + 18) {
-			nameField.changeFocus(false);
-			protocolField.changeFocus(false);
-			targetField.changeFocus(false);
-			packVerField.changeFocus(true);
+		if (mouseX >= packVerField.x && mouseX <= packVerField.x + packVerField.getWidth() && mouseY >= packVerField.y && mouseY <= packVerField.y + 18) {
+			nameField.setTextFieldFocused(false);
+			protocolField.setTextFieldFocused(false);
+			targetField.setTextFieldFocused(false);
+			packVerField.setTextFieldFocused(true);
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
