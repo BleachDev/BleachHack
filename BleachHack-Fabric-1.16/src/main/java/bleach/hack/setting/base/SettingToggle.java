@@ -59,7 +59,7 @@ public class SettingToggle extends SettingBase {
 
 	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
 		String color2 = state ? "\u00a7a" : "\u00a7c";
-		
+
 		if (window.mouseOver(x, y, x + len, y + 12)) {
 			DrawableHelper.fill(matrix, x + 1, y, x + len, y + 12, 0x70303070);
 		}
@@ -83,9 +83,16 @@ public class SettingToggle extends SettingBase {
 			}
 
 			GL11.glPushMatrix();
-			GL11.glScaled(0.65, 0.65, 1);
-			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
-					color2 + (expanded ? "[\u00a7lv" + color2 + "]" : "[\u00a7l>" + color2 + "]"), (int) ((x + len - 13) * 1 / 0.65), (int) ((y + 4) * 1 / 0.65), -1);
+			if (expanded) {
+				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
+						color2 + "\u2228",
+						x + len - 8, y + 3, -1);
+			} else {
+				GL11.glScaled(0.75, 0.75, 1);
+				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
+						color2 + "\u00a7l>",
+						(int) ((x + len - 7) * 1 / 0.75), (int) ((y + 4) * 1 / 0.75), -1);
+			}
 			GL11.glPopMatrix();
 		}
 
