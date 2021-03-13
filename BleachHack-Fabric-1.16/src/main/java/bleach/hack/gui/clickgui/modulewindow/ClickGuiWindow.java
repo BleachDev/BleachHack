@@ -27,11 +27,11 @@ public abstract class ClickGuiWindow extends Window {
 		mc = MinecraftClient.getInstance();
 	}
 
-	public boolean shouldClose(int mX, int mY) {
+	public boolean shouldClose(int mouseX, int mouseY) {
 		return false;
 	}
 
-	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
+	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
 		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
 		horizonalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);

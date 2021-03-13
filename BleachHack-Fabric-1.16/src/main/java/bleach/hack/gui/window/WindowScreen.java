@@ -115,9 +115,9 @@ public abstract class WindowScreen extends Screen {
 		super.render(matrix, mouseX, mouseY, delta);
 	}
 
-	public void onRenderWindow(MatrixStack matrix, int window, int mX, int mY) {
+	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
 		if (!windows.get(window).closed) {
-			windows.get(window).render(matrix, mX, mY);
+			windows.get(window).render(matrix, mouseX, mouseY);
 		}
 	}
 

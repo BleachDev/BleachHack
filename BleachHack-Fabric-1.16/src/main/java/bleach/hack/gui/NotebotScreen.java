@@ -100,8 +100,8 @@ public class NotebotScreen extends WindowScreen {
 		super.render(matrix, mouseX, mouseY, delta);
 	}
 
-	public void onRenderWindow(MatrixStack matrix, int window, int mX, int mY) {
-		super.onRenderWindow(matrix, window, mX, mY);
+	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
+		super.onRenderWindow(matrix, window, mouseX, mouseY);
 
 		if (window == 0) {
 			int x = getWindow(0).x1,
@@ -115,7 +115,7 @@ public class NotebotScreen extends WindowScreen {
 
 			drawCenteredString(matrix, textRenderer, "Page " + (page + 1), x + 55, y + 5, 0xc0c0ff);
 
-			fillButton(matrix, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mX, mY);
+			fillButton(matrix, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mouseX, mouseY);
 			drawCenteredString(matrix, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 
 			int c = 0, c1 = -1;
@@ -127,7 +127,7 @@ public class NotebotScreen extends WindowScreen {
 					break;
 
 				fillButton(matrix, x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10,
-						Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, mX, mY);
+						Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, mouseX, mouseY);
 				if (cutText(s, 105).equals(s))
 					drawCenteredString(matrix, textRenderer, s, x + 55, y + 16 + c * 10, -1);
 				else
@@ -183,9 +183,9 @@ public class NotebotScreen extends WindowScreen {
 					GL11.glPopMatrix();
 				}
 
-				fillButton(matrix, x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, mX, mY);
-				fillButton(matrix, x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mX, mY);
-				fillButton(matrix, x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mX, mY);
+				fillButton(matrix, x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, mouseX, mouseY);
+				fillButton(matrix, x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mouseX, mouseY);
+				fillButton(matrix, x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mouseX, mouseY);
 
 				int pixels = (int) Math.round(MathHelper.clamp((w / 4d) * ((double) entry.playTick / (double) entry.length), 0, w / 4d));
 				fill(matrix, x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
@@ -258,8 +258,8 @@ public class NotebotScreen extends WindowScreen {
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	private void fillButton(MatrixStack matrix, int x1, int y1, int x2, int y2, int color, int colorHover, int mX, int mY) {
-		fill(matrix, x1, y1, x2, y2, (mX > x1 && mX < x2 && mY > y1 && mY < y2 ? colorHover : color));
+	private void fillButton(MatrixStack matrix, int x1, int y1, int x2, int y2, int color, int colorHover, int mouseX, int mouseY) {
+		fill(matrix, x1, y1, x2, y2, (mouseX > x1 && mouseX < x2 && mouseY > y1 && mouseY < y2 ? colorHover : color));
 	}
 
 	private String cutText(String text, int leng) {

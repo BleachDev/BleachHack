@@ -122,8 +122,8 @@ public class PacketFly extends Module {
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket(timer));
 
 		} else if (getSetting(0).asMode().mode == 1) {
-			double mX = 0;
-			double mY = 0;
+			double mouseX = 0;
+			double mouseY = 0;
 			double mZ = 0;
 			if (mc.player.headYaw != mc.player.yaw) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
@@ -132,32 +132,32 @@ public class PacketFly extends Module {
 			}
 
 			if (mc.options.keyJump.isPressed())
-				mY = 0.062;
+				mouseY = 0.062;
 			if (mc.options.keySneak.isPressed())
-				mY = -0.062;
+				mouseY = -0.062;
 
 			if (mc.options.keyForward.isPressed()) {
 				if (mc.player.getMovementDirection().equals(Direction.NORTH))
 					mZ = -0.275;
 				if (mc.player.getMovementDirection().equals(Direction.EAST))
-					mX = 0.275;
+					mouseX = 0.275;
 				if (mc.player.getMovementDirection().equals(Direction.SOUTH))
 					mZ = 0.275;
 				if (mc.player.getMovementDirection().equals(Direction.WEST))
-					mX = -0.275;
+					mouseX = -0.275;
 			}
 
 			if (timer > getSetting(3).asSlider().getValue()) {
-				mX = 0;
+				mouseX = 0;
 				mZ = 0;
-				mY = -0.062;
+				mouseY = -0.062;
 				timer = 0;
 			}
 
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.getX() + mX, mc.player.getY() + mY, mc.player.getZ() + mZ, false));
+					mc.player.getX() + mouseX, mc.player.getY() + mouseY, mc.player.getZ() + mZ, false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.getX() + mX, mc.player.getY() - 420.69, mc.player.getZ() + mZ, true));
+					mc.player.getX() + mouseX, mc.player.getY() - 420.69, mc.player.getZ() + mZ, true));
 
 		}
 	}

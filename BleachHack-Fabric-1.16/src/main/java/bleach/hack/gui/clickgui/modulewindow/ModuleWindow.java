@@ -60,8 +60,8 @@ public class ModuleWindow extends ClickGuiWindow {
 		y2 = getHeight();
 	}
 
-	public void render(MatrixStack matrix, int mX, int mY) {
-		super.render(matrix, mX, mY);
+	public void render(MatrixStack matrix, int mouseX, int mouseY) {
+		super.render(matrix, mouseX, mouseY);
 
 		TextRenderer textRend = mc.textRenderer;
 
@@ -132,8 +132,8 @@ public class ModuleWindow extends ClickGuiWindow {
 		}
 	}
 
-	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
-		super.drawBar(matrix, mX, mY, textRend);
+	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
+		super.drawBar(matrix, mouseX, mouseY, textRend);
 		textRend.draw(matrix, hiding ? "+" : "_", x2 - 10, y1 + (hiding ? 4 : 2), 0x000000);
 		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
 	}

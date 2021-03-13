@@ -29,10 +29,10 @@ public class EventDrawContainer extends Event {
 	public int mouseY;
 	public MatrixStack matrix;
 
-	public EventDrawContainer(HandledScreen<?> screen, int mX, int mY, MatrixStack matrix) {
+	public EventDrawContainer(HandledScreen<?> screen, int mouseX, int mouseY, MatrixStack matrix) {
 		this.screen = screen;
-		this.mouseX = mX;
-		this.mouseY = mY;
+		this.mouseX = mouseX;
+		this.mouseY = mouseY;
 		this.matrix = matrix;
 	}
 

@@ -25,7 +25,7 @@ import java.util.Random;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lwjgl.opengl.GL11;
 import bleach.hack.BleachHack;
-import bleach.hack.gui.particle.ParticleManager;
+import bleach.hack.gui.title.particle.ParticleManager;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
@@ -139,8 +139,8 @@ public class BleachTitleScreen extends WindowScreen {
 
 	}
 
-	public void onRenderWindow(MatrixStack matrix, int window, int mX, int mY) {
-		super.onRenderWindow(matrix, window, mX, mY);
+	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
+		super.onRenderWindow(matrix, window, mouseX, mouseY);
 
 		if (window == 0) {
 			int x = getWindow(0).x1,

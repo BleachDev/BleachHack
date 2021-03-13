@@ -77,7 +77,7 @@ public class Ambience extends Module {
 		return new SkyProperties(128f, false, SkyType.NORMAL, false, false) {
 
 			@Override
-			public boolean useThickFog(int camX, int camY) {
+			public boolean useThickFog(int camouseX, int camouseY) {
 				return false;
 			}
 
@@ -139,7 +139,7 @@ public class Ambience extends Module {
 					return color.multiply(0.15000000596046448D);
 				}
 
-				public boolean useThickFog(int camX, int camY) {
+				public boolean useThickFog(int camouseX, int camouseY) {
 					return false;
 				}
 

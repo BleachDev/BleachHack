@@ -52,11 +52,13 @@ import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
@@ -75,7 +77,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 	public TextFieldWidget userField;
 	public TextPassFieldWidget passField;
-	public BleachCheckbox checkBox;
+	public BleachCheckbox checkBox = new BleachCheckbox(0, 0, new LiteralText("Save Login"), false);
 
 	public String loginResult = "";
 
@@ -96,24 +98,18 @@ public class AccountManagerScreen extends WindowScreen {
 				width / 8 + 15 + (width - width / 3),
 				height / 8 + 15 + (height - height / 3), "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
 
-		int x = getWindow(0).x1;
-		int y = getWindow(0).y1;
 		int w = width - width / 4;
 		int h = height - height / 4;
 
-		if (userField == null)
-			userField = new TextFieldWidget(textRenderer, x + w / 2 - 98, y + h / 4, 196, 18, LiteralText.EMPTY);
+		if (userField == null) {
+			userField = new TextFieldWidget(textRenderer, 0, 0, 196, 18, LiteralText.EMPTY);
+			userField.setMaxLength(32767);
+		}
 
-		if (passField == null)
-			passField = new TextPassFieldWidget(textRenderer, x + w / 2 - 98, y + h / 4 + 30, 196, 18, LiteralText.EMPTY);
-
-		if (checkBox == null)
-			checkBox = new BleachCheckbox(x + w / 2 - 99, y + h / 4 + 53, new LiteralText("Save Login"), false);
-
-		checkBox.x = x + w / 2 - 99;
-		checkBox.y = y + h / 4 + 53;
-		userField.setMaxLength(32767);
-		passField.setMaxLength(32767);
+		if (passField == null) {
+			passField = new TextPassFieldWidget(textRenderer, 0, 0, 196, 18, LiteralText.EMPTY);
+			passField.setMaxLength(32767);
+		}
 
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
@@ -145,17 +141,6 @@ public class AccountManagerScreen extends WindowScreen {
 						e.printStackTrace();
 					}
 				}));
-
-		/*x = getWindow(1).x1;
-		y = getWindow(1).y1;
-		w = width - width / 3;
-		h = height - height / 3;
-
-		getWindow(1).buttons.add(
-				new WindowButton(w / 2 - 100, h - 25, w / 2 - 2, h - 5, "Refresh", () -> {
-					accountQueue.addAll(accounts.getAccounts());
-					accounts.clear();
-				}));*/
 
 		if (accounts == null) {
 			accounts = new AccountList();
@@ -189,8 +174,8 @@ public class AccountManagerScreen extends WindowScreen {
 		super.render(matrix, mouseX, mouseY, delta);
 	}
 
-	public void onRenderWindow(MatrixStack matrix, int window, int mX, int mY) {
-		super.onRenderWindow(matrix, window, mX, mY);
+	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
+		super.onRenderWindow(matrix, window, mouseX, mouseY);
 
 		if (window == 0) {
 			int x = getWindow(0).x1,
@@ -210,9 +195,9 @@ public class AccountManagerScreen extends WindowScreen {
 			checkBox.x = x + w / 2 - 99;
 			checkBox.y = y + h / 4 + 63;
 
-			userField.render(matrix, mX, mY, 1f);
-			passField.render(matrix, mX, mY, 1f);
-			checkBox.render(matrix, mX, mY, 1f);
+			userField.render(matrix, mouseX, mouseY, 1f);
+			passField.render(matrix, mouseX, mouseY, 1f);
+			checkBox.render(matrix, mouseX, mouseY, 1f);
 		} else if (window == 1) {
 			int x = getWindow(1).x1,
 					y = getWindow(1).y1,
@@ -227,7 +212,7 @@ public class AccountManagerScreen extends WindowScreen {
 						y + accStart + c,
 						length,
 						28,
-						mX, mY,
+						mouseX, mouseY,
 						0x60606090, 0x60b070f0);
 
 				c += accHeight;
@@ -305,8 +290,9 @@ public class AccountManagerScreen extends WindowScreen {
 					}
 
 					getWindow(1).closed = true;
-					getWindow(0).closed = false;
 					selectWindow(0);
+					client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					return super.mouseClicked(mouseX, mouseY, button);
 				}
 
 				if (mouseX >= x + w / 2 + length / 2 + 1 && mouseX <= x + w / 2 + length / 2 + 14

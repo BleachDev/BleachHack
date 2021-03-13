@@ -15,17 +15,17 @@ public class EventDrawTooltip extends Event {
 	public List<? extends OrderedText> text;
 	public int x;
 	public int y;
-	public int mX;
-	public int mY;
+	public int mouseX;
+	public int mouseY;
 
-	public EventDrawTooltip(MatrixStack matrix, List<? extends OrderedText> text, int x, int y, int mX, int mY) {
+	public EventDrawTooltip(MatrixStack matrix, List<? extends OrderedText> text, int x, int y, int mouseX, int mouseY) {
 		this.matrix = matrix;
 		screen = MinecraftClient.getInstance().currentScreen;
 		this.text = text;
 		this.x = x;
 		this.y = y;
-		this.mX = mX;
-		this.mY = mY;
+		this.mouseX = mouseX;
+		this.mouseY = mouseY;
 	}
 
 }

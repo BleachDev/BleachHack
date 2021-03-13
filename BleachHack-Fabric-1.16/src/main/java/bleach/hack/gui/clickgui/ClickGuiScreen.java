@@ -104,7 +104,7 @@ public class ClickGuiScreen extends WindowScreen {
 		client.openScreen(null);
 	}
 
-	public void render(MatrixStack matrix, int mX, int mY, float float_1) {
+	public void render(MatrixStack matrix, int mouseX, int mouseY, float float_1) {
 		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
 
 		searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
@@ -144,11 +144,11 @@ public class ClickGuiScreen extends WindowScreen {
 					((ModuleWindow) w).setLen(len);
 				}
 
-				((ClickGuiWindow) w).updateKeys(mX, mY, keyDown, lmDown, rmDown, lmHeld, mwScroll);
+				((ClickGuiWindow) w).updateKeys(mouseX, mouseY, keyDown, lmDown, rmDown, lmHeld, mwScroll);
 			}
 		}
 
-		super.render(matrix, mX, mY, float_1);
+		super.render(matrix, mouseX, mouseY, float_1);
 
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {

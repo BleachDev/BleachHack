@@ -76,16 +76,16 @@ public class Peek extends Module {
 		event.matrix.translate(0, 0, 300);
 
 		if (getSetting(0).asToggle().state)
-			drawShulkerToolTip(event, slot, event.mX, event.mY);
+			drawShulkerToolTip(event, slot, event.mouseX, event.mouseY);
 		if (getSetting(1).asToggle().state)
-			drawBookToolTip(event.matrix, slot, event.mX, event.mY);
+			drawBookToolTip(event.matrix, slot, event.mouseX, event.mouseY);
 		if (getSetting(2).asToggle().state)
-			drawMapToolTip(event.matrix, slot, event.mX, event.mY);
+			drawMapToolTip(event.matrix, slot, event.mouseX, event.mouseY);
 
 		event.matrix.pop();
 	}
 
-	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mX, int mY) {
+	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mouseX, int mouseY) {
 		if (!(slot.getStack().getItem() instanceof BlockItem))
 			return;
 		if (!(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
@@ -117,24 +117,24 @@ public class Peek extends Module {
 			event.text = Lists.transform(Arrays.asList(slot.getStack().getName()), Text::asOrderedText);
 		}
 
-		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mY + 24 : mY;
+		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mouseY + 24 : mouseY;
 
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
 
 		if (block instanceof AbstractFurnaceBlock) {
-			renderTooltipBox(event.matrix, mX, realY - 21, 13, 47, true);
+			renderTooltipBox(event.matrix, mouseX, realY - 21, 13, 47, true);
 		} else if (block instanceof HopperBlock) {
-			renderTooltipBox(event.matrix, mX, realY - 21, 13, 82, true);
+			renderTooltipBox(event.matrix, mouseX, realY - 21, 13, 82, true);
 		} else if (block instanceof DispenserBlock) {
-			renderTooltipBox(event.matrix, mX, realY - 21, 13, 150, true);
+			renderTooltipBox(event.matrix, mouseX, realY - 21, 13, 150, true);
 		} else {
-			renderTooltipBox(event.matrix, mX, realY - 55, 47, 150, true);
+			renderTooltipBox(event.matrix, mouseX, realY - 55, 47, 150, true);
 		}
 
 		for (ItemStack i : items) {
 			if (count > 26)
 				break;
-			int x = mX + 10 + (17 * (count % 9));
+			int x = mouseX + 10 + (17 * (count % 9));
 			int y = realY - 69 + (17 * (count / 9));
 
 			mc.getItemRenderer().zOffset = 400;
@@ -145,7 +145,7 @@ public class Peek extends Module {
 		}
 	}
 
-	public void drawBookToolTip(MatrixStack matrix, Slot slot, int mX, int mY) {
+	public void drawBookToolTip(MatrixStack matrix, Slot slot, int mouseX, int mouseY) {
 		if (slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK)
 			return;
 
@@ -166,20 +166,20 @@ public class Peek extends Module {
 
 		int length = mc.textRenderer.getWidth("Page: " + (pageCount + 1) + "/" + pages.size());
 
-		renderTooltipBox(matrix, mX + 56 - length / 2, mY - pages.get(pageCount).size() * 10 - 19, 5, length, true);
-		renderTooltipBox(matrix, mX, mY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
+		renderTooltipBox(matrix, mouseX + 56 - length / 2, mouseY - pages.get(pageCount).size() * 10 - 19, 5, length, true);
+		renderTooltipBox(matrix, mouseX, mouseY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
 		mc.textRenderer.drawWithShadow(matrix, "Page: " + (pageCount + 1) + "/" + pages.size(),
-				mX + 68 - length / 2, mY - pages.get(pageCount).size() * 10 - 32, -1);
+				mouseX + 68 - length / 2, mouseY - pages.get(pageCount).size() * 10 - 32, -1);
 
 		int count = 0;
 		for (String s : pages.get(pageCount)) {
-			mc.textRenderer.drawWithShadow(matrix, s, mX + 12, mY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
+			mc.textRenderer.drawWithShadow(matrix, s, mouseX + 12, mouseY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
 			count++;
 		}
 
 	}
 
-	public void drawMapToolTip(MatrixStack matrix, Slot slot, int mX, int mY) {
+	public void drawMapToolTip(MatrixStack matrix, Slot slot, int mouseX, int mouseY) {
 		if (slot.getStack().getItem() != Items.FILLED_MAP)
 			return;
 
@@ -194,8 +194,8 @@ public class Peek extends Module {
 		GL11.glPushMatrix();
 		GL11.glScaled(size, size, 1.0);
 		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
-		int x = (int) (mX * (1 / size) + 12 * (1 / size));
-		int y = (int) (mY * (1 / size) - 12 * (1 / size) - 140);
+		int x = (int) (mouseX * (1 / size) + 12 * (1 / size));
+		int y = (int) (mouseY * (1 / size) - 12 * (1 / size) - 140);
 
 		renderTooltipBox(matrix, x - 12, y + 12, 128, 128, false);
 		for (byte c : colors) {
@@ -203,8 +203,8 @@ public class Peek extends Module {
 
 			if (c1 / 4 != 0)
 				DrawableHelper.fill(matrix, x, y, x + 1, y + 1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
-			if (x - (int) (mX * (1 / size) + 12 * (1 / size)) == 127) {
-				x = (int) (mX * (1 / size) + 12 * (1 / size));
+			if (x - (int) (mouseX * (1 / size) + 12 * (1 / size)) == 127) {
+				x = (int) (mouseX * (1 / size) + 12 * (1 / size));
 				y++;
 			} else
 				x++;

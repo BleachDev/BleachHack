@@ -72,17 +72,17 @@ public class Window {
 		this.closed = closed;
 	}
 
-	public void render(MatrixStack matrix, int mX, int mY) {
+	public void render(MatrixStack matrix, int mouseX, int mouseY) {
 		TextRenderer textRend = MinecraftClient.getInstance().textRenderer;
 
 		if (dragging) {
-			x2 = (x2 - x1) + mX - dragOffX - Math.min(0, mX - dragOffX);
-			y2 = (y2 - y1) + mY - dragOffY - Math.min(0, mY - dragOffY);
-			x1 = Math.max(0, mX - dragOffX);
-			y1 = Math.max(0, mY - dragOffY);
+			x2 = (x2 - x1) + mouseX - dragOffX - Math.min(0, mouseX - dragOffX);
+			y2 = (y2 - y1) + mouseY - dragOffY - Math.min(0, mouseY - dragOffY);
+			x1 = Math.max(0, mouseX - dragOffX);
+			y1 = Math.max(0, mouseY - dragOffY);
 		}
 
-		drawBar(matrix, mX, mY, textRend);
+		drawBar(matrix, mouseX, mouseY, textRend);
 
 		for (WindowButton w : buttons) {
 			int bx1 = x1 + w.x1;
@@ -91,7 +91,7 @@ public class Window {
 			int by2 = y1 + w.y2;
 
 			drawRect(matrix, bx1, by1, bx2, by2,
-					selected && mX >= bx1 && mX <= bx2 && mY >= by1 && mY <= by2 ? 0x4fb070f0 : 0x60606090);
+					selected && mouseX >= bx1 && mouseX <= bx2 && mouseY >= by1 && mouseY <= by2 ? 0x4fb070f0 : 0x60606090);
 
 			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 		}
@@ -118,7 +118,7 @@ public class Window {
 		}
 	}
 
-	protected void drawBar(MatrixStack matrix, int mX, int mY, TextRenderer textRend) {
+	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
 		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
 		horizonalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
@@ -139,8 +139,8 @@ public class Window {
 		textRend.draw(matrix, "_", x2 - 22, y1 + 1, -1);
 	}
 
-	public boolean shouldClose(int mX, int mY) {
-		return selected && mX > x2 - 23 && mX < x2 && mY > y1 + 2 && mY < y1 + 12;
+	public boolean shouldClose(int mouseX, int mouseY) {
+		return selected && mouseX > x2 - 23 && mouseX < x2 && mouseY > y1 + 2 && mouseY < y1 + 12;
 	}
 
 	public void onMousePressed(int x, int y) {
