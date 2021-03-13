@@ -18,6 +18,8 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.eventbus.Subscribe;
@@ -27,6 +29,8 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -38,63 +42,72 @@ public class ArrowJuke extends Module {
 	public ArrowJuke() {
 		super("ArrowJuke", KEY_UNBOUND, Category.COMBAT, "Tries to dodge arrows coming at you",
 				new SettingMode("Move", "Client", "Packet").withDesc("How to move to avoid the arrow"),
-				new SettingSlider("Speed", 0.01, 2, 1, 2).withDesc("Move speed"));
+				new SettingSlider("Speed", 0.01, 2, 1, 2).withDesc("Move speed"),
+				new SettingSlider("Lookahead", 1, 500, 250, 0).withDesc("How many steps in the future to look ahead"),
+				new SettingToggle("Up", false).withDesc("Allows you to move up when dodging the arrow"));
 	}
 
 	@Subscribe
 	public void onTick(EventTick envent) {
 		for (Entity e : mc.world.getEntities()) {
-			if (!(e instanceof ArrowEntity) || e.age > 50)
+			if (e.age > 75 || !(e instanceof ArrowEntity) || ((ArrowEntity) e).getOwner() == mc.player)
 				continue;
 
-			Box pBox = mc.player.getBoundingBox().expand(0.555);
-			List<Box> boxes = new ArrayList<>();
+			int mode = getSetting(0).asMode().mode;
+			int steps = (int) getSetting(2).asSlider().getValue();
 
-			for (int i = 0; i < 100; i++) {
-				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5d));
-				boxes.add(new Box(
-						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
-						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2)));
+			Box playerBox = mc.player.getBoundingBox().expand(0.3);
+			List<Box> futureBoxes = new ArrayList<>();
+
+			Box currentBox = e.getBoundingBox();
+			Vec3d currentVel = e.getVelocity();
+
+			for (int i = 0; i < steps; i++) {
+				currentBox = currentBox.offset(currentVel);
+				currentVel = currentVel.multiply(0.99, 0.94, 0.99);
+				futureBoxes.add(currentBox);
+
+				if (!mc.world.getOtherEntities(null, currentBox).isEmpty() || !WorldUtils.isBoxEmpty(currentBox)) {
+					break;
+				}
 			}
 
-			int mode = getSetting(0).asMode().mode;
-			double speed = getSetting(1).asSlider().getValue();
+			for (Box box: futureBoxes) {
+				if (playerBox.intersects(box)) {
+					for (Vec3d vel : getMoveVecs(e.getVelocity())) {
+						Box newBox = mc.player.getBoundingBox().offset(vel);
 
-			for (int i = 0; i < 75; i++) {
-				Vec3d nextPos = e.getPos().add(e.getVelocity().multiply(i / 5d));
-				Box nextBox = new Box(
-						nextPos.subtract(e.getBoundingBox().getXLength() / 2, 0, e.getBoundingBox().getZLength() / 2),
-						nextPos.add(e.getBoundingBox().getXLength() / 2, e.getBoundingBox().getYLength(), e.getBoundingBox().getZLength() / 2));
-
-				if (pBox.intersects(nextBox)) {
-					for (Vec3d vel : new Vec3d[] { new Vec3d(1, 0, 0), new Vec3d(-1, 0, 0), new Vec3d(0, 0, 1) }) {
-						boolean contains = false;
-						for (Box b : boxes)
-							if (b.intersects(pBox.offset(vel.x, vel.y, vel.z)))
-								contains = true;
-						if (!contains) {
-							if (mode == 0) {
-								Vec3d vel2 = vel.multiply(speed);
-								mc.player.setVelocity(vel2.x, vel2.y, vel2.z);
-							} else if (mode == 1) {
-								Vec3d vel2 = mc.player.getPos().add(vel.multiply(speed));
-								mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y, vel2.z, false));
-								mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y - 0.01, vel2.z, true));
+						if (WorldUtils.isBoxEmpty(newBox) && futureBoxes.stream().noneMatch(playerBox.offset(vel)::intersects)) {
+							if (mode == 0 && vel.y == 0) {
+								mc.player.setVelocity(vel);
+							} else {
+								mc.player.updatePosition(mc.player.getX() + vel.x, mc.player.getY() + vel.y, mc.player.getZ() + vel.z);
+								mc.player.networkHandler.sendPacket(
+										new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY(), mc.player.getZ(), false));
 							}
+
 							return;
 						}
-					}
-
-					if (mode == 0) {
-						mc.player.setVelocity(0, 0, -speed);
-					} else if (mode == 1) {
-						Vec3d vel2 = mc.player.getPos().add(new Vec3d(0, 0, -speed));
-						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y, vel2.z, false));
-						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(vel2.x, vel2.y - 0.01, vel2.z, true));
 					}
 				}
 			}
 		}
+	}
+
+	private List<Vec3d> getMoveVecs(Vec3d arrowVec) {
+		double speed = getSetting(1).asSlider().getValue();
+
+		List<Vec3d> list = new ArrayList<>(Arrays.asList(
+				arrowVec.subtract(0, arrowVec.y, 0).normalize().multiply(speed).rotateY((float) -Math.toRadians(90f)),
+				arrowVec.subtract(0, arrowVec.y, 0).normalize().multiply(speed).rotateY((float) Math.toRadians(90f))));
+
+		Collections.shuffle(list);
+
+		if (getSetting(3).asToggle().state) {
+			list.add(new Vec3d(0, 2, 0));
+		}
+
+		return list;
 	}
 
 }
