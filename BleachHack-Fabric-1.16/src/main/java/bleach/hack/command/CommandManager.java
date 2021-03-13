@@ -25,6 +25,8 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
 
 public class CommandManager {
+	
+	public static boolean allowNextMsg = false;
 
 	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
@@ -46,6 +48,7 @@ public class CommandManager {
 			new CmdRbook(),
 			new CmdRename(),
 			new CmdRpc(),
+			new CmdSay(),
 			new CmdScaffold(),
 			new CmdSetting(),
 			new CmdSkull(),

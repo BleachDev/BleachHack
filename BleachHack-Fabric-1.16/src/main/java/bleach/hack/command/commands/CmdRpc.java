@@ -27,6 +27,7 @@ public class CmdRpc extends Command {
 	public void onCommand(String command, String[] args) throws Exception {
 		if (args.length != 2) {
 			printSyntaxError();
+			return;
 		}
 
 		ModuleManager.getModule(DiscordRPCMod.class).setText(args[0], args[1]);
