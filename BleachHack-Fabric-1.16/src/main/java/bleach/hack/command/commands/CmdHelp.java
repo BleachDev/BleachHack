@@ -43,7 +43,7 @@ public class CmdHelp extends Command {
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
 		String cmd = args[0];
-		
+
 		if (cmd.isEmpty()) {
 			BleachLogger.infoMessage("Commands:");
 		} else {
@@ -54,7 +54,7 @@ public class CmdHelp extends Command {
 			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias()))
 				continue;
 
-			LiteralText text = new LiteralText("\u00a73" + PREFIX + c.getAlias() + " ->\u00a7b " + c.getSyntax());
+			LiteralText text = new LiteralText("\u00a73" + PREFIX + c.getAlias() + " ->\u00a7b " + c.getDescription());
 			text.setStyle(text.getStyle().withHoverEvent(
 					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
 							"\u00a7b" + PREFIX + c.getAlias() + "\n\u00a73" + c.getSyntax() + "\n\u00a7b" + c.getDescription()))));

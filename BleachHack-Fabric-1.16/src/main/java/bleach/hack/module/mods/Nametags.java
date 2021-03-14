@@ -153,7 +153,7 @@ public class Nametags extends Module {
 	}
 
 	@Subscribe
-	public void onLivingLabelRender(EventEntityRender.Label event) {
+	public void onLivingLabelRender(EventEntityRender.Single.Label event) {
 		if ((EntityUtils.isAnimal(event.getEntity()) && getSetting(3).asToggle().state)
 				|| (event.getEntity() instanceof Monster && getSetting(4).asToggle().state)
 				|| (event.getEntity() instanceof PlayerEntity && getSetting(2).asToggle().state)
@@ -162,7 +162,7 @@ public class Nametags extends Module {
 	}
 
 	@Subscribe
-	public void onLivingRender(EventEntityRender.Render event) {
+	public void onLivingRender(EventEntityRender.Single.Post event) {
 		List<String> lines = new ArrayList<>();
 		double scale = 0;
 		

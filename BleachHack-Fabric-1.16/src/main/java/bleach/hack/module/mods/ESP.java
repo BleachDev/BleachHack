@@ -22,8 +22,8 @@ import java.io.IOException;
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonSyntaxException;
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
@@ -99,7 +99,7 @@ public class ESP extends Module {
 	}
 
 	@Subscribe
-	public void onWorldRenderPre(EventWorldRender.Pre event) {
+	public void onEntityRenderPre(EventEntityRender.PreAll event) {
 		if (getSetting(0).asMode().mode <= 1) {
 			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
 					|| lastShaderWidth != getSetting(1).asSlider().getValue() || lastShaderMode != getSetting(0).asMode().mode) {
@@ -150,25 +150,25 @@ public class ESP extends Module {
 	}
 
 	@Subscribe
-	public void onWorldEntityRender(EventWorldRenderEntity event) {
-		float[] color = getColorForEntity(event.entity);
+	public void onEntityRender(EventEntityRender.Single.Pre event) {
+		float[] color = getColorForEntity(event.getEntity());
 
 		if (color != null) {
 			if (getSetting(4).asToggle().state) {
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
-					RenderUtils.drawFill(event.entity.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
+					RenderUtils.drawFill(event.getEntity().getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
 				}
 
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawOutline(event.entity.getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
+					RenderUtils.drawOutline(event.getEntity().getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
 				}
 			}
 
 			if (getSetting(0).asMode().mode <= 1) {
-				event.vertex = getOutline(event.buffers, color[0], color[1], color[2]);
-				event.entity.setGlowing(true);
+				event.setVertex(getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]));
+				event.getEntity().setGlowing(true);
 			} else {
-				event.entity.setGlowing(false);
+				event.getEntity().setGlowing(false);
 			}
 		}
 	}

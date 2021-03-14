@@ -5,43 +5,54 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventBlockEntityRender;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.event.events.EventWorldRenderEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.profiler.Profiler;
 
 @Mixin(WorldRenderer.class)
 public class MixinWorldRenderer {
 
 	@Shadow private BufferBuilderStorage bufferBuilders;
 
-	@Inject(method = "renderEntity", at = @At("HEAD"), cancellable = true)
-	private void renderEntity(Entity entity_1, double double_1, double double_2, double double_3, float float_1, MatrixStack matrixStack_1,
-			VertexConsumerProvider vertexConsumerProvider_1, CallbackInfo ci) {
-		EventWorldRenderEntity event = new EventWorldRenderEntity(entity_1, matrixStack_1, vertexConsumerProvider_1, bufferBuilders);
-		BleachHack.eventBus.post(event);
+	/** Fixes that the outline framebuffer only resets if any glowing entites are drawn **/
+	@ModifyVariable(method = "render", name = "bl3", at = @At(value = "STORE"))
+	public boolean render_modifyBoolean(boolean bool) {
+		return true;
+	}
 
-		if (event.isCancelled()) {
-			ci.cancel();
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
+	private void render_swap(Profiler profiler, String string) {
+		if (string.equals("entities")) {
+			BleachHack.eventBus.post(new EventEntityRender.PreAll());
+		} else if (string.equals("blockentities")) {
+			BleachHack.eventBus.post(new EventEntityRender.PostAll());
+			BleachHack.eventBus.post(new EventBlockEntityRender.PreAll());
+		} else if (string.equals("blockentities")) {
+			BleachHack.eventBus.post(new EventEntityRender.PostAll());
+			BleachHack.eventBus.post(new EventBlockEntityRender.PreAll());
+		} else if (string.equals("destroyProgress")) {
+			BleachHack.eventBus.post(new EventBlockEntityRender.PostAll());
 		}
 	}
-	
+
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	private void render_head(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
 			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
@@ -52,7 +63,7 @@ public class MixinWorldRenderer {
 			info.cancel();
 		}
 	}
-	
+
 	@Inject(method = "render", at = @At("RETURN"))
 	private void render_return(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
 			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {

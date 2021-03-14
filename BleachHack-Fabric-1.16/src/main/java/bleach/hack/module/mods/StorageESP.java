@@ -22,25 +22,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
-
-import org.lwjgl.opengl.GL11;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonSyntaxException;
 
+import bleach.hack.event.events.EventBlockEntityRender;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.event.events.EventWorldRenderEntity;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.RenderUtils;
-import bleach.hack.util.WorldRenderUtils;
 import bleach.hack.util.shader.StaticShaders;
 import bleach.hack.util.shader.StringShaderEffect;
 import net.minecraft.block.Block;
@@ -59,11 +56,7 @@ import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -113,7 +106,7 @@ public class StorageESP extends Module {
 		blockEntities.clear();
 		entities.clear();
 		blacklist.clear();
-		
+
 		for (Entity e: mc.world.getEntities()) {
 			e.setGlowing(false);
 		}
@@ -136,13 +129,9 @@ public class StorageESP extends Module {
 
 			if (color != null) {
 				blockEntities.put(be, color);
-				
-				if (be.getCachedState().getBlock() instanceof ChestBlock && be.getCachedState().get(ChestBlock.CHEST_TYPE) != ChestType.SINGLE) {
-					blacklist.add(be.getPos().offset(ChestBlock.getFacing(be.getCachedState())));
-				}
 			}
 		}
-		
+
 		for (Entity e: mc.world.getEntities()) {
 			float[] color = getColorForEntity(e);
 
@@ -155,48 +144,12 @@ public class StorageESP extends Module {
 
 	@Subscribe
 	public void onRender(EventWorldRender.Post event) {
-		if (getSetting(0).asMode().mode <= 1) {
+		if (getSetting(0).asMode().mode >= 2) {
 			for (Entry<BlockEntity, float[]> e: blockEntities.entrySet()) {
-				MatrixStack matrix = WorldRenderUtils.matrixFrom(e.getKey().getPos().getX(), e.getKey().getPos().getY(), e.getKey().getPos().getZ());
-
-				Block block = e.getKey().getCachedState().getBlock();
-				BlockState state = Blocks.DIRT.getDefaultState();
-
-				if (block == Blocks.CHEST || block == Blocks.TRAPPED_CHEST || block == Blocks.ENDER_CHEST) {
-					matrix.scale(0.88f, 0.88f, 0.88f);
-					matrix.translate(0.06, 0, 0.06);
-
-					Direction dir = getChestDirection(e.getKey().getPos());
-					if (dir != null) {
-						matrix.scale(1f + Math.abs(dir.getOffsetX()) * 1.12f, 1f, 1f + Math.abs(dir.getOffsetZ()) * 1.12f);
-						matrix.translate(
-								Math.min(0, dir.getOffsetX() / 2d + dir.getOffsetX() * 0.03),
-								0,
-								Math.min(0, dir.getOffsetZ() / 2d + dir.getOffsetZ() * 0.03));
-					}
+				if (blacklist.contains(e.getKey().getPos())) {
+					continue;
 				}
 
-				float[] color = e.getValue();
-				VertexConsumer vertex = getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]).getBuffer(RenderLayers.getMovingBlockLayer(state));
-
-				GL11.glDepthFunc(GL11.GL_NEVER);
-				mc.getBlockRenderManager().getModelRenderer().render(
-						mc.world,
-						mc.getBlockRenderManager().getModel(state),
-						state,
-						new BlockPos(e.getKey().getPos().getX(), e.getKey().getPos().getY(), e.getKey().getPos().getZ()),
-						matrix,
-						vertex,
-						false,
-						new Random(),
-						0,
-						OverlayTexture.DEFAULT_UV);
-
-				mc.getBufferBuilders().getEntityVertexConsumers().draw();
-				GL11.glDepthFunc(GL11.GL_LEQUAL);
-			}
-		} else {
-			for (Entry<BlockEntity, float[]> e: blockEntities.entrySet()) {
 				Box box = new Box(e.getKey().getPos());
 
 				Block block = e.getKey().getCachedState().getBlock();
@@ -209,6 +162,7 @@ public class StorageESP extends Module {
 					if (dir != null) {
 						box = box.expand(Math.abs(dir.getOffsetX()) / 2d, 0, Math.abs(dir.getOffsetZ()) / 2d);
 						box = box.offset(dir.getOffsetX() / 2d, 0, dir.getOffsetZ() / 2d);
+						blacklist.add(e.getKey().getPos().offset(dir));
 					}
 				}
 
@@ -220,10 +174,10 @@ public class StorageESP extends Module {
 					RenderUtils.drawOutline(box, e.getValue()[0], e.getValue()[1], e.getValue()[2], (float) getSetting(2).asSlider().getValue());
 				}
 			}
-			
+
 			for (Entry<Entity, float[]> e: entities.entrySet()) {
 				Box box = e.getKey().getBoundingBox();
-				
+
 				if (e.getKey() instanceof ItemFrameEntity && ((ItemFrameEntity) e.getKey()).getHeldItemStack().getItem() == Items.FILLED_MAP) {
 					int axis = box.maxX - box.minX < box.maxY - box.minY ? 0 : box.maxY - box.minY < box.maxZ - box.minZ ? 1 : 2;
 					box = box.expand(axis == 0 ? 0 : 0.12, axis == 1 ? 0 : 0.12, axis == 2 ? 0 : 0.12);
@@ -241,7 +195,7 @@ public class StorageESP extends Module {
 	}
 
 	@Subscribe
-	public void onWorldRenderPre(EventWorldRender.Pre event) {
+	public void onBlockEntityRenderPre(EventBlockEntityRender.PreAll event) {
 		if (getSetting(0).asMode().mode <= 1) {
 			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
 					|| lastShaderWidth != getSetting(1).asSlider().getValue() || lastShaderMode != getSetting(0).asMode().mode) {
@@ -270,13 +224,21 @@ public class StorageESP extends Module {
 	}
 
 	@Subscribe
-	public void onWorldEntityRender(EventWorldRenderEntity event) {
-		if (getSetting(0).asMode().mode <= 1 && entities.containsKey(event.entity)) {
-			float[] color = entities.get(event.entity);
-			event.vertex = getOutline(event.buffers, color[0], color[1], color[2]);
-			event.entity.setGlowing(true);
+	public void onBlockEntityRender(EventBlockEntityRender.Single.Pre event) {
+		if (getSetting(0).asMode().mode <= 1 && blockEntities.containsKey(event.getBlockEntity())) {
+			float[] color = blockEntities.get(event.getBlockEntity());
+			event.setVertexConsumers(getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]));
+		}
+	}
+
+	@Subscribe
+	public void onEntityRender(EventEntityRender.Single.Pre event) {
+		if (getSetting(0).asMode().mode <= 1 && entities.containsKey(event.getEntity())) {
+			float[] color = entities.get(event.getEntity());
+			event.setVertex(getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]));
+			event.getEntity().setGlowing(true);
 		} else {
-			event.entity.setGlowing(false);
+			event.getEntity().setGlowing(false);
 		}
 	}
 
@@ -299,7 +261,7 @@ public class StorageESP extends Module {
 
 		return null;
 	}
-	
+
 	private float[] getColorForEntity(Entity e) {
 		if (e instanceof ChestMinecartEntity && getSetting(11).asToggle().state) {
 			return new float[] { 1F, 0.65F, 0.3F };
@@ -327,7 +289,6 @@ public class StorageESP extends Module {
 		BlockState state = mc.world.getBlockState(pos);
 
 		if (state.getBlock() instanceof ChestBlock && state.get(ChestBlock.CHEST_TYPE) != ChestType.SINGLE) {
-			//System.out.println(state.get(ChestBlock.CHEST_TYPE));
 			return ChestBlock.getFacing(state);
 		}
 

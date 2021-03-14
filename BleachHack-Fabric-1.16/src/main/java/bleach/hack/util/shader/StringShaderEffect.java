@@ -78,7 +78,7 @@ public class StringShaderEffect extends ShaderEffect {
 				for (JsonElement je: jsonObject.getAsJsonArray("passes")) {
 					try {
 						parsePass(textureManager, je);
-						System.out.println("PASS >> " + je);
+						//System.out.println("PASS >> " + je);
 					} catch (Exception var16) {
 						ShaderParseException shaderParseException2 = ShaderParseException.wrap(var16);
 						shaderParseException2.addFaultyElement("passes[" + je + "]");
