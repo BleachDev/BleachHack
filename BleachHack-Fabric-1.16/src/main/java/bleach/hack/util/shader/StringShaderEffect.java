@@ -16,7 +16,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import bleach.hack.util.FabricReflect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlUniform;
@@ -315,16 +314,5 @@ public class StringShaderEffect extends ShaderEffect {
 		} else {
 			return name.equals("minecraft:main") ? this.mainTarget : (Framebuffer)this.targetsByName.get(name);
 		}
-	}
-	
-	// TODO: not reflect
-	public void loadToWorldRenderer() {
-		ShaderEffect se = (ShaderEffect) FabricReflect.getFieldValue(MinecraftClient.getInstance().worldRenderer, "field_4059", "entityOutlineShader"); 
-		if (se != null) {
-			se.close();
-		}
-
-		FabricReflect.writeField(MinecraftClient.getInstance().worldRenderer, this, "field_4059", "entityOutlineShader");
-		FabricReflect.writeField(MinecraftClient.getInstance().worldRenderer, getSecondaryTarget("final"), "field_4101", "entityOutlinesFramebuffer");
 	}
 }

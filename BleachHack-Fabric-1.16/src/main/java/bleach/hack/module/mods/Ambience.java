@@ -20,9 +20,9 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.BiomeColorEvent;
-import bleach.hack.event.events.EventSendMovementPackets;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSkyRender;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
@@ -46,8 +46,7 @@ public class Ambience extends Module {
 						new SettingSlider("Time", 0, 24000, 12500, 0).withDesc("What time to use")),
 				new SettingToggle("Overworld", true).withDesc("Changes the overworld ambience").withChildren(
 						new SettingToggle("Sky Color", true).withDesc("Changes the overworld sky color").withChildren(
-								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?").withChildren(
-										new SettingToggle("CustomColor", false).withDesc("Changes the end sky color")),
+								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?"),
 								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky")),
 						new SettingToggle("Foilage Color", false).withDesc("Changes the foilage color").withChildren(
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Foilage color")),
@@ -55,8 +54,7 @@ public class Ambience extends Module {
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Water color"))),
 				new SettingToggle("Nether", true).withDesc("Changes the nether ambience").withChildren(
 						new SettingToggle("Sky Color", true).withDesc("Changes the nether sky color").withChildren(
-								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?").withChildren(
-										new SettingToggle("CustomColor", false).withDesc("Changes the end sky color")),
+								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?"),
 								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky")),
 						new SettingToggle("Foilage Color", false).withDesc("Changes the foilage color").withChildren(
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Foilage color")),
@@ -64,8 +62,7 @@ public class Ambience extends Module {
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Water color"))),
 				new SettingToggle("End", true).withDesc("Changes the end ambience").withChildren(
 						new SettingToggle("Sky Color", true).withDesc("Changes the end sky color").withChildren(
-								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?").withChildren(
-										new SettingToggle("CustomColor", false).withDesc("Changes the end sky color")),
+								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?"),
 								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky")),
 						new SettingToggle("Foilage Color", false).withDesc("Changes the foilage color").withChildren(
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Foilage color")),
@@ -89,7 +86,7 @@ public class Ambience extends Module {
 	}
 
 	@Subscribe
-	public void onPreTick(EventSendMovementPackets event) {
+	public void onPreTick(EventTick event) {
 		if (getSetting(0).asToggle().state) {
 			if (getSetting(0).asToggle().getChild(0).asMode().mode == 0) {
 				mc.world.setRainGradient(0f);
@@ -121,11 +118,7 @@ public class Ambience extends Module {
 	@Subscribe
 	public void onSkyColor(EventSkyRender.Color event) {
 		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(0).asToggle().state) {
-			if (event instanceof EventSkyRender.Color.SkyColor || event instanceof EventSkyRender.Color.CloudColor
-					|| (getCurrentDimSetting().getChild(0).asToggle().getChild(0).asToggle().getChild(0).asToggle().state
-							&& event instanceof EventSkyRender.Color.EndSkyColor)) {
-				event.setColor(getCurrentDimSetting().getChild(0).asToggle().getChild(1).asColor().getRGBFloat());
-			}
+			event.setColor(getCurrentDimSetting().getChild(0).asToggle().getChild(1).asColor().getRGBFloat());
 		}
 	}
 

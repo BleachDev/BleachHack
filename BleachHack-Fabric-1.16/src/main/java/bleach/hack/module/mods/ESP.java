@@ -31,9 +31,11 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.RenderUtils;
+import bleach.hack.util.shader.OutlineShaderManager;
 import bleach.hack.util.shader.StaticShaders;
 import bleach.hack.util.shader.StringShaderEffect;
 import bleach.hack.util.world.EntityUtils;
+import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -48,8 +50,8 @@ import net.minecraft.entity.vehicle.BoatEntity;
 
 public class ESP extends Module {
 
-	private int lastWidth;
-	private int lastHeight;
+	private int lastWidth = -1;
+	private int lastHeight = -1;
 	private double lastShaderWidth;
 	private int lastShaderMode;
 	private boolean shaderUnloaded = true;
@@ -104,7 +106,7 @@ public class ESP extends Module {
 			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
 					|| lastShaderWidth != getSetting(1).asSlider().getValue() || lastShaderMode != getSetting(0).asMode().mode) {
 				try {
-					StringShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
+					ShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
 							getSetting(0).asMode().mode == 0 ? StaticShaders.OUTLINE_SHADER : StaticShaders.MC_SHADER_UNFOMATTED
 									.replace("%1", "" + getSetting(1).asSlider().getValue())
 									.replace("%2", "" + (getSetting(1).asSlider().getValue() / 2)));
@@ -115,14 +117,14 @@ public class ESP extends Module {
 					lastShaderWidth = getSetting(1).asSlider().getValue();
 					lastShaderMode = getSetting(0).asMode().mode;
 					shaderUnloaded = false;
-
-					shader.loadToWorldRenderer();
+					
+					OutlineShaderManager.loadShader(shader);
 				} catch (JsonSyntaxException | IOException e) {
 					e.printStackTrace();
 				}
 			}
 		} else if (!shaderUnloaded) {
-			mc.worldRenderer.loadEntityOutlineShader();
+			OutlineShaderManager.loadDefaultShader();
 			shaderUnloaded = true;
 		}
 	}

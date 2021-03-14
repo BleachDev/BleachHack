@@ -16,7 +16,10 @@ import bleach.hack.event.events.EventBlockEntityRender;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventWorldRender;
+import bleach.hack.mixinterface.IMixinWorldRenderer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -28,9 +31,11 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.profiler.Profiler;
 
 @Mixin(WorldRenderer.class)
-public class MixinWorldRenderer {
+public class MixinWorldRenderer implements IMixinWorldRenderer {
 
 	@Shadow private BufferBuilderStorage bufferBuilders;
+	@Shadow private Framebuffer entityOutlinesFramebuffer;
+	@Shadow private ShaderEffect entityOutlineShader;
 
 	/** Fixes that the outline framebuffer only resets if any glowing entites are drawn **/
 	@ModifyVariable(method = "render", name = "bl3", at = @At(value = "STORE"))
@@ -83,6 +88,26 @@ public class MixinWorldRenderer {
 		} else {
 			return vertexConsumer.color(red, green, blue, alpha);
 		}
+	}
+
+	@Override
+	public Framebuffer getOutlineFramebuffer() {
+		return entityOutlinesFramebuffer;
+	}
+
+	@Override
+	public void setOutlineFramebuffer(Framebuffer framebuffer) {
+		this.entityOutlinesFramebuffer = framebuffer;
+	}
+
+	@Override
+	public ShaderEffect getOutlineShader() {
+		return entityOutlineShader;
+	}
+
+	@Override
+	public void setOutlineShader(ShaderEffect shader) {
+		this.entityOutlineShader = shader;
 	}
 
 	/*@Redirect(method = "loadEntityOutlineShader", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
