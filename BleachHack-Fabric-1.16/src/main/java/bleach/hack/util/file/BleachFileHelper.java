@@ -31,6 +31,7 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.setting.base.SettingBase;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FriendManager;
 
 public class BleachFileHelper {
@@ -105,7 +106,16 @@ public class BleachFileHelper {
 			if (e.getValue().isJsonObject()) {
 				JsonObject mo = e.getValue().getAsJsonObject();
 				if (mo.has("toggled")) {
-					mod.setToggled(true);
+					try {
+						mod.setToggled(true);
+					} catch (Exception ex) {
+						try {
+							BleachLogger.errorMessage("Error enabling " + e.getKey() + ", Disabling!");
+							mod.setToggled(false);
+						} catch (Exception ex2) {
+							// ????
+						}
+					}
 				}
 
 				if (mo.has("bind") && mo.get("bind").isJsonPrimitive() && mo.get("bind").getAsJsonPrimitive().isNumber()) {
