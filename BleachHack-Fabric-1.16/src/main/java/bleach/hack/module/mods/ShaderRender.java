@@ -20,6 +20,7 @@ package bleach.hack.module.mods;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonSyntaxException;
@@ -52,7 +53,7 @@ public class ShaderRender extends Module {
 			} else if (s.equals("Scanline")) {
 				shaders.add(new Identifier("shaders/post/scan_pincushion.json"));
 			} else {
-				shaders.add(new Identifier("shaders/post/" + s.toLowerCase() + ".json"));
+				shaders.add(new Identifier("shaders/post/" + s.toLowerCase(Locale.ENGLISH) + ".json"));
 			}
 		}
 	}
