@@ -17,6 +17,7 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.Locale;
 import java.util.Random;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -205,7 +206,7 @@ public class CmdGive extends Command {
 		}
 
 		ItemStack item = new ItemStack(
-				Registry.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase())));
+				Registry.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase(Locale.ENGLISH))));
 
 		if (item.getItem() instanceof AirBlockItem)
 			printSyntaxError();

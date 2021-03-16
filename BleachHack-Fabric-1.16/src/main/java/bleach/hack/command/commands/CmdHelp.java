@@ -17,6 +17,8 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.Locale;
+
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandManager;
 import bleach.hack.util.BleachLogger;
@@ -47,7 +49,7 @@ public class CmdHelp extends Command {
 		if (cmd.isEmpty()) {
 			BleachLogger.infoMessage("Commands:");
 		} else {
-			BleachLogger.infoMessage("Syntax for " + PREFIX + cmd.toLowerCase() + ":");
+			BleachLogger.infoMessage("Syntax for " + PREFIX + cmd.toLowerCase(Locale.ENGLISH) + ":");
 		}
 
 		for (Command c : CommandManager.getCommands()) {

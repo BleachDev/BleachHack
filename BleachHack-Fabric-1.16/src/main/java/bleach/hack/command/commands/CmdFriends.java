@@ -1,5 +1,7 @@
 package bleach.hack.command.commands;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 
 import bleach.hack.BleachHack;
@@ -45,7 +47,7 @@ public class CmdFriends extends Command {
 				return;
 			}
 
-			BleachHack.friendMang.remove(args[1].toLowerCase());
+			BleachHack.friendMang.remove(args[1].toLowerCase(Locale.ENGLISH));
 			BleachLogger.infoMessage("Removed \"" + args[1] + "\" from the friend list");
 		} else if (args[0].equalsIgnoreCase("list")) {
 			MutableText text = new LiteralText(

@@ -18,6 +18,7 @@
 package bleach.hack.command.commands;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,7 +58,7 @@ public class CmdNuker extends Command {
 
 		if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
 			Module nuker = ModuleManager.getModule(Nuker.class);
-			String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase();
+			String block = (args[1].contains(":") ? "" : "minecraft:") + args[1].toLowerCase(Locale.ENGLISH);
 
 			if (args[0].equalsIgnoreCase("add")) {
 				if (Registry.BLOCK.get(new Identifier(block)) == Blocks.AIR) {

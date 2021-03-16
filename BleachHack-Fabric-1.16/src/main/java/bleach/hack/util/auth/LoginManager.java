@@ -18,6 +18,7 @@
 package bleach.hack.util.auth;
 
 import java.net.Proxy;
+import java.util.Locale;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -55,7 +56,7 @@ public final class LoginManager {
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 
-			if (e.getMessage().toLowerCase().contains("invalid username or password") || e.getMessage().toLowerCase().contains("account migrated")) {
+			if (e.getMessage().toLowerCase(Locale.ENGLISH).contains("invalid username or password") || e.getMessage().toLowerCase(Locale.ENGLISH).contains("account migrated")) {
 				return Pair.of("\u00a74Wrong password!", null);
 			} else {
 				return Pair.of("\u00a7cCannot contact authentication server!", null);

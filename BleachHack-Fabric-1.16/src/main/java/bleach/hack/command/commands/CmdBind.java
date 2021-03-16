@@ -17,6 +17,8 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.Locale;
+
 import bleach.hack.command.Command;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -60,20 +62,20 @@ public class CmdBind extends Command {
 
 						// Special cases for rshift/rcontrol and that shit
 						try {
-							key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase()).getCode();
+							key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase(Locale.ENGLISH)).getCode();
 						} catch (IllegalArgumentException e) {
-							if (args[2].toLowerCase().startsWith("right")) {
+							if (args[2].toLowerCase(Locale.ENGLISH).startsWith("right")) {
 								try {
-									key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase().replaceFirst("right", "right.")).getCode();
+									key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase(Locale.ENGLISH).replaceFirst("right", "right.")).getCode();
 								} catch (IllegalArgumentException e1) {
-									printSyntaxError("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("right", "right."));
+									printSyntaxError("Unknown key: " + args[2] + " / " + args[2].toLowerCase(Locale.ENGLISH).replaceFirst("right", "right."));
 									return;
 								}
-							} else if (args[2].toLowerCase().startsWith("r")) {
+							} else if (args[2].toLowerCase(Locale.ENGLISH).startsWith("r")) {
 								try {
-									key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase().replaceFirst("r", "right.")).getCode();
+									key = InputUtil.fromTranslationKey("key.keyboard." + args[2].toLowerCase(Locale.ENGLISH).replaceFirst("r", "right.")).getCode();
 								} catch (IllegalArgumentException e1) {
-									printSyntaxError("Unknown key: " + args[2] + " / " + args[2].toLowerCase().replaceFirst("r", "right."));
+									printSyntaxError("Unknown key: " + args[2] + " / " + args[2].toLowerCase(Locale.ENGLISH).replaceFirst("r", "right."));
 									return;
 								}
 							} else {

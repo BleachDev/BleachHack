@@ -1,6 +1,7 @@
 package bleach.hack.util;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,7 +21,7 @@ public class FriendManager {
 		}
 
 		if (!name.isEmpty()) {
-			friends.add(name.toLowerCase());
+			friends.add(name.toLowerCase(Locale.ENGLISH));
 		}
 	}
 
@@ -30,7 +31,7 @@ public class FriendManager {
 		}
 
 		if (!name.isEmpty()) {
-			friends.remove(name.toLowerCase());
+			friends.remove(name.toLowerCase(Locale.ENGLISH));
 		}
 	}
 
@@ -40,7 +41,7 @@ public class FriendManager {
 		}
 
 		if (!name.isEmpty()) {
-			return friends.contains(name.toLowerCase());
+			return friends.contains(name.toLowerCase(Locale.ENGLISH));
 		}
 
 		return false;

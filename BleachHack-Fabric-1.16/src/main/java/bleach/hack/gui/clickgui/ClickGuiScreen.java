@@ -20,6 +20,7 @@ package bleach.hack.gui.clickgui;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -124,7 +125,7 @@ public class ClickGuiScreen extends WindowScreen {
 			Set<Module> seachMods = new HashSet<>();
 			if (!searchField.getText().isEmpty()) {
 				for (Module m : ModuleManager.getModules()) {
-					if (m.getName().toLowerCase().contains(searchField.getText().toLowerCase().replace(" ", ""))) {
+					if (m.getName().toLowerCase(Locale.ENGLISH).contains(searchField.getText().toLowerCase(Locale.ENGLISH).replace(" ", ""))) {
 						seachMods.add(m);
 					}
 				}

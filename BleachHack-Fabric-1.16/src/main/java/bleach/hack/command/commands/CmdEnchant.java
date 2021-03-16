@@ -17,6 +17,8 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
@@ -87,7 +89,7 @@ public class CmdEnchant extends Command {
 	
 	public Enchantment fromString(String s) {
 		// programming
-		switch (s.toLowerCase()) {
+		switch (s.toLowerCase(Locale.ENGLISH)) {
 			case "aqua_affinity":
 			case "aqua":
 				return Enchantments.AQUA_AFFINITY;
