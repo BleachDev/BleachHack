@@ -74,7 +74,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class Nametags extends Module {
-	
+
 	private ExecutorService uuidExecutor;
 	// list of future client licenses
 	private Map<UUID, Future<String>> uuidFutures = new HashMap<>();
@@ -114,17 +114,17 @@ public class Nametags extends Module {
 		failedUUIDs.clear();
 		uuidExecutor.shutdownNow();
 		uuidFutures.clear();
-		
+
 		Map<UUID, String> cacheCopy = new HashMap<>(uuidCache);
 		uuidCache.clear();
-		
+
 		cacheCopy.forEach((u, s) -> {
 			if (!s.startsWith("\u00a7c")) uuidCache.put(u, s);
 		});
-		
+
 		super.onDisable();
 	}
-	
+
 	public void onEnable() {
 		super.onEnable();
 		uuidExecutor = Executors.newFixedThreadPool(4);
@@ -138,14 +138,14 @@ public class Nametags extends Module {
 				try {
 					String s = f.getValue().get();
 					uuidCache.put(f.getKey(), s);
-					
+
 					uuidFutures.remove(f.getKey());
 				} catch (InterruptedException | ExecutionException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
+
 		if (!uuidQueue.isEmpty() && System.currentTimeMillis() - lastLookup > 1000) {
 			lastLookup = System.currentTimeMillis();
 			addUUIDFuture(uuidQueue.poll());
@@ -165,7 +165,7 @@ public class Nametags extends Module {
 	public void onLivingRender(EventEntityRender.Single.Post event) {
 		List<String> lines = new ArrayList<>();
 		double scale = 0;
-		
+
 		Vec3d rPos = getRenderPos(event.getEntity());
 
 		if (event.getEntity() instanceof ItemEntity && getSetting(5).asToggle().state) {
@@ -229,7 +229,7 @@ public class Nametags extends Module {
 				if (e instanceof HorseBaseEntity || e instanceof TameableEntity) {
 					boolean tame = e instanceof HorseBaseEntity
 							? ((HorseBaseEntity) e).isTame() : ((TameableEntity) e).isTamed();
-					
+
 					UUID ownerUUID = e instanceof HorseBaseEntity
 							? ((HorseBaseEntity) e).getOwnerUuid() : ((TameableEntity) e).getOwnerUuid();
 
@@ -247,13 +247,13 @@ public class Nametags extends Module {
 							Optional<GameProfile> owner = mc.player.networkHandler.getPlayerList().stream()
 									.filter(en -> en.getProfile() != null && ownerUUID.equals(en.getProfile().getId()) && en.getProfile().getName() != null)
 									.map(en -> en.getProfile()).findFirst();
-							
+
 							if (owner.isPresent()) {
 								uuidCache.put(ownerUUID, owner.get().getName());
 							} else if (!uuidQueue.contains(ownerUUID) && !uuidFutures.containsKey(ownerUUID)) {
 								uuidQueue.add(ownerUUID);
 							}
-							
+
 							lines.add(0, Formatting.GREEN + "Owner: " + Formatting.GRAY + "Loading...");
 						}
 					}
@@ -308,10 +308,10 @@ public class Nametags extends Module {
 			}
 		}
 	}
-	
+
 	private void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
 		MatrixStack matrix = WorldRenderUtils.drawGuiItem(x, y, z, offX, offY, scale, item);
-		
+
 		matrix.scale(-0.05F, -0.05F, 1f);
 
 		//System.out.println(item);
@@ -338,7 +338,7 @@ public class Nametags extends Module {
 					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0);
 			c--;
 		}
-		
+
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 	}
 
@@ -389,7 +389,7 @@ public class Nametags extends Module {
 			return Formatting.DARK_RED;
 		}
 	}
-	
+
 	// how to download future client 2020 :flushed:
 	private void addUUIDFuture(UUID uuid) {
 		uuidFutures.put(uuid, uuidExecutor.submit(new Callable<String>() {
@@ -400,16 +400,16 @@ public class Nametags extends Module {
 					String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
 					String response = Resources.toString(new URL(url), StandardCharsets.UTF_8);
 					System.out.println("bruh uuid time: " + url);
-					
+
 					JsonElement json = new JsonParser().parse(response);
-					
+
 					if (!json.isJsonArray()) {
 						System.out.println("[Nametags] Invalid Owner UUID: " + uuid.toString());
 						return "\u00a7c[Invalid]";
 					}
-					
+
 					JsonArray ja = json.getAsJsonArray();
-					
+
 					return ja.get(ja.size() - 1).getAsJsonObject().get("name").getAsString();
 				} catch (IOException e) {
 					System.out.println("[Nametags] Error Getting Owner UUID: " + uuid.toString());

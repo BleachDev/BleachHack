@@ -29,6 +29,7 @@ public class CommandManager {
 	public static boolean allowNextMsg = false;
 
 	private static List<Command> commands = Arrays.asList(
+			new CmdAutoSteal(),
 			new CmdBind(),
 			new CmdCI(),
 			new CmdCustomChat(),
