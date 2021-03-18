@@ -128,30 +128,34 @@ public class AutoSteal extends Module {
 		}
 
 		if (currentItems != null && currentSyncId != -1) {
-			int openSlot = InventoryUtils.getSlot(false, i -> mc.player.inventory.getStack(i).isEmpty());
-			boolean shouldAutoClose = getSetting(0).asMode().mode >= 1 || getSetting(3).asToggle().state;
-
-			if (shouldAutoClose && (currentItems.stream().allMatch(i -> i.isEmpty() || isBlacklisted(i.getItem())) || openSlot == -1)) {
-				mc.openScreen(null);
-				mc.player.networkHandler.sendPacket(new CloseHandledScreenC2SPacket(currentSyncId));
-				return;
-			}
-
 			if (currentTime - lastSteal >= getSetting(1).asSlider().getValue()) {
-				if (openSlot > -1) {
-					for (int i = 0; i < currentItems.size(); i++) {
-						if (!currentItems.get(i).isEmpty()) {
-							if (isBlacklisted(currentItems.get(i).getItem())) {
-								continue;
-							}
+				for (int i = 0; i < currentItems.size(); i++) {
+					if (!currentItems.get(i).isEmpty()) {
+						if (isBlacklisted(currentItems.get(i).getItem())) {
+							continue;
+						}
 
+						int fi = i;
+						boolean openSlot = InventoryUtils.getSlot(false, j -> mc.player.inventory.getStack(j).isEmpty()
+								|| (mc.player.inventory.getStack(j).isStackable()
+										&& mc.player.inventory.getStack(j).getCount() < mc.player.inventory.getStack(j).getMaxCount()
+										&& currentItems.get(fi).isItemEqual(mc.player.inventory.getStack(j)))) != 1;
+
+						if (openSlot) {
 							mc.interactionManager.clickSlot(currentSyncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
 							currentItems.set(i, ItemStack.EMPTY);
 
 							lastSteal = currentTime + RandomUtils.nextInt(0, (int) getSetting(2).asSlider().getValue() + 1);
-							return;
 						}
+
+						return;
 					}
+				}
+
+				if (getSetting(0).asMode().mode >= 1 || getSetting(3).asToggle().state) {
+					mc.openScreen(null);
+					mc.player.networkHandler.sendPacket(new CloseHandledScreenC2SPacket(currentSyncId));
+					return;
 				}
 			}
 		} else if (currentItems == null && currentSyncId == -1 && getSetting(3).asToggle().state) {
