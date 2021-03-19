@@ -47,7 +47,7 @@ public class CmdGive extends Command {
 
 	@Override
 	public String getSyntax() {
-		return "give [item] [count] [damage] [nbt] | give preset [negs/stacked/spawners/bookban/eggs] [chest/shulker]";
+		return "give <item> <count> <damage> <nbt> | give preset <negs/stacked/spawners/bookban/eggs> <chest/shulker>";
 	}
 
 	@Override
