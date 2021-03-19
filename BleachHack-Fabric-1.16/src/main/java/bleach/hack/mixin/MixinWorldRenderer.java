@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -36,12 +37,11 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 	@Shadow private Framebuffer entityOutlinesFramebuffer;
 	@Shadow private ShaderEffect entityOutlineShader;
 
-	// TODO: readd
 	/** Fixes that the outline framebuffer only resets if any glowing entites are drawn **/
-	/*@ModifyVariable(method = "render", name = "bl3", at = @At(value = "STORE"))
+	@ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 2)
 	public boolean render_modifyBoolean(boolean bool) {
 		return true;
-	}*/
+	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
 	private void render_swap(Profiler profiler, String string) {
