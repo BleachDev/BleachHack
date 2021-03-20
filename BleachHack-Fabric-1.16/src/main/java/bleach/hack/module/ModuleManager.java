@@ -44,6 +44,7 @@ public class ModuleManager {
 			new AutoRespawn(),
 			new AutoSign(),
 			new AutoSteal(),
+			new AutoThrow(),
 			new AutoTool(),
 			new AutoTotem(),
 			new AutoWalk(),

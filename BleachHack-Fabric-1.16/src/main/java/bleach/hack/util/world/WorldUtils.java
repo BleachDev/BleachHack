@@ -47,7 +47,7 @@ public class WorldUtils {
 
 	protected static final MinecraftClient mc = MinecraftClient.getInstance();
 
-	public static final Set<Block> NONSOLID_BLOCKS = Sets.newHashSet(
+	public static final Set<Block> REPLACEABLE_BLOCKS = Sets.newHashSet(
 			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
 			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
 			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE, Blocks.VOID_AIR,
@@ -110,7 +110,7 @@ public class WorldUtils {
 		for (int x = (int) Math.floor(box.minX); x < Math.ceil(box.maxX); x++) {
 			for (int y = (int) Math.floor(box.minY); y < Math.ceil(box.maxY); y++) {
 				for (int z = (int) Math.floor(box.minZ); z < Math.ceil(box.maxZ); z++) {
-					if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
+					if (!REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
 						return false;
 					}
 				}
@@ -136,7 +136,7 @@ public class WorldUtils {
 
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
 			
-			if (NONSOLID_BLOCKS.contains(neighborBlock))
+			if (REPLACEABLE_BLOCKS.contains(neighborBlock))
 				continue;
 
 			Vec3d vec = getLegitLookPos(pos.offset(d), d.getOpposite(), true, 5);
@@ -263,7 +263,7 @@ public class WorldUtils {
 	}
 
 	public static boolean isBlockEmpty(BlockPos pos) {
-		if (!NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) {
+		if (!REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) {
 			return false;
 		}
 
@@ -283,7 +283,7 @@ public class WorldUtils {
 
 		for (Direction d : Direction.values()) {
 			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255)
-					|| NONSOLID_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
+					|| REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 									pos.getY() + 0.5 + d.getOffsetY() * 0.5,

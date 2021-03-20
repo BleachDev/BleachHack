@@ -298,7 +298,7 @@ public class Dispenser32k extends Module {
 	private void openBlock(BlockPos pos) {
 		for (Direction d : Direction.values()) {
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-			if (!WorldUtils.NONSOLID_BLOCKS.contains(neighborBlock))
+			if (!WorldUtils.REPLACEABLE_BLOCKS.contains(neighborBlock))
 				continue;
 
 			mc.interactionManager.interactBlock(

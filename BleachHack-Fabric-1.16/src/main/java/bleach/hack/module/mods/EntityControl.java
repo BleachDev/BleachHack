@@ -115,7 +115,7 @@ public class EntityControl extends Module {
 
 		if (getSetting(3).asToggle().state) {
 			BlockPos p = new BlockPos(e.getPos());
-			if (!WorldUtils.NONSOLID_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
+			if (!WorldUtils.REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(p.down()).getBlock()) && e.fallDistance > 0.01) {
 				e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}

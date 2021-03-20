@@ -65,20 +65,20 @@ public class Flight extends Module {
 		if (getSetting(0).asMode().mode == 0) {
 			if (getSetting(2).asMode().mode == 0 || getSetting(2).asMode().mode == 3)
 				mc.player.setVelocity(0, 0, 0);
-			else if (getSetting(2).asMode().mode == 1 && WorldUtils.NONSOLID_BLOCKS
+			else if (getSetting(2).asMode().mode == 1 && WorldUtils.REPLACEABLE_BLOCKS
 					.contains(mc.world.getBlockState(new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.069, mc.player.getPos().getZ())).getBlock()))
 				mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
 			else if (getSetting(2).asMode().mode == 2)
 				mc.player
 				.setVelocity(0,
 						mc.player.age % 40 == 0
-						? (WorldUtils.NONSOLID_BLOCKS
+						? (WorldUtils.REPLACEABLE_BLOCKS
 								.contains(mc.world
 										.getBlockState(
 												new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() + 1.15, mc.player.getPos().getZ()))
 										.getBlock()) ? 0.15 : 0)
 								: mc.player.age % 20 == 0
-								? (WorldUtils.NONSOLID_BLOCKS.contains(mc.world
+								? (WorldUtils.REPLACEABLE_BLOCKS.contains(mc.world
 										.getBlockState(
 												new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.15, mc.player.getPos().getZ()))
 										.getBlock()) ? -0.15 : 0)
