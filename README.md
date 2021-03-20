@@ -12,7 +12,7 @@ Works on fabric 1.16 & 1.17 Snapshots (1.14-1.15 is discontinued).
 > Join The Discord: https://discord.gg/b5Wc4nQ
 
 ## Installation:
-#### For normal people:
+### For normal people:
 
 Download [fabric for minecraft 1.16/1.17](https://fabricmc.net/use/).
 Download the latest version of BleachHack for your Minecraft version [from the releases section](https://github.com/BleachDrinker420/BleachHack/releases).
@@ -26,7 +26,7 @@ On Linux: in a terminal window, type 'xdg-open ~/.minecraft'... or if you like w
 Then inside that folder, you should see a folder named 'mods'. (If you don't see one, make sure you've installed Fabric already and started Minecraft again once).
 That's where you'll put any mods you want to install.
 
-#### For (200 IQ) developers:
+### For (200 IQ) developers:
 
 Download the project.
 Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder.
