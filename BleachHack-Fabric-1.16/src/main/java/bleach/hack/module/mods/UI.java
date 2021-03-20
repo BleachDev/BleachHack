@@ -325,18 +325,19 @@ public class UI extends Module {
 	}
 
 	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {
-		if (!rev ? value > best : value < best)
+		if (!rev ? value > best : value < best) {
 			return "\u00a72";
-		else if (!rev ? value > good : value < good)
+		} else if (!rev ? value > good : value < good) {
 			return "\u00a7a";
-		else if (!rev ? value > mid : value < mid)
+		} else if (!rev ? value > mid : value < mid) {
 			return "\u00a7e";
-		else if (!rev ? value > bad : value < bad)
+		} else if (!rev ? value > bad : value < bad) {
 			return "\u00a76";
-		else if (!rev ? value > worst : value < worst)
+		} else if (!rev ? value > worst : value < worst) {
 			return "\u00a7c";
-		else
+		} else {
 			return "\u00a74";
+		}
 	}
 
 	public static int getRainbow(float sat, float bri, double speed, int offset) {

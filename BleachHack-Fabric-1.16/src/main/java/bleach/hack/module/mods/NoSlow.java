@@ -72,8 +72,9 @@ public class NoSlow extends Module {
 					&& mc.player.getVelocity().z > -0.15 && mc.player.getVelocity().z < 0.15) {
 				mc.player.setVelocity(mc.player.getVelocity().add(addVelocity));
 				addVelocity = addVelocity.add(new Vec3d(0, 0, 0.05).rotateY(-(float) Math.toRadians(mc.player.yaw)));
-			} else
+			} else {
 				addVelocity = addVelocity.multiply(0.75, 0.75, 0.75);
+			}
 		}
 
 		/* Soul Sand */
@@ -135,15 +136,17 @@ public class NoSlow extends Module {
 					pitch += 4f;
 
 				if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(1).asToggle().state) {
-					if (yaw == 0f && pitch != 0f)
+					if (yaw == 0f && pitch != 0f) {
 						yaw += -0.1 + Math.random() / 5f;
-					else
+					} else {
 						yaw *= 0.75f + Math.random() / 2f;
+					}
 
-					if (pitch == 0f && yaw != 0f)
+					if (pitch == 0f && yaw != 0f) {
 						pitch += -0.1 + Math.random() / 5f;
-					else
+					} else {
 						pitch *= 0.75f + Math.random() / 2f;
+					}
 				}
 
 				mc.player.yaw += yaw;

@@ -84,8 +84,10 @@ public class Notebot extends Module {
 			BleachLogger.errorMessage("No File Loaded!, Use .notebot load [File]");
 			setToggled(false);
 			return;
-		} else
+		} else {
 			readFile(filePath);
+		}
+
 		timer = -10;
 
 		for (List<Integer> i : tunes) {

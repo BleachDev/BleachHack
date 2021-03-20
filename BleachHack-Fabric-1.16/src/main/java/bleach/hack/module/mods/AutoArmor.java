@@ -143,10 +143,11 @@ public class AutoArmor extends Module {
 				if (!ElytraItem.isUsable(is))
 					return 0;
 
-				if (getSetting(1).asToggle().state)
+				if (getSetting(1).asToggle().state) {
 					prot = 32767;
-				else
+				} else {
 					prot = 1;
+				}
 			} else if (is.getMaxDamage() - is.getDamage() < 7 && getSetting(0).asToggle().state) {
 				return 0;
 			}

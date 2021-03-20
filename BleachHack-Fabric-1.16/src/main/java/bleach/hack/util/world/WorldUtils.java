@@ -296,10 +296,11 @@ public class WorldUtils {
 	}
 
 	public static void facePosAuto(double x, double y, double z, SettingRotate sr) {
-		if (sr.getRotateMode() == 0)
+		if (sr.getRotateMode() == 0) {
 			facePosPacket(x, y, z);
-		else
+		} else {
 			facePos(x, y, z);
+		}
 	}
 
 	public static void facePos(double x, double y, double z) {

@@ -100,10 +100,11 @@ public class BowBot extends Module {
 					/ (g * hDistance)));
 
 			// set pitch
-			if (Float.isNaN(neededPitch))
+			if (Float.isNaN(neededPitch)) {
 				WorldUtils.facePos(target.getX(), target.getY() + target.getHeight() / 2, target.getZ());
-			else
+			} else {
 				mc.player.pitch = neededPitch;
+			}
 		}
 	}
 

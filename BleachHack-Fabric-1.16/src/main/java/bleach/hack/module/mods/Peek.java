@@ -157,10 +157,11 @@ public class Peek extends Module {
 		/* Cycle through pages */
 		if (mc.player.age % 80 == 0 && !shown) {
 			shown = true;
-			if (pageCount == pages.size() - 1)
+			if (pageCount == pages.size() - 1) {
 				pageCount = 0;
-			else
+			} else {
 				pageCount++;
+			}
 		} else if (mc.player.age % 80 != 0)
 			shown = false;
 
@@ -206,8 +207,9 @@ public class Peek extends Module {
 			if (x - (int) (mouseX * (1 / size) + 12 * (1 / size)) == 127) {
 				x = (int) (mouseX * (1 / size) + 12 * (1 / size));
 				y++;
-			} else
+			} else {
 				x++;
+			}
 		}
 
 		GL11.glPopMatrix();

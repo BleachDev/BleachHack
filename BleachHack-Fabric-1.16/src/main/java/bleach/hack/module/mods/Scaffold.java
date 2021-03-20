@@ -227,14 +227,16 @@ public class Scaffold extends Module {
 				step--;
 
 			for (int j = 0; j < step; j++) {
-				if (i % 4 == 0)
+				if (i % 4 == 0) {
 					currentPos = currentPos.add(-1, 0, 0);
-				else if (i % 4 == 1)
+				} else if (i % 4 == 1) {
 					currentPos = currentPos.add(0, 0, -1);
-				else if (i % 4 == 2)
+				} else if (i % 4 == 2) {
 					currentPos = currentPos.add(1, 0, 0);
-				else
+				} else {
 					currentPos = currentPos.add(0, 0, 1);
+				}
+
 				list.add(currentPos);
 			}
 

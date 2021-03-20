@@ -62,10 +62,11 @@ public class Spammer extends Module {
 				mc.player.sendChatMessage(lines.get(lineCount));
 			}
 
-			if (lineCount >= lines.size() - 1)
+			if (lineCount >= lines.size() - 1) {
 				lineCount = 0;
-			else
+			} else {
 				lineCount++;
+			}
 		}
 	}
 

@@ -128,10 +128,12 @@ public class NotebotScreen extends WindowScreen {
 
 				fillButton(matrix, x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10,
 						Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, mouseX, mouseY);
-				if (cutText(s, 105).equals(s))
+				if (cutText(s, 105).equals(s)) {
 					drawCenteredString(matrix, textRenderer, s, x + 55, y + 16 + c * 10, -1);
-				else
+				} else {
 					drawStringWithShadow(matrix, textRenderer, cutText(s, 105), x + 5, y + 16 + c * 10, -1);
+				}
+
 				c++;
 			}
 

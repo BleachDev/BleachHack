@@ -54,11 +54,12 @@ public class OperationList {
 		Box box = null;
 
 		for (Operation o: operations) {
-			if (box == null)
+			if (box == null) {
 				box = new Box(o.pos);
-			else
+			} else {
 				box = new Box(Math.min(box.minX, o.pos.getX()), Math.min(box.minY, o.pos.getY()), Math.min(box.minZ, o.pos.getZ()),
 						Math.max(box.maxX, o.pos.getX() + 1), Math.max(box.maxY, o.pos.getY() + 1), Math.max(box.maxZ, o.pos.getZ() + 1));
+			}
 		}
 
 		return box;
