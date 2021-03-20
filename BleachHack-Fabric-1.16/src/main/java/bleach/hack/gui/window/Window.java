@@ -148,7 +148,7 @@ public class Window {
 			return;
 		}
 
-		if (x > x1 + 2 && x < x2 - 2 && y > y1 + 2 && y < y1 + 12) {
+		if (x >= x1 && x <= x2 - 2 && y >= y1 && y <= y1 + 11) {
 			dragging = true;
 			dragOffX = x - x1;
 			dragOffY = y - y1;
