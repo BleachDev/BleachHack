@@ -70,12 +70,17 @@ public class AutoThrow extends Module {
 				if (mc.player.inventory.getStack(i).getItem() == Items.SPLASH_POTION) {
 					Potion potion = PotionUtil.getPotion(mc.player.inventory.getStack(i));
 
-					return !(potion.getEffects().isEmpty()
-							|| potion.getEffects().stream().anyMatch(s -> s.getEffectType().getType() == StatusEffectType.HARMFUL)
-							|| potion.getEffects().stream().allMatch(
-									s -> s.getEffectType().isInstant()
-									|| mc.player.hasStatusEffect(s.getEffectType())
-									|| effectCache.containsKey(s.getEffectType())));
+					if (getSetting(1).asToggle().getChild(0).asToggle().state) {
+						return !(potion.getEffects().isEmpty()
+								|| potion.getEffects().stream().anyMatch(s -> s.getEffectType().getType() == StatusEffectType.HARMFUL)
+								|| potion.getEffects().stream().allMatch(
+										s -> s.getEffectType().isInstant()
+										|| mc.player.hasStatusEffect(s.getEffectType())
+										|| effectCache.containsKey(s.getEffectType())));
+					} else {
+						return !potion.getEffects().isEmpty()
+								&& potion.getEffects().stream().allMatch(s -> s.getEffectType().getType() != StatusEffectType.HARMFUL);
+					}
 				}
 
 				return false;
