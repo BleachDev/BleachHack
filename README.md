@@ -1,4 +1,4 @@
-# BleachHack-1.14
+# BleachHack
 ![](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total)
 ![](https://img.shields.io/tokei/lines/github/BleachDrinker420/bleachhack-1.14)
 ![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14)
