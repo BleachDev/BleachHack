@@ -75,13 +75,13 @@ public class DiscordRPCMod extends Module {
 
 			switch (getSetting(0).asMode().mode) {
 				case 0:
-					text1 = "Playing " + (mc.getCurrentServerEntry() != null ? "Singleplayer" : mc.getCurrentServerEntry().address);
+					text1 = "Playing " + (mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address);
 					break;
 				case 1:
-					text1 = mc.getCurrentServerEntry() != null ? "Singleplayer" : mc.getCurrentServerEntry().address;
+					text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
 					break;
 				case 2:
-					text1 = mc.getCurrentServerEntry() != null ? "Singleplayer" : "Multiplayer";
+					text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : "Multiplayer";
 					break;
 				case 3:
 					text1 = mc.player.getEntityName() + " Ontop!";
