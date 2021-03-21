@@ -55,7 +55,7 @@ public class Scaffold extends Module {
 				new SettingToggle("Legit Place", false).withDesc("Only places on sides you can see"),
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
-						SettingLists.newItemList("Edit Blocks", "Edit Scaffold Filter Blocks", i -> i instanceof BlockItem).withDesc("Edit the filter blocks")),
+						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks")),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier").withChildren(
 						new SettingToggle("Legit", false).withDesc("Slower mode that bypasses some anticheats")),
 				new SettingToggle("AirPlace", false).withDesc("Places blocks in the air without support blocks"),

@@ -1,21 +1,13 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.command.Command;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
@@ -26,10 +18,10 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.WorldRenderUtils;
-import bleach.hack.util.file.BleachFileMang;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -46,12 +38,10 @@ import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
 public class AutoSteal extends Module {
 
@@ -60,7 +50,6 @@ public class AutoSteal extends Module {
 	private int currentSyncId;
 	private BlockPos currentPos = null;
 
-	private Set<Item> filterItems = new HashSet<>();
 	private Map<BlockPos, Integer> opened = new HashMap<>();
 
 	private int lastSteal = 0;
@@ -77,26 +66,16 @@ public class AutoSteal extends Module {
 						new SettingSlider("Range", 0.5, 6, 4.5, 2).withDesc("Range to open chests"),
 						new SettingSlider("Cooldown", 1, 90, 30, 0).withDesc("How long to wait before reopening the same chest (in seconds)"),
 						new SettingRotate(false).withDesc("Rotates to chests when opening them")),
-				new SettingToggle("Filter", false).withDesc("Filters items based on the " + Command.PREFIX + "cheststealer list").withChildren(
-						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list")));
-	}
-
-	public void addFilterItems(Item... items) {
-		Collections.addAll(this.filterItems, items);
-	}
-
-	public void removeFilterItems(Item... blocks) {
-		this.filterItems.removeAll(Arrays.asList(blocks));
-	}
-
-	public Set<Item> getFilterItems() {
-		return filterItems;
+				new SettingToggle("Filter", false).withDesc("Filters certain items").withChildren(
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
+						SettingLists.newItemList("Edit Items", "Edit Filtered Items").withDesc("Edit the filtered items")));
 	}
 
 	public boolean isBlacklisted(Item item) {
-		return getSetting(4).asToggle().state
-				&& ((getSetting(4).asToggle().getChild(0).asMode().mode == 0 && filterItems.contains(item))
-						|| (getSetting(4).asToggle().getChild(0).asMode().mode == 1 && !filterItems.contains(item)));
+		SettingToggle setting = getSetting(4).asToggle();
+		return setting.state
+				&& ((setting.getChild(0).asMode().mode == 0 && setting.getChild(1).asList(Item.class).contains(item))
+						|| (setting.getChild(0).asMode().mode == 1 && !setting.getChild(1).asList(Item.class).contains(item)));
 	}
 
 	@Override
@@ -105,17 +84,6 @@ public class AutoSteal extends Module {
 		currentItems = null;
 		currentSyncId = -1;
 		super.onDisable();
-	}
-
-	@Override
-	public void onEnable() {
-		super.onEnable();
-
-		filterItems.clear();
-
-		BleachFileMang.readFileLines("autostealitems.txt").stream().filter(s -> !StringUtils.isBlank(s)).forEach(s -> {
-			addFilterItems(Registry.ITEM.get(new Identifier(s)));
-		});
 	}
 
 	@Subscribe

@@ -52,7 +52,7 @@ public class Nuker extends Module {
 				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
-						SettingLists.newBlockList("Edit Blocks", "Edit Nuker Filter Blocks").withDesc("Edit the filter blocks")),
+						SettingLists.newBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks")),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
 				new SettingRotate(false),
 				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
