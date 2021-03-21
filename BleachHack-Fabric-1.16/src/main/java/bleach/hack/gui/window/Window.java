@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -95,18 +96,20 @@ public class Window {
 
 			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 		}
-		
+
 		boolean blockItem = icon != null && icon.getItem() instanceof BlockItem;
 
 		/* window icon */
 		if (icon != null) {
-			GL11.glPushMatrix();
-			GL11.glScaled(0.6, 0.6, 1);
+			RenderSystem.pushMatrix();
+			RenderSystem.scalef(0.6f, 0.6f, 1f);
+
 			DiffuseLighting.enableGuiDepthLighting();
-			MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(
+			MinecraftClient.getInstance().getItemRenderer().renderInGui(
 					icon, (int) ((x1 + (blockItem ? 3 : 2)) * 1 / 0.6), (int) ((y1 + 2) * 1 / 0.6));
 			DiffuseLighting.disableGuiDepthLighting();
-			GL11.glPopMatrix();
+
+			RenderSystem.popMatrix();
 		}
 
 		/* window title */
@@ -125,10 +128,10 @@ public class Window {
 		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
 		horizonalGradient(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
 		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0x90606090);
-		
+
 		/* title bar */
 		horizonalGradient(matrix, x1 + 1, y1 + 1, x2 - 1, y1 + 12, (selected ? 0xff6060b0 : 0xff606060), (selected ? 0xff8070b0 : 0xffa0a0a0));
-		
+
 		/* buttons */
 		//fillGrey(matrix, x2 - 12, y1 + 3, x2 - 4, y1 + 11);
 		textRend.draw(matrix, "x", x2 - 10, y1 + 3, 0);
@@ -169,11 +172,11 @@ public class Window {
 	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2) {
 		drawRect(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, 0x00000000);
 	}
-	
+
 	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2, int fill) {
 		drawRect(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, fill);
 	}
-	
+
 	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2, int colTop, int colBot, int colFill) {
 		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, colTop);
 		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, colTop);
@@ -191,11 +194,11 @@ public class Window {
 		float float_6 = (color2 >> 16 & 255) / 255.0F;
 		float float_7 = (color2 >> 8 & 255) / 255.0F;
 		float float_8 = (color2 & 255) / 255.0F;
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		RenderSystem.disableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.disableAlphaTest();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.shadeModel(GL11.GL_SMOOTH);
 		Tessellator tessellator_1 = Tessellator.getInstance();
 		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
@@ -204,12 +207,12 @@ public class Window {
 		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
 		bufferBuilder_1.vertex(x2, y1, 0).color(float_6, float_7, float_8, float_5).next();
 		tessellator_1.draw();
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		RenderSystem.shadeModel(GL11.GL_FLAT);
+		RenderSystem.disableBlend();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.enableTexture();
 	}
-	
+
 	public static void verticalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
 		float float_1 = (color1 >> 24 & 255) / 255.0F;
 		float float_2 = (color1 >> 16 & 255) / 255.0F;
@@ -219,11 +222,11 @@ public class Window {
 		float float_6 = (color2 >> 16 & 255) / 255.0F;
 		float float_7 = (color2 >> 8 & 255) / 255.0F;
 		float float_8 = (color2 & 255) / 255.0F;
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		RenderSystem.disableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.disableAlphaTest();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.shadeModel(GL11.GL_SMOOTH);
 		Tessellator tessellator_1 = Tessellator.getInstance();
 		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
@@ -232,9 +235,9 @@ public class Window {
 		bufferBuilder_1.vertex(x1, y2, 0).color(float_6, float_7, float_8, float_5).next();
 		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
 		tessellator_1.draw();
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		RenderSystem.shadeModel(GL11.GL_FLAT);
+		RenderSystem.disableBlend();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.enableTexture();
 	}
 }

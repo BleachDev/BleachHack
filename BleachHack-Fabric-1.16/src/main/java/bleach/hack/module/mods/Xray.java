@@ -17,12 +17,6 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
@@ -32,66 +26,39 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.setting.other.SettingLists;
 import net.minecraft.block.Block;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.block.Blocks;
 
 public class Xray extends Module {
 
-	private Set<Block> visibleBlocks = new HashSet<>();
 	private double gamma;
 
 	public Xray() {
 		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
-				new SettingToggle("Fluids", false).withDesc("Show fluids"));
+				new SettingToggle("Fluids", false).withDesc("Show fluids"),
+				SettingLists.newBlockList("Edit Blocks", "Edit Xray Blocks",
+						Blocks.IRON_ORE,
+						Blocks.GOLD_ORE,
+						Blocks.LAPIS_ORE,
+						Blocks.REDSTONE_ORE,
+						Blocks.DIAMOND_ORE,
+						Blocks.EMERALD_ORE,
+						Blocks.GOLD_BLOCK,
+						Blocks.LAPIS_BLOCK,
+						Blocks.REDSTONE_BLOCK,
+						Blocks.DIAMOND_BLOCK,
+						Blocks.EMERALD_BLOCK,
+						Blocks.NETHER_GOLD_ORE,
+						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks"));
 	}
-
+	
 	public boolean isVisible(Block block) {
-		return !this.isToggled() || this.visibleBlocks.contains(block);
-	}
-
-	public void setVisible(Block... blocks) {
-		Collections.addAll(this.visibleBlocks, blocks);
-	}
-
-	public void setInvisible(Block... blocks) {
-		this.visibleBlocks.removeAll(Arrays.asList(blocks));
-	}
-
-	public Set<Block> getVisibleBlocks() {
-		return visibleBlocks;
+		return !isToggled() || getSetting(1).asList(Block.class).contains(block);
 	}
 
 	@Override
 	public void onEnable() {
-		visibleBlocks.clear();
-
-		if (!BleachFileMang.fileExists("xrayblocks.txt")) {
-			BleachFileMang.createEmptyFile("xrayblocks.txt");
-			BleachFileMang.appendFile(
-					"minecraft:iron_ore\n" +
-					"minecraft:gold_ore\n" +
-					"minecraft:lapis_ore\n" +
-					"minecraft:redstone_ore\n" +
-					"minecraft:diamond_ore\n" +
-					"minecraft:emerald_ore\n" +
-					"minecraft:iron_block\n" +
-					"minecraft:gold_block\n" +
-					"minecraft:lapis_block\n" +
-					"minecraft:redstone_block\n" +
-					"minecraft:diamond_block\n" +
-					"minecraft:emerald_block\n" +
-					"minecraft:nether_gold_ore\n" +
-					"minecraft:nether_quartz_ore\n" +
-					"minecraft:ancient_debris" +
-					"xrayblocks.txt");
-		}
-
-		BleachFileMang.readFileLines("xrayblocks.txt").stream().filter(s -> !StringUtils.isBlank(s)).forEach(s -> {
-			setVisible(Registry.BLOCK.get(new Identifier(s)));
-		});
-
 		mc.worldRenderer.reload();
 
 		gamma = mc.options.gamma;
@@ -104,9 +71,6 @@ public class Xray extends Module {
 		if (mc.world != null)
 			mc.worldRenderer.setWorld(mc.world);
 
-		/* for (int i = 0; i <= 15; ++i) { float float_2 = 1.0F - (float) i / 15.0F;
-		 * mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) /
-		 * (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F; } */
 		mc.options.gamma = gamma;
 
 		mc.worldRenderer.reload();
@@ -116,7 +80,7 @@ public class Xray extends Module {
 
 	@Subscribe
 	public void blockRender(EventBlockRender eventBlockRender) {
-		if (this.isVisible(eventBlockRender.getBlockState().getBlock())) {
+		if (isVisible(eventBlockRender.getBlockState().getBlock())) {
 			eventBlockRender.setCancelled(true);
 		}
 	}

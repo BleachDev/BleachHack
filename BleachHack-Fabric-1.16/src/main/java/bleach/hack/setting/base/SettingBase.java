@@ -60,6 +60,15 @@ public abstract class SettingBase {
 			throw new ClassCastException("Execption parsing setting: " + this);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public <E> SettingList<E> asList(Class<E> itemClass) {
+		try {
+			return (SettingList<E>) this;
+		} catch (Exception e) {
+			throw new ClassCastException("Execption parsing setting: " + this);
+		}
+	}
 
 	public SettingRotate asRotate() {
 		try {

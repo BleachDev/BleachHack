@@ -43,18 +43,15 @@ public class CommandManager {
 			new CmdHelp(),
 			new CmdNBT(),
 			new CmdNotebot(),
-			new CmdNuker(),
 			new CmdPeek(),
 			new CmdPrefix(),
 			new CmdRbook(),
 			new CmdRename(),
 			new CmdRpc(),
 			new CmdSay(),
-			new CmdScaffold(),
 			new CmdSetting(),
 			new CmdSkull(),
-			new CmdToggle(),
-			new CmdXray());
+			new CmdToggle());
 
 	public static List<Command> getCommands() {
 		return commands;

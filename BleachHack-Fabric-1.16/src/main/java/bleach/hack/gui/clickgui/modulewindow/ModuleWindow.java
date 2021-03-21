@@ -96,7 +96,7 @@ public class ModuleWindow extends ClickGuiWindow {
 				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x50ff0000);
 			}
 
-			/* Set which module settings show on */
+			// Set which module settings show on
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
 				tooltip = Triple.of(x + len + 2, y + curY, m.getKey().getDesc());
 
@@ -110,7 +110,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 			curY += 12;
 
-			/* draw settings */
+			// draw settings
 			if (m.getValue()) {
 				//horizonalGradient(matrix, x + 2, y + curY - 12, x + len - 2, y + curY - 11, 0xff6060b0, 0xff8070b0);
 				

@@ -17,11 +17,8 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Sets;
@@ -36,22 +33,19 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.RenderUtils;
-import bleach.hack.util.file.BleachFileMang;
 import bleach.hack.util.world.WorldUtils;
-import net.minecraft.block.Block;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.BlockItem;
-import net.minecraft.util.Identifier;
+import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
 public class Scaffold extends Module {
 
 	private Set<BlockPos> renderBlocks = new LinkedHashSet<>();
-	private Set<Block> filterBlocks = new LinkedHashSet<>();
 
 	public Scaffold() {
 		super("Scaffold", GLFW.GLFW_KEY_N, Category.WORLD, "Places blocks under you",
@@ -61,7 +55,8 @@ public class Scaffold extends Module {
 				new SettingRotate(false).withDesc("Rotates when placing blocks"),
 				new SettingToggle("Legit Place", false).withDesc("Only places on sides you can see"),
 				new SettingToggle("Filter", false).withDesc("Filters blocks based on the " + Command.PREFIX + "scaffold list").withChildren(
-						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list")),
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
+						SettingLists.newItemList("Edit Blocks", "Edit Scaffold Filter Blocks", i -> i instanceof BlockItem).withDesc("Edit the filter blocks")),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier").withChildren(
 						new SettingToggle("Legit", false).withDesc("Slower mode that bypasses some anticheats")),
 				new SettingToggle("AirPlace", false).withDesc("Places blocks in the air without support blocks"),
@@ -71,28 +66,6 @@ public class Scaffold extends Module {
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
 						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight"),
 						new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed")));
-	}
-
-	public void addFilterBlocks(Block... blocks) {
-		Collections.addAll(this.filterBlocks, blocks);
-	}
-
-	public void removeFilterBlocks(Block... blocks) {
-		this.filterBlocks.removeAll(Arrays.asList(blocks));
-	}
-
-	public Set<Block> getFilterBlocks() {
-		return filterBlocks;
-	}
-
-	public void onEnable() {
-		filterBlocks.clear();
-
-		BleachFileMang.readFileLines("scaffoldblocks.txt").stream().filter(s -> !StringUtils.isBlank(s)).forEach(s -> {
-			addFilterBlocks(Registry.BLOCK.get(new Identifier(s)));
-		});
-
-		super.onEnable();
 	}
 
 	@Subscribe
@@ -122,7 +95,7 @@ public class Scaffold extends Module {
 		}
 
 		if (getSetting(5).asToggle().state) {
-			boolean contains = getFilterBlocks().contains(((BlockItem) mc.player.inventory.getStack(slot).getItem()).getBlock());
+			boolean contains = getSetting(5).asToggle().getChild(1).asList(Item.class).contains(mc.player.inventory.getStack(slot).getItem());
 
 			if ((getSetting(5).asToggle().getChild(0).asMode().mode == 0 && contains)
 					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && !contains)) {

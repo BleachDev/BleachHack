@@ -17,16 +17,11 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
@@ -38,21 +33,17 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
-import bleach.hack.util.file.BleachFileMang;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
 public class Nuker extends Module {
-
-	private Set<Block> filterBlocks = new HashSet<>();
 
 	public Nuker() {
 		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
@@ -61,33 +52,12 @@ public class Nuker extends Module {
 				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range"),
 				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
 				new SettingToggle("Filter", false).withDesc("Filters blocks based on the " + Command.PREFIX + "nuker list").withChildren(
-						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list")),
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
+						SettingLists.newBlockList("Edit Blocks", "Edit Nuker Filter Blocks").withDesc("Edit the filter blocks")),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
 				new SettingRotate(false),
 				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
 				new SettingMode("Sort", "Closest", "Furthest", "Hardness", "None").withDesc("Which order to mine blocks in"));
-	}
-
-	public void addFilterBlocks(Block... blocks) {
-		Collections.addAll(this.filterBlocks, blocks);
-	}
-
-	public void removeFilterBlocks(Block... blocks) {
-		this.filterBlocks.removeAll(Arrays.asList(blocks));
-	}
-
-	public Set<Block> getFilterBlocks() {
-		return filterBlocks;
-	}
-
-	public void onEnable() {
-		filterBlocks.clear();
-
-		BleachFileMang.readFileLines("nukerblocks.txt").stream().filter(s -> !StringUtils.isBlank(s)).forEach(s -> {
-			addFilterBlocks(Registry.BLOCK.get(new Identifier(s)));
-		});
-
-		super.onEnable();
 	}
 
 	@Subscribe
@@ -141,7 +111,7 @@ public class Nuker extends Module {
 		int broken = 0;
 		for (Entry<BlockPos, Pair<Vec3d, Direction>> pos : blocks.entrySet()) {
 			if (getSetting(4).asToggle().state) {
-				boolean contains = filterBlocks.contains(mc.world.getBlockState(pos.getKey()).getBlock());
+				boolean contains = getSetting(4).asToggle().getChild(1).asList(Block.class).contains(mc.world.getBlockState(pos.getKey()).getBlock());
 
 				if ((getSetting(4).asToggle().getChild(0).asMode().mode == 0 && contains)
 						|| (getSetting(4).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
