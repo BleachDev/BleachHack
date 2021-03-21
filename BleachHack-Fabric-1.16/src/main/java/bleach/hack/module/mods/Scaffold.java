@@ -24,7 +24,6 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
@@ -54,7 +53,7 @@ public class Scaffold extends Module {
 				new SettingSlider("Range", 0, 1, 0.3, 1).withDesc("How far to place ahead of you in Normal mode"),
 				new SettingRotate(false).withDesc("Rotates when placing blocks"),
 				new SettingToggle("Legit Place", false).withDesc("Only places on sides you can see"),
-				new SettingToggle("Filter", false).withDesc("Filters blocks based on the " + Command.PREFIX + "scaffold list").withChildren(
+				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
 						SettingLists.newItemList("Edit Blocks", "Edit Scaffold Filter Blocks", i -> i instanceof BlockItem).withDesc("Edit the filter blocks")),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier").withChildren(

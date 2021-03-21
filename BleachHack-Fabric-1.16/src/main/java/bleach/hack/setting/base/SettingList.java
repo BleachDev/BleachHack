@@ -219,7 +219,7 @@ public abstract class SettingList<E> extends SettingBase {
 					entries++;
 				}
 
-				Window.horizonalGradient(matrix, x1 + 1, y2 - 25, x2 - 1, y2 - 1, 0x70606090, 0x00606090);
+				Window.horizontalGradient(matrix, x1 + 1, y2 - 25, x2 - 1, y2 - 1, 0x70606090, 0x00606090);
 				DrawableHelper.fill(matrix, x1 + 1, y2 - 27, x2 - 1, y2 - 25, 0xa0606090);
 
 				inputField.x = x1 + 5;
@@ -261,7 +261,7 @@ public abstract class SettingList<E> extends SettingBase {
 
 		private void drawEntry(MatrixStack matrix, E item, int x, int y, int width, int height, int mouseX, int mouseY) {
 			boolean mouseOverDelete = mouseX >= x + width - 14 && mouseX <= x + width - 1 && mouseY >= y + 2 && mouseY <= y + height - 2;
-			Window.drawRect(matrix, x + width - 14, y + 2, x + width - 1, y + height - 2, mouseOverDelete ? 0x4fb070f0 : 0x60606090);
+			Window.fill(matrix, x + width - 14, y + 2, x + width - 1, y + height - 2, mouseOverDelete ? 0x4fb070f0 : 0x60606090);
 
 			if (mouseOverDelete) {
 				toDeleteItem = item;

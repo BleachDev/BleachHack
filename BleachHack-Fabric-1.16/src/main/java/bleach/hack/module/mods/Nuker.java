@@ -26,7 +26,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -51,7 +50,7 @@ public class Nuker extends Module {
 				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if Multi/SurvMulti mode is on"),
 				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range"),
 				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
-				new SettingToggle("Filter", false).withDesc("Filters blocks based on the " + Command.PREFIX + "nuker list").withChildren(
+				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
 						SettingLists.newBlockList("Edit Blocks", "Edit Nuker Filter Blocks").withDesc("Edit the filter blocks")),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),

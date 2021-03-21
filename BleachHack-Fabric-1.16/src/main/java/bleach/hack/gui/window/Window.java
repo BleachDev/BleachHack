@@ -91,7 +91,7 @@ public class Window {
 			int bx2 = x1 + w.x2;
 			int by2 = y1 + w.y2;
 
-			drawRect(matrix, bx1, by1, bx2, by2,
+			fill(matrix, bx1, by1, bx2, by2,
 					selected && mouseX >= bx1 && mouseX <= bx2 && mouseY >= by1 && mouseY <= by2 ? 0x4fb070f0 : 0x60606090);
 
 			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
@@ -124,13 +124,13 @@ public class Window {
 	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
 		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
-		horizonalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
+		horizontalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
 		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
-		horizonalGradient(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
+		horizontalGradient(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
 		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0x90606090);
 
 		/* title bar */
-		horizonalGradient(matrix, x1 + 1, y1 + 1, x2 - 1, y1 + 12, (selected ? 0xff6060b0 : 0xff606060), (selected ? 0xff8070b0 : 0xffa0a0a0));
+		horizontalGradient(matrix, x1 + 1, y1 + 1, x2 - 1, y1 + 12, (selected ? 0xff6060b0 : 0xff606060), (selected ? 0xff8070b0 : 0xffa0a0a0));
 
 		/* buttons */
 		//fillGrey(matrix, x2 - 12, y1 + 3, x2 - 4, y1 + 11);
@@ -169,15 +169,15 @@ public class Window {
 		dragging = false;
 	}
 
-	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		drawRect(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, 0x00000000);
+	public static void fill(MatrixStack matrix, int x1, int y1, int x2, int y2) {
+		fill(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, 0x00000000);
 	}
 
-	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2, int fill) {
-		drawRect(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, fill);
+	public static void fill(MatrixStack matrix, int x1, int y1, int x2, int y2, int fill) {
+		fill(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, fill);
 	}
 
-	public static void drawRect(MatrixStack matrix, int x1, int y1, int x2, int y2, int colTop, int colBot, int colFill) {
+	public static void fill(MatrixStack matrix, int x1, int y1, int x2, int y2, int colTop, int colBot, int colFill) {
 		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, colTop);
 		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, colTop);
 		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, colBot);
@@ -185,7 +185,7 @@ public class Window {
 		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, colFill);
 	}
 
-	public static void horizonalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
+	public static void horizontalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
 		float float_1 = (color1 >> 24 & 255) / 255.0F;
 		float float_2 = (color1 >> 16 & 255) / 255.0F;
 		float float_3 = (color1 >> 8 & 255) / 255.0F;

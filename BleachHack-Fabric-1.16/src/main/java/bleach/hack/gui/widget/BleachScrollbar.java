@@ -119,7 +119,7 @@ public class BleachScrollbar extends AbstractButtonWidget {
 		if (pos != null) {
 			int color = mouseX >= pos[0] && mouseX <= pos[0] + pos[2] && mouseY >= pos[1] && mouseY <= pos[1] + pos[3] ? 0x906060ff : 0x9040409f;
 
-			Window.drawRect(matrix, pos[0], pos[1], pos[0] + pos[2], pos[1] + pos[3], color);
+			Window.fill(matrix, pos[0], pos[1], pos[0] + pos[2], pos[1] + pos[3], color);
 
 			int middleY = pos[1] + (int) (pos[3] / 2d);
 

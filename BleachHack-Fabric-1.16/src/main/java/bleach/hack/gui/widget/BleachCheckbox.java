@@ -46,7 +46,7 @@ public class BleachCheckbox extends AbstractPressableButtonWidget {
 		fill(matrix, x, y + 10, x + 11, y + 11, 0xffb0b0b0);
 		fill(matrix, x, y, x + 10, y + 1, 0xff303030);
 		fill(matrix, x + 10, y, x + 11, y + 11, 0xffb0b0b0);*/
-		Window.drawRect(matrix, x, y, x + 11, y + 11, color);
+		Window.fill(matrix, x, y, x + 11, y + 11, color);
 
 		if (checked) {
 			textRenderer.draw(matrix, "\u2714", x + 2, y + 2, 0xffeeff);

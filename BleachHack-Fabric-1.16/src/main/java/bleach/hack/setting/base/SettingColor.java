@@ -57,7 +57,7 @@ public class SettingColor extends SettingBase {
 				ex = x + len - 18,
 				ey = y + getHeight(len) - 2;
 
-		Window.drawRect(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
+		Window.fill(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
 
 		DrawableHelper.fill(matrix, sx, sy, ex, ey, -1);
 		Color satColor = Color.getHSBColor(1f - hue, 1f, 1f);
@@ -105,7 +105,7 @@ public class SettingColor extends SettingBase {
 
 		sx = ex + 5;
 		ex = ex + 12;
-		Window.drawRect(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
+		Window.fill(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
 
 		for (int i = sy; i < ey; i++) {
 			float curHue = 1f / ((float) (ey - sy) / (i - sy));

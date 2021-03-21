@@ -221,7 +221,7 @@ public class AccountManagerScreen extends WindowScreen {
 	}
 
 	private void drawEntry(MatrixStack matrix, Account acc, int x, int y, int width, int height, int mouseX, int mouseY, int color, int hoverColor) {
-		Window.drawRect(matrix, x, y, x + width, y + height,
+		Window.fill(matrix, x, y, x + width, y + height,
 				mouseX >= x && mouseY >= y && mouseX <= x + width && mouseY <= y + height ? hoverColor : color);
 
 		drawStringWithShadow(matrix, textRenderer, "\u00a7cx", x + width + 2, y + 2, -1);

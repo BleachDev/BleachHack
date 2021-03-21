@@ -77,7 +77,7 @@ public class SettingSlider extends SettingBase {
 		}
 		
 		int pixels = (int) Math.round(MathHelper.clamp(len * ((getValue() - min) / (max - min)), 0, len));
-		Window.horizonalGradient(matrix, x + 1, y, x + pixels, y + 12,
+		Window.horizontalGradient(matrix, x + 1, y, x + pixels, y + 12,
 				mo ? 0xf03078b0 : 0xf03080a0, mo ? 0xf02068c0 : 0xf02070b0);
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
