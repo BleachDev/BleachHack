@@ -1,6 +1,7 @@
 package bleach.hack.module.mods;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -98,8 +99,16 @@ public class DiscordRPCMod extends Module {
 			}
 
 			ItemStack currentItem = mc.player.inventory.getMainHandStack();
+
+			String customName = StringUtils.strip(currentItem.getName().getString());
+			if (customName.length() > 25) {
+				customName = customName.substring(0, 23) + "..";
+			}
+
+			String name = currentItem.getItem().getName().getString();
 			String itemName = currentItem.getItem() == Items.AIR ? "Nothing"
-					: (currentItem.getCount() > 1 ? currentItem.getCount() + " " : "") + currentItem.getItem().getName().getString();
+					: (currentItem.getCount() > 1 ? currentItem.getCount() + " " : "")
+					+ (currentItem.hasCustomName() ? "\"" + customName + "\" (" + name + ")" : name);
 
 			switch (getSetting(1).asMode().mode) {
 				case 0:
