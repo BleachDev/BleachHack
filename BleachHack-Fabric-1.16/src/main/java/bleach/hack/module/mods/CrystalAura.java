@@ -31,6 +31,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.collect.Streams;
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
@@ -187,7 +188,11 @@ public class CrystalAura extends Module {
 				return;
 			}
 
-			List<LivingEntity> entities = Streams.stream(mc.world.getEntities())
+			List<LivingEntity> targets = Streams.stream(mc.world.getEntities())
+					.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
+							&& e.isAlive()
+							&& !e.getEntityName().equals(mc.getSession().getUsername())
+							&& e != mc.player.getVehicle())
 					.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state)
 							|| (e instanceof MobEntity && getSetting(1).asToggle().state)
 							|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state))
@@ -203,9 +208,8 @@ public class CrystalAura extends Module {
 					continue;
 				}
 
-				for (LivingEntity e: entities) {
-					if (e == mc.player || e == mc.player.getVehicle() || !e.isAlive() || !e.getPos().isInRange(v, 13)
-							|| (ExplosionUtils.willPop(v, 6f, mc.player) && !ExplosionUtils.willPopOrKill(v, 6f, e))) {
+				for (LivingEntity e: targets) {
+					if (ExplosionUtils.willPop(v, 6f, mc.player) && !ExplosionUtils.willPopOrKill(v, 6f, e)) {
 						continue;
 					}
 
