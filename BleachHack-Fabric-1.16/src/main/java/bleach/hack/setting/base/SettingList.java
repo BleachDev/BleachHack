@@ -32,6 +32,7 @@ import bleach.hack.gui.widget.BleachScrollbar;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
 import bleach.hack.gui.window.WindowScreen;
+import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
@@ -167,16 +168,19 @@ public abstract class SettingList<E> extends SettingBase {
 				items.clear();
 				items.addAll(defaultItems);
 				itemPool.removeAll(defaultItems);
+				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 			}));
 
 			getWindow(0).buttons.add(new WindowButton((x2 - x1) - 100, y2 - y1 - 22, (x2 - x1) - 55, y2 - y1 - 5, "Clear", () -> {
 				itemPool.addAll(items);
 				items.clear();
+				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 			}));
 
 			getWindow(0).buttons.add(new WindowButton((x2 - x1) - 150, y2 - y1 - 22, (x2 - x1) - 105, y2 - y1 - 5, "Add All", () -> {
 				items.addAll(itemPool);
 				itemPool.clear();
+				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 			}));
 
 			if (inputField == null) {
@@ -299,10 +303,12 @@ public abstract class SettingList<E> extends SettingBase {
 				itemPool.remove(toAddItem);
 				inputField.setTextFieldFocused(true);
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 			} else if (toDeleteItem != null) {
 				itemPool.add(toDeleteItem);
 				items.remove(toDeleteItem);
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 			}
 
 			return super.mouseClicked(mouseX, mouseY, button);

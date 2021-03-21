@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -60,8 +61,8 @@ public class SettingMode extends SettingBase {
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			mode = getNextMode();
-			MinecraftClient.getInstance().getSoundManager().play(
-					PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+			BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 		}
 	}
 

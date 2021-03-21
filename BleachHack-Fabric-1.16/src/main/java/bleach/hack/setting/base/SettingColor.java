@@ -11,6 +11,7 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.window.Window;
+import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
@@ -113,6 +114,7 @@ public class SettingColor extends SettingBase {
 		}
 
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
+			BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 			hue = 1f / ((float) (ey - sy) / (window.mouseY - sy));
 		}
 

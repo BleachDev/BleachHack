@@ -25,6 +25,7 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.window.Window;
+import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -58,6 +59,7 @@ public class SettingSlider extends SettingBase {
 
 	public void setValue(double value) {
 		this.value = value;
+		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 	}
 
 	public double round(double value, int places) {
@@ -95,8 +97,7 @@ public class SettingSlider extends SettingBase {
 				double units = 1 / (Math.pow(10, decimals));
 
 				setValue(MathHelper.clamp(getValue() + units * window.mwScroll, min, max));
-				MinecraftClient.getInstance().getSoundManager().play(
-						PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+				MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
 			}
 		}
 	}
