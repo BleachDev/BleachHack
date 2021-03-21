@@ -35,7 +35,7 @@ public class ElytraFly extends Module {
 
 	public ElytraFly() {
 		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
-				new SettingMode("Mode", "Normal", "Control", "Bruh Momentum").withDesc("Elytrafly mode"),
+				new SettingMode("Mode", "Normal", "Control", "BruhFly").withDesc("Elytrafly mode"),
 				new SettingSlider("Speed", 0, 5, 0.8, 2).withDesc("Elytra speed"));
 	}
 
@@ -85,14 +85,17 @@ public class ElytraFly extends Module {
 					vec3d = Vec3d.ZERO;
 				mc.player.setVelocity(vec3d.multiply(2));
 			}
-		} else if (getSetting(0).asMode().mode == 2 && !mc.player.isOnGround()
-				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA && mc.player.fallDistance > 0.5) {
+		} 
+		
+		if (getSetting(0).asMode().mode == 2 && !mc.player.isOnGround()
+				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA) {
 			/* I tried packet mode and got whatever the fuck **i mean frick** this is */
-			if (mc.options.keySneak.isPressed())
-				return;
-			mc.player.setVelocity(vec3d);
-			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
+			if (!mc.options.keySneak.isPressed()) {
+				mc.player.setVelocity(vec3d);
+				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
+						mc.player.getX() + vec3d.x, mc.player.getY() + vec3d.y, mc.player.getZ() + vec3d.z, true));
+			}
 		}
 	}
 }
