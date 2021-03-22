@@ -38,7 +38,10 @@ public class Module {
 	private String name;
 	private int key;
 	private int defaultKey;
+	
 	private boolean toggled = false;
+	private final boolean defaultToggled;
+	
 	private Category category;
 	private String desc;
 	private List<SettingBase> settings = new ArrayList<>();
@@ -55,6 +58,7 @@ public class Module {
 		desc = d;
 		settings = new ArrayList<>(Arrays.asList(s));
 		
+		defaultToggled = toggled;
 		if (toggled) {
 			setToggled(true);
 		}
@@ -145,6 +149,10 @@ public class Module {
 		} else {
 			onDisable();
 		}
+	}
+
+	public boolean isDefaultToggled() {
+		return defaultToggled;
 	}
 
 }
