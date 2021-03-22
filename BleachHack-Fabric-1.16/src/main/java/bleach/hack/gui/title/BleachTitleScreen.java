@@ -75,17 +75,17 @@ public class BleachTitleScreen extends WindowScreen {
 
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
-					client.openScreen(new SelectWorldScreen(this));
+					client.openScreen(new SelectWorldScreen(client.currentScreen));
 				}));
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
-					client.openScreen(new MultiplayerScreen(this));
+					client.openScreen(new MultiplayerScreen(client.currentScreen));
 				}));
 
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 + 100, h / 4 + 106, I18n.translate("menu.online"), () -> {
 					RealmsBridgeScreen realmsBridgeScreen = new RealmsBridgeScreen();
-					realmsBridgeScreen.switchToRealms(this);
+					realmsBridgeScreen.switchToRealms(client.currentScreen);
 				}));
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
