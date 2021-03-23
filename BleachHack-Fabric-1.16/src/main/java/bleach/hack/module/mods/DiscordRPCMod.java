@@ -4,6 +4,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.eventbus.Subscribe;
+import com.google.gson.JsonElement;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
@@ -35,15 +36,15 @@ public class DiscordRPCMod extends Module {
 				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None").withDesc("How to show elapsed time"),
 				new SettingToggle("Silent", false).withDesc("Use a generic Minecraft title and image"));
 		
-		String t1 = BleachFileHelper.readMiscSetting("discordRPCTopText");
-		String t2 = BleachFileHelper.readMiscSetting("discordRPCBottomText");
+		JsonElement t1 = BleachFileHelper.readMiscSetting("discordRPCTopText");
+		JsonElement t2 = BleachFileHelper.readMiscSetting("discordRPCBottomText");
 
 		if (t1 != null) {
-			customText1 = t1;
+			customText1 = t1.getAsString();
 		}
 
 		if (t2 != null) {
-			customText2 = t2;
+			customText2 = t2.getAsString();
 		}
 	}
 

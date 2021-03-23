@@ -184,18 +184,18 @@ public class BleachFileHelper {
 		BleachFileMang.appendFile(toWrite, "friends.txt");
 	}
 
-	public static String readMiscSetting(String key) {
+	public static JsonElement readMiscSetting(String key) {
 		JsonElement element = BleachJsonHelper.readJsonElement(key, "misc.json");
 
 		try {
-			return element.getAsString();
+			return element;
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	public static void saveMiscSetting(String key, String value) {
-		BleachJsonHelper.addJsonElement(key, new JsonPrimitive(value), "misc.json");
+	public static void saveMiscSetting(String key, JsonElement value) {
+		BleachJsonHelper.addJsonElement(key, value, "misc.json");
 	}
 
 }

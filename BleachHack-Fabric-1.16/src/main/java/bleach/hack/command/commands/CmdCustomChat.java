@@ -2,6 +2,8 @@ package bleach.hack.command.commands;
 
 import java.util.Arrays;
 
+import com.google.gson.JsonPrimitive;
+
 import bleach.hack.command.Command;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.CustomChat;
@@ -39,18 +41,18 @@ public class CmdCustomChat extends Command {
 			chat.prefix = "";
 			chat.suffix = " \u25ba \u0432\u2113\u0454\u03b1c\u043d\u043d\u03b1c\u043a";
 
-			BleachFileHelper.saveMiscSetting("customChatPrefix", chat.prefix);
-			BleachFileHelper.saveMiscSetting("customChatSuffix", chat.suffix);
+			BleachFileHelper.saveMiscSetting("customChatPrefix", new JsonPrimitive(chat.prefix));
+			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
 			BleachLogger.infoMessage("Reset the chat prefix and suffix");
 		} else if (args[0].equalsIgnoreCase("prefix")) {
 			chat.prefix = String.join(" ", Arrays.asList(args).subList(1, args.length)).trim() + " ";
 
-			BleachFileHelper.saveMiscSetting("customChatPrefix", chat.prefix);
+			BleachFileHelper.saveMiscSetting("customChatPrefix", new JsonPrimitive(chat.prefix));
 			BleachLogger.infoMessage("Set prefix to: \"" + chat.prefix + "\"");
 		} else if (args[0].equalsIgnoreCase("suffix")) {
 			chat.suffix = " " + String.join(" ", Arrays.asList(args).subList(1, args.length)).trim();
 
-			BleachFileHelper.saveMiscSetting("customChatSuffix", chat.suffix);
+			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
 			BleachLogger.infoMessage("Set suffix to: \"" + chat.suffix + "\"");
 		} else {
 			printSyntaxError();

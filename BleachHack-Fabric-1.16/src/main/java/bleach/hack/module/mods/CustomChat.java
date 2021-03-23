@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.google.common.eventbus.Subscribe;
+import com.google.gson.JsonElement;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventReadPacket;
@@ -69,11 +70,11 @@ public class CustomChat extends Module {
 				new SettingToggle("Suffix", false).withDesc("Message appended to the message, set with \"customchat suffix [message]\""),
 				new SettingMode("KillText", "None", "Ez", "GG").withDesc("Send a chat message when you kill someone"));
 		
-		String pfx = BleachFileHelper.readMiscSetting("customChatPrefix");
-		if (pfx != null) prefix = pfx;
+		JsonElement pfx = BleachFileHelper.readMiscSetting("customChatPrefix");
+		if (pfx != null) prefix = pfx.getAsString();
 
-		String sfx = BleachFileHelper.readMiscSetting("customChatSuffix");
-		if (sfx != null) suffix = sfx;
+		JsonElement sfx = BleachFileHelper.readMiscSetting("customChatSuffix");
+		if (sfx != null) suffix = sfx.getAsString();
 	}
 
 	@Subscribe

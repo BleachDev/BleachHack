@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.google.gson.JsonPrimitive;
+
 import bleach.hack.gui.title.AccountManagerScreen;
 import bleach.hack.gui.title.BleachTitleScreen;
 import bleach.hack.gui.window.WindowManagerScreen;
@@ -65,7 +67,7 @@ public class MixinTitleScreen extends Screen {
 		} else {
 			addButton(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
 				BleachTitleScreen.customTitleScreen = !BleachTitleScreen.customTitleScreen;
-				BleachFileHelper.saveMiscSetting("customTitleScreen", "true");
+				BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(true));
 				client.openScreen(new TitleScreen(false));
 			}));
 		}

@@ -24,6 +24,9 @@ import java.util.Random;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lwjgl.opengl.GL11;
+
+import com.google.gson.JsonPrimitive;
+
 import bleach.hack.BleachHack;
 import bleach.hack.gui.title.particle.ParticleManager;
 import bleach.hack.gui.window.WindowScreen;
@@ -90,7 +93,7 @@ public class BleachTitleScreen extends WindowScreen {
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
 					customTitleScreen = !customTitleScreen;
-					BleachFileHelper.saveMiscSetting("customTitleScreen", "false");
+					BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(false));
 					client.openScreen(new TitleScreen(false));
 				}));
 		getWindow(0).buttons.add(

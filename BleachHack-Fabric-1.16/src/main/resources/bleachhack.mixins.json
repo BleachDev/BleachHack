@@ -42,7 +42,6 @@
     "MixinServerScreen",
     "MixinShaderEffect",
     "MixinSharedConstants",
-    "MixinSignBlockEntityRenderer",
     "MixinSkyProperties",
     "MixinSoundSystem",
     "MixinTitleScreen",

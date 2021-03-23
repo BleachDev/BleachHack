@@ -93,7 +93,18 @@ public abstract class SettingList<E> extends SettingBase {
 		return items;
 	}
 
-	public abstract void renderItem(MinecraftClient mc, MatrixStack matrix, E item, int x, int y, int w, int h);
+	public void renderItem(MinecraftClient mc, MatrixStack matrix, E item, int x, int y, int w, int h) {
+		RenderSystem.pushMatrix();
+		
+		float scale = (h - 2) / 10f;
+		float offset = 1f / scale;
+
+		RenderSystem.scalef(scale, scale, 1f);
+
+		mc.textRenderer.drawWithShadow(matrix, "?", (x + 5) * offset, (y + 4) * offset, -1);
+		
+		RenderSystem.popMatrix();
+	}
 
 	public abstract E getItemFromString(String string);
 	public abstract String getStringFromItem(E item);

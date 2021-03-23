@@ -20,6 +20,8 @@ package bleach.hack.command;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gson.JsonElement;
+
 import bleach.hack.command.commands.*;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
@@ -32,6 +34,7 @@ public class CommandManager {
 			new CmdBind(),
 			new CmdCI(),
 			new CmdCustomChat(),
+			new CmdCustomSign(),
 			new CmdDupe(),
 			new CmdEnchant(),
 			new CmdEntityStats(),
@@ -57,9 +60,9 @@ public class CommandManager {
 	}
 	
 	public static void readPrefix() {
-		String prefix = BleachFileHelper.readMiscSetting("prefix");
+		JsonElement prefix = BleachFileHelper.readMiscSetting("prefix");
 		if (prefix != null)
-			Command.PREFIX = prefix;
+			Command.PREFIX = prefix.getAsString();
 	}
 
 	public static void callCommand(String input) {

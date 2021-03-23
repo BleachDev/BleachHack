@@ -20,13 +20,14 @@ public class MixinBlockEntityRenderDispatcher {
 
 	@Shadow private static <T extends BlockEntity> void render(BlockEntityRenderer<T> renderer, T blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {}
 
+	@SuppressWarnings("unchecked")
 	@Redirect(method = "*" /* lambda moment*/, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/entity/BlockEntityRenderDispatcher;render(Lnet/minecraft/client/render/block/entity/BlockEntityRenderer;Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V"))
 	private static <T extends BlockEntity> void render_render(BlockEntityRenderer<T> renderer, T blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
 		EventBlockEntityRender.Single.Pre event = new EventBlockEntityRender.Single.Pre(blockEntity, matrices, vertexConsumers);
 		BleachHack.eventBus.post(event);
 
 		if (!event.isCancelled()) {
-			render(renderer, blockEntity, tickDelta, event.getMatrices(), event.getVertexConsumers());
+			render(renderer, (T) event.getBlockEntity(), tickDelta, event.getMatrices(), event.getVertexConsumers());
 		}
 	}
 	

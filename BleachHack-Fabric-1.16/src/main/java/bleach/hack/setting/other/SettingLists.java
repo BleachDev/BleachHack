@@ -33,16 +33,11 @@ public class SettingLists {
 
 			@Override
 			public void renderItem(MinecraftClient mc, MatrixStack matrix, Block item, int x, int y, int w, int h) {
-				RenderSystem.pushMatrix();
-
 				if (item.asItem() == Items.AIR) {
-					float scale = (h - 2) / 10f;
-					float offset = 1f / scale;
-
-					RenderSystem.scalef(scale, scale, 1f);
-
-					mc.textRenderer.drawWithShadow(matrix, "?", (x + 5) * offset, (y + 4) * offset, -1);
+					super.renderItem(mc, matrix, item, x, y, w, h);
 				} else {
+					RenderSystem.pushMatrix();
+
 					float scale = (h - 2) / 16f;
 					float offset = 1f / scale;
 
@@ -51,9 +46,9 @@ public class SettingLists {
 					DiffuseLighting.enableGuiDepthLighting();
 					mc.getItemRenderer().renderInGui(new ItemStack(item.asItem()), (int) ((x + 1) * offset), (int) ((y + 1) * offset));
 					DiffuseLighting.disableGuiDepthLighting();
-				}
 
-				RenderSystem.popMatrix();
+					RenderSystem.popMatrix();
+				}
 			}
 
 			@Override
@@ -68,7 +63,7 @@ public class SettingLists {
 			}
 		};
 	}
-	
+
 	public static SettingList<Item> newItemList(String text, String windowText, Item... items) {
 		return newItemList(text, windowText, null, items);
 	}
@@ -82,16 +77,11 @@ public class SettingLists {
 
 			@Override
 			public void renderItem(MinecraftClient mc, MatrixStack matrix, Item item, int x, int y, int w, int h) {
-				RenderSystem.pushMatrix();
-
 				if (item == Items.AIR) {
-					float scale = (h - 2) / 10f;
-					float offset = 1f / scale;
-
-					RenderSystem.scalef(scale, scale, 1f);
-
-					mc.textRenderer.drawWithShadow(matrix, "?", (x + 5) * offset, (y + 4) * offset, -1);
+					super.renderItem(mc, matrix, item, x, y, w, h);
 				} else {
+					RenderSystem.pushMatrix();
+
 					float scale = (h - 2) / 16f;
 					float offset = 1f / scale;
 
@@ -100,9 +90,9 @@ public class SettingLists {
 					DiffuseLighting.enableGuiDepthLighting();
 					mc.getItemRenderer().renderInGui(new ItemStack(item), (int) ((x + 1) * offset), (int) ((y + 1) * offset));
 					DiffuseLighting.disableGuiDepthLighting();
-				}
 
-				RenderSystem.popMatrix();
+					RenderSystem.popMatrix();
+				}
 			}
 
 			@Override

@@ -17,6 +17,8 @@
  */
 package bleach.hack.command.commands;
 
+import com.google.gson.JsonPrimitive;
+
 import bleach.hack.command.Command;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
@@ -45,8 +47,8 @@ public class CmdPrefix extends Command {
 			return;
 		}
 
-		BleachFileHelper.saveMiscSetting("prefix", args[0]);
 		PREFIX = args[0];
+		BleachFileHelper.saveMiscSetting("prefix", new JsonPrimitive(PREFIX));
 		BleachLogger.infoMessage("Set Prefix To: \"" + args[0] + "\"");
 	}
 

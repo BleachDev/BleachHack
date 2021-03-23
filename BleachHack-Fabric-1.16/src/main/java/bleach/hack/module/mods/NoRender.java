@@ -1,19 +1,27 @@
 package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
+import com.google.gson.JsonElement;
 
+import bleach.hack.event.events.EventBlockEntityRender;
 import bleach.hack.event.events.EventParticle;
-import bleach.hack.event.events.EventSignBlockEntityRender;
 import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.file.BleachFileHelper;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.client.particle.ExplosionLargeParticle;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class NoRender extends Module {
+
+	public Text[] signText = new Text[] { LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY };
 
 	public NoRender() {
 		super("NoRender", KEY_UNBOUND, Category.RENDER, "Blocks certain elements from rendering",
@@ -22,9 +30,8 @@ public class NoRender extends Module {
 				new SettingToggle("Hurtcam", true).withDesc("Removes shaking when you get hurt"), // 2
 				new SettingToggle("Liquid", true).withDesc("Removes the underwater overlay when you are in water"), // 3
 				new SettingToggle("Pumpkin", true).withDesc("Removes the pumpkin overlay"), // 4
-				new SettingToggle("Signs", false).withDesc("Doesn't render signs"), /* .withChildren( // 5 new SettingMode("Mode", "Unrender", "Blank", "Custom").
-				 * withDesc("How to render signs, use the \"customsign\" command to set sign text"
-				 * )), */
+				new SettingToggle("Signs", false).withDesc("Doesn't render signs").withChildren(
+						new SettingMode("Mode", "Unrender", "Blank", "Custom").withDesc("How to render signs, use the \"customsign\" command to set sign text")),
 				new SettingToggle("Wobble", true).withDesc("Removes the nausea effect"), // 6
 				new SettingToggle("BossBar", false).withDesc("Removes bossbars"), // 7
 				new SettingToggle("Totem", false).withDesc("Removes the totem animation").withChildren(
@@ -36,12 +43,35 @@ public class NoRender extends Module {
 				new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"),
 				new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren(
 						new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")));
+
+		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
+
+		if (signText != null) {
+			for (int i = 0; i < Math.min(4, signText.getAsJsonArray().size()); i++) {
+				this.signText[i] = new LiteralText(signText.getAsJsonArray().get(i).getAsString());
+			}
+		}
 	}
 
 	@Subscribe
-	public void signRender(EventSignBlockEntityRender event) {
-		if (this.getSetting(5).asToggle().state) {
-			event.setCancelled(true);
+	public void signRender(EventBlockEntityRender.Single.Pre event) {
+		if (event.getBlockEntity() instanceof SignBlockEntity) {
+			if (this.getSetting(5).asToggle().state) {
+				if (getSetting(5).asToggle().getChild(0).asMode().mode == 0) {
+					event.setCancelled(true);
+				} else {
+					SignBlockEntity sign = new SignBlockEntity();
+					sign.setLocation(mc.world, event.getBlockEntity().getPos());
+
+					if (getSetting(5).asToggle().getChild(0).asMode().mode == 2) {
+						for (int i = 0; i < 4; i++) {
+							sign.setTextOnRow(i, signText[i]);
+						}
+					}
+
+					event.setBlockEntity(sign);
+				}
+			}
 		}
 	}
 
