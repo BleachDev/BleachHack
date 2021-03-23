@@ -19,6 +19,7 @@ package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
 import bleach.hack.util.BleachLogger;
+import bleach.hack.util.file.BleachJsonHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringNbtReader;
@@ -46,10 +47,11 @@ public class CmdNBT extends Command {
 			printSyntaxError();
 			return;
 		}
+
 		ItemStack item = mc.player.inventory.getMainHandStack();
 
 		if (args[0].equalsIgnoreCase("get")) {
-			BleachLogger.infoMessage("\u00a76\u00a7lNBT:\n" + item.getTag() + "");
+			BleachLogger.infoMessage("\u00a76NBT:\n" + BleachJsonHelper.formatJson(item.getTag().toString()));
 		} else if (args[0].equalsIgnoreCase("copy")) {
 			mc.keyboard.setClipboard(item.getTag() + "");
 			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + (item.getTag() + "\n") + "\u00a76to clipboard.");

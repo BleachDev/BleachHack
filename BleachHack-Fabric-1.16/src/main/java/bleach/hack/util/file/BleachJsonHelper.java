@@ -86,4 +86,12 @@ public class BleachJsonHelper {
 			return null;
 		}
 	}
+	
+	public static String formatJson(String json) {
+		return jsonWriter.toJson(new JsonParser().parse(json));
+	}
+	
+	public static String formatJson(JsonElement json) {
+		return jsonWriter.toJson(json);
+	}
 }
