@@ -197,7 +197,6 @@ public class Peek extends Module {
 
 		RenderSystem.pushMatrix();
 		RenderSystem.scaled(size, size, 1.0);
-		RenderSystem.translatef(0f, 0f, 300f);
 		int x = (int) (mouseX * (1 / size) + 12 * (1 / size));
 		int y = (int) (mouseY * (1 / size) - 12 * (1 / size) - 140);
 

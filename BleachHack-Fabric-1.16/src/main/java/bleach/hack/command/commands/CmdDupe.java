@@ -49,6 +49,11 @@ public class CmdDupe extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
+		if (args.length == 0) {
+			printSyntaxError("Invaild dupe method");
+			return;
+		}
+
 		if (args[0].equalsIgnoreCase("vanilla")) {
 			mc.player.dropSelectedItem(true);
 			mc.player.networkHandler.getConnection().disconnect(new LiteralText("Duping..."));

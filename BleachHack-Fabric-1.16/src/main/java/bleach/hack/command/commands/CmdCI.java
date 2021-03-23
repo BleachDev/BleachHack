@@ -41,13 +41,13 @@ public class CmdCI extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		for (int i = 0; i < 200; i++) {
-			if (mc.interactionManager.getCurrentGameMode() == GameMode.CREATIVE) {
-				mc.player.inventory.setStack(i, new ItemStack(null));
-			} else {
-				printSyntaxError("Bruh you're not in creative.");
-				return;
-			}
+		if (mc.interactionManager.getCurrentGameMode() != GameMode.CREATIVE) {
+			printSyntaxError("Bruh you're not in creative.");
+			return;
+		}
+		
+		for (int i = 0; i < mc.player.playerScreenHandler.getStacks().size(); i++) {
+			mc.interactionManager.clickCreativeStack(ItemStack.EMPTY, i);
 		}
 
 		BleachLogger.infoMessage("Cleared all items");

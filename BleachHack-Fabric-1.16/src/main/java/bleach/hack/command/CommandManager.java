@@ -20,6 +20,8 @@ package bleach.hack.command;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.google.gson.JsonElement;
 
 import bleach.hack.command.commands.*;
@@ -43,6 +45,7 @@ public class CommandManager {
 			new CmdGive(),
 			new CmdGuiReset(),
 			new CmdHelp(),
+			new CmdInvPeek(),
 			new CmdNBT(),
 			new CmdNotebot(),
 			new CmdPeek(),
@@ -66,14 +69,13 @@ public class CommandManager {
 	}
 
 	public static void callCommand(String input) {
-		String[] split = input.split(" ", -1);
-		System.out.println(Arrays.asList(split));
-		String command = split[0];
-		String args = input.substring(command.length()).trim();
+		String[] split = input.split(" ");
+		System.out.println(Arrays.toString(split));
+
 		for (Command c : getCommands()) {
-			if (c.getAlias().equalsIgnoreCase(command)) {
+			if (c.getAlias().equalsIgnoreCase(split[0])) {
 				try {
-					c.onCommand(command, args.split(" "));
+					c.onCommand(split[0], ArrayUtils.subarray(split, 1, split.length));
 				} catch (Exception e) {
 					e.printStackTrace();
 					c.printSyntaxError();
@@ -81,6 +83,7 @@ public class CommandManager {
 				return;
 			}
 		}
+
 		BleachLogger.errorMessage("Command Not Found, Maybe Try " + Command.PREFIX + "help");
 	}
 }

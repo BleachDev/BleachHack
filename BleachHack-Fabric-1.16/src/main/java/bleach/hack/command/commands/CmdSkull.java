@@ -17,10 +17,17 @@
  */
 package bleach.hack.command.commands;
 
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.UUID;
+import java.util.Random;
+
+import com.google.common.io.Resources;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import bleach.hack.command.Command;
+import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
@@ -45,19 +52,45 @@ public class CmdSkull extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
+		if (args.length == 0) {
+			printSyntaxError();
+			return;
+		}
+
 		ItemStack item = new ItemStack(Items.PLAYER_HEAD, 64);
 
+		Random random = new Random();
+		String id = "[I;" + random.nextInt() + "," + random.nextInt() + "," + random.nextInt() + "," + random.nextInt() + "]";
+
 		if (args.length < 2) {
-			item.setTag(StringNbtReader.parse("{SkullOwner:{Name:\"" + args[0] + "\"}}"));
+			try {
+				JsonObject json = new JsonParser().parse(
+						Resources.toString(new URL("https://api.mojang.com/users/profiles/minecraft/" + args[0]), StandardCharsets.UTF_8))
+						.getAsJsonObject();
+
+				JsonObject json2 = new JsonParser().parse(
+						Resources.toString(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + json.get("id").getAsString()), StandardCharsets.UTF_8))
+						.getAsJsonObject();
+
+				item.setTag(StringNbtReader.parse("{SkullOwner:{Id:" + id + ",Properties:{textures:[{Value:\""
+						+ json2.get("properties").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString()
+						+ "\"}]}}}"));
+			} catch (Exception e) {
+				e.printStackTrace();
+				BleachLogger.errorMessage("Error getting head! (" + e.getClass().getSimpleName() + ")");
+			}
 		} else if (args[0].equalsIgnoreCase("img")) {
-			CompoundTag tag = StringNbtReader.parse("{SkullOwner:{Id:\"" + UUID.randomUUID() + "\",Properties:{textures:[{Value:\""
-					+ Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + args[1] + "\"}}}").getBytes())
-					+ "\"}]}}}");
+			CompoundTag tag = StringNbtReader.parse(
+					"{SkullOwner:{Id:" + id + ",Properties:{textures:[{Value:\"" + encodeUrl(args[1]) + "\"}]}}}");
 			item.setTag(tag);
 			System.out.println(tag);
 		}
 
 		mc.player.inventory.addPickBlock(item);
+	}
+
+	private String encodeUrl(String url) {
+		return Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}").getBytes());
 	}
 
 }

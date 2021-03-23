@@ -1,6 +1,6 @@
 package bleach.hack.command.commands;
 
-import java.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.gson.JsonPrimitive;
 
@@ -35,6 +35,7 @@ public class CmdCustomChat extends Command {
 		}
 
 		CustomChat chat = ModuleManager.getModule(CustomChat.class);
+
 		if (args[0].equalsIgnoreCase("current")) {
 			BleachLogger.infoMessage("Current prefix: \"" + chat.prefix + "\", suffix: \"" + chat.suffix + "\"");
 		} else if (args[0].equalsIgnoreCase("reset")) {
@@ -45,12 +46,12 @@ public class CmdCustomChat extends Command {
 			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
 			BleachLogger.infoMessage("Reset the chat prefix and suffix");
 		} else if (args[0].equalsIgnoreCase("prefix")) {
-			chat.prefix = String.join(" ", Arrays.asList(args).subList(1, args.length)).trim() + " ";
+			chat.prefix = String.join(" ", ArrayUtils.subarray(args, 1, args.length)).trim() + " ";
 
 			BleachFileHelper.saveMiscSetting("customChatPrefix", new JsonPrimitive(chat.prefix));
 			BleachLogger.infoMessage("Set prefix to: \"" + chat.prefix + "\"");
 		} else if (args[0].equalsIgnoreCase("suffix")) {
-			chat.suffix = " " + String.join(" ", Arrays.asList(args).subList(1, args.length)).trim();
+			chat.suffix = " " + String.join(" ", ArrayUtils.subarray(args, 1, args.length)).trim();
 
 			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
 			BleachLogger.infoMessage("Set suffix to: \"" + chat.suffix + "\"");

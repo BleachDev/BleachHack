@@ -23,6 +23,10 @@ import bleach.hack.util.file.BleachJsonHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class CmdNBT extends Command {
 
@@ -43,7 +47,7 @@ public class CmdNBT extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		if (args[0].isEmpty()) {
+		if (args.length == 0) {
 			printSyntaxError();
 			return;
 		}
@@ -51,7 +55,16 @@ public class CmdNBT extends Command {
 		ItemStack item = mc.player.inventory.getMainHandStack();
 
 		if (args[0].equalsIgnoreCase("get")) {
-			BleachLogger.infoMessage("\u00a76NBT:\n" + BleachJsonHelper.formatJson(item.getTag().toString()));
+			String tag = BleachJsonHelper.formatJson(item.getTag().toString());
+
+			Text copy = new LiteralText("\u00a7e\u00a7l<COPY>")
+					.styled(s ->
+					s.withClickEvent(
+							new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tag))
+					.withHoverEvent(
+							new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Copy the nbt of this item to your clipboard"))));
+
+			BleachLogger.infoMessage(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + tag));
 		} else if (args[0].equalsIgnoreCase("copy")) {
 			mc.keyboard.setClipboard(item.getTag() + "");
 			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + (item.getTag() + "\n") + "\u00a76to clipboard.");

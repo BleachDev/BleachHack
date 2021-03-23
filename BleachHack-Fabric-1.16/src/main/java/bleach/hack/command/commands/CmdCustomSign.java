@@ -49,20 +49,20 @@ public class CmdCustomSign extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) {
+		if (args.length == 0) {
+			printSyntaxError();
+			return;
+		}
+
 		NoRender noRender = ModuleManager.getModule(NoRender.class);
 
-		if (args.length < 2) {
-			if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
-				String s = "Sign Text:";
-				for (Text text: noRender.signText) {
-					s += "\n\u00a77" + text.getString();
-				}
-				
-				BleachLogger.infoMessage(s);
-				return;
+		if (args[0].equalsIgnoreCase("list")) {
+			String s = "Sign Text:";
+			for (Text text: noRender.signText) {
+				s += "\n\u00a77" + text.getString();
 			}
 
-			printSyntaxError();
+			BleachLogger.infoMessage(s);
 			return;
 		}
 

@@ -44,6 +44,11 @@ public class CmdBind extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
+		if (args.length == 0) {
+			printSyntaxError();
+			return;
+		}
+
 		if (args[0].equalsIgnoreCase("clear")) {
 			int c = 0;
 			for (Module m : ModuleManager.getModules()) {
