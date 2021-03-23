@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.event.events.EventBlockEntityRender;
+import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.module.Category;
@@ -15,6 +16,8 @@ import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.client.particle.ExplosionLargeParticle;
+import net.minecraft.entity.FallingBlockEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -42,7 +45,9 @@ public class NoRender extends Module {
 				new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)"),
 				new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"),
 				new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren(
-						new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")));
+						new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
+				new SettingToggle("Armor Stands", false).withDesc("Disables rendering of armor stands"),
+				new SettingToggle("Falling Blocks", false).withDesc("Disables rendering of falling blocks"));
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 
@@ -50,6 +55,19 @@ public class NoRender extends Module {
 			for (int i = 0; i < Math.min(4, signText.getAsJsonArray().size()); i++) {
 				this.signText[i] = new LiteralText(signText.getAsJsonArray().get(i).getAsString());
 			}
+		}
+	}
+	
+	@Subscribe
+	public void onEntityRender(EventEntityRender.Single.Pre event) {
+		if (getSetting(14).asToggle().state && event.getEntity() instanceof ArmorStandEntity) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		if (getSetting(15).asToggle().state && event.getEntity() instanceof FallingBlockEntity) {
+			event.setCancelled(true);
+			return;
 		}
 	}
 

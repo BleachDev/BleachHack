@@ -275,7 +275,7 @@ public class StorageESP extends Module {
 			} else {
 				return new float[] { 0.1F, 0.45F, 0.1F };
 			}
-		} else if (e instanceof ArmorStandEntity && getSetting(11).asToggle().state) {
+		} else if (e instanceof ArmorStandEntity && getSetting(15).asToggle().state) {
 			return new float[] { 0.7F, 0.6F, 0.2F };
 		}
 
