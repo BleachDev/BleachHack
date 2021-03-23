@@ -18,6 +18,7 @@
 package bleach.hack;
 
 import com.google.common.eventbus.EventBus;
+import com.google.gson.JsonElement;
 
 import bleach.hack.command.CommandManager;
 import bleach.hack.gui.title.BleachTitleScreen;
@@ -30,8 +31,8 @@ import net.fabricmc.api.ModInitializer;
 
 public class BleachHack implements ModInitializer {
 
-	public static final String VERSION = "B15";
-	public static final int INTVERSION = 25;
+	public static final String VERSION = "0.15.1";
+	public static final int INTVERSION = 26;
 
 	public static final EventBus eventBus = new EventBus();
 
@@ -55,8 +56,8 @@ public class BleachHack implements ModInitializer {
 		// keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind
 		// System
 
-		String mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
-		if (mainMenu != null && mainMenu.equalsIgnoreCase("false")) {
+		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
+		if (mainMenu != null && !mainMenu.getAsBoolean()) {
 			BleachTitleScreen.customTitleScreen = false;
 		}
 	}
