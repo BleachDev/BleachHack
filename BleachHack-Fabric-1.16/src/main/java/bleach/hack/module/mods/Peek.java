@@ -4,10 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.event.events.EventDrawTooltip;
 import bleach.hack.module.Category;
@@ -28,6 +27,7 @@ import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
@@ -38,6 +38,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Matrix4f;
 
 public class Peek extends Module {
 
@@ -86,30 +87,26 @@ public class Peek extends Module {
 	}
 
 	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mouseX, int mouseY) {
-		if (!(slot.getStack().getItem() instanceof BlockItem))
+		if (!(slot.getStack().getItem() instanceof BlockItem)) {
 			return;
-		if (!(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ShulkerBoxBlock)
-				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof ChestBlock)
-				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof BarrelBlock)
-				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof DispenserBlock)
-				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof HopperBlock)
-				&& !(((BlockItem) slot.getStack().getItem()).getBlock() instanceof AbstractFurnaceBlock))
+		}
+
+		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
+
+		if (!(block instanceof ShulkerBoxBlock)
+				&& !(block instanceof ChestBlock)
+				&& !(block instanceof BarrelBlock)
+				&& !(block instanceof DispenserBlock)
+				&& !(block instanceof HopperBlock)
+				&& !(block instanceof AbstractFurnaceBlock)) {
 			return;
+		}
 
 		List<ItemStack> items = ItemContentUtils.getItemsInContainer(slot.getStack());
 
-		boolean empty = true;
-		for (ItemStack i : items) {
-			if (i.getItem() != Items.AIR) {
-				empty = false;
-				break;
-			}
-		}
-
-		if (empty)
+		if (items.stream().allMatch(ItemStack::isEmpty)) {
 			return;
-
-		Block block = ((BlockItem) slot.getStack().getItem()).getBlock();
+		}
 
 		if (getSetting(0).asToggle().getChild(0).asMode().mode == 2) {
 			event.setCancelled(true);
@@ -118,8 +115,6 @@ public class Peek extends Module {
 		}
 
 		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mouseY + 24 : mouseY;
-
-		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
 
 		if (block instanceof AbstractFurnaceBlock) {
 			renderTooltipBox(event.matrix, mouseX, realY - 21, 13, 47, true);
@@ -131,9 +126,13 @@ public class Peek extends Module {
 			renderTooltipBox(event.matrix, mouseX, realY - 55, 47, 150, true);
 		}
 
+		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;
+
 		for (ItemStack i : items) {
-			if (count > 26)
+			if (count > 26) {
 				break;
+			}
+
 			int x = mouseX + 10 + (17 * (count % 9));
 			int y = realY - 69 + (17 * (count / 9));
 
@@ -149,8 +148,10 @@ public class Peek extends Module {
 		if (slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK)
 			return;
 
-		if (pages == null)
+		if (pages == null) {
 			pages = ItemContentUtils.getTextInBook(slot.getStack());
+		}
+
 		if (pages.isEmpty())
 			return;
 
@@ -162,15 +163,17 @@ public class Peek extends Module {
 			} else {
 				pageCount++;
 			}
-		} else if (mc.player.age % 80 != 0)
+		} else if (mc.player.age % 80 != 0) {
 			shown = false;
+		}
 
-		int length = mc.textRenderer.getWidth("Page: " + (pageCount + 1) + "/" + pages.size());
+		String pageString = "Page: " + (pageCount + 1) + "/" + pages.size();
+		int length = mc.textRenderer.getWidth(pageString);
 
 		renderTooltipBox(matrix, mouseX + 56 - length / 2, mouseY - pages.get(pageCount).size() * 10 - 19, 5, length, true);
 		renderTooltipBox(matrix, mouseX, mouseY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
-		mc.textRenderer.drawWithShadow(matrix, "Page: " + (pageCount + 1) + "/" + pages.size(),
-				mouseX + 68 - length / 2, mouseY - pages.get(pageCount).size() * 10 - 32, -1);
+		
+		mc.textRenderer.drawWithShadow(matrix, pageString, mouseX + 68 - length / 2, mouseY - pages.get(pageCount).size() * 10 - 32, -1);
 
 		int count = 0;
 		for (String s : pages.get(pageCount)) {
@@ -192,9 +195,9 @@ public class Peek extends Module {
 
 		double size = getSetting(2).asToggle().getChild(0).asSlider().getValue();
 
-		GL11.glPushMatrix();
-		GL11.glScaled(size, size, 1.0);
-		GL11.glTranslatef(0.0F, 0.0F, 300.0F);
+		RenderSystem.pushMatrix();
+		RenderSystem.scaled(size, size, 1.0);
+		RenderSystem.translatef(0f, 0f, 300f);
 		int x = (int) (mouseX * (1 / size) + 12 * (1 / size));
 		int y = (int) (mouseY * (1 / size) - 12 * (1 / size) - 140);
 
@@ -212,7 +215,7 @@ public class Peek extends Module {
 			}
 		}
 
-		GL11.glPopMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	/* Fix your game [B]ojang */
@@ -226,51 +229,54 @@ public class Peek extends Module {
 	}
 
 	private void renderTooltipBox(MatrixStack matrix, int x1, int y1, int x2, int y2, boolean wrap) {
-		int int_5 = x1 + 12;
-		int int_6 = y1 - 12;
+		int xStart = x1 + 12;
+		int yStart = y1 - 12;
 		if (wrap) {
-			if (int_5 + y2 > mc.currentScreen.width)
-				int_5 -= 28 + y2;
-			if (int_6 + x2 + 6 > mc.currentScreen.height)
-				int_6 = mc.currentScreen.height - x2 - 6;
+			if (xStart + y2 > mc.currentScreen.width)
+				xStart -= 28 + y2;
+			if (yStart + x2 + 6 > mc.currentScreen.height)
+				yStart = mc.currentScreen.height - x2 - 6;
 		}
+		
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = tessellator.getBuffer();
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
 
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(7425);
-		fillGradient(matrix, int_5 - 3, int_6 - 4, int_5 + y2 + 3, int_6 - 3, -267386864, -267386864);
-		fillGradient(matrix, int_5 - 3, int_6 + x2 + 3, int_5 + y2 + 3, int_6 + x2 + 4, -267386864, -267386864);
-		fillGradient(matrix, int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 + x2 + 3, -267386864, -267386864);
-		fillGradient(matrix, int_5 - 4, int_6 - 3, int_5 - 3, int_6 + x2 + 3, -267386864, -267386864);
-		fillGradient(matrix, int_5 + y2 + 3, int_6 - 3, int_5 + y2 + 4, int_6 + x2 + 3, -267386864, -267386864);
-		fillGradient(matrix, int_5 - 3, int_6 - 3 + 1, int_5 - 3 + 1, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
-		fillGradient(matrix, int_5 + y2 + 2, int_6 - 3 + 1, int_5 + y2 + 3, int_6 + x2 + 3 - 1, 1347420415, 1344798847);
-		fillGradient(matrix, int_5 - 3, int_6 - 3, int_5 + y2 + 3, int_6 - 3 + 1, 1347420415, 1347420415);
-		fillGradient(matrix, int_5 - 3, int_6 + x2 + 2, int_5 + y2 + 3, int_6 + x2 + 3, 1344798847, 1344798847);
-		GL11.glShadeModel(7424);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Matrix4f matrix4f = matrix.peek().getModel();
+		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 4, xStart + y2 + 3, yStart - 3, -267386864, -267386864);
+		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart + x2 + 3, xStart + y2 + 3, yStart + x2 + 4, -267386864, -267386864);
+		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 3, xStart + y2 + 3, yStart + x2 + 3, -267386864, -267386864);
+		fillGradient(matrix4f, bufferBuilder, xStart - 4, yStart - 3, xStart - 3, yStart + x2 + 3, -267386864, -267386864);
+		fillGradient(matrix4f, bufferBuilder, xStart + y2 + 3, yStart - 3, xStart + y2 + 4, yStart + x2 + 3, -267386864, -267386864);
+		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 3 + 1, xStart - 3 + 1, yStart + x2 + 3 - 1, 1347420415, 1344798847);
+		fillGradient(matrix4f, bufferBuilder, xStart + y2 + 2, yStart - 3 + 1, xStart + y2 + 3, yStart + x2 + 3 - 1, 1347420415, 1344798847);
+		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 3, xStart + y2 + 3, yStart - 3 + 1, 1347420415, 1347420415);
+		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart + x2 + 2, xStart + y2 + 3, yStart + x2 + 3, 1344798847, 1344798847);
+		
+		RenderSystem.enableDepthTest();
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.shadeModel(GL11.GL_SMOOTH);
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
+        RenderSystem.shadeModel(GL11.GL_FLAT);
+        RenderSystem.disableBlend();
+        RenderSystem.enableTexture();
 	}
 
-	private void fillGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
-		float float_1 = (color1 >> 24 & 255) / 255.0F;
-		float float_2 = (color1 >> 16 & 255) / 255.0F;
-		float float_3 = (color1 >> 8 & 255) / 255.0F;
-		float float_4 = (color1 & 255) / 255.0F;
-		float float_5 = (color2 >> 24 & 255) / 255.0F;
-		float float_6 = (color2 >> 16 & 255) / 255.0F;
-		float float_7 = (color2 >> 8 & 255) / 255.0F;
-		float float_8 = (color2 & 255) / 255.0F;
-		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(x1, y1, 0).color(float_2, float_3, float_4, float_1).next();
-		bufferBuilder_1.vertex(x1, y2, 0).color(float_2, float_3, float_4, float_1).next();
-		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
-		bufferBuilder_1.vertex(x2, y1, 0).color(float_6, float_7, float_8, float_5).next();
-		tessellator_1.draw();
+	private void fillGradient(Matrix4f matrix, BufferBuilder bufferBuilder, int xStart, int yStart, int xEnd, int yEnd, int colorStart, int colorEnd) {
+		float f = (float)(colorStart >> 24 & 255) / 255.0F;
+		float g = (float)(colorStart >> 16 & 255) / 255.0F;
+		float h = (float)(colorStart >> 8 & 255) / 255.0F;
+		float i = (float)(colorStart & 255) / 255.0F;
+		float j = (float)(colorEnd >> 24 & 255) / 255.0F;
+		float k = (float)(colorEnd >> 16 & 255) / 255.0F;
+		float l = (float)(colorEnd >> 8 & 255) / 255.0F;
+		float m = (float)(colorEnd & 255) / 255.0F;
+		bufferBuilder.vertex(matrix, (float) xEnd, (float) yStart, 0f).color(g, h, i, f).next();
+		bufferBuilder.vertex(matrix, (float) xStart, (float) yStart, 0f).color(g, h, i, f).next();
+		bufferBuilder.vertex(matrix, (float) xStart, (float) yEnd, 0f).color(k, l, m, j).next();
+		bufferBuilder.vertex(matrix, (float) xEnd, (float) yEnd, 0f).color(k, l, m, j).next();
 	}
 }

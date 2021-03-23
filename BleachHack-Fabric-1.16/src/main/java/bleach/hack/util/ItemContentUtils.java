@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.text.Text;
 
 public class ItemContentUtils {
 
@@ -52,8 +53,11 @@ public class ItemContentUtils {
 
 		if (nbt != null && nbt.contains("pages")) {
 			ListTag nbt2 = nbt.getList("pages", 8);
-			for (int i = 0; i < nbt2.size(); i++)
-				pages.add(nbt2.getString(i));
+			for (int i = 0; i < nbt2.size(); i++) {
+				Text text = Text.Serializer.fromLenientJson(nbt2.getString(i));
+
+				pages.add(text != null ? text.getString() : nbt2.getString(i));
+			}
 		}
 
 		List<List<String>> finalPages = new ArrayList<>();
@@ -70,6 +74,7 @@ public class ItemContentUtils {
 
 				buffer += c;
 			}
+
 			pageBuffer.add(buffer);
 			finalPages.add(pageBuffer);
 		}
