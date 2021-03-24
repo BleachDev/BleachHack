@@ -17,13 +17,15 @@
  */
 package bleach.hack.gui.title;
 
+import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
+import org.apache.commons.io.FileUtils;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -34,9 +36,12 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.UI;
 import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.file.BleachFileMang;
 import bleach.hack.util.file.BleachGithubReader;
+import net.fabricmc.loader.ModContainer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -57,7 +62,9 @@ public class BleachTitleScreen extends WindowScreen {
 	public static boolean customTitleScreen = true;
 
 	public static String splash = "";
-	public static final List<String> versions = new ArrayList<>();
+	public static JsonObject version = null;
+
+	private static String updaterText = "";
 
 	public BleachTitleScreen() {
 		super(new TranslatableText("narrator.screen.title"));
@@ -72,8 +79,8 @@ public class BleachTitleScreen extends WindowScreen {
 				width / 8 + (width - width / 4),
 				height / 8 + (height - height / 4), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)));
 
-		int w = getWindow(0).x2 - getWindow(0).x1,
-				h = getWindow(0).y2 - getWindow(0).y1;
+		int w = getWindow(0).x2 - getWindow(0).x1;
+		int h = getWindow(0).y2 - getWindow(0).y1;
 		int maxY = MathHelper.clamp(h / 4 + 119, 0, h - 22);
 
 		getWindow(0).buttons.add(
@@ -105,9 +112,65 @@ public class BleachTitleScreen extends WindowScreen {
 					client.scheduleStop();
 				}));
 
-		if (versions.isEmpty()) {
-			versions.clear();
-			versions.addAll(BleachGithubReader.readFileLines("latestversion.txt"));
+
+		addWindow(new Window(width / 2 - 100,
+				height / 2 - 70,
+				width / 2 + 100,
+				height / 2 + 70, "Update", new ItemStack(Items.MAGENTA_GLAZED_TERRACOTTA)){
+
+			protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
+				super.drawBar(matrix, mouseX, mouseY, textRend);
+				DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0x90606090);
+			}
+		});
+
+		getWindow(1).buttons.add(
+				new WindowButton(5, 115, 95, 135, "Update", () -> {
+					try {
+						File path = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginUrl().toURI());
+
+						if (!path.isFile()) {
+							updaterText = "Invalid mod path";
+							return;
+						}
+
+						if (version == null || !version.has("installer")) {
+							updaterText = "Invalid metadata json";
+							return;
+						}
+
+						String link = version.get("installer").getAsJsonObject().get("link").getAsString();
+						String name = link.replaceFirst("^.*\\/", "");
+
+						BleachFileMang.createEmptyFile("temp", name);
+
+						FileUtils.copyURLToFile(new URL(link), BleachFileMang.stringsToPath("temp", name).toFile());
+
+						Runtime.getRuntime().exec("cmd /c start "
+								+ BleachFileMang.stringsToPath("temp", name).toAbsolutePath().toString()
+								+ " "
+								+ path.toString()
+								+ " "
+								+ version.get("installer").getAsJsonObject().get("url").getAsString());
+
+						client.scheduleStop();
+					} catch (Exception e) {
+						updaterText = "Unknown error";
+						e.printStackTrace();
+					}
+				}));
+
+		getWindow(1).buttons.add(
+				new WindowButton(105, 115, 195, 135, "Github", () -> {
+					Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/"));
+				}));
+
+		if (version == null) {
+			version = BleachGithubReader.readJson("update/" + SharedConstants.getGameVersion().getName() + ".json");
+
+			if (version == null) {
+				version = new JsonObject();
+			}
 		}
 
 		if (splash.isEmpty()) {
@@ -127,9 +190,9 @@ public class BleachTitleScreen extends WindowScreen {
 		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
 		textRenderer.drawWithShadow(matrix, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
 
-		if (NumberUtils.toInt(versions.get(1), Integer.MAX_VALUE) > BleachHack.INTVERSION) {
+		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
 			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack Version!", width / 2, 2, -1);
-			drawCenteredString(matrix, this.textRenderer, "\u00a76[ \u00a7nUpdate\u00a76 ]", width / 2, 11, -1);
+			drawCenteredString(matrix, this.textRenderer,"\u00a76[ \u00a7nUpdate\u00a76 ]", width / 2, 11, -1);
 		}
 
 		super.render(matrix, mouseX, mouseY, delta);
@@ -143,10 +206,10 @@ public class BleachTitleScreen extends WindowScreen {
 		super.onRenderWindow(matrix, window, mouseX, mouseY);
 
 		if (window == 0) {
-			int x = getWindow(0).x1,
-					y = getWindow(0).y1 - 10,
-					w = width - width / 4,
-					h = height - height / 4;
+			int x = getWindow(0).x1;
+			int y = getWindow(0).y1 - 10;
+			int w = width - width / 4;
+			int h = height - height / 4;
 
 			/* Main Text */
 			RenderSystem.pushMatrix();
@@ -175,13 +238,21 @@ public class BleachTitleScreen extends WindowScreen {
 			RenderSystem.scalef(float_4, float_4, float_4);
 			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
 			RenderSystem.popMatrix();
+		} else if (window == 1) {
+			int x = getWindow(1).x1;
+			int y = getWindow(1).y1;
+			
+			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack version!", x + 100, y + 15, -1);
+			drawCenteredString(matrix, this.textRenderer, "\u00a7eClick update to auto-update", x + 100, y + 28, -1);
+			drawCenteredString(matrix, this.textRenderer, "\u00a7eOr Github to manually update", x + 100, y + 38, -1);
+			drawCenteredString(matrix, this.textRenderer, "\u00a7c\u00a7o" + updaterText, x + 100, y + 58, -1);
 		}
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (versions.size() >= 2 && NumberUtils.toInt(versions.get(1), Integer.MAX_VALUE) > BleachHack.INTVERSION) {
+		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
 			if (mouseX > width / 2 - 80 && mouseX < width / 2 + 80 && mouseY > 0 && mouseY < 20) {
-				Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/bleachhack-1.14/releases"));
+				Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/releases"));
 			}
 		}
 

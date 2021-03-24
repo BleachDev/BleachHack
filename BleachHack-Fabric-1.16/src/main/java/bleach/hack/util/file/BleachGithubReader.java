@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.google.common.io.Resources;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class BleachGithubReader {
 
-	private static URI url = URI.create("https://raw.githubusercontent.com/BleachDrinker420/bleachhack-1.14/master/online/");
+	private static URI url = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/master/");
 
 	public static List<String> readFileLines(String file) {
 		List<String> st = new ArrayList<>();
@@ -36,5 +38,15 @@ public class BleachGithubReader {
 		} catch (IOException e) {
 		}
 		return st;
+	}
+	
+	public static JsonObject readJson(String file) {
+		try {
+			String s = Resources.toString(url.resolve(file).toURL(), StandardCharsets.UTF_8);
+			return new JsonParser().parse(s).getAsJsonObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

@@ -62,7 +62,7 @@ public class BleachFileMang {
 	public static void createFile(String... file) {
 		try {
 			if (!fileExists(file)) {
-				dir.toFile().mkdirs();
+				stringsToPath(file).getParent().toFile().mkdirs();
 				Files.createFile(stringsToPath(file));
 			}
 		} catch (Exception e) {
