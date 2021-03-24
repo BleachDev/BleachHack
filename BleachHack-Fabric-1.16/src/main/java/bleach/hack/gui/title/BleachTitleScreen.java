@@ -20,7 +20,6 @@ package bleach.hack.gui.title;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 
@@ -116,7 +115,7 @@ public class BleachTitleScreen extends WindowScreen {
 		addWindow(new Window(width / 2 - 100,
 				height / 2 - 70,
 				width / 2 + 100,
-				height / 2 + 70, "Update", new ItemStack(Items.MAGENTA_GLAZED_TERRACOTTA)){
+				height / 2 + 70, "Update", new ItemStack(Items.MAGENTA_GLAZED_TERRACOTTA), true) {
 
 			protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
 				super.drawBar(matrix, mouseX, mouseY, textRend);
@@ -172,6 +171,11 @@ public class BleachTitleScreen extends WindowScreen {
 				version = new JsonObject();
 			}
 		}
+		
+		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
+			getWindow(1).closed = false;
+			selectWindow(1);
+		}
 
 		if (splash.isEmpty()) {
 			List<String> sp = BleachGithubReader.readFileLines("splashes.txt");
@@ -189,11 +193,6 @@ public class BleachTitleScreen extends WindowScreen {
 				4, height - 30, -1);
 		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
 		textRenderer.drawWithShadow(matrix, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
-
-		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
-			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack Version!", width / 2, 2, -1);
-			drawCenteredString(matrix, this.textRenderer,"\u00a76[ \u00a7nUpdate\u00a76 ]", width / 2, 11, -1);
-		}
 
 		super.render(matrix, mouseX, mouseY, delta);
 
@@ -238,6 +237,10 @@ public class BleachTitleScreen extends WindowScreen {
 			RenderSystem.scalef(float_4, float_4, float_4);
 			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
 			RenderSystem.popMatrix();
+			
+			if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
+				drawStringWithShadow(matrix, textRenderer, "\u00a76[ \u00a7nUpdate\u00a76 ]", getWindow(0).x1 + 3, getWindow(0).y2 - 12, -1);
+			}
 		} else if (window == 1) {
 			int x = getWindow(1).x1;
 			int y = getWindow(1).y1;
@@ -251,8 +254,12 @@ public class BleachTitleScreen extends WindowScreen {
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
-			if (mouseX > width / 2 - 80 && mouseX < width / 2 + 80 && mouseY > 0 && mouseY < 20) {
-				Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/releases"));
+			int x = getWindow(0).x1;
+			int y = getWindow(0).y2;
+			if (mouseX >= x + 1 && mouseX <= x + 50 && mouseY >= y - 10 && mouseY <= y) {
+				getWindow(1).closed = false;
+				selectWindow(1);
+				//Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/releases"));
 			}
 		}
 
