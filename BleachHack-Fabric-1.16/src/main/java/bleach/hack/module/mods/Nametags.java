@@ -56,10 +56,8 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.WorldRenderUtils;
 import bleach.hack.util.world.EntityUtils;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -109,7 +107,8 @@ public class Nametags extends Module {
 				new SettingToggle("Items", true).withDesc("Shows nametags for items").withChildren(
 						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags"),
 						new SettingToggle("Custom Name", true).withDesc("Shows the items custom name if it has it"),
-						new SettingToggle("Item Count", true).withDesc("Shows how many items are in the stack")));
+						new SettingToggle("Item Count", true).withDesc("Shows how many items are in the stack")),
+				new SettingToggle("1.17", false).withDesc("jeff bezo"));
 	}
 
 	public void onDisable() {
@@ -306,22 +305,21 @@ public class Nametags extends Module {
 			float offset = 0.25f + lines.size() * 0.25f;
 
 			for (String s: lines) {
-				WorldRenderUtils.drawText(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
+				if (getSetting(6).asToggle().state) {
+					WorldRenderUtils.drawText_NEW(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
+				} else {
+					WorldRenderUtils.drawText(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
+				}
+
 				offset -= 0.25f;
 			}
 		}
 	}
 
 	private void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
-		MatrixStack matrix = WorldRenderUtils.drawGuiItem(x, y, z, offX, offY, scale, item);
-		matrix = WorldRenderUtils.matrixFrom(x, y, z);
-		
-		Camera camera = mc.gameRenderer.getCamera();
-		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-
-		matrix.scale((float) scale, (float) scale, 0.001f);
-		matrix.translate(offX, offY, 0);
+		MatrixStack matrix = getSetting(6).asToggle().state
+				? WorldRenderUtils.drawGuiItem_NEW(x, y, z, offX, offY, scale, item)
+						: WorldRenderUtils.drawGuiItem(x, y, z, offX, offY, scale, item);
 
 		matrix.scale(-0.05F, -0.05F, 0.05f);
 
