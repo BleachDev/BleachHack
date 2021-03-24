@@ -34,7 +34,6 @@ import java.util.concurrent.Future;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
@@ -226,7 +225,6 @@ public class AccountManagerScreen extends WindowScreen {
 
 		drawStringWithShadow(matrix, textRenderer, "\u00a7cx", x + width + 2, y + 2, -1);
 
-		GL11.glEnable(GL11.GL_BLEND);
 		if (acc.bindSkin()) {
 			double pixelSize = (height - 6) / 8d;
 			DrawableHelper.fill(matrix,
@@ -260,8 +258,6 @@ public class AccountManagerScreen extends WindowScreen {
 		drawStringWithShadow(matrix, textRenderer,
 				(acc.pass == null ? "\u00aeCracked" : acc.username == null ? "\u00a78Unchecked" : "\u00a7aWorking"),
 				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + height - 11, -1);
-
-		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {

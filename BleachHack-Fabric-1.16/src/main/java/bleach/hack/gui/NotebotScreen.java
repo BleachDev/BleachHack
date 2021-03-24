@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.opengl.GL11;
 
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.Window;
@@ -78,18 +77,18 @@ public class NotebotScreen extends WindowScreen {
 				width / 4 + width / 2,
 				height / 4 + height / 2,
 				"Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
-		
+
 		getWindow(0).buttons.add(new WindowButton(22, 14, 32, 24, "<", () -> {
 			if (page > 0)
 				page--;
 		}));
-		
+
 		getWindow(0).buttons.add(new WindowButton(77, 14, 87, 24, ">", () -> {
 			page++;
 		}));
-		
+
 		int yEnd = getWindow(0).x2 - getWindow(0).x1;
-		
+
 		getWindow(0).buttons.add(new WindowButton(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () -> {
 			Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"));
 		}));
@@ -147,42 +146,43 @@ public class NotebotScreen extends WindowScreen {
 					itemRenderer.zOffset = 500 - c2 * 20;
 					drawCenteredString(matrix, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(),
 							x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
-					GL11.glPushMatrix();
+
 					DiffuseLighting.enableGuiDepthLighting();
 					if (e.getKey() == Instrument.HARP)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.DIRT), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BASEDRUM)
+					else if (e.getKey() == Instrument.BASEDRUM)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.STONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.SNARE)
+					else if (e.getKey() == Instrument.SNARE)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.HAT)
+					else if (e.getKey() == Instrument.HAT)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLASS), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BASS)
+					else if (e.getKey() == Instrument.BASS)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.OAK_WOOD), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.FLUTE)
+					else if (e.getKey() == Instrument.FLUTE)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.CLAY), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BELL)
+					else if (e.getKey() == Instrument.BELL)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GOLD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.GUITAR)
+					else if (e.getKey() == Instrument.GUITAR)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.WHITE_WOOL), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.CHIME)
+					else if (e.getKey() == Instrument.CHIME)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PACKED_ICE), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.XYLOPHONE)
+					else if (e.getKey() == Instrument.XYLOPHONE)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.BONE_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.IRON_XYLOPHONE)
+					else if (e.getKey() == Instrument.IRON_XYLOPHONE)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.IRON_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.COW_BELL)
+					else if (e.getKey() == Instrument.COW_BELL)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SOUL_SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.DIDGERIDOO)
+					else if (e.getKey() == Instrument.DIDGERIDOO)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PUMPKIN), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BIT)
+					else if (e.getKey() == Instrument.BIT)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.EMERALD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.BANJO)
+					else if (e.getKey() == Instrument.BANJO)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.HAY_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
-					if (e.getKey() == Instrument.PLING)
+					else if (e.getKey() == Instrument.PLING)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
 					c2++;
-					GL11.glPopMatrix();
+					
+					DiffuseLighting.disableGuiDepthLighting();
 				}
 
 				fillButton(matrix, x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, mouseX, mouseY);
@@ -218,7 +218,7 @@ public class NotebotScreen extends WindowScreen {
 					y = getWindow(0).y1 + 10,
 					w = width / 2,
 					h = height / 2;
-			
+
 			if (mouseX > x + 10 && mouseX < x + 99 && mouseY > y + h - 13 && mouseY < y + h - 3) {
 				NotebotUtils.downloadSongs(true);
 				init();

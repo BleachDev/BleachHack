@@ -27,8 +27,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.opengl.GL11;
-
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.modulewindow.ClickGuiWindow;
@@ -76,22 +74,22 @@ public class ClickGuiScreen extends WindowScreen {
 		int startX = 10;
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER),
 				startX, 35, len, "Player", new ItemStack(Items.ARMOR_STAND)));
-		
+
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER),
 				startX + len + 5, 35, len, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
-		
+
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT),
 				startX + len * 2 + 10, 35, len, "Combat", new ItemStack(Items.TOTEM_OF_UNDYING)));
-		
+
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT),
 				startX + len * 3 + 15, 35, len, "Movement", new ItemStack(Items.POTION)));
-		
+
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS),
 				startX + len * 4 + 20, 35, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
-		
+
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC),
 				startX + len * 5 + 25, 35, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
-		
+
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD),
 				startX + len * 6 + 30, 35, len, "World", new ItemStack(Items.GRASS_BLOCK)));
 	}
@@ -154,7 +152,7 @@ public class ClickGuiScreen extends WindowScreen {
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
-				GL11.glTranslated(0, 0, 300);
+
 				if (tooltip != null) {
 					int tooltipY = tooltip.getMiddle();
 
@@ -183,7 +181,6 @@ public class ClickGuiScreen extends WindowScreen {
 						tooltipY -= lines.size() * 10;
 					}
 				}
-				GL11.glTranslated(0, 0, -300);
 			}
 		}
 

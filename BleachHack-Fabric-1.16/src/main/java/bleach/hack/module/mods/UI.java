@@ -29,9 +29,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.DeflaterOutputStream;
 
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.eventbus.Subscribe;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
@@ -63,7 +62,7 @@ public class UI extends Module {
 	private long prevTime = 0;
 	private double tps = 20;
 	private long lastPacket = 0;
-	
+
 	private long chunkTimer = 0;
 	private int chunkSize = 0;
 
@@ -78,16 +77,16 @@ public class UI extends Module {
 						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 0-5
 						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("Rainbow Speed")), // 0-6
 				new SettingToggle("Info", true).withDesc("Shows info/stats in a corner of the screen").withChildren( // 1
-					new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 1-0
-					new SettingToggle("Ping", true).withDesc("Shows your ping"), // 1-1
-					new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 1-2
-					new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 1-3
-					new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 1-4
-					new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 1-5
-							new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"), // 1-5-0
-							new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 1-5-1
-					new SettingToggle("Chunk Size", false).withDesc("Shows the data size of the chunk you are standing in"), // 1-6
-					new SettingMode("Corner", "BL", "TR", "BR").withDesc("Where on the screen to show the info")), // 1-7
+						new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 1-0
+						new SettingToggle("Ping", true).withDesc("Shows your ping"), // 1-1
+						new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 1-2
+						new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 1-3
+						new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 1-4
+						new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 1-5
+								new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"), // 1-5-0
+								new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 1-5-1
+						new SettingToggle("Chunk Size", false).withDesc("Shows the data size of the chunk you are standing in"), // 1-6
+						new SettingMode("Corner", "BL", "TR", "BR").withDesc("Where on the screen to show the info")), // 1-7
 				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), //2
 				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 3
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")), // 3-0
@@ -132,7 +131,7 @@ public class UI extends Module {
 				if (outer) {
 					DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(s) + 3 + extra, (arrayCount * 10), mc.textRenderer.getWidth(s) + 4 + extra,
 							10 + (arrayCount * 10), color);
-	
+
 					if (arrayCount + 1 < lines.size()) {
 						DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(lines.get(arrayCount + 1)) + 4 + extra, 10 + (arrayCount * 10),
 								mc.textRenderer.getWidth(s) + 4 + extra, 11 + (arrayCount * 10), color);
@@ -176,29 +175,29 @@ public class UI extends Module {
 						+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
 						+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : "")).format(new Date()));
 			}
-	
+
 			if (getSetting(1).asToggle().getChild(2).asToggle().state) {
 				boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 				BlockPos pos = mc.player.getBlockPos();
 				Vec3d vec = mc.player.getPos();
 				BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
 						: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
-	
+
 				infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 				+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 			}
-	
+
 			if (getSetting(1).asToggle().getChild(4).asToggle().state) {
 				String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
 				infoList.add("\u00a77Server: \u00a7d" + server);
 			}
-			
+
 			if (getSetting(1).asToggle().getChild(6).asToggle().state) {
 				infoList.add("Chunk: \u00a7f" + (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"));
-				
+
 				if (System.currentTimeMillis() - 1500 > chunkTimer) {
 					chunkTimer = System.currentTimeMillis();
-	
+
 					if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
 						new Thread(() -> {
 							CompoundTag tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
@@ -209,24 +208,24 @@ public class UI extends Module {
 							} catch (IOException e) {
 								BleachLogger.errorMessage("[ChunkSize] Error serializing chunk");
 							}
-							
+
 							chunkSize = output.size();
 						}).start();
 					}
 				}
 			}
-	
+
 			if (getSetting(1).asToggle().getChild(0).asToggle().state) {
 				int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
 				infoList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
 			}
-	
+
 			if (getSetting(1).asToggle().getChild(1).asToggle().state) {
 				PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
 				int ping = playerEntry == null ? 0 : playerEntry.getLatency();
 				infoList.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
 			}
-	
+
 			if (getSetting(1).asToggle().getChild(3).asToggle().state) {
 				String suffix = "\u00a77";
 				if (lastPacket + 7500 < System.currentTimeMillis())
@@ -237,7 +236,7 @@ public class UI extends Module {
 					suffix += "..";
 				else if (lastPacket + 1200 < System.currentTimeMillis())
 					suffix += ".";
-	
+
 				infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
 			}
 		}
@@ -252,8 +251,7 @@ public class UI extends Module {
 		}
 
 		if (getSetting(3).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
-			GL11.glPushMatrix();
-			// GL11.glEnable(GL11.GL_TEXTURE_2D);
+			RenderSystem.pushMatrix();
 
 			int count = 0;
 			int x1 = mc.getWindow().getScaledWidth() / 2;
@@ -265,7 +263,7 @@ public class UI extends Module {
 					continue;
 				int x = x1 - 90 + (9 - count) * 20 + 2;
 
-				GL11.glEnable(GL11.GL_DEPTH_TEST);
+				RenderSystem.enableDepthTest();
 				mc.getItemRenderer().zOffset = 200F;
 				mc.getItemRenderer().renderGuiItemIcon(is, x, y);
 
@@ -274,11 +272,12 @@ public class UI extends Module {
 				}
 
 				mc.getItemRenderer().zOffset = 0F;
-				GL11.glDisable(GL11.GL_DEPTH_TEST);
+				RenderSystem.disableDepthTest();
 
 				if (getSetting(3).asToggle().getChild(0).asMode().mode != 1) {
-					GL11.glPushMatrix();
-					GL11.glScaled(0.75, 0.75, 0.75);
+					RenderSystem.pushMatrix();
+					RenderSystem.scalef(0.75f, 0.75f, 1f);
+
 					String s = is.getCount() > 1 ? "x" + is.getCount() : "";
 					mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
 
@@ -293,12 +292,12 @@ public class UI extends Module {
 						mc.textRenderer.drawWithShadow(event.matrix, dur, (x + 10 - mc.textRenderer.getWidth(dur) / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
 					}
 
-					GL11.glPopMatrix();
+					RenderSystem.popMatrix();
 				}
 			}
 
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glPopMatrix();
+			RenderSystem.enableDepthTest();
+			RenderSystem.popMatrix();
 		}
 
 		int count2 = 0;

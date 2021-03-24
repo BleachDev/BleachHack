@@ -18,6 +18,9 @@
 package bleach.hack.util;
 
 import org.lwjgl.opengl.GL11;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
@@ -46,28 +49,39 @@ public class WorldRenderUtils {
 		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
 		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDepthFunc(GL11.GL_ALWAYS);
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.enableDepthTest();
+		RenderSystem.depthFunc(GL11.GL_ALWAYS);
 
 		matrix.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
 
 		int i = mc.textRenderer.getWidth(str) / 2;
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		RenderSystem.disableTexture();
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, VertexFormats.POSITION_COLOR);
-		float f = mc.options.getTextBackgroundOpacity(0.3F);
+		float f = mc.options.getTextBackgroundOpacity(0.25F);
 		bufferbuilder.vertex(matrix.peek().getModel(), -i - 1, -1, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
 		bufferbuilder.vertex(matrix.peek().getModel(), -i - 1, 8, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
 		bufferbuilder.vertex(matrix.peek().getModel(), i + 1, 8, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
 		bufferbuilder.vertex(matrix.peek().getModel(), i + 1, -1, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
 		tessellator.draw();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+		RenderSystem.enableTexture();
+
+		// Hack
+		RenderSystem.translated(0, 0, 0.0001);
 
 		mc.textRenderer.draw(matrix, str, -i, 0, 553648127);
 		mc.textRenderer.draw(matrix, str, -i, 0, -1);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
+
+		// Unhack
+		RenderSystem.translated(0, 0, -0.0001);
+		RenderSystem.depthFunc(GL11.GL_LEQUAL);
+		RenderSystem.disableDepthTest();
+
+		RenderSystem.disableBlend();
 
 		return matrix;
 	}
@@ -94,13 +108,26 @@ public class WorldRenderUtils {
 
 		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+
+		RenderSystem.enableDepthTest();
+		RenderSystem.depthFunc(GL11.GL_ALWAYS);
+
 		DiffuseLighting.disableGuiDepthLighting();
-		GL11.glDepthFunc(GL11.GL_ALWAYS);
+
+		mc.getBufferBuilders().getOutlineVertexConsumers().setColor(255, 255, 255, 255);
 		mc.getItemRenderer().renderItem(item, ModelTransformation.Mode.GUI, 0xF000F0,
-				OverlayTexture.DEFAULT_UV, matrix, mc.getBufferBuilders().getEntityVertexConsumers());
+				OverlayTexture.DEFAULT_UV, matrix, mc.getBufferBuilders().getOutlineVertexConsumers() /* yeah fuck sure */);
 
 		mc.getBufferBuilders().getEntityVertexConsumers().draw();
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
+
+		//DiffuseLighting.enableGuiDepthLighting();
+
+		RenderSystem.depthFunc(GL11.GL_LEQUAL);
+		RenderSystem.disableDepthTest();
+
+		RenderSystem.disableBlend();
 
 		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-180f));
 

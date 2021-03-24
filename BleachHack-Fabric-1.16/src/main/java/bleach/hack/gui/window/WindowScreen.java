@@ -27,7 +27,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.BufferBuilder;
@@ -39,59 +39,59 @@ import net.minecraft.text.Text;
 public abstract class WindowScreen extends Screen {
 
 	private List<Window> windows = new ArrayList<>();
-	
+
 	/* [Layer, Window Index] */
 	private SortedMap<Integer, Integer> windowOrder = new TreeMap<>(); 
 
 	public WindowScreen(Text text_1) {
 		super(text_1);
 	}
-	
+
 	public void addWindow(Window window) {
 		windows.add(window);
 		windowOrder.put(windows.size() - 1, windows.size() - 1);
 	}
-	
+
 	public Window getWindow(int i) {
 		return windows.get(i);
 	}
-	
+
 	public void clearWindows() {
 		windows.clear();
 		windowOrder.clear();
 	}
-	
+
 	public List<Window> getWindows() {
 		return windows;
 	}
-	
+
 	protected List<Integer> getWindowsBackToFront() {
 		return windowOrder.values().stream().collect(Collectors.toList());
 	}
-		
+
 	protected List<Integer> getWindowsFrontToBack() {
 		List<Integer> w = getWindowsBackToFront();
 		Collections.reverse(w);
 		return w;
 	}
-	
+
 	protected int getSelectedWindow() {
 		for (int i = 0; i < windows.size(); i++) {
 			if (!getWindow(i).closed && getWindow(i).selected) {
 				return i;
 			}
 		}
-		
+
 		return -1;
 	}
-	
+
 	public void init() {
 		super.init();
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		int sel = getSelectedWindow();
-		
+
 		if (sel == -1) {
 			for (int i: getWindowsFrontToBack()) {
 				if (!getWindow(i).closed) {
@@ -102,14 +102,14 @@ public abstract class WindowScreen extends Screen {
 		}
 
 		boolean close = true;
-		
+
 		for (int w: getWindowsBackToFront()) {
 			if (!getWindow(w).closed) {
 				close = false;
 				onRenderWindow(matrix, w, mouseX, mouseY);
 			}
 		}
-		
+
 		if (close) this.onClose();
 
 		super.render(matrix, mouseX, mouseY, delta);
@@ -126,10 +126,10 @@ public abstract class WindowScreen extends Screen {
 			if (w.selected) {
 				w.inactiveTime = 2;
 			}
-			
+
 			w.selected = false;
 		}
-		
+
 		for (int i = 0; i < windows.size(); i++) {
 			Window w = windows.get(i);
 
@@ -166,13 +166,13 @@ public abstract class WindowScreen extends Screen {
 					w.closed = true;
 					break;
 				}
-				
+
 				if (w.selected) {
 					w.onMousePressed((int) mouseX, (int) mouseY);
 				} else {
 					selectWindow(wi);
 				}
-				
+
 				break;
 			}
 		}
@@ -186,17 +186,18 @@ public abstract class WindowScreen extends Screen {
 
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
-	
+
 	public void renderBackgroundTexture(int vOffset) {
 		Color colorTL = new Color(100, 120, 0);
 		Color colorTR = new Color(70, 120, 20);
 		Color colorBL = new Color(60, 160, 0);
 		Color colorBR = new Color(60, 200, 60);
 
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		RenderSystem.enableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.shadeModel(GL11.GL_SMOOTH);
+
 		Tessellator tessellator_1 = Tessellator.getInstance();
 		BufferBuilder bufferBuilder_1 = Tessellator.getInstance().getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
@@ -205,8 +206,9 @@ public abstract class WindowScreen extends Screen {
 		bufferBuilder_1.vertex(0, height + 14, 0).color(colorBL.getRed(), colorBL.getBlue(), colorBL.getGreen(), 255).next();
 		bufferBuilder_1.vertex(width, height + 14, 0).color(colorBR.getRed(), colorBR.getBlue(), colorBR.getGreen(), 255).next();
 		tessellator_1.draw();
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+		RenderSystem.shadeModel(GL11.GL_FLAT);
+		RenderSystem.disableBlend();
+		RenderSystem.disableTexture();
 	}
 }

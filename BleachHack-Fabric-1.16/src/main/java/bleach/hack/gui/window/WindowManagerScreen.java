@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.opengl.GL11;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -68,10 +69,10 @@ public class WindowManagerScreen extends Screen {
 			DrawableHelper.fill(matrices, wid, height - 13, wid + 1, height, 0xff6060b0);
 			DrawableHelper.fill(matrices, wid + size - 1, height - 12, wid + size, height, 0xff6060b0);
 
-			GL11.glPushMatrix();
-			GL11.glScaled(0.7, 0.7, 1);
+			RenderSystem.pushMatrix();
+			RenderSystem.scaled(0.7, 0.7, 1);
 			itemRenderer.renderGuiItemIcon(windows[i].getRight(), (int) ((wid + 2) * (1 / 0.7)), (int) ((height - 12) * (1 / 0.7)));
-			GL11.glPopMatrix();
+			RenderSystem.popMatrix();
 
 			textRenderer.draw(matrices, windows[i].getMiddle(), wid + 16, height - 10, selected == i ? 0xffccff : 0xffffff);
 			wid += size;

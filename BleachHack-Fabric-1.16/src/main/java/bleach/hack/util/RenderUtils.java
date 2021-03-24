@@ -17,8 +17,7 @@
  */
 package bleach.hack.util;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
@@ -42,7 +41,7 @@ public class RenderUtils {
 	}
 
 	public static void drawFilledBox(Box box, float r, float g, float b, float a, float width) {
-		gl11Setup();
+		setup();
 
 		// Fill
 		Tessellator tessellator = Tessellator.getInstance();
@@ -54,7 +53,7 @@ public class RenderUtils {
 		tessellator.draw();
 
 		// Outline
-		GL11.glLineWidth(width);
+		RenderSystem.lineWidth(width);
 		buffer.begin(3, VertexFormats.POSITION_COLOR);
 		buffer.vertex(box.minX, box.minY, box.minZ).color(r, g, b, a).next();
 		buffer.vertex(box.minX, box.minY, box.maxZ).color(r, g, b, a).next();
@@ -74,7 +73,7 @@ public class RenderUtils {
 		buffer.vertex(box.maxX, box.maxY, box.minZ).color(r, g, b, a).next();
 		tessellator.draw();
 
-		gl11Cleanup();
+		cleanup();
 	}
 	
 	public static void drawFill(BlockPos blockPos, float r, float g, float b, float a) {
@@ -82,7 +81,7 @@ public class RenderUtils {
 	}
 
 	public static void drawFill(Box box, float r, float g, float b, float a) {
-		gl11Setup();
+		setup();
 
 		// Fill
 		Tessellator tessellator = Tessellator.getInstance();
@@ -93,7 +92,7 @@ public class RenderUtils {
 				box.maxX, box.maxY, box.maxZ, r, g, b, a / 2f);
 		tessellator.draw();
 
-		gl11Cleanup();
+		cleanup();
 	}
 
 	public static void drawOutline(BlockPos blockPos, float r, float g, float b, float a) {
@@ -105,9 +104,9 @@ public class RenderUtils {
 	}
 
 	public static void drawOutline(Box box, float r, float g, float b, float a, float width) {
-		gl11Setup();
+		setup();
 
-		GL11.glLineWidth(width);
+		RenderSystem.lineWidth(width);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
@@ -131,12 +130,12 @@ public class RenderUtils {
 		buffer.vertex(box.maxX, box.maxY, box.minZ).color(r, g, b, a).next();
 		tessellator.draw();
 
-		gl11Cleanup();
+		cleanup();
 	}
 
 	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float t) {
-		gl11Setup();
-		GL11.glLineWidth(t);
+		setup();
+		RenderSystem.lineWidth(t);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -146,32 +145,32 @@ public class RenderUtils {
 		buffer.vertex(x2, y2, z2).color(r, g, b, 1.0F).next();
 		tessellator.draw();
 
-		gl11Cleanup();
-
+		cleanup();
 	}
 
 	public static void offsetRender() {
 		Camera camera = BlockEntityRenderDispatcher.INSTANCE.camera;
 		Vec3d camPos = camera.getPos();
-		GL11.glRotated(MathHelper.wrapDegrees(camera.getPitch()), 1, 0, 0);
-		GL11.glRotated(MathHelper.wrapDegrees(camera.getYaw() + 180.0), 0, 1, 0);
-		GL11.glTranslated(-camPos.x, -camPos.y, -camPos.z);
+		RenderSystem.rotatef(MathHelper.wrapDegrees(camera.getPitch()), 1f, 0f, 0f);
+		RenderSystem.rotatef(MathHelper.wrapDegrees(camera.getYaw() + 180.0f), 0f, 1f, 0f);
+		RenderSystem.translated(-camPos.x, -camPos.y, -camPos.z);
 	}
 
-	public static void gl11Setup() {
-		GL11.glPushMatrix();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glLineWidth(2.5F);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_LINE_SMOOTH);
+	public static void setup() {
+		RenderSystem.pushMatrix();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.lineWidth(2.5f);
+		RenderSystem.disableTexture();
+		RenderSystem.enableLineOffset();
+		//GL11.glEnable(GL11.GL_LINE_SMOOTH);
 		offsetRender();
 	}
 
-	public static void gl11Cleanup() {
-		GL11.glDisable(GL11.GL_LINE_SMOOTH);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
+	public static void cleanup() {
+		//GL11.glDisable(GL11.GL_LINE_SMOOTH);
+		RenderSystem.enableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.popMatrix();
 	}
 }

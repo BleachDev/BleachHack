@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.lwjgl.opengl.GL11;
 
 import com.google.gson.JsonPrimitive;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
 import bleach.hack.gui.title.particle.ParticleManager;
@@ -149,8 +149,8 @@ public class BleachTitleScreen extends WindowScreen {
 					h = height - height / 4;
 
 			/* Main Text */
-			GL11.glPushMatrix();
-			GL11.glScaled(3, 3, 0);
+			RenderSystem.pushMatrix();
+			RenderSystem.scaled(3, 3, 0);
 
 			// drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3,
 			// 0xffc0e0);
@@ -160,21 +160,21 @@ public class BleachTitleScreen extends WindowScreen {
 				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w / 2 - 81) / 3 + intarray[i] - 8, (y + h / 4 - 15) / 3, UI.getRainbowFromSettings(i * 25));
 			}
 
-			GL11.glScaled(1d / 3d, 1d / 3d, 0);
+			RenderSystem.scaled(1d / 3d, 1d / 3d, 0);
 
 			/* Version Text */
-			GL11.glScaled(1.5, 1.5, 1.5);
+			RenderSystem.scaled(1.5, 1.5, 1.5);
 			drawCenteredString(matrix, this.textRenderer, BleachHack.VERSION, (int) ((x + w / 2) / 1.5), (int) ((y + h / 4 + 6) / 1.5), 0xffc050);
-			GL11.glScaled(1 / 1.5, 1 / 1.5, 1 / 1.5);
+			RenderSystem.scaled(1 / 1.5, 1 / 1.5, 1 / 1.5);
 
 			/* Splash Text */
-			GL11.glTranslated(x + w / 2 + 80, y + h / 4 + 8, 0.0F);
-			GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
+			RenderSystem.translated(x + w / 2 + 80, y + h / 4 + 8, 0.0F);
+			RenderSystem.rotatef(-20.0F, 0.0F, 0.0F, 1.0F);
 			float float_4 = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
 			float_4 = float_4 * 60.0F / (textRenderer.getWidth(splash) + 32);
-			GL11.glScalef(float_4, float_4, float_4);
+			RenderSystem.scalef(float_4, float_4, float_4);
 			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
-			GL11.glPopMatrix();
+			RenderSystem.popMatrix();
 		}
 	}
 

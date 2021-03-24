@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.opengl.GL11;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.util.file.BleachFileHelper;
@@ -82,18 +82,20 @@ public class SettingToggle extends SettingBase {
 				}
 			}
 
-			GL11.glPushMatrix();
 			if (expanded) {
 				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
 						color2 + "\u2228",
 						x + len - 8, y + 3, -1);
 			} else {
-				GL11.glScaled(0.75, 0.75, 1);
+				RenderSystem.pushMatrix();
+
+				RenderSystem.scalef(0.75f, 0.75f, 1f);
 				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
 						color2 + "\u00a7l>",
 						(int) ((x + len - 7) * 1 / 0.75), (int) ((y + 4) * 1 / 0.75), -1);
+
+				RenderSystem.popMatrix();
 			}
-			GL11.glPopMatrix();
 		}
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, color2 + text, x + 3, y + 2, 0xffffff);

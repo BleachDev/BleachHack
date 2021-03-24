@@ -3,11 +3,11 @@ package bleach.hack.setting.base;
 import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.window.Window;
@@ -63,10 +63,11 @@ public class SettingColor extends SettingBase {
 		DrawableHelper.fill(matrix, sx, sy, ex, ey, -1);
 		Color satColor = Color.getHSBColor(1f - hue, 1f, 1f);
 
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		RenderSystem.enableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.shadeModel(GL11.GL_SMOOTH);
+
 		Tessellator tessellator_1 = Tessellator.getInstance();
 		BufferBuilder bufferBuilder_1 = Tessellator.getInstance().getBuffer();
 		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
@@ -82,9 +83,10 @@ public class SettingColor extends SettingBase {
 		bufferBuilder_1.vertex(sx, ey, 0).color(0, 0, 0, 255).next();
 		bufferBuilder_1.vertex(ex, ey, 0).color(0, 0, 0, 255).next();
 		tessellator_1.draw();
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+		RenderSystem.shadeModel(GL11.GL_FLAT);
+		RenderSystem.disableBlend();
+		RenderSystem.disableTexture();
 
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
 			bri = 1f - 1f / ((float) (ey - sy) / (window.mouseY - sy));
@@ -99,10 +101,10 @@ public class SettingColor extends SettingBase {
 		DrawableHelper.fill(matrix, satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
 		DrawableHelper.fill(matrix, satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
 
-		GL11.glPushMatrix();
-		GL11.glScaled(0.75, 0.75, 1);
+		RenderSystem.pushMatrix();
+		RenderSystem.scalef(0.75f, 0.75f, 1f);
 		MinecraftClient.getInstance().textRenderer.draw(matrix, text, (int) ((sx + 1) * 1 / 0.75), (int) ((sy + 1) * 1 / 0.75), 0x000000);
-		GL11.glPopMatrix();
+		RenderSystem.popMatrix();
 
 		sx = ex + 5;
 		ex = ex + 12;

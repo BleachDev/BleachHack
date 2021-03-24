@@ -45,6 +45,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
@@ -55,8 +56,10 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.WorldRenderUtils;
 import bleach.hack.util.world.EntityUtils;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -311,14 +314,26 @@ public class Nametags extends Module {
 
 	private void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
 		MatrixStack matrix = WorldRenderUtils.drawGuiItem(x, y, z, offX, offY, scale, item);
+		matrix = WorldRenderUtils.matrixFrom(x, y, z);
+		
+		Camera camera = mc.gameRenderer.getCamera();
+		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
-		matrix.scale(-0.05F, -0.05F, 1f);
+		matrix.scale((float) scale, (float) scale, 0.001f);
+		matrix.translate(offX, offY, 0);
 
-		//System.out.println(item);
-		GL11.glDepthFunc(GL11.GL_ALWAYS);
+		matrix.scale(-0.05F, -0.05F, 0.05f);
+
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.enableDepthTest();
+		RenderSystem.depthFunc(GL11.GL_ALWAYS);
+
 		if (!item.isEmpty()) {
 			int w = mc.textRenderer.getWidth("x" + item.getCount()) / 2;
-			mc.textRenderer.drawWithShadow(matrix, "x" + item.getCount(), 7 - w, 3, 0xffffff);
+			mc.textRenderer.draw("x" + item.getCount(), 7 - w, 3, 0xffffff, true, matrix.peek().getModel(),
+					mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
 		}
 
 		matrix.scale(0.85F, 0.85F, 1F);
@@ -333,13 +348,16 @@ public class Nametags extends Module {
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
 			int w1 = mc.textRenderer.getWidth(subText) / 2;
-			mc.textRenderer.drawWithShadow(matrix,
-					subText, -2 - w1, c * 10 - 19,
-					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0);
+			mc.textRenderer.draw(subText, -2 - w1, c * 10 - 19,
+					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0,
+							true, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
 			c--;
 		}
 
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		RenderSystem.depthFunc(GL11.GL_LEQUAL);
+		RenderSystem.disableDepthTest();
+
+		RenderSystem.disableBlend();
 	}
 
 	private Vec3d getRenderPos(Entity e) {
