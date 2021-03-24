@@ -61,7 +61,7 @@ public class CmdGive extends Command {
 		if (args[0].equalsIgnoreCase("preset")) {
 			String args2 = (args.length >= 3 ? args[2] : "");
 
-			ItemStack item = new ItemStack(args2.equalsIgnoreCase("egg") ? Items.GUARDIAN_SPAWN_EGG : args2.equalsIgnoreCase("chest") ? Items.CHEST : Items.PINK_SHULKER_BOX);
+			ItemStack item = new ItemStack(args2.equalsIgnoreCase("egg") ? Items.STRIDER_SPAWN_EGG : args2.equalsIgnoreCase("chest") ? Items.CHEST : Items.PINK_SHULKER_BOX);
 			CompoundTag tag = null;
 
 			if (args[1].equalsIgnoreCase("negs")) {

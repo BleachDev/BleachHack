@@ -22,6 +22,8 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendMovementPackets;
+import bleach.hack.event.events.EventSendPacket;
+import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
@@ -29,11 +31,11 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.FabricReflect;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class PacketFly extends Module {
@@ -62,16 +64,42 @@ public class PacketFly extends Module {
 
 	@Subscribe
 	public void onMovement(EventSendMovementPackets event) {
-		mc.player.setVelocity(0, 0, 0);
+		mc.player.setVelocity(Vec3d.ZERO);
+		event.setCancelled(true);
+	}
+	
+	@Subscribe
+	public void onMovement(EventClientMove event) {
 		event.setCancelled(true);
 	}
 
 	@Subscribe
-	public void readPacket(EventReadPacket event) {
-		if (mc.world == null || mc.player == null)
-			return;
-		if (event.getPacket() instanceof PlayerPositionLookS2CPacket && getSetting(4).asToggle().state) {
+	public void onReadPacket(EventReadPacket event) {
+		if (event.getPacket() instanceof PlayerPositionLookS2CPacket) {
+			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
+		
+			FabricReflect.writeField(p, mc.player.yaw, "field_12391", "yaw");
+			FabricReflect.writeField(p, mc.player.pitch, "field_12393", "pitch");
+			
+			if (getSetting(4).asToggle().state) {
+				event.setCancelled(true);
+			}
+		}
+		
+	}
+	
+	@Subscribe
+	public void onSendPacket(EventSendPacket event) {
+		if (event.getPacket() instanceof PlayerMoveC2SPacket.LookOnly) {
 			event.setCancelled(true);
+			return;
+		}
+		
+		if (event.getPacket() instanceof PlayerMoveC2SPacket.Both) {
+			event.setCancelled(true);
+			PlayerMoveC2SPacket p = (PlayerMoveC2SPacket) event.getPacket();
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(p.getX(0), p.getY(0), p.getZ(0), p.isOnGround()));
+			return;
 		}
 	}
 
@@ -122,43 +150,49 @@ public class PacketFly extends Module {
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket(timer));
 
 		} else if (getSetting(0).asMode().mode == 1) {
-			double mouseX = 0;
-			double mouseY = 0;
-			double mZ = 0;
-			if (mc.player.headYaw != mc.player.yaw) {
+			Vec3d forward = new Vec3d(0, 0, hspeed).rotateY(-(float) Math.toRadians(mc.player.yaw));
+			
+			if (mc.player.input.jumping) {
+				forward = new Vec3d(0, vspeed, 0);
+			}
+			else if (mc.player.input.jumping) {
+				forward = new Vec3d(0, -vspeed, 0);
+			}
+			else if (mc.player.input.pressingBack) {
+				forward = forward.multiply(-1);
+			}
+			else if (mc.player.input.pressingLeft) {
+				forward = forward.rotateY((float) Math.toRadians(90));
+			}
+			else if (mc.player.input.pressingRight) {
+				forward = forward.rotateY((float) -Math.toRadians(90));
+			}
+			else if (!mc.player.input.pressingForward) {
+				forward = Vec3d.ZERO;
+			}
+			
+			//forward = Vec3d.ZERO;
+			/*if (mc.player.headYaw != mc.player.yaw) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(
 						mc.player.headYaw, mc.player.pitch, mc.player.isOnGround()));
 				return;
-			}
+			}*/
 
-			if (mc.options.keyJump.isPressed())
+			/*if (mc.options.keyJump.isPressed())
 				mouseY = 0.062;
 			if (mc.options.keySneak.isPressed())
-				mouseY = -0.062;
-
-			if (mc.options.keyForward.isPressed()) {
-				if (mc.player.getMovementDirection().equals(Direction.NORTH))
-					mZ = -0.275;
-				if (mc.player.getMovementDirection().equals(Direction.EAST))
-					mouseX = 0.275;
-				if (mc.player.getMovementDirection().equals(Direction.SOUTH))
-					mZ = 0.275;
-				if (mc.player.getMovementDirection().equals(Direction.WEST))
-					mouseX = -0.275;
-			}
+				mouseY = -0.062;*/
 
 			if (timer > getSetting(3).asSlider().getValue()) {
-				mouseX = 0;
-				mZ = 0;
-				mouseY = -0.062;
+				forward = new Vec3d(0, -vspeed, 0);
 				timer = 0;
 			}
 
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.getX() + mouseX, mc.player.getY() + mouseY, mc.player.getZ() + mZ, false));
+					mc.player.getX() + forward.x, mc.player.getY() + forward.y, mc.player.getZ() + forward.z, false));
+	
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-					mc.player.getX() + mouseX, mc.player.getY() - 420.69, mc.player.getZ() + mZ, true));
-
+					mc.player.getX() + forward.x, mc.player.getY() - 420.69, mc.player.getZ() + forward.z, true));
 		}
 	}
 

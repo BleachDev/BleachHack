@@ -55,6 +55,10 @@ public class EventEntityRender extends Event {
 			public void setVertex(VertexConsumerProvider vertex) {
 				this.vertex = vertex;
 			}
+			
+			public void setEntity(Entity entity) {
+				this.entity = entity;
+			}
 		}
 		
 		public static class Post extends Single {
