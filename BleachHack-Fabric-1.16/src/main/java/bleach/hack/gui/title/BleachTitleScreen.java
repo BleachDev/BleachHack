@@ -20,6 +20,8 @@ package bleach.hack.gui.title;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 
@@ -151,8 +153,9 @@ public class BleachTitleScreen extends WindowScreen {
 
 						BleachFileMang.createEmptyFile("temp", name);
 
-						if (!BleachFileMang.stringsToPath("temp", name).toFile().exists()) {
-							FileUtils.copyURLToFile(new URL(link), BleachFileMang.stringsToPath("temp", name).toFile());
+						Path installerPath = BleachFileMang.stringsToPath("temp", name);
+						if (Files.isRegularFile(installerPath) || installerPath.toFile().length() <= 1000L) {
+							FileUtils.copyURLToFile(new URL(link), installerPath.toFile());
 						}
 
 						Runtime.getRuntime().exec("cmd /c start "
