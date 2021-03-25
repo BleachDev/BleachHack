@@ -154,7 +154,7 @@ public class BleachTitleScreen extends WindowScreen {
 						BleachFileMang.createEmptyFile("temp", name);
 
 						Path installerPath = BleachFileMang.stringsToPath("temp", name);
-						if (Files.isRegularFile(installerPath) || installerPath.toFile().length() <= 1000L) {
+						if (!Files.isRegularFile(installerPath) || installerPath.toFile().length() <= 1000L) {
 							FileUtils.copyURLToFile(new URL(link), installerPath.toFile());
 						}
 
