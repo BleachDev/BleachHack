@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -119,16 +121,22 @@ public class BleachTitleScreen extends WindowScreen {
 
 			protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
 				super.drawBar(matrix, mouseX, mouseY, textRend);
-				DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0x90606090);
+
+				Window.verticalGradient(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0xff606090, 0x00606090);
 			}
 		});
 
 		getWindow(1).buttons.add(
 				new WindowButton(5, 115, 95, 135, "Update", () -> {
 					try {
-						File path = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginUrl().toURI());
+						if (!SystemUtils.IS_OS_WINDOWS) {
+							updaterText = "Updater only supports Windows";
+							return;
+						}
 
-						if (!path.isFile()) {
+						File modpath = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginUrl().toURI());
+
+						if (!modpath.isFile()) {
 							updaterText = "Invalid mod path";
 							return;
 						}
@@ -143,12 +151,14 @@ public class BleachTitleScreen extends WindowScreen {
 
 						BleachFileMang.createEmptyFile("temp", name);
 
-						FileUtils.copyURLToFile(new URL(link), BleachFileMang.stringsToPath("temp", name).toFile());
+						if (!BleachFileMang.stringsToPath("temp", name).toFile().exists()) {
+							FileUtils.copyURLToFile(new URL(link), BleachFileMang.stringsToPath("temp", name).toFile());
+						}
 
 						Runtime.getRuntime().exec("cmd /c start "
 								+ BleachFileMang.stringsToPath("temp", name).toAbsolutePath().toString()
 								+ " "
-								+ path.toString()
+								+ modpath.toString()
 								+ " "
 								+ version.get("installer").getAsJsonObject().get("url").getAsString());
 
@@ -171,7 +181,7 @@ public class BleachTitleScreen extends WindowScreen {
 				version = new JsonObject();
 			}
 		}
-		
+
 		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
 			getWindow(1).closed = false;
 			selectWindow(1);
@@ -237,14 +247,14 @@ public class BleachTitleScreen extends WindowScreen {
 			RenderSystem.scalef(float_4, float_4, float_4);
 			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
 			RenderSystem.popMatrix();
-			
+
 			if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
 				drawStringWithShadow(matrix, textRenderer, "\u00a76[ \u00a7nUpdate\u00a76 ]", getWindow(0).x1 + 3, getWindow(0).y2 - 12, -1);
 			}
 		} else if (window == 1) {
 			int x = getWindow(1).x1;
 			int y = getWindow(1).y1;
-			
+
 			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack version!", x + 100, y + 15, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7eClick update to auto-update", x + 100, y + 28, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7eOr Github to manually update", x + 100, y + 38, -1);
@@ -256,7 +266,7 @@ public class BleachTitleScreen extends WindowScreen {
 		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
 			int x = getWindow(0).x1;
 			int y = getWindow(0).y2;
-			if (mouseX >= x + 1 && mouseX <= x + 50 && mouseY >= y - 10 && mouseY <= y) {
+			if (mouseX >= x + 1 && mouseX <= x + 70 && mouseY >= y - 12 && mouseY <= y) {
 				getWindow(1).closed = false;
 				selectWindow(1);
 				//Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/releases"));

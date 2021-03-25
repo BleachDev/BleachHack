@@ -86,15 +86,7 @@ public class Window {
 		drawBar(matrix, mouseX, mouseY, textRend);
 
 		for (WindowButton w : buttons) {
-			int bx1 = x1 + w.x1;
-			int by1 = y1 + w.y1;
-			int bx2 = x1 + w.x2;
-			int by2 = y1 + w.y2;
-
-			fill(matrix, bx1, by1, bx2, by2,
-					selected && mouseX >= bx1 && mouseX <= bx2 && mouseY >= by1 && mouseY <= by2 ? 0x4fb070f0 : 0x60606090);
-
-			textRend.drawWithShadow(matrix, w.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(w.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
+			drawButton(w, matrix, mouseX, mouseY, textRend);
 		}
 
 		boolean blockItem = icon != null && icon.getItem() instanceof BlockItem;
@@ -141,6 +133,18 @@ public class Window {
 		//fillGrey(matrix, x2 - 22, y1 + 3, x2 - 14, y1 + 11);
 		textRend.draw(matrix, "_", x2 - 21, y1 + 2, 0);
 		textRend.draw(matrix, "_", x2 - 22, y1 + 1, -1);
+	}
+	
+	protected void drawButton(WindowButton button, MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
+		int bx1 = x1 + button.x1;
+		int by1 = y1 + button.y1;
+		int bx2 = x1 + button.x2;
+		int by2 = y1 + button.y2;
+
+		fill(matrix, bx1, by1, bx2, by2,
+				selected && mouseX >= bx1 && mouseX <= bx2 && mouseY >= by1 && mouseY <= by2 ? 0x4fb070f0 : 0x60606090);
+
+		textRend.drawWithShadow(matrix, button.text, bx1 + (bx2 - bx1) / 2 - textRend.getWidth(button.text) / 2, by1 + (by2 - by1) / 2 - 4, -1);
 	}
 
 	public boolean shouldClose(int mouseX, int mouseY) {
