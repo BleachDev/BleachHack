@@ -68,7 +68,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
+	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"),
+			require = 0 /* TODO: proper meteor fix */)
 	private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
 		if (ModuleManager.getModule(NoSlow.class).isToggled() && ModuleManager.getModule(NoSlow.class).getSetting(5).asToggle().state) {
 			return false;
