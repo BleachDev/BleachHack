@@ -44,9 +44,9 @@ public class NotebotUtils {
 	public static void downloadSongs(boolean log) {
 		try {
 			FileUtils.copyURLToFile(
-					new URL("https://github.com/BleachDrinker420/bleachhack-1.14/raw/master/online/notebot/songs.zip"),
-					BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
-			ZipFile zip = new ZipFile(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip").toFile());
+					new URL("https://github.com/BleachDrinker420/BH-resources/raw/master/notebot/songs.zip"),
+					BleachFileMang.stringsToPath("notebot", "songs.zip").toFile());
+			ZipFile zip = new ZipFile(BleachFileMang.stringsToPath("notebot", "songs.zip").toFile());
 			Enumeration<? extends ZipEntry> files = zip.entries();
 			int count = 0;
 			while (files.hasMoreElements()) {
@@ -90,8 +90,7 @@ public class NotebotUtils {
 		}
 
 		for (Entry<Instrument, Integer> e : notes.entrySet()) {
-			// System.out.println(e.getValue() + " | " + i + " | "); /* this is how
-			// debugging works right? */
+			// System.out.println(e.getValue() + " | " + i + " | "); /* this is how debugging works right? */
 			play(e.getKey().getSound(), (float) Math.pow(2.0D, (e.getValue() - 12) / 12.0D));
 		}
 	}
