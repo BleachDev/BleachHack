@@ -151,10 +151,17 @@ public class BleachTitleScreen extends WindowScreen {
 						String link = version.get("installer").getAsJsonObject().get("link").getAsString();
 						String name = link.replaceFirst("^.*\\/", "");
 
-						BleachFileMang.createEmptyFile("temp", name);
-
 						Path installerPath = BleachFileMang.stringsToPath("temp", name);
-						if (!Files.isRegularFile(installerPath) || installerPath.toFile().length() <= 1000L) {
+
+						System.out.println(
+								"\n> Installer path: " + installerPath
+								+ "\n> Installer URL: " + link
+								+ "\n> Installer file name: " + name
+								+ "\n> Regular File: " + Files.isRegularFile(installerPath)
+								+ "\n> File Length: " + installerPath.toFile().length());
+
+						if (!Files.isRegularFile(installerPath) || installerPath.toFile().length() <= 1024L) {
+							BleachFileMang.createEmptyFile("temp", name);
 							FileUtils.copyURLToFile(new URL(link), installerPath.toFile());
 						}
 
