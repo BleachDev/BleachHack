@@ -87,7 +87,7 @@ public class WorldUtils {
 			Blocks.STONECUTTER, Blocks.SMITHING_TABLE);
 
 	public static final Set<Material> FLUIDS = Sets.newHashSet(
-			Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT);
+			Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT, Material.REPLACEABLE_UNDERWATER_PLANT);
 
 	public static boolean isFluid(BlockPos pos) {
 		return FLUIDS.contains(mc.world.getBlockState(pos).getMaterial());
