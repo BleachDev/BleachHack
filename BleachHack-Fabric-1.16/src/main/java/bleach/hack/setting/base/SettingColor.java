@@ -101,10 +101,10 @@ public class SettingColor extends SettingBase {
 		DrawableHelper.fill(matrix, satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
 		DrawableHelper.fill(matrix, satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
 
-		RenderSystem.pushMatrix();
-		RenderSystem.scalef(0.75f, 0.75f, 1f);
+		matrix.push();
+		matrix.scale(0.75f, 0.75f, 1f);
 		MinecraftClient.getInstance().textRenderer.draw(matrix, text, (int) ((sx + 1) * 1 / 0.75), (int) ((sy + 1) * 1 / 0.75), 0x000000);
-		RenderSystem.popMatrix();
+		matrix.pop();
 
 		sx = ex + 5;
 		ex = ex + 12;

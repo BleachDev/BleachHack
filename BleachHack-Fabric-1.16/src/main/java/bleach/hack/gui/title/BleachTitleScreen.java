@@ -30,7 +30,6 @@ import org.apache.commons.lang3.SystemUtils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
 import bleach.hack.gui.title.particle.ParticleManager;
@@ -53,11 +52,13 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.realms.gui.screen.RealmsBridgeScreen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Quaternion;
 
 public class BleachTitleScreen extends WindowScreen {
 
@@ -231,8 +232,8 @@ public class BleachTitleScreen extends WindowScreen {
 			int h = height - height / 4;
 
 			/* Main Text */
-			RenderSystem.pushMatrix();
-			RenderSystem.scaled(3, 3, 0);
+			matrix.push();
+			matrix.scale(3f, 3f, 0f);
 
 			// drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3,
 			// 0xffc0e0);
@@ -242,21 +243,21 @@ public class BleachTitleScreen extends WindowScreen {
 				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w / 2 - 81) / 3 + intarray[i] - 8, (y + h / 4 - 15) / 3, UI.getRainbowFromSettings(i * 25));
 			}
 
-			RenderSystem.scaled(1d / 3d, 1d / 3d, 0);
+			matrix.scale(1f / 3f, 1f / 3f, 0f);
 
 			/* Version Text */
-			RenderSystem.scaled(1.5, 1.5, 1.5);
+			matrix.scale(1.5f, 1.5f, 1.5f);
 			drawCenteredString(matrix, this.textRenderer, BleachHack.VERSION, (int) ((x + w / 2) / 1.5), (int) ((y + h / 4 + 6) / 1.5), 0xffc050);
-			RenderSystem.scaled(1 / 1.5, 1 / 1.5, 1 / 1.5);
+			matrix.scale(1f / 1.5f, 1f / 1.5f, 1f / 1.5f);
 
 			/* Splash Text */
-			RenderSystem.translated(x + w / 2 + 80, y + h / 4 + 8, 0.0F);
-			RenderSystem.rotatef(-20.0F, 0.0F, 0.0F, 1.0F);
+			matrix.translate(x + w / 2 + 80, y + h / 4 + 8, 0.0F);
+			matrix.multiply(new Quaternion(new Vector3f(0.0F, 0.0F, 1.0F), -20.0F, true));
 			float float_4 = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
 			float_4 = float_4 * 60.0F / (textRenderer.getWidth(splash) + 32);
-			RenderSystem.scalef(float_4, float_4, float_4);
+			matrix.scale(float_4, float_4, float_4);
 			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
-			RenderSystem.popMatrix();
+			matrix.pop();
 
 			if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
 				drawStringWithShadow(matrix, textRenderer, "\u00a76[ \u00a7nUpdate\u00a76 ]", getWindow(0).x1 + 3, getWindow(0).y2 - 12, -1);

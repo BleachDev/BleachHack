@@ -251,8 +251,6 @@ public class UI extends Module {
 		}
 
 		if (getSetting(3).asToggle().state && !mc.player.isCreative() && !mc.player.isSpectator()) {
-			RenderSystem.pushMatrix();
-
 			int count = 0;
 			int x1 = mc.getWindow().getScaledWidth() / 2;
 			int y = mc.getWindow().getScaledHeight() -
@@ -272,11 +270,11 @@ public class UI extends Module {
 				}
 
 				mc.getItemRenderer().zOffset = 0F;
-				RenderSystem.disableDepthTest();
 
 				if (getSetting(3).asToggle().getChild(0).asMode().mode != 1) {
-					RenderSystem.pushMatrix();
-					RenderSystem.scalef(0.75f, 0.75f, 1f);
+					event.matrix.push();
+					event.matrix.scale(0.75f, 0.75f, 1f);
+					RenderSystem.disableDepthTest();
 
 					String s = is.getCount() > 1 ? "x" + is.getCount() : "";
 					mc.textRenderer.drawWithShadow(event.matrix, s, (x + 19 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 9) * 1.333f, 0xffffff);
@@ -292,12 +290,10 @@ public class UI extends Module {
 						mc.textRenderer.drawWithShadow(event.matrix, dur, (x + 10 - mc.textRenderer.getWidth(dur) / 2) * 1.333f, (y - 3) * 1.333f, durcolor);
 					}
 
-					RenderSystem.popMatrix();
+					RenderSystem.enableDepthTest();
+					event.matrix.pop();
 				}
 			}
-
-			RenderSystem.enableDepthTest();
-			RenderSystem.popMatrix();
 		}
 
 		int count2 = 0;

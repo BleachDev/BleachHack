@@ -193,10 +193,10 @@ public class Peek extends Module {
 
 		byte[] colors = data.colors;
 
-		double size = getSetting(2).asToggle().getChild(0).asSlider().getValue();
+		float size = (float) getSetting(2).asToggle().getChild(0).asSlider().getValue();
 
-		RenderSystem.pushMatrix();
-		RenderSystem.scaled(size, size, 1.0);
+		matrix.push();
+		matrix.scale(size, size, 1.0f);
 		int x = (int) (mouseX * (1 / size) + 12 * (1 / size));
 		int y = (int) (mouseY * (1 / size) - 12 * (1 / size) - 140);
 
@@ -214,7 +214,7 @@ public class Peek extends Module {
 			}
 		}
 
-		RenderSystem.popMatrix();
+		matrix.pop();
 	}
 
 	/* Fix your game [B]ojang */

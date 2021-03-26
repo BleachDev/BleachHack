@@ -27,7 +27,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.util.file.BleachFileHelper;
@@ -87,14 +86,14 @@ public class SettingToggle extends SettingBase {
 						color2 + "\u2228",
 						x + len - 8, y + 3, -1);
 			} else {
-				RenderSystem.pushMatrix();
+				matrix.push();
 
-				RenderSystem.scalef(0.75f, 0.75f, 1f);
+				matrix.scale(0.75f, 0.75f, 1f);
 				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
 						color2 + "\u00a7l>",
 						(int) ((x + len - 7) * 1 / 0.75), (int) ((y + 4) * 1 / 0.75), -1);
 
-				RenderSystem.popMatrix();
+				matrix.pop();
 			}
 		}
 

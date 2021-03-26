@@ -31,6 +31,7 @@ import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.model.json.ModelTransformation.Mode;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
@@ -93,15 +94,17 @@ public class Window {
 
 		/* window icon */
 		if (icon != null) {
-			RenderSystem.pushMatrix();
-			RenderSystem.scalef(0.6f, 0.6f, 1f);
+			matrix.push();
+			matrix.scale(0.6f, 0.6f, 1f);
 
 			DiffuseLighting.enableGuiDepthLighting();
 			MinecraftClient.getInstance().getItemRenderer().renderInGui(
-					icon, (int) ((x1 + (blockItem ? 3 : 2)) * 1 / 0.6), (int) ((y1 + 2) * 1 / 0.6));
+					icon, x1 + (blockItem ? 3 : 2), y1 + 2);
+			MinecraftClient.getInstance().getItemRenderer().renderItem(
+					icon, Mode.GUI, 0xf000f0, 0, matrix, MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers());
 			DiffuseLighting.disableGuiDepthLighting();
 
-			RenderSystem.popMatrix();
+			matrix.pop();
 		}
 
 		/* window title */

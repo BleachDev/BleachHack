@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Set;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.widget.BleachScrollbar;
@@ -94,16 +93,16 @@ public abstract class SettingList<E> extends SettingBase {
 	}
 
 	public void renderItem(MinecraftClient mc, MatrixStack matrix, E item, int x, int y, int w, int h) {
-		RenderSystem.pushMatrix();
+		matrix.push();
 		
 		float scale = (h - 2) / 10f;
 		float offset = 1f / scale;
 
-		RenderSystem.scalef(scale, scale, 1f);
+		matrix.scale(scale, scale, 1f);
 
 		mc.textRenderer.drawWithShadow(matrix, "?", (x + 5) * offset, (y + 4) * offset, -1);
 		
-		RenderSystem.popMatrix();
+		matrix.pop();
 	}
 
 	public abstract E getItemFromString(String string);
@@ -261,15 +260,15 @@ public abstract class SettingList<E> extends SettingBase {
 					int curY = inputField.y - 4 - toDraw.size() * 17;
 					int longest = toDraw.stream().map(e -> textRenderer.getWidth(getStringFromItem(e))).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
 
-					RenderSystem.pushMatrix();
-					RenderSystem.translatef(0f, 0f, 200f);
+					matrix.push();
+					matrix.translate(0f, 0f, 200f);
 
 					for (E e: toDraw) {
 						drawSearchEntry(matrix, e, inputField.x, curY, longest + 23, 16, mouseX, mouseY);
 						curY += 17;
 					}
 
-					RenderSystem.popMatrix();
+					matrix.pop();
 				}
 			}
 		}
