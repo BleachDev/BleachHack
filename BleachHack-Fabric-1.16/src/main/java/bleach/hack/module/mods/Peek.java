@@ -152,8 +152,9 @@ public class Peek extends Module {
 			pages = ItemContentUtils.getTextInBook(slot.getStack());
 		}
 
-		if (pages.isEmpty())
+		if (pages.isEmpty()){
 			return;
+		}
 
 		/* Cycle through pages */
 		if (mc.player.age % 80 == 0 && !shown) {
@@ -184,12 +185,14 @@ public class Peek extends Module {
 	}
 
 	public void drawMapToolTip(MatrixStack matrix, Slot slot, int mouseX, int mouseY) {
-		if (slot.getStack().getItem() != Items.FILLED_MAP)
+		if (slot.getStack().getItem() != Items.FILLED_MAP) {
 			return;
+		}
 
 		MapState data = FilledMapItem.getMapState(slot.getStack(), mc.world);
-		if (data == null || data.colors == null)
+		if (data == null || data.colors == null) {
 			return;
+		}
 
 		byte[] colors = data.colors;
 

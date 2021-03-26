@@ -19,8 +19,8 @@ package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventPlayerPushed;
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
@@ -47,16 +47,10 @@ public class NoVelocity extends Module {
 				new SettingToggle("Fluids", true).withDesc("Reduces how much you get pushed from fluids"));
 	}
 
-	public void onDisable() {
-		mc.player.pushSpeedReduction = 0f;
-
-		super.onDisable();
-	}
-
 	@Subscribe
-	public void onTick(EventTick event) {
+	public void onPlayerPushed(EventPlayerPushed event) {
 		if (getSetting(2).asToggle().state) {
-			mc.player.pushSpeedReduction = (float) (1 - getSetting(2).asToggle().getChild(0).asSlider().getValue() / 100);
+			event.setPush(event.getPush().multiply(getSetting(2).asToggle().getChild(0).asSlider().getValue() / 100d));
 		}
 	}
 
@@ -70,7 +64,7 @@ public class NoVelocity extends Module {
 			if (packet.getId() == mc.player.getEntityId()) {
 				double velXZ = getSetting(0).asToggle().getChild(0).asSlider().getValue() / 100;
 				double velY = getSetting(0).asToggle().getChild(1).asSlider().getValue() / 100;
-				
+
 				double pvelX = (packet.getVelocityX() / 8000d - mc.player.getVelocity().x) * velXZ;
 				double pvelY = (packet.getVelocityY() / 8000d - mc.player.getVelocity().y) * velY;
 				double pvelZ = (packet.getVelocityZ() / 8000d - mc.player.getVelocity().z) * velXZ;
@@ -84,7 +78,7 @@ public class NoVelocity extends Module {
 
 			double velXZ = getSetting(1).asToggle().getChild(0).asSlider().getValue() / 100;
 			double velY = getSetting(1).asToggle().getChild(1).asSlider().getValue() / 100;
-			
+
 			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityX() * velXZ), "field_12176", "playerVelocityX");
 			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityY() * velY), "field_12182", "playerVelocityY");
 			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityZ() * velXZ), "field_12183", "playerVelocityZ");

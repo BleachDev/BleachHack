@@ -35,20 +35,18 @@ import net.minecraft.world.BlockView;
 public class MixinBlock {
 
 	@Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
-	private static void shouldDrawSide(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, Direction direction_1,
-			CallbackInfoReturnable<Boolean> callback) {
+	private static void shouldDrawSide(BlockState state, BlockView world, BlockPos pos, Direction facing, CallbackInfoReturnable<Boolean> callback) {
 		Xray xray = ModuleManager.getModule(Xray.class);
 		if (xray.isToggled()) {
-			callback.setReturnValue(xray.isVisible(blockState_1.getBlock()));
+			callback.setReturnValue(xray.isVisible(state.getBlock()));
 			callback.cancel();
 		}
 	}
 
 	@Inject(method = "isShapeFullCube", at = @At("HEAD"), cancellable = true)
-	private static void isShapeFullCube(VoxelShape voxelShape_1, CallbackInfoReturnable<Boolean> callback) {
+	private static void isShapeFullCube(VoxelShape shape, CallbackInfoReturnable<Boolean> callback) {
 		if (ModuleManager.getModule(Xray.class).isToggled()) {
 			callback.setReturnValue(false);
-			callback.cancel();
 		}
 	}
 

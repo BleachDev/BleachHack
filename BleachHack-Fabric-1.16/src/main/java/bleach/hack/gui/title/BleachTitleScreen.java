@@ -58,7 +58,6 @@ import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
 
 public class BleachTitleScreen extends WindowScreen {
 
@@ -252,7 +251,7 @@ public class BleachTitleScreen extends WindowScreen {
 
 			/* Splash Text */
 			matrix.translate(x + w / 2 + 80, y + h / 4 + 8, 0.0F);
-			matrix.multiply(new Quaternion(new Vector3f(0.0F, 0.0F, 1.0F), -20.0F, true));
+			matrix.multiply(new Vector3f(0.0F, 0.0F, 1.0F).getDegreesQuaternion(-20.0F));
 			float float_4 = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
 			float_4 = float_4 * 60.0F / (textRenderer.getWidth(splash) + 32);
 			matrix.scale(float_4, float_4, float_4);

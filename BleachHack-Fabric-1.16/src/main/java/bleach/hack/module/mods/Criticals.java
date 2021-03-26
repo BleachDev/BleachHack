@@ -45,22 +45,25 @@ public class Criticals extends Module {
 			if (packet.getType() == PlayerInteractEntityC2SPacket.InteractionType.ATTACK) {
 				this.doCritical();
 
-				/* Lets fake some extra paricles to make the player feel good */
+				/* Lets fake some extra paricles why not */
 				Entity e = packet.getEntity(mc.world);
-				Random r = new Random();
-				for (int i = 0; i < 10; i++) {
-					mc.particleManager.addParticle(ParticleTypes.CRIT, e.getX(), e.getY() + e.getHeight() / 2, e.getZ(),
-							r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5);
+				
+				if (e != null) {
+					Random r = new Random();
+					for (int i = 0; i < 10; i++) {
+						mc.particleManager.addParticle(ParticleTypes.CRIT, e.getX(), e.getY() + e.getHeight() / 2, e.getZ(),
+								r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5);
+					}
 				}
 			}
 		}
 	}
 
 	private void doCritical() {
-		if (!mc.player.isOnGround())
+		if (!mc.player.isOnGround() || mc.player.isInLava() || mc.player.isTouchingWater()) {
 			return;
-		if (mc.player.isInLava() || mc.player.isTouchingWater())
-			return;
+		}
+
 		double posX = mc.player.getX();
 		double posY = mc.player.getY();
 		double posZ = mc.player.getZ();
