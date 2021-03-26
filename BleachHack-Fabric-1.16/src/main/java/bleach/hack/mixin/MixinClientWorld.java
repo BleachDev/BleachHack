@@ -22,9 +22,9 @@ import net.minecraft.util.math.Vec3d;
 
 @Mixin(ClientWorld.class)
 public class MixinClientWorld {
-	
+
 	@Final @Shadow private SkyProperties skyProperties;
-	
+
 	@Inject(method = "tickEntities", at = @At("HEAD"), cancellable = true)
 	public void tickEntities(CallbackInfo info) {
 		try {
@@ -51,6 +51,7 @@ public class MixinClientWorld {
 	public void method_23777(BlockPos blockPos, float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyRender.Color.SkyColor event = new EventSkyRender.Color.SkyColor(f);
 		BleachHack.eventBus.post(event);
+
 		if (event.isCancelled()) {
 			ci.setReturnValue(Vec3d.ZERO);
 		} else if (event.getColor() != null) {
@@ -62,6 +63,7 @@ public class MixinClientWorld {
 	public void getCloudsColor(float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyRender.Color.CloudColor event = new EventSkyRender.Color.CloudColor(f);
 		BleachHack.eventBus.post(event);
+
 		if (event.isCancelled()) {
 			ci.setReturnValue(Vec3d.ZERO);
 		} else if (event.getColor() != null) {
@@ -71,6 +73,10 @@ public class MixinClientWorld {
 
 	@Overwrite
 	public SkyProperties getSkyProperties() {
+		if (MinecraftClient.getInstance().world == null) {
+			return skyProperties;
+		}
+
 		EventSkyRender.Properties event = new EventSkyRender.Properties(skyProperties);
 		BleachHack.eventBus.post(event);
 
