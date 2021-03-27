@@ -87,8 +87,8 @@ public class StorageESP extends Module {
 		super("StorageESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.",
 				new SettingMode("Render", "Outline", "Shader", "Box+Fill", "Box", "Fill"),
 				new SettingSlider("Shader", 0, 3, 1.5, 1).withDesc("The thickness of the shader outline"),
-				new SettingSlider("Box", 0.1, 4, 2.5, 1).withDesc("The thickness of the box lines"),
-				new SettingSlider("Fill", 0, 1, 0.75, 2).withDesc("The opacity of the fill"),
+				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
+				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
 
 				new SettingToggle("Chests", true).withDesc("Highlights chests"),
 				new SettingToggle("EnderChests", true).withDesc("Highlights enderchests"),

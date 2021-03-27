@@ -61,7 +61,7 @@ public class ESP extends Module {
 				new SettingMode("Render", "Outline", "Shader", "Box+Fill", "Box", "Fill"),
 				new SettingSlider("Shader", 0, 3, 1.5, 1).withDesc("The thickness of the shader outline"),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
-				new SettingSlider("Fill", 0, 1, 0.75, 2).withDesc("The opacity of the fill"),
+				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
 				new SettingToggle("DrawBehind", false).withDesc("Draws the box/fill behind the entity (definitely not a bug turned into a feature)"),
 
 				new SettingToggle("Players", true).withDesc("Show Players").withChildren(
@@ -144,7 +144,7 @@ public class ESP extends Module {
 					}
 
 					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-						RenderUtils.drawOutline(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(2).asSlider().getValue());
+						RenderUtils.drawOutline(e.getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
 					}
 				}
 			}
