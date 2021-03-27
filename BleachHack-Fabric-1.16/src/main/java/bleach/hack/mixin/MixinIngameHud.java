@@ -33,7 +33,7 @@ import net.minecraft.client.util.math.MatrixStack;
 public class MixinIngameHud {
 
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true)
-	public void render(MatrixStack matrixStack, float float_1, CallbackInfo info) {
+	public void render(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
 		EventDrawOverlay event = new EventDrawOverlay(matrixStack);
 		BleachHack.eventBus.post(event);
 

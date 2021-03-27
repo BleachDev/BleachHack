@@ -41,16 +41,15 @@ public class MixinPacketInflater {
 	@Shadow private Inflater inflater;
 
 	@Inject(method = "decode", at = @At("HEAD"), cancellable = true)
-	protected void decode(ChannelHandlerContext channelHandlerContext_1, ByteBuf byteBuf_1, List<Object> list_1, CallbackInfo info) throws Exception {
-
+	protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list, CallbackInfo info) throws Exception {
 		if (ModuleManager.getModule(AntiChunkBan.class).isToggled()) {
 			info.cancel();
 
-			if (byteBuf_1.readableBytes() != 0) {
-				PacketByteBuf packetByteBuf_1 = new PacketByteBuf(byteBuf_1);
+			if (byteBuf.readableBytes() != 0) {
+				PacketByteBuf packetByteBuf_1 = new PacketByteBuf(byteBuf);
 				int int_1 = packetByteBuf_1.readVarInt();
 				if (int_1 == 0) {
-					list_1.add(packetByteBuf_1.readBytes(packetByteBuf_1.readableBytes()));
+					list.add(packetByteBuf_1.readBytes(packetByteBuf_1.readableBytes()));
 				} else {
 					if (int_1 > 51200000) {
 						throw new DecoderException("Badly compressed packet - size of " + (int_1 / 1000000) + "MB is larger than protocol maximum of 50 MB");
@@ -61,7 +60,7 @@ public class MixinPacketInflater {
 					this.inflater.setInput(bytes_1);
 					byte[] bytes_2 = new byte[int_1];
 					this.inflater.inflate(bytes_2);
-					list_1.add(Unpooled.wrappedBuffer(bytes_2));
+					list.add(Unpooled.wrappedBuffer(bytes_2));
 					this.inflater.reset();
 				}
 			}

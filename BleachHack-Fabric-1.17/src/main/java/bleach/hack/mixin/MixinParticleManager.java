@@ -20,9 +20,9 @@ import net.minecraft.util.math.BlockPos;
 public class MixinParticleManager {
 
 	@Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
-	public void addParticle(Particle particle_1, CallbackInfo ci) {
+	public void addParticle(Particle particle, CallbackInfo ci) {
 		// pls send help
-		EventParticle.Normal event = new EventParticle.Normal(particle_1);
+		EventParticle.Normal event = new EventParticle.Normal(particle);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -31,8 +31,8 @@ public class MixinParticleManager {
 	}
 
 	@Inject(method = "addEmitter(Lnet/minecraft/entity/Entity;Lnet/minecraft/particle/ParticleEffect;)V", at = @At("HEAD"), cancellable = true)
-	public void addEmitter(Entity entity_1, ParticleEffect particleEffect_1, CallbackInfo ci) {
-		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect_1);
+	public void addEmitter(Entity entity, ParticleEffect particleEffect, CallbackInfo ci) {
+		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -41,8 +41,8 @@ public class MixinParticleManager {
 	}
 
 	@Inject(method = "addEmitter(Lnet/minecraft/entity/Entity;Lnet/minecraft/particle/ParticleEffect;I)V", at = @At("HEAD"), cancellable = true)
-	public void addEmitter1(Entity entity_1, ParticleEffect particleEffect_1, int i, CallbackInfo ci) {
-		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect_1);
+	public void addEmitter_(Entity entity, ParticleEffect particleEffect, int maxAge, CallbackInfo ci) {
+		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) {
 			ci.cancel();
@@ -51,7 +51,7 @@ public class MixinParticleManager {
 
 	/** Mojang is retarded and makes this and ONLY this thread-unsafe **/
 	@Inject(method = "addBlockBreakParticles", at = @At("HEAD"), cancellable = true)
-	public void addBlockBreakParticles(BlockPos blockPos_1, BlockState blockState_1, CallbackInfo ci) {
+	public void addBlockBreakParticles(BlockPos pos, BlockState state, CallbackInfo ci) {
 		if (ModuleManager.getModule(Nuker.class).isToggled() && ModuleManager.getModule(Nuker.class).getSetting(7).asToggle().state) {
 			ci.cancel();
 		}

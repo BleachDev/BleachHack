@@ -51,9 +51,9 @@ public class MixinGameRenderer {
 	}
 
 	@Inject(method = "showFloatingItem", at = @At("HEAD"), cancellable = true)
-	private void showFloatingItem(ItemStack itemStack_1, CallbackInfo ci) {
+	private void showFloatingItem(ItemStack floatingItem, CallbackInfo ci) {
 		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(8).asToggle().state
-				&& itemStack_1.getItem() == Items.TOTEM_OF_UNDYING) {
+				&& floatingItem.getItem() == Items.TOTEM_OF_UNDYING) {
 			ci.cancel();
 		}
 	}

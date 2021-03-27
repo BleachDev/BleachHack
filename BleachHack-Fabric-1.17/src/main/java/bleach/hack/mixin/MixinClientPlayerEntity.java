@@ -56,7 +56,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		super(world, profile);
 	}
 
-	@Shadow protected void autoJump(float float_1, float float_2) {}
+	@Shadow protected void autoJump(float dx, float dz) {}
 
 	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
 	public void sendMovementPackets(CallbackInfo info) {
@@ -79,12 +79,12 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 
 	@Inject(method = "move", at = @At("HEAD"), cancellable = true)
-	public void move(MovementType movementType_1, Vec3d vec3d_1, CallbackInfo info) {
-		EventClientMove event = new EventClientMove(movementType_1, vec3d_1);
+	public void move(MovementType type, Vec3d movement, CallbackInfo info) {
+		EventClientMove event = new EventClientMove(type, movement);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) {
 			info.cancel();
-		} else if (!movementType_1.equals(event.type) || !vec3d_1.equals(event.vec3d)) {
+		} else if (!type.equals(event.type) || !movement.equals(event.vec3d)) {
 			double double_1 = this.getX();
 			double double_2 = this.getZ();
 			super.move(event.type, event.vec3d);
@@ -94,7 +94,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 
 	@Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
-	protected void pushOutOfBlocks(double double_1, double double_2, CallbackInfo ci) {
+	protected void pushOutOfBlocks(double x, double d, CallbackInfo ci) {
 		if (ModuleManager.getModule(Freecam.class).isToggled()) {
 			ci.cancel();
 		}
@@ -109,10 +109,10 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 
 	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0))
-	private void updateNausea_openScreen(MinecraftClient player, Screen screen_1) {
+	private void updateNausea_openScreen(MinecraftClient player, Screen screen) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled()
 				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
-			client.openScreen(screen_1);
+			client.openScreen(screen);
 		}
 	}
 

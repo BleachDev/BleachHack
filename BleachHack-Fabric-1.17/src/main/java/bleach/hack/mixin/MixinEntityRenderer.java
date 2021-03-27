@@ -34,8 +34,8 @@ import net.minecraft.text.Text;
 public abstract class MixinEntityRenderer<T extends Entity> {
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
-	public void renderLabelIfPresent(T entity_1, Text text_1, MatrixStack matrixStack_1, VertexConsumerProvider vertexConsumerProvider_1, int int_1, CallbackInfo info) {
-		EventEntityRender.Single.Label event = new EventEntityRender.Single.Label(entity_1, matrixStack_1, vertexConsumerProvider_1);
+	public void renderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
+		EventEntityRender.Single.Label event = new EventEntityRender.Single.Label(entity, matrices, vertexConsumers);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {

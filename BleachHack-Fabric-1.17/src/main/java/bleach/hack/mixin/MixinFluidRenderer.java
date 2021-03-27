@@ -36,25 +36,22 @@ import net.minecraft.world.BlockView;
 public class MixinFluidRenderer {
 
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
-	public void render(BlockRenderView extendedBlockView_1, BlockPos blockPos_1, VertexConsumer vertexConsumer_1, FluidState fluidState_1,
-			CallbackInfoReturnable<Boolean> callbackInfo) {
+	public void render(BlockRenderView world, BlockPos pos, VertexConsumer vertexConsumer, FluidState state, CallbackInfoReturnable<Boolean> callback) {
 		Xray xray = ModuleManager.getModule(Xray.class);
 		if (xray.getSetting(0).asToggle().state)
 			return;
 
-		if (xray.isToggled() && !xray.isVisible(fluidState_1.getBlockState().getBlock())) {
-			callbackInfo.setReturnValue(false);
+		if (xray.isToggled() && !xray.isVisible(state.getBlockState().getBlock())) {
+			callback.setReturnValue(false);
 		}
 	}
 
 	@Inject(method = "isSideCovered", at = @At("HEAD"), cancellable = true)
-	private static void isSideCovered(BlockView blockView_1, BlockPos blockPos_1, Direction direction_1, float float_1, CallbackInfoReturnable<Boolean> callbackInfo) {
+	private static void isSideCovered(BlockView world, BlockPos pos, Direction direction, float maxDeviation, CallbackInfoReturnable<Boolean> callback) {
 		Xray xray = ModuleManager.getModule(Xray.class);
-		if (xray.getSetting(0).asToggle().state)
-			return;
 
-		if (xray.isToggled() && xray.isVisible(blockView_1.getBlockState(blockPos_1).getBlock())) {
-			callbackInfo.setReturnValue(false);
+		if (!xray.getSetting(0).asToggle().state && xray.isToggled() && xray.isVisible(world.getBlockState(pos).getBlock())) {
+			callback.setReturnValue(false);
 		}
 	}
 }

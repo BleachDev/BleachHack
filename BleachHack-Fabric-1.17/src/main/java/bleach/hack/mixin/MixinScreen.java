@@ -23,26 +23,26 @@ public class MixinScreen {
 	@Unique private boolean skipTooltip = false;
 
 	@Inject(method = "render", at = @At("HEAD"))
-	public void render(MatrixStack matrix, int int_1, int int_2, float float_1, CallbackInfo info) {
-		lastMX = int_1;
-		lastMY = int_2;
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
+		lastMX = mouseX;
+		lastMY = mouseY;
 	}
 
 	@Inject(at = @At("HEAD"), method = "renderOrderedTooltip", cancellable = true)
-	public void renderTooltip(MatrixStack matrix, List<? extends OrderedText> text, int x, int y, CallbackInfo info) {
+	public void renderTooltip(MatrixStack matrices, List<? extends OrderedText> lines, int x, int y, CallbackInfo info) {
 		if (skipTooltip) {
 			skipTooltip = false;
 			return;
 		}
 		
-		EventDrawTooltip event = new EventDrawTooltip(matrix, text, x, y, lastMX, lastMY);
+		EventDrawTooltip event = new EventDrawTooltip(matrices, lines, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
 			info.cancel();
-		} else if (!event.text.equals(text) || event.x != x || event.y != y) {
+		} else if (!event.text.equals(lines) || event.x != x || event.y != y) {
 			skipTooltip = true;
-			event.screen.renderOrderedTooltip(matrix, event.text, event.x, event.y);
+			event.screen.renderOrderedTooltip(matrices, event.text, event.x, event.y);
 			info.cancel();
 		}
 	}

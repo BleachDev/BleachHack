@@ -68,21 +68,21 @@ public class SettingColor extends SettingBase {
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
-		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = Tessellator.getInstance().getBuffer();
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(ex, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
-		bufferBuilder_1.vertex(sx, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
-		bufferBuilder_1.vertex(sx, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
-		bufferBuilder_1.vertex(ex, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
-		tessellator_1.draw();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder.vertex(ex, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
+		bufferBuilder.vertex(sx, sy, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
+		bufferBuilder.vertex(sx, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 0).next();
+		bufferBuilder.vertex(ex, ey, 0).color(satColor.getRed(), satColor.getBlue(), satColor.getGreen(), 255).next();
+		tessellator.draw();
 
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(ex, sy, 0).color(0, 0, 0, 0).next();
-		bufferBuilder_1.vertex(sx, sy, 0).color(0, 0, 0, 0).next();
-		bufferBuilder_1.vertex(sx, ey, 0).color(0, 0, 0, 255).next();
-		bufferBuilder_1.vertex(ex, ey, 0).color(0, 0, 0, 255).next();
-		tessellator_1.draw();
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder.vertex(ex, sy, 0).color(0, 0, 0, 0).next();
+		bufferBuilder.vertex(sx, sy, 0).color(0, 0, 0, 0).next();
+		bufferBuilder.vertex(sx, ey, 0).color(0, 0, 0, 255).next();
+		bufferBuilder.vertex(ex, ey, 0).color(0, 0, 0, 255).next();
+		tessellator.draw();
 
 		RenderSystem.shadeModel(GL11.GL_FLAT);
 		RenderSystem.disableBlend();

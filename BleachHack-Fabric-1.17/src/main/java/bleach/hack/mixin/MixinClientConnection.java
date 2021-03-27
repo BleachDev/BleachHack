@@ -45,23 +45,25 @@ public class MixinClientConnection {
 	
 	@Shadow private Channel channel;
 
-	@Shadow private void sendImmediately(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1) {}
+	@Shadow private void sendImmediately(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> callback) {}
 
 	@Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
-	public void channelRead0(ChannelHandlerContext channelHandlerContext_1, Packet<?> packet_1, CallbackInfo callback) {
-		if (this.channel.isOpen() && packet_1 != null) {
-			EventReadPacket event = new EventReadPacket(packet_1);
+	public void channelRead0(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo callback) {
+		if (this.channel.isOpen() && packet != null) {
+			EventReadPacket event = new EventReadPacket(packet);
 			BleachHack.eventBus.post(event);
-			if (event.isCancelled())
+
+			if (event.isCancelled()) {
 				callback.cancel();
+			}
 		}
 	}
 
 	@Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
-	public void send(Packet<?> packet_1, GenericFutureListener<? extends Future<? super Void>> genericFutureListener_1, CallbackInfo callback) {
-		if (packet_1 instanceof ChatMessageC2SPacket) {
+	public void send(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> packetCallback, CallbackInfo callback) {
+		if (packet instanceof ChatMessageC2SPacket) {
 			if (!CommandManager.allowNextMsg) {
-				ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet_1;
+				ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet;
 				if (pack.getChatMessage().startsWith(Command.PREFIX)) {
 					CommandManager.callCommand(pack.getChatMessage().substring(Command.PREFIX.length()));
 					callback.cancel();
@@ -71,7 +73,7 @@ public class MixinClientConnection {
 			CommandManager.allowNextMsg = false;
 		}
 
-		EventSendPacket event = new EventSendPacket(packet_1);
+		EventSendPacket event = new EventSendPacket(packet);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -81,13 +83,12 @@ public class MixinClientConnection {
 
 	// Packet kick blocc
 	@Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
-	public void exceptionCaught(ChannelHandlerContext channelHandlerContext_1, Throwable throwable_1, CallbackInfo callback) {
-		if (!ModuleManager.getModule(AntiChunkBan.class).isToggled())
-			return;
-
-		if (!(throwable_1 instanceof PacketEncoderException)) {
-			BleachLogger.warningMessage("Canceled Defect Packet: " + throwable_1);
-			callback.cancel();
+	public void exceptionCaught(ChannelHandlerContext channelHandlerContext, Throwable throwable, CallbackInfo callback) {
+		if (ModuleManager.getModule(AntiChunkBan.class).isToggled()) {
+			if (!(throwable instanceof PacketEncoderException)) {
+				BleachLogger.warningMessage("Canceled Defect Packet: " + throwable);
+				callback.cancel();
+			}
 		}
 	}
 }

@@ -16,8 +16,8 @@ import net.minecraft.client.sound.TickableSoundInstance;
 public class MixinSoundSystem {
 
 	@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
-	public void play(SoundInstance soundInstance_1, CallbackInfo ci) {
-		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance_1);
+	public void play(SoundInstance soundInstance, CallbackInfo ci) {
+		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -26,8 +26,8 @@ public class MixinSoundSystem {
 	}
 
 	@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;I)V", at = @At("HEAD"), cancellable = true)
-	public void play(SoundInstance soundInstance_1, int i, CallbackInfo ci) {
-		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance_1);
+	public void play(SoundInstance soundInstance, int delay, CallbackInfo ci) {
+		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -36,8 +36,8 @@ public class MixinSoundSystem {
 	}
 
 	@Inject(method = "playNextTick", at = @At("HEAD"), cancellable = true)
-	public void playNextTick(TickableSoundInstance soundInstance_1, CallbackInfo ci) {
-		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance_1);
+	public void playNextTick(TickableSoundInstance sound, CallbackInfo ci) {
+		EventSoundPlay.Normal event = new EventSoundPlay.Normal(sound);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -46,8 +46,8 @@ public class MixinSoundSystem {
 	}
 
 	@Inject(method = "addPreloadedSound", at = @At("HEAD"), cancellable = true)
-	public void addPreloadedSound(Sound sound_1, CallbackInfo ci) {
-		EventSoundPlay.Preloaded event = new EventSoundPlay.Preloaded(sound_1);
+	public void addPreloadedSound(Sound sound, CallbackInfo ci) {
+		EventSoundPlay.Preloaded event = new EventSoundPlay.Preloaded(sound);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {

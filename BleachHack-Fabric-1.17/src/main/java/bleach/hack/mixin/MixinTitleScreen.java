@@ -43,8 +43,8 @@ import net.minecraft.text.Text;
 @Mixin(TitleScreen.class)
 public class MixinTitleScreen extends Screen {
 
-	protected MixinTitleScreen(Text text_1) {
-		super(text_1);
+	protected MixinTitleScreen(Text title) {
+		super(title);
 	}
 
 	@Inject(method = "init()V", at = @At("HEAD"))

@@ -19,9 +19,11 @@ public class MixinBackgroundRenderer {
 			"applyFog(Lnet/minecraft/client/rener/Camera;Lnet/minecraft/client/render/BackgroundRenderer$FogType;FZ)V"},
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
 	private static boolean hasStatusEffect(LivingEntity entity, StatusEffect effect) {
-		if (effect == StatusEffects.BLINDNESS && ModuleManager.getModule(NoRender.class).isToggled()
-				&& ModuleManager.getModule(NoRender.class).getSetting(0).asToggle().state)
+		if (effect == StatusEffects.BLINDNESS
+				&& ModuleManager.getModule(NoRender.class).isToggled()
+				&& ModuleManager.getModule(NoRender.class).getSetting(0).asToggle().state) {
 			return false;
+		}
 
 		return entity.hasStatusEffect(effect);
 	}

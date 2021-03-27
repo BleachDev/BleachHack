@@ -26,64 +26,64 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
 	@Shadow public PlayerInventory inventory;
 
-	protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType_1, World world_1) {
-		super(entityType_1, world_1);
+	protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType, World world) {
+		super(entityType, world);
 	}
 
 	@Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
-	public void getBlockBreakingSpeed(BlockState blockState_1, CallbackInfoReturnable<Float> ci) {
+	public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> ci) {
 		Module mod = ModuleManager.getModule(SpeedMine.class);
 
 		if (mod.isToggled()) {
-			float float_1 = inventory.getBlockBreakingSpeed(blockState_1);
-			if (float_1 > 1.0F) {
-				int int_1 = EnchantmentHelper.getEfficiency(this);
+			float breakingSpeed = inventory.getBlockBreakingSpeed(block);
+			if (breakingSpeed > 1.0F) {
+				int eff = EnchantmentHelper.getEfficiency(this);
 				ItemStack itemStack_1 = this.getMainHandStack();
-				if (int_1 > 0 && !itemStack_1.isEmpty()) {
-					float_1 += int_1 * int_1 + 1;
+				if (eff > 0 && !itemStack_1.isEmpty()) {
+					breakingSpeed += eff * eff + 1;
 				}
 			}
 
 			if (StatusEffectUtil.hasHaste(this)) {
-				float_1 *= 1.0F + (StatusEffectUtil.getHasteAmplifier(this) + 1) * 0.2F;
+				breakingSpeed *= 1.0F + (StatusEffectUtil.getHasteAmplifier(this) + 1) * 0.2F;
 			}
 
 			if (!mod.getSetting(4).asToggle().state) {
 				if (this.hasStatusEffect(StatusEffects.MINING_FATIGUE)) {
-					float float_5;
+					float fatigueMult;
 					switch (this.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
 						case 0:
-							float_5 = 0.3F;
+							fatigueMult = 0.3F;
 							break;
 						case 1:
-							float_5 = 0.09F;
+							fatigueMult = 0.09F;
 							break;
 						case 2:
-							float_5 = 0.0027F;
+							fatigueMult = 0.0027F;
 							break;
 						case 3:
 						default:
-							float_5 = 8.1E-4F;
+							fatigueMult = 8.1E-4F;
 					}
 
-					float_1 *= float_5;
+					breakingSpeed *= fatigueMult;
 				}
 			}
 
 			if (!mod.getSetting(5).asToggle().state) {
 				if (this.isSubmergedIn(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
-					float_1 /= 5.0F;
+					breakingSpeed /= 5.0F;
 				}
 
 				if (!this.onGround) {
-					float_1 /= 5.0F;
+					breakingSpeed /= 5.0F;
 				}
 			}
 
 			if (mod.getSetting(0).asMode().mode == 1)
-				float_1 *= (float) mod.getSetting(3).asSlider().getValue();
+				breakingSpeed *= (float) mod.getSetting(3).asSlider().getValue();
 
-			ci.setReturnValue(float_1);
+			ci.setReturnValue(breakingSpeed);
 		}
 	}
 }

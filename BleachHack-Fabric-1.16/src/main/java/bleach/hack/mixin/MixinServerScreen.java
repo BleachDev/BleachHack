@@ -34,8 +34,8 @@ import net.minecraft.text.Text;
 @Mixin(MultiplayerScreen.class)
 public class MixinServerScreen extends Screen {
 
-	protected MixinServerScreen(Text text_1) {
-		super(text_1);
+	protected MixinServerScreen(Text title) {
+		super(title);
 	}
 
 	@Inject(method = "init()V", at = @At("HEAD"))

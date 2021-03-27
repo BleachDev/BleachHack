@@ -141,16 +141,20 @@ public class ServerScraperScreen extends Screen {
 		}
 	}
 
-	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
-		if (ipField.isFocused())
-			ipField.charTyped(p_charTyped_1_, p_charTyped_2_);
-		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
+	public boolean charTyped(char chr, int modifiers) {
+		if (ipField.isFocused()) {
+			ipField.charTyped(chr, modifiers);
+		}
+
+		return super.charTyped(chr, modifiers);
 	}
 
-	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-		if (ipField.isFocused())
-			ipField.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
-		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (ipField.isFocused()) {
+			ipField.keyPressed(keyCode, scanCode, modifiers);
+		}
+
+		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	public void tick() {

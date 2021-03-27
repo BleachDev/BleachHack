@@ -43,8 +43,8 @@ public abstract class WindowScreen extends Screen {
 	/* [Layer, Window Index] */
 	private SortedMap<Integer, Integer> windowOrder = new TreeMap<>(); 
 
-	public WindowScreen(Text text_1) {
-		super(text_1);
+	public WindowScreen(Text title) {
+		super(title);
 	}
 
 	public void addWindow(Window window) {
@@ -198,14 +198,14 @@ public abstract class WindowScreen extends Screen {
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
-		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = Tessellator.getInstance().getBuffer();
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(width, 0, 0).color(colorTR.getRed(), colorTR.getBlue(), colorTR.getGreen(), 255).next();
-		bufferBuilder_1.vertex(0, 0, 0).color(colorTL.getRed(), colorTL.getBlue(), colorTL.getGreen(), 255).next();
-		bufferBuilder_1.vertex(0, height + 14, 0).color(colorBL.getRed(), colorBL.getBlue(), colorBL.getGreen(), 255).next();
-		bufferBuilder_1.vertex(width, height + 14, 0).color(colorBR.getRed(), colorBR.getBlue(), colorBR.getGreen(), 255).next();
-		tessellator_1.draw();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder.vertex(width, 0, 0).color(colorTR.getRed(), colorTR.getBlue(), colorTR.getGreen(), 255).next();
+		bufferBuilder.vertex(0, 0, 0).color(colorTL.getRed(), colorTL.getBlue(), colorTL.getGreen(), 255).next();
+		bufferBuilder.vertex(0, height + 14, 0).color(colorBL.getRed(), colorBL.getBlue(), colorBL.getGreen(), 255).next();
+		bufferBuilder.vertex(width, height + 14, 0).color(colorBR.getRed(), colorBR.getBlue(), colorBR.getGreen(), 255).next();
+		tessellator.draw();
 
 		RenderSystem.shadeModel(GL11.GL_FLAT);
 		RenderSystem.disableBlend();

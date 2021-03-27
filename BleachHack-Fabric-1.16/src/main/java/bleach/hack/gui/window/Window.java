@@ -191,27 +191,27 @@ public class Window {
 	}
 
 	public static void horizontalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
-		float float_1 = (color1 >> 24 & 255) / 255.0F;
-		float float_2 = (color1 >> 16 & 255) / 255.0F;
-		float float_3 = (color1 >> 8 & 255) / 255.0F;
-		float float_4 = (color1 & 255) / 255.0F;
-		float float_5 = (color2 >> 24 & 255) / 255.0F;
-		float float_6 = (color2 >> 16 & 255) / 255.0F;
-		float float_7 = (color2 >> 8 & 255) / 255.0F;
-		float float_8 = (color2 & 255) / 255.0F;
+		float alpha_1 = (color1 >> 24 & 255) / 255.0F;
+		float red_1   = (color1 >> 16 & 255) / 255.0F;
+		float green_1 = (color1 >> 8 & 255) / 255.0F;
+		float blue_1  = (color1 & 255) / 255.0F;
+		float alpha_2 = (color2 >> 24 & 255) / 255.0F;
+		float red_2   = (color2 >> 16 & 255) / 255.0F;
+		float green_2 = (color2 >> 8 & 255) / 255.0F;
+		float blue_2  = (color2 & 255) / 255.0F;
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.disableAlphaTest();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.shadeModel(GL11.GL_SMOOTH);
-		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(x1, y1, 0).color(float_2, float_3, float_4, float_1).next();
-		bufferBuilder_1.vertex(x1, y2, 0).color(float_2, float_3, float_4, float_1).next();
-		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
-		bufferBuilder_1.vertex(x2, y1, 0).color(float_6, float_7, float_8, float_5).next();
-		tessellator_1.draw();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = tessellator.getBuffer();
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder.vertex(x1, y1, 0).color(red_1, green_1, blue_1, alpha_1).next();
+		bufferBuilder.vertex(x1, y2, 0).color(red_1, green_1, blue_1, alpha_1).next();
+		bufferBuilder.vertex(x2, y2, 0).color(red_2, green_2, blue_2, alpha_2).next();
+		bufferBuilder.vertex(x2, y1, 0).color(red_2, green_2, blue_2, alpha_2).next();
+		tessellator.draw();
 		RenderSystem.shadeModel(GL11.GL_FLAT);
 		RenderSystem.disableBlend();
 		RenderSystem.enableAlphaTest();
@@ -219,27 +219,27 @@ public class Window {
 	}
 
 	public static void verticalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
-		float float_1 = (color1 >> 24 & 255) / 255.0F;
-		float float_2 = (color1 >> 16 & 255) / 255.0F;
-		float float_3 = (color1 >> 8 & 255) / 255.0F;
-		float float_4 = (color1 & 255) / 255.0F;
-		float float_5 = (color2 >> 24 & 255) / 255.0F;
-		float float_6 = (color2 >> 16 & 255) / 255.0F;
-		float float_7 = (color2 >> 8 & 255) / 255.0F;
-		float float_8 = (color2 & 255) / 255.0F;
+		float alpha_1 = (color1 >> 24 & 255) / 255.0F;
+		float red_1   = (color1 >> 16 & 255) / 255.0F;
+		float green_1 = (color1 >> 8 & 255) / 255.0F;
+		float blue_1  = (color1 & 255) / 255.0F;
+		float alpha_2 = (color2 >> 24 & 255) / 255.0F;
+		float red_2   = (color2 >> 16 & 255) / 255.0F;
+		float green_2 = (color2 >> 8 & 255) / 255.0F;
+		float blue_2  = (color2 & 255) / 255.0F;
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.disableAlphaTest();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.shadeModel(GL11.GL_SMOOTH);
-		Tessellator tessellator_1 = Tessellator.getInstance();
-		BufferBuilder bufferBuilder_1 = tessellator_1.getBuffer();
-		bufferBuilder_1.begin(7, VertexFormats.POSITION_COLOR);
-		bufferBuilder_1.vertex(x2, y1, 0).color(float_2, float_3, float_4, float_1).next();
-		bufferBuilder_1.vertex(x1, y1, 0).color(float_2, float_3, float_4, float_1).next();
-		bufferBuilder_1.vertex(x1, y2, 0).color(float_6, float_7, float_8, float_5).next();
-		bufferBuilder_1.vertex(x2, y2, 0).color(float_6, float_7, float_8, float_5).next();
-		tessellator_1.draw();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = tessellator.getBuffer();
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder.vertex(x2, y1, 0).color(red_1, green_1, blue_1, alpha_1).next();
+		bufferBuilder.vertex(x1, y1, 0).color(red_1, green_1, blue_1, alpha_1).next();
+		bufferBuilder.vertex(x1, y2, 0).color(red_2, green_2, blue_2, alpha_2).next();
+		bufferBuilder.vertex(x2, y2, 0).color(red_2, green_2, blue_2, alpha_2).next();
+		tessellator.draw();
 		RenderSystem.shadeModel(GL11.GL_FLAT);
 		RenderSystem.disableBlend();
 		RenderSystem.enableAlphaTest();
