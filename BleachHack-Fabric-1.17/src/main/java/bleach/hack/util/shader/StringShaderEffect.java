@@ -1,6 +1,5 @@
 package bleach.hack.util.shader;
 
-import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -151,9 +150,10 @@ public class StringShaderEffect extends ShaderEffect {
 							} catch (FileNotFoundException var31) {
 								throw new ShaderParseException("Render target or texture '" + string7 + "' does not exist");
 							} finally {
-								IOUtils.closeQuietly((Closeable)resource);
+								IOUtils.closeQuietly(resource);
 							}
 
+							RenderSystem.setShaderTexture(0, identifier);
 							textureManager.bindTexture(identifier);
 							AbstractTexture abstractTexture = textureManager.getTexture(identifier);
 							int j = JsonHelper.getInt(jsonObject2, "width");
@@ -273,7 +273,7 @@ public class StringShaderEffect extends ShaderEffect {
 	}
 
 	private void setupProjectionMatrix() {
-		this.projectionMatrix = Matrix4f.projectionMatrix((float)this.mainTarget.textureWidth, (float)this.mainTarget.textureHeight, 0.1F, 1000.0F);
+		this.projectionMatrix = Matrix4f.method_34239(0.0F, (float) this.mainTarget.textureWidth, (float) this.mainTarget.textureHeight, 0.0F, 0.1F, 1000.0F);
 	}
 
 	public void setupDimensions(int targetsWidth, int targetsHeight) {
