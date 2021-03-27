@@ -42,5 +42,5 @@ jobs:
     - name: Upload 1.17 bruh bruh
       uses: actions/upload-artifact@v2
       with:
-        name: BleachHack-1.17
+        name: BleachHack-20w11a
         path: BleachHack-Fabric-1.17/build/libs/bleachhack-20w11a.jar
