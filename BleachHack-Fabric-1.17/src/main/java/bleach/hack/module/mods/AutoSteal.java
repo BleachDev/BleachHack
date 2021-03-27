@@ -22,7 +22,6 @@ import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.WorldRenderUtils;
-import bleach.hack.util.world.WorldHelper;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -128,7 +127,7 @@ public class AutoSteal extends Module {
 				}
 			}
 		} else if (currentItems == null && currentSyncId == -1 && getSetting(3).asToggle().state) {
-			for (BlockEntity be: WorldHelper.getBlockEntities()) {
+			for (BlockEntity be: WorldUtils.getBlockEntities()) {
 				if (!opened.containsKey(be.getPos())
 						&& be instanceof ChestBlockEntity
 						&& mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)

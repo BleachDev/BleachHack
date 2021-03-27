@@ -28,7 +28,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.util.FabricReflect;
-import bleach.hack.util.world.WorldUtils;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
@@ -47,10 +46,13 @@ public class Flight extends Module {
 
 	@Override
 	public void onDisable() {
-		super.onDisable();
-		if (!mc.player.abilities.creativeMode)
+		if (!mc.player.abilities.creativeMode) {
 			mc.player.abilities.allowFlying = false;
+		}
+
 		mc.player.abilities.flying = false;
+		
+		super.onDisable();
 	}
 
 	@Subscribe
@@ -58,32 +60,31 @@ public class Flight extends Module {
 		float speed = (float) getSetting(1).asSlider().getValue();
 
 		if (mc.player.age % 20 == 0 && getSetting(2).asMode().mode == 3 && !(getSetting(0).asMode().mode == 1)) {
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() - 0.06, mc.player.getZ(), false));
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getZ() + 0.06, mc.player.getZ(), true));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getY() - 0.069, mc.player.getZ(), false));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(mc.player.getX(), mc.player.getZ() + 0.069, mc.player.getZ(), true));
 		}
 
 		if (getSetting(0).asMode().mode == 0) {
-			if (getSetting(2).asMode().mode == 0 || getSetting(2).asMode().mode == 3)
-				mc.player.setVelocity(0, 0, 0);
-			else if (getSetting(2).asMode().mode == 1 && WorldUtils.REPLACEABLE_BLOCKS
-					.contains(mc.world.getBlockState(new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.069, mc.player.getPos().getZ())).getBlock()))
-				mc.player.setVelocity(0, mc.player.age % 20 == 0 ? -0.069 : 0, 0);
-			else if (getSetting(2).asMode().mode == 2)
-				mc.player
-				.setVelocity(0,
-						mc.player.age % 40 == 0
-						? (WorldUtils.REPLACEABLE_BLOCKS
-								.contains(mc.world
-										.getBlockState(
-												new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() + 1.15, mc.player.getPos().getZ()))
-										.getBlock()) ? 0.15 : 0)
-								: mc.player.age % 20 == 0
-								? (WorldUtils.REPLACEABLE_BLOCKS.contains(mc.world
-										.getBlockState(
-												new BlockPos(mc.player.getPos().getX(), mc.player.getPos().getY() - 0.15, mc.player.getPos().getZ()))
-										.getBlock()) ? -0.15 : 0)
-										: 0,
-										0);
+			Vec3d antiKickVel = Vec3d.ZERO;
+
+			if (getSetting(2).asMode().mode == 1
+					&& mc.player.age % 20 == 0
+					&& mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, -0.069, 0)))).getMaterial().isReplaceable()) {
+				antiKickVel = antiKickVel.add(0, -0.069, 0);
+			} else if (getSetting(2).asMode().mode == 2) {
+				if (mc.player.age % 40 == 0) {
+					if (mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, 0.15, 0)))).getMaterial().isReplaceable()) {
+						antiKickVel = antiKickVel.add(0, 0.15, 0);
+					}
+				} else if (mc.player.age % 20 == 0) {
+					if (mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, -0.15, 0)))).getMaterial().isReplaceable()) {
+						antiKickVel = antiKickVel.add(0, -0.15, 0);
+					}
+				}
+			}
+
+			mc.player.setVelocity(antiKickVel);
+
 			Vec3d forward = new Vec3d(0, 0, speed).rotateY(-(float) Math.toRadians(mc.player.yaw));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 

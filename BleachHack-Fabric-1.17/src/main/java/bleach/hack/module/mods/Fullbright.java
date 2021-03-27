@@ -18,7 +18,7 @@ public class Fullbright extends Module {
 	public Fullbright() {
 		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.",
 				new SettingMode("Mode", "Gamma", "Potion").withDesc("Fullbright mode"),
-				new SettingSlider("Gamma", 1, 12, 7.5, 1).withDesc("How much to turn the gamma up when using gamma mode"));
+				new SettingSlider("Gamma", 1, 12, 9, 1).withDesc("How much to turn the gamma up when using gamma mode"));
 	}
 
 	// table setting [B]roke

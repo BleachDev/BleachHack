@@ -25,7 +25,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.util.world.WorldHelper;
+import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -46,7 +46,7 @@ public class Ghosthand extends Module {
 
 		// Return if we are looking at any block entities
 		BlockPos lookingPos = new BlockPos(mc.player.raycast(4.25, mc.getTickDelta(), false).getPos());
-		for (BlockEntity b : WorldHelper.getBlockEntities()) {
+		for (BlockEntity b : WorldUtils.getBlockEntities()) {
 			if (lookingPos.equals(b.getPos())) {
 				return;
 			}
@@ -63,7 +63,7 @@ public class Ghosthand extends Module {
 			if (!posList.contains(curPos)) {
 				posList.add(curPos);
 	
-				for (BlockEntity b : WorldHelper.getBlockEntities()) {
+				for (BlockEntity b : WorldUtils.getBlockEntities()) {
 					if (b.getPos().equals(curPos)) {
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
 								new BlockHitResult(mc.player.getPos(), Direction.UP, curPos, true));

@@ -16,7 +16,6 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.world.WorldUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.ingame.Generic3x3ContainerScreen;
@@ -297,13 +296,11 @@ public class Dispenser32k extends Module {
 
 	private void openBlock(BlockPos pos) {
 		for (Direction d : Direction.values()) {
-			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-			if (!WorldUtils.REPLACEABLE_BLOCKS.contains(neighborBlock))
-				continue;
-
-			mc.interactionManager.interactBlock(
-					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos, false));
-			return;
+			if (mc.world.getBlockState(pos.offset(d)).getMaterial().isReplaceable()) {
+				mc.interactionManager.interactBlock(
+						mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos, false));
+				return;
+			}
 		}
 	}
 }

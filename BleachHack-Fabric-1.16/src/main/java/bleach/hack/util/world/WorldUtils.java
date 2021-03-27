@@ -42,16 +42,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 
 public class WorldUtils {
 
 	protected static final MinecraftClient mc = MinecraftClient.getInstance();
-
-	public static final Set<Block> REPLACEABLE_BLOCKS = Sets.newHashSet(
-			Blocks.AIR, Blocks.LAVA, Blocks.WATER, Blocks.GRASS,
-			Blocks.VINE, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS,
-			Blocks.SNOW, Blocks.TALL_GRASS, Blocks.FIRE, Blocks.VOID_AIR,
-			Blocks.CAVE_AIR);
 
 	public static final Set<Block> RIGHTCLICKABLE_BLOCKS = Sets.newHashSet(
 			Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST,
@@ -103,6 +98,7 @@ public class WorldUtils {
 				}
 			}
 		}
+
 		return false;
 	}
 
@@ -110,12 +106,13 @@ public class WorldUtils {
 		for (int x = (int) Math.floor(box.minX); x < Math.ceil(box.maxX); x++) {
 			for (int y = (int) Math.floor(box.minY); y < Math.ceil(box.maxY); y++) {
 				for (int z = (int) Math.floor(box.minZ); z < Math.ceil(box.maxZ); z++) {
-					if (!REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(new BlockPos(x, y, z)).getBlock())) {
+					if (!mc.world.getBlockState(new BlockPos(x, y, z)).getMaterial().isReplaceable()) {
 						return false;
 					}
 				}
 			}
 		}
+
 		return true;
 	}
 
@@ -124,7 +121,7 @@ public class WorldUtils {
 	}
 
 	public static boolean placeBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean swingHand) {
-		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
+		if (!World.isInBuildLimit(pos) || !isBlockEmpty(pos))
 			return false;
 
 		if (slot != mc.player.inventory.selectedSlot && slot >= 0 && slot <= 8)
@@ -135,8 +132,8 @@ public class WorldUtils {
 				continue;
 
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-			
-			if (REPLACEABLE_BLOCKS.contains(neighborBlock))
+
+			if (neighborBlock.getDefaultState().getMaterial().isReplaceable())
 				continue;
 
 			Vec3d vec = getLegitLookPos(pos.offset(d), d.getOpposite(), true, 5);
@@ -145,9 +142,9 @@ public class WorldUtils {
 				if (forceLegit) {
 					continue;
 				}
-				
+
 				vec = getLegitLookPos(pos.offset(d), d.getOpposite(), false, 5);
-				
+
 				if (vec == null) {
 					continue;
 				}
@@ -180,13 +177,13 @@ public class WorldUtils {
 
 		return false;
 	}
-	
+
 	public static boolean airPlaceBlock(BlockPos pos, int slot, SettingRotate sr, boolean forceLegit, boolean swingHand) {
 		return airPlaceBlock(pos, slot, !sr.state ? 0 : sr.getRotateMode() + 1, forceLegit, swingHand);
 	}
 
 	public static boolean airPlaceBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean swingHand) {
-		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
+		if (!World.isInBuildLimit(pos) || !isBlockEmpty(pos))
 			return false;
 
 		if (slot != mc.player.inventory.selectedSlot && slot >= 0 && slot <= 8)
@@ -195,7 +192,7 @@ public class WorldUtils {
 		for (Direction d : Direction.values()) {
 			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255))
 				continue;
-			
+
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
 			Vec3d vec = Vec3d.of(pos).add(0.5 + d.getOffsetX() * 0.5, 0.5 + d.getOffsetY() * 0.5, 0.5 + d.getOffsetZ() * 0.5);
 
@@ -226,11 +223,11 @@ public class WorldUtils {
 
 		return false;
 	}
-	
+
 	public static Vec3d getLegitLookPos(BlockPos pos, Direction dir, boolean raycast, int res) {
 		return getLegitLookPos(new Box(pos), dir, raycast, res, 0.01);
 	}
-	
+
 	public static Vec3d getLegitLookPos(Box box, Direction dir, boolean raycast, int res, double extrude) {
 		Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
 		Vec3d blockPos = new Vec3d(box.minX, box.minY, box.minZ).add(
@@ -244,10 +241,10 @@ public class WorldUtils {
 						(dir.getAxis() == Axis.X ? 0 : i * box.getXLength()),
 						(dir.getAxis() == Axis.Y ? 0 : dir.getAxis() == Axis.Z ? j * box.getYLength() : i * box.getYLength()),
 						(dir.getAxis() == Axis.Z ? 0 : j * box.getZLength()));
-				
+
 				if (eyePos.distanceTo(lookPos) > 4.55)
 					continue;
-				
+
 				if (raycast) {
 					if (mc.world.raycast(new RaycastContext(eyePos, lookPos,
 							RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player)).getType() == HitResult.Type.MISS) {
@@ -263,7 +260,7 @@ public class WorldUtils {
 	}
 
 	public static boolean isBlockEmpty(BlockPos pos) {
-		if (!REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(pos).getBlock())) {
+		if (!mc.world.getBlockState(pos).getMaterial().isReplaceable()) {
 			return false;
 		}
 
@@ -283,7 +280,7 @@ public class WorldUtils {
 
 		for (Direction d : Direction.values()) {
 			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255)
-					|| REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(pos.offset(d)).getBlock())
+					|| mc.world.getBlockState(pos.offset(d)).getMaterial().isReplaceable()
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 									pos.getY() + 0.5 + d.getOffsetY() * 0.5,

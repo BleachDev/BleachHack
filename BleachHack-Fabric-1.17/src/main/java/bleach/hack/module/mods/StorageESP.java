@@ -40,7 +40,7 @@ import bleach.hack.util.RenderUtils;
 import bleach.hack.util.shader.OutlineShaderManager;
 import bleach.hack.util.shader.StaticShaders;
 import bleach.hack.util.shader.StringShaderEffect;
-import bleach.hack.util.world.WorldHelper;
+import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -120,7 +120,7 @@ public class StorageESP extends Module {
 		blockEntities.clear();
 		entities.clear();
 
-		for (BlockEntity be: WorldHelper.getBlockEntities()) {
+		for (BlockEntity be: WorldUtils.getBlockEntities()) {
 			float[] color = getColorForBlock(be);
 
 			if (color != null) {

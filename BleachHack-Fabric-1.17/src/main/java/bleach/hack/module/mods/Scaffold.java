@@ -122,8 +122,8 @@ public class Scaffold extends Module {
 		if (getSetting(6).asToggle().state
 				&& InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
 
-			if (WorldUtils.REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock())
-					&& !WorldUtils.REPLACEABLE_BLOCKS.contains(mc.world.getBlockState(mc.player.getBlockPos().down(2)).getBlock())
+			if (mc.world.getBlockState(mc.player.getBlockPos().down()).getMaterial().isReplaceable()
+					&& !mc.world.getBlockState(mc.player.getBlockPos().down(2)).getMaterial().isReplaceable()
 					&& mc.player.getVelocity().y > 0) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.1, mc.player.getVelocity().z);
 
