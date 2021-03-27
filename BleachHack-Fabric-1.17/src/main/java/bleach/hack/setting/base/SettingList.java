@@ -262,10 +262,10 @@ public abstract class SettingList<E> extends SettingBase {
 					int longest = toDraw.stream().map(e -> textRenderer.getWidth(getStringFromItem(e))).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
 
 					RenderSystem.getModelViewStack().push();
-					RenderSystem.getModelViewStack().translate(0f, 0f, 200f);
+					RenderSystem.getModelViewStack().translate(0f, 0f, 150f);
 					
 					matrix.push();
-					matrix.translate(0f, 0f, 200f);
+					matrix.translate(0f, 0f, 15f);
 
 					for (E e: toDraw) {
 						drawSearchEntry(matrix, e, inputField.x, curY, longest + 23, 16, mouseX, mouseY);
