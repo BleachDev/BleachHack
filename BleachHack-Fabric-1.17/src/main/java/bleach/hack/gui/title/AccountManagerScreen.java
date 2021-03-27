@@ -37,6 +37,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.gui.widget.BleachCheckbox;
 import bleach.hack.gui.widget.TextPassFieldWidget;
@@ -48,7 +49,6 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -231,6 +231,7 @@ public class AccountManagerScreen extends WindowScreen {
 					x + 2, y + 2,
 					x + height - 2, y + height - 2,
 					0x60d86ceb);
+
 			DrawableHelper.drawTexture(matrix,
 					x + 3, y + 3,
 					(int) (pixelSize * 8), (int) (pixelSize * 8),
@@ -423,10 +424,10 @@ public class AccountManagerScreen extends WindowScreen {
 
 		public boolean bindSkin() {
 			if (textures.containsKey(Type.SKIN)) {
-				MinecraftClient.getInstance().getTextureManager().bindTexture(textures.get(Type.SKIN));
+				RenderSystem.setShaderTexture(0, textures.get(Type.SKIN));
 				//System.out.println("Binded custom skin: " + skin);
 			} else {
-				MinecraftClient.getInstance().getTextureManager().bindTexture(DefaultSkinHelper.getTexture());
+				RenderSystem.setShaderTexture(0, DefaultSkinHelper.getTexture());
 			}
 
 			return true;
@@ -434,7 +435,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 		public boolean bindCape() {
 			if (textures.containsKey(Type.CAPE)) {
-				MinecraftClient.getInstance().getTextureManager().bindTexture(textures.get(Type.CAPE));
+				RenderSystem.setShaderTexture(0, textures.get(Type.CAPE));
 				return true;
 			}
 
