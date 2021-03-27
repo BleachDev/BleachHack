@@ -1,15 +1,17 @@
+
 # BleachHack
-![](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total)
-![](https://img.shields.io/tokei/lines/github/BleachDrinker420/bleachhack-1.14)
-![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14)
-![](https://img.shields.io/github/last-commit/bleachdrinker420/bleachhack-1.14)
-![](https://img.shields.io/badge/daily%20commit-yes-blue)
+![](https://img.shields.io/github/downloads/bleachdrinker420/bleachhack-1.14/total?style=flat-square)
+![](https://img.shields.io/tokei/lines/github/BleachDrinker420/bleachhack-1.14?style=flat-square)
+![](https://img.shields.io/github/languages/code-size/bleachdrinker420/bleachhack-1.14?style=flat-square)
+![](https://img.shields.io/github/last-commit/bleachdrinker420/bleachhack-1.14?style=flat-square)
+![](https://img.shields.io/badge/daily%20commit-yes-blue?style=flat-square)
+![](https://img.shields.io/discord/620600892718055434?style=flat-square)
 
 Very cool client.
 
 Works on fabric 1.16 & 1.17 Snapshots (1.14-1.15 is discontinued).
 
-> Join The Discord: https://discord.gg/b5Wc4nQ
+> BleachHack Discord Server: https://discord.gg/b5Wc4nQ
 
 ## Installation:
 ### For normal people:
@@ -17,9 +19,10 @@ Works on fabric 1.16 & 1.17 Snapshots (1.14-1.15 is discontinued).
 Download [fabric for minecraft 1.16/1.17](https://fabricmc.net/use/).
 Download the latest version of BleachHack for your Minecraft version [from the releases section](https://github.com/BleachDrinker420/BleachHack/releases).
 
-On Windows: type %appdata% into the location field of the Windows Explorer; then open '.minecraft'.
 
-On Mac: click on the desktop, press Command+Shift+G, type ~/Library and press enter; then open 'Application Support' and finally '.minecraft'.
+On Windows: Type %appdata% into the Windows search bar; open the folder that comes up and then open '.minecraft'.
+
+On Mac: Click on the desktop, press Command+Shift+G, type ~/Library and press enter; then open 'Application Support' and finally '.minecraft'.
 
 On Linux: in a terminal window, type 'xdg-open ~/.minecraft'... or if you like working at the commandline, 'cd ~/.minecraft'.
 
@@ -29,7 +32,7 @@ That's where you'll put any mods you want to install.
 ### For (200 IQ) developers:
 
 Download the project.
-Start A Command Prompt in the BleachHack-Fabric-(*Version*) folder.
+Start A Command Prompt/Terminal in the BleachHack-Fabric-(*Version*) folder.
 Generate the needed files for your preferred IDE.
 
 ***Eclipse:***
@@ -41,9 +44,9 @@ Generate the needed files for your preferred IDE.
   > chmod +x ./gradlew  
   >./gradlew genSources eclipse
 
-  Start a new workspace in eclipse
-  Click File > Import... > Gradle > Gradle Project
-  Select the BleachHack-Fabric-(*Version*) folder
+  Start a new workspace in eclipse.
+  Click File > Import... > Gradle > Gradle Project.
+  Select the BleachHack-Fabric-(*Version*) folder.
 
 ***Other IDE's:***
 
