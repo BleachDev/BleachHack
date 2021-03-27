@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Set;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
 import bleach.hack.gui.widget.BleachScrollbar;
@@ -260,6 +261,9 @@ public abstract class SettingList<E> extends SettingBase {
 					int curY = inputField.y - 4 - toDraw.size() * 17;
 					int longest = toDraw.stream().map(e -> textRenderer.getWidth(getStringFromItem(e))).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
 
+					RenderSystem.getModelViewStack().push();
+					RenderSystem.getModelViewStack().translate(0f, 0f, 200f);
+					
 					matrix.push();
 					matrix.translate(0f, 0f, 200f);
 
@@ -269,6 +273,9 @@ public abstract class SettingList<E> extends SettingBase {
 					}
 
 					matrix.pop();
+					
+					RenderSystem.getModelViewStack().pop();
+					RenderSystem.applyModelViewMatrix();
 				}
 			}
 		}
