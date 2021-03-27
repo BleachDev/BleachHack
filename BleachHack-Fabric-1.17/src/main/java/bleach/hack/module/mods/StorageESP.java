@@ -167,7 +167,7 @@ public class StorageESP extends Module {
 				}
 
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawOutline(box, e.getValue()[0], e.getValue()[1], e.getValue()[2], (float) getSetting(2).asSlider().getValue());
+					RenderUtils.drawOutline(box, e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f, (float) getSetting(2).asSlider().getValue());
 				}
 			}
 
@@ -186,7 +186,7 @@ public class StorageESP extends Module {
 				}
 
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawOutline(box, e.getValue()[0], e.getValue()[1], e.getValue()[2], (float) getSetting(2).asSlider().getValue());
+					RenderUtils.drawOutline(box, e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f, (float) getSetting(2).asSlider().getValue());
 				}
 			}
 		}

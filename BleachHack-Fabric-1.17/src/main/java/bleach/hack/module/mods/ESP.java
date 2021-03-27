@@ -117,7 +117,7 @@ public class ESP extends Module {
 					lastShaderWidth = getSetting(1).asSlider().getValue();
 					lastShaderMode = getSetting(0).asMode().mode;
 					shaderUnloaded = false;
-					
+
 					OutlineShaderManager.loadShader(shader);
 				} catch (JsonSyntaxException | IOException e) {
 					e.printStackTrace();
@@ -139,12 +139,13 @@ public class ESP extends Module {
 
 				float[] color = getColorForEntity(e);
 				if (color != null) {
-					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-						RenderUtils.drawOutline(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(2).asSlider().getValue());
-					}
 
 					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
 						RenderUtils.drawFill(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
+					}
+
+					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
+						RenderUtils.drawOutline(e.getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
 					}
 				}
 			}
@@ -157,12 +158,12 @@ public class ESP extends Module {
 
 		if (color != null) {
 			if (getSetting(4).asToggle().state) {
-				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
-					RenderUtils.drawFill(event.getEntity().getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
-				}
-
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
 					RenderUtils.drawOutline(event.getEntity().getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
+				}
+
+				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
+					RenderUtils.drawFill(event.getEntity().getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
 				}
 			}
 

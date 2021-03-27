@@ -22,13 +22,16 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 
@@ -44,130 +47,94 @@ public class RenderUtils {
 
 	public static void drawFilledBox(Box box, float r, float g, float b, float a, float width) {
 		setup();
-		
+
 		MatrixStack matrix = matrixFromOrigin();
-		Matrix4f model = matrix.peek().getModel();
+
+		Tessellator tessellator = RenderSystem.renderThreadTesselator();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		// Fill
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
-		buffer.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-		WorldRenderer.drawBox(matrix, buffer, box, r, g, b, a / 2f);
+		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+		Vertexer.vertexBoxQuads(matrix, buffer, box, r, g, b, a);
 		tessellator.draw();
 
 		// Outline
+		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
 		RenderSystem.lineWidth(width);
-		buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.maxZ).color(r, g, b, 0f).next();
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.maxZ).color(r, g, b, 0f).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.minZ).color(r, g, b, 0f).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
+
+		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+		Vertexer.vertexBoxLines(matrix, buffer, box, r, g, b, a);
 		tessellator.draw();
 
 		cleanup();
 	}
-	
+
 	public static void drawFill(BlockPos blockPos, float r, float g, float b, float a) {
 		drawFill(new Box(blockPos), r, g, b, a);
 	}
 
 	public static void drawFill(Box box, float r, float g, float b, float a) {
 		setup();
-		
+
 		MatrixStack matrix = matrixFromOrigin();
 
-		// Fill
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
-		buffer.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-		WorldRenderer.drawBox(matrix, buffer, box, r, g, b, a / 2f);
+
+		// Fill
+		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+		Vertexer.vertexBoxQuads(matrix, buffer, box, r, g, b, a);
 		tessellator.draw();
 
 		cleanup();
 	}
 
-	public static void drawOutline(BlockPos blockPos, float r, float g, float b, float a) {
-		drawOutline(new Box(blockPos), r, g, b, a);
-	}
-	
-	public static void drawOutline(Box box, float r, float g, float b, float a) {
-		drawOutline(box, r, g, b, a, 2.5f);
+	public static void drawOutline(BlockPos blockPos, float r, float g, float b, float a, float width) {
+		drawOutline(new Box(blockPos), r, g, b, a, width);
 	}
 
 	public static void drawOutline(Box box, float r, float g, float b, float a, float width) {
 		setup();
-		
-		MatrixStack matrix = matrixFromOrigin();
-		Matrix4f model = matrix.peek().getModel();
 
-		RenderSystem.lineWidth(width);
-		Tessellator tessellator = Tessellator.getInstance();
+		MatrixStack matrix = matrixFromOrigin();
+
+		Tessellator tessellator = RenderSystem.renderThreadTesselator();
 		BufferBuilder buffer = tessellator.getBuffer();
 
 		// Outline
-		buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.minZ).color(r, g, b, a).next();
-		
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
-		tessellator.draw();
-		
-		buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.minZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.minZ).color(r, g, b, a).next();
-		tessellator.draw();
-		
-		buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-		buffer.vertex(model, (float) box.maxX, (float) box.minY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.maxX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
-		tessellator.draw();
-		
-		buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-		buffer.vertex(model, (float) box.minX, (float) box.minY, (float) box.maxZ).color(r, g, b, a).next();
-		buffer.vertex(model, (float) box.minX, (float) box.maxY, (float) box.maxZ).color(r, g, b, a).next();
+		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+		RenderSystem.lineWidth(width);
+
+		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+		Vertexer.vertexBoxLines(matrix, buffer, box, r, g, b, a);
 		tessellator.draw();
 
 		cleanup();
 	}
 
-	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float t) {
+	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float width) {
 		setup();
-		
-		MatrixStack matrix = matrixFromOrigin();
-		Matrix4f model = matrix.peek().getModel();
-		
-		RenderSystem.lineWidth(t);
 
-		Tessellator tessellator = Tessellator.getInstance();
+		MatrixStack matrix = matrixFromOrigin();
+
+		Tessellator tessellator = RenderSystem.renderThreadTesselator();
 		BufferBuilder buffer = tessellator.getBuffer();
-		buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-		buffer.vertex(model, (float) x1, (float) y1, (float) z1).color(r, g, b, 0.0F).next();
-		buffer.vertex(model, (float) x1, (float) y1, (float) z1).color(r, g, b, 1.0F).next();
-		buffer.vertex(model, (float) x2, (float) y2, (float) z2).color(r, g, b, 1.0F).next();
+
+		// Line
+		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+		RenderSystem.lineWidth(width);
+
+		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+		Vertexer.vertexLine(matrix, buffer, (float) x1, (float) y1, (float) z1, (float) x2, (float) y2, (float) z2, r, g, b, 0.5f);
 		tessellator.draw();
 
 		cleanup();
 	}
-	
+
 	public static MatrixStack matrixFromOrigin() {
 		MatrixStack matrix = new MatrixStack();
 
@@ -180,23 +147,108 @@ public class RenderUtils {
 		return matrix;
 	}
 
-	/*public static void offsetRender() {
-		Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
-		Vec3d camPos = camera.getPos();
-		RenderSystem.rotatef(MathHelper.wrapDegrees(camera.getPitch()), 1f, 0f, 0f);
-		RenderSystem.rotatef(MathHelper.wrapDegrees(camera.getYaw() + 180.0f), 0f, 1f, 0f);
-		RenderSystem.translated(-camPos.x, -camPos.y, -camPos.z);
-	}*/
-
 	public static void setup() {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.lineWidth(2.5f);
 		RenderSystem.disableTexture();
 	}
 
 	public static void cleanup() {
+		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
-		RenderSystem.enableBlend();
+	}
+
+	public static class Vertexer {
+
+		public static void vertexBoxQuads(MatrixStack matrix, VertexConsumer vertexConsumer, Box box, float r, float g, float b, float a) {
+			float x1 = (float) box.minX;
+			float y1 = (float) box.minY;
+			float z1 = (float) box.minZ;
+			float x2 = (float) box.maxX;
+			float y2 = (float) box.maxY;
+			float z2 = (float) box.maxZ;
+
+			// Bottom
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y1, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y1, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z2).color(r, g, b, a).next();
+
+			// X-
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y2, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y2, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z1).color(r, g, b, a).next();
+
+			// X+
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y1, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y1, z2).color(r, g, b, a).next();
+
+			// Z-
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y2, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y1, z1).color(r, g, b, a).next();
+
+			// Z+
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y1, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y2, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z2).color(r, g, b, a).next();
+
+			// Top
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y2, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z2).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z1).color(r, g, b, a).next();
+			vertexConsumer.vertex(matrix.peek().getModel(), x1, y2, z1).color(r, g, b, a).next();
+		}
+
+		public static void vertexBoxLines(MatrixStack matrix, VertexConsumer vertexConsumer, Box box, float r, float g, float b, float a) {
+			float x1 = (float) box.minX;
+			float y1 = (float) box.minY;
+			float z1 = (float) box.minZ;
+			float x2 = (float) box.maxX;
+			float y2 = (float) box.maxY;
+			float z2 = (float) box.maxZ;
+
+			// Bottom
+			vertexLine(matrix, vertexConsumer, x1, y1, z1, x2, y1, z1, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x2, y1, z1, x2, y1, z2, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x2, y1, z2, x1, y1, z2, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x1, y1, z2, x1, y1, z1, r, g, b, a);
+
+			// Pillars
+			vertexLine(matrix, vertexConsumer, x1, y1, z1, x1, y2, z1, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x2, y1, z1, x2, y2, z1, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x2, y1, z2, x2, y2, z2, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x1, y1, z2, x1, y2, z2, r, g, b, a);
+
+			// Top
+			vertexLine(matrix, vertexConsumer, x1, y2, z1, x2, y2, z1, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x2, y2, z1, x2, y2, z2, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x2, y2, z2, x1, y2, z2, r, g, b, a);
+			vertexLine(matrix, vertexConsumer, x1, y2, z2, x1, y2, z1, r, g, b, a);
+		}
+
+		public static void vertexLine(MatrixStack matrix, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, float r, float g, float b, float a) {
+			Matrix4f model = matrix.peek().getModel();
+			Matrix3f normal = matrix.peek().getNormal();
+
+			Vec3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
+
+			vertexConsumer.vertex(model, x1, y1, z1).color(r, g, b, a).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+			vertexConsumer.vertex(model, x2, y2, z2).color(r, g, b, a).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+		}
+
+		public static Vec3f getNormal(Matrix3f normal, float x1, float y1, float z1, float x2, float y2, float z2) {
+			float xNormal = x2 - x1;
+			float yNormal = y2 - y1;
+			float zNormal = z2 - z1;
+			float normalSqrt = MathHelper.sqrt(xNormal * xNormal + yNormal * yNormal + zNormal * zNormal);
+
+			return new Vec3f(xNormal / normalSqrt, yNormal / normalSqrt, zNormal / normalSqrt);
+		}
 	}
 }
