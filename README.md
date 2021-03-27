@@ -55,7 +55,7 @@ Generate the needed files for your preferred IDE.
 
 ## Recommended Mods
 
-Here are some nice to have mods that are compatible with BleachHack, none if these require Fabric API.
+Here are some nice to have mods that are compatible with BleachHack, none of these require Fabric API.
 
 ### [Multiconnect](https://github.com/Earthcomputer/multiconnect)
 Multiconnect allows you to connect to any 1.9-1.16 server from a 1.16 client.
