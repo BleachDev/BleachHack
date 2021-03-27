@@ -124,7 +124,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 
 	@Overwrite
-	public float method_3151() {
+	public float getMountJumpStrength() {
 		return ModuleManager.getModule(EntityControl.class).isToggled()
 				&& ModuleManager.getModule(EntityControl.class).getSetting(2).asToggle().state ? 1F : field_3922;
 	}
