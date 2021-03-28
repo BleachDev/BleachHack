@@ -100,7 +100,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0))
+	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0),
+			require = 0 /* TODO: proper inertia fix */)
 	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled()
 				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
@@ -108,7 +109,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0))
+	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0),
+			require = 0 /* TODO: proper inertia fix */)
 	private void updateNausea_openScreen(MinecraftClient player, Screen screen) {
 		if (!ModuleManager.getModule(BetterPortal.class).isToggled()
 				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
