@@ -17,32 +17,43 @@
  */
 package bleach.hack.module.mods;
 
+import org.apache.commons.lang3.RandomUtils;
+
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventClientMove;
+import bleach.hack.event.events.EventReadPacket;
+import bleach.hack.event.events.EventSendMovementPackets;
+import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
+import bleach.hack.util.FabricReflect;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class ElytraFly extends Module {
 
 	public ElytraFly() {
 		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
-				new SettingMode("Mode", "Normal", "Control", "BruhFly").withDesc("Elytrafly mode"),
-				new SettingSlider("Speed", 0, 5, 0.8, 2).withDesc("Elytra speed"));
+				new SettingMode("Mode", "AutoBoost", "Boost", "Control", "BruhFly", "PakètFly").withDesc("Elytrafly mode"),
+				new SettingSlider("Boost", 0, 0.15, 0.05, 2).withDesc("Boost speed"),
+				new SettingSlider("MaxBoost", 0, 5, 2.5, 1).withDesc("Max boost speed"),
+				new SettingSlider("Speed", 0, 5, 0.8, 2).withDesc("Speed for all the other modes"),
+				new SettingSlider("Packets", 1, 10, 2, 0).withDesc("How many packets to send in packet mode"));
 	}
 
 	@Subscribe
 	public void onClientMove(EventClientMove event) {
 		/* Cancel the retarded auto elytra movement */
-		if (getSetting(0).asMode().mode == 1 && mc.player.isFallFlying()) {
+		if (getSetting(0).asMode().mode == 2 && mc.player.isFallFlying()) {
 			if (!mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
 				event.vec3d = new Vec3d(event.vec3d.x, 0, event.vec3d.z);
 			}
@@ -56,46 +67,121 @@ public class ElytraFly extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		Vec3d vec3d = new Vec3d(0, 0, getSetting(1).asSlider().getValue())
-				.rotateX(getSetting(0).asMode().mode == 1 ? 0 : -(float) Math.toRadians(mc.player.pitch))
+		Vec3d vec3d = new Vec3d(0, 0, getSetting(3).asSlider().getValue())
 				.rotateY(-(float) Math.toRadians(mc.player.yaw));
 
-		// if (getSetting(0).toMode().mode == 1) vec3d = new Vec3d(vec3d.x, 0, vec3d.z);
+		double currentVel = Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().y) + Math.abs(mc.player.getVelocity().z);
+		float radianYaw = (float) Math.toRadians(mc.player.yaw);
+		float boost = (float) getSetting(1).asSlider().getValue();
 
-		if (mc.player.isFallFlying()) {
-			if (getSetting(0).asMode().mode == 0 && mc.options.keyForward.isPressed()) {
-				mc.player.setVelocity(
-						mc.player.getVelocity().x + vec3d.x + (vec3d.x - mc.player.getVelocity().x),
-						mc.player.getVelocity().y + vec3d.y + (vec3d.y - mc.player.getVelocity().y),
-						mc.player.getVelocity().z + vec3d.z + (vec3d.z - mc.player.getVelocity().z));
-			} else if (getSetting(0).asMode().mode == 1) {
-				if (mc.options.keyBack.isPressed())
-					vec3d = vec3d.multiply(-1);
-				if (mc.options.keyLeft.isPressed())
-					vec3d = vec3d.rotateY((float) Math.toRadians(90));
-				if (mc.options.keyRight.isPressed())
-					vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
-				if (mc.options.keyJump.isPressed())
-					vec3d = vec3d.add(0, getSetting(1).asSlider().getValue(), 0);
-				if (mc.options.keySneak.isPressed())
-					vec3d = vec3d.add(0, -getSetting(1).asSlider().getValue(), 0);
-				if (!mc.options.keyBack.isPressed() && !mc.options.keyLeft.isPressed()
-						&& !mc.options.keyRight.isPressed() && !mc.options.keyForward.isPressed()
-						&& !mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed())
-					vec3d = Vec3d.ZERO;
-				mc.player.setVelocity(vec3d.multiply(2));
+		switch (getSetting(0).asMode().mode) {
+			case 0:
+				if (mc.player.isFallFlying() && currentVel <= getSetting(2).asSlider().getValue()) {
+					if (mc.options.keyBack.isPressed()) {
+						mc.player.addVelocity(MathHelper.sin(radianYaw) * boost, 0, MathHelper.cos(radianYaw) * -boost);
+					} else if (mc.player.pitch > 0) {
+						mc.player.addVelocity(MathHelper.sin(radianYaw) * -boost, 0, MathHelper.cos(radianYaw) * boost);
+					}
+				}
+
+				break;
+			case 1:
+				if (mc.player.isFallFlying() && currentVel <= getSetting(2).asSlider().getValue()) {
+					if (mc.options.keyForward.isPressed()) {
+						mc.player.addVelocity(MathHelper.sin(radianYaw) * -boost, 0, MathHelper.cos(radianYaw) * boost);
+					} else if (mc.options.keyBack.isPressed()) {
+						mc.player.addVelocity(MathHelper.sin(radianYaw) * boost, 0, MathHelper.cos(radianYaw) * -boost);
+					}
+				}
+
+				break;
+			case 2:
+				if (mc.player.isFallFlying() && mc.options.keyForward.isPressed()) {
+					mc.player.setVelocity(
+							mc.player.getVelocity().x + vec3d.x + (vec3d.x - mc.player.getVelocity().x),
+							mc.player.getVelocity().y + vec3d.y + (vec3d.y - mc.player.getVelocity().y),
+							mc.player.getVelocity().z + vec3d.z + (vec3d.z - mc.player.getVelocity().z));
+				}
+
+				break;
+			case 3:
+				if (shouldPacketFly()) {
+					mc.player.setVelocity(vec3d);
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
+							mc.player.getX() + vec3d.x, mc.player.getY() + vec3d.y, mc.player.getZ() + vec3d.z, true));
+				}
+
+				break;
+			case 4:
+				if (shouldPacketFly()) {
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+					double randMult = RandomUtils.nextDouble(0.9, 1.1);
+
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
+							mc.player.getX() + vec3d.x * randMult,
+							mc.player.getY(),
+							mc.player.getZ() + vec3d.z * randMult,
+							false));
+
+					for (int i = 0; i < 6; i++) {
+						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
+								mc.player.getX() + vec3d.x * (randMult + i),
+								mc.player.getY() - 0.0001,
+								mc.player.getZ() + vec3d.z * (randMult + i),
+								true));
+					}
+				}
+		}
+	}
+
+	// Packet moment
+
+	@Subscribe
+	public void onMovement(EventSendMovementPackets event) {
+		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
+			mc.player.setVelocity(Vec3d.ZERO);
+			event.setCancelled(true);
+		}
+	}
+
+	@Subscribe
+	public void onMovement(EventClientMove event) {
+		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
+			event.setCancelled(true);
+		}
+	}
+
+	@Subscribe
+	public void onReadPacket(EventReadPacket event) {
+		if (getSetting(0).asMode().mode == 4 && shouldPacketFly() && event.getPacket() instanceof PlayerPositionLookS2CPacket) {
+			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
+
+			FabricReflect.writeField(p, mc.player.yaw, "field_12391", "yaw");
+			FabricReflect.writeField(p, mc.player.pitch, "field_12393", "pitch");
+		}
+	}
+
+	@Subscribe
+	public void onSendPacket(EventSendPacket event) {
+		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
+			if (event.getPacket() instanceof PlayerMoveC2SPacket.LookOnly) {
+				event.setCancelled(true);
+				return;
 			}
-		} 
-		
-		if (getSetting(0).asMode().mode == 2 && !mc.player.isOnGround()
-				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA) {
-			/* I tried packet mode and got whatever the fuck **i mean frick** this is */
-			if (!mc.options.keySneak.isPressed()) {
-				mc.player.setVelocity(vec3d);
-				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_FALL_FLYING));
-				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
-						mc.player.getX() + vec3d.x, mc.player.getY() + vec3d.y, mc.player.getZ() + vec3d.z, true));
+
+			if (event.getPacket() instanceof PlayerMoveC2SPacket.Both) {
+				event.setCancelled(true);
+				PlayerMoveC2SPacket p = (PlayerMoveC2SPacket) event.getPacket();
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(p.getX(0), p.getY(0), p.getZ(0), p.isOnGround()));
+				return;
 			}
 		}
+	}
+
+	private boolean shouldPacketFly() {
+		return !mc.player.isOnGround()
+				&& !mc.options.keySneak.isPressed()
+				&& mc.player.inventory.getArmorStack(2).getItem() == Items.ELYTRA;
 	}
 }
