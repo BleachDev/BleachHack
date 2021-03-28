@@ -77,7 +77,7 @@ public class MixinGameRenderer {
             RenderSystem.disableDepthTest();
             RenderSystem.enableTexture();
             RenderSystem.resetTextureMatrix();
-            this.shader.render(tickDelta);
+            event.getEffect().render(tickDelta);
 		}
 
 		return null;
