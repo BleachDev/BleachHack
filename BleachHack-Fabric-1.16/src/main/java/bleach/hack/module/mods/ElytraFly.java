@@ -43,7 +43,7 @@ public class ElytraFly extends Module {
 
 	public ElytraFly() {
 		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
-				new SettingMode("Mode", "AutoBoost", "Boost", "Control", "BruhFly", "PakètFly").withDesc("Elytrafly mode"),
+				new SettingMode("Mode", "AutoBoost", "Boost", "Control", "BruhFly", "Pak\u00e8tFly").withDesc("Elytrafly mode"),
 				new SettingSlider("Boost", 0, 0.15, 0.05, 2).withDesc("Boost speed"),
 				new SettingSlider("MaxBoost", 0, 5, 2.5, 1).withDesc("Max boost speed"),
 				new SettingSlider("Speed", 0, 5, 0.8, 2).withDesc("Speed for all the other modes"),
