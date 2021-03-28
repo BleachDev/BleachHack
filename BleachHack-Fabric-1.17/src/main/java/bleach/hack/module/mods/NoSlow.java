@@ -30,9 +30,13 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.ingame.BookScreen;
+import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
+import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
@@ -110,7 +114,13 @@ public class NoSlow extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		/* Inventory */
-		if (getSetting(6).asToggle().state && mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
+		if (getSetting(6).asToggle().state && mc.currentScreen != null
+				&& !(mc.currentScreen instanceof ChatScreen)
+				&& !(mc.currentScreen instanceof BookScreen)
+				&& !(mc.currentScreen instanceof SignEditScreen)
+				&& !(mc.currentScreen instanceof CreativeInventoryScreen
+						&& ((CreativeInventoryScreen) mc.currentScreen).getSelectedTab() == ItemGroup.SEARCH.getIndex())) {
+
 			for (KeyBinding k : new KeyBinding[] { mc.options.keyForward, mc.options.keyBack,
 					mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump, mc.options.keySprint }) {
 				k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
