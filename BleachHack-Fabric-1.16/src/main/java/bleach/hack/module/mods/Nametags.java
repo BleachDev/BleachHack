@@ -47,6 +47,8 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import bleach.hack.BleachHack;
+import bleach.hack.command.commands.CmdEntityStats;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
@@ -99,7 +101,8 @@ public class Nametags extends Module {
 						new SettingToggle("Health", true).withDesc("Shows the health of the entity"),
 						new SettingToggle("Tamed", false).withDesc("Shows if the animal is tamed").withChildren(
 								new SettingMode("If Not", "Show", "Hide").withDesc("What to show if the animal isn't tame")),
-						new SettingToggle("Owner", true).withDesc("Hows the owner of the pet if its tameable")),
+						new SettingToggle("Owner", true).withDesc("Hows the owner of the pet if its tameable"),
+						new SettingToggle("HorseStats", false).withDesc("Shows the entities stats if its a horse")),
 				new SettingToggle("Mobs", false).withDesc("Show mob nametags").withChildren(
 						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags"),
 						new SettingToggle("Name", true).withDesc("Shows the name of the entity"),
@@ -182,50 +185,24 @@ public class Nametags extends Module {
 				lines.add(0, Formatting.GOLD + "\"" + e.getStack().getName().getString() + Formatting.GOLD + "\"");
 			}
 		} else if (event.getEntity() instanceof LivingEntity) {
-			if (event.getEntity() == mc.player || event.getEntity().hasPassenger(mc.player) || mc.player.hasPassenger(event.getEntity()))
+			if (event.getEntity() == mc.player || event.getEntity().hasPassenger(mc.player) || mc.player.hasPassenger(event.getEntity())) {
 				return;
+			}
 
 			LivingEntity e = (LivingEntity) event.getEntity();
-
-			// Color before name
-			Formatting color = (e.isInvisible() ? Formatting.YELLOW
-					: e instanceof Monster ? Formatting.DARK_PURPLE
-							: EntityUtils.isAnimal(e) ? Formatting.GREEN
-									: e.isSneaking() ? Formatting.GOLD
-											: e instanceof PlayerEntity ? Formatting.RED : Formatting.WHITE);
-
-			String health = getHealthText(e);
 
 			if (e instanceof PlayerEntity && getSetting(2).asToggle().state) {
 				scale = Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 
-				if (getSetting(1).asMode().mode == 1) {
-					if (getSetting(2).asToggle().getChild(1).asToggle().state)
-						lines.add(color + e.getName().getString());
-
-					if (getSetting(2).asToggle().getChild(2).asToggle().state)
-						lines.add(0, health);
-				} else if (getSetting(2).asToggle().getChild(1).asToggle().state || getSetting(2).asToggle().getChild(2).asToggle().state) {
-					lines.add(
-							(getSetting(2).asToggle().getChild(1).asToggle().state ? color + e.getName().getString()
-									+ (getSetting(2).asToggle().getChild(2).asToggle().state ? " " : "") : "")
-							+ (getSetting(2).asToggle().getChild(2).asToggle().state ? health : ""));
-				}
+				addNameHealthLine(lines, e, BleachHack.friendMang.has(e.getName().getString()) ? Formatting.AQUA : Formatting.RED,
+						getSetting(2).asToggle().getChild(1).asToggle().state,
+						getSetting(2).asToggle().getChild(2).asToggle().state);
 			} else if (EntityUtils.isAnimal(e) && getSetting(3).asToggle().state) {
 				scale = Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 
-				if (getSetting(1).asMode().mode == 1) {
-					if (getSetting(3).asToggle().getChild(1).asToggle().state)
-						lines.add(color + e.getName().getString());
-
-					if (getSetting(3).asToggle().getChild(2).asToggle().state)
-						lines.add(0, health);
-				} else if (getSetting(3).asToggle().getChild(1).asToggle().state || getSetting(3).asToggle().getChild(2).asToggle().state) {
-					lines.add(
-							(getSetting(3).asToggle().getChild(1).asToggle().state ? color + e.getName().getString()
-									+ (getSetting(3).asToggle().getChild(2).asToggle().state ? " " : "") : "")
-							+ (getSetting(3).asToggle().getChild(2).asToggle().state ? health : ""));
-				}
+				addNameHealthLine(lines, e, Formatting.GREEN,
+						getSetting(3).asToggle().getChild(1).asToggle().state,
+						getSetting(3).asToggle().getChild(2).asToggle().state);
 
 				if (e instanceof HorseBaseEntity || e instanceof TameableEntity) {
 					boolean tame = e instanceof HorseBaseEntity
@@ -235,8 +212,9 @@ public class Nametags extends Module {
 							? ((HorseBaseEntity) e).getOwnerUuid() : ((TameableEntity) e).getOwnerUuid();
 
 					if (getSetting(3).asToggle().getChild(3).asToggle().state && !e.isBaby()
-							&& (getSetting(3).asToggle().getChild(3).asToggle().getChild(0).asMode().mode != 1 || tame))
+							&& (getSetting(3).asToggle().getChild(3).asToggle().getChild(0).asMode().mode != 1 || tame)) {
 						lines.add(0, tame ? Formatting.GREEN + "Tamed: Yes" : Formatting.RED + "Tamed: No");
+					}
 
 					if (getSetting(3).asToggle().getChild(4).asToggle().state && ownerUUID != null) {
 						if (uuidCache.containsKey(ownerUUID)) {
@@ -258,22 +236,22 @@ public class Nametags extends Module {
 							lines.add(0, Formatting.GREEN + "Owner: " + Formatting.GRAY + "Loading...");
 						}
 					}
+
+					if (getSetting(3).asToggle().getChild(5).asToggle().state && e instanceof HorseBaseEntity) {
+						HorseBaseEntity he = (HorseBaseEntity) e;
+
+						lines.add(0, Formatting.GREEN.toString()
+								+ CmdEntityStats.getSpeed(he) + " m/s"
+								+ Formatting.GRAY + " | " + Formatting.GREEN
+								+ CmdEntityStats.getJumpHeight(he) + " Jump");
+					}
 				}
 			} else if (e instanceof Monster && getSetting(4).asToggle().state) {
 				scale = Math.max(getSetting(4).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
 
-				if (getSetting(1).asMode().mode == 1) {
-					if (getSetting(4).asToggle().getChild(1).asToggle().state)
-						lines.add(color + e.getName().getString());
-
-					if (getSetting(4).asToggle().getChild(2).asToggle().state)
-						lines.add(0, health);
-				} else if (getSetting(4).asToggle().getChild(1).asToggle().state || getSetting(3).asToggle().getChild(2).asToggle().state) {
-					lines.add(
-							(getSetting(4).asToggle().getChild(1).asToggle().state ? color + e.getName().getString()
-									+ (getSetting(4).asToggle().getChild(2).asToggle().state ? " " : "") : "")
-							+ (getSetting(4).asToggle().getChild(2).asToggle().state ? health : ""));
-				}
+				addNameHealthLine(lines, e, Formatting.DARK_PURPLE,
+						getSetting(4).asToggle().getChild(1).asToggle().state,
+						getSetting(4).asToggle().getChild(2).asToggle().state);
 			}
 
 			/* Drawing Items */
@@ -396,6 +374,20 @@ public class Nametags extends Module {
 			return Formatting.RED;
 		} else {
 			return Formatting.DARK_RED;
+		}
+	}
+
+	private void addNameHealthLine(List<String> lines, LivingEntity entity, Formatting color, boolean addName, boolean addHealth) {
+		if (getSetting(1).asMode().mode == 1) {
+			if (addName) {
+				lines.add(color + entity.getName().getString());
+			}
+
+			if (addHealth) {
+				lines.add(0, getHealthText(entity));
+			}
+		} else if (addName || addHealth) {
+			lines.add((addName ? color + entity.getName().getString() + (addHealth ? " " : "") : "") + (addHealth ? getHealthText(entity) : ""));
 		}
 	}
 
