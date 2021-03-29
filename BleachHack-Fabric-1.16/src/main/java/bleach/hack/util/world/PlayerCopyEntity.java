@@ -17,6 +17,10 @@
  */
 package bleach.hack.util.world;
 
+import java.util.UUID;
+
+import org.apache.commons.lang3.RandomUtils;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,8 +37,14 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 
 	public PlayerCopyEntity(PlayerEntity player, double x, double y, double z) {
 		super(MinecraftClient.getInstance().world, player.getGameProfile());
-		copyPositionAndRotation(player);
-		yaw = headYaw = bodyYaw = player.yaw;
+
+		this.updateTrackedPosition(player.getX(), player.getY(), player.getZ());
+		this.refreshPositionAfterTeleport(player.getX(), player.getY(), player.getZ());
+		this.pitch = player.pitch;
+		this.yaw = headYaw = bodyYaw = player.yaw;
+		this.setEntityId(RandomUtils.nextInt());
+		this.setUuid(UUID.randomUUID());
+
 		inventory.main.set(inventory.selectedSlot, player.getMainHandStack());
 		inventory.offHand.set(0, player.getOffHandStack());
 		inventory.armor.set(0, player.inventory.armor.get(0));
