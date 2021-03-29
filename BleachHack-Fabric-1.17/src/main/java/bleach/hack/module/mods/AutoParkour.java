@@ -13,10 +13,10 @@ import net.minecraft.util.shape.VoxelShape;
 // credit: https://github.com/Wurst-Imperium/Wurst7/blob/21w11a/src/main/java/net/wurstclient/hacks/ParkourHack.java
 // modified by https://github.com/lasnikprogram
 
-public class AutoJump extends Module {
-	public AutoJump() {
-		super("Auto Jump", KEY_UNBOUND, Category.MOVEMENT,
-				"You jump when you reach a blocks edge (Use this if you are really bad at parkouring)");
+public class AutoParkour extends Module {
+	public AutoParkour() {
+		super("Auto Parkour", KEY_UNBOUND, Category.MOVEMENT,
+				"You jump when you reach a blocks edge (Use this if you are suck at parkouring)");
 	}
 
 	@Subscribe
