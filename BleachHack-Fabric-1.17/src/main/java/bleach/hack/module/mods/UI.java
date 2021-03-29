@@ -98,11 +98,12 @@ public class UI extends Module {
 		infoList.clear();
 
 		int arrayCount = 0;
-		if ((getSetting(0).asToggle().state || getSetting(0).asToggle().getChild(2).asToggle().state) && !mc.options.debugEnabled) {
+		if (getSetting(0).asToggle().state && !mc.options.debugEnabled) {
 			List<String> lines = new ArrayList<>();
 
-			if (getSetting(0).asToggle().getChild(3).asToggle().state)
+			if (getSetting(0).asToggle().getChild(3).asToggle().state) {
 				lines.add(0, "\u00a7a> BleachHack " + BleachHack.VERSION);
+			}
 
 			if (getSetting(0).asToggle().state) {
 				for (Module m : ModuleManager.getModules())
