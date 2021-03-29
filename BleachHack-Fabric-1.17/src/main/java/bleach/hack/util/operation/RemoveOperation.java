@@ -1,5 +1,6 @@
 package bleach.hack.util.operation;
 
+import bleach.hack.util.RenderUtils;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -41,6 +42,11 @@ public class RemoveOperation extends Operation {
 	@Override
 	public boolean verify() {
 		return mc.world.getBlockState(pos).isAir();
+	}
+
+	@Override
+	public void render() {
+		RenderUtils.drawFilledBox(pos, 1f, 0f, 0f, 0.3f);
 	}
 
 }

@@ -12,7 +12,6 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.util.RenderUtils;
 import bleach.hack.util.operation.Operation;
 import bleach.hack.util.operation.OperationList;
-import bleach.hack.util.operation.RemoveOperation;
 import bleach.hack.util.operation.blueprint.OperationBlueprint;
 import bleach.hack.util.operation.blueprint.PlaceDirOperationBlueprint;
 import bleach.hack.util.operation.blueprint.PlaceOperationBlueprint;
@@ -75,7 +74,6 @@ public class AutoBuild extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-
 		if (!active) {
 			ray = (BlockHitResult) mc.player.raycast(40, mc.getTickDelta(), false);
 			Direction dir = ray.getSide();
@@ -103,10 +101,11 @@ public class AutoBuild extends Module {
 		if (current != null) {
 			//RenderUtils.drawOutlineBox(current.getBox(), 1f, 1f, 0f, 0.5f);
 
-			RenderUtils.drawFilledBox(current.getNext().pos, 1f, 1f, 0f, 0.5f);
 			for (Operation o: current.getRemainingOps()) {
-				RenderUtils.drawFilledBox(o.pos, 1f, o instanceof RemoveOperation ? 0f : 1f, 0f, 0.3f);
+				o.render();
 			}
+			
+			RenderUtils.drawOutline(new Box(current.getNext().pos).contract(0.01), 1f, 1f, 0f, 0.5f, 3f);
 		}
 
 		if (ray != null && !active) {
@@ -115,7 +114,7 @@ public class AutoBuild extends Module {
 			RenderUtils.drawFilledBox(new Box(
 					pos.getX() + (dir == Direction.EAST ? 0.98 : 0), pos.getY() + (dir == Direction.UP ? 0.98 : 0), pos.getZ() + (dir == Direction.SOUTH ? 0.98 : 0),
 					pos.getX() + (dir == Direction.WEST ? 0.02 : 1), pos.getY() + (dir == Direction.DOWN ? 0.02 : 1), pos.getZ() + (dir == Direction.NORTH ? 0.02 : 1)),
-					1f, 1f, 0f, 1f);
+					1f, 1f, 0f, 0.3f);
 		}
 	}
 }

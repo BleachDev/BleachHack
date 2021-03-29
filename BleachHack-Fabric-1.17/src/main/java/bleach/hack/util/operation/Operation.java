@@ -11,4 +11,6 @@ public abstract class Operation {
 	public abstract boolean canExecute();
 	public abstract boolean execute();
 	public abstract boolean verify();
+	
+	public abstract void render();
 }
