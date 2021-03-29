@@ -21,6 +21,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventChunkCulling;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
@@ -120,11 +121,13 @@ public class Freecam extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		// mc.player.setSprinting(false);
-		// mc.player.setVelocity(Vec3d.ZERO);
 		mc.player.setOnGround(false);
 		mc.player.getAbilities().setFlySpeed((float) (getSetting(0).asSlider().getValue() / 5));
 		mc.player.getAbilities().flying = true;
 	}
 
+	@Subscribe
+	public void onChunkCull(EventChunkCulling event) {
+		event.setCull(false);
+	}
 }

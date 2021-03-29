@@ -13,6 +13,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventBlockEntityRender;
+import bleach.hack.event.events.EventChunkCulling;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventWorldRender;
@@ -102,6 +103,14 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 		} else {
 			return vertexConsumer.color(red, green, blue, alpha);
 		}
+	}
+	
+	@Redirect(method = "method_34808", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;chunkCullingEnabled:Z", ordinal = 0))
+	private boolean method_34808_chunkCullingEnabled(MinecraftClient client) {
+		EventChunkCulling event = new EventChunkCulling(client.chunkCullingEnabled);
+		BleachHack.eventBus.post(event);
+		
+		return event.shouldCull();
 	}
 
 	@Override

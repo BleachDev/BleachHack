@@ -19,7 +19,7 @@ package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.BiomeColorEvent;
+import bleach.hack.event.events.EventBiomeColor;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventTick;
@@ -108,8 +108,8 @@ public class Ambience extends Module {
 	}
 
 	@Subscribe
-	public void onBiomeColor(BiomeColorEvent event) {
-		int type = event instanceof BiomeColorEvent.Water ? 2 : 1;
+	public void onBiomeColor(EventBiomeColor event) {
+		int type = event instanceof EventBiomeColor.Water ? 2 : 1;
 
 		event.setColor(getCurrentDimSetting().state && getCurrentDimSetting().getChild(type).asToggle().state
 				? getCurrentDimSetting().getChild(type).asToggle().getChild(0).asColor().getRGB() : null);

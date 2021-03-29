@@ -4,14 +4,14 @@ import bleach.hack.event.Event;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 
-public class BiomeColorEvent extends Event {
+public class EventBiomeColor extends Event {
 
 	protected BlockRenderView world;
 	protected BlockPos pos;
 
 	private Integer color = null;
 
-	public static class Grass extends BiomeColorEvent {
+	public static class Grass extends EventBiomeColor {
 
 		public Grass(BlockRenderView world, BlockPos pos) {
 			this.world = world;
@@ -20,7 +20,7 @@ public class BiomeColorEvent extends Event {
 
 	}
 
-	public static class Foilage extends BiomeColorEvent {
+	public static class Foilage extends EventBiomeColor {
 
 		public Foilage(BlockRenderView world, BlockPos pos) {
 			this.world = world;
@@ -29,7 +29,7 @@ public class BiomeColorEvent extends Event {
 
 	}
 
-	public static class Water extends BiomeColorEvent {
+	public static class Water extends EventBiomeColor {
 
 		public Water(BlockRenderView world, BlockPos pos) {
 			this.world = world;
