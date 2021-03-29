@@ -16,7 +16,7 @@ import net.minecraft.util.shape.VoxelShape;
 public class AutoParkour extends Module {
 	public AutoParkour() {
 		super("AutoParkour", KEY_UNBOUND, Category.MOVEMENT,
-				"You jump when you reach a blocks edge (Use this if you are suck at parkouring)");
+				"You jump when you reach the edge of a block (Use this if you suck at parkouring)");
 	}
 
 	@Subscribe
