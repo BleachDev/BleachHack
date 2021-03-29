@@ -33,6 +33,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.world.PlayerCopyEntity;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
@@ -124,6 +125,7 @@ public class Freecam extends Module {
 		mc.player.setOnGround(false);
 		mc.player.abilities.setFlySpeed((float) (getSetting(0).asSlider().getValue() / 5));
 		mc.player.abilities.flying = true;
+		mc.player.setPose(EntityPose.STANDING);
 	}
 
 	@Subscribe
