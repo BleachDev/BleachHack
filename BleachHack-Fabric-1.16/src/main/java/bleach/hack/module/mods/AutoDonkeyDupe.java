@@ -59,7 +59,7 @@ public class AutoDonkeyDupe extends Module {
 
 		if (chest == -1) {
 			BleachLogger.errorMessage("No chests in hotbar");
-			setToggled(false);
+			setEnabled(false);
 			return;
 		}
 
@@ -91,7 +91,7 @@ public class AutoDonkeyDupe extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_ESCAPE)) {
-			setToggled(false);
+			setEnabled(false);
 			return;
 		}
 

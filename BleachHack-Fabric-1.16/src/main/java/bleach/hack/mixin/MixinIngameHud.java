@@ -44,7 +44,7 @@ public class MixinIngameHud {
 
 	@Inject(method = "renderPumpkinOverlay", at = @At("HEAD"), cancellable = true)
 	private void onRenderPumpkinOverlay(CallbackInfo ci) {
-		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(4).asToggle().state) {
+		if (ModuleManager.getModule(NoRender.class).isEnabled() && ModuleManager.getModule(NoRender.class).getSetting(4).asToggle().state) {
 			ci.cancel();
 		}
 	}

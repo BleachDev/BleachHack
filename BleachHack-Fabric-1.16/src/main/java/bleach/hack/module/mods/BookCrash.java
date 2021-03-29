@@ -123,6 +123,6 @@ public class BookCrash extends Module {
 	@Subscribe
 	private void EventDisconnect(EventReadPacket event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state)
-			setToggled(false);
+			setEnabled(false);
 	}
 }

@@ -100,7 +100,7 @@ public class ClickGuiScreen extends WindowScreen {
 	}
 
 	public void onClose() {
-		ModuleManager.getModule(ClickGui.class).setToggled(false);
+		ModuleManager.getModule(ClickGui.class).setEnabled(false);
 		client.openScreen(null);
 	}
 

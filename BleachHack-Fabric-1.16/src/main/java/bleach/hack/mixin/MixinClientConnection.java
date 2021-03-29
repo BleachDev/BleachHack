@@ -84,7 +84,7 @@ public class MixinClientConnection {
 	// Packet kick blocc
 	@Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
 	public void exceptionCaught(ChannelHandlerContext channelHandlerContext, Throwable throwable, CallbackInfo callback) {
-		if (ModuleManager.getModule(AntiChunkBan.class).isToggled()) {
+		if (ModuleManager.getModule(AntiChunkBan.class).isEnabled()) {
 			if (!(throwable instanceof PacketEncoderException)) {
 				BleachLogger.warningMessage("Canceled Defect Packet: " + throwable);
 				callback.cancel();

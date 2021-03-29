@@ -31,6 +31,6 @@ public abstract class MixinLlamaEntity {
 
 	@Inject(method = "canBeControlledByRider", at = @At("HEAD"), cancellable = true)
 	public void canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
-		info.setReturnValue(ModuleManager.getModule(EntityControl.class).isToggled());
+		info.setReturnValue(ModuleManager.getModule(EntityControl.class).isEnabled());
 	}
 }

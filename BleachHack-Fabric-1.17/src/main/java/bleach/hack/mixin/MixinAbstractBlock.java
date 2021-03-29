@@ -17,7 +17,7 @@ public class MixinAbstractBlock {
 
 	@Inject(method = "getAmbientOcclusionLightLevel", at = @At("HEAD"), cancellable = true)
 	public void getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> callback) {
-		if (ModuleManager.getModule(Xray.class).isToggled()) {
+		if (ModuleManager.getModule(Xray.class).isEnabled()) {
 			callback.setReturnValue(1f);
 		}
 	}

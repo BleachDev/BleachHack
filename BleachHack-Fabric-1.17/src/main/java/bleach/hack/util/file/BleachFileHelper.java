@@ -48,8 +48,8 @@ public class BleachFileHelper {
 		for (Module m : ModuleManager.getModules()) {
 			JsonObject mo = new JsonObject();
 
-			if (m.isDefaultToggled() != m.isToggled() && !m.getName().equals("ClickGui") && !m.getName().equals("Freecam")) {
-				mo.add("toggled", new JsonPrimitive(m.isToggled()));
+			if (m.isDefaultEnabled() != m.isEnabled() && !m.getName().equals("ClickGui") && !m.getName().equals("Freecam")) {
+				mo.add("toggled", new JsonPrimitive(m.isEnabled()));
 			}
 
 			if (m.getKey() >= 0 || m.getDefaultKey() >= 0 /* Force saving of modules with a default bind to prevent them reapplying the
@@ -107,11 +107,11 @@ public class BleachFileHelper {
 				JsonObject mo = e.getValue().getAsJsonObject();
 				if (mo.has("toggled")) {
 					try {
-						mod.setToggled(mo.get("toggled").getAsBoolean());
+						mod.setEnabled(mo.get("toggled").getAsBoolean());
 					} catch (Exception ex) {
 						try {
 							BleachLogger.errorMessage("Error enabling " + e.getKey() + ", Disabling!");
-							mod.setToggled(false);
+							mod.setEnabled(false);
 						} catch (Exception ex2) {
 							// ????
 						}

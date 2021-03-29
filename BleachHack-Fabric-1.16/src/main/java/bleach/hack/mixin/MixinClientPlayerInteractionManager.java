@@ -33,9 +33,9 @@ public class MixinClientPlayerInteractionManager {
 	@Shadow private int blockBreakingCooldown;
 	
 	private int getCooldown() {
-		return (ModuleManager.getModule(Nuker.class).isToggled()
+		return (ModuleManager.getModule(Nuker.class).isEnabled()
 				? (int) ModuleManager.getModule(Nuker.class).getSetting(3).asSlider().getValue()
-						: ModuleManager.getModule(SpeedMine.class).isToggled()
+						: ModuleManager.getModule(SpeedMine.class).isEnabled()
 						&& ModuleManager.getModule(SpeedMine.class).getSetting(0).asMode().mode == 1
 						? (int) ModuleManager.getModule(SpeedMine.class).getSetting(2).asSlider().getValue()
 								: 5);

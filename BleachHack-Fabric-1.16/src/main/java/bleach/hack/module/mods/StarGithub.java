@@ -34,6 +34,6 @@ public class StarGithub extends Module {
 			e.printStackTrace();
 		}
 
-		this.setToggled(false);
+		this.setEnabled(false);
 	}
 }

@@ -54,7 +54,7 @@ public class Xray extends Module {
 	}
 	
 	public boolean isVisible(Block block) {
-		return !isToggled() || getSetting(1).asList(Block.class).contains(block);
+		return !isEnabled() || getSetting(1).asList(Block.class).contains(block);
 	}
 
 	@Override

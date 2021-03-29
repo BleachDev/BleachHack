@@ -15,7 +15,7 @@ public class MixinCamera {
 
 	@Inject(method = "getSubmersionType", at = @At("HEAD"), cancellable = true)
 	private void getSubmergedFluidState(CallbackInfoReturnable<CameraSubmersionType> ci) {
-		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(3).asToggle().state) {
+		if (ModuleManager.getModule(NoRender.class).isEnabled() && ModuleManager.getModule(NoRender.class).getSetting(3).asToggle().state) {
 			ci.setReturnValue(CameraSubmersionType.NONE);
 		}
 	}

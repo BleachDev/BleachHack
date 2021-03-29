@@ -39,8 +39,8 @@ public class Module {
 	private int key;
 	private int defaultKey;
 	
-	private boolean toggled = false;
-	private final boolean defaultToggled;
+	private boolean enabled = false;
+	private final boolean defaultEnabled;
 	
 	private Category category;
 	private String desc;
@@ -50,7 +50,7 @@ public class Module {
 		this(nm, k, c, false, d, s);
 	}
 
-	public Module(String nm, int k, Category c, boolean toggled, String d, SettingBase... s) {
+	public Module(String nm, int k, Category c, boolean enabled, String d, SettingBase... s) {
 		name = nm;
 		setKey(k);
 		defaultKey = getKey();
@@ -58,17 +58,17 @@ public class Module {
 		desc = d;
 		settings = new ArrayList<>(Arrays.asList(s));
 		
-		defaultToggled = toggled;
-		if (toggled) {
-			setToggled(true);
+		defaultEnabled = enabled;
+		if (enabled) {
+			setEnabled(true);
 		}
 
 		settings.add(new SettingBind(this));
 	}
 
 	public void toggle() {
-		toggled = !toggled;
-		if (toggled) {
+		enabled = !enabled;
+		if (enabled) {
 			onEnable();
 		} else {
 			onDisable();
@@ -138,21 +138,21 @@ public class Module {
 		this.key = key;
 	}
 
-	public boolean isToggled() {
-		return toggled;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
-	public void setToggled(boolean toggled) {
-		this.toggled = toggled;
-		if (toggled) {
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+		if (enabled) {
 			onEnable();
 		} else {
 			onDisable();
 		}
 	}
 
-	public boolean isDefaultToggled() {
-		return defaultToggled;
+	public boolean isDefaultEnabled() {
+		return defaultEnabled;
 	}
 
 }

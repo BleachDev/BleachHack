@@ -17,7 +17,7 @@ public class MixinMapRenderer {
 
 	@Inject(method = "draw", at = @At("HEAD"), cancellable = true)
 	public void draw(MatrixStack matrices, VertexConsumerProvider vertexConsumers, MapState mapState, boolean bl, int light, CallbackInfo ci) {
-		if (ModuleManager.getModule(NoRender.class).isToggled() && ModuleManager.getModule(NoRender.class).getSetting(11).asToggle().state) {
+		if (ModuleManager.getModule(NoRender.class).isEnabled() && ModuleManager.getModule(NoRender.class).getSetting(11).asToggle().state) {
 			ci.cancel();
 		}
 	}

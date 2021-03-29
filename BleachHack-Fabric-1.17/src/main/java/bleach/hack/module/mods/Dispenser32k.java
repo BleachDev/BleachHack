@@ -107,7 +107,7 @@ public class Dispenser32k extends Module {
 			BleachLogger.errorMessage("Missing Generic Block");
 
 		if (hopper == -1 || dispenser == -1 || redstone == -1 || shulker == -1 || block == -1) {
-			setToggled(false);
+			setEnabled(false);
 			return;
 		}
 
@@ -127,7 +127,7 @@ public class Dispenser32k extends Module {
 					|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
 					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1]))) {
 				BleachLogger.errorMessage("Unable to place 32k");
-				setToggled(false);
+				setEnabled(false);
 				return;
 			}
 
@@ -168,13 +168,13 @@ public class Dispenser32k extends Module {
 		}
 
 		BleachLogger.errorMessage("Unable to place 32k");
-		setToggled(false);
+		setEnabled(false);
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
 		if ((getSetting(4).asToggle().state && !active && ticksPassed > 25) || (active && !(mc.currentScreen instanceof HopperScreen))) {
-			setToggled(false);
+			setEnabled(false);
 			return;
 		}
 

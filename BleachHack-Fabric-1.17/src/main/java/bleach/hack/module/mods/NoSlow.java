@@ -66,7 +66,7 @@ public class NoSlow extends Module {
 
 	@Subscribe
 	public void onClientMove(EventClientMove event) {
-		if (!isToggled())
+		if (!isEnabled())
 			return;
 
 		/* Slowness */

@@ -61,7 +61,7 @@ public abstract class MixinHandledScreen extends Screen {
 
 			if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 				addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
-					ModuleManager.getModule(AutoDonkeyDupe.class).setToggled(true);
+					ModuleManager.getModule(AutoDonkeyDupe.class).setEnabled(true);
 				}));
 
 				addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {

@@ -17,7 +17,7 @@ public class MixinFlowableFluid {
 	/** Yeet the first iterator which handles the horizontal fluid movement **/
 	@Redirect(method = "getVelocity", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0))
 	public boolean getVelocity_hasNext(Iterator<Direction> var9) {
-		if (ModuleManager.getModule(NoVelocity.class).isToggled()
+		if (ModuleManager.getModule(NoVelocity.class).isEnabled()
 				&& ModuleManager.getModule(NoVelocity.class).getSetting(3).asToggle().state) {
 			return false;
 		}

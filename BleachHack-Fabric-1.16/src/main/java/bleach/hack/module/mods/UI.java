@@ -107,7 +107,7 @@ public class UI extends Module {
 
 			if (getSetting(0).asToggle().state) {
 				for (Module m : ModuleManager.getModules())
-					if (m.isToggled())
+					if (m.isEnabled())
 						lines.add(m.getName());
 
 				lines.sort((a, b) -> Integer.compare(mc.textRenderer.getWidth(b), mc.textRenderer.getWidth(a)));

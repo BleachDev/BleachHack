@@ -34,7 +34,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 	public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> ci) {
 		Module mod = ModuleManager.getModule(SpeedMine.class);
 
-		if (mod.isToggled()) {
+		if (mod.isEnabled()) {
 			float breakingSpeed = inventory.getBlockBreakingSpeed(block);
 			if (breakingSpeed > 1.0F) {
 				int eff = EnchantmentHelper.getEfficiency(this);

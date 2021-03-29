@@ -91,7 +91,7 @@ public class AutoBuild extends Module {
 			}
 		} else {
 			if (current.executeNext() && current.isDone()) {
-				setToggled(false);
+				setEnabled(false);
 			}
 		}
 	}

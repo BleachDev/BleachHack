@@ -78,11 +78,11 @@ public class Notebot extends Module {
 		blockTunes.clear();
 		if (mc.player.getAbilities().creativeMode) {
 			BleachLogger.errorMessage("Not In Survival Mode!");
-			setToggled(false);
+			setEnabled(false);
 			return;
 		} else if (filePath.isEmpty()) {
 			BleachLogger.errorMessage("No File Loaded!, Use .notebot load [File]");
-			setToggled(false);
+			setEnabled(false);
 			return;
 		} else {
 			readFile(filePath);
@@ -192,8 +192,8 @@ public class Notebot extends Module {
 					paths.forEach(p -> files.add(p.getFileName().toString()));
 					paths.close();
 					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
-					setToggled(false);
-					setToggled(true);
+					setEnabled(false);
+					setEnabled(true);
 					BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
 				} catch (IOException e) {
 				}

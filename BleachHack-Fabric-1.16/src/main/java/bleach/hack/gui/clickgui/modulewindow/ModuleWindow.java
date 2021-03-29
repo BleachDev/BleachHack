@@ -89,7 +89,7 @@ public class ModuleWindow extends ClickGuiWindow {
 			}
 
 			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
-					x + 2, y + 2 + curY, m.getKey().isToggled() ? 0x70efe0 : 0xc0c0c0);
+					x + 2, y + 2 + curY, m.getKey().isEnabled() ? 0x70efe0 : 0xc0c0c0);
 
 			// If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {

@@ -87,7 +87,7 @@ public class Scaffold extends Module {
 
 		if (slot == -1) {
 			if (getSetting(10).asToggle().state) {
-				setToggled(false);
+				setEnabled(false);
 			}
 
 			return;
@@ -99,7 +99,7 @@ public class Scaffold extends Module {
 			if ((getSetting(5).asToggle().getChild(0).asMode().mode == 0 && contains)
 					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
 				if (getSetting(10).asToggle().state) {
-					setToggled(false);
+					setEnabled(false);
 				}
 
 				return;

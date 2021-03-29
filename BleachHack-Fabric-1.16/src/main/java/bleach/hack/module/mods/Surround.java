@@ -43,7 +43,7 @@ public class Surround extends Module {
 
 		if (obby == -1) {
 			BleachLogger.errorMessage("No obsidian in hotbar!");
-			setToggled(false);
+			setEnabled(false);
 			return;
 		}
 
@@ -59,7 +59,7 @@ public class Surround extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (getSetting(3).asToggle().state && mc.options.keyJump.isPressed()) {
-			setToggled(false);
+			setEnabled(false);
 			return;
 		}
 
@@ -73,7 +73,7 @@ public class Surround extends Module {
 
 		if (obby == -1) {
 			BleachLogger.errorMessage("Ran out of obsidian!");
-			setToggled(false);
+			setEnabled(false);
 			return;
 		}
 
@@ -138,7 +138,7 @@ public class Surround extends Module {
 		}
 
 		if (!getSetting(2).asToggle().state) {
-			setToggled(false);
+			setEnabled(false);
 		}
 	}
 

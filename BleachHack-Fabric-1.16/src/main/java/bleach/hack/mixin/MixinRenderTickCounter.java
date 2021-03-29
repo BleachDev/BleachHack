@@ -20,7 +20,7 @@ public class MixinRenderTickCounter {
 
 	@Inject(method = "beginRenderTick", at = @At("HEAD"), cancellable = true)
 	public void beginRenderTick(long timeMillis, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(Timer.class).isToggled()) {
+		if (ModuleManager.getModule(Timer.class).isEnabled()) {
 			this.lastFrameDuration = (float) (((timeMillis - this.prevTimeMillis) / this.tickTime)
 					* ModuleManager.getModule(Timer.class).getSetting(0).asSlider().getValue());
 			this.prevTimeMillis = timeMillis;

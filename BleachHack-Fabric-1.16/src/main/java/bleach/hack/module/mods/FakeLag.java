@@ -70,11 +70,11 @@ public class FakeLag extends Module {
 		if (getSetting(0).asMode().mode == 0) {
 			if (getSetting(1).asToggle().state &&
 					System.currentTimeMillis() - startTime > getSetting(1).asToggle().getChild(0).asSlider().getValue() * 1000)
-				setToggled(false);
+				setEnabled(false);
 		} else if (getSetting(0).asMode().mode == 1) {
 			if (System.currentTimeMillis() - startTime > getSetting(2).asSlider().getValue() * 1000) {
-				setToggled(false);
-				setToggled(true);
+				setEnabled(false);
+				setEnabled(true);
 			}
 		}
 	}

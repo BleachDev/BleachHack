@@ -49,7 +49,7 @@ public class MixinIngameHud {
 	@Inject(method = "renderOverlay", at = @At("HEAD"), cancellable = true)
 	private void renderOverlay(Identifier texture, float opacity, CallbackInfo ci) {
 		if (texture == PUMPKIN_BLUR
-				&& ModuleManager.getModule(NoRender.class).isToggled()
+				&& ModuleManager.getModule(NoRender.class).isEnabled()
 				&& ModuleManager.getModule(NoRender.class).getSetting(4).asToggle().state) {
 			ci.cancel();
 		}
