@@ -19,13 +19,12 @@ package bleach.hack.util;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
@@ -47,28 +46,19 @@ public class WorldRenderUtils {
 		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
 		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDepthFunc(GL11.GL_ALWAYS);
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
 
 		matrix.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
+		
+		int halfWidth = mc.textRenderer.getWidth(str) / 2;
+		
+        int opacity = (int) (MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F) * 255.0F) << 24;
+		
+		mc.textRenderer.draw(str, -halfWidth, 0f, 553648127, false, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, opacity, 0xf000f0);
+        mc.textRenderer.draw(str, -halfWidth, 0f, -1, false, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
 
-		int i = mc.textRenderer.getWidth(str) / 2;
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(7, VertexFormats.POSITION_COLOR);
-		float f = mc.options.getTextBackgroundOpacity(0.3F);
-		bufferbuilder.vertex(matrix.peek().getModel(), -i - 1, -1, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		bufferbuilder.vertex(matrix.peek().getModel(), -i - 1, 8, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		bufferbuilder.vertex(matrix.peek().getModel(), i + 1, 8, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		bufferbuilder.vertex(matrix.peek().getModel(), i + 1, -1, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		tessellator.draw();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-
-		mc.textRenderer.draw(matrix, str, -i, 0, 553648127);
-		mc.textRenderer.draw(matrix, str, -i, 0, -1);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		RenderSystem.disableBlend();
 
 		return matrix;
 	}

@@ -22,13 +22,8 @@ import org.lwjgl.opengl.GL11;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -52,35 +47,15 @@ public class WorldRenderUtils {
 
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.enableDepthTest();
-		RenderSystem.depthFunc(GL11.GL_ALWAYS);
 
 		matrix.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
-
-		int i = mc.textRenderer.getWidth(str) / 2;
-		RenderSystem.disableTexture();
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		float f = mc.options.getTextBackgroundOpacity(0.25F);
-		bufferbuilder.vertex(matrix.peek().getModel(), -i - 1, -1, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		bufferbuilder.vertex(matrix.peek().getModel(), -i - 1, 8, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		bufferbuilder.vertex(matrix.peek().getModel(), i + 1, 8, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		bufferbuilder.vertex(matrix.peek().getModel(), i + 1, -1, 0.0f).color(0.0F, 0.0F, 0.0F, f).next();
-		tessellator.draw();
-
-		RenderSystem.enableTexture();
-
-		// Hack
-		matrix.translate(0f, 0f, 0.0001f);
-
-		mc.textRenderer.draw(matrix, str, -i, 0, 553648127);
-		mc.textRenderer.draw(matrix, str, -i, 0, -1);
-
-		// Unhack
-		matrix.translate(0f, 0f, -0.0001f);
-		RenderSystem.depthFunc(GL11.GL_LEQUAL);
-		RenderSystem.disableDepthTest();
+		
+		int halfWidth = mc.textRenderer.getWidth(str) / 2;
+		
+        int opacity = (int) (MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F) * 255.0F) << 24;
+		
+		mc.textRenderer.draw(str, -halfWidth, 0f, 553648127, false, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, opacity, 0xf000f0);
+        mc.textRenderer.draw(str, -halfWidth, 0f, -1, false, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
 
 		RenderSystem.disableBlend();
 
@@ -115,7 +90,7 @@ public class WorldRenderUtils {
 		RenderSystem.enableDepthTest();
 		RenderSystem.depthFunc(GL11.GL_ALWAYS);
 
-		DiffuseLighting.disableGuiDepthLighting();
+		//DiffuseLighting.disableGuiDepthLighting();
 
 		mc.getBufferBuilders().getOutlineVertexConsumers().setColor(255, 255, 255, 255);
 		mc.getItemRenderer().renderItem(item, ModelTransformation.Mode.GUI, 0xF000F0,
