@@ -14,6 +14,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.block.entity.SignBlockEntity;
+import net.minecraft.client.particle.CampfireSmokeParticle;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
 import net.minecraft.client.particle.ExplosionLargeParticle;
 import net.minecraft.entity.FallingBlockEntity;
@@ -47,7 +48,8 @@ public class NoRender extends Module {
 				new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren(
 						new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
 				new SettingToggle("Armor Stands", false).withDesc("Disables rendering of armor stands"),
-				new SettingToggle("Falling Blocks", false).withDesc("Disables rendering of falling blocks"));
+				new SettingToggle("Falling Blocks", false).withDesc("Disables rendering of falling blocks"),
+				new SettingToggle("Campfire", false).withDesc("Disables rendering of campfire smoke particles"));
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 
@@ -101,6 +103,8 @@ public class NoRender extends Module {
 			if (Math.abs(event.particle.getBoundingBox().hashCode() % 101) >= (int) getSetting(13).asToggle().getChild(0).asSlider().getValue()) {
 				event.setCancelled(true);
 			}
+		} else if (getSetting(16).asToggle().state && event.particle instanceof CampfireSmokeParticle) {
+			event.setCancelled(true);
 		}
 	}
 
