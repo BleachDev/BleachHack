@@ -19,8 +19,6 @@ package bleach.hack.util.world;
 
 import java.util.UUID;
 
-import org.apache.commons.lang3.RandomUtils;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,12 +36,15 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 	public PlayerCopyEntity(PlayerEntity player, double x, double y, double z) {
 		super(MinecraftClient.getInstance().world, player.getGameProfile());
 		
-		this.updateTrackedPosition(player.getX(), player.getY(), player.getZ());
-		this.refreshPositionAfterTeleport(player.getX(), player.getY(), player.getZ());
-		this.pitch = player.pitch;
-		this.yaw = headYaw = bodyYaw = player.yaw;
-		this.setEntityId(RandomUtils.nextInt());
-		this.setUuid(UUID.randomUUID());
+		updateTrackedPosition(player.getX(), player.getY(), player.getZ());
+		refreshPositionAfterTeleport(player.getX(), player.getY(), player.getZ());
+		pitch = player.pitch;
+		yaw = headYaw = bodyYaw = player.yaw;
+		
+		// Cache the player textures, then switch to a random uuid
+		// because the world doesn't allow duplicate uuids in 1.17+
+		getPlayerListEntry();
+		setUuid(UUID.randomUUID());
 
 		getInventory().main.set(getInventory().selectedSlot, player.getMainHandStack());
 		getInventory().offHand.set(0, player.getOffHandStack());
