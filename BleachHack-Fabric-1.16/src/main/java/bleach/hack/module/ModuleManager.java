@@ -40,6 +40,7 @@ public class ModuleManager {
 			new AutoArmor(),
 			new AutoBuild(),
 			new AutoDonkeyDupe(),
+			new AutoParkour(),
 			new AutoReconnect(),
 			new AutoRespawn(),
 			new AutoSign(),
