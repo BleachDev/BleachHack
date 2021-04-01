@@ -72,6 +72,7 @@ public class ModuleManager {
 			new Fullbright(),
 			new Ghosthand(),
 			new HandProgress(),
+			new HoleESP(),
 			new Jesus(),
 			new Killaura(),
 			new MountBypass(),
