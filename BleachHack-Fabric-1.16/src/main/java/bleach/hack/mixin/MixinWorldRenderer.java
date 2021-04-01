@@ -13,7 +13,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventBlockEntityRender;
-import bleach.hack.event.events.EventChunkCulling;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventWorldRender;
@@ -43,7 +42,6 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 
 	/** Fixes that the outline framebuffer only resets if any glowing entites are drawn **/
 	@ModifyVariable(method = "render", at = @At(value = "STORE"), index = 37)
-	//@ModifyVariable(method = "render", name = "bl3", at = @At("STORE"))
 	public boolean render_modifyBoolean(boolean bool) {
 		return true;
 	}
@@ -105,14 +103,14 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 		}
 	}
 	
-	@Redirect(method = "setupTerrain", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;chunkCullingEnabled:Z", ordinal = 0),
-			require = 0 /* TODO: sodium? */)
+	/*@Redirect(method = "setupTerrain", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;chunkCullingEnabled:Z", ordinal = 0),
+			require = 0 / TODO: sodium? /)
 	private boolean setupTerrain_chunkCullingEnabled(MinecraftClient client) {
 		EventChunkCulling event = new EventChunkCulling(client.chunkCullingEnabled);
 		BleachHack.eventBus.post(event);
 		
 		return event.shouldCull();
-	}
+	}*/
 
 	@Override
 	public Framebuffer getOutlineFramebuffer() {
