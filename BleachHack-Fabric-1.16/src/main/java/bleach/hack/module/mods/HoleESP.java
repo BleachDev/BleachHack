@@ -31,7 +31,6 @@ public class HoleESP extends Module {
 				new SettingColor("Mixed", 1f, 1f, 0f, false).withDesc("The neighbours are a mix out of obsidian and bedrock"),
 				new SettingColor("Obsidian", 1f, 0f, 0f, false).withDesc("All neighbours are obsidian"),
 				new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
-				//TODO: Add shader and outline render setting. If this is this even possible?!
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
 				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
 				new SettingMode("Location", "Under", "At").withDesc("The locations of the rendered blocks"));
