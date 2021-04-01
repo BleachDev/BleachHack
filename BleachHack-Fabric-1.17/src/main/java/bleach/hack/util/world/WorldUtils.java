@@ -159,19 +159,19 @@ public class WorldUtils {
 			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255))
 				continue;
 
-			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
+			Block neighborBlock = mc.world.getBlockState(pos.method_35851(d)).getBlock();
 
 			if (neighborBlock.getDefaultState().getMaterial().isReplaceable())
 				continue;
 
-			Vec3d vec = getLegitLookPos(pos.offset(d), d.getOpposite(), true, 5);
+			Vec3d vec = getLegitLookPos(pos.method_35851(d), d.getOpposite(), true, 5);
 
 			if (vec == null) {
 				if (forceLegit) {
 					continue;
 				}
 
-				vec = getLegitLookPos(pos.offset(d), d.getOpposite(), false, 5);
+				vec = getLegitLookPos(pos.method_35851(d), d.getOpposite(), false, 5);
 
 				if (vec == null) {
 					continue;
@@ -195,7 +195,7 @@ public class WorldUtils {
 			}
 
 			mc.interactionManager.interactBlock(
-					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.offset(d), false));
+					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.method_35851(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
@@ -221,7 +221,7 @@ public class WorldUtils {
 			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255))
 				continue;
 
-			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
+			Block neighborBlock = mc.world.getBlockState(pos.method_35851(d)).getBlock();
 			Vec3d vec = Vec3d.of(pos).add(0.5 + d.getOffsetX() * 0.5, 0.5 + d.getOffsetY() * 0.5, 0.5 + d.getOffsetZ() * 0.5);
 
 			if (rotateMode == 1) {
@@ -241,7 +241,7 @@ public class WorldUtils {
 			}
 
 			mc.interactionManager.interactBlock(
-					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.offset(d), false));
+					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.method_35851(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
@@ -308,7 +308,7 @@ public class WorldUtils {
 
 		for (Direction d : Direction.values()) {
 			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255)
-					|| mc.world.getBlockState(pos.offset(d)).getMaterial().isReplaceable()
+					|| mc.world.getBlockState(pos.method_35851(d)).getMaterial().isReplaceable()
 					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
 							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
 									pos.getY() + 0.5 + d.getOffsetY() * 0.5,

@@ -85,8 +85,8 @@ public class Surround extends Module {
 
 		if (getSetting(0).asMode().mode == 0) {
 			for (BlockPos b : new BlockPos[] {
-					mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
-					mc.player.getBlockPos().south(), mc.player.getBlockPos().west() }) {
+					mc.player.getBlockPos().method_35861(), mc.player.getBlockPos().method_35855(),
+					mc.player.getBlockPos().method_35859(), mc.player.getBlockPos().method_35857() }) {
 
 				if (cap >= (int) getSetting(4).asSlider().getValue()) {
 					return;

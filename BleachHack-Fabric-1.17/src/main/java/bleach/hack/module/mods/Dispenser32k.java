@@ -296,7 +296,7 @@ public class Dispenser32k extends Module {
 
 	private void openBlock(BlockPos pos) {
 		for (Direction d : Direction.values()) {
-			if (mc.world.getBlockState(pos.offset(d)).getMaterial().isReplaceable()) {
+			if (mc.world.getBlockState(pos.method_35851(d)).getMaterial().isReplaceable()) {
 				mc.interactionManager.interactBlock(
 						mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos, false));
 				return;

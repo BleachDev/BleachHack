@@ -158,7 +158,7 @@ public class StorageESP extends Module {
 					if (dir != null) {
 						box = box.expand(Math.abs(dir.getOffsetX()) / 2d, 0, Math.abs(dir.getOffsetZ()) / 2d);
 						box = box.offset(dir.getOffsetX() / 2d, 0, dir.getOffsetZ() / 2d);
-						blacklist.add(e.getKey().getPos().offset(dir));
+						blacklist.add(e.getKey().getPos().method_35851(dir));
 					}
 				}
 

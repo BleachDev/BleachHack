@@ -65,7 +65,7 @@ public class Step extends Module {
 			}
 		}
 		
-		if (!mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight() + 1, 0)).getMaterial().isReplaceable()
+		if (!mc.world.getBlockState(mc.player.getBlockPos().method_35849(0, mc.player.getHeight() + 1, 0)).getMaterial().isReplaceable()
 				|| mc.player.input.jumping
 				|| !(mc.player.input.pressingForward || mc.player.input.pressingBack || mc.player.input.pressingLeft || mc.player.input.pressingRight)) {
 			return;

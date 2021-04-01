@@ -16,7 +16,7 @@ public class RemoveOperation extends Operation {
 	public boolean canExecute() {
 		if (mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(Vec3d.of(pos).add(0.5, 0.5, 0.5)) < 4.5) {
 			for (Direction d: Direction.values()) {
-				if (!mc.world.getBlockState(pos.offset(d)).isSideSolidFullSquare(mc.world, pos.offset(d), d.getOpposite())) {
+				if (!mc.world.getBlockState(pos.method_35851(d)).isSideSolidFullSquare(mc.world, pos.method_35851(d), d.getOpposite())) {
 					return true;
 				}
 			}
@@ -28,7 +28,7 @@ public class RemoveOperation extends Operation {
 	@Override
 	public boolean execute() {
 		for (Direction d: Direction.values()) {
-			if (!mc.world.getBlockState(pos.offset(d)).isSideSolidFullSquare(mc.world, pos.offset(d), d.getOpposite())) {
+			if (!mc.world.getBlockState(pos.method_35851(d)).isSideSolidFullSquare(mc.world, pos.method_35851(d), d.getOpposite())) {
 				mc.interactionManager.updateBlockBreakingProgress(pos, d);
 				mc.player.swingHand(Hand.MAIN_HAND);
 

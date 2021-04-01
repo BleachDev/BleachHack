@@ -70,7 +70,7 @@ public class AutoParkour extends Module {
 					for (BlockPos pos: BlockPos.iterateOutwards(mc.player.getBlockPos().down(), 4, 1, 4)) {
 						if (mc.world.isTopSolid(pos, mc.player)
 								&& mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) >= 1
-								&& mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) <= 3.8 /* ? */
+								&& mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) <= 4.5 /* ? */
 								&& !mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 2, 1))).findAny().isPresent()
 								&& (nearestPos == null || pos.getSquaredDistance(lookVec, false) < nearestPos.getSquaredDistance(lookVec, false))) {
 							nearestPos = pos.toImmutable();
