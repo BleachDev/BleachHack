@@ -105,7 +105,8 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 		}
 	}
 	
-	@Redirect(method = "setupTerrain", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;chunkCullingEnabled:Z", ordinal = 0))
+	@Redirect(method = "setupTerrain", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;chunkCullingEnabled:Z", ordinal = 0),
+			require = 0 /* TODO: sodium? */)
 	private boolean setupTerrain_chunkCullingEnabled(MinecraftClient client) {
 		EventChunkCulling event = new EventChunkCulling(client.chunkCullingEnabled);
 		BleachHack.eventBus.post(event);
