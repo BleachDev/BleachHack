@@ -61,6 +61,7 @@ public class RenderUtils {
 		tessellator.draw();
 
 		// Outline
+		RenderSystem.disableCull();
 		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
 		RenderSystem.lineWidth(width);
 
@@ -68,6 +69,7 @@ public class RenderUtils {
 		Vertexer.vertexBoxLines(matrix, buffer, box, r, g, b, a);
 		tessellator.draw();
 
+		RenderSystem.enableCull();
 		cleanup();
 	}
 
@@ -102,10 +104,11 @@ public class RenderUtils {
 
 		MatrixStack matrix = matrixFromOrigin();
 
-		Tessellator tessellator = RenderSystem.renderThreadTesselator();
+		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
 		// Outline
+		RenderSystem.disableCull();
 		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
 		RenderSystem.lineWidth(width);
 
@@ -113,6 +116,7 @@ public class RenderUtils {
 		Vertexer.vertexBoxLines(matrix, buffer, box, r, g, b, a);
 		tessellator.draw();
 
+		RenderSystem.enableCull();
 		cleanup();
 	}
 
@@ -125,6 +129,7 @@ public class RenderUtils {
 		BufferBuilder buffer = tessellator.getBuffer();
 
 		// Line
+		RenderSystem.disableCull();
 		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
 		RenderSystem.lineWidth(width);
 
@@ -132,6 +137,7 @@ public class RenderUtils {
 		Vertexer.vertexLine(matrix, buffer, (float) x1, (float) y1, (float) z1, (float) x2, (float) y2, (float) z2, r, g, b, 0.5f);
 		tessellator.draw();
 
+		RenderSystem.enableCull();
 		cleanup();
 	}
 
