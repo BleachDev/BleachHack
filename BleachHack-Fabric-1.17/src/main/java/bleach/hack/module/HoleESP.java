@@ -15,10 +15,11 @@ import bleach.hack.util.RenderUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * Author: Lasnik (<a href="https://github.com/lasnikprogram">https://github.com/lasnikprogram</a>)
+ */
+
 public class HoleESP extends Module {
-	/**
-	 * Author: Lasnik (https://github.com/lasnikprogram)
-	 */
 	private ArrayList<BlockPos> bedrockHoles = new ArrayList<BlockPos>();
 	private ArrayList<BlockPos> mixedHoles = new ArrayList<BlockPos>();
 	private ArrayList<BlockPos> obsidianHoles = new ArrayList<BlockPos>();
