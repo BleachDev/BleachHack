@@ -19,22 +19,24 @@ package bleach.hack.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NoRender;
+import bleach.hack.event.events.EventRenderOverlay;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 @Mixin(InGameHud.class)
 public class MixinIngameHud {
-	
-	@Shadow private static Identifier PUMPKIN_BLUR;
+
+	@Unique private boolean bypassRenderOverlay = false;
+
+	@Shadow private void renderOverlay(Identifier texture, float opacity) {}
 
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true)
 	public void render(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
@@ -48,10 +50,18 @@ public class MixinIngameHud {
 
 	@Inject(method = "renderOverlay", at = @At("HEAD"), cancellable = true)
 	private void renderOverlay(Identifier texture, float opacity, CallbackInfo ci) {
-		if (texture == PUMPKIN_BLUR
-				&& ModuleManager.getModule(NoRender.class).isEnabled()
-				&& ModuleManager.getModule(NoRender.class).getSetting(4).asToggle().state) {
-			ci.cancel();
+		if (!bypassRenderOverlay) {
+			EventRenderOverlay event = new EventRenderOverlay(texture, opacity);
+			BleachHack.eventBus.post(event);
+
+			if (event.isCancelled()) {
+				ci.cancel();
+				return;
+			}
+
+			bypassRenderOverlay = true;
+			renderOverlay(event.getTexture(), event.getOpacity());
+			bypassRenderOverlay = false;
 		}
 	}
 }

@@ -24,10 +24,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NoRender;
+import bleach.hack.event.events.EventRenderOverlay;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 
 @Mixin(InGameHud.class)
 public class MixinIngameHud {
@@ -44,7 +44,10 @@ public class MixinIngameHud {
 
 	@Inject(method = "renderPumpkinOverlay", at = @At("HEAD"), cancellable = true)
 	private void onRenderPumpkinOverlay(CallbackInfo ci) {
-		if (ModuleManager.getModule(NoRender.class).isEnabled() && ModuleManager.getModule(NoRender.class).getSetting(4).asToggle().state) {
+		EventRenderOverlay event = new EventRenderOverlay(new Identifier("textures/misc/pumpkinblur.png"), 1f);
+		BleachHack.eventBus.post(event);
+
+		if (event.isCancelled()) {
 			ci.cancel();
 		}
 	}

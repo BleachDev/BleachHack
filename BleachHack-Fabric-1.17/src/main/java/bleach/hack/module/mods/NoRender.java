@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import bleach.hack.event.events.EventBlockEntityRender;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventParticle;
+import bleach.hack.event.events.EventRenderOverlay;
 import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -49,7 +50,8 @@ public class NoRender extends Module {
 						new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
 				new SettingToggle("Armor Stands", false).withDesc("Disables rendering of armor stands"),
 				new SettingToggle("Falling Blocks", false).withDesc("Disables rendering of falling blocks"),
-				new SettingToggle("Campfire", false).withDesc("Disables rendering of campfire smoke particles"));
+				new SettingToggle("Campfire", false).withDesc("Disables rendering of campfire smoke particles"),
+				new SettingToggle("Frostbite", true).withDesc("Removes the frostbite overlay when you walk in powdered snow"));
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 
@@ -59,14 +61,23 @@ public class NoRender extends Module {
 			}
 		}
 	}
-	
+
+	@Subscribe
+	public void onRenderOverlay(EventRenderOverlay event) {
+		if (event.getTexture().getPath().equals("textures/misc/pumpkinblur.png") && getSetting(4).asToggle().state) {
+			event.setCancelled(true);
+		} else if (event.getTexture().getPath().equals("textures/misc/powder_snow_outline.png") && getSetting(17).asToggle().state) {
+			event.setCancelled(true);
+		}
+	}
+
 	@Subscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
 		if (getSetting(14).asToggle().state && event.getEntity() instanceof ArmorStandEntity) {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		if (getSetting(15).asToggle().state && event.getEntity() instanceof FallingBlockEntity) {
 			event.setCancelled(true);
 			return;
