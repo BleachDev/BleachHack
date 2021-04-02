@@ -84,7 +84,7 @@ public class AutoBuild extends Module {
 								: ray.getBlockPos().getZ() - mc.player.getBlockPos().getZ() > 0 ? Direction.SOUTH : Direction.NORTH;
 			}
 
-			current = OperationList.create(BLUEPRINTS.get(getSetting(0).asMode().mode), ray.getBlockPos().method_35851(ray.getSide()), dir);
+			current = OperationList.create(BLUEPRINTS.get(getSetting(0).asMode().mode), ray.getBlockPos().offset(ray.getSide()), dir);
 
 			if (mc.mouse.wasLeftButtonClicked() || mc.mouse.wasRightButtonClicked()) {
 				active = true;
