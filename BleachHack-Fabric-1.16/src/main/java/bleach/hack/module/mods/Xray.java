@@ -21,7 +21,6 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventBlockRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
