@@ -93,6 +93,7 @@ public class ModuleManager {
 			new RotationSnap(),
 			new SafeWalk(),
 			new Scaffold(),
+			new Search(),
 			new ShaderRender(),
 			new Spammer(),
 			new Speed(),
