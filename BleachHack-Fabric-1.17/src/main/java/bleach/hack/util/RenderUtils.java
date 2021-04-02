@@ -48,7 +48,7 @@ public class RenderUtils {
 	public static void drawFilledBox(Box box, float red, float green, float blue, float alpha, float width) {
 		setup();
 
-		MatrixStack matrix = matrixFromOrigin();
+		MatrixStack matrix = matrixFrom(box.minX, box.minY, box.minZ);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -57,7 +57,7 @@ public class RenderUtils {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
 		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		Vertexer.vertexBoxQuads(matrix, buffer, box, red, green, blue, alpha);
+		Vertexer.vertexBoxQuads(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
 		tessellator.draw();
 
 		// Outline
@@ -66,7 +66,7 @@ public class RenderUtils {
 		RenderSystem.lineWidth(width);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexBoxLines(matrix, buffer, box, red, green, blue, alpha);
+		Vertexer.vertexBoxLines(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
 		tessellator.draw();
 
 		RenderSystem.enableCull();
@@ -80,7 +80,7 @@ public class RenderUtils {
 	public static void drawFill(Box box, float red, float green, float blue, float alpha) {
 		setup();
 
-		MatrixStack matrix = matrixFromOrigin();
+		MatrixStack matrix = matrixFrom(box.minX, box.minY, box.minZ);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -89,7 +89,7 @@ public class RenderUtils {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
 		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		Vertexer.vertexBoxQuads(matrix, buffer, box, red, green, blue, alpha);
+		Vertexer.vertexBoxQuads(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
 		tessellator.draw();
 
 		cleanup();
@@ -102,7 +102,7 @@ public class RenderUtils {
 	public static void drawOutline(Box box, float red, float green, float blue, float alpha, float width) {
 		setup();
 
-		MatrixStack matrix = matrixFromOrigin();
+		MatrixStack matrix = matrixFrom(box.minX, box.minY, box.minZ);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -113,7 +113,7 @@ public class RenderUtils {
 		RenderSystem.lineWidth(width);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexBoxLines(matrix, buffer, box, red, green, blue, alpha);
+		Vertexer.vertexBoxLines(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
 		tessellator.draw();
 
 		RenderSystem.enableCull();
@@ -123,7 +123,7 @@ public class RenderUtils {
 	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float red, float green, float blue, float width) {
 		setup();
 
-		MatrixStack matrix = matrixFromOrigin();
+		MatrixStack matrix = matrixFrom(x1, y1, z1);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -134,21 +134,21 @@ public class RenderUtils {
 		RenderSystem.lineWidth(width);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexLine(matrix, buffer, (float) x1, (float) y1, (float) z1, (float) x2, (float) y2, (float) z2, red, green, blue, 0.5f);
+		Vertexer.vertexLine(matrix, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), red, green, blue, 0.5f);
 		tessellator.draw();
 
 		RenderSystem.enableCull();
 		cleanup();
 	}
-
-	public static MatrixStack matrixFromOrigin() {
+	
+	public static MatrixStack matrixFrom(double x, double y, double z) {
 		MatrixStack matrix = new MatrixStack();
 
 		Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
 		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
 
-		matrix.translate(-camera.getPos().x, -camera.getPos().y, -camera.getPos().z);
+		matrix.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
 		return matrix;
 	}
