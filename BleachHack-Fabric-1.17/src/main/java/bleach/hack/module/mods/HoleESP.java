@@ -1,6 +1,7 @@
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -16,13 +17,14 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 
 /**
- * Author: Lasnik (<a href="https://github.com/lasnikprogram">https://github.com/lasnikprogram</a>)
+ * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
  */
 
 public class HoleESP extends Module {
-	private ArrayList<BlockPos> bedrockHoles = new ArrayList<BlockPos>();
-	private ArrayList<BlockPos> mixedHoles = new ArrayList<BlockPos>();
-	private ArrayList<BlockPos> obsidianHoles = new ArrayList<BlockPos>();
+
+	private Set<BlockPos> bedrockHoles = new HashSet<>();
+	private Set<BlockPos> mixedHoles = new HashSet<>();
+	private Set<BlockPos> obsidianHoles = new HashSet<>();
 
 	public HoleESP() {
 		super("HoleESP", KEY_UNBOUND, Category.RENDER, "Highlights save and not so save holes. Used for CrystalPvP",
@@ -35,11 +37,14 @@ public class HoleESP extends Module {
 				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
 				new SettingMode("Location", "Under", "At").withDesc("The locations of the rendered blocks"));
 	}
-	
+
+	@Override
 	public void onDisable() {
 		bedrockHoles.clear();
 		mixedHoles.clear();
 		obsidianHoles.clear();
+
+		super.onDisable();
 	}
 
 	@Subscribe
@@ -48,18 +53,19 @@ public class HoleESP extends Module {
 		bedrockHoles.clear();
 		mixedHoles.clear();
 		obsidianHoles.clear();
-		
-			
+
+
 		int dist = (int) getSetting(0).asSlider().getValue();
 		int renderMode = getSetting(7).asMode().mode;
 		BlockPos player = mc.player.getBlockPos();
 		Iterable<BlockPos> blocks = BlockPos.iterateOutwards(player, dist, dist, dist);
 
-		allBlocksInDistance: 
 		for (BlockPos pos : blocks) {
-			for (int i = 0; i <= 2; i++)
-				if (mc.world.getBlockState(pos.add(0, i, 0)).getBlock() != Blocks.AIR)
-					continue allBlocksInDistance; // That´s only for expert programmers
+			if (!mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()
+					|| !mc.world.getBlockState(pos.up()).getCollisionShape(mc.world, pos.up()).isEmpty()
+					|| !mc.world.getBlockState(pos.up(2)).getCollisionShape(mc.world, pos.up(2)).isEmpty()) {
+				continue;
+			}
 
 			int bedrockCounter = 0;
 			int obsidianCounter = 0;
@@ -104,7 +110,7 @@ public class HoleESP extends Module {
 				RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], 
 						(float) getSetting(6).asSlider().getValue());
 			}
-			
+
 			for (BlockPos pos : obsidianHoles) {
 				float[] rgb = getSetting(3).asColor().getRGBFloat();
 				RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], 
@@ -124,7 +130,7 @@ public class HoleESP extends Module {
 				RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, 
 						(float) getSetting(5).asSlider().getValue());
 			}
-			
+
 			for (BlockPos pos : obsidianHoles) {
 				float[] rgb = getSetting(3).asColor().getRGBFloat();
 				RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, 
