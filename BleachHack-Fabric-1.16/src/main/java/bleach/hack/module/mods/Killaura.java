@@ -73,7 +73,7 @@ public class Killaura extends Module {
 		if(mc.crosshairTarget != null && mc.crosshairTarget instanceof EntityHitResult) 
 			arrayListWithOneEntry.add(((EntityHitResult)mc.crosshairTarget).getEntity());
 		
-		Optional<Entity> target = Streams.stream(getSetting(0).asToggle().state ? mc.world.getEntities() : arrayListWithOneEntry)
+		Optional<Entity> target = Streams.stream(getSetting(0).asToggle().state ? arrayListWithOneEntry : mc.world.getEntities())
 				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
 						&& mc.player.distanceTo(e) <= getSetting(8).asSlider().getValue()
 						&& e.isAlive() 
