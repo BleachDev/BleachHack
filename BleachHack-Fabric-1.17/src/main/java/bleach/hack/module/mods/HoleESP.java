@@ -16,6 +16,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.RenderUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -39,7 +40,7 @@ public class HoleESP extends Module {
 						new SettingColor("Mixed", 1f, 1f, 0f, false).withDesc("Color formixed holes")),
 				new SettingToggle("Obsidian", true).withDesc("Shows holes with a mix of obsidian and bedrock").withChildren(
 						new SettingColor("Obsidian", 1f, 0f, 0f, false).withDesc("Color for obsidian holes")),
-				new SettingMode("Location", "Under", "At").withDesc("The locations of the rendered blocks"));
+				new SettingMode("Location", "Under", "At", "Flat").withDesc("Where and how the box is rendered"));
 	}
 
 	@Override
@@ -53,10 +54,11 @@ public class HoleESP extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		// Is this efficient? I don't think so. So fix it if you know how
-		bedrockHoles.clear();
-		mixedHoles.clear();
-		obsidianHoles.clear();
+		if (mc.player.age % 16 == 0) {
+			bedrockHoles.clear();
+			mixedHoles.clear();
+			obsidianHoles.clear();
+		}
 
 		int dist = (int) getSetting(0).asSlider().getValue();
 
@@ -65,7 +67,7 @@ public class HoleESP extends Module {
 					|| (mc.world.getBlockState(pos.down()).getBlock() != Blocks.BEDROCK
 					&& mc.world.getBlockState(pos.down()).getBlock() != Blocks.OBSIDIAN)
 					|| !mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()
-					|| !mc.world.getBlockState(pos.up()).getCollisionShape(mc.world, pos.up()).isEmpty()
+					|| !mc.world.getBlockState(pos.up(1)).getCollisionShape(mc.world, pos.up(1)).isEmpty()
 					|| !mc.world.getBlockState(pos.up(2)).getCollisionShape(mc.world, pos.up(2)).isEmpty()) {
 				continue;
 			}
@@ -82,14 +84,13 @@ public class HoleESP extends Module {
 				}
 			}
 			
-			int renderOffset = getSetting(7).asMode().mode == 0 ? -1 : 0;
-
 			if (bedrockCounter == 5 && getSetting(4).asToggle().state) {
-				bedrockHoles.add(pos.toImmutable().up(renderOffset));
+				bedrockHoles.add(pos.toImmutable());
 			} else if (obsidianCounter == 5 && getSetting(6).asToggle().state) {
-				obsidianHoles.add(pos.toImmutable().up(renderOffset));
-			} else if (bedrockCounter + obsidianCounter == 5 && getSetting(5).asToggle().state) {
-				mixedHoles.add(pos.toImmutable().up(renderOffset));
+				obsidianHoles.add(pos.toImmutable());
+			} else if (bedrockCounter >= 1 && obsidianCounter >= 1 
+					&& bedrockCounter + obsidianCounter == 5 && getSetting(5).asToggle().state) {
+				mixedHoles.add(pos.toImmutable());
 			}
 		}
 	}
@@ -103,17 +104,17 @@ public class HoleESP extends Module {
 			
 			for (BlockPos pos : bedrockHoles) {
 				float[] rgb = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], fillAlpha);
+				RenderUtils.drawFill(boxAt(pos), rgb[0], rgb[1], rgb[2], fillAlpha);
 			}
 
 			for (BlockPos pos : mixedHoles) {
 				float[] rgb = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], fillAlpha);
+				RenderUtils.drawFill(boxAt(pos), rgb[0], rgb[1], rgb[2], fillAlpha);
 			}
 
 			for (BlockPos pos : obsidianHoles) {
 				float[] rgb = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], fillAlpha);
+				RenderUtils.drawFill(boxAt(pos), rgb[0], rgb[1], rgb[2], fillAlpha);
 			}
 		}
 
@@ -122,17 +123,17 @@ public class HoleESP extends Module {
 			
 			for (BlockPos pos : bedrockHoles) {
 				float[] rgb = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+				RenderUtils.drawOutline(boxAt(pos), rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
 			}
 
 			for (BlockPos pos : mixedHoles) {
 				float[] rgb = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+				RenderUtils.drawOutline(boxAt(pos), rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
 			}
 
 			for (BlockPos pos : obsidianHoles) {
 				float[] rgb = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+				RenderUtils.drawOutline(boxAt(pos), rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
 			}
 		}
 	}
@@ -142,5 +143,14 @@ public class HoleESP extends Module {
 				pos.west(), pos.east(), pos.south(), pos.north(), pos.down()
 		};
 	}
+	
+	private Box boxAt (BlockPos pos) {
+		int renderLocation = getSetting(7).asMode().mode;
+		Box box = new Box(renderLocation == 0 ? pos.down() : pos);
+		
+		if (renderLocation == 2)
+			return box.expand(0, -0.5, 0).offset(0, -0.5, 0);
+		
+		return box;
+	}
 }
-
