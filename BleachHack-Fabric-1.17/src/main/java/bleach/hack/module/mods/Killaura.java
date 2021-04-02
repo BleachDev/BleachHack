@@ -17,6 +17,7 @@
  */
 package bleach.hack.module.mods;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import org.lwjgl.glfw.GLFW;
 
@@ -39,6 +40,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.EntityHitResult;
 
 public class Killaura extends Module {
 
@@ -46,6 +48,7 @@ public class Killaura extends Module {
 
 	public Killaura() {
 		super("Killaura", GLFW.GLFW_KEY_K, Category.COMBAT, "Automatically attacks entities",
+				new SettingToggle("TriggerBot", false).withDesc("Only attack entities in front of you"),
 				new SettingToggle("Players", true).withDesc("Attack players"),
 				new SettingToggle("Mobs", true).withDesc("Attack mobs"),
 				new SettingToggle("Animals", false).withDesc("Attack animals"),
@@ -64,31 +67,35 @@ public class Killaura extends Module {
 		}
 
 		delay++;
-		int reqDelay = (int) Math.round(20 / getSetting(8).asSlider().getValue());
-
-		Optional<Entity> target = Streams.stream(mc.world.getEntities())
+		int reqDelay = (int) Math.round(20 / getSetting(9).asSlider().getValue());
+		
+		ArrayList<Entity> arrayListWithOneEntry = new ArrayList<Entity>();
+		if(mc.crosshairTarget != null && mc.crosshairTarget instanceof EntityHitResult) 
+			arrayListWithOneEntry.add(((EntityHitResult)mc.crosshairTarget).getEntity());
+		
+		Optional<Entity> target = Streams.stream(getSetting(0).asToggle().state ? mc.world.getEntities() : arrayListWithOneEntry)
 				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
-						&& mc.player.distanceTo(e) <= getSetting(7).asSlider().getValue()
+						&& mc.player.distanceTo(e) <= getSetting(8).asSlider().getValue()
 						&& e.isAlive() 
 						&& !e.getEntityName().equals(mc.getSession().getUsername())
 						&& e != mc.player.getVehicle()
-						&& (mc.player.canSee(e) || getSetting(5).asToggle().state))
-				.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state)
-						|| (e instanceof Monster && getSetting(1).asToggle().state)
-						|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state)
-						|| (e instanceof ArmorStandEntity && getSetting(3).asToggle().state))
+						&& (mc.player.canSee(e) || getSetting(6).asToggle().state))
+				.filter(e -> (e instanceof PlayerEntity && getSetting(1).asToggle().state)
+						|| (e instanceof Monster && getSetting(2).asToggle().state)
+						|| (EntityUtils.isAnimal(e) && getSetting(3).asToggle().state)
+						|| (e instanceof ArmorStandEntity && getSetting(4).asToggle().state))
 				.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player)))
 				.findFirst();
 
 		if (target.isPresent()) {
 			Entity e = target.get();
 			
-			if (getSetting(4).asRotate().state) {
-				WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(4).asRotate());
+			if (getSetting(5).asRotate().state && getSetting(0).asToggle().state) {
+				WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(5).asRotate());
 			}
 
-			if (((delay > reqDelay || reqDelay == 0) && !getSetting(6).asToggle().state) ||
-					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSetting(6).asToggle().state)) {
+			if (((delay > reqDelay || reqDelay == 0) && !getSetting(7).asToggle().state) ||
+					(mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f && getSetting(7).asToggle().state)) {
 				boolean wasSprinting = mc.player.isSprinting();
 
 				if (wasSprinting)
