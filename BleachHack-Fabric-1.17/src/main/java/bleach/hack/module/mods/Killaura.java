@@ -90,7 +90,7 @@ public class Killaura extends Module {
 		if (target.isPresent()) {
 			Entity e = target.get();
 			
-			if (getSetting(5).asRotate().state && getSetting(0).asToggle().state) {
+			if (getSetting(5).asRotate().state && !getSetting(0).asToggle().state) {
 				WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(5).asRotate());
 			}
 
