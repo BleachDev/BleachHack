@@ -79,13 +79,6 @@ public class Xray extends Module {
 	}
 
 	@Subscribe
-	public void blockRender(EventBlockRender eventBlockRender) {
-		if (isVisible(eventBlockRender.getBlockState().getBlock())) {
-			eventBlockRender.setCancelled(true);
-		}
-	}
-
-	@Subscribe
 	public void onTick(EventTick eventPreUpdate) {
 		mc.options.gamma = 69.420;
 	}
