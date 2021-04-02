@@ -120,7 +120,7 @@ public class RenderUtils {
 		cleanup();
 	}
 
-	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float red, float green, float blue, float width) {
+	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float red, float green, float blue, float alpha, float width) {
 		setup();
 
 		MatrixStack matrix = matrixFrom(x1, y1, z1);
@@ -134,7 +134,7 @@ public class RenderUtils {
 		RenderSystem.lineWidth(width);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexLine(matrix, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), red, green, blue, 0.5f);
+		Vertexer.vertexLine(matrix, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), red, green, blue, alpha);
 		tessellator.draw();
 
 		RenderSystem.enableCull();

@@ -54,12 +54,15 @@ public class Tracers extends Module {
 						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals")),
 				new SettingToggle("Vehicles", false).withDesc("Show Vehicle Tracers").withChildren(
 						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles (minecarts/boats)")),
-				new SettingSlider("Thick", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers"));
+
+				new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers"),
+				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers"));
 	}
 
 	@Subscribe
 	public void onRender(EventWorldRender.Post event) {
-		final float thick = (float) getSetting(6).asSlider().getValue();
+		float width = (float) getSetting(6).asSlider().getValue();
+		float opacity = (float) getSetting(7).asSlider().getValue();
 
 		for (Entity e : mc.world.getEntities()) {
 			Vec3d vec = e.getPos();
@@ -85,8 +88,8 @@ public class Tracers extends Module {
 			}
 
 			if (col != null) {
-				RenderUtils.drawLine(vec2.x, vec2.y, vec2.z, vec.x, vec.y, vec.z, col[0], col[1], col[2], thick);
-				RenderUtils.drawLine(vec.x, vec.y, vec.z, vec.x, vec.y + (e.getHeight() / 1.1), vec.z, col[0], col[1], col[2], thick);
+				RenderUtils.drawLine(vec2.x, vec2.y, vec2.z, vec.x, vec.y, vec.z, col[0], col[1], col[2], opacity, width);
+				RenderUtils.drawLine(vec.x, vec.y, vec.z, vec.x, vec.y + e.getHeight() * 0.9, vec.z, col[0], col[1], col[2], opacity, width);
 			}
 		}
 	}

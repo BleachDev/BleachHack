@@ -45,7 +45,9 @@ public class Trajectories extends Module {
 						new SettingToggle("Potions", true).withDesc("Shows flying splash/lingering potions")),
 				new SettingToggle("Other Players", false).withDesc("Show other players trajectories"),
 				new SettingColor("Color", 1f, 0.3f, 1f, false),
-				new SettingSlider("Thick", 0.1, 5, 2, 2).withDesc("Thickness of the trajectories"));
+
+				new SettingSlider("Thick", 0.1, 5, 2, 2).withDesc("Thickness of the trajectories"),
+				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the trajectories"));
 	}
 
 	@Subscribe
@@ -102,24 +104,26 @@ public class Trajectories extends Module {
 			if (t.getLeft().size() >= 2) {
 				if (getSetting(0).asMode().mode == 0) {
 					for (int i = 1; i < t.getLeft().size(); i++) {
-						RenderUtils.drawLine(t.getLeft().get(i - 1).x, t.getLeft().get(i - 1).y, t.getLeft().get(i - 1).z,
-								t.getLeft().get(i).x, t.getLeft().get(i).y, t.getLeft().get(i).z, col[0], col[1], col[2],
+						RenderUtils.drawLine(
+								t.getLeft().get(i - 1).x, t.getLeft().get(i - 1).y, t.getLeft().get(i - 1).z,
+								t.getLeft().get(i).x, t.getLeft().get(i).y, t.getLeft().get(i).z,
+								col[0], col[1], col[2],
+								(float) getSetting(8).asSlider().getValue(),
 								(float) getSetting(7).asSlider().getValue());
 					}
 				} else {
 					for (Vec3d v : t.getLeft()) {
-						RenderUtils.drawFilledBox(new Box(v.x - 0.1, v.y - 0.1, v.z - 0.1, v.x + 0.1, v.y + 0.1, v.z + 0.1),
-								col[0], col[1], col[2], 0.75f);
+						RenderUtils.drawFill(new Box(v, v).expand(0.08), col[0], col[1], col[2], (float) getSetting(8).asSlider().getValue());
 					}
 				}
 			}
 
 			if (t.getMiddle() != null) {
-				RenderUtils.drawFilledBox(t.getMiddle().getBoundingBox(), col[0], col[1], col[2], 0.75f);
+				RenderUtils.drawFilledBox(t.getMiddle().getBoundingBox(), col[0], col[1], col[2], (float) getSetting(8).asSlider().getValue());
 			}
 
 			if (t.getRight() != null) {
-				RenderUtils.drawFilledBox(t.getRight(), col[0], col[1], col[2], 0.75f);
+				RenderUtils.drawFilledBox(t.getRight(), col[0], col[1], col[2], (float) getSetting(8).asSlider().getValue());
 			}
 		}
 	}
