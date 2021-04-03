@@ -121,6 +121,8 @@ public abstract class SettingList<E> extends SettingBase {
 	public void readSettings(JsonElement settings) {
 		JsonArray ja = (JsonArray) settings;
 
+		itemPool.addAll(items);
+		items.clear();
 		for (JsonElement je: ja) {
 			if (je.isJsonPrimitive()) {
 				E item = getItemFromString(je.getAsString());
