@@ -17,7 +17,7 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import org.lwjgl.glfw.GLFW;
 
@@ -33,6 +33,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.world.EntityUtils;
 import bleach.hack.util.world.WorldUtils;
+import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.Monster;
@@ -40,7 +41,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.Hand;
-import net.minecraft.util.hit.EntityHitResult;
 
 public class Killaura extends Module {
 
@@ -69,13 +69,13 @@ public class Killaura extends Module {
 		delay++;
 		int reqDelay = (int) Math.round(20 / getSetting(9).asSlider().getValue());
 		
-		ArrayList<Entity> arrayListWithOneEntry = new ArrayList<Entity>();
-		if(mc.crosshairTarget != null && mc.crosshairTarget instanceof EntityHitResult) 
-			arrayListWithOneEntry.add(((EntityHitResult)mc.crosshairTarget).getEntity());
+		double range = getSetting(8).asSlider().getValue();
+		// DebugRenderer.getTargetedEntity() doesn't support ints -> ceiling the range and later filtering numbers with to high decimals out
+		Optional<Entity> lookingAt = DebugRenderer.getTargetedEntity(mc.player, (int) Math.ceil(range));
 		
-		Optional<Entity> target = Streams.stream(getSetting(0).asToggle().state ? arrayListWithOneEntry : mc.world.getEntities())
+		Optional<Entity> target = Streams.stream(getSetting(0).asToggle().state ? optionalToIterable(lookingAt) : mc.world.getEntities())
 				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
-						&& mc.player.distanceTo(e) <= getSetting(8).asSlider().getValue()
+						&& mc.player.distanceTo(e) <= range
 						&& e.isAlive() 
 						&& !e.getEntityName().equals(mc.getSession().getUsername())
 						&& e != mc.player.getVehicle()
@@ -91,7 +91,6 @@ public class Killaura extends Module {
 			Entity e = target.get();
 			
 			if (getSetting(5).asRotate().state && !getSetting(0).asToggle().state) {
-
 				WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(5).asRotate());
 			}
 
@@ -111,5 +110,9 @@ public class Killaura extends Module {
 				delay = 0;
 			}
 		}
+	}
+	
+	private Iterable<Entity> optionalToIterable(Optional<Entity> o) {
+		return o.map(Collections::singleton).orElseGet(Collections::emptySet);
 	}
 }
