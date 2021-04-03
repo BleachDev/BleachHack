@@ -154,17 +154,17 @@ public class NoSlow extends Module {
 				
 				mc.keyboard.setRepeatEvents(true);
 				
-				float newTime = (System.currentTimeMillis() - lastTime) / 10f;
+				float amount = (System.currentTimeMillis() - lastTime) / 10f;
 				lastTime = System.currentTimeMillis();
 	
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT))
-					yaw -= newTime;
+					yaw -= amount;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT))
-					yaw += newTime;
+					yaw += amount;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP))
-					pitch -= newTime;
+					pitch -= amount;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN))
-					pitch += newTime;
+					pitch += amount;
 	
 				if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(1).asToggle().state) {
 					if (yaw == 0f && pitch != 0f) {
