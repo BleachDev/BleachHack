@@ -92,7 +92,7 @@ public class Search extends Module {
 	public void onTick(EventTick event) {
 		Set<Block> blockList = getSetting(4).asList(Block.class).getItems();
 
-		if (!prevBlockList.equals(blockList) || (oldViewDistance != mc.options.viewDistance && oldViewDistance != -1)) {
+		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
 			reset();
 
 			for (Chunk chunk: WorldUtils.getLoadedChunks()) {
