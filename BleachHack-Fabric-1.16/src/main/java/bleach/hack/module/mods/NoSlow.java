@@ -48,6 +48,7 @@ import net.minecraft.util.math.Vec3d;
 public class NoSlow extends Module {
 
 	private Vec3d addVelocity = Vec3d.ZERO;
+	private long lastTime;
 
 	public NoSlow() {
 		super("NoSlow", KEY_UNBOUND, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
@@ -152,15 +153,18 @@ public class NoSlow extends Module {
 				float pitch = 0f;
 				
 				mc.keyboard.setRepeatEvents(true);
+				
+				float newTime = (System.currentTimeMillis() - lastTime) / 10f;
+				lastTime = System.currentTimeMillis();
 	
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT))
-					yaw -= 1f;
+					yaw -= newTime;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT))
-					yaw += 1f;
+					yaw += newTime;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP))
-					pitch -= 1f;
+					pitch -= newTime;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN))
-					pitch += 1f;
+					pitch += newTime;
 	
 				if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(1).asToggle().state) {
 					if (yaw == 0f && pitch != 0f) {
