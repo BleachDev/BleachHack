@@ -54,7 +54,7 @@ public class Search extends Module {
 
 	private Set<BlockPos> foundBlocks = new HashSet<>();
 
-	private ExecutorService chunkSearchers;
+	private ExecutorService chunkSearchers = Executors.newFixedThreadPool(4);
 	private Map<ChunkPos, Future<Set<BlockPos>>> chunkFutures = new HashMap<>();
 
 	private Queue<ChunkPos> queuedChunks = new ArrayDeque<>();
@@ -84,12 +84,6 @@ public class Search extends Module {
 		reset();
 
 		super.onDisable();
-	}
-
-	@Override
-	public void onEnable() {
-		super.onEnable();
-		chunkSearchers = Executors.newFixedThreadPool(4);
 	}
 
 	@Subscribe
