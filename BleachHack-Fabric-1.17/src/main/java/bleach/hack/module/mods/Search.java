@@ -36,6 +36,7 @@ import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.UnloadChunkS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -149,7 +150,7 @@ public class Search extends Module {
 	public void onReadPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket) {
 			reset();
-		} else if (event.getPacket() instanceof BlockUpdateS2CPacket) {
+		} else if (event.getPacket() instanceof BlockUpdateS2CPacket || event.getPacket() instanceof GameJoinS2CPacket) {
 			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
 
 			queuedBlocks.add(Pair.of(packet.getPos(), packet.getState()));
