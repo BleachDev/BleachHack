@@ -62,6 +62,8 @@ public class Search extends Module {
 	private Queue<Pair<BlockPos, BlockState>> queuedBlocks = new ArrayDeque<>();
 
 	private Set<Block> prevBlockList = new HashSet<>();
+	
+	private int oldViewDistance = -1;
 
 	public Search() {
 		super("Search", KEY_UNBOUND, Category.RENDER, "Highlights specified Blocks",
@@ -90,7 +92,7 @@ public class Search extends Module {
 	public void onTick(EventTick event) {
 		Set<Block> blockList = getSetting(4).asList(Block.class).getItems();
 
-		if (!prevBlockList.equals(blockList)) {
+		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
 			reset();
 
 			for (Chunk chunk: WorldUtils.getLoadedChunks()) {
@@ -98,6 +100,7 @@ public class Search extends Module {
 			}
 
 			prevBlockList = new HashSet<>(blockList);
+			oldViewDistance = mc.options.viewDistance;
 			return;
 		}
 
