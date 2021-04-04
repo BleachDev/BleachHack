@@ -55,16 +55,23 @@ public class CmdNBT extends Command {
 		ItemStack item = mc.player.getInventory().getMainHandStack();
 
 		if (args[0].equalsIgnoreCase("get")) {
-			String tag = BleachJsonHelper.formatJson(item.getTag().toString());
+			NbtCompound tag = item.getTag();
+			
+			if (tag == null) {
+				BleachLogger.infoMessage("\u00a7c\u00a7lNo NBT on this item!");
+				return;
+			}
+
+			String stringTag = BleachJsonHelper.formatJson(tag.toString());
 
 			Text copy = new LiteralText("\u00a7e\u00a7l<COPY>")
 					.styled(s ->
 					s.withClickEvent(
-							new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tag))
+							new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, stringTag))
 					.withHoverEvent(
 							new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Copy the nbt of this item to your clipboard"))));
 
-			BleachLogger.infoMessage(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + tag));
+			BleachLogger.infoMessage(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + stringTag));
 		} else if (args[0].equalsIgnoreCase("copy")) {
 			mc.keyboard.setClipboard(item.getTag() + "");
 			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + (item.getTag() + "\n") + "\u00a76to clipboard.");
