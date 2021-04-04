@@ -17,7 +17,6 @@
  */
 package bleach.hack;
 
-import bleach.hack.module.StaticModuleStore;
 import com.google.common.eventbus.EventBus;
 import com.google.gson.JsonElement;
 
@@ -45,7 +44,6 @@ public class BleachHack implements ModInitializer {
 
     public static final EventBus eventBus = new EventBus();
 
-    //TODO: Come back for base-rewrite
     private Logger logger;
     //private EventBus eventBus;
     //private BleachFileMang bleachFileManager;
@@ -68,9 +66,11 @@ public class BleachHack implements ModInitializer {
 
         instance = this;
         this.logger = LogManager.getFormatterLogger("BleachHack");
+        //TODO base-rewrite
         //this.eventBus = new EventBus();
         //this.bleachFileManager = new BleachFileMang();
         BleachFileMang.init();
+        ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
         BleachFileHelper.readModules();
 
         ClickGui.clickGui.initWindows();
