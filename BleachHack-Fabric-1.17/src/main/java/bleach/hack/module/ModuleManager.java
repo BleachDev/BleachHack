@@ -84,11 +84,11 @@ public class ModuleManager {
         return modules.values().stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
     }
 
-    @Subscribe
-    public static void handleKeyPress(EventKeyPress eventKeyPress) {
+    //This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
+    public static void handleKeyPress(int key) {
         if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3))
             return;
 
-        modules.values().stream().filter(m -> m.getKey() == eventKeyPress.getKey()).forEach(Module::toggle);
+        modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
     }
 }
