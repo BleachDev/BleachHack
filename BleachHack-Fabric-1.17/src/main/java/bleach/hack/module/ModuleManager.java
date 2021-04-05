@@ -72,7 +72,7 @@ public class ModuleManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getModule(Class<T> clazz) {
+    public static <T extends Module> T getModule(Class<T> clazz) {
         return (T) modules.values().stream().filter(clazz::isInstance).findFirst().orElse(null);
     }
 
