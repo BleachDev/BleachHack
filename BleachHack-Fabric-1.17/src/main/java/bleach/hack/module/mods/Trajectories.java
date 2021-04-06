@@ -46,8 +46,8 @@ public class Trajectories extends Module {
 				new SettingToggle("Other Players", false).withDesc("Show other players trajectories"),
 				new SettingColor("Color", 1f, 0.3f, 1f, false),
 
-				new SettingSlider("Thick", 0.1, 5, 2, 2).withDesc("Thickness of the trajectories"),
-				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the trajectories"));
+				new SettingSlider("Width", 0.1, 5, 2, 2).withDesc("Thickness of the trajectories"),
+				new SettingSlider("Opacity", 0, 1, 0.7, 2).withDesc("Opacity of the trajectories"));
 	}
 
 	@Subscribe
