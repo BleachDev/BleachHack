@@ -33,61 +33,59 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class BleachHack implements ModInitializer {
-    private static BleachHack instance = null;
 
-    public static BleachHack getInstance() {
-        return instance;
-    }
+	private static BleachHack instance = null;
 
-    public static final String VERSION = "0.15.2";
-    public static final int INTVERSION = 27;
+	public static final String VERSION = "0.15.2";
+	public static final int INTVERSION = 27;
 
-    public static final EventBus eventBus = new EventBus();
+	public static final EventBus eventBus = new EventBus();
 
-    private Logger logger;
-    //private EventBus eventBus;
-    //private BleachFileMang bleachFileManager;
+	public static FriendManager friendMang;
 
-    public static FriendManager friendMang;
+	private Logger logger;
+	//private EventBus eventBus;
+	//private BleachFileMang bleachFileManager;
 
-    public BleachHack() {
-        if (instance != null) {
-            throw new RuntimeException("A BleachHack instance already exists.");
-        }
-    }
+	public static BleachHack getInstance() {
+		return instance;
+	}
 
-    @Override
-    public void onInitialize() {
-        long initStartTime = System.nanoTime();
+	public BleachHack() {
+		if (instance != null) {
+			throw new RuntimeException("A BleachHack instance already exists.");
+		}
+	}
 
-        if (instance != null) {
-            throw new RuntimeException("BleachHack has already been initialized.");
-        }
+	@Override
+	public void onInitialize() {
+		long initStartTime = System.currentTimeMillis();
 
-        instance = this;
-        this.logger = LogManager.getFormatterLogger("BleachHack");
-        //TODO base-rewrite
-        //this.eventBus = new EventBus();
-        //this.bleachFileManager = new BleachFileMang();
-        BleachFileMang.init();
-        ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
-        BleachFileHelper.readModules();
+		if (instance != null) {
+			throw new RuntimeException("BleachHack has already been initialized.");
+		}
 
-        ClickGui.clickGui.initWindows();
-        BleachFileHelper.readClickGui();
-        BleachFileHelper.readFriends();
+		instance = this;
+		this.logger = LogManager.getFormatterLogger("BleachHack");
 
-        CommandManager.readPrefix();
+		//TODO base-rewrite
+		//this.eventBus = new EventBus();
+		//this.bleachFileManager = new BleachFileMang();
+		BleachFileMang.init();
+		ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
+		BleachFileHelper.readModules();
 
-        JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
-        if (mainMenu != null && !mainMenu.getAsBoolean()) {
-            BleachTitleScreen.customTitleScreen = false;
-        }
+		ClickGui.clickGui.initWindows();
+		BleachFileHelper.readClickGui();
+		BleachFileHelper.readFriends();
 
-        this.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", (System.nanoTime() - initStartTime) / 1000000L);
-    }
+		CommandManager.readPrefix();
 
-    private EventBus getEventBus() {
-        return this.eventBus;
-    }
+		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
+		if (mainMenu != null && !mainMenu.getAsBoolean()) {
+			BleachTitleScreen.customTitleScreen = false;
+		}
+
+		this.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
+	}
 }
