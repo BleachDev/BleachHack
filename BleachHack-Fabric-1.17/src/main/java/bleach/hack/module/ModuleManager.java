@@ -17,126 +17,55 @@
  */
 package bleach.hack.module;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-import bleach.hack.module.mods.*;
-
-import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.collect.Sets;
+import com.google.gson.Gson;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
 public class ModuleManager {
 
-	@SuppressWarnings("unchecked")
-	private static final Set<Class<? extends Module>> storedModules = Sets.newHashSet(
-			Ambience.class,
-			AntiChunkBan.class,
-			AntiHunger.class,
-			ArrowJuke.class,
-			AutoArmor.class,
-			AutoBuild.class,
-			AutoDonkeyDupe.class,
-			AutoParkour.class,
-			AutoReconnect.class,
-			AutoRespawn.class,
-			AutoSign.class,
-			AutoSteal.class,
-			AutoThrow.class,
-			AutoTool.class,
-			AutoTotem.class,
-			AutoWalk.class,
-			BetterPortal.class,
-			BlockParty.class,
-			BookCrash.class,
-			BowBot.class,
-			ClickGui.class,
-			ClickTp.class,
-			ColorSigns.class,
-			Criticals.class,
-			CrystalAura.class,
-			CustomChat.class,
-			DiscordRPCMod.class,
-			Dispenser32k.class,
-			ElytraFly.class,
-			EntityControl.class,
-			ElytraReplace.class,
-			ESP.class,
-			FakeLag.class,
-			FastUse.class,
-			Flight.class,
-			Freecam.class,
-			Fullbright.class,
-			Ghosthand.class,
-			HandProgress.class,
-			HoleESP.class,
-			Jesus.class,
-			Killaura.class,
-			MountBypass.class,
-			MouseFriend.class,
-			Nametags.class,
-			Nofall.class,
-			NoKeyBlock.class,
-			NoRender.class,
-			NoSlow.class,
-			Notebot.class,
-			NotebotStealer.class,
-			NoVelocity.class,
-			Nuker.class,
-			OffhandCrash.class,
-			PacketFly.class,
-			Peek.class,
-			PlayerCrash.class,
-			RotationSnap.class,
-			SafeWalk.class,
-			Scaffold.class,
-			Search.class,
-			ShaderRender.class,
-			Spammer.class,
-			Speed.class,
-			SpeedMine.class,
-			Sprint.class,
-			StarGithub.class,
-			Step.class,
-			StorageESP.class,
-			Surround.class,
-			Timer.class,
-			Tracers.class,
-			Trail.class,
-			Trajectories.class,
-			UI.class,
-			Xray.class,
-			Zoom.class);
+	private static final Gson moduleGson = new Gson();
 
 	private static final Map<String, Module> modules = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
 	public static Iterable<Module> getModules() {
 		return modules.values();
 	}
-	
-	public static Iterable<Class<? extends Module>> getStoredModules() {
-		return storedModules;
-	}
 
-	public static void loadStoredModules(boolean overwrite) {
-		for (Class<? extends Module> moduleClass : getStoredModules()) {
+	public static void loadModules(InputStream jsonInputStream, boolean overwrite) {
+		ModuleListJson json = moduleGson.fromJson(new InputStreamReader(jsonInputStream), ModuleListJson.class);
+
+		for (String moduleString : json.getModules()) {
 			try {
-				// Apache really got utils for every thing in the entire universe
-				Module module = ConstructorUtils.invokeConstructor(moduleClass);
+				Class<?> moduleClass = Class.forName(String.format("%s.%s", json.getPackage(), moduleString));
 
-				loadModule(module, overwrite);
+				if (Module.class.isAssignableFrom(moduleClass)) {
+					try {
+						Module module = (Module) moduleClass.getConstructor().newInstance();
+
+						loadModule(module, overwrite);
+					} catch (Exception exception) {
+						System.err.printf("Failed to load module %s: could not instantiate.%n", moduleClass);
+						exception.printStackTrace();
+					}
+				} else {
+					System.err.printf("Failed to load module %s: not a descendant of Module.%n", moduleClass);
+				}
 			} catch (Exception exception) {
-				System.err.printf("Failed to load module %s: could not instantiate.%n", moduleClass);
+				System.err.printf("Failed to load module %s.%n", moduleString);
 				exception.printStackTrace();
 			}
 		}
 	}
-	
+
 	public static void loadModule(Module module, boolean overwrite) {
 		if (!overwrite && modules.containsKey(module.getName())) {
 			System.err.printf("Failed to load module %s: a module with this name is already loaded.%n", module.getName());
