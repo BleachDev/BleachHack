@@ -210,7 +210,7 @@ public class BleachFileHelper {
 		
 		String toWrite = "";
 		for (String s: BleachHack.interaction.keySet())
-			toWrite += s + ":" + BleachHack.interaction.get(s);
+			toWrite += s + ":" + BleachHack.interaction.get(s) + "\n";
 			
 		BleachFileMang.createEmptyFile("interaction.txt");
 		BleachFileMang.appendFile(toWrite, "interaction.txt");
