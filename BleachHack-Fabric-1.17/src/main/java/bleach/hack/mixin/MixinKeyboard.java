@@ -43,8 +43,10 @@ public class MixinKeyboard {
 		if (key != -1) {
 			EventKeyPress event = new EventKeyPress(key, scanCode);
 			BleachHack.eventBus.post(event);
-			if (event.isCancelled())
+
+			if (event.isCancelled()) {
 				callbackInfo.cancel();
+			}
 		}
 	}
 }
