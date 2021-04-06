@@ -17,6 +17,7 @@
  */
 package bleach.hack.mixin;
 
+import bleach.hack.module.ModuleManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,6 +37,8 @@ public class MixinKeyboard {
 			 MinecraftClient.getInstance().openScreen(new
 			 ChatScreen(CommandManager.prefix));
 		 }*/
+
+		ModuleManager.handleKeyPress(key);
 
 		if (key != -1) {
 			EventKeyPress event = new EventKeyPress(key, scanCode);

@@ -28,37 +28,66 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.file.BleachFileHelper;
 import bleach.hack.util.file.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BleachHack implements ModInitializer {
+    private static BleachHack instance = null;
 
-	public static final String VERSION = "0.15.2";
-	public static final int INTVERSION = 27;
+    public static BleachHack getInstance() {
+        return instance;
+    }
 
-	public static final EventBus eventBus = new EventBus();
+    public static final String VERSION = "0.15.2";
+    public static final int INTVERSION = 27;
 
-	public static FriendManager friendMang;
+    public static final EventBus eventBus = new EventBus();
 
-	@Override
-	public void onInitialize() {
-		BleachFileMang.init();
-		BleachFileHelper.readModules();
+    private Logger logger;
+    //private EventBus eventBus;
+    //private BleachFileMang bleachFileManager;
 
-		ClickGui.clickGui.initWindows();
-		BleachFileHelper.readClickGui();
-		BleachFileHelper.readFriends();
+    public static FriendManager friendMang;
 
-		CommandManager.readPrefix();
+    public BleachHack() {
+        if (instance != null) {
+            throw new RuntimeException("A BleachHack instance already exists.");
+        }
+    }
 
-		// v This makes a scat fetishist look like housekeeping.
-		eventBus.register(new ModuleManager());
-		// wait why do we need this ^?
-		// Because I was too lazy to implement a proper keybind system and I left the
-		// keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind
-		// System
+    @Override
+    public void onInitialize() {
+        long initStartTime = System.nanoTime();
 
-		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
-		if (mainMenu != null && !mainMenu.getAsBoolean()) {
-			BleachTitleScreen.customTitleScreen = false;
-		}
-	}
+        if (instance != null) {
+            throw new RuntimeException("BleachHack has already been initialized.");
+        }
+
+        instance = this;
+        this.logger = LogManager.getFormatterLogger("BleachHack");
+        //TODO base-rewrite
+        //this.eventBus = new EventBus();
+        //this.bleachFileManager = new BleachFileMang();
+        BleachFileMang.init();
+        ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
+        BleachFileHelper.readModules();
+
+        ClickGui.clickGui.initWindows();
+        BleachFileHelper.readClickGui();
+        BleachFileHelper.readFriends();
+
+        CommandManager.readPrefix();
+
+        JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
+        if (mainMenu != null && !mainMenu.getAsBoolean()) {
+            BleachTitleScreen.customTitleScreen = false;
+        }
+
+        this.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", (System.nanoTime() - initStartTime) / 1000000L);
+    }
+
+    private EventBus getEventBus() {
+        return this.eventBus;
+    }
 }
