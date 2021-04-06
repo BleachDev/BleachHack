@@ -149,7 +149,7 @@ public class WorldUtils {
 			mc.player.inventory.selectedSlot = slot;
 
 		for (Direction d : Direction.values()) {
-			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255))
+			if (!World.isInBuildLimit(pos.offset(d)))
 				continue;
 
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
@@ -211,7 +211,7 @@ public class WorldUtils {
 			mc.player.inventory.selectedSlot = slot;
 
 		for (Direction d : Direction.values()) {
-			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255))
+			if (!World.isInBuildLimit(pos.offset(d)))
 				continue;
 
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
