@@ -1,8 +1,9 @@
 package bleach.hack.event.events;
 
+import bleach.hack.event.Event;
 import net.minecraft.util.math.Vec3d;
 
-public class EventPlayerPushed {
+public class EventPlayerPushed extends Event {
 	
 	private Vec3d push;
 

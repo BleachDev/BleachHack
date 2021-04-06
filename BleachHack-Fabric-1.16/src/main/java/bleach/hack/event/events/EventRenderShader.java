@@ -1,8 +1,9 @@
 package bleach.hack.event.events;
 
+import bleach.hack.event.Event;
 import net.minecraft.client.gl.ShaderEffect;
 
-public class EventRenderShader {
+public class EventRenderShader extends Event {
 	
 	private ShaderEffect effect;
 	
