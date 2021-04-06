@@ -34,11 +34,12 @@ public class MixinClientWorld {
 					BleachFileHelper.saveClickGui();
 				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS)
 					BleachFileHelper.saveFriends();
+				if (BleachFileHelper.SCHEDULE_SAVE_INTERACTION)
+					BleachFileHelper.saveInteraction();
 			}
 
 			BleachQueue.nextQueue();
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 
 		EventTick event = new EventTick();
 		BleachHack.eventBus.post(event);
