@@ -7,6 +7,9 @@ import bleach.hack.command.Command;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
 
+/**
+ * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
+ */
 public class CmdInteraction extends Command{
 	HashMap<String, String> interaction = BleachHack.interaction;
 	
@@ -17,12 +20,12 @@ public class CmdInteraction extends Command{
 
 	@Override
 	public String getDescription() {
-		return "Manage the things which appear on the interaction screen. Use %name";
+		return "Manage the things which appear on the interaction screen. Use %name and %suggestion";
 	}
 
 	@Override
 	public String getSyntax() {
-		return "interaction add ( <alias> ) ( <command> ) | interaction remove ( <alias / command> ) | interection list | interaction clear";
+		return "interaction add ( <alias> ) ( <command> ) | interaction remove ( <alias/command> ) | interection list | interaction clear";
 	}
 
 	@Override
@@ -38,12 +41,13 @@ public class CmdInteraction extends Command{
 			list();
 		else 
 			printSyntaxError();
+		
 		BleachFileHelper.SCHEDULE_SAVE_INTERACTION = true;
 	}
 	
 	private void add (String[] args) {
-		if (args.length < 3) {
-			printSyntaxError("No alias or command specified");
+		if (args.length < 7) {
+			printSyntaxError();
 			return;
 		} 
 		
@@ -85,6 +89,11 @@ public class CmdInteraction extends Command{
 	}
 	
 	private void remove (String[] args) {
+		if (args.length < 4) {
+			printSyntaxError();
+			return;
+		}
+		
 		if (interaction.size() == 0) {
 			BleachLogger.errorMessage("Nothing to remove. You first have to add an entry");
 			return;
@@ -96,14 +105,14 @@ public class CmdInteraction extends Command{
 		}
 		
 		String result = "";
-		
 		for (int i = 2; i < args.length; i++) 
 			if (!args[i].equals(")"))
 				result += args[i] + " ";
 		
+		System.out.println(result);
 		HashMap<String, String> map = BleachHack.interaction;
 		for (String s: map.keySet())
-			if (s.equals(result) || map.get(s).equals(result)) {
+			if (s.equalsIgnoreCase(result) || map.get(s).equalsIgnoreCase(result)) {
 				map.remove(s);
 				BleachLogger.infoMessage("Removed: " + s);
 			}
