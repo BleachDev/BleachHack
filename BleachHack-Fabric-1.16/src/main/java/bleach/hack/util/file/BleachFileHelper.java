@@ -98,7 +98,7 @@ public class BleachFileHelper {
 			return;
 
 		for (Entry<String, JsonElement> e : jo.entrySet()) {
-			Module mod = ModuleManager.getModuleByName(e.getKey());
+			Module mod = ModuleManager.getModule(e.getKey());
 
 			if (mod == null)
 				continue;

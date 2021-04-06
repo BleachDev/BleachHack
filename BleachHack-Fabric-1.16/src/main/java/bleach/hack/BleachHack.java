@@ -28,8 +28,13 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.file.BleachFileHelper;
 import bleach.hack.util.file.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BleachHack implements ModInitializer {
+
+	private static BleachHack instance = null;
 
 	public static final String VERSION = "0.15.2";
 	public static final int INTVERSION = 27;
@@ -38,9 +43,35 @@ public class BleachHack implements ModInitializer {
 
 	public static FriendManager friendMang;
 
+	private Logger logger;
+	//private BleachFileMang bleachFileManager;
+
+	public static BleachHack getInstance() {
+		return instance;
+	}
+
+	public BleachHack() {
+		if (instance != null) {
+			throw new RuntimeException("A BleachHack instance already exists.");
+		}
+	}
+
 	@Override
 	public void onInitialize() {
+		long initStartTime = System.currentTimeMillis();
+
+		if (instance != null) {
+			throw new RuntimeException("BleachHack has already been initialized.");
+		}
+
+		instance = this;
+		this.logger = LogManager.getFormatterLogger("BleachHack");
+
+		//TODO base-rewrite
+		//this.eventBus = new EventBus();
+		//this.bleachFileManager = new BleachFileMang();
 		BleachFileMang.init();
+		ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"), false);
 		BleachFileHelper.readModules();
 
 		ClickGui.clickGui.initWindows();
@@ -49,16 +80,11 @@ public class BleachHack implements ModInitializer {
 
 		CommandManager.readPrefix();
 
-		// v This makes a scat fetishist look like housekeeping.
-		eventBus.register(new ModuleManager());
-		// wait why do we need this ^?
-		// Because I was too lazy to implement a proper keybind system and I left the
-		// keypress handler in ModuleManager as a subscribed event. TODO: Proper Keybind
-		// System
-
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
 			BleachTitleScreen.customTitleScreen = false;
 		}
+
+		this.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 }

@@ -50,7 +50,7 @@ public class CmdSetting extends Command {
 			return;
 		}
 
-		Module m = ModuleManager.getModuleByName(args[0]);
+		Module m = ModuleManager.getModule(args[0]);
 		SettingBase s = m.getSetting(Integer.parseInt(args[1]));
 
 		if (s instanceof SettingSlider) {

@@ -44,7 +44,6 @@ public class BleachHack implements ModInitializer {
 	public static FriendManager friendMang;
 
 	private Logger logger;
-	//private EventBus eventBus;
 	//private BleachFileMang bleachFileManager;
 
 	public static BleachHack getInstance() {
