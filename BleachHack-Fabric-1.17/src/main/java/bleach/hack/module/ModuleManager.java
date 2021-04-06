@@ -17,55 +17,132 @@
  */
 package bleach.hack.module;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
+import bleach.hack.module.mods.*;
 
-import com.google.gson.Gson;
+import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.lwjgl.glfw.GLFW;
 
+import com.google.common.collect.Sets;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
 public class ModuleManager {
 
-	private static final Gson gson = new Gson();
+	@SuppressWarnings("unchecked")
+	private static final Set<Class<? extends Module>> storedModules = Sets.newHashSet(
+			Ambience.class,
+			AntiChunkBan.class,
+			AntiHunger.class,
+			ArrowJuke.class,
+			AutoArmor.class,
+			AutoBuild.class,
+			AutoDonkeyDupe.class,
+			AutoParkour.class,
+			AutoReconnect.class,
+			AutoRespawn.class,
+			AutoSign.class,
+			AutoSteal.class,
+			AutoThrow.class,
+			AutoTool.class,
+			AutoTotem.class,
+			AutoWalk.class,
+			BetterPortal.class,
+			BlockParty.class,
+			BookCrash.class,
+			BowBot.class,
+			ClickGui.class,
+			ClickTp.class,
+			ColorSigns.class,
+			Criticals.class,
+			CrystalAura.class,
+			CustomChat.class,
+			DiscordRPCMod.class,
+			Dispenser32k.class,
+			ElytraFly.class,
+			EntityControl.class,
+			ElytraReplace.class,
+			ESP.class,
+			FakeLag.class,
+			FastUse.class,
+			Flight.class,
+			Freecam.class,
+			Fullbright.class,
+			Ghosthand.class,
+			HandProgress.class,
+			HoleESP.class,
+			Jesus.class,
+			Killaura.class,
+			MountBypass.class,
+			MouseFriend.class,
+			Nametags.class,
+			Nofall.class,
+			NoKeyBlock.class,
+			NoRender.class,
+			NoSlow.class,
+			Notebot.class,
+			NotebotStealer.class,
+			NoVelocity.class,
+			Nuker.class,
+			OffhandCrash.class,
+			PacketFly.class,
+			Peek.class,
+			PlayerCrash.class,
+			RotationSnap.class,
+			SafeWalk.class,
+			Scaffold.class,
+			Search.class,
+			ShaderRender.class,
+			Spammer.class,
+			Speed.class,
+			SpeedMine.class,
+			Sprint.class,
+			StarGithub.class,
+			Step.class,
+			StorageESP.class,
+			Surround.class,
+			Timer.class,
+			Tracers.class,
+			Trail.class,
+			Trajectories.class,
+			UI.class,
+			Xray.class,
+			Zoom.class);
 
-	private static final Map<String, Module> modules = new HashMap<>();
+	private static final Map<String, Module> modules = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
 	public static Iterable<Module> getModules() {
 		return modules.values();
 	}
+	
+	public static Iterable<Class<? extends Module>> getStoredModules() {
+		return storedModules;
+	}
 
-	public static void loadModules(InputStream jsonFileStream) {
-		ModulesJson json = gson.fromJson(new InputStreamReader(jsonFileStream), ModulesJson.class);
-		for (String moduleClass : json.getModules()) {
+	public static void loadStoredModules(boolean overwrite) {
+		for (Class<? extends Module> moduleClass : getStoredModules()) {
 			try {
-				Class<?> clazz = Class.forName(String.format("%s.%s", json.getPackage(), moduleClass));
+				// Apache really got utils for every thing in the entire universe
+				Module module = ConstructorUtils.invokeConstructor(moduleClass);
 
-				if (Module.class.isAssignableFrom(clazz)) {
-					try {
-						Module module = (Module) clazz.getConstructors()[0].newInstance();
-						if (modules.containsKey(module.getName())) {
-							System.err.printf("Failed to load module %s: a module with this name is already loaded.%n", moduleClass);
-						} else {
-							modules.put(module.getName(), module);
-							//TODO Setup init system for modules
-						}
-					} catch (Exception exception) {
-						System.err.printf("Failed to load module %s: could not instantiate.%n", moduleClass);
-						exception.printStackTrace();
-					}
-				} else {
-					System.err.printf("Failed to load module %s: not a descendant of Module.%n", moduleClass);
-				}
+				loadModule(module, overwrite);
 			} catch (Exception exception) {
-				System.err.printf("Failed to load module %s.%n", moduleClass);
+				System.err.printf("Failed to load module %s: could not instantiate.%n", moduleClass);
 				exception.printStackTrace();
 			}
+		}
+	}
+	
+	public static void loadModule(Module module, boolean overwrite) {
+		if (!overwrite && modules.containsKey(module.getName())) {
+			System.err.printf("Failed to load module %s: a module with this name is already loaded.%n", module.getName());
+		} else {
+			modules.put(module.getName(), module);
+			// TODO: Setup init system for modules
 		}
 	}
 
@@ -82,7 +159,7 @@ public class ModuleManager {
 		return modules.values().stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
 	}
 
-	//This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
+	// This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
 	public static void handleKeyPress(int key) {
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
 			modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
