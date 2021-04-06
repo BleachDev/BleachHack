@@ -14,12 +14,15 @@ import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
+/**
+ * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
+ */
 public class Interaction extends Module {
 
 	private boolean released;
 	
 	public Interaction() {
-		super("Interaction screen", KEY_UNBOUND, Category.MISC, "An interaction screen when pressing the middle mouse button while looking to an entity. Customizable via the \"$interaction\" command");
+		super("InteractionScreen", KEY_UNBOUND, Category.MISC, "An interaction screen when pressing the middle mouse button while looking to an entity. Customizable via the $interaction command");
 	}
 	
 	@Subscribe
