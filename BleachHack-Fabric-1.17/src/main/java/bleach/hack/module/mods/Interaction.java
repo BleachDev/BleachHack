@@ -19,7 +19,7 @@ public class Interaction extends Module {
 	private boolean released;
 	
 	public Interaction() {
-		super("MouseMenu", KEY_UNBOUND, Category.MISC, "An interaction screen pressing the middle mouse button while looking to an entity. Customizable via the $interaction command");
+		super("Interaction screen", KEY_UNBOUND, Category.MISC, "An interaction screen pressing the middle mouse button while looking to an entity. Customizable via the $interaction command");
 	}
 	
 	@Subscribe
