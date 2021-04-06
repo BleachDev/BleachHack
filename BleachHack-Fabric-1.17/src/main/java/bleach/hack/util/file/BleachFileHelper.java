@@ -39,6 +39,7 @@ public class BleachFileHelper {
 	public static boolean SCHEDULE_SAVE_MODULES = false;
 	public static boolean SCHEDULE_SAVE_FRIENDS = false;
 	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
+	public static boolean SCHEDULE_SAVE_INTERACTION = false;
 
 	public static void saveModules() {
 		SCHEDULE_SAVE_MODULES = false;
@@ -197,5 +198,22 @@ public class BleachFileHelper {
 	public static void saveMiscSetting(String key, JsonElement value) {
 		BleachJsonHelper.addJsonElement(key, value, "misc.json");
 	}
-
+	
+	public static void readInteraction() {
+		for (String s: BleachFileMang.readFileLines("interaction.txt")) {
+			BleachHack.interaction.put(s.split(":")[0], s.split(":")[1]);
+		}
+	}
+	
+	public static void saveInteraction() {
+		SCHEDULE_SAVE_INTERACTION = false;
+		
+		String toWrite = "";
+		for (String s: BleachHack.interaction.keySet())
+			toWrite += s + ":" + BleachHack.interaction.get(s);
+			
+		BleachFileMang.createEmptyFile("interaction.txt");
+		BleachFileMang.appendFile(toWrite, "interaction.txt");
+			
+	}
 }
