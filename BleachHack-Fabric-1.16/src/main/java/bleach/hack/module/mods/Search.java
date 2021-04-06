@@ -36,6 +36,7 @@ import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
+import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.UnloadChunkS2CPacket;
 import net.minecraft.util.math.BlockPos;
@@ -110,6 +111,8 @@ public class Search extends Module {
 
 			if (getSetting(4).asList(Block.class).contains(blockPair.getRight().getBlock())) {
 				foundBlocks.add(blockPair.getLeft());
+			} else {
+				foundBlocks.remove(blockPair.getLeft());
 			}
 		}
 
@@ -153,6 +156,12 @@ public class Search extends Module {
 			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
 
 			queuedBlocks.add(Pair.of(packet.getPos(), packet.getState()));
+		} else if (event.getPacket() instanceof ExplosionS2CPacket) {
+			ExplosionS2CPacket packet = (ExplosionS2CPacket) event.getPacket();
+
+			for (BlockPos pos: packet.getAffectedBlocks()) {
+				queuedBlocks.add(Pair.of(pos, Blocks.AIR.getDefaultState()));
+			}
 		} else if (event.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
 			ChunkDeltaUpdateS2CPacket packet = (ChunkDeltaUpdateS2CPacket) event.getPacket();
 
