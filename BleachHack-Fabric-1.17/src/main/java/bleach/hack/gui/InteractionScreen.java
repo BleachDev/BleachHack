@@ -20,16 +20,18 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
 
+/**
+ * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
+ */
 public class InteractionScreen extends Screen {
 
-	private String name, current;
-	private int crosshairX, crosshairY, at = -1;
+	private String name, focusedString;
+	private int crosshairX, crosshairY, focusedDot = -1;
 	private float yaw, pitch;
 
 	public InteractionScreen(String name) {
 		super(new LiteralText("Menu Screen"));
 		this.name = name;
-		System.out.println(name);
 	}
 
 	public void init() {
@@ -41,8 +43,8 @@ public class InteractionScreen extends Screen {
 
 	private void cursorMode(int mode) {
 		KeyBinding.unpressAll();
-		double x = (double) (this.client.getWindow().getWidth() / 2);
-		double y = (double) (this.client.getWindow().getHeight() / 2);
+        double x = (double)(this.client.getWindow().getWidth() / 2);
+        double y = (double)(this.client.getWindow().getHeight() / 2);
 		InputUtil.setCursorParameters(this.client.getWindow().getHandle(), GLFW.GLFW_CURSOR_HIDDEN, x, y);
 	}
 
@@ -54,8 +56,9 @@ public class InteractionScreen extends Screen {
 
 	public void onClose() {
 		cursorMode(GLFW.GLFW_CURSOR_NORMAL);
-		if (current != null) {
-			String message = BleachHack.interaction.get(current).replaceAll("%name", name);
+		// This makes the magic
+		if (focusedString != null) {
+			String message = BleachHack.interaction.get(focusedString).replaceAll("%name", name);
 			if (message.startsWith("%suggestion")) 
 				client.openScreen(new ChatScreen(message.replaceFirst("%suggestion", "")));
 			else {
@@ -71,6 +74,7 @@ public class InteractionScreen extends Screen {
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+		// Fake crosshair stuff
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
@@ -81,6 +85,10 @@ public class InteractionScreen extends Screen {
 		drawTexture(matrix, crosshairX - 8, crosshairY - 8, 0, 0, 15, 15);
 		
 		drawDots(matrix, (int) (Math.min(height, width) / 2 * 0.75), mouseX, mouseY);
+		matrix.scale (2f, 2f, 1f);
+		drawCenteredString(matrix, textRenderer, "Interaction Screen", width / 4, 6, 0xFFFFFFFF);
+		matrix.scale(1f / 2f, 1f / 2f, 1f);
+		drawCenteredString(matrix, textRenderer, "Created by Lasnik#0294", width / 2, 50, 0xFFFFFFFF);
 		
 		int scale = client.options.guiScale;
 		Vector2 mouse = new Vector2(mouseX, mouseY);
@@ -92,11 +100,11 @@ public class InteractionScreen extends Screen {
 		if (scale == 0)
 			scale = 4;
 		
+		// Move crossHair based on distance between mouse and center. But with limit
 		if (Math.hypot(width / 2 - mouseX, height / 2 - mouseY) < 1f / scale * 200f)
 			mouse.multiply((float) Math.hypot(width / 2 - mouseX, height / 2 - mouseY));
 		else 
 			mouse.multiply(1f / scale * 200f);
-		
 		
 		this.crosshairX = (int) mouse.x + width / 2;
 		this.crosshairY = (int) mouse.y + height / 2;
@@ -107,6 +115,44 @@ public class InteractionScreen extends Screen {
 	}
 
 
+
+	private void drawDots(MatrixStack matrix, int radius, int mouseX, int mouseY) {
+		HashMap<String, String> map = BleachHack.interaction;
+		ArrayList<Point> pointList = new ArrayList<Point>();
+		String cache[] = new String[map.size()];
+		double lowestDistance = Double.MAX_VALUE;
+		int i = 0;
+		
+		for (String string: map.keySet()) {
+			// Just some fancy calculations to get the positions of the dots
+			double s = (double) i / map.size() * 2 * Math.PI;
+			int x = (int) Math.round(radius * Math.cos(s) + width / 2);
+			int y = (int) Math.round(radius * Math.sin(s) + height / 2);
+			drawTextField(matrix, x, y, string);
+			
+			// Calculate lowest distance between mouse and dot
+			if (Math.hypot(x - mouseX, y - mouseY) < lowestDistance) {
+				lowestDistance = Math.hypot(x - mouseX, y - mouseY);
+				focusedDot = i;
+			}
+			
+			cache[i] = string;
+			pointList.add(new Point(x, y));
+			i++;
+		}
+		
+		// Go through all point and if it is focused -> drawing different color, changing closest string value
+		for (int j = 0; j < map.size(); j++) {
+			Point point = pointList.get(j);
+			if (pointList.get(focusedDot) == point) {
+				drawDot(matrix, point.x - 4, point.y - 4, 0xFF4CFF00);
+				this.focusedString = cache[focusedDot];
+			}
+			else
+				drawDot(matrix, point.x - 4, point.y - 4, 0xFF0094FF);
+		}
+	}
+	
 	private void drawRect(MatrixStack matrix, int startX, int startY, int width, int height, int colorInner,int colorOuter) {
 		drawHorizontalLine(matrix, startX, startX + width, startY, colorOuter);
 		drawHorizontalLine(matrix, startX, startX + width, startY + height, colorOuter);
@@ -114,38 +160,6 @@ public class InteractionScreen extends Screen {
 		drawVerticalLine(matrix, startX + width, startY, startY + height, colorOuter);
 		fill(matrix, startX + 1, startY + 1, startX + width, startY + height, colorInner);
 	}
-
-	private void drawDots(MatrixStack matrix, int radius, int mouseX, int mouseY) {
-		HashMap<String, String> map = BleachHack.interaction;
-		ArrayList<Point> pointList = new ArrayList<Point>();
-		String cache[] = new String[map.size()];
-		double lowestDistance = Double.MAX_VALUE;
-		int i = -1;
-		for (String string: map.keySet()) {
-			i++;
-			double s = (double) i / map.size() * 2 * Math.PI;
-			int x = (int) Math.round(radius * Math.cos(s) + width / 2);
-			int y = (int) Math.round(radius * Math.sin(s) + height / 2);
-			drawTextField(matrix, x, y, string);
-			cache[i] = string;
-			pointList.add(new Point(x, y));
-			
-			if (Math.hypot(x - mouseX, y - mouseY) < lowestDistance) {
-				lowestDistance = Math.hypot(x - mouseX, y - mouseY);
-				at = i;
-			}
-		}
-		for (int j = 0; j < map.size(); j++) {
-			Point current = pointList.get(j);
-			if (pointList.get(at) == current) {
-				drawDot(matrix, current.x - 4, current.y - 4, 0xFF4CFF00);
-				this.current = cache[at];
-			}
-			else
-				drawDot(matrix, current.x - 4, current.y - 4, 0xFF0094FF);
-		}
-	}
-	
 
 	private void drawTextField(MatrixStack matrix, int x, int y, String key) {
 		if (x >= width / 2) {
@@ -176,7 +190,7 @@ public class InteractionScreen extends Screen {
 }
 
 
-// Bruh literally making my own Vector class because I am smart
+// Creating my own Vector class beacause I couldn´t find a good one in minecrafts code
 class Vector2 {
     float x, y;
 
