@@ -18,7 +18,7 @@ Works on fabric 1.16 & 1.17 Snapshots (1.14-1.15 is discontinued).
 ### For normal people
 
 Download [fabric for minecraft 1.16/1.17](https://fabricmc.net/use/).
-Download the latest version of BleachHack for your Minecraft version [from the releases section](https://github.com/BleachDrinker420/BleachHack/releases).
+Download the latest version of BleachHack for your Minecraft version [from the website](https://bleachhack.github.io/).
 
 
 On Windows: Type %appdata% into the Windows search bar; open the folder that comes up and then open '.minecraft'.
