@@ -35,6 +35,7 @@ import org.apache.logging.log4j.Logger;
 public class BleachHack implements ModInitializer {
 
 	private static BleachHack instance = null;
+	public static Logger logger;
 
 	public static final String VERSION = "0.15.2";
 	public static final int INTVERSION = 27;
@@ -43,7 +44,6 @@ public class BleachHack implements ModInitializer {
 
 	public static FriendManager friendMang;
 
-	private Logger logger;
 	//private BleachFileMang bleachFileManager;
 
 	public static BleachHack getInstance() {
@@ -65,7 +65,7 @@ public class BleachHack implements ModInitializer {
 		}
 
 		instance = this;
-		this.logger = LogManager.getFormatterLogger("BleachHack");
+		logger = LogManager.getFormatterLogger("BleachHack");
 
 		//TODO base-rewrite
 		//this.eventBus = new EventBus();
@@ -85,6 +85,6 @@ public class BleachHack implements ModInitializer {
 			BleachTitleScreen.customTitleScreen = false;
 		}
 
-		this.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
+		logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 }
