@@ -12,7 +12,6 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 
 public class CmdFriends extends Command {
 
@@ -50,28 +49,34 @@ public class CmdFriends extends Command {
 			BleachHack.friendMang.remove(args[1].toLowerCase(Locale.ENGLISH));
 			BleachLogger.infoMessage("Removed \"" + args[1] + "\" from the friend list");
 		} else if (args[0].equalsIgnoreCase("list")) {
-			MutableText text = new LiteralText(
-					BleachHack.friendMang.getFriends().isEmpty() ? "You don't have any friends :(" : "Friends:");
-
-			if (!BleachHack.friendMang.getFriends().isEmpty()) {
+			if (BleachHack.friendMang.getFriends().isEmpty()) {
+				BleachLogger.infoMessage("You don't have any friends :(");
+			} else {
 				int len = BleachHack.friendMang.getFriends().stream()
-						.sorted((f1, f2) -> f2.length() - f1.length()).findFirst().get().length() + 3;
+						.sorted((f1, f2) -> f2.length() - f1.length())
+						.findFirst()
+						.get().length() + 3;
+
+				MutableText text = new LiteralText("Friends:");
 
 				for (String f : BleachHack.friendMang.getFriends()) {
-					text = text.append("\n\u00a7b> " + f + StringUtils.repeat(' ', len - f.length()))
-							.append(new LiteralText("\u00a7c[Del]").
-									setStyle(Style.EMPTY.withHoverEvent(
-											new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Remove " + f + " from your friendlist")))
-											.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, PREFIX + "friends remove " + f)))
-									.append("   ")
-									.append(new LiteralText("\u00a73[NameMC]").
-											setStyle(Style.EMPTY.withHoverEvent(
-													new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Open NameMC page of " + f)))
-													.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + f)))));
-				}
-			}
+					String spaces = StringUtils.repeat(' ', len - f.length());
 
-			BleachLogger.infoMessage(text);
+					text
+					.append("\n\u00a7b> " + f + spaces)
+					.append(new LiteralText("\u00a7c[Del]")
+							.styled(style -> style
+									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Remove " + f + " from your friendlist")))
+									.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, PREFIX + "friends remove " + f))))
+					.append("   ")
+					.append(new LiteralText("\u00a73[NameMC]")
+							.styled(style -> style
+									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Open NameMC page of " + f)))
+									.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + f))));
+				}
+
+				BleachLogger.infoMessage(text);
+			}
 		} else if (args[0].equalsIgnoreCase("clear")) {
 			BleachHack.friendMang.getFriends().clear();
 

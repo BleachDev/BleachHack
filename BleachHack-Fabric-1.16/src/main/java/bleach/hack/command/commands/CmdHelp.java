@@ -24,6 +24,8 @@ import bleach.hack.command.CommandManager;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 public class CmdHelp extends Command {
 
@@ -56,13 +58,12 @@ public class CmdHelp extends Command {
 			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAlias()))
 				continue;
 
-			LiteralText text = new LiteralText("\u00a7b" + PREFIX + c.getAlias() + " - \u00a7f" + c.getDescription());
+			MutableText text = new LiteralText("\u00a7b" + PREFIX + c.getAlias() + " - \u00a7f" + c.getDescription());
+			Text tooltip = new LiteralText("\u00a7b\u00a7l" + PREFIX + c.getAlias() + "\u00a7b | " + c.getSyntax() + "\n\u00a7f" + c.getDescription());
 
-			text.setStyle(text.getStyle().withHoverEvent(
-					new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(
-							"\u00a7b\u00a7l" + PREFIX + c.getAlias() + "\u00a7b | " + c.getSyntax() + "\n\u00a7f" + c.getDescription()))));
-
-			BleachLogger.noPrefixMessage(text);
+			BleachLogger.noPrefixMessage(
+					text.styled(style -> style
+							.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip))));
 		}
 	}
 
