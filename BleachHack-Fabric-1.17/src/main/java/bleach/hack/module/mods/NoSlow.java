@@ -24,6 +24,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
@@ -47,6 +48,7 @@ import net.minecraft.util.math.Vec3d;
 public class NoSlow extends Module {
 
 	private Vec3d addVelocity = Vec3d.ZERO;
+	private long lastTime;
 
 	public NoSlow() {
 		super("NoSlow", KEY_UNBOUND, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
@@ -61,7 +63,7 @@ public class NoSlow extends Module {
 						new SettingToggle("NCP Bypass", false).withDesc("Allows you to move items around while running on NCP"),
 						new SettingToggle("Rotate", true).withDesc("Allows you to use the arrow keys to rotate").withChildren(
 								new SettingToggle("Limit Pitch", true).withDesc("Prevents you from being able to do a 360 pitch spin"),
-								new SettingToggle("Anti-Spinbot", true).withDesc("Adds a random amount of rotation when spinning to prevent spinbot detects"))));
+								new SettingToggle("Anti-Spinbot", false).withDesc("Adds a random amount of rotation when spinning to prevent spinbot detects"))));
 	}
 
 	@Subscribe
@@ -132,40 +134,60 @@ public class NoSlow extends Module {
 						InputUtil.fromTranslationKey(mc.options.keySneak.getBoundKeyTranslationKey()).getCode()));
 			}
 
-			if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().state) {
+
+		}
+	}
+	
+	
+	@Subscribe
+	public void onRender(EventWorldRender.Post event) {
+		/* Inventory */
+		if (getSetting(6).asToggle().state && mc.currentScreen != null
+				&& !(mc.currentScreen instanceof ChatScreen)
+				&& !(mc.currentScreen instanceof BookScreen)
+				&& !(mc.currentScreen instanceof SignEditScreen)
+				&& !(mc.currentScreen instanceof CreativeInventoryScreen
+						&& ((CreativeInventoryScreen) mc.currentScreen).getSelectedTab() == ItemGroup.SEARCH.getIndex())
+				&& getSetting(6).asToggle().asToggle().getChild(2).asToggle().state) {
+			
 				float yaw = 0f;
 				float pitch = 0f;
-
+				
+				mc.keyboard.setRepeatEvents(true);
+				
+				float amount = (System.currentTimeMillis() - lastTime) / 10f;
+				lastTime = System.currentTimeMillis();
+	
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT))
-					yaw -= 4f;
+					yaw -= amount;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT))
-					yaw += 4f;
+					yaw += amount;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP))
-					pitch -= 4f;
+					pitch -= amount;
 				if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN))
-					pitch += 4f;
-
+					pitch += amount;
+	
 				if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(1).asToggle().state) {
 					if (yaw == 0f && pitch != 0f) {
 						yaw += -0.1 + Math.random() / 5f;
 					} else {
 						yaw *= 0.75f + Math.random() / 2f;
 					}
-
+	
 					if (pitch == 0f && yaw != 0f) {
 						pitch += -0.1 + Math.random() / 5f;
 					} else {
 						pitch *= 0.75f + Math.random() / 2f;
 					}
 				}
-
+				
+	
 				mc.player.yaw += yaw;
-
+	
 				if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(0).asToggle().state) {
 					mc.player.pitch = MathHelper.clamp(mc.player.pitch + pitch, -90f, 90f);
 				} else {
 					mc.player.pitch += pitch;
-				}
 			}
 		}
 	}
