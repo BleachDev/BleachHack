@@ -151,9 +151,9 @@ public class Search extends Module {
 
 	@Subscribe
 	public void onReadPacket(EventReadPacket event) {
-		if (event.getPacket() instanceof DisconnectS2CPacket) {
+		if (event.getPacket() instanceof DisconnectS2CPacket || event.getPacket() instanceof GameJoinS2CPacket) {
 			reset();
-		} else if (event.getPacket() instanceof BlockUpdateS2CPacket || event.getPacket() instanceof GameJoinS2CPacket) {
+		} else if (event.getPacket() instanceof BlockUpdateS2CPacket) {
 			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
 
 			queuedBlocks.add(Pair.of(packet.getPos(), packet.getState()));
