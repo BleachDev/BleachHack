@@ -1,5 +1,5 @@
 /*
- * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/bleachhack-1.14/).
+ * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/BleachHack/).
  * Copyright (c) 2019 Bleach.
  *
  * This program is free software: you can redistribute it and/or modify
