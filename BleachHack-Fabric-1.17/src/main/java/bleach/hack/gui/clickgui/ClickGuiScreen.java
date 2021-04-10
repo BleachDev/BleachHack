@@ -150,6 +150,9 @@ public class ClickGuiScreen extends WindowScreen {
 
 		super.render(matrix, mouseX, mouseY, delta);
 
+		matrix.push();
+		matrix.translate(0, 0, 250);
+
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
 				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
@@ -176,6 +179,7 @@ public class ClickGuiScreen extends WindowScreen {
 							fill(matrix, tooltip.getLeft(), start + (l * 10) - 1,
 									tooltip.getLeft() + textRenderer.getWidth(lines.get(l)) + 3,
 									start + (l * 10) + 9, 0xff000000);
+
 							textRenderer.drawWithShadow(matrix, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
 						}
 
@@ -184,6 +188,8 @@ public class ClickGuiScreen extends WindowScreen {
 				}
 			}
 		}
+
+		matrix.pop();
 
 		lmDown = false;
 		rmDown = false;
