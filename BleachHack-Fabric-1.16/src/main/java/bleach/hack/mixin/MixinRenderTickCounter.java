@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.Timer;
 import net.minecraft.client.render.RenderTickCounter;
 
 @Mixin(RenderTickCounter.class)
@@ -20,9 +19,9 @@ public class MixinRenderTickCounter {
 
 	@Inject(method = "beginRenderTick", at = @At("HEAD"), cancellable = true)
 	public void beginRenderTick(long timeMillis, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(Timer.class).isEnabled()) {
+		if (ModuleManager.getModule("Timer").isEnabled()) {
 			this.lastFrameDuration = (float) (((timeMillis - this.prevTimeMillis) / this.tickTime)
-					* ModuleManager.getModule(Timer.class).getSetting(0).asSlider().getValue());
+					* ModuleManager.getModule("Timer").getSetting(0).asSlider().getValue());
 			this.prevTimeMillis = timeMillis;
 			this.tickDelta += this.lastFrameDuration;
 			int i = (int) this.tickDelta;

@@ -19,8 +19,7 @@ package bleach.hack.module;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.lwjgl.glfw.GLFW;
 
@@ -33,10 +32,14 @@ public class ModuleManager {
 
 	private static final Gson moduleGson = new Gson();
 
-	private static final List<Module> modules = new ArrayList<>();
+	private static final Map<String, Module> modules = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+	public static Map<String, Module> getModuleMap() {
+	    return modules;
+    }
 
 	public static Iterable<Module> getModules() {
-		return modules;
+		return modules.values();
 	}
 
 	public static void loadModules(InputStream jsonInputStream) {
@@ -66,31 +69,32 @@ public class ModuleManager {
 	}
 
 	public static void loadModule(Module module) {
-		if (modules.contains(module)) {
+		if (modules.containsValue(module)) {
 			System.err.printf("Failed to load module %s: a module with this name is already loaded.%n", module.getName());
 		} else {
-			modules.add(module);
+			modules.put(module.getName(), module);
 			// TODO: Setup init system for modules
 		}
 	}
 
+	@Deprecated
 	@SuppressWarnings("unchecked")
-	public static <T extends Module> T getModule(Class<T> clazz) {
-		return (T) modules.stream().filter(clazz::isInstance).findFirst().orElse(null);
+	public static <T extends Module> T getModuleByClass(Class<T> clazz) {
+		return (T) modules.values().stream().filter(clazz::isInstance).findFirst().orElse(null);
 	}
 
 	public static Module getModule(String name) {
-		return modules.stream().filter(m -> m.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+		return modules.get(name);
 	}
 
 	public static List<Module> getModulesInCat(Category cat) {
-		return modules.stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
+		return modules.values().stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
 	}
 
 	// This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
 	public static void handleKeyPress(int key) {
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
-			modules.stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
+			modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
 		}
 	}
 }

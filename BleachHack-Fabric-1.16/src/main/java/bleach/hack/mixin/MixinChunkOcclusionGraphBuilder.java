@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.Xray;
 import net.minecraft.client.render.chunk.ChunkOcclusionDataBuilder;
 import net.minecraft.util.math.BlockPos;
 
@@ -35,7 +34,7 @@ public class MixinChunkOcclusionGraphBuilder {
 	// they're in your FOV.
 	@Inject(method = "markClosed", at = @At("HEAD"), cancellable = true)
 	public void markClosed(BlockPos pos, CallbackInfo callback) {
-		if (ModuleManager.getModule(Xray.class).isEnabled()) {
+		if (ModuleManager.getModule("Xray").isEnabled()) {
 			callback.cancel();
 		}
 	}

@@ -34,7 +34,7 @@ public class ModuleManager {
 
 	private static final Map<String, Module> modules = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-	public static Map<String, Module> getModuleMap(){
+	public static Map<String, Module> getModuleMap() {
 	    return modules;
     }
 

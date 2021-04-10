@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.Nuker;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
@@ -52,7 +51,7 @@ public class MixinParticleManager {
 	/** Mojang is retarded and makes this and ONLY this thread-unsafe **/
 	@Inject(method = "addBlockBreakParticles", at = @At("HEAD"), cancellable = true)
 	public void addBlockBreakParticles(BlockPos pos, BlockState state, CallbackInfo ci) {
-		if (ModuleManager.getModule(Nuker.class).isEnabled() && ModuleManager.getModule(Nuker.class).getSetting(7).asToggle().state) {
+		if (ModuleManager.getModule("Nuker").isEnabled() && ModuleManager.getModule("Nuker").getSetting(7).asToggle().state) {
 			ci.cancel();
 		}
 	}

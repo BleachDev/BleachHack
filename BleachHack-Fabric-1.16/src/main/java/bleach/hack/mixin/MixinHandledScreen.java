@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -61,17 +60,17 @@ public abstract class MixinHandledScreen extends Screen {
 
 			if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 				addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
-					ModuleManager.getModule(AutoDonkeyDupe.class).setEnabled(true);
+					ModuleManager.getModule("AutoDonkeyDupe").setEnabled(true);
 				}));
 
 				addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {
-					ModuleManager.getModule(MountBypass.class).dontCancel = true;
+					((MountBypass) ModuleManager.getModule("MountBypass")).dontCancel = true;
 
 					client.player.networkHandler.sendPacket(
 							new PlayerInteractEntityC2SPacket(
 									entity, Hand.MAIN_HAND, entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2), false));
 
-					ModuleManager.getModule(MountBypass.class).dontCancel = false;
+					((MountBypass) ModuleManager.getModule("MountBypass")).dontCancel = false;
 				}));
 
 				addButton(new ButtonWidget(rightside, topside + 66, 50, 14, new LiteralText("Dupe"), button -> {

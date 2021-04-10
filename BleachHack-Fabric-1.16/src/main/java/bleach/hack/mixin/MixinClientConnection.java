@@ -29,7 +29,6 @@ import bleach.hack.command.CommandManager;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.AntiChunkBan;
 import bleach.hack.util.BleachLogger;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -84,7 +83,7 @@ public class MixinClientConnection {
 	// Packet kick blocc
 	@Inject(method = "exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V", at = @At("HEAD"), cancellable = true)
 	public void exceptionCaught(ChannelHandlerContext channelHandlerContext, Throwable throwable, CallbackInfo callback) {
-		if (ModuleManager.getModule(AntiChunkBan.class).isEnabled()) {
+		if (ModuleManager.getModule("AntiChunkBan").isEnabled()) {
 			if (!(throwable instanceof PacketEncoderException)) {
 				BleachLogger.warningMessage("Canceled Defect Packet: " + throwable);
 				callback.cancel();

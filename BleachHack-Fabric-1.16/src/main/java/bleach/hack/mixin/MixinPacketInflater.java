@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.AntiChunkBan;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -42,7 +41,7 @@ public class MixinPacketInflater {
 
 	@Inject(method = "decode", at = @At("HEAD"), cancellable = true)
 	protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list, CallbackInfo info) throws Exception {
-		if (ModuleManager.getModule(AntiChunkBan.class).isEnabled()) {
+		if (ModuleManager.getModule("AntiChunkBan").isEnabled()) {
 			info.cancel();
 
 			if (byteBuf.readableBytes() != 0) {

@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.EntityControl;
 import net.minecraft.entity.passive.LlamaEntity;
 
 @Mixin(LlamaEntity.class)
@@ -31,6 +30,6 @@ public abstract class MixinLlamaEntity {
 
 	@Inject(method = "canBeControlledByRider", at = @At("HEAD"), cancellable = true)
 	public void canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
-		info.setReturnValue(ModuleManager.getModule(EntityControl.class).isEnabled());
+		info.setReturnValue(ModuleManager.getModule("EntityControl").isEnabled());
 	}
 }
