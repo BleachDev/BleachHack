@@ -28,6 +28,9 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.file.BleachFileHelper;
 import bleach.hack.util.file.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
+
+import java.util.HashMap;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,6 +46,7 @@ public class BleachHack implements ModInitializer {
 	public static final EventBus eventBus = new EventBus();
 
 	public static FriendManager friendMang;
+	public static HashMap<String, String> interaction = new HashMap<String, String>();
 
 	//private BleachFileMang bleachFileManager;
 
@@ -77,7 +81,8 @@ public class BleachHack implements ModInitializer {
 		ClickGui.clickGui.initWindows();
 		BleachFileHelper.readClickGui();
 		BleachFileHelper.readFriends();
-
+		BleachFileHelper.readInteraction();
+		
 		CommandManager.readPrefix();
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");

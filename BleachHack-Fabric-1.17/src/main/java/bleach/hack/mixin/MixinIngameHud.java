@@ -27,15 +27,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventRenderOverlay;
+import bleach.hack.gui.InteractionScreen;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 @Mixin(InGameHud.class)
 public class MixinIngameHud {
-
 	@Unique private boolean bypassRenderOverlay = false;
-
+	
 	@Shadow private void renderOverlay(Identifier texture, float opacity) {}
 
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true)
@@ -62,6 +63,15 @@ public class MixinIngameHud {
 			bypassRenderOverlay = true;
 			renderOverlay(event.getTexture(), event.getOpacity());
 			bypassRenderOverlay = false;
+		}
+	}
+	
+	
+	@Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
+	private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
+		MinecraftClient client = MinecraftClient.getInstance();
+		if (client.currentScreen instanceof InteractionScreen) {
+			ci.cancel();
 		}
 	}
 }

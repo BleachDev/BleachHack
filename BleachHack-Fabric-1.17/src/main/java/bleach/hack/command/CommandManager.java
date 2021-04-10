@@ -45,6 +45,7 @@ public class CommandManager {
 			new CmdGive(),
 			new CmdGuiReset(),
 			new CmdHelp(),
+			new CmdInteraction(),
 			new CmdInvPeek(),
 			new CmdNBT(),
 			new CmdNotebot(),
