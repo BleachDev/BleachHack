@@ -34,8 +34,6 @@ public class MixinClientWorld {
 					BleachFileHelper.saveClickGui();
 				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS)
 					BleachFileHelper.saveFriends();
-				if (BleachFileHelper.SCHEDULE_SAVE_INTERACTION)
-					BleachFileHelper.saveInteraction();
 			}
 
 			BleachQueue.nextQueue();
