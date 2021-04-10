@@ -113,13 +113,11 @@ public class UI extends Module {
 				lines.sort((a, b) -> Integer.compare(mc.textRenderer.getWidth(b), mc.textRenderer.getWidth(a)));
 			}
 
-			// new colors
-			int color = getRainbowFromSettings(0);
 			int extra = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
 			boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
 			boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
 			for (String s : lines) {
-				color = getRainbowFromSettings(arrayCount);
+				int color = getRainbowFromSettings(arrayCount * 40);
 
 				if (fill) {
 					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, mc.textRenderer.getWidth(s) + 3 + extra, 10 + (arrayCount * 10), 0x70003030);
@@ -144,7 +142,10 @@ public class UI extends Module {
 			}
 
 			if (outer && !lines.isEmpty()) {
-				DrawableHelper.fill(event.matrix, 0, (arrayCount * 10), mc.textRenderer.getWidth(lines.get(arrayCount - 1)) + 4 + extra, 1 + (arrayCount * 10), color);
+				DrawableHelper.fill(event.matrix,
+						0, (arrayCount * 10),
+						mc.textRenderer.getWidth(lines.get(arrayCount - 1)) + 4 + extra, 1 + (arrayCount * 10),
+						getRainbowFromSettings(arrayCount * 40));
 			}
 		}
 

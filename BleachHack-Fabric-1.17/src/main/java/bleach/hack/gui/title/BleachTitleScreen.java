@@ -239,7 +239,7 @@ public class BleachTitleScreen extends WindowScreen {
 			int[] intarray = { 7, 13, 16, 22, 28, 34, 40, 46, 52, 58 };
 			String[] bruh = { "B", "l", "e", "a", "c", "h", "H", "a", "c", "k" };
 			for (int i = 0; i < bruh.length; i++) {
-				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w / 2 - 81) / 3 + intarray[i] - 8, (y + h / 4 - 15) / 3, UI.getRainbowFromSettings(i * 25));
+				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w / 2 - 81) / 3 + intarray[i] - 8, (y + h / 4 - 15) / 3, UI.getRainbowFromSettings(i * 40));
 			}
 
 			matrix.scale(1f / 3f, 1f / 3f, 0f);
