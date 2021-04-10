@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;

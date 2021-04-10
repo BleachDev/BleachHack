@@ -27,7 +27,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.widget.BleachScrollbar;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowButton;

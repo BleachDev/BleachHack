@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;

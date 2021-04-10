@@ -1,4 +1,4 @@
-package bleach.hack.gui.clickgui.modulewindow;
+package bleach.hack.gui.clickgui.window;
 
 import org.apache.commons.lang3.tuple.Triple;
 

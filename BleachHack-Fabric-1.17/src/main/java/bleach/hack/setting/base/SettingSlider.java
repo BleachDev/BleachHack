@@ -23,7 +23,7 @@ import java.math.RoundingMode;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;

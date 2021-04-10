@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package bleach.hack.gui.clickgui.modulewindow;
+package bleach.hack.gui.clickgui.window;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

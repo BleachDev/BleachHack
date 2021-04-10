@@ -21,7 +21,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.gson.JsonElement;
 
-import bleach.hack.gui.clickgui.modulewindow.ModuleWindow;
+import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.setting.other.SettingRotate;
 import net.minecraft.client.util.math.MatrixStack;
 
