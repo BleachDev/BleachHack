@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;

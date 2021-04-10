@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NoKeyBlock;
 import net.minecraft.SharedConstants;
 
 @Mixin(SharedConstants.class)

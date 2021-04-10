@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.Nuker;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;

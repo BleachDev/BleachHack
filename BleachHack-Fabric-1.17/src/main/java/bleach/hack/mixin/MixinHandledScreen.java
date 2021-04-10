@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.AutoDonkeyDupe;
 import bleach.hack.module.mods.MountBypass;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

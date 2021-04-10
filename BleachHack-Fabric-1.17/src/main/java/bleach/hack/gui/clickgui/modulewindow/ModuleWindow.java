@@ -27,7 +27,6 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.ClickGui;
 import bleach.hack.setting.base.SettingBase;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;

@@ -29,7 +29,6 @@ import bleach.hack.command.CommandManager;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.AntiChunkBan;
 import bleach.hack.util.BleachLogger;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

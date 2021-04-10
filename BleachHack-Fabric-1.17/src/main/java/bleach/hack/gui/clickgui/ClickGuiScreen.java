@@ -36,7 +36,6 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;

@@ -29,7 +29,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventRenderShader;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;

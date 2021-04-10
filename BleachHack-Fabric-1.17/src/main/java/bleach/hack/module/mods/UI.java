@@ -343,13 +343,15 @@ public class UI extends Module {
 	}
 
 	public static int getRainbowFromSettings(int offset) {
-		//What the fuck
-		Module ui = ModuleManager.getModuleByClass(UI.class);
+		// What the fuck
+		// shhh
+		Module ui = ModuleManager.getModule("UI");
 
 		if (ui == null)
 			return getRainbow(0.5f, 0.5f, 10, 0);
 
-		return getRainbow((float) ui.getSetting(0).asToggle().getChild(5).asSlider().getValue(),
+		return getRainbow(
+				(float) ui.getSetting(0).asToggle().getChild(5).asSlider().getValue(),
 				(float) ui.getSetting(0).asToggle().getChild(4).asSlider().getValue(),
 				ui.getSetting(0).asToggle().getChild(6).asSlider().getValue(),
 				offset);

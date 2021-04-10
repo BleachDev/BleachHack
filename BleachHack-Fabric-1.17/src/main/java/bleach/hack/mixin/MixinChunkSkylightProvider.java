@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.NoRender;
 import net.minecraft.world.chunk.light.ChunkSkyLightProvider;
 
 @Mixin(ChunkSkyLightProvider.class)

@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.EntityControl;
 import net.minecraft.entity.passive.LlamaEntity;
 
 @Mixin(LlamaEntity.class)

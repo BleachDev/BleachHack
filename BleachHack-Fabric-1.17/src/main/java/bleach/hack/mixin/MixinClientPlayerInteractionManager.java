@@ -23,8 +23,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.Nuker;
-import bleach.hack.module.mods.SpeedMine;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 
 @Mixin(ClientPlayerInteractionManager.class)
