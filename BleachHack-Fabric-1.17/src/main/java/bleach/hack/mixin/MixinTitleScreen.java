@@ -57,7 +57,7 @@ public class MixinTitleScreen extends Screen {
 							Triple.of(ClickGui.clickGui, "ClickGui", new ItemStack(Items.TOTEM_OF_UNDYING))) {
 						
 						public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-							if (keyCode == ModuleManager.getModule(ClickGui.class).getKey()) {
+							if (keyCode == ModuleManager.getModule("ClickGui").getKey()) {
 								selectWindow(2);
 							}
 

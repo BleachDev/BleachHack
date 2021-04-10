@@ -13,7 +13,7 @@ public class MixinSharedConstants {
 
 	@Overwrite
 	public static boolean isValidChar(char chr) {
-		Module noKeyBlock = ModuleManager.getModule(NoKeyBlock.class);
+		Module noKeyBlock = ModuleManager.getModule("NoKeyBlock");
 
 		if (!noKeyBlock.isEnabled()) {
 			return chr != 167 && chr >= ' ' && chr != 127;

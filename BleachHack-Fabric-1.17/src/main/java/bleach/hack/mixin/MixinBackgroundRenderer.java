@@ -20,8 +20,8 @@ public class MixinBackgroundRenderer {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
 	private static boolean hasStatusEffect(LivingEntity entity, StatusEffect effect) {
 		if (effect == StatusEffects.BLINDNESS
-				&& ModuleManager.getModule(NoRender.class).isEnabled()
-				&& ModuleManager.getModule(NoRender.class).getSetting(0).asToggle().state) {
+				&& ModuleManager.getModule("NoRender").isEnabled()
+				&& ModuleManager.getModule("NoRender").getSetting(0).asToggle().state) {
 			return false;
 		}
 

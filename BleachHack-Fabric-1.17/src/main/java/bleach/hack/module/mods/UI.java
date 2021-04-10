@@ -343,7 +343,8 @@ public class UI extends Module {
 	}
 
 	public static int getRainbowFromSettings(int offset) {
-		Module ui = ModuleManager.getModule(UI.class);
+		//What the fuck
+		Module ui = ModuleManager.getModuleByClass(UI.class);
 
 		if (ui == null)
 			return getRainbow(0.5f, 0.5f, 10, 0);
