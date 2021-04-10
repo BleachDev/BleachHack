@@ -88,7 +88,7 @@ public class InteractionScreen extends Screen {
 		matrix.scale (2f, 2f, 1f);
 		drawCenteredString(matrix, textRenderer, "Interaction Screen", width / 4, 6, 0xFFFFFFFF);
 		matrix.scale(1f / 2f, 1f / 2f, 1f);
-		drawCenteredString(matrix, textRenderer, "Created by Lasnik#0294", width / 2, 50, 0xFFFFFFFF);
+		drawCenteredString(matrix, textRenderer, "Created by Lasnik#0294", width / 2, 30, 0xFFFFFFFF);
 		
 		int scale = client.options.guiScale;
 		Vector2 mouse = new Vector2(mouseX, mouseY);
