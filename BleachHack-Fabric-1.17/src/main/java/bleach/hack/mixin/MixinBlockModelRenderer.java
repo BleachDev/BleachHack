@@ -42,15 +42,14 @@ public class MixinBlockModelRenderer {
 	@Inject(method = "renderQuad", at = @At("HEAD"), cancellable = true)
 	private void renderQuad(BlockRenderView world, BlockState state, BlockPos pos, VertexConsumer vertexConsumer, MatrixStack.Entry matrixEntry, BakedQuad quad,
 			float brightness0, float brightness1, float brightness2, float brightness3, int light0, int light1, int light2, int light3, int overlay, CallbackInfo ci) {
-		Xray xray = ModuleManager.getModule(Xray.class);
-		if (!xray.isVisible(state.getBlock())) {
+		if (!((Xray) ModuleManager.getModule("Xray")).isVisible(state.getBlock())) {
 			ci.cancel();
 		}
 	}
 
 	/* @ModifyArg(method = "render", at = @At(value = "HEAD", target = "Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;ZLjava/util/Random;JI)Z"))
 	 * private boolean renderSmooth(boolean boolean_1) {
-	 *     if (ModuleManager.getModule(Xray.class).isToggled()) {
+	 *     if (ModuleManager.getModuleByClass(Xray.class).isToggled()) {
 	 *         return false;
 	 *     }
 	 * 
@@ -59,7 +58,7 @@ public class MixinBlockModelRenderer {
 	 *
 	 * @ModifyArg(method = "render", at = @At(value = "HEAD", target = "Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;ZLjava/util/Random;JI)Z"))
 	 * private boolean renderFlat(boolean boolean_1) {
-	 *     if (ModuleManager.getModule(Xray.class).isToggled()) {
+	 *     if (ModuleManager.getModuleByClass(Xray.class).isToggled()) {
 	 *         return false;
 	 *     }
 	 *

@@ -70,7 +70,7 @@ public class ClickGuiScreen extends WindowScreen {
 	}
 
 	public void initWindows() {
-		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
+		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
 
 		int startX = 10;
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER),
@@ -100,25 +100,25 @@ public class ClickGuiScreen extends WindowScreen {
 	}
 
 	public void onClose() {
-		ModuleManager.getModule(ClickGui.class).setEnabled(false);
+		ModuleManager.getModule("ClickGui").setEnabled(false);
 		client.openScreen(null);
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
 
-		searchField.visible = ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state;
+		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state;
 
 		this.renderBackground(matrix);
 		textRenderer.draw(matrix, "BleachHack-" + SharedConstants.getGameVersion().getName() + "-" + BleachHack.VERSION, 3, 3, 0x305090);
 		textRenderer.draw(matrix, "BleachHack-" + SharedConstants.getGameVersion().getName() + "-" + BleachHack.VERSION, 2, 2, 0x6090d0);
 
-		if (ModuleManager.getModule(ClickGui.class).getSetting(2).asToggle().state) {
+		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
 			textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
 			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10, 0x9999ff);
 		}
 
-		if (ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().state) {
+		if (ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
 
 			Set<Module> seachMods = new HashSet<>();
@@ -137,7 +137,7 @@ public class ClickGuiScreen extends WindowScreen {
 			}
 		}
 
-		int len = (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue();
+		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
 				if (w instanceof ModuleWindow) {
@@ -236,7 +236,7 @@ public class ClickGuiScreen extends WindowScreen {
 		for (Window m : getWindows()) {
 			m.x1 = x;
 			m.y1 = 35;
-			x += (int) ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValue() + 5;
+			x += (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue() + 5;
 		}
 	}
 }

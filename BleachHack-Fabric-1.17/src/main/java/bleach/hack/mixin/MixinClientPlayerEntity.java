@@ -31,7 +31,6 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventSendMovementPackets;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.BetterPortal;
 import bleach.hack.module.mods.EntityControl;
 import bleach.hack.module.mods.Freecam;
 import bleach.hack.module.mods.NoSlow;
@@ -71,7 +70,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"),
 			require = 0 /* TODO: meteor */)
 	private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
-		if (ModuleManager.getModule(NoSlow.class).isEnabled() && ModuleManager.getModule(NoSlow.class).getSetting(5).asToggle().state) {
+		if (ModuleManager.getModule("NoSlow").isEnabled() && ModuleManager.getModule("NoSlow").getSetting(5).asToggle().state) {
 			return false;
 		}
 
@@ -95,7 +94,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
 	@Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
 	protected void pushOutOfBlocks(double x, double d, CallbackInfo ci) {
-		if (ModuleManager.getModule(Freecam.class).isEnabled()) {
+		if (ModuleManager.getModule("Freecam").isEnabled()) {
 			ci.cancel();
 		}
 	}
@@ -103,8 +102,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0),
 			require = 0 /* TODO: inertia */)
 	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
-		if (!ModuleManager.getModule(BetterPortal.class).isEnabled()
-				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+		if (!ModuleManager.getModule("BetterPortal").isEnabled()
+				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().state) {
 			closeHandledScreen();
 		}
 	}
@@ -112,22 +111,22 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0),
 			require = 0 /* TODO: inertia */)
 	private void updateNausea_openScreen(MinecraftClient player, Screen screen) {
-		if (!ModuleManager.getModule(BetterPortal.class).isEnabled()
-				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().state) {
+		if (!ModuleManager.getModule("BetterPortal").isEnabled()
+				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().state) {
 			client.openScreen(screen);
 		}
 	}
 
 	@Override
 	protected boolean clipAtLedge() {
-		return super.clipAtLedge() || ModuleManager.getModule(SafeWalk.class).isEnabled()
-				|| (ModuleManager.getModule(Scaffold.class).isEnabled()
-						&& ModuleManager.getModule(Scaffold.class).getSetting(8).asToggle().state);
+		return super.clipAtLedge() || ModuleManager.getModule("SafeWalk").isEnabled()
+				|| (ModuleManager.getModule("Scaffold").isEnabled()
+						&& ModuleManager.getModule("Scaffold").getSetting(8).asToggle().state);
 	}
 
 	@Overwrite
 	public float getMountJumpStrength() {
-		return ModuleManager.getModule(EntityControl.class).isEnabled()
-				&& ModuleManager.getModule(EntityControl.class).getSetting(2).asToggle().state ? 1F : field_3922;
+		return ModuleManager.getModule("EntityControl").isEnabled()
+				&& ModuleManager.getModule("EntityControl").getSetting(2).asToggle().state ? 1F : field_3922;
 	}
 }

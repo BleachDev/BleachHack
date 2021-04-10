@@ -14,7 +14,7 @@ public class MixinChunkSkylightProvider {
 
 	@Inject(method = "recalculateLevel", at = @At("HEAD"), cancellable = true)
 	protected void recalculateLevel(long id, long excludedId, int maxLevel, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule(NoRender.class).isEnabled() && ModuleManager.getModule(NoRender.class).getSetting(12).asToggle().state) {
+		if (ModuleManager.getModule("NoRender").isEnabled() && ModuleManager.getModule("NoRender").getSetting(12).asToggle().state) {
 			ci.setReturnValue(15);
 		}
 	}

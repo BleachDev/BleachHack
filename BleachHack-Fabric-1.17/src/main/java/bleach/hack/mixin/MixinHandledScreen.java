@@ -61,11 +61,11 @@ public abstract class MixinHandledScreen extends Screen {
 
 			if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 				addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
-					ModuleManager.getModule(AutoDonkeyDupe.class).setEnabled(true);
+					ModuleManager.getModule("AutoDonkeyDupe").setEnabled(true);
 				}));
 
 				addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {
-					ModuleManager.getModule(MountBypass.class).dontCancel = true;
+					((MountBypass) ModuleManager.getModule("MountBypass")).dontCancel = true;
 
 					client.player.networkHandler.sendPacket(
 							PlayerInteractEntityC2SPacket.interactAt(
@@ -74,7 +74,7 @@ public abstract class MixinHandledScreen extends Screen {
 									Hand.MAIN_HAND,
 									entity.getPos().add(entity.getWidth() / 2, entity.getHeight() / 2, entity.getWidth() / 2)));
 
-					ModuleManager.getModule(MountBypass.class).dontCancel = false;
+					((MountBypass) ModuleManager.getModule("MountBypass")).dontCancel = false;
 				}));
 
 				addButton(new ButtonWidget(rightside, topside + 66, 50, 14, new LiteralText("Dupe"), button -> {
