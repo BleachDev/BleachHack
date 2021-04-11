@@ -1,7 +1,7 @@
 package bleach.hack.gui;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -10,28 +10,34 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.EntityMenu;
+import bleach.hack.util.Boxes;
+import bleach.hack.util.PairList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.MathHelper;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
  */
-public class InteractionScreen extends Screen {
+public class EntityMenuScreen extends Screen {
 
-	private String name, focusedString;
+	private LivingEntity entity;
+	private String focusedString;
 	private int crosshairX, crosshairY, focusedDot = -1;
 	private float yaw, pitch;
 
-	public InteractionScreen(String name) {
+	public EntityMenuScreen(LivingEntity entity) {
 		super(new LiteralText("Interaction Screen"));
-		this.name = name;
+		this.entity = entity;
 	}
 
 	public void init() {
@@ -61,7 +67,7 @@ public class InteractionScreen extends Screen {
 
 		// This makes the magic
 		if (focusedString != null) {
-			String message = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions.get(focusedString).replaceAll("%name", name);
+			String message = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions.getValue(focusedString).replaceAll("%name", entity.getDisplayName().getString());
 
 			if (message.startsWith("%suggestion")) {
 				client.openScreen(new ChatScreen(message.replaceFirst("%suggestion", "")));
@@ -79,7 +85,20 @@ public class InteractionScreen extends Screen {
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		// Fake crosshair stuff
+		// Draw entity
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, InventoryScreen.BACKGROUND_TEXTURE);
+
+		int entitySize = (int) (120 / Boxes.getCornerLength(entity.getBoundingBox()));
+		int entityHeight = entitySize / 2 - (int) (10 / Boxes.getAxisLength(entity.getBoundingBox(), Axis.Y));
+		InventoryScreen.drawEntity(
+				width / 2, height / 2 + entityHeight,
+				entitySize,
+				(float) (width / 2) - mouseX, (float) (height / 2 + entityHeight - 45) - mouseY,
+				entity);
+
+		// Fake crosshair
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
@@ -93,43 +112,36 @@ public class InteractionScreen extends Screen {
 
 		matrix.push();
 		matrix.scale(2.5f, 2.5f, 1f);
-		drawCenteredString(matrix, textRenderer, name/*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
+		drawCenteredString(matrix, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
 		matrix.pop();
 
 		drawCenteredString(matrix, textRenderer, "Created by Lasnik#0294", width - 64, height - 11, 0xFFFFFFFF);
 
-		Vector2 mouse = new Vector2(mouseX, mouseY);
 		Vector2 center = new Vector2(width / 2, height / 2);
-		mouse.subtract(center);
-		mouse.normalize();
-		Vector2 cross = mouse;
+		Vector2 mouse = new Vector2(mouseX, mouseY).subtract(center).normalize();
 
 		int scale = Math.max(1, client.options.guiScale);
 
 		// Move crossHair based on distance between mouse and center. But with limit
-		if (Math.hypot(width / 2 - mouseX, height / 2 - mouseY) < 1f / scale * 200f)
-			mouse.multiply((float) Math.hypot(width / 2 - mouseX, height / 2 - mouseY));
-		else 
-			mouse.multiply(1f / scale * 200f);
+		float hypot = (float) Math.hypot(width / 2 - mouseX, height / 2 - mouseY);
+		mouse.multiply(Math.min(hypot, 1f) / scale * 200f);
 
 		this.crosshairX = (int) mouse.x + width / 2;
 		this.crosshairY = (int) mouse.y + height / 2;
 
-		client.player.yaw = yaw + cross.x / 3;
-		client.player.pitch = MathHelper.clamp(pitch + cross.y / 3, -90f, 90f);
+		client.player.yaw = yaw + mouse.x / 3;
+		client.player.pitch = MathHelper.clamp(pitch + mouse.y / 3, -90f, 90f);
 		super.render(matrix, mouseX, mouseY, delta);
 	}
 
-
-
 	private void drawDots(MatrixStack matrix, int radius, int mouseX, int mouseY) {
-		Map<String, String> map = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
-		ArrayList<Vector2> pointList = new ArrayList<Vector2>();
+		PairList<String, String> map = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
+		List<Vector2> pointList = new ArrayList<>();
 		String cache[] = new String[map.size()];
-		double lowestDistance = Double.MAX_VALUE;
-		int i = 0;
 
-		for (String string: map.keySet()) {
+		int i = 0;
+		double lowestDistance = Double.MAX_VALUE;
+		for (String string: map.getEntries()) {
 			// Just some fancy calculations to get the positions of the dots
 			double s = (double) i / map.size() * 2 * Math.PI;
 			int x = (int) Math.round(radius * Math.cos(s) + width / 2);
@@ -150,12 +162,13 @@ public class InteractionScreen extends Screen {
 		// Go through all point and if it is focused -> drawing different color, changing closest string value
 		for (int j = 0; j < map.size(); j++) {
 			Vector2 point = pointList.get(j);
-			if (pointList.get(focusedDot) == point) {
-				drawDot(matrix, (int) point.x - 4, (int) point.y - 4, 0xFF4CFF00);
+
+			if (pointList.get(focusedDot).equals(point)) {
+				drawDot(matrix, (int) point.x, (int) point.y, 0xFF4CFF00);
 				this.focusedString = cache[focusedDot];
+			} else {
+				drawDot(matrix, (int) point.x, (int) point.y, 0xFF0094FF);
 			}
-			else
-				drawDot(matrix, (int) point.x - 4, (int) point.y - 4, 0xFF0094FF);
 		}
 	}
 
@@ -167,66 +180,89 @@ public class InteractionScreen extends Screen {
 		fill(matrix, startX + 1, startY + 1, startX + width, startY + height, colorInner);
 	}
 
-	private void drawTextField(MatrixStack matrix, int x, int y, String key) {
+	private void drawTextField(MatrixStack matrix, int x, int y, String text) {
 		if (x >= width / 2) {
-			drawRect(matrix, x + 10, y - 8, textRenderer.getWidth(key) + 3, 15, 0x80808080, 0xFF000000);
-			drawStringWithShadow(matrix, textRenderer, key, x + 12, y - 4, 0xFFFFFFFF);
+			drawRect(matrix, x + 10, y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
+			drawStringWithShadow(matrix, textRenderer, text, x + 12, y - 4, 0xFFFFFFFF);
 		} else {
-			drawRect(matrix, x - 14 - textRenderer.getWidth(key), y - 8, textRenderer.getWidth(key) + 3, 15, 0x80808080, 0xFF000000);
-			drawStringWithShadow(matrix, textRenderer, key, x - 12 - textRenderer.getWidth(key), y - 4, 0xFFFFFFFF);
+			drawRect(matrix, x - 14 - textRenderer.getWidth(text), y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
+			drawStringWithShadow(matrix, textRenderer, text, x - 12 - textRenderer.getWidth(text), y - 4, 0xFFFFFFFF);
 		}
 	}
 
 	// Literally drawing it in code
-	private void drawDot(MatrixStack matrix, int startX, int startY, int colorInner) {
-		// Draw dot itself
-		drawHorizontalLine(matrix, startX + 2, startX + 5, startY, 0xFF000000);
-		drawHorizontalLine(matrix, startX + 1, startX + 6, startY + 1, 0xFF000000);
-		drawHorizontalLine(matrix, startX + 2, startX + 5, startY + 1, colorInner);
-		fill(matrix, startX, startY + 2, startX + 8, startY + 6, 0xFF000000);
-		fill(matrix, startX + 1, startY + 2, startX + 7, startY + 6, colorInner);
-		drawHorizontalLine(matrix, startX + 1, startX + 6, startY + 6, 0xFF000000);
-		drawHorizontalLine(matrix, startX + 2, startX + 5, startY + 6, colorInner);
-		drawHorizontalLine(matrix, startX + 2, startX + 5, startY + 7, 0xFF000000);
+	private void drawDot(MatrixStack matrix, int centerX, int centerY, int colorInner) {
+		// Black background
+		fill(matrix, centerX - 1, centerY - 5, centerX + 2, centerY + 6, 0xff000000);
+		fill(matrix, centerX - 3, centerY - 4, centerX + 4, centerY + 5, 0xff000000);
+		fill(matrix, centerX - 4, centerY - 3, centerX + 5, centerY + 4, 0xff000000);
+		fill(matrix, centerX - 5, centerY - 1, centerX + 6, centerY + 2, 0xff000000);
 
-		// Draw light overlay
-		drawHorizontalLine(matrix, startX + 2, startX + 3, startY + 1, 0x80FFFFFF);
-		drawHorizontalLine(matrix, startX + 1, startX + 1, startY + 2, 0x80FFFFFF);
+		// Fill
+		fill(matrix, centerX - 1, centerY - 4, centerX + 2, centerY + 5, colorInner);
+		fill(matrix, centerX - 3, centerY - 3, centerX + 4, centerY + 4, colorInner);
+		fill(matrix, centerX - 4, centerY - 1, centerX + 5, centerY + 2, colorInner);
+
+		// Light overlay
+		fill(matrix, centerX - 1, centerY - 3, centerX + 1, centerY - 2, 0x80ffffff);
+		fill(matrix, centerX - 2, centerY - 2, centerX - 1, centerY - 1, 0x80ffffff);
+		//fill(matrix, centerX - 3, centerY - 1, centerX - 2, centerY, 0x80ffffff);
 	}
 }
 
 
 // Creating my own Vector class beacause I couldn't find a good one in minecrafts code
 class Vector2 {
-	public float x, y;
+
+	public final float x, y;
 
 	public Vector2(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	void normalize() {
+	public Vector2 normalize() {
 		float mag = getMag();
-		if (mag != 0 && mag != 1)
-			divide(mag);
+
+		if (mag == 0 || mag == 1)
+			return this;
+
+		return divide(mag);
 	}
 
-	void subtract(Vector2 vec) {
-		this.x -= vec.x;
-		this.y -= vec.y;
+	public Vector2 subtract(Vector2 vec) {
+		return new Vector2(this.x - vec.x, this.y - vec.y);
 	}
 
-	void divide(float n) {
-		x /= n;
-		y /= n;
+	public Vector2 divide(float n) {
+		return new Vector2(this.x / n, this.y / n);
 	}
 
-	void multiply(float n) {
-		x *= n;
-		y *= n;
+	public Vector2 multiply(float n) {
+		return new Vector2(this.x * n, this.y * n);
 	}
 
 	private float getMag() {
 		return (float) Math.sqrt(x * x + y * y);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result = 31 * result + Float.floatToIntBits(x);
+		result = 31 * result + Float.floatToIntBits(y);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+
+		Vector2 other = (Vector2) obj;
+		if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x)
+				|| Float.floatToIntBits(y) != Float.floatToIntBits(other.y)) return false;
+
+		return true;
 	}
 }

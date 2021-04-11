@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventRenderOverlay;
-import bleach.hack.gui.InteractionScreen;
+import bleach.hack.gui.EntityMenuScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
@@ -70,7 +70,7 @@ public class MixinIngameHud {
 	@Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
 	private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
 		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.currentScreen instanceof InteractionScreen) {
+		if (client.currentScreen instanceof EntityMenuScreen) {
 			ci.cancel();
 		}
 	}
