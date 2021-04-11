@@ -57,7 +57,7 @@ public class RenderUtils {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
 		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		Vertexer.vertexBoxQuads(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
+		Vertexer.vertexBoxQuads(matrix, buffer, Boxes.moveToZero(box), red, green, blue, alpha);
 		tessellator.draw();
 
 		// Outline
@@ -66,7 +66,7 @@ public class RenderUtils {
 		RenderSystem.lineWidth(width);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexBoxLines(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
+		Vertexer.vertexBoxLines(matrix, buffer, Boxes.moveToZero(box), red, green, blue, alpha);
 		tessellator.draw();
 
 		RenderSystem.enableCull();
@@ -89,7 +89,7 @@ public class RenderUtils {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
 		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		Vertexer.vertexBoxQuads(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
+		Vertexer.vertexBoxQuads(matrix, buffer, Boxes.moveToZero(box), red, green, blue, alpha);
 		tessellator.draw();
 
 		cleanup();
@@ -113,7 +113,7 @@ public class RenderUtils {
 		RenderSystem.lineWidth(width);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexBoxLines(matrix, buffer, box.offset(-box.minX, -box.minY, -box.minZ), red, green, blue, alpha);
+		Vertexer.vertexBoxLines(matrix, buffer, Boxes.moveToZero(box), red, green, blue, alpha);
 		tessellator.draw();
 
 		RenderSystem.enableCull();
