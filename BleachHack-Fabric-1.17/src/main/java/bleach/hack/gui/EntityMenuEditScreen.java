@@ -29,8 +29,10 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 	private int scroll;
 	private int scrollOffset;
-	
+
 	private boolean addEntry;
+
+	private String insertString;
 
 	private TextFieldWidget editNameField;
 	private TextFieldWidget editValueField;
@@ -84,17 +86,18 @@ public class EntityMenuEditScreen extends WindowScreen {
 			deleteEntry = null;
 			scrollOffset = 0;
 			addEntry = false;
+			insertString = null;
 
 			int seperator = (int) (x + w / 3.25);
 			fill(matrix, seperator, y, seperator + 1, y + h, 0xff606090);
 
 			textRenderer.drawWithShadow(matrix, "Interactions:", x + 6, y + 5, 0xffffff);
-			
+
 			boolean mouseOverAdd = mouseX >= seperator - 16 && mouseX <= seperator - 3 && mouseY >= y + 3 && mouseY <= y + 15;
 			Window.fill(matrix, seperator - 16, y + 3, seperator - 3, y + 15,
 					mouseOverAdd ? 0x4fb070f0 : 0x60606090);
 			textRenderer.drawWithShadow(matrix, "\u00a7a+", seperator - 12, y + 5, 0xffffff);
-			
+
 			if (mouseOverAdd) {
 				addEntry = true;
 			}
@@ -182,6 +185,29 @@ public class EntityMenuEditScreen extends WindowScreen {
 					interactions.getPair(selectedEntry).setRight(editValueField.getText());
 				}
 
+				textRenderer.drawWithShadow(matrix, "Insert:", seperator + 8, y + 85, 0xffffff);
+
+				int line = 0;
+				int curX = 0;
+				for (String insert: new String[] { "%name%", "%uuid%", "%health%", "%x%", "%y%", "%z%"}) {
+					int textLen = textRenderer.getWidth(insert);
+					
+					if (seperator + 9 + curX + textLen > x + w) {
+						line++;
+						curX = 0;
+					}
+
+					boolean mouseOverInsert = mouseX >= seperator + 7 + curX && mouseX <= seperator + 10 + curX + textLen && mouseY >= y + 97 + line * 14 && mouseY <= y + 108 + line * 14;
+					fill(matrix, seperator + 7 + curX, y + 97 + line * 14, seperator + 10 + curX + textLen, y + 108 + line * 14, mouseOverInsert ? 0x9f6060b0 : 0x9f8070b0);
+					textRenderer.drawWithShadow(matrix, insert, seperator + 9 + curX, y + 99 + line * 14, 0xffffff);
+					
+					if (mouseOverInsert) {
+						insertString = insert;
+					}
+					
+					curX += textLen + 7;
+				}
+
 				boolean mouseOverDelete = mouseX >= x + w - 70 && mouseX <= x + w - 5 && mouseY >= y + h - 22 && mouseY <= y + h - 4;
 				Window.fill(matrix, x + w - 70, y + h - 22, x + w - 5, y + h - 4, 0x60e05050, 0x60c07070, mouseOverDelete ? 0x20e05050 : 0x10e07070);
 				drawCenteredString(matrix, textRenderer, "Delete", x + w - 37, y + h - 17, 0xf0f0f0);
@@ -189,7 +215,6 @@ public class EntityMenuEditScreen extends WindowScreen {
 				if (mouseOverDelete) {
 					deleteEntry = selectedEntry;
 				}
-
 			}
 		}
 	}
@@ -229,10 +254,15 @@ public class EntityMenuEditScreen extends WindowScreen {
 			scroll += scrollOffset;
 			scrollOffset = 0;
 		}
-		
+
 		if (addEntry) {
 			interactions.add(new Pair<>(RandomStringUtils.randomAlphabetic(6), "bruh"));
 			addEntry = false;
+		}
+
+		if (insertString != null) {
+			editValueField.write(insertString);
+			insertString = null;
 		}
 
 		return super.mouseClicked(mouseX, mouseY, button);

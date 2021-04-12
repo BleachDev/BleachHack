@@ -1,5 +1,6 @@
 package bleach.hack.gui;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +68,16 @@ public class EntityMenuScreen extends Screen {
 
 		// This makes the magic
 		if (focusedString != null) {
-			String message = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions.getValue(focusedString).replaceAll("%name", entity.getDisplayName().getString());
+			DecimalFormat coordFormat = new DecimalFormat("#.##");
+
+			String message = ((EntityMenu) ModuleManager.getModule("EntityMenu"))
+					.interactions.getValue(focusedString)
+					.replaceAll("%name%", entity.getDisplayName().getString())
+					.replaceAll("%uuid%", entity.getEntityName())
+					.replaceAll("%health%", String.valueOf((int) entity.getHealth()))
+					.replaceAll("%x%", coordFormat.format(entity.getX()))
+					.replaceAll("%y%", coordFormat.format(entity.getY()))
+					.replaceAll("%z%", coordFormat.format(entity.getZ()));
 
 			if (message.startsWith("%suggestion")) {
 				client.openScreen(new ChatScreen(message.replaceFirst("%suggestion", "")));
