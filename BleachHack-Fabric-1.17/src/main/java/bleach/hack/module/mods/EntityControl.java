@@ -160,7 +160,8 @@ public class EntityControl extends Module {
 
 	@Subscribe
 	public void onReadPacket(EventReadPacket event) {
-		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state && mc.player.hasVehicle()) {
+		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state
+				&& mc.player != null && mc.player.hasVehicle()) {
 			if (event.getPacket() instanceof PlayerPositionLookS2CPacket
 					|| event.getPacket() instanceof EntityPassengersSetS2CPacket)
 				event.setCancelled(true);
