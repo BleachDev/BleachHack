@@ -21,6 +21,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
@@ -34,6 +35,9 @@ import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
+import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -45,7 +49,8 @@ public class EntityControl extends Module {
 						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("Entity speed")),
 				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entites").withChildren(
 						new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed"),
-						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed")),
+						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed"),
+						new SettingToggle("EcmeBypass", false).withDesc("Prevents you from getting kicked off when flying on ec.me")),
 				new SettingToggle("HorseJump", true).withDesc("Always makes your horse do the highest jump it can"),
 				new SettingToggle("GroundSnap", false).withDesc("Snaps the entity to the ground when going down blocks"),
 				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding when going up blocks"),
@@ -145,6 +150,20 @@ public class EntityControl extends Module {
 				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(0).asSlider().getValue(), "field_12887", "yaw");
 				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(1).asSlider().getValue(), "field_12885", "pitch");
 			}
+		}
+
+		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state
+				&& mc.player != null && mc.player.getVehicle() != null && event.getPacket() instanceof VehicleMoveC2SPacket) {
+			mc.interactionManager.interactEntity(mc.player, mc.player.getVehicle(), Hand.MAIN_HAND);
+		}
+	}
+
+	@Subscribe
+	public void onReadPacket(EventReadPacket event) {
+		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state && mc.player.hasVehicle()) {
+			if (event.getPacket() instanceof PlayerPositionLookS2CPacket
+					|| event.getPacket() instanceof EntityPassengersSetS2CPacket)
+				event.setCancelled(true);
 		}
 	}
 
