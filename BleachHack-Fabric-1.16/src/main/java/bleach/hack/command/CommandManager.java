@@ -39,6 +39,7 @@ public class CommandManager {
 			new CmdCustomSign(),
 			new CmdDupe(),
 			new CmdEnchant(),
+			new CmdEntityMenu(),
 			new CmdEntityStats(),
 			new CmdFriends(),
 			new CmdGamemode(),
