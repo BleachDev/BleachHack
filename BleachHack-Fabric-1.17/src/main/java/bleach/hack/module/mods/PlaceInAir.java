@@ -53,7 +53,7 @@ public class PlaceInAir extends Module {
 			}
 			break;
 			
-		case 1:
+		default:
 			if (!pressed && isKeyUsePressed) {
 				sendInteractionBlockC2SPacket();
 	            pressed = true;
@@ -79,15 +79,16 @@ public class PlaceInAir extends Module {
 		int mode = getSetting(0).asToggle().getChild(0).asMode().mode;
 		float[] rgb = getSetting(0).asToggle().getChild(3).asColor().getRGBFloat();
 		
+		if (mode == 0 || mode == 1) {
+			float outlineWidth = (float) getSetting(0).asToggle().getChild(1).asSlider().getValue();
+			RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+		}
+		
 		if (mode == 0 || mode == 2) {
 			float fillAlpha = (float) getSetting(0).asToggle().getChild(2).asSlider().getValue();
 			RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], fillAlpha);
 		}
 
-		if (mode == 0 || mode == 1) {
-			float outlineWidth = (float) getSetting(0).asToggle().getChild(1).asSlider().getValue();
-			RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
-		}
 	}
 	
 	
