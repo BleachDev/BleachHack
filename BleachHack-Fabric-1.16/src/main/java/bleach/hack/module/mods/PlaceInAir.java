@@ -38,7 +38,7 @@ public class PlaceInAir extends Module {
 	}
 
 	@Subscribe
-	public void onTick (EventTick event) {
+	public void onTick(EventTick event) {
 		boolean isKeyUsePressed = mc.options.keyUse.isPressed();
 
 		if (!(mc.crosshairTarget instanceof BlockHitResult)) {
@@ -60,7 +60,7 @@ public class PlaceInAir extends Module {
 	}
 
 	@Subscribe
-	public void onWorldRender (EventWorldRender event) {
+	public void onWorldRender(EventWorldRender event) {
 		if (!(mc.crosshairTarget instanceof BlockHitResult) || !getSetting(0).asToggle().state) {
 			return;
 		}
