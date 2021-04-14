@@ -6,6 +6,7 @@
   ],
   "client": [
     "IMixinHeldItemRenderer",
+    "IMixinMinecraftClient",
     "MixinBackgroundRenderer",
   	"MixinAbstractBlock",
   	"MixinBeaconScreen",
