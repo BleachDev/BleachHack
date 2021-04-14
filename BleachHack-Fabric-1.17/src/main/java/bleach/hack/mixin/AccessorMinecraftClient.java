@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import net.minecraft.client.MinecraftClient;
 
 @Mixin(MinecraftClient.class)
-public interface IMixinMinecraftClient {
+public interface AccessorMinecraftClient {
 	@Accessor
 	public abstract int getItemUseCooldown();
 }

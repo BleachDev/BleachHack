@@ -3,7 +3,7 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.mixin.IMixinHeldItemRenderer;
+import bleach.hack.mixin.AccessorHeldItemRenderer;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
@@ -19,7 +19,7 @@ public class HandProgress extends Module {
 
 	@Subscribe
 	public void tick(EventTick event) {
-		IMixinHeldItemRenderer accessor = (IMixinHeldItemRenderer) mc.gameRenderer.firstPersonRenderer;
+		AccessorHeldItemRenderer accessor = (AccessorHeldItemRenderer) mc.gameRenderer.firstPersonRenderer;
 
 		// Refresh the item held in hand every tick
 		accessor.setItemStackMainHand(mc.player.getMainHandStack());

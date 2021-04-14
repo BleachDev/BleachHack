@@ -5,7 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.mixin.IMixinMinecraftClient;
+import bleach.hack.mixin.AccessorMinecraftClient;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
@@ -48,7 +48,7 @@ public class PlaceInAir extends Module {
 		switch (getSetting(1).asMode().mode) {
 		
 		case 0:
-			if (((IMixinMinecraftClient) mc).getItemUseCooldown() == 4 && isKeyUsePressed) {
+			if (((AccessorMinecraftClient) mc).getItemUseCooldown() == 4 && isKeyUsePressed) {
 				sendInteractionBlockC2SPacket();
 			}
 			break;

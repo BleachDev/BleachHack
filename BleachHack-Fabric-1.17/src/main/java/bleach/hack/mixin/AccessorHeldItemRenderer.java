@@ -7,7 +7,7 @@ import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.ItemStack;
 
 @Mixin(HeldItemRenderer.class)
-public interface IMixinHeldItemRenderer {
+public interface AccessorHeldItemRenderer {
 	@Accessor("mainHand")
 	void setItemStackMainHand(ItemStack value);
 

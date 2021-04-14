@@ -5,8 +5,8 @@
   "mixins": [
   ],
   "client": [
-    "IMixinHeldItemRenderer",
-    "IMixinMinecraftClient",
+    "AccessorHeldItemRenderer",
+    "AccessorMinecraftClient",
     "MixinBackgroundRenderer",
   	"MixinAbstractBlock",
   	"MixinBeaconScreen",
