@@ -13,14 +13,12 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.RenderUtils;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.AirBlock;
+import net.minecraft.block.Block;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -73,26 +71,22 @@ public class PlaceInAir extends Module {
 		}
 		
 		BlockPos pos = new BlockPos(mc.crosshairTarget.getPos());
-		BlockState state = mc.world.getBlockState(pos);
-		VoxelShape voxelShape = state.getOutlineShape(mc.world, pos);
-		if (voxelShape.isEmpty()) {
-			voxelShape = VoxelShapes.cuboid(0, 0, 0, 1, 1, 1);
+		Block block = mc.world.getBlockState(pos).getBlock();
+		if (!(block instanceof AirBlock)) {
+			return;
 		}
 		
 		int mode = getSetting(0).asToggle().getChild(0).asMode().mode;
 		float[] rgb = getSetting(0).asToggle().getChild(3).asColor().getRGBFloat();
 		
-		if (mode == 0 || mode == 1) {
-			float outlineWidth = (float) getSetting(0).asToggle().getChild(1).asSlider().getValue();
-			for (Box box: voxelShape.getBoundingBoxes()) {
-				RenderUtils.drawOutline(box.offset(pos), rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
-			}
-		}
 		if (mode == 0 || mode == 2) {
 			float fillAlpha = (float) getSetting(0).asToggle().getChild(2).asSlider().getValue();
-			for (Box box: voxelShape.getBoundingBoxes()) {
-				RenderUtils.drawFill(box.offset(pos), rgb[0], rgb[1], rgb[2], fillAlpha);
-			}
+			RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], fillAlpha);
+		}
+
+		if (mode == 0 || mode == 1) {
+			float outlineWidth = (float) getSetting(0).asToggle().getChild(1).asSlider().getValue();
+			RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
 		}
 	}
 	
