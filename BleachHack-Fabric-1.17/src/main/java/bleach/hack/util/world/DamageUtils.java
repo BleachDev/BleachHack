@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
@@ -14,9 +15,57 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.explosion.Explosion;
 
-public class ExplosionUtils {
+public class DamageUtils {
 
 	private static final MinecraftClient mc = MinecraftClient.getInstance();
+
+	public static float getAttackDamage(PlayerEntity attacker, LivingEntity target) {
+		float cooldown = attacker.getAttackCooldownProgress(0.5F);
+
+		float damage = (float) attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) * (0.2f + cooldown * cooldown * 0.8f);
+		float enchDamage = EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup()) * cooldown;
+
+		if (damage <= 0f && enchDamage <= 0f) {
+			return 0f;
+		}
+
+		// Crits
+		if (cooldown > 0.9
+				&& attacker.fallDistance > 0.0F
+				&& !attacker.isOnGround()
+				&& !attacker.isClimbing()
+				&& !attacker.isTouchingWater()
+				&& !attacker.hasStatusEffect(StatusEffects.BLINDNESS)
+				&& !attacker.hasVehicle()
+				&& !attacker.isSprinting()
+				&& target instanceof LivingEntity) {
+			damage *= 1.5f;
+		}
+
+		damage += enchDamage;
+
+		// Armor
+		damage = DamageUtil.getDamageLeft(damage, target.getArmor(),
+				(float) target.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
+
+		// Enchantments
+		if (target.hasStatusEffect(StatusEffects.RESISTANCE)) {
+			int resistance = 25 - (target.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+			float resistance_1 = damage * resistance;
+			damage = Math.max(resistance_1 / 25f, 0f);
+		}
+
+		if (damage <= 0f) {
+			damage = 0f;
+		} else {
+			int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), DamageSource.player(attacker));
+			if (protAmount > 0) {
+				damage = DamageUtil.getInflictedDamage(damage, protAmount);
+			}
+		}
+
+		return damage;
+	}
 
 	public static float getExplosionDamage(Vec3d explosionPos, float power, LivingEntity target) {
 		if (mc.world.getDifficulty() == Difficulty.PEACEFUL)
@@ -62,9 +111,8 @@ public class ExplosionUtils {
 
 					// Enchantments
 					if (target.hasStatusEffect(StatusEffects.RESISTANCE)) {
-						int resistance = (target.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
-						int int_2 = 25 - resistance;
-						float resistance_1 = toDamage * int_2;
+						int resistance = 25 - (target.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+						float resistance_1 = toDamage * resistance;
 						toDamage = Math.max(resistance_1 / 25f, 0f);
 					}
 
@@ -84,24 +132,24 @@ public class ExplosionUtils {
 
 		return 0f;
 	}
-	
-	public static boolean willKill(Vec3d explosionPos, float power, LivingEntity target) {
+
+	public static boolean willExplosionKill(Vec3d explosionPos, float power, LivingEntity target) {
 		if (target.getMainHandStack().getItem() == Items.TOTEM_OF_UNDYING || target.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING) {
 			return false;
 		}
-	
+
 		return getExplosionDamage(explosionPos, power, target) >= target.getHealth() + target.getAbsorptionAmount();
 	}
-	
-	public static boolean willPop(Vec3d explosionPos, float power, LivingEntity target) {
+
+	public static boolean willExplosionPop(Vec3d explosionPos, float power, LivingEntity target) {
 		if (target.getMainHandStack().getItem() != Items.TOTEM_OF_UNDYING && target.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING) {
 			return false;
 		}
-	
+
 		return getExplosionDamage(explosionPos, power, target) >= target.getHealth() + target.getAbsorptionAmount();
 	}
-	
-	public static boolean willPopOrKill(Vec3d explosionPos, float power, LivingEntity target) {
+
+	public static boolean willExplosionPopOrKill(Vec3d explosionPos, float power, LivingEntity target) {
 		return getExplosionDamage(explosionPos, power, target) >= target.getHealth() + target.getAbsorptionAmount();
 	}
 }

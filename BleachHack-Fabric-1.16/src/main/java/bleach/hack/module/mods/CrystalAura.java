@@ -43,7 +43,7 @@ import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.RenderUtils;
 import bleach.hack.util.world.EntityUtils;
-import bleach.hack.util.world.ExplosionUtils;
+import bleach.hack.util.world.DamageUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -134,8 +134,8 @@ public class CrystalAura extends Module {
 			boolean end = false;
 			for (EndCrystalEntity c: nearestCrystals) {
 				if (mc.player.distanceTo(c) > getSetting(7).asSlider().getValue()
-						|| ExplosionUtils.willKill(c.getPos(), 6f, mc.player)
-						|| (mc.player.getHealth() + mc.player.getAbsorptionAmount()) - ExplosionUtils.getExplosionDamage(c.getPos(), 6f, mc.player) 
+						|| DamageUtils.willExplosionKill(c.getPos(), 6f, mc.player)
+						|| (mc.player.getHealth() + mc.player.getAbsorptionAmount()) - DamageUtils.getExplosionDamage(c.getPos(), 6f, mc.player) 
 						< getSetting(3).asToggle().getChild(4).asSlider().getValue()
 						|| mc.world.getOtherEntities(null,
 								new Box(c.getPos(), c.getPos()).expand(7),
@@ -202,18 +202,18 @@ public class CrystalAura extends Module {
 			Map<BlockPos, Float> placeBlocks = new LinkedHashMap<>();
 
 			for (Vec3d v: getCrystalPoses()) {
-				float playerDamg = ExplosionUtils.getExplosionDamage(v, 6f, mc.player);
+				float playerDamg = DamageUtils.getExplosionDamage(v, 6f, mc.player);
 
-				if (ExplosionUtils.willKill(v, 6f, mc.player)) {
+				if (DamageUtils.willExplosionKill(v, 6f, mc.player)) {
 					continue;
 				}
 
 				for (LivingEntity e: targets) {
-					if (ExplosionUtils.willPop(v, 6f, mc.player) && !ExplosionUtils.willPopOrKill(v, 6f, e)) {
+					if (DamageUtils.willExplosionPop(v, 6f, mc.player) && !DamageUtils.willExplosionPopOrKill(v, 6f, e)) {
 						continue;
 					}
 
-					float targetDamg = ExplosionUtils.getExplosionDamage(v, 6f, e);
+					float targetDamg = DamageUtils.getExplosionDamage(v, 6f, e);
 
 					if (targetDamg >= getSetting(4).asToggle().getChild(4).asSlider().getValue()) {
 						float ratio = playerDamg == 0 ? targetDamg : targetDamg / playerDamg;
