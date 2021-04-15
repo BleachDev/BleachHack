@@ -25,9 +25,10 @@ import net.minecraft.util.math.BlockPos;
  */
 
 public class PlaceInAir extends Module {
+
 	private boolean pressed;
 
-	public PlaceInAir () {
+	public PlaceInAir() {
 		super("PlaceInAir", KEY_UNBOUND, Category.WORLD, "Allows you to place blocks in thin air",
 				new SettingToggle("Highlight", true).withDesc("Renders an overlay where it will place the block").withChildren(
 						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),

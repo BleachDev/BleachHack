@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 
 @Mixin(MinecraftClient.class)
 public interface AccessorMinecraftClient {
+
 	@Accessor
 	public abstract int getItemUseCooldown();
 }
