@@ -96,11 +96,17 @@ public class ElytraFly extends Module {
 
 				break;
 			case 2:
-				if (mc.player.isFallFlying() && mc.options.keyForward.isPressed()) {
-					mc.player.setVelocity(
-							mc.player.getVelocity().x + vec3d.x + (vec3d.x - mc.player.getVelocity().x),
-							mc.player.getVelocity().y + vec3d.y + (vec3d.y - mc.player.getVelocity().y),
-							mc.player.getVelocity().z + vec3d.z + (vec3d.z - mc.player.getVelocity().z));
+				if (mc.player.isFallFlying()) {
+					if (mc.options.keyBack.isPressed()) vec3d = vec3d.multiply(-1);
+					if (mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
+					else if (mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
+					if (mc.options.keyJump.isPressed()) vec3d = vec3d.add(0, getSetting(3).asSlider().getValue(), 0);
+					if (mc.options.keySneak.isPressed()) vec3d = vec3d.add(0, -getSetting(3).asSlider().getValue(), 0);
+
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(
+							mc.player.getX() + vec3d.x, mc.player.getY() - 0.01, mc.player.getZ() + vec3d.z, false));
+
+					mc.player.setVelocity(vec3d.x, vec3d.y, vec3d.z);
 				}
 
 				break;
