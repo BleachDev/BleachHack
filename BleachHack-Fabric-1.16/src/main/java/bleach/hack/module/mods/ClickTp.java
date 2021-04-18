@@ -10,7 +10,8 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.hit.BlockHitResult;
@@ -47,10 +48,10 @@ public class ClickTp extends Module {
 	public void onWorldRender(EventWorldRender.Post event) {
 		if (pos != null && dir != null) {
 			float[] col = getSetting(4).asColor().getRGBFloat();
-			RenderUtils.drawFilledBox(new Box(
+			RenderUtils.drawBoxBoth(new Box(
 					pos.getX() + (dir == Direction.EAST ? 0.95 : 0), pos.getY() + (dir == Direction.UP ? 0.95 : 0), pos.getZ() + (dir == Direction.SOUTH ? 0.95 : 0),
 					pos.getX() + (dir == Direction.WEST ? 0.05 : 1), pos.getY() + (dir == Direction.DOWN ? 0.05 : 1), pos.getZ() + (dir == Direction.NORTH ? 0.05 : 1)),
-					col[0], col[1], col[2], 1f);
+					QuadColor.single(col[0], col[1], col[2], 1f), 2.5f);
 		}
 	}
 

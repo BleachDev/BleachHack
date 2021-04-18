@@ -38,8 +38,9 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.RenderUtils;
 import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.block.enums.Instrument;
@@ -127,9 +128,9 @@ public class Notebot extends Module {
 	public void onRender(EventWorldRender.Post event) {
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
-				RenderUtils.drawFilledBox(e.getKey(), 1F, 0F, 0F, 0.8F);
+				RenderUtils.drawBoxBoth(e.getKey(), QuadColor.single(1F, 0F, 0F, 0.8F), 2.5f);
 			} else {
-				RenderUtils.drawFilledBox(e.getKey(), 0F, 1F, 0F, 0.4F);
+				RenderUtils.drawBoxBoth(e.getKey(), QuadColor.single(0F, 1F, 0F, 0.4F), 2.5f);
 			}
 		}
 	}

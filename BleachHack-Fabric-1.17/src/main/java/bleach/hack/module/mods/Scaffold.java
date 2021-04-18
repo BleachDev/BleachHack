@@ -34,7 +34,8 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.BlockItem;
@@ -175,7 +176,7 @@ public class Scaffold extends Module {
 		if (getSetting(11).asToggle().state) {
 			float[] col = getSetting(11).asToggle().getChild(0).asColor().getRGBFloat();
 			for (BlockPos bp : renderBlocks) {
-				RenderUtils.drawFilledBox(bp, col[0], col[1], col[2], 0.5f);
+				RenderUtils.drawBoxBoth(bp, QuadColor.single(col[0], col[1], col[2], 0.5f), 2.5f);
 
 				col[0] = Math.max(0f, col[0] - 0.01f);
 				col[2] = Math.min(1f, col[2] + 0.01f);

@@ -30,7 +30,8 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.shader.OutlineShaderManager;
 import bleach.hack.util.shader.StaticShaders;
 import bleach.hack.util.shader.StringShaderEffect;
@@ -141,11 +142,11 @@ public class ESP extends Module {
 				if (color != null) {
 
 					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
-						RenderUtils.drawFill(e.getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
+						RenderUtils.drawBoxFill(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue()));
 					}
 
 					if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-						RenderUtils.drawOutline(e.getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
+						RenderUtils.drawBoxOutline(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f), (float) getSetting(2).asSlider().getValue());
 					}
 				}
 			}
@@ -159,11 +160,11 @@ public class ESP extends Module {
 		if (color != null) {
 			if (getSetting(4).asToggle().state) {
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawOutline(event.getEntity().getBoundingBox(), color[0], color[1], color[2], 1f, (float) getSetting(2).asSlider().getValue());
+					RenderUtils.drawBoxOutline(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f), (float) getSetting(2).asSlider().getValue());
 				}
 
 				if (getSetting(0).asMode().mode == 2 || getSetting(0).asMode().mode == 4) {
-					RenderUtils.drawFill(event.getEntity().getBoundingBox(), color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue());
+					RenderUtils.drawBoxFill(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue()));
 				}
 			}
 

@@ -9,13 +9,14 @@ import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
-import bleach.hack.util.RenderUtils;
 import bleach.hack.util.operation.Operation;
 import bleach.hack.util.operation.OperationList;
 import bleach.hack.util.operation.blueprint.OperationBlueprint;
 import bleach.hack.util.operation.blueprint.PlaceDirOperationBlueprint;
 import bleach.hack.util.operation.blueprint.PlaceOperationBlueprint;
 import bleach.hack.util.operation.blueprint.RemoveOperationBlueprint;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.item.Items;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -105,16 +106,16 @@ public class AutoBuild extends Module {
 				o.render();
 			}
 			
-			RenderUtils.drawOutline(new Box(current.getNext().pos).contract(0.01), 1f, 1f, 0f, 0.5f, 3f);
+			RenderUtils.drawBoxOutline(new Box(current.getNext().pos).contract(0.01), QuadColor.single(1f, 1f, 0f, 0.5f), 3f);
 		}
 
 		if (ray != null && !active) {
 			BlockPos pos = ray.getBlockPos();
 			Direction dir = ray.getSide();
-			RenderUtils.drawFilledBox(new Box(
+			RenderUtils.drawBoxBoth(new Box(
 					pos.getX() + (dir == Direction.EAST ? 0.98 : 0), pos.getY() + (dir == Direction.UP ? 0.98 : 0), pos.getZ() + (dir == Direction.SOUTH ? 0.98 : 0),
 					pos.getX() + (dir == Direction.WEST ? 0.02 : 1), pos.getY() + (dir == Direction.DOWN ? 0.02 : 1), pos.getZ() + (dir == Direction.NORTH ? 0.02 : 1)),
-					1f, 1f, 0f, 0.3f);
+					QuadColor.single(1f, 1f, 0f, 0.3f), 2.5f);
 		}
 	}
 }

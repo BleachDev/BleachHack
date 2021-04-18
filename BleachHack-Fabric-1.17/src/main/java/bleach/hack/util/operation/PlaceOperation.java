@@ -2,8 +2,9 @@ package bleach.hack.util.operation;
 
 import java.util.Random;
 
-import bleach.hack.util.RenderUtils;
-import bleach.hack.util.WorldRenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.WorldRenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.RenderLayers;
@@ -68,10 +69,10 @@ public class PlaceOperation extends Operation {
 			mc.getBufferBuilders().getEntityVertexConsumers().draw(RenderLayers.getMovingBlockLayer(state));
 
 			for (Box box: state.getOutlineShape(mc.world, pos).getBoundingBoxes()) {
-				RenderUtils.drawFill(box.offset(pos), 0.45f, 0.7f, 1f, 0.4f);
+				RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(0.45f, 0.7f, 1f, 0.4f));
 			}
 		} else {
-			RenderUtils.drawFilledBox(pos, 1f, 1f, 0f, 0.3f);
+			RenderUtils.drawBoxBoth(pos, QuadColor.single(1f, 1f, 0f, 0.3f), 2.5f);
 		}
 	}
 }

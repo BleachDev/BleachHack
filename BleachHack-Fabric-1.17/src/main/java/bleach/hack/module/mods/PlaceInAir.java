@@ -12,7 +12,8 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
@@ -77,12 +78,12 @@ public class PlaceInAir extends Module {
 
 		if (mode == 0 || mode == 1) {
 			float outlineWidth = (float) getSetting(0).asToggle().getChild(1).asSlider().getValue();
-			RenderUtils.drawOutline(pos, rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+			RenderUtils.drawBoxOutline(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
 		}
 
 		if (mode == 0 || mode == 2) {
 			float fillAlpha = (float) getSetting(0).asToggle().getChild(2).asSlider().getValue();
-			RenderUtils.drawFill(pos, rgb[0], rgb[1], rgb[2], fillAlpha);
+			RenderUtils.drawBoxFill(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
 		}
 
 	}

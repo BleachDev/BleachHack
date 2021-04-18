@@ -13,7 +13,8 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -105,17 +106,17 @@ public class HoleESP extends Module {
 			
 			for (BlockPos pos : bedrockHoles) {
 				float[] rgb = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawFill(boxAt(pos), rgb[0], rgb[1], rgb[2], fillAlpha);
+				RenderUtils.drawBoxFill(boxAt(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
 			}
 
 			for (BlockPos pos : mixedHoles) {
 				float[] rgb = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawFill(boxAt(pos), rgb[0], rgb[1], rgb[2], fillAlpha);
+				RenderUtils.drawBoxFill(boxAt(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
 			}
 
 			for (BlockPos pos : obsidianHoles) {
 				float[] rgb = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawFill(boxAt(pos), rgb[0], rgb[1], rgb[2], fillAlpha);
+				RenderUtils.drawBoxFill(boxAt(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
 			}
 		}
 
@@ -124,17 +125,17 @@ public class HoleESP extends Module {
 			
 			for (BlockPos pos : bedrockHoles) {
 				float[] rgb = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawOutline(boxAt(pos), rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+				RenderUtils.drawBoxOutline(boxAt(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
 			}
 
 			for (BlockPos pos : mixedHoles) {
 				float[] rgb = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawOutline(boxAt(pos), rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+				RenderUtils.drawBoxOutline(boxAt(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
 			}
 
 			for (BlockPos pos : obsidianHoles) {
 				float[] rgb = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
-				RenderUtils.drawOutline(boxAt(pos), rgb[0], rgb[1], rgb[2], 1f, outlineWidth);
+				RenderUtils.drawBoxOutline(boxAt(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
 			}
 		}
 	}

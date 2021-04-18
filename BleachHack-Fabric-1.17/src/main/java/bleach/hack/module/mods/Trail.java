@@ -30,7 +30,8 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.LineColor;
 import net.minecraft.util.math.Vec3d;
 
 public class Trail extends Module {
@@ -89,8 +90,7 @@ public class Trail extends Module {
 			RenderUtils.drawLine(
 					e.getKey().x, e.getKey().y, e.getKey().z,
 					e.getValue().x, e.getValue().y, e.getValue().z,
-					((color & 0xff0000) >> 16) / 255f, ((color & 0xff00) >> 8) / 255f, (color & 0xff) / 255f,
-					(float) getSetting(5).asSlider().getValue(),
+					LineColor.single(((color & 0xff0000) >> 16) / 255f, ((color & 0xff00) >> 8) / 255f, (color & 0xff) / 255f, (float) getSetting(5).asSlider().getValue()),
 					(float) getSetting(4).asSlider().getValue());
 
 			if (count < 5 || count > 250) {

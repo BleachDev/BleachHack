@@ -26,7 +26,8 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.world.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -67,7 +68,8 @@ public class Tracers extends Module {
 		for (Entity e : mc.world.getEntities()) {
 			Vec3d vec = e.getPos();
 
-			Vec3d vec2 = new Vec3d(0, 0, 75).rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
+			Vec3d vec2 = new Vec3d(0, 0, 75)
+					.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
 					.rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw()))
 					.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
 
@@ -88,8 +90,8 @@ public class Tracers extends Module {
 			}
 
 			if (col != null) {
-				RenderUtils.drawLine(vec2.x, vec2.y, vec2.z, vec.x, vec.y, vec.z, col[0], col[1], col[2], opacity, width);
-				RenderUtils.drawLine(vec.x, vec.y, vec.z, vec.x, vec.y + e.getHeight() * 0.9, vec.z, col[0], col[1], col[2], opacity, width);
+				RenderUtils.drawLine(vec2.x, vec2.y, vec2.z, vec.x, vec.y, vec.z, LineColor.single(col[0], col[1], col[2], opacity), width);
+				RenderUtils.drawLine(vec.x, vec.y, vec.z, vec.x, vec.y + e.getHeight() * 0.9, vec.z, LineColor.single(col[0], col[1], col[2], opacity), width);
 			}
 		}
 	}

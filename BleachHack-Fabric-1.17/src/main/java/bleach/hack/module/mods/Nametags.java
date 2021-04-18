@@ -56,7 +56,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.WorldRenderUtils;
+import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.EntityUtils;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;

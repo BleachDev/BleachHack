@@ -21,7 +21,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
-import bleach.hack.util.WorldRenderUtils;
+import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;

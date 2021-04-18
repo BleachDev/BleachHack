@@ -27,7 +27,9 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
 import bleach.hack.util.FabricReflect;
-import bleach.hack.util.RenderUtils;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.LineColor;
+import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -203,7 +205,7 @@ public class Search extends Module {
 				float outlineWidth = (float) getSetting(1).asSlider().getValue();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawOutline(box.offset(pos), red, green, blue, 1f, outlineWidth);
+					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);
 				}
 			}
 
@@ -211,22 +213,22 @@ public class Search extends Module {
 				float fillAlpha = (float) getSetting(2).asSlider().getValue();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawFill(box.offset(pos), red, green, blue, fillAlpha);
+					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
 				}
 			}
 
 			SettingToggle tracers = getSetting(3).asToggle();
 			if (tracers.state) {
 				// This is bad when bobbing is enabled!
-				Vec3d lookVec = new Vec3d(0, 0, 75).rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
+				Vec3d lookVec = new Vec3d(0, 0, 75)
+						.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
 						.rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw()))
 						.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
 
 				RenderUtils.drawLine(
 						lookVec.x, lookVec.y, lookVec.z,
 						pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-						red, green, blue,
-						(float) tracers.getChild(1).asSlider().getValue(),
+						LineColor.single(red, green, blue, (float) tracers.getChild(1).asSlider().getValue()),
 						(float) tracers.getChild(0).asSlider().getValue());
 			}
 		}
