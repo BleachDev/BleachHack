@@ -48,10 +48,11 @@ public class ClickTp extends Module {
 	public void onWorldRender(EventWorldRender.Post event) {
 		if (pos != null && dir != null) {
 			float[] col = getSetting(4).asColor().getRGBFloat();
+
 			RenderUtils.drawBoxBoth(new Box(
 					pos.getX() + (dir == Direction.EAST ? 0.95 : 0), pos.getY() + (dir == Direction.UP ? 0.95 : 0), pos.getZ() + (dir == Direction.SOUTH ? 0.95 : 0),
 					pos.getX() + (dir == Direction.WEST ? 0.05 : 1), pos.getY() + (dir == Direction.DOWN ? 0.05 : 1), pos.getZ() + (dir == Direction.NORTH ? 0.05 : 1)),
-					QuadColor.single(col[0], col[1], col[2], 1f), 2.5f);
+					QuadColor.single(col[0], col[1], col[2], 0.5f), 2.5f);
 		}
 	}
 
