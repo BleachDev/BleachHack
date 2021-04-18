@@ -35,10 +35,10 @@ public class QuadColor extends RenderColor {
 	public static QuadColor gradient(int red1, int green1, int blue1, int alpha1, int red2, int green2, int blue2, int alpha2, CardinalDirection direction) {
 		return new QuadColor((curVertex) -> {
 			if (direction.isStartVertex(curVertex)) {
-				return new int[] { (int) (red1 * 255f), (int) (green1 * 255f), (int) (blue1 * 255f), (int) (alpha1 * 255f) };
+				return new int[] { red1, green1, blue1, alpha1 };
 			}
 
-			return new int[] { (int) (red2 * 255f), (int) (green2 * 255f), (int) (blue2 * 255f), (int) (alpha2 * 255f) };
+			return new int[] { red2, green2, blue2, alpha2 };
 		});
 	}
 
