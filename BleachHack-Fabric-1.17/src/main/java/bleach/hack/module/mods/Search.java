@@ -67,7 +67,7 @@ public class Search extends Module {
 	private Queue<Pair<BlockPos, BlockState>> queuedBlocks = new ArrayDeque<>();
 
 	private Set<Block> prevBlockList = new HashSet<>();
-	
+
 	private int oldViewDistance = -1;
 
 	public Search() {
@@ -108,7 +108,7 @@ public class Search extends Module {
 			oldViewDistance = mc.options.viewDistance;
 			return;
 		}
-		
+
 
 		while (!queuedBlocks.isEmpty()) {
 			Pair<BlockPos, BlockState> blockPair = queuedBlocks.poll();
@@ -149,7 +149,7 @@ public class Search extends Module {
 				}
 			}
 		}
-		
+
 	}
 
 	@Subscribe
@@ -201,19 +201,19 @@ public class Search extends Module {
 				voxelShape = VoxelShapes.cuboid(0, 0, 0, 1, 1, 1);
 			}
 
-			if (mode == 0 || mode == 1) {
-				float outlineWidth = (float) getSetting(1).asSlider().getValue();
-
-				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);
-				}
-			}
-
 			if (mode == 0 || mode == 2) {
 				float fillAlpha = (float) getSetting(2).asSlider().getValue();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
 					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
+				}
+			}
+
+			if (mode == 0 || mode == 1) {
+				float outlineWidth = (float) getSetting(1).asSlider().getValue();
+
+				for (Box box: voxelShape.getBoundingBoxes()) {
+					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);
 				}
 			}
 

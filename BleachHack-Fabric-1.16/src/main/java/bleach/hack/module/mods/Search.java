@@ -199,20 +199,20 @@ public class Search extends Module {
 			if (voxelShape.isEmpty()) {
 				voxelShape = VoxelShapes.cuboid(0, 0, 0, 1, 1, 1);
 			}
+			
+			if (mode == 0 || mode == 2) {
+				float fillAlpha = (float) getSetting(2).asSlider().getValue();
+
+				for (Box box: voxelShape.getBoundingBoxes()) {
+					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
+				}
+			}
 
 			if (mode == 0 || mode == 1) {
 				float outlineWidth = (float) getSetting(1).asSlider().getValue();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
 					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);
-				}
-			}
-
-			if (mode == 0 || mode == 2) {
-				float fillAlpha = (float) getSetting(2).asSlider().getValue();
-
-				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
 				}
 			}
 

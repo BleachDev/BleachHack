@@ -128,6 +128,7 @@ public class RenderUtils {
 		BufferBuilder buffer = tessellator.getBuffer();
 
 		// Line
+		RenderSystem.disableDepthTest();
 		RenderSystem.disableCull();
 		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
 		RenderSystem.lineWidth(width);
@@ -137,6 +138,7 @@ public class RenderUtils {
 		tessellator.draw();
 
 		RenderSystem.enableCull();
+		RenderSystem.enableDepthTest();
 		cleanup();
 	}
 
