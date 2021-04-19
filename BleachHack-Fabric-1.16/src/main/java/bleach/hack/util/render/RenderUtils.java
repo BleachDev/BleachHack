@@ -18,6 +18,7 @@
 package bleach.hack.util.render;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -150,10 +151,14 @@ public class RenderUtils {
 	public static void setup() {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
+		RenderSystem.disableAlphaTest();
+		RenderSystem.shadeModel(GL11.GL_SMOOTH);
 		RenderSystem.disableTexture();
 	}
 
 	public static void cleanup() {
+		RenderSystem.shadeModel(GL11.GL_FLAT);
+		RenderSystem.enableAlphaTest();
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
 	}
