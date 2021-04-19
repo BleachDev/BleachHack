@@ -1,11 +1,8 @@
 package bleach.hack.module.mods;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.Set;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -31,9 +28,7 @@ import net.minecraft.util.math.Vec3d;
  */
 public class HoleESP extends Module {
 
-	private Set<BlockPos> bedrockHoles = new HashSet<>();
-	private Set<BlockPos> mixedHoles = new HashSet<>();
-	private Set<BlockPos> obsidianHoles = new HashSet<>();
+	private Map<BlockPos, float[]> holes = new HashMap<>();
 
 	public HoleESP() {
 		super("HoleESP", KEY_UNBOUND, Category.RENDER, "Highlights save and not so save holes. Used for CrystalPvP",
@@ -58,83 +53,74 @@ public class HoleESP extends Module {
 
 	@Override
 	public void onDisable() {
-		bedrockHoles.clear();
-		mixedHoles.clear();
-		obsidianHoles.clear();
+		holes.clear();
 
 		super.onDisable();
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (mc.player.age % 16 == 0) {
-			bedrockHoles.clear();
-			mixedHoles.clear();
-			obsidianHoles.clear();
-		}
+		if (mc.player.age % 14 == 0) {
+			holes.clear();
 
-		int dist = (int) getSetting(0).asSlider().getValue();
+			int dist = (int) getSetting(0).asSlider().getValue();
 
-		for (BlockPos pos : BlockPos.iterateOutwards(mc.player.getBlockPos(), dist, dist, dist)) {
-			if (!mc.world.isInBuildLimit(pos.down())
-					|| (mc.world.getBlockState(pos.down()).getBlock() != Blocks.BEDROCK
-					&& mc.world.getBlockState(pos.down()).getBlock() != Blocks.OBSIDIAN)
-					|| !mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()
-					|| !mc.world.getBlockState(pos.up(1)).getCollisionShape(mc.world, pos.up(1)).isEmpty()
-					|| !mc.world.getBlockState(pos.up(2)).getCollisionShape(mc.world, pos.up(2)).isEmpty()) {
-				continue;
-			}
-			
-			if (getSetting(6).asToggle().state
-					&& mc.player.getBoundingBox().getCenter().x > pos.getX() + 0.1
-					&& mc.player.getBoundingBox().getCenter().x < pos.getX() + 0.9
-					&& mc.player.getBoundingBox().getCenter().z > pos.getZ() + 0.1
-					&& mc.player.getBoundingBox().getCenter().z < pos.getZ() + 0.9) {
-				continue;
-			}
-
-			int bedrockCounter = 0;
-			int obsidianCounter = 0;
-			for (BlockPos pos1 : neighbours(pos)) {
-				if (mc.world.getBlockState(pos1).getBlock() == Blocks.BEDROCK) {
-					bedrockCounter++;
-				} else if (mc.world.getBlockState(pos1).getBlock() == Blocks.OBSIDIAN) {
-					obsidianCounter++;
-				} else {
-					break;
+			for (BlockPos pos : BlockPos.iterateOutwards(mc.player.getBlockPos(), dist, dist, dist)) {
+				if (!mc.world.isInBuildLimit(pos.down())
+						|| (mc.world.getBlockState(pos.down()).getBlock() != Blocks.BEDROCK
+						&& mc.world.getBlockState(pos.down()).getBlock() != Blocks.OBSIDIAN)
+						|| !mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()
+						|| !mc.world.getBlockState(pos.up(1)).getCollisionShape(mc.world, pos.up(1)).isEmpty()
+						|| !mc.world.getBlockState(pos.up(2)).getCollisionShape(mc.world, pos.up(2)).isEmpty()) {
+					continue;
 				}
-			}
 
-			if (bedrockCounter == 5 && getSetting(3).asToggle().state) {
-				bedrockHoles.add(pos.toImmutable());
-			} else if (obsidianCounter == 5 && getSetting(5).asToggle().state) {
-				obsidianHoles.add(pos.toImmutable());
-			} else if (bedrockCounter >= 1 && obsidianCounter >= 1
-					&& bedrockCounter + obsidianCounter == 5 && getSetting(4).asToggle().state) {
-				mixedHoles.add(pos.toImmutable());
+				if (getSetting(6).asToggle().state
+						&& mc.player.getBoundingBox().getCenter().x > pos.getX() + 0.1
+						&& mc.player.getBoundingBox().getCenter().x < pos.getX() + 0.9
+						&& mc.player.getBoundingBox().getCenter().z > pos.getZ() + 0.1
+						&& mc.player.getBoundingBox().getCenter().z < pos.getZ() + 0.9) {
+					continue;
+				}
+
+				int bedrockCounter = 0;
+				int obsidianCounter = 0;
+				for (BlockPos pos1 : neighbours(pos)) {
+					if (mc.world.getBlockState(pos1).getBlock() == Blocks.BEDROCK) {
+						bedrockCounter++;
+					} else if (mc.world.getBlockState(pos1).getBlock() == Blocks.OBSIDIAN) {
+						obsidianCounter++;
+					} else {
+						break;
+					}
+				}
+
+				if (bedrockCounter == 5 && getSetting(3).asToggle().state) {
+					holes.put(pos.toImmutable(), getSetting(3).asToggle().getChild(0).asColor().getRGBFloat());
+				} else if (obsidianCounter == 5 && getSetting(5).asToggle().state) {
+					holes.put(pos.toImmutable(), getSetting(5).asToggle().getChild(0).asColor().getRGBFloat());
+				} else if (bedrockCounter >= 1 && obsidianCounter >= 1
+						&& bedrockCounter + obsidianCounter == 5 && getSetting(4).asToggle().state) {
+					holes.put(pos.toImmutable(), getSetting(4).asToggle().getChild(0).asColor().getRGBFloat());
+				}
 			}
 		}
 	}
 
 	@Subscribe
 	public void onRender(EventWorldRender.Post event) {
-		Map<BlockPos, float[]> blocks = new HashMap<>();
-		bedrockHoles.forEach(b -> blocks.put(b, getSetting(3).asToggle().getChild(0).asColor().getRGBFloat()));
-		mixedHoles.forEach(b -> blocks.put(b, getSetting(4).asToggle().getChild(0).asColor().getRGBFloat()));
-		obsidianHoles.forEach(b -> blocks.put(b, getSetting(5).asToggle().getChild(0).asColor().getRGBFloat()));
-
 		if (getSetting(1).asToggle().state) {
 			int bottomMode = getSetting(1).asToggle().getChild(0).asMode().mode;
 			Direction[] excludeDirs = ArrayUtils.remove(Direction.values(), 0);
 
 			if (bottomMode == 0 || bottomMode == 2) {
-				blocks.forEach((pos, color) -> {
+				holes.forEach((pos, color) -> {
 					RenderUtils.drawBoxFill(pos, QuadColor.single(color[0], color[1], color[2], (float) getSetting(1).asToggle().getChild(2).asSlider().getValue()), excludeDirs);
 				});
 			}
 
 			if (bottomMode == 0 || bottomMode == 1) {
-				blocks.forEach((pos, color) -> {
+				holes.forEach((pos, color) -> {
 					RenderUtils.drawBoxOutline(pos, QuadColor.single(color[0], color[1], color[2], 1f), (float) getSetting(1).asToggle().getChild(1).asSlider().getValue(), excludeDirs);
 				});
 			}
@@ -148,7 +134,7 @@ public class HoleESP extends Module {
 			if (sideMode == 0 || sideMode == 1) {
 				CardinalDirection gradientDir = sideMode == 0 ? CardinalDirection.NORTH : CardinalDirection.SOUTH;
 
-				blocks.forEach((pos, color) -> {
+				holes.forEach((pos, color) -> {
 					RenderUtils.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
 							QuadColor.gradient(
 									color[0], color[1], color[2], (float) getSetting(2).asToggle().getChild(2).asSlider().getValue(),
@@ -156,14 +142,14 @@ public class HoleESP extends Module {
 				});
 			} else {
 				if (sideMode == 2 || sideMode == 4) {
-					blocks.forEach((pos, color) -> {
+					holes.forEach((pos, color) -> {
 						RenderUtils.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
 								QuadColor.single(color[0], color[1], color[2], (float) getSetting(2).asToggle().getChild(2).asSlider().getValue()), excludeDirs);
 					});
 				}
 
 				if (sideMode == 2 || sideMode == 3) {
-					blocks.forEach((pos, color) -> {
+					holes.forEach((pos, color) -> {
 						RenderUtils.drawBoxOutline(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
 								QuadColor.single(color[0], color[1], color[2], 1f), (float) getSetting(2).asToggle().getChild(1).asSlider().getValue(), excludeDirs);
 					});
