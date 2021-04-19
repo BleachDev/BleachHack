@@ -45,7 +45,7 @@ public class AutoArmor extends Module {
 			return;
 		}
 
-		tickDelay = (getSetting(2).asToggle().state ? (int) getSetting(2).asToggle().getChild(0).asSlider().getValue() : 0);
+		tickDelay = (getSetting(2).asToggle().state ? getSetting(2).asToggle().getChild(0).asSlider().getValueInt() : 0);
 
 		/* [Slot type, [Armor slot, Armor prot, New armor slot, New armor prot]] */
 		HashMap<EquipmentSlot, int[]> armorMap = new HashMap<>(4);

@@ -91,12 +91,12 @@ public class Ambience extends Module {
 			if (getSetting(0).asToggle().getChild(0).asMode().mode == 0) {
 				mc.world.setRainGradient(0f);
 			} else {
-				mc.world.setRainGradient((float) getSetting(0).asToggle().getChild(1).asSlider().getValue());
+				mc.world.setRainGradient(getSetting(0).asToggle().getChild(1).asSlider().getValueFloat());
 			}
 		}
 
 		if (getSetting(1).asToggle().state) {
-			mc.world.setTimeOfDay((long) getSetting(1).asToggle().getChild(0).asSlider().getValue());
+			mc.world.setTimeOfDay(getSetting(1).asToggle().getChild(0).asSlider().getValueLong());
 		}
 	}
 

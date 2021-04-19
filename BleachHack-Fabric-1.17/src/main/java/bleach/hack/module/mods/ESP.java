@@ -140,11 +140,11 @@ public class ESP extends Module {
 				if (color != null) {
 
 					if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-						RenderUtils.drawBoxFill(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue()));
+						RenderUtils.drawBoxFill(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], getSetting(3).asSlider().getValueFloat()));
 					}
 
 					if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-						RenderUtils.drawBoxOutline(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f), (float) getSetting(2).asSlider().getValue());
+						RenderUtils.drawBoxOutline(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asSlider().getValueFloat());
 					}
 				}
 			}
@@ -158,11 +158,11 @@ public class ESP extends Module {
 		if (color != null) {
 			if (getSetting(4).asToggle().state) {
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-					RenderUtils.drawBoxOutline(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f), (float) getSetting(2).asSlider().getValue());
+					RenderUtils.drawBoxOutline(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f),getSetting(2).asSlider().getValueFloat());
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawBoxFill(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], (float) getSetting(3).asSlider().getValue()));
+					RenderUtils.drawBoxFill(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], getSetting(3).asSlider().getValueFloat()));
 				}
 			}
 

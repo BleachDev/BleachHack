@@ -167,7 +167,7 @@ public class CrystalAura extends Module {
 				}
 			}
 
-			breakCooldown = (int) getSetting(3).asToggle().getChild(3).asSlider().getValue() + 1;
+			breakCooldown = getSetting(3).asToggle().getChild(3).asSlider().getValueInt() + 1;
 
 			if (!getSetting(5).asToggle().state && end) {
 				return;
@@ -261,7 +261,7 @@ public class CrystalAura extends Module {
 				mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(vec, dir, block, false));
 
 				places++;
-				if (places >= (int) getSetting(4).asToggle().getChild(6).asSlider().getValue()) {
+				if (places >= getSetting(4).asToggle().getChild(6).asSlider().getValueInt()) {
 					break;
 				}
 			}
@@ -272,7 +272,7 @@ public class CrystalAura extends Module {
 					mc.player.getInventory().selectedSlot = oldSlot;
 				}
 
-				placeCooldown = (int) getSetting(4).asToggle().getChild(7).asSlider().getValue() + 1;
+				placeCooldown = getSetting(4).asToggle().getChild(7).asSlider().getValueInt() + 1;
 			}
 		}
 	}

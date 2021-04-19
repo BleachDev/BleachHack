@@ -164,7 +164,7 @@ public class Scaffold extends Module {
 
 				cap++;
 
-				if (cap >= (int) getSetting(1).asSlider().getValue()) {
+				if (cap >= getSetting(1).asSlider().getValueInt()) {
 					return;
 				}
 			}

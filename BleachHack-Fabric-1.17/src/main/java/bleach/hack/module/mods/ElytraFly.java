@@ -72,7 +72,7 @@ public class ElytraFly extends Module {
 
 		double currentVel = Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().y) + Math.abs(mc.player.getVelocity().z);
 		float radianYaw = (float) Math.toRadians(mc.player.yaw);
-		float boost = (float) getSetting(1).asSlider().getValue();
+		float boost = getSetting(1).asSlider().getValueFloat();
 
 		switch (getSetting(0).asMode().mode) {
 			case 0:

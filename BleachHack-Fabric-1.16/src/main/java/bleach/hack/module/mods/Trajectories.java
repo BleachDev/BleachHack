@@ -109,22 +109,22 @@ public class Trajectories extends Module {
 						RenderUtils.drawLine(
 								t.getLeft().get(i - 1).x, t.getLeft().get(i - 1).y, t.getLeft().get(i - 1).z,
 								t.getLeft().get(i).x, t.getLeft().get(i).y, t.getLeft().get(i).z,
-								LineColor.single(col[0], col[1], col[2], (float) getSetting(8).asSlider().getValue()),
-								(float) getSetting(7).asSlider().getValue());
+								LineColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()),
+								getSetting(7).asSlider().getValueFloat());
 					}
 				} else {
 					for (Vec3d v : t.getLeft()) {
-						RenderUtils.drawBoxFill(new Box(v, v).expand(0.08), QuadColor.single(col[0], col[1], col[2], (float) getSetting(8).asSlider().getValue()));
+						RenderUtils.drawBoxFill(new Box(v, v).expand(0.08), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()));
 					}
 				}
 			}
 
 			if (t.getMiddle() != null) {
-				RenderUtils.drawBoxBoth(t.getMiddle().getBoundingBox(), QuadColor.single(col[0], col[1], col[2], (float) getSetting(8).asSlider().getValue()), 2.5f);
+				RenderUtils.drawBoxBoth(t.getMiddle().getBoundingBox(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
 			}
 
 			if (t.getRight() != null) {
-				RenderUtils.drawBoxBoth(t.getRight(), QuadColor.single(col[0], col[1], col[2], (float) getSetting(8).asSlider().getValue()), 2.5f);
+				RenderUtils.drawBoxBoth(t.getRight(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
 			}
 		}
 	}

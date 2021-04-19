@@ -108,7 +108,7 @@ public class NoRender extends Module {
 		if (getSetting(10).asToggle().state && event.particle instanceof ElderGuardianAppearanceParticle) {
 			event.setCancelled(true);
 		} else if (getSetting(13).asToggle().state && event.particle instanceof ExplosionLargeParticle) {
-			if (Math.abs(event.particle.getBoundingBox().hashCode() % 101) >= (int) getSetting(13).asToggle().getChild(0).asSlider().getValue()) {
+			if (Math.abs(event.particle.getBoundingBox().hashCode() % 101) >= getSetting(13).asToggle().getChild(0).asSlider().getValueInt()) {
 				event.setCancelled(true);
 			}
 		} else if (getSetting(16).asToggle().state && event.particle instanceof CampfireSmokeParticle) {

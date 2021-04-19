@@ -163,11 +163,11 @@ public class StorageESP extends Module {
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], (float) getSetting(3).asSlider().getValue()));
+					RenderUtils.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], getSetting(3).asSlider().getValueFloat()));
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-					RenderUtils.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), (float) getSetting(2).asSlider().getValue());
+					RenderUtils.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), getSetting(2).asSlider().getValueFloat());
 				}
 			}
 
@@ -182,11 +182,11 @@ public class StorageESP extends Module {
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], (float) getSetting(3).asSlider().getValue()));
+					RenderUtils.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], getSetting(3).asSlider().getValueFloat()));
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-					RenderUtils.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), (float) getSetting(2).asSlider().getValue());
+					RenderUtils.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), getSetting(2).asSlider().getValueFloat());
 				}
 			}
 		}

@@ -68,7 +68,7 @@ public class AutoSign extends Module {
 				text = new String[] {};
 				while (text.length < 4) {
 					IntStream chars = new Random().ints(0, 0x10FFFF);
-					int amount = (int) getSetting(0).asToggle().getChild(0).asSlider().getValue();
+					int amount = getSetting(0).asToggle().getChild(0).asSlider().getValueInt();
 					text = chars.limit(amount * 5)
 							.mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining())
 							.split("(?<=\\G.{" + amount + "})");

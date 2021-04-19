@@ -53,7 +53,7 @@ public class Step extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		mc.player.stepHeight = getSetting(0).asMode().mode == 1 ? (float) getSetting(1).asSlider().getValue() : 0.5f;
+		mc.player.stepHeight = getSetting(0).asMode().mode == 1 ? getSetting(1).asSlider().getValueFloat() : 0.5f;
 		
 		if (!mc.player.horizontalCollision) {
 			queue.clear();

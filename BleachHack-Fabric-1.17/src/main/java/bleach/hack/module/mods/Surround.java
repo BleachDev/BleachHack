@@ -88,7 +88,7 @@ public class Surround extends Module {
 					mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
 					mc.player.getBlockPos().south(), mc.player.getBlockPos().west() }) {
 
-				if (cap >= (int) getSetting(4).asSlider().getValue()) {
+				if (cap >= getSetting(4).asSlider().getValueInt()) {
 					return;
 				}
 
@@ -97,7 +97,7 @@ public class Surround extends Module {
 						WorldUtils.placeBlock(b.down(), obsidian, getSetting(5).asRotate(), false, true);
 						cap++;
 
-						if (cap >= (int) getSetting(4).asSlider().getValue()) {
+						if (cap >= getSetting(4).asSlider().getValueInt()) {
 							return;
 						}
 					}
@@ -116,7 +116,7 @@ public class Surround extends Module {
 					new BlockPos(box.minX - 1, box.minY, box.maxZ), new BlockPos(box.minX, box.minY, box.maxZ + 1),
 					new BlockPos(box.maxX + 1, box.minY, box.maxZ), new BlockPos(box.maxX, box.minY, box.maxZ + 1))) {
 
-				if (cap >= (int) getSetting(4).asSlider().getValue()) {
+				if (cap >= getSetting(4).asSlider().getValueInt()) {
 					return;
 				}
 
@@ -125,7 +125,7 @@ public class Surround extends Module {
 						WorldUtils.placeBlock(b.down(), obsidian, getSetting(5).asRotate(), false, true);
 						cap++;
 
-						if (cap >= (int) getSetting(4).asSlider().getValue()) {
+						if (cap >= getSetting(4).asSlider().getValueInt()) {
 							return;
 						}
 					}

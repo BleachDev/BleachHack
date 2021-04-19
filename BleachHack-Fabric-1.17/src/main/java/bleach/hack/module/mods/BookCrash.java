@@ -72,7 +72,7 @@ public class BookCrash extends Module {
 		String title = "\n Bleachhack Owns All \n";
 
 		String size = "";
-		int pages = Math.min((int) getSetting(4).asSlider().getValue(), 100);
+		int pages = Math.min(getSetting(4).asSlider().getValueInt(), 100);
 		int pageChars = 210;
 
 		if (getSetting(3).asMode().mode == 2) {

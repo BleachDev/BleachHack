@@ -77,12 +77,12 @@ public class PlaceInAir extends Module {
 		float[] rgb = getSetting(0).asToggle().getChild(3).asColor().getRGBFloat();
 
 		if (mode == 0 || mode == 1) {
-			float outlineWidth = (float) getSetting(0).asToggle().getChild(1).asSlider().getValue();
+			float outlineWidth = getSetting(0).asToggle().getChild(1).asSlider().getValueFloat();
 			RenderUtils.drawBoxOutline(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
 		}
 
 		if (mode == 0 || mode == 2) {
-			float fillAlpha = (float) getSetting(0).asToggle().getChild(2).asSlider().getValue();
+			float fillAlpha = getSetting(0).asToggle().getChild(2).asSlider().getValueFloat();
 			RenderUtils.drawBoxFill(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
 		}
 

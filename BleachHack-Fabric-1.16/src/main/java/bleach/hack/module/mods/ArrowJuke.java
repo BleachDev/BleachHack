@@ -54,7 +54,7 @@ public class ArrowJuke extends Module {
 				continue;
 
 			int mode = getSetting(0).asMode().mode;
-			int steps = (int) getSetting(2).asSlider().getValue();
+			int steps = getSetting(2).asSlider().getValueInt();
 
 			Box playerBox = mc.player.getBoundingBox().expand(0.3);
 			List<Box> futureBoxes = new ArrayList<>();

@@ -56,6 +56,18 @@ public class SettingSlider extends SettingBase {
 	public double getValue() {
 		return round(value, decimals);
 	}
+	
+	public float getValueFloat() {
+		return (float) getValue();
+	}
+	
+	public int getValueInt() {
+		return (int) getValue();
+	}
+	
+	public long getValueLong() {
+		return (long) getValue();
+	}
 
 	public void setValue(double value) {
 		this.value = value;

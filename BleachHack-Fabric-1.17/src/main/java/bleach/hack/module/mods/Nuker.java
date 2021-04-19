@@ -136,8 +136,8 @@ public class Nuker extends Module {
 			broken++;
 			if (getSetting(0).asMode().mode == 0
 					|| (getSetting(0).asMode().mode == 1 && hardness <= 1f)
-					|| (getSetting(0).asMode().mode == 1 && broken >= (int) getSetting(1).asSlider().getValue())
-					|| (getSetting(0).asMode().mode == 2 && broken >= (int) getSetting(1).asSlider().getValue())) {
+					|| (getSetting(0).asMode().mode == 1 && broken >= getSetting(1).asSlider().getValueInt())
+					|| (getSetting(0).asMode().mode == 2 && broken >= getSetting(1).asSlider().getValueInt())) {
 				return;
 			}
 		}

@@ -201,7 +201,7 @@ public class Search extends Module {
 			}
 			
 			if (mode == 0 || mode == 2) {
-				float fillAlpha = (float) getSetting(2).asSlider().getValue();
+				float fillAlpha = getSetting(2).asSlider().getValueFloat();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
 					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
@@ -209,7 +209,7 @@ public class Search extends Module {
 			}
 
 			if (mode == 0 || mode == 1) {
-				float outlineWidth = (float) getSetting(1).asSlider().getValue();
+				float outlineWidth = getSetting(1).asSlider().getValueFloat();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
 					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);

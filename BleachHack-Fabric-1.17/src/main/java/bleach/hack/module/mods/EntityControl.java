@@ -142,13 +142,13 @@ public class EntityControl extends Module {
 	public void onSendPacket(EventSendPacket event) {
 		if (getSetting(6).asToggle().state) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
-				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(0).asSlider().getValue(), "field_12898", "yaw");
-				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(1).asSlider().getValue(), "field_12896", "pitch");
+				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(0).asSlider().getValueFloat(), "field_12898", "yaw");
+				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(1).asSlider().getValueFloat(), "field_12896", "pitch");
 			} else if (event.getPacket() instanceof PlayerMoveC2SPacket
 					&& mc.player.hasVehicle()
 					&& getSetting(6).asToggle().getChild(2).asToggle().state) {
-				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(0).asSlider().getValue(), "field_12887", "yaw");
-				FabricReflect.writeField(event.getPacket(), (float) getSetting(6).asToggle().getChild(1).asSlider().getValue(), "field_12885", "pitch");
+				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(0).asSlider().getValueFloat(), "field_12887", "yaw");
+				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(1).asSlider().getValueFloat(), "field_12885", "pitch");
 			}
 		}
 

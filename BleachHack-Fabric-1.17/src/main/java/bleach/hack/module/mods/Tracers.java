@@ -62,8 +62,8 @@ public class Tracers extends Module {
 
 	@Subscribe
 	public void onRender(EventWorldRender.Post event) {
-		float width = (float) getSetting(6).asSlider().getValue();
-		float opacity = (float) getSetting(7).asSlider().getValue();
+		float width = getSetting(6).asSlider().getValueFloat();
+		float opacity = getSetting(7).asSlider().getValueFloat();
 
 		for (Entity e : mc.world.getEntities()) {
 			Vec3d vec = e.getPos();

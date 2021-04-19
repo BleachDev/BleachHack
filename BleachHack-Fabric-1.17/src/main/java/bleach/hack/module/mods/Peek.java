@@ -197,7 +197,7 @@ public class Peek extends Module {
 
 		byte[] colors = data.colors;
 
-		float size = (float) getSetting(2).asToggle().getChild(0).asSlider().getValue();
+		float size = getSetting(2).asToggle().getChild(0).asSlider().getValueFloat();
 
 		matrix.push();
 		matrix.scale(size, size, 1.0f);

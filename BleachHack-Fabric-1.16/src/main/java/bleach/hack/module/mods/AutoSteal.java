@@ -113,7 +113,7 @@ public class AutoSteal extends Module {
 							mc.interactionManager.clickSlot(currentSyncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
 							currentItems.set(i, ItemStack.EMPTY);
 
-							lastSteal = currentTime + RandomUtils.nextInt(0, (int) getSetting(2).asSlider().getValue() + 1);
+							lastSteal = currentTime + RandomUtils.nextInt(0, getSetting(2).asSlider().getValueInt() + 1);
 						}
 
 						return;
@@ -140,7 +140,7 @@ public class AutoSteal extends Module {
 
 					mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
 							new BlockHitResult(lookVec, Direction.UP, be.getPos(), false));
-					opened.put(be.getPos(), (int) getSetting(3).asToggle().getChild(1).asSlider().getValue() * 20);
+					opened.put(be.getPos(), getSetting(3).asToggle().getChild(1).asSlider().getValueInt() * 20);
 					return;
 				}
 			}

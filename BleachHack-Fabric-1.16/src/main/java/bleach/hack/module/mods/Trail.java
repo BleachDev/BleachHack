@@ -90,8 +90,8 @@ public class Trail extends Module {
 			RenderUtils.drawLine(
 					e.getKey().x, e.getKey().y, e.getKey().z,
 					e.getValue().x, e.getValue().y, e.getValue().z,
-					LineColor.single((color & 0xff0000) >> 16, (color & 0xff00) >> 8, color & 0xff, (float) getSetting(5).asSlider().getValue()),
-					(float) getSetting(4).asSlider().getValue());
+					LineColor.single(((color & 0xff0000) >> 16) / 255f, ((color & 0xff00) >> 8) / 255f, (color & 0xff) / 255f, getSetting(5).asSlider().getValueFloat()),
+					getSetting(4).asSlider().getValueFloat());
 
 			if (count < 5 || count > 250) {
 				rev = !rev;

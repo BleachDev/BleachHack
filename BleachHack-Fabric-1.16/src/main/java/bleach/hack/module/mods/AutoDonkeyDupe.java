@@ -96,7 +96,7 @@ public class AutoDonkeyDupe extends Module {
 		}
 
 		int slots = getSetting(0).asSlider().getValue() <= 0 ? getInvSize(mc.player.getVehicle())
-				: Math.min((int) getSetting(0).asSlider().getValue(), getInvSize(mc.player.getVehicle()));
+				: Math.min(getSetting(0).asSlider().getValueInt(), getInvSize(mc.player.getVehicle()));
 
 		for (Entity e : mc.world.getEntities()) {
 			if (e.getPos().distanceTo(mc.player.getPos()) < 6

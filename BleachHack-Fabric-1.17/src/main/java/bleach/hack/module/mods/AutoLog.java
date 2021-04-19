@@ -69,7 +69,7 @@ public class AutoLog extends Module {
 		int playerHealth = (int) (mc.player.getHealth() + mc.player.getAbsorptionAmount());
 
 		if (getSetting(0).asToggle().state) {
-			int health = (int) getSetting(0).asToggle().getChild(0).asSlider().getValue();
+			int health = getSetting(0).asToggle().getChild(0).asSlider().getValueInt();
 
 			if ((getSetting(0).asToggle().getChild(1).asToggle().state || !hasTotem) && playerHealth <= health) {
 				return new LiteralText("[AutoLog] Your health (" + playerHealth + " HP) was lower than " + health + " HP.");

@@ -22,9 +22,10 @@ public class AutoRespawn extends Module {
 	public void onOpenScreen(EventOpenScreen event) {
 		if (event.getScreen() instanceof DeathScreen) {
 			if (getSetting(0).asToggle().state) {
-				for (int i = 0; i <= (int) getSetting(0).asToggle().getChild(0).asSlider().getValue(); i++)
-					BleachQueue.add("autorespawn", () -> {
-					});
+				for (int i = 0; i <= getSetting(0).asToggle().getChild(0).asSlider().getValueInt(); i++) {
+					BleachQueue.add("autorespawn", () -> {});
+				}
+
 				BleachQueue.add("autorespawn", () -> mc.player.requestRespawn());
 			} else {
 				mc.player.requestRespawn();

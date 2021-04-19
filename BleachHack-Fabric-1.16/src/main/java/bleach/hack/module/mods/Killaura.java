@@ -156,7 +156,7 @@ public class Killaura extends Module {
 						|| (EntityUtils.isAnimal(e) && getSetting(3).asToggle().state)
 						|| (e instanceof ArmorStandEntity && getSetting(4).asToggle().state))
 				.sorted(comparator)
-				.limit(getSetting(6).asToggle().state ? (long) getSetting(6).asToggle().getChild(0).asSlider().getValue() : 1L)
+				.limit(getSetting(6).asToggle().state ? getSetting(6).asToggle().getChild(0).asSlider().getValueLong() : 1L)
 				.collect(Collectors.toList());
 	}
 }

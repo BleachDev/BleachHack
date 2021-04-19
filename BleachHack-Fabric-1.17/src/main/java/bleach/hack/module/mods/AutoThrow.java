@@ -108,7 +108,7 @@ public class AutoThrow extends Module {
 				mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(prevSlot));
 			}
 
-			delay = (int) getSetting(3).asSlider().getValue();
+			delay = getSetting(3).asSlider().getValueInt();
 		}
 	}
 }
