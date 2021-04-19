@@ -294,6 +294,7 @@ public class RenderUtils {
 			vertexConsumer.vertex(model, x1, y1, z1).color(color1[0], color1[1], color1[2], 0).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
 			vertexConsumer.vertex(model, x1, y1, z1).color(color1[0], color1[1], color1[2], color1[3]).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
 			vertexConsumer.vertex(model, x2, y2, z2).color(color2[0], color2[1], color2[2], color2[3]).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+			vertexConsumer.vertex(model, x2, y2, z2).color(color1[0], color1[1], color1[2], 0).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
 		}
 
 		public static Vector3f getNormal(Matrix3f normal, float x1, float y1, float z1, float x2, float y2, float z2) {
