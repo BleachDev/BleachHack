@@ -108,7 +108,7 @@ public class BleachTitleScreen extends WindowScreen {
 				}));
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
-					client.openScreen(new OptionsScreen(this, client.options));
+					client.openScreen(new OptionsScreen(client.currentScreen, client.options));
 				}));
 		getWindow(0).buttons.add(
 				new WindowButton(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
