@@ -35,6 +35,7 @@ public class CommandManager {
 	private static List<Command> commands = Arrays.asList(
 			new CmdBind(),
 			new CmdCI(),
+			new CmdClickGui(),
 			new CmdCustomChat(),
 			new CmdCustomSign(),
 			new CmdDupe(),
@@ -44,7 +45,6 @@ public class CommandManager {
 			new CmdFriends(),
 			new CmdGamemode(),
 			new CmdGive(),
-			new CmdGuiReset(),
 			new CmdHelp(),
 			new CmdInvPeek(),
 			new CmdNBT(),

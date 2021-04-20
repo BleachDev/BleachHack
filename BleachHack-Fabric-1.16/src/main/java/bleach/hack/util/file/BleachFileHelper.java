@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
+import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -149,8 +150,9 @@ public class BleachFileHelper {
 		BleachFileMang.createEmptyFile("clickgui.txt");
 
 		String text = "";
-		for (Window w : ClickGui.clickGui.getWindows())
-			text += w.x1 + ":" + w.y1 + "\n";
+		for (Window w : ClickGui.clickGui.getWindows()) {
+			text += w.x1 + ":" + w.y1 + (w instanceof ClickGuiWindow ? ":" + ((ClickGuiWindow) w).hiding : "") + "\n";
+		}
 
 		BleachFileMang.appendFile(text, "clickgui.txt");
 	}
@@ -161,8 +163,15 @@ public class BleachFileHelper {
 		try {
 			int c = 0;
 			for (Window w : ClickGui.clickGui.getWindows()) {
-				w.x1 = Integer.parseInt(lines.get(c).split(":")[0]);
-				w.y1 = Integer.parseInt(lines.get(c).split(":")[1]);
+				String[] split = lines.get(c).split(":");
+
+				w.x1 = Integer.parseInt(split[0]);
+				w.y1 = Integer.parseInt(split[1]);
+
+				if (w instanceof ClickGuiWindow && split.length >= 3) {
+					((ClickGuiWindow) w).hiding = Boolean.parseBoolean(split[2]);
+				}
+
 				c++;
 			}
 		} catch (Exception e) {
@@ -197,5 +206,4 @@ public class BleachFileHelper {
 	public static void saveMiscSetting(String key, JsonElement value) {
 		BleachJsonHelper.addJsonElement(key, value, "misc.json");
 	}
-
 }

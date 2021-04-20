@@ -37,6 +37,7 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.util.file.BleachFileHelper;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -108,12 +109,12 @@ public class ClickGuiScreen extends WindowScreen {
 		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state;
 
 		this.renderBackground(matrix);
-		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 3, 3, 0x305090);
-		textRenderer.draw(matrix, "BleachHack-1.16-" + BleachHack.VERSION, 2, 2, 0x6090d0);
+		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x305090);
+		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6090d0);
 
 		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
 			textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
-			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "guireset to reset the gui", 2, height - 10, 0x9999ff);
+			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "clickgui to reset the clickgui", 2, height - 10, 0x9999ff);
 		}
 
 		if (ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
@@ -177,6 +178,7 @@ public class ClickGuiScreen extends WindowScreen {
 							fill(matrix, tooltip.getLeft(), start + (l * 10) - 1,
 									tooltip.getLeft() + textRenderer.getWidth(lines.get(l)) + 3,
 									start + (l * 10) + 9, 0xff000000);
+
 							textRenderer.drawWithShadow(matrix, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
 						}
 
@@ -226,14 +228,5 @@ public class ClickGuiScreen extends WindowScreen {
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		mwScroll = (int) amount;
 		return super.mouseScrolled(mouseX, mouseY, amount);
-	}
-
-	public void resetGui() {
-		int x = 10;
-		for (Window m : getWindows()) {
-			m.x1 = x;
-			m.y1 = 35;
-			x += (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue() + 5;
-		}
 	}
 }

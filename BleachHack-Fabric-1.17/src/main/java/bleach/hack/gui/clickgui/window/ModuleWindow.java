@@ -40,8 +40,6 @@ public class ModuleWindow extends ClickGuiWindow {
 	public List<Module> modList = new ArrayList<>();
 	public LinkedHashMap<Module, Boolean> mods = new LinkedHashMap<>();
 
-	public boolean hiding;
-
 	private int len;
 
 	private Set<Module> searchedModules;
@@ -56,30 +54,21 @@ public class ModuleWindow extends ClickGuiWindow {
 
 		for (Module m : mods)
 			this.mods.put(m, false);
+
 		y2 = getHeight();
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY) {
 		super.render(matrix, mouseX, mouseY);
 
-		TextRenderer textRend = mc.textRenderer;
-
 		tooltip = null;
 		int x = x1 + 1;
 		int y = y1 + 13;
 		x2 = x + len + 1;
 
-		if (rmDown && mouseOver(x, y - 12, x + len, y)) {
-			mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-			hiding = !hiding;
-		}
+		if (hiding) return;
 
-		if (hiding) {
-			y2 = y;
-			return;
-		} else {
-			y2 = y + getHeight();
-		}
+		TextRenderer textRend = mc.textRenderer;
 
 		int curY = 0;
 		for (Entry<Module, Boolean> m : new LinkedHashMap<>(mods).entrySet()) {
@@ -111,8 +100,6 @@ public class ModuleWindow extends ClickGuiWindow {
 
 			// draw settings
 			if (m.getValue()) {
-				//horizonalGradient(matrix, x + 2, y + curY - 12, x + len - 2, y + curY - 11, 0xff6060b0, 0xff8070b0);
-				
 				for (SettingBase s : m.getKey().getSettings()) {
 					s.render(this, matrix, x + 1, y + curY, len - 1);
 
@@ -120,21 +107,12 @@ public class ModuleWindow extends ClickGuiWindow {
 						tooltip = s.getGuiDesc(this, x + 1, y + curY, len - 1);
 					}
 
-					//fillGreySides(matrix, x, y + curY - 1, x + len - 1, y + curY + s.getHeight(len));
 					DrawableHelper.fill(matrix, x + 1, y + curY, x + 2, y + curY + s.getHeight(len), 0xff8070b0);
 
 					curY += s.getHeight(len);
 				}
-
-				//horizonalGradient(matrix, x + 2, y + curY - 1, x + len - 2, y + curY, 0xff6060b0, 0xff8070b0);
 			}
 		}
-	}
-
-	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
-		super.drawBar(matrix, mouseX, mouseY, textRend);
-		textRend.draw(matrix, hiding ? "+" : "_", x2 - 10, y1 + (hiding ? 4 : 2), 0x000000);
-		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
 	}
 
 	public Triple<Integer, Integer, String> getTooltip() {
