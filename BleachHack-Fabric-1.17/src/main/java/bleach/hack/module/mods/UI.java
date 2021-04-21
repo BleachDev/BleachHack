@@ -52,6 +52,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -69,10 +73,11 @@ public class UI extends Module {
 	public UI() {
 		super("UI", KEY_UNBOUND, Category.RENDER, true, "Shows stuff onscreen.",
 				new SettingToggle("Modulelist", true).withDesc("Shows the module list").withChildren( // 0
-						new SettingToggle("Extra Line", true).withDesc("Adds an extra line to the front of the module list"), // 0-0
+						new SettingToggle("Inner Line", true).withDesc("Adds an extra line to the front of the module list"), // 0-0
 						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the module list"), // 0-1
 						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list"), // 0-2
-						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list"), // 0-3
+						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list").withChildren( // 0-3
+								new SettingMode("Mode", "Old", "New").withDesc("The watermark type")), // 0-3-0
 						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 0-4
 						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 0-5
 						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("Rainbow Speed")), // 0-6
@@ -99,16 +104,25 @@ public class UI extends Module {
 
 		int arrayCount = 0;
 		if (getSetting(0).asToggle().state && !mc.options.debugEnabled) {
-			List<String> lines = new ArrayList<>();
+			List<Text> lines = new ArrayList<>();
 
 			if (getSetting(0).asToggle().getChild(3).asToggle().state) {
-				lines.add(0, "\u00a7a> BleachHack " + BleachHack.VERSION);
+				int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
+
+				if (watermarkMode == 0) {
+					lines.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
+				} else {
+					MutableText text1 = new LiteralText("> Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
+					MutableText text2 = new LiteralText("Hack " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
+
+					lines.add(0, text1.append(text2));
+				}
 			}
 
 			if (getSetting(0).asToggle().state) {
 				for (Module m : ModuleManager.getModules())
 					if (m.isEnabled())
-						lines.add(m.getName());
+						lines.add(new LiteralText(m.getName()));
 
 				lines.sort((a, b) -> Integer.compare(mc.textRenderer.getWidth(b), mc.textRenderer.getWidth(a)));
 			}
@@ -116,11 +130,11 @@ public class UI extends Module {
 			int extra = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
 			boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
 			boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
-			for (String s : lines) {
+			for (Text t : lines) {
 				int color = getRainbowFromSettings(arrayCount * 40);
 
 				if (fill) {
-					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, mc.textRenderer.getWidth(s) + 3 + extra, 10 + (arrayCount * 10), 0x70003030);
+					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, mc.textRenderer.getWidth(t) + 3 + extra, 10 + (arrayCount * 10), 0x70003030);
 				}
 
 				if (extra == 1) {
@@ -128,16 +142,16 @@ public class UI extends Module {
 				}
 
 				if (outer) {
-					DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(s) + 3 + extra, (arrayCount * 10), mc.textRenderer.getWidth(s) + 4 + extra,
+					DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(t) + 3 + extra, (arrayCount * 10), mc.textRenderer.getWidth(t) + 4 + extra,
 							10 + (arrayCount * 10), color);
 
 					if (arrayCount + 1 < lines.size()) {
 						DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(lines.get(arrayCount + 1)) + 4 + extra, 10 + (arrayCount * 10),
-								mc.textRenderer.getWidth(s) + 4 + extra, 11 + (arrayCount * 10), color);
+								mc.textRenderer.getWidth(t) + 4 + extra, 11 + (arrayCount * 10), color);
 					}
 				}
 
-				mc.textRenderer.drawWithShadow(event.matrix, s, 2 + extra, 1 + (arrayCount * 10), color);
+				mc.textRenderer.drawWithShadow(event.matrix, t, 2 + extra, 1 + (arrayCount * 10), color);
 				arrayCount++;
 			}
 
