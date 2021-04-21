@@ -38,7 +38,7 @@ public class CmdEnchant extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		if (args[0].equalsIgnoreCase("list")) {
 			BleachLogger.infoMessage("\u00a7d[Aqua_Affinity/Aqua] \u00a75[Arthropods] \u00a7d[Blast/Blast_Prot] "
 					+ "\u00a75[Channeling] \u00a7d[Curse_Binding/Binding] \u00a75[Curse_Vanish/Vanish] \u00a7d[Depth_Strider/Strider] "

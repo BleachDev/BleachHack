@@ -22,7 +22,7 @@ public class CmdFriends extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		if (args[0].equalsIgnoreCase("add")) {
 			if (args.length < 2) {
 				printSyntaxError("No username selected");

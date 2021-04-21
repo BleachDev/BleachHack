@@ -12,7 +12,7 @@ public class CmdSay extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		CommandManager.allowNextMsg = true;
 		mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket(String.join(" ", args)));
 	}

@@ -38,7 +38,7 @@ public class CmdCustomSign extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) {
+	public void onCommand(String alias, String[] args) {
 		if (args.length == 0) {
 			printSyntaxError();
 			return;

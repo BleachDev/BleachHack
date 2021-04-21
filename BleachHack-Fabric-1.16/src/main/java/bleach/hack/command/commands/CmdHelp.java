@@ -35,7 +35,7 @@ public class CmdHelp extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		String cmd = args.length == 0 ? "" : args[0];
 
 		if (cmd.isEmpty()) {

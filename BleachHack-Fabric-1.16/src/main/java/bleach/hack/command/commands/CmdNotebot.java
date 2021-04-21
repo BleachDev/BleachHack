@@ -34,7 +34,7 @@ public class CmdNotebot extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length >= 2 && args[0].equalsIgnoreCase("convert")) {
 			int i = 0;
 			String s = "";

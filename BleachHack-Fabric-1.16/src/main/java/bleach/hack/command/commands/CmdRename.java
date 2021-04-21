@@ -30,7 +30,7 @@ public class CmdRename extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		if (!mc.player.abilities.creativeMode) {
 			BleachLogger.errorMessage("Not In Creative Mode!");
 			return;

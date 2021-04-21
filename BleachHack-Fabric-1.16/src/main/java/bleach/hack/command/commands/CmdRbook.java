@@ -40,7 +40,7 @@ public class CmdRbook extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		ItemStack item = mc.player.inventory.getMainHandStack();
 
 		if (item.getItem() != Items.WRITABLE_BOOK) {
@@ -63,6 +63,8 @@ public class CmdRbook extends Command {
 
 		item.getOrCreateTag().put("pages", textSplit);
 		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, mc.player.inventory.selectedSlot));
+
+		BleachLogger.infoMessage("Written book (" + pages + " pages, " + pageChars + " chars/page)");
 	}
 
 }

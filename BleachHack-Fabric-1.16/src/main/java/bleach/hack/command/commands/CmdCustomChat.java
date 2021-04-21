@@ -18,7 +18,7 @@ public class CmdCustomChat extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length == 0) {
 			printSyntaxError();
 			return;

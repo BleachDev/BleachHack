@@ -31,7 +31,7 @@ public class CmdCI extends Command {
 	}
 
 	@Override
-	public void onCommand(String command, String[] args) throws Exception {
+	public void onCommand(String alias, String[] args) throws Exception {
 		if (mc.interactionManager.getCurrentGameMode() != GameMode.CREATIVE) {
 			printSyntaxError("Bruh you're not in creative.");
 			return;
