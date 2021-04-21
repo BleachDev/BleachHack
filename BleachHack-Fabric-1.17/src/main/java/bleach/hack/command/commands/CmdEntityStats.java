@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -28,19 +29,9 @@ import net.minecraft.entity.passive.HorseBaseEntity;
 
 public class CmdEntityStats extends Command {
 
-	@Override
-	public String getAlias() {
-		return "estats";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Get stats of vehicle entity.";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "estats";
+	public CmdEntityStats() {
+		super("estats", "Get stats of vehicle entity.", "estats", CommandCategory.MISC,
+				"entitystats", "horsestats");
 	}
 
 	@Override
@@ -77,7 +68,7 @@ public class CmdEntityStats extends Command {
 	public static double getSpeed(HorseBaseEntity horse) {
 		return round(20 * horse.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED), 2);
 	}
-	
+
 	public static double getSpeedLiving(LivingEntity entity) {
 		return round(43.17 * entity.getMovementSpeed(), 2);
 	}

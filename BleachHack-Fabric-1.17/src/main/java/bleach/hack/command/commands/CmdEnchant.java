@@ -22,6 +22,7 @@ import java.util.Locale;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
@@ -32,19 +33,8 @@ import net.minecraft.util.registry.Registry;
 
 public class CmdEnchant extends Command {
 
-	@Override
-	public String getAlias() {
-		return "enchant";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Enchants an item";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "enchant <enchant/id> <level> | enchant all <level> | enchant list";
+	public CmdEnchant() {
+		super("enchant", "Enchants an item", "enchant <enchant/id> <level> | enchant all <level> | enchant list", CommandCategory.CREATIVE);
 	}
 
 	@Override
@@ -74,19 +64,19 @@ public class CmdEnchant extends Command {
 			for (Enchantment e : Registry.ENCHANTMENT) {
 				enchant(item, e, level);
 			}
-			
+
 			return;
 		}
-		
+
 		int i = NumberUtils.toInt(args[0], -1);
-		
+
 		if (i != -1) {
 			enchant(item, Enchantment.byRawId(i), level);
 		} else {
 			enchant(item, fromString(args[0]), level);
 		}
 	}
-	
+
 	public Enchantment fromString(String s) {
 		// programming
 		switch (s.toLowerCase(Locale.ENGLISH)) {
@@ -196,7 +186,7 @@ public class CmdEnchant extends Command {
 			printSyntaxError("Invalid enchantment!");
 			return;
 		}
-		
+
 		if (item.getTag() == null)
 			item.setTag(new NbtCompound());
 		if (!item.getTag().contains("Enchantments", 9)) {

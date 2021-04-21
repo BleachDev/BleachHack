@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -33,19 +34,9 @@ import net.minecraft.network.packet.c2s.play.BookUpdateC2SPacket;
 
 public class CmdRbook extends Command {
 
-	@Override
-	public String getAlias() {
-		return "rbook";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Generates a random book";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "rbook <pages> <start char> <end char> <chrs/page>";
+	public CmdRbook() {
+		super("rbook", "Generates a random book.", "rbook <pages> <start char> <end char> <chrs/page>", CommandCategory.MISC,
+				"randombook", "book");
 	}
 
 	@Override

@@ -20,6 +20,7 @@ package bleach.hack.command.commands;
 import java.util.Locale;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.util.BleachLogger;
@@ -27,19 +28,8 @@ import net.minecraft.client.util.InputUtil;
 
 public class CmdBind extends Command {
 
-	@Override
-	public String getAlias() {
-		return "bind";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Binds a module";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "bind set <Module> <Key> | bind del <Module> | bind clear";
+	public CmdBind() {
+		super("bind", "Binds a module", "bind set <Module> <Key> | bind del <Module> | bind clear", CommandCategory.MODULES);
 	}
 
 	@Override

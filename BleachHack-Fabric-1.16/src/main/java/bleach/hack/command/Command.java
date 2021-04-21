@@ -17,6 +17,8 @@
  */
 package bleach.hack.command;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import bleach.hack.util.BleachLogger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.HoverEvent;
@@ -30,11 +32,42 @@ public abstract class Command {
 
 	protected MinecraftClient mc = MinecraftClient.getInstance();
 
-	public abstract String getAlias();
+	private String[] aliases;
+	private String description;
+	private String syntax;
+	private CommandCategory category;
 
-	public abstract String getDescription();
+	public Command(String alias, String desc, String syntax, CommandCategory category, String... moreAliases) {
+		this.aliases = ArrayUtils.add(moreAliases, alias);
+		this.description = desc;
+		this.syntax = syntax;
+	}
 
-	public abstract String getSyntax();
+	public String[] getAliases() {
+		return aliases;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public String getSyntax() {
+		return syntax;
+	}
+
+	public CommandCategory getCategory() {
+		return category;
+	}
+
+	public boolean hasAlias(String alias) {
+		for (String a: aliases) {
+			if (alias.equalsIgnoreCase(a)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public void printSyntaxError() {
 		printSyntaxError("Invalid Syntax!");
@@ -43,13 +76,13 @@ public abstract class Command {
 	public void printSyntaxError(String reason) {
 		BleachLogger.errorMessage(reason);
 
-		MutableText text = new LiteralText("\u00a73" + PREFIX + getAlias() + " -> \u00a7b" + getSyntax());
-		Text tooltip = new LiteralText("\u00a7b" + PREFIX + getAlias() + "\n\u00a73" + getSyntax() + "\n\u00a7b" + getDescription());
+		MutableText text = new LiteralText("\u00a73" + PREFIX + getAliases()[0] + " -> \u00a7b" + getSyntax());
+		Text tooltip = new LiteralText("\u00a7b" + PREFIX + getAliases()[0] + "\n\u00a73" + getSyntax() + "\n\u00a7b" + getDescription());
 
 		BleachLogger.infoMessage(
 				text.styled(style -> style
 						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip))));
 	}
 
-	public abstract void onCommand(String command, String[] args) throws Exception;
+	public abstract void onCommand(String alias, String[] args) throws Exception;
 }

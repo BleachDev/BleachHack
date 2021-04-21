@@ -20,6 +20,7 @@ package bleach.hack.command.commands;
 import java.util.List;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.BleachQueue;
 import bleach.hack.util.ItemContentUtils;
@@ -37,19 +38,8 @@ import net.minecraft.text.Text;
 
 public class CmdPeek extends Command {
 
-	@Override
-	public String getAlias() {
-		return "peek";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Shows whats inside a container";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "peek";
+	public CmdPeek() {
+		super("peek", "Shows whats inside the container you're holder.", "peek", CommandCategory.MISC);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import java.util.Locale;
 import com.google.gson.JsonArray;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoRender;
 import bleach.hack.util.BleachLogger;
@@ -32,19 +33,8 @@ import net.minecraft.text.Text;
 
 public class CmdCustomSign extends Command {
 
-	@Override
-	public String getAlias() {
-		return "customsign";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Sets the NoRender custom sign text";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "customsign <line1/line2/line3/line4/all> <text> | customsign list";
+	public CmdCustomSign() {
+		super("customsign", "Sets the NoRender custom sign text", "customsign <line1/line2/line3/line4/all> <text> | customsign list", CommandCategory.MODULES);
 	}
 
 	@Override

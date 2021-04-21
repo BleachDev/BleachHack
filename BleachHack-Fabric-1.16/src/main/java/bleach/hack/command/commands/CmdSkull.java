@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,19 +36,8 @@ import net.minecraft.nbt.StringNbtReader;
 
 public class CmdSkull extends Command {
 
-	@Override
-	public String getAlias() {
-		return "skull";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Gives you a player skull";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "skull <Player> | skull img <Image url>";
+	public CmdSkull() {
+		super("skull", "Gives you a player skull.", "skull <player> | skull img <image url>", CommandCategory.CREATIVE);
 	}
 
 	@Override

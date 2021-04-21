@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -32,19 +33,8 @@ import net.minecraft.text.LiteralText;
 
 public class CmdDupe extends Command {
 
-	@Override
-	public String getAlias() {
-		return "dupe";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Dupes items, (Vanilla mode patched on 1.14.4+)";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "dupe <vanilla/book>";
+	public CmdDupe() {
+		super("dupe", "Dupes items, (Vanilla mode patched on 1.14.4+)", "dupe <vanilla/book>", CommandCategory.MISC);
 	}
 
 	@Override

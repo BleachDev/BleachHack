@@ -18,6 +18,7 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachJsonHelper;
 import net.minecraft.item.ItemStack;
@@ -30,19 +31,8 @@ import net.minecraft.text.Text;
 
 public class CmdNBT extends Command {
 
-	@Override
-	public String getAlias() {
-		return "nbt";
-	}
-
-	@Override
-	public String getDescription() {
-		return "NBT stuff";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "nbt get | nbt copy | nbt set <nbt> | nbt wipe";
+	public CmdNBT() {
+		super("nbt", "NBT stuff.", "nbt get | nbt copy | nbt set <nbt> | nbt wipe", CommandCategory.MISC);
 	}
 
 	@Override
@@ -56,7 +46,7 @@ public class CmdNBT extends Command {
 
 		if (args[0].equalsIgnoreCase("get")) {
 			CompoundTag tag = item.getTag();
-			
+
 			if (tag == null) {
 				BleachLogger.infoMessage("\u00a7c\u00a7lNo NBT on this item!");
 				return;

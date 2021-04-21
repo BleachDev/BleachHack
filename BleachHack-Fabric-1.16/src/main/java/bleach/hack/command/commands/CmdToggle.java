@@ -18,6 +18,7 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.util.BleachLogger;
@@ -25,19 +26,8 @@ import bleach.hack.util.BleachQueue;
 
 public class CmdToggle extends Command {
 
-	@Override
-	public String getAlias() {
-		return "toggle";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Toggles a mod with a command.";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "toggle <Module>";
+	public CmdToggle() {
+		super("toggle", "Toggles a mod with a command.", "toggle <module>", CommandCategory.MODULES);
 	}
 
 	@Override
@@ -49,7 +39,7 @@ public class CmdToggle extends Command {
 				return;
 			}
 		}
-		
+
 		BleachLogger.errorMessage("Module \"" + args[0] + "\" Not Found!");
 	}
 

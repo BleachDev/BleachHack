@@ -25,6 +25,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.AirBlockItem;
 import net.minecraft.item.ItemStack;
@@ -36,19 +37,8 @@ import net.minecraft.util.registry.Registry;
 
 public class CmdGive extends Command {
 
-	@Override
-	public String getAlias() {
-		return "give";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Gives you an item";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "give <item> <count> <damage> <nbt> | give preset <negs/stacked/spawners/bookban/eggs> <chest/shulker/egg>";
+	public CmdGive() {
+		super("give", "Gives you an item.", "give <item> <count> <damage> <nbt> | give preset <negs/stacked/spawners/bookban/eggs> <chest/shulker/egg>", CommandCategory.CREATIVE);
 	}
 
 	@Override
@@ -217,7 +207,7 @@ public class CmdGive extends Command {
 				CompoundTag ct = new CompoundTag();
 				ct.put("EntityTag", StringNbtReader.parse("{Time:1,id:\"minecraft:falling_block\",BlockState:{Name:\"minecraft:chest\"}}"));
 				((CompoundTag) ct.get("EntityTag")).put("TileEntityData", tag.get("BlockEntityTag"));
-				
+
 				item.setTag(ct);
 			} else {
 				item.setTag(tag);

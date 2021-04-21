@@ -1,24 +1,14 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.command.CommandManager;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 public class CmdSay extends Command {
 
-	@Override
-	public String getAlias() {
-		return "say";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Says a message in chat";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "say <message>";
+	public CmdSay() {
+		super("say", "Says a message in chat.", "say <message>", CommandCategory.MISC);
 	}
 
 	@Override

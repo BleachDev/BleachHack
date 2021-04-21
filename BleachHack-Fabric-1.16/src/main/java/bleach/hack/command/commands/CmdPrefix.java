@@ -20,24 +20,14 @@ package bleach.hack.command.commands;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
 
 public class CmdPrefix extends Command {
 
-	@Override
-	public String getAlias() {
-		return "prefix";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Sets the command prefix";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "prefix <char>";
+	public CmdPrefix() {
+		super("prefix", "Sets the BleachHack command prefix.", "prefix <char>", CommandCategory.MISC);
 	}
 
 	@Override

@@ -20,6 +20,7 @@ package bleach.hack.command.commands;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.ModuleManager;
@@ -29,19 +30,8 @@ import bleach.hack.util.file.BleachFileHelper;
 
 public class CmdClickGui extends Command {
 
-	@Override
-	public String getAlias() {
-		return "clickgui";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Modify the clickgui windows";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "clickgui reset <open/closed> | clickgui length <length>";
+	public CmdClickGui() {
+		super("clickgui", "Modify the clickgui windows", "clickgui reset <open/closed> | clickgui length <length>", CommandCategory.MODULES);
 	}
 
 	@Override

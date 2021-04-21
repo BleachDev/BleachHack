@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.gson.JsonElement;
 
+import bleach.hack.BleachHack;
 import bleach.hack.command.commands.*;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
@@ -73,16 +74,17 @@ public class CommandManager {
 
 	public static void callCommand(String input) {
 		String[] split = input.split(" ");
-		System.out.println(Arrays.toString(split));
+		BleachHack.logger.info("Running command: " + Arrays.toString(split));
 
 		for (Command c : getCommands()) {
-			if (c.getAlias().equalsIgnoreCase(split[0])) {
+			if (c.hasAlias(split[0])) {
 				try {
 					c.onCommand(split[0], ArrayUtils.subarray(split, 1, split.length));
 				} catch (Exception e) {
 					e.printStackTrace();
 					c.printSyntaxError();
 				}
+
 				return;
 			}
 		}

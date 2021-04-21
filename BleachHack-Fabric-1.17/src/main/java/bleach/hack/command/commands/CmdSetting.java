@@ -18,6 +18,7 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingBase;
@@ -28,19 +29,8 @@ import bleach.hack.util.BleachLogger;
 
 public class CmdSetting extends Command {
 
-	@Override
-	public String getAlias() {
-		return "setting";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Changes a setting in a module";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "setting <Module> <Setting number (starts at 0)> <value>";
+	public CmdSetting() {
+		super("setting", "Changes a setting in a module.", "setting <module> <setting number (starts at 0)> <value>", CommandCategory.MODULES);
 	}
 
 	@Override

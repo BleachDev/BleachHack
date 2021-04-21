@@ -20,6 +20,7 @@ package bleach.hack.command.commands;
 import java.util.List;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.gui.NotebotScreen;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.BleachQueue;
@@ -28,19 +29,8 @@ import bleach.hack.util.file.BleachFileMang;
 
 public class CmdNotebot extends Command {
 
-	@Override
-	public String getAlias() {
-		return "notebot";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Shows the notebot gui";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "notebot | notebot convert <midi file in .minecraft/bleach/>";
+	public CmdNotebot() {
+		super("notebot", "Shows the notebot gui.", "notebot | notebot convert <midi file in .minecraft/bleach/>", CommandCategory.MODULES);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.CustomChat;
 import bleach.hack.util.BleachLogger;
@@ -12,19 +13,8 @@ import bleach.hack.util.file.BleachFileHelper;
 
 public class CmdCustomChat extends Command {
 
-	@Override
-	public String getAlias() {
-		return "customchat";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Changes customchat prefix and suffix";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "customchat current | customchat reset | customchat prefix <prefix> | customchat suffix <suffix>";
+	public CmdCustomChat() {
+		super("customchat", "Changes customchat prefix and suffix", "customchat current | customchat reset | customchat prefix <prefix> | customchat suffix <suffix>", CommandCategory.MODULES);
 	}
 
 	@Override

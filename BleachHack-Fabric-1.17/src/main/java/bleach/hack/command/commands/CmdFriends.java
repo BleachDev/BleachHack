@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.text.ClickEvent;
@@ -15,19 +16,9 @@ import net.minecraft.text.MutableText;
 
 public class CmdFriends extends Command {
 
-	@Override
-	public String getAlias() {
-		return "friends";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Manage friends";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "friends add <user> | friends remove <user> | friends list | friends clear";
+	public CmdFriends() {
+		super("friends", "Manage friends.", "friends add <user> | friends remove <user> | friends list | friends clear", CommandCategory.MISC,
+				"friend");
 	}
 
 	@Override

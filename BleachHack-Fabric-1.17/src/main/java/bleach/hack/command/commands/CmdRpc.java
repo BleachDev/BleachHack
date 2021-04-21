@@ -3,6 +3,7 @@ package bleach.hack.command.commands;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.DiscordRPCMod;
 import bleach.hack.util.BleachLogger;
@@ -10,19 +11,9 @@ import bleach.hack.util.file.BleachFileHelper;
 
 public class CmdRpc extends Command {
 
-	@Override
-	public String getAlias() {
-		return "rpc";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Sets custom discord rpc text";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "rpc <top text> <bottom text>";
+	public CmdRpc() {
+		super("rpc", "Sets custom discord rpc text.", "rpc <top text> <bottom text>", CommandCategory.MODULES,
+				"discordrpc");
 	}
 
 	@Override

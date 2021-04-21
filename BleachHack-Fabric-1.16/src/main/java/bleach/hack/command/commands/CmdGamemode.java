@@ -18,24 +18,15 @@
 package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
+import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.world.GameMode;
 
 public class CmdGamemode extends Command {
 
-	@Override
-	public String getAlias() {
-		return "gm";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Sets clientside gamemode.";
-	}
-
-	@Override
-	public String getSyntax() {
-		return "gm <0-3>";
+	public CmdGamemode() {
+		super("gamemode", "Sets your clientside gamemode.", "gm <0-3>", CommandCategory.MISC,
+				"gm");
 	}
 
 	@Override
