@@ -38,9 +38,10 @@ public abstract class Command {
 	private CommandCategory category;
 
 	public Command(String alias, String desc, String syntax, CommandCategory category, String... moreAliases) {
-		this.aliases = ArrayUtils.add(moreAliases, alias);
+		this.aliases = ArrayUtils.add(moreAliases, 0, alias);
 		this.description = desc;
 		this.syntax = syntax;
+		this.category = category;
 	}
 
 	public String[] getAliases() {
