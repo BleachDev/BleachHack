@@ -11,7 +11,7 @@ import bleach.hack.util.PairList;
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
  */
-public class CmdEntityMenu extends Command{
+public class CmdEntityMenu extends Command {
 
 	public CmdEntityMenu() {
 		super("entitymenu", "Opens the gui to manage the things which appear on the entitymenu interaction screen.", "entitymenu", CommandCategory.MODULES,
