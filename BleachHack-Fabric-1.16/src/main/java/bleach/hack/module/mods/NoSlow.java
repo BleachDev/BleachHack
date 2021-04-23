@@ -33,7 +33,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
-import net.minecraft.client.gui.screen.ingame.BookScreen;
+import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.JigsawBlockScreen;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
@@ -42,7 +42,6 @@ import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
@@ -200,7 +199,7 @@ public class NoSlow extends Module {
 		}
 
 		return !(screen instanceof ChatScreen
-				|| (screen instanceof BookScreen && mc.player.getMainHandStack().getItem() == Items.WRITABLE_BOOK)
+				|| screen instanceof BookEditScreen
 				|| screen instanceof SignEditScreen
 				|| screen instanceof JigsawBlockScreen
 				|| screen instanceof StructureBlockScreen
