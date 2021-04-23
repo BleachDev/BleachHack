@@ -77,8 +77,12 @@ public abstract class Command {
 	public void printSyntaxError(String reason) {
 		BleachLogger.errorMessage(reason);
 
-		MutableText text = new LiteralText("\u00a73" + PREFIX + getAliases()[0] + " -> \u00a7b" + getSyntax());
-		Text tooltip = new LiteralText("\u00a7b" + PREFIX + getAliases()[0] + "\n\u00a73" + getSyntax() + "\n\u00a7b" + getDescription());
+		MutableText text = new LiteralText("\u00a7b" + PREFIX + getAliases()[0] + " - \u00a7f" + getDescription());
+		Text tooltip = new LiteralText(
+				"\u00a72Category: " + getCategory()
+				+ "\n\u00a7bAliases: \u00a7f" + PREFIX + String.join(" \u00a77/\u00a7f " + PREFIX, getAliases())
+				+ "\n\u00a7bUsage: \u00a7f" + getSyntax()
+				+ "\n\u00a7bDesc: \u00a7f" + getDescription());
 
 		BleachLogger.infoMessage(
 				text.styled(style -> style

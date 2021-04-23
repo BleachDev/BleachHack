@@ -49,7 +49,11 @@ public class CmdHelp extends Command {
 				continue;
 
 			MutableText text = new LiteralText("\u00a7b" + PREFIX + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
-			Text tooltip = new LiteralText("\u00a7b\u00a7l" + PREFIX + c.getAliases()[0] + "\u00a7b | " + c.getSyntax() + "\n\u00a7f" + c.getDescription());
+			Text tooltip = new LiteralText(
+					"\u00a72Category: " + c.getCategory()
+					+ "\n\u00a7bAliases: \u00a7f" + PREFIX + String.join(" \u00a77/\u00a7f " + PREFIX, c.getAliases())
+					+ "\n\u00a7bUsage: \u00a7f" + c.getSyntax()
+					+ "\n\u00a7bDesc: \u00a7f" + c.getDescription());
 
 			BleachLogger.noPrefixMessage(
 					text.styled(style -> style
