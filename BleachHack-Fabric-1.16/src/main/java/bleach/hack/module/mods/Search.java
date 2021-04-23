@@ -26,7 +26,6 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
@@ -45,7 +44,6 @@ import net.minecraft.network.packet.s2c.play.UnloadChunkS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -170,8 +168,7 @@ public class Search extends Module {
 		} else if (event.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
 			ChunkDeltaUpdateS2CPacket packet = (ChunkDeltaUpdateS2CPacket) event.getPacket();
 
-			ChunkSectionPos chunkPos = (ChunkSectionPos) FabricReflect.getFieldValue(packet, "field_26345", "sectionPos");
-			queuedChunks.add(chunkPos.toChunkPos());
+			packet.visitUpdates((pos, state) -> queuedBlocks.add(Pair.of(pos.toImmutable(), state)));
 		} else if (event.getPacket() instanceof ChunkDataS2CPacket) {
 			ChunkDataS2CPacket packet = (ChunkDataS2CPacket) event.getPacket();
 
