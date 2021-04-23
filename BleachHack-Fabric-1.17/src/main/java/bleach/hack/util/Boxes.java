@@ -31,4 +31,16 @@ public class Boxes {
 		return box.getMax(axis) - box.getMin(axis);
 	}
 
+	/** Returns a box with each axis multiplied by the amount specified. **/
+	public static Box multiply(Box box, double amount) {
+		return multiply(box, amount, amount, amount);
+	}
+
+	/** Returns a box with each axis multiplied by the amount specified. **/
+	public static Box multiply(Box box, double x, double y, double z) {
+		return box.expand(
+				getAxisLength(box, Axis.X) * (x - 1) / 2d,
+				getAxisLength(box, Axis.Y) * (y - 1) / 2d,
+				getAxisLength(box, Axis.Z) * (z - 1) / 2d);
+	}
 }

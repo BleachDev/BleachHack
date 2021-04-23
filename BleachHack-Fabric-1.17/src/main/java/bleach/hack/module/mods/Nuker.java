@@ -17,9 +17,11 @@
  */
 package bleach.hack.module.mods;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,13 +29,19 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
+import bleach.hack.util.Boxes;
+import bleach.hack.util.FabricReflect;
+import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -41,8 +49,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 
 public class Nuker extends Module {
+
+	private Set<BlockPos> renderBlocks = new HashSet<>();
 
 	public Nuker() {
 		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
@@ -50,24 +61,36 @@ public class Nuker extends Module {
 				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if Multi/SurvMulti mode is on"),
 				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range"),
 				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
+				new SettingMode("Sort", "Closest", "Furthest", "Hardness", "None").withDesc("Which order to mine blocks in"),
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
 						SettingLists.newBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks")),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
 				new SettingRotate(false),
 				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
-				new SettingMode("Sort", "Closest", "Furthest", "Hardness", "None").withDesc("Which order to mine blocks in"));
+				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are currently mining").withChildren(
+						new SettingMode("Mode", "Opacity", "Expand").withDesc("How to show the mining progress"),
+						new SettingColor("Color", 1f, 0.5f, 0.5f, false).withDesc("The color of the highlight")));
+	}
+
+	@Override
+	public void onDisable() {
+		renderBlocks.clear();
+
+		super.onDisable();
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		renderBlocks.clear();
+
 		double range = getSetting(2).asSlider().getValue();
 
-		LinkedHashMap<BlockPos, Pair<Vec3d, Direction>> blocks = new LinkedHashMap<>();
+		Map<BlockPos, Pair<Vec3d, Direction>> blocks = new LinkedHashMap<>();
 
 		/* Add blocks around player */
 		for (int x = (int) range; x >= (int) -range; x--) {
-			for (int y = (int) range; y >= (getSetting(5).asToggle().state ? 0 : (int) -range); y--) {
+			for (int y = (int) range; y >= (getSetting(6).asToggle().state ? 0 : (int) -range); y--) {
 				for (int z = (int) range; z >= (int) -range; z--) {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + 0.2, z));
 
@@ -85,14 +108,14 @@ public class Nuker extends Module {
 		if (blocks.isEmpty())
 			return;
 
-		if (getSetting(8).asMode().mode != 3) {
+		if (getSetting(4).asMode().mode != 3) {
 			Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
 
 			blocks = blocks.entrySet().stream()
-					.sorted((a, b) -> getSetting(8).asMode().mode <= 1 ?
+					.sorted((a, b) -> getSetting(4).asMode().mode <= 1 ?
 							Double.compare(
-									eyePos.distanceTo((getSetting(8).asMode().mode == 0 ? a : b).getValue().getLeft()),
-									eyePos.distanceTo((getSetting(8).asMode().mode == 0 ? b : a).getValue().getLeft()))
+									eyePos.distanceTo((getSetting(4).asMode().mode == 0 ? a : b).getValue().getLeft()),
+									eyePos.distanceTo((getSetting(4).asMode().mode == 0 ? b : a).getValue().getLeft()))
 							: Float.compare(
 									mc.world.getBlockState(a.getKey()).getHardness(mc.world, a.getKey()),
 									mc.world.getBlockState(b.getKey()).getHardness(mc.world, b.getKey())))
@@ -109,11 +132,11 @@ public class Nuker extends Module {
 
 		int broken = 0;
 		for (Entry<BlockPos, Pair<Vec3d, Direction>> pos : blocks.entrySet()) {
-			if (getSetting(4).asToggle().state) {
-				boolean contains = getSetting(4).asToggle().getChild(1).asList(Block.class).contains(mc.world.getBlockState(pos.getKey()).getBlock());
+			if (getSetting(5).asToggle().state) {
+				boolean contains = getSetting(5).asToggle().getChild(1).asList(Block.class).contains(mc.world.getBlockState(pos.getKey()).getBlock());
 
-				if ((getSetting(4).asToggle().getChild(0).asMode().mode == 0 && contains)
-						|| (getSetting(4).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
+				if ((getSetting(5).asToggle().getChild(0).asMode().mode == 0 && contains)
+						|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
 					continue;
 				}
 			}
@@ -124,12 +147,13 @@ public class Nuker extends Module {
 				return;
 			}
 
-			if (getSetting(6).asRotate().state) {
+			if (getSetting(7).asRotate().state) {
 				Vec3d v = pos.getValue().getLeft();
-				WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(6).asRotate());
+				WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(7).asRotate());
 			}
 
 			mc.interactionManager.updateBlockBreakingProgress(pos.getKey(), pos.getValue().getRight());
+			renderBlocks.add(pos.getKey());
 
 			mc.player.swingHand(Hand.MAIN_HAND);
 
@@ -139,6 +163,29 @@ public class Nuker extends Module {
 					|| (getSetting(0).asMode().mode == 1 && broken >= getSetting(1).asSlider().getValueInt())
 					|| (getSetting(0).asMode().mode == 2 && broken >= getSetting(1).asSlider().getValueInt())) {
 				return;
+			}
+		}
+	}
+
+	@Subscribe
+	public void onWorldRender(EventWorldRender.Post event) {
+		if (getSetting(9).asToggle().state) {
+			float[] color = getSetting(9).asToggle().getChild(1).asColor().getRGBFloat();
+
+			float breakingProgress = (float) FabricReflect.getFieldValue(mc.interactionManager, "field_3715", "currentBreakingProgress");
+
+			for (BlockPos pos: renderBlocks) {
+				VoxelShape shape = mc.world.getBlockState(pos).getOutlineShape(mc.world, pos);
+
+				if (!shape.isEmpty()) {
+					if (getSetting(9).asToggle().getChild(0).asMode().mode == 0) {
+						RenderUtils.drawBoxBoth(shape.getBoundingBox().offset(pos),
+								QuadColor.single(color[0], color[1], color[2], breakingProgress * 0.8f), 2.5f);
+					} else {
+						RenderUtils.drawBoxBoth(Boxes.multiply(shape.getBoundingBox().offset(pos), breakingProgress),
+								QuadColor.single(color[0], color[1], color[2], 0.5f), 2.5f);
+					}
+				}
 			}
 		}
 	}

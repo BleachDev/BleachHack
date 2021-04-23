@@ -117,6 +117,57 @@ public class RenderUtils {
 		cleanup();
 	}
 
+	// -------------------- Quads --------------------
+
+	public static void drawQuadFill(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, int cullMode, QuadColor color) {
+		setup();
+
+		MatrixStack matrix = matrixFrom(x1, y1, z1);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		// Fill
+		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+		Vertexer.vertexQuad(matrix, buffer,
+				0f, 0f, 0f,
+				(float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1),
+				(float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1),
+				(float) (x4 - x1), (float) (y4 - y1), (float) (z4 - z1),
+				cullMode, color);
+		tessellator.draw();
+
+		cleanup();
+	}
+
+	public static void drawQuadOutline(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, float lineWidth, QuadColor color) {
+		setup();
+
+		MatrixStack matrix = matrixFrom(x1, y1, z1);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		int[] colors = color.getAllColors();
+
+		// Outline
+		RenderSystem.disableCull();
+		RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+		RenderSystem.lineWidth(lineWidth);
+
+		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+		Vertexer.vertexLine(matrix, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), LineColor.gradient(colors[0], colors[1]));
+		Vertexer.vertexLine(matrix, buffer, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), (float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1), LineColor.gradient(colors[1], colors[2]));
+		Vertexer.vertexLine(matrix, buffer, (float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1), (float) (x4 - x1), (float) (y4 - y1), (float) (z4 - z1), LineColor.gradient(colors[2], colors[3]));
+		Vertexer.vertexLine(matrix, buffer, (float) (x4 - x1), (float) (y4 - y1), (float) (z4 - z1), 0f, 0f, 0f, LineColor.gradient(colors[3], colors[0]));
+		tessellator.draw();
+
+		RenderSystem.enableCull();
+		cleanup();
+	}
+
 	// -------------------- Lines --------------------
 
 	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, LineColor color, float width) {
@@ -167,9 +218,9 @@ public class RenderUtils {
 
 	public static class Vertexer {
 
-		private static final int CULL_BACK = 0;
-		private static final int CULL_FRONT = 1;
-		private static final int CULL_NONE = 2;
+		public static final int CULL_BACK = 0;
+		public static final int CULL_FRONT = 1;
+		public static final int CULL_NONE = 2;
 
 		public static void vertexBoxQuads(MatrixStack matrix, VertexConsumer vertexConsumer, Box box, QuadColor quadColor, Direction... excludeDirs) {
 			float x1 = (float) box.minX;
@@ -238,7 +289,7 @@ public class RenderUtils {
 			boolean exNorth = ArrayUtils.contains(excludeDirs, Direction.NORTH);
 			boolean exSouth = ArrayUtils.contains(excludeDirs, Direction.SOUTH);
 			boolean exUp = ArrayUtils.contains(excludeDirs, Direction.UP);
-			
+
 			int[] color = quadColor.getAllColors();
 
 			if (!exDown) {
