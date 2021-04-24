@@ -9,7 +9,6 @@
 package bleach.hack.util.file;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonElement;
@@ -138,34 +137,49 @@ public class BleachFileHelper {
 	public static void saveClickGui() {
 		SCHEDULE_SAVE_CLICKGUI = false;
 
-		BleachFileMang.createEmptyFile("clickgui.txt");
+		JsonObject jo = new JsonObject();
 
-		String text = "";
 		for (Window w : ClickGui.clickGui.getWindows()) {
-			text += w.x1 + ":" + w.y1 + (w instanceof ClickGuiWindow ? ":" + ((ClickGuiWindow) w).hiding : "") + "\n";
+			JsonObject jw = new JsonObject();
+			jw.addProperty("x", w.x1);
+			jw.addProperty("y", w.y1);
+			
+			if (w instanceof ClickGuiWindow) {
+				jw.addProperty("hidden", ((ClickGuiWindow) w).hiding);
+			}
+
+			jo.add(w.title, jw);
 		}
 
-		BleachFileMang.appendFile(text, "clickgui.txt");
+		BleachJsonHelper.setJsonFile(jo, "clickgui.json");
 	}
 
 	public static void readClickGui() {
-		List<String> lines = BleachFileMang.readFileLines("clickgui.txt");
+		JsonObject jo = BleachJsonHelper.readJsonFile("clickgui.json");
+		
+		if (jo == null)
+			return;
+		
+		for (Entry<String, JsonElement> e : jo.entrySet()) {
+			if (!e.getValue().isJsonObject())
+				continue;
 
-		try {
-			int c = 0;
 			for (Window w : ClickGui.clickGui.getWindows()) {
-				String[] split = lines.get(c).split(":");
-
-				w.x1 = Integer.parseInt(split[0]);
-				w.y1 = Integer.parseInt(split[1]);
-
-				if (w instanceof ClickGuiWindow && split.length >= 3) {
-					((ClickGuiWindow) w).hiding = Boolean.parseBoolean(split[2]);
+				if (w.title.equals(e.getKey())) {
+					JsonObject jw = e.getValue().getAsJsonObject();
+					
+					try {
+						w.x1 = jw.get("x").getAsInt();
+						w.y1 = jw.get("y").getAsInt();
+						
+						if (w instanceof ClickGuiWindow && jw.has("hidden")) {
+							((ClickGuiWindow) w).hiding = jw.get("hidden").getAsBoolean();
+						}
+					} catch (Exception ex) {
+						BleachHack.logger.error("Error trying to load clickgui window: " + e.getKey() + " with data: " + e.getValue());
+					}
 				}
-
-				c++;
 			}
-		} catch (Exception e) {
 		}
 	}
 

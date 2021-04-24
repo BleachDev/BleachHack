@@ -75,8 +75,6 @@ public abstract class ClickGuiWindow extends Window {
 		return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY < maxY;
 	}
 
-	public abstract int getHeight();
-
 	public Triple<Integer, Integer, String> getTooltip() {
 		return null;
 	}
@@ -90,4 +88,6 @@ public abstract class ClickGuiWindow extends Window {
 		this.lmHeld = lmHeld;
 		this.mwScroll = mwScroll;
 	}
+
+	public abstract int getHeight();
 }
