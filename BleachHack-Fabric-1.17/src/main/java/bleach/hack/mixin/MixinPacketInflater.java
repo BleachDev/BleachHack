@@ -30,7 +30,7 @@ public class MixinPacketInflater {
 
 	@Shadow private Inflater inflater;
 
-	@Inject(method = "decode", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "decode", at = @At("HEAD"), remap = false, cancellable = true)
 	protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list, CallbackInfo info) throws Exception {
 		if (ModuleManager.getModule("AntiChunkBan").isEnabled()) {
 			info.cancel();
