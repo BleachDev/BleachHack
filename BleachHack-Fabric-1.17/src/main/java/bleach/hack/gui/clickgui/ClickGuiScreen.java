@@ -18,131 +18,45 @@
 package bleach.hack.gui.clickgui;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import bleach.hack.BleachHack;
-import bleach.hack.command.Command;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
-import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.window.Window;
-import bleach.hack.module.Category;
-import bleach.hack.module.Module;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.SharedConstants;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
-public class ClickGuiScreen extends WindowScreen {
+public abstract class ClickGuiScreen extends WindowScreen {
 
-	private int keyDown = -1;
-	private boolean lmDown = false;
-	private boolean rmDown = false;
-	private boolean lmHeld = false;
-	private int mwScroll = 0;
+	protected int keyDown = -1;
+	protected boolean lmDown = false;
+	protected boolean rmDown = false;
+	protected boolean lmHeld = false;
+	protected int mwScroll = 0;
 
-	private TextFieldWidget searchField;
-
-	public ClickGuiScreen() {
-		super(new LiteralText("ClickGui"));
+	public ClickGuiScreen(Text title) {
+		super(title);
 	}
 
-	public void init() {
-		super.init();
-
-		searchField = new TextFieldWidget(textRenderer, 2, 14, 100, 12, LiteralText.EMPTY /* @LasnikProgram is author lol */);
-		searchField.visible = false;
-		searchField.setMaxLength(20);
-		searchField.setSuggestion("Search here");
-		addButton(searchField);
-	}
-
-	public void initWindows() {
-		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
-
-		int startX = 10;
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.PLAYER),
-				startX, 35, len, "Player", new ItemStack(Items.ARMOR_STAND)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.RENDER),
-				startX + len + 5, 35, len, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.COMBAT),
-				startX + len * 2 + 10, 35, len, "Combat", new ItemStack(Items.TOTEM_OF_UNDYING)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.MOVEMENT),
-				startX + len * 3 + 15, 35, len, "Movement", new ItemStack(Items.POTION)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.EXPLOITS),
-				startX + len * 4 + 20, 35, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.MISC),
-				startX + len * 5 + 25, 35, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(Category.WORLD),
-				startX + len * 6 + 30, 35, len, "World", new ItemStack(Items.GRASS_BLOCK)));
-	}
+	public abstract void initWindows();
 
 	public boolean isPauseScreen() {
 		return false;
 	}
 
-	public void onClose() {
-		ModuleManager.getModule("ClickGui").setEnabled(false);
-		client.openScreen(null);
-	}
-
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
-
-		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state;
-
 		this.renderBackground(matrix);
 		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x305090);
 		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6090d0);
 
-		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
-			textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
-			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "clickgui to reset the clickgui", 2, height - 10, 0x9999ff);
-		}
-
-		if (ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
-			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
-
-			Set<Module> seachMods = new HashSet<>();
-			if (!searchField.getText().isEmpty()) {
-				for (Module m : ModuleManager.getModules()) {
-					if (m.getName().toLowerCase(Locale.ENGLISH).contains(searchField.getText().toLowerCase(Locale.ENGLISH).replace(" ", ""))) {
-						seachMods.add(m);
-					}
-				}
-			}
-
-			for (Window w : getWindows()) {
-				if (w instanceof ModuleWindow) {
-					((ModuleWindow) w).setSearchedModule(seachMods);
-				}
-			}
-		}
-
-		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
-				if (w instanceof ModuleWindow) {
-					((ModuleWindow) w).setLen(len);
-				}
-
 				((ClickGuiWindow) w).updateKeys(mouseX, mouseY, keyDown, lmDown, rmDown, lmHeld, mwScroll);
 			}
 		}
@@ -200,8 +114,9 @@ public class ClickGuiScreen extends WindowScreen {
 		if (button == 0) {
 			lmDown = true;
 			lmHeld = true;
-		} else if (button == 1)
+		} else if (button == 1) {
 			rmDown = true;
+		}
 
 		// Fix having to double click windows to move them
 		for (Window w : getWindows()) {

@@ -59,19 +59,19 @@ public class ModuleWindow extends ClickGuiWindow {
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY) {
-		super.render(matrix, mouseX, mouseY);
-
 		tooltip = null;
 		int x = x1 + 1;
 		int y = y1 + 13;
 		x2 = x + len + 1;
+		
+		super.render(matrix, mouseX, mouseY);
 
 		if (hiding) return;
 
 		TextRenderer textRend = mc.textRenderer;
 
 		int curY = 0;
-		for (Entry<Module, Boolean> m : new LinkedHashMap<>(mods).entrySet()) {
+		for (Entry<Module, Boolean> m : mods.entrySet()) {
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
 				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x70303070);
 			}

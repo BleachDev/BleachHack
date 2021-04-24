@@ -20,6 +20,7 @@ package bleach.hack.module.mods;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
+import bleach.hack.gui.clickgui.ModuleClickGuiScreen;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
@@ -27,7 +28,7 @@ import bleach.hack.setting.base.SettingToggle;
 
 public class ClickGui extends Module {
 
-	public static final ClickGuiScreen clickGui = new ClickGuiScreen();
+	public static final ClickGuiScreen clickGui = new ModuleClickGuiScreen();
 
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
@@ -36,8 +37,19 @@ public class ClickGui extends Module {
 				new SettingToggle("Help", true).withDesc("Shows the help text"));
 	}
 
+	@Override
 	public void onEnable() {
+		super.onEnable();
+
 		mc.openScreen(clickGui);
-		setEnabled(false);
+	}
+
+	@Override
+	public void onDisable() {
+		if (mc.currentScreen instanceof ModuleClickGuiScreen) {
+			mc.openScreen(null);
+		}
+
+		super.onDisable();
 	}
 }

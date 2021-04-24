@@ -46,15 +46,15 @@ public abstract class ClickGuiWindow extends Window {
 
 		/* title bar */
 		horizontalGradient(matrix, x1 + 1, y1 + 1, x2 - 1, y1 + 12, 0xff6060b0, 0xff8070b0);
-		
+
 		/* +/- text */
 		textRend.draw(matrix, hiding ? "+" : "_", x2 - 10, y1 + (hiding ? 4 : 2), 0x000000);
 		textRend.draw(matrix, hiding ? "+" : "_", x2 - 11, y1 + (hiding ? 3 : 1), 0xffffff);
-		
-		y2 = hiding ? y1 + 13 : y1 + 13 + getHeight();
 	}
-	
+
 	public void render(MatrixStack matrix, int mouseX, int mouseY) {
+		y2 = hiding ? y1 + 13 : y1 + 13 + getHeight();
+
 		super.render(matrix, mouseX, mouseY);
 
 		if (rmDown && mouseOver(x1, y1, x1 + (x2 - x1), y1 + 13)) {
