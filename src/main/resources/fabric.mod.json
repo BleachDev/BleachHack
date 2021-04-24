@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "bleachhack",
+  "id": "bleachhackepearledition",
   "version": "${version}",
   "name": "BleachHack epearl Edition",
   "description": "SUPER gamer hack",
@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "bleach.hack.BleachHack"
+      "bleach.hack.epearledition.BleachHack"
     ]
   },
   "mixins": [

@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "bleach.hack.mixin",
+  "package": "bleach.hack.epearledition.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
