@@ -33,7 +33,7 @@ import net.minecraft.util.math.Vec3d;
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
-	@Shadow private float field_3922;
+	@Shadow private float mountJumpStrength;
 
 	@Shadow protected MinecraftClient client;
 
@@ -114,6 +114,6 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Overwrite
 	public float getMountJumpStrength() {
 		return ModuleManager.getModule("EntityControl").isEnabled()
-				&& ModuleManager.getModule("EntityControl").getSetting(2).asToggle().state ? 1F : field_3922;
+				&& ModuleManager.getModule("EntityControl").getSetting(2).asToggle().state ? 1F : mountJumpStrength;
 	}
 }

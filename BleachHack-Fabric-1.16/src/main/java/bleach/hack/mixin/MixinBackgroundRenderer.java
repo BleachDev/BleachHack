@@ -23,7 +23,7 @@ public class MixinBackgroundRenderer {
 
 	@Redirect(method = {
 			"render(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/world/ClientWorld;IF)V",
-			"applyFog(Lnet/minecraft/client/rener/Camera;Lnet/minecraft/client/render/BackgroundRenderer$FogType;FZ)V"},
+			"applyFog(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/BackgroundRenderer$FogType;FZ)V"},
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
 	private static boolean hasStatusEffect(LivingEntity entity, StatusEffect effect) {
 		if (effect == StatusEffects.BLINDNESS
