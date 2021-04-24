@@ -30,6 +30,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import bleach.hack.BleachHack;
 import bleach.hack.gui.widget.BleachCheckbox;
 import bleach.hack.gui.widget.TextPassFieldWidget;
 import bleach.hack.gui.window.WindowScreen;
@@ -147,7 +148,7 @@ public class AccountManagerScreen extends WindowScreen {
 						accountQueue.add(new Account(split[0], crypter.decrypt(split[3]), split[1], split[2]));
 					}
 				} catch (Exception e) {
-					System.out.println("Error decrypting accout: " + split[0]);
+					BleachHack.logger.info("Error decrypting accout: " + split[0]);
 				}
 			}
 		}
@@ -319,7 +320,6 @@ public class AccountManagerScreen extends WindowScreen {
 
 		if (!accountQueue.isEmpty()) {
 			Account account = accountQueue.poll();
-			System.out.println("Queue >> " + account);
 			accountFutures.add(accountExecutor.submit(new Callable<Account>() {
 
 				@Override

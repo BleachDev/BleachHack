@@ -8,6 +8,7 @@
  */
 package bleach.hack.gui;
 
+import bleach.hack.BleachHack;
 import bleach.hack.util.FabricReflect;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screen.Screen;
@@ -42,7 +43,7 @@ public class ProtocolScreen extends Screen {
 				FabricReflect.writeField(SharedConstants.getGameVersion(), i, "field_16735", "protocolVersion");
 				FabricReflect.writeField(SharedConstants.getGameVersion(), i1, "field_16734", "packVersion");
 				FabricReflect.writeField(SharedConstants.getGameVersion(), targetField.getText(), "field_16740", "releaseTarget");
-				System.out.println("Set Protocol");
+				BleachHack.logger.info("Set Protocol");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

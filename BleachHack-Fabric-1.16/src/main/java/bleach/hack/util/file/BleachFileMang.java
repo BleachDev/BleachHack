@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import bleach.hack.BleachHack;
 import net.minecraft.client.MinecraftClient;
 
 public class BleachFileMang {
@@ -42,7 +43,7 @@ public class BleachFileMang {
 		} catch (NoSuchFileException e) {
 
 		} catch (Exception e) {
-			System.out.println("Error Reading File: " + stringsToPath(file));
+			BleachHack.logger.error("Error Reading File: " + stringsToPath(file));
 			e.printStackTrace();
 		}
 
@@ -57,7 +58,7 @@ public class BleachFileMang {
 				Files.createFile(stringsToPath(file));
 			}
 		} catch (Exception e) {
-			System.out.println("Error Creating File: " + Arrays.toString(file));
+			BleachHack.logger.error("Error Creating File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}
@@ -71,7 +72,7 @@ public class BleachFileMang {
 			writer.write("");
 			writer.close();
 		} catch (Exception e) {
-			System.out.println("Error Clearing/Creating File: " + Arrays.toString(file));
+			BleachHack.logger.error("Error Clearing/Creating File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}
@@ -87,7 +88,7 @@ public class BleachFileMang {
 					+ (content.endsWith("\n") ? "" : "\n"));
 			writer.close();
 		} catch (Exception e) {
-			System.out.println("Error Appending File: " + Arrays.toString(file));
+			BleachHack.logger.error("Error Appending File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}
@@ -106,7 +107,7 @@ public class BleachFileMang {
 		try {
 			Files.deleteIfExists(stringsToPath(file));
 		} catch (Exception e) {
-			System.out.println("Error Deleting File: " + Arrays.toString(file));
+			BleachHack.logger.error("Error Deleting File: " + Arrays.toString(file));
 			e.printStackTrace();
 		}
 	}

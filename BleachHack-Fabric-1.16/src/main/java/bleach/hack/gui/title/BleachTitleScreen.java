@@ -144,7 +144,7 @@ public class BleachTitleScreen extends WindowScreen {
 
 						Path installerPath = BleachFileMang.stringsToPath("temp", name);
 
-						System.out.println(
+						BleachHack.logger.info(
 								"\n> Installer path: " + installerPath
 								+ "\n> Installer URL: " + link
 								+ "\n> Installer file name: " + name

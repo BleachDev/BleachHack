@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import bleach.hack.BleachHack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -49,7 +50,7 @@ public class ServerScraperScreen extends Screen {
 					return;
 				if (ipField.getText().split(":")[0].trim().isEmpty())
 					throw new Exception();
-				System.out.println("Starting scraper...");
+				BleachHack.logger.info("Starting scraper...");
 				InetAddress ip = InetAddress.getByName(ipField.getText().split(":")[0].trim());
 				checked = 0;
 				working = 0;
@@ -162,7 +163,7 @@ class BleachServerPinger {
 
 	public void ping(String ip, int port) {
 		server = new ServerInfo(ip, ip + ":" + port, false);
-		System.out.println("Starting Ping " + ip + ":" + port);
+		BleachHack.logger.info("Starting Ping " + ip + ":" + port);
 		new Thread(() -> {
 			MultiplayerServerListPinger pinger = new MultiplayerServerListPinger();
 			try {
@@ -173,7 +174,7 @@ class BleachServerPinger {
 			}
 			pinger.cancel();
 			done = true;
-			System.out.println("Finished Ping " + ip + ":" + port + " > " + failed);
+			BleachHack.logger.info("Finished Ping " + ip + ":" + port + " > " + failed);
 		}).start();
 	}
 }

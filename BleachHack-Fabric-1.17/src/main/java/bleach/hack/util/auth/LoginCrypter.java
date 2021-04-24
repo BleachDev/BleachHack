@@ -19,6 +19,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.google.common.hash.Hashing;
 
+import bleach.hack.BleachHack;
+
 public class LoginCrypter {
 
 	private Cipher dcipher;
@@ -33,7 +35,7 @@ public class LoginCrypter {
 			key = new SecretKeySpec(pass, "AES");
 			dcipher = Cipher.getInstance("AES");
 		} catch (Exception e) {
-			System.out.println("Error initing login crypter");
+			BleachHack.logger.error("Error initing login crypter");
 		}
 	}
 

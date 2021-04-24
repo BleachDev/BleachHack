@@ -23,6 +23,8 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
+import bleach.hack.BleachHack;
+
 public class Midi2Notebot {
 
 	public static final String[] NOTE_NAMES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
@@ -36,7 +38,7 @@ public class Midi2Notebot {
 
 			int res = seq.getResolution();
 
-			System.out.println("Tracks: " + seq.getTracks().length + " | " + seq.getDivisionType());
+			BleachHack.logger.info("Tracks: " + seq.getTracks().length + " | " + seq.getDivisionType());
 			int trackCount = 0;
 			for (Track track : seq.getTracks()) {
 				// Track track = seq.getTracks()[0]
@@ -118,7 +120,7 @@ public class Midi2Notebot {
 			synthesizer.open();
 			Instrument[] instruments = synthesizer.getDefaultSoundbank().getInstruments();
 			for (Instrument i : instruments)
-				System.out.println(i);
+				BleachHack.logger.info(i);
 
 			synthesizer.close();
 

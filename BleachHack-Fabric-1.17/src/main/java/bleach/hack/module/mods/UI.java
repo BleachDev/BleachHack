@@ -68,7 +68,7 @@ public class UI extends Module {
 						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the module list"), // 0-1
 						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list"), // 0-2
 						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list").withChildren( // 0-3
-								new SettingMode("Mode", "Old", "New").withDesc("The watermark type")), // 0-3-0
+								new SettingMode("Mode", "New", "Old").withDesc("The watermark type")), // 0-3-0
 						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 0-4
 						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 0-5
 						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("Rainbow Speed")), // 0-6
@@ -101,12 +101,12 @@ public class UI extends Module {
 				int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
 
 				if (watermarkMode == 0) {
-					lines.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
-				} else {
 					MutableText text1 = new LiteralText("> Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
 					MutableText text2 = new LiteralText("Hack " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
 
 					lines.add(0, text1.append(text2));
+				} else {
+					lines.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
 				}
 			}
 

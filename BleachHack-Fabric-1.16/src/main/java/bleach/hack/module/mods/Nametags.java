@@ -391,12 +391,12 @@ public class Nametags extends Module {
 				try {
 					String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
 					String response = Resources.toString(new URL(url), StandardCharsets.UTF_8);
-					System.out.println("bruh uuid time: " + url);
+					BleachHack.logger.info("bruh uuid time: " + url);
 
 					JsonElement json = new JsonParser().parse(response);
 
 					if (!json.isJsonArray()) {
-						System.out.println("[Nametags] Invalid Owner UUID: " + uuid.toString());
+						BleachHack.logger.error("[Nametags] Invalid Owner UUID: " + uuid.toString());
 						return "\u00a7c[Invalid]";
 					}
 
@@ -404,7 +404,7 @@ public class Nametags extends Module {
 
 					return ja.get(ja.size() - 1).getAsJsonObject().get("name").getAsString();
 				} catch (IOException e) {
-					System.out.println("[Nametags] Error Getting Owner UUID: " + uuid.toString());
+					BleachHack.logger.error("[Nametags] Error Getting Owner UUID: " + uuid.toString());
 					return "\u00a7c[Error]";
 				}
 			}

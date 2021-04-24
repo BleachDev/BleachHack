@@ -18,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.widget.BleachScrollbar;
 import bleach.hack.gui.window.Window;
@@ -121,7 +122,7 @@ public abstract class SettingList<E> extends SettingBase {
 					itemPool.remove(item);
 					items.add(item);
 				} else {
-					System.out.println("Error Importing item: " + je.toString());
+					BleachHack.logger.error("Error Importing item: " + je.toString());
 				}
 			}
 		}
