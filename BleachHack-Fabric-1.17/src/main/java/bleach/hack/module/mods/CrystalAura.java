@@ -89,7 +89,7 @@ public class CrystalAura extends Module {
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
 						new SettingToggle("Force Legit", false).withDesc("Only places a crystal if you can see it"),
 						new SettingSlider("MinDamg", 1, 20, 2, 0).withDesc("Minimun damage to the target to place crystals"),
-						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimun damage ratio to place a crystal at (Target damg/Player damg)"),
+						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimun damage ratio to place a crystal at (Target dmg/Player dmg)"),
 						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to place per tick"),
 						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before placing the next batch of crystals"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
