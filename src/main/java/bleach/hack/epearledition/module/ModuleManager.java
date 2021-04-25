@@ -140,6 +140,7 @@ public class ModuleManager {
         new BedReplenish(),
         new AutoCrystal(),
         new BlockHighlight(),
+        new EcmeElytraFly(),
 
         //new LiquidInteract(),
         //new IRCMod(),
