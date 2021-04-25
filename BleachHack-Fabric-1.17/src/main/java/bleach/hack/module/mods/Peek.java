@@ -240,10 +240,10 @@ public class Peek extends Module {
 		mc.getTextureManager().bindTexture(new Identifier("textures/map/map_background_checkerboard.png"));
 		DrawableHelper.drawTexture(
 				matrix,
-				x - 8, y - 8, 0,
+				x - 7, y - 7, 0,
 				0, 0,
-				143, 143,
-				143, 143);
+				142, 142,
+				142, 142);
 
 		for (byte c : colors) {
 			int c1 = c & 255;
