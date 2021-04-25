@@ -12,7 +12,6 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
 
-import bleach.hack.event.events.EventChunkCulling;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
@@ -49,6 +48,10 @@ public class Freecam extends Module {
 
 	@Override
 	public void onEnable() {
+		super.onEnable();
+
+		mc.chunkCullingEnabled = false;
+
 		playerPos = new double[] { mc.player.getX(), mc.player.getY(), mc.player.getZ() };
 		playerRot = new float[] { mc.player.yaw, mc.player.pitch };
 
@@ -68,12 +71,12 @@ public class Freecam extends Module {
 
 		prevFlying = mc.player.getAbilities().flying;
 		prevFlySpeed = mc.player.getAbilities().getFlySpeed();
-
-		super.onEnable();
 	}
 
 	@Override
 	public void onDisable() {
+		mc.chunkCullingEnabled = true;
+
 		dummy.despawn();
 		mc.player.noClip = false;
 		mc.player.getAbilities().flying = prevFlying;
@@ -117,10 +120,5 @@ public class Freecam extends Module {
 		mc.player.getAbilities().setFlySpeed((float) (getSetting(0).asSlider().getValue() / 5));
 		mc.player.getAbilities().flying = true;
 		mc.player.setPose(EntityPose.STANDING);
-	}
-
-	@Subscribe
-	public void onChunkCull(EventChunkCulling event) {
-		event.setCull(false);
 	}
 }

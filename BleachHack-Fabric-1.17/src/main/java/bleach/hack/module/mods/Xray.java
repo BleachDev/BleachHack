@@ -49,17 +49,19 @@ public class Xray extends Module {
 
 	@Override
 	public void onEnable() {
+		super.onEnable();
+
+		mc.chunkCullingEnabled = false;
 		mc.worldRenderer.reload();
 
 		gamma = mc.options.gamma;
-
-		super.onEnable();
 	}
 
 	@Override
 	public void onDisable() {
 		mc.options.gamma = gamma;
 
+		mc.chunkCullingEnabled = true;
 		mc.worldRenderer.reload();
 
 		super.onDisable();

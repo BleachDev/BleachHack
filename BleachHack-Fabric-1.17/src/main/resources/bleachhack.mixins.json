@@ -16,7 +16,6 @@
     "MixinBlockModelRenderer",
     "MixinBossBarHud",
     "MixinCamera",
-    "MixinChunkOcclusionGraphBuilder",
     "MixinChunkSkylightProvider",
   	"MixinClientConnection",
   	"MixinClientPlayerEntity",

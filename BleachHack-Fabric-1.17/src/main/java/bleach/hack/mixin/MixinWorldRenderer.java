@@ -111,15 +111,6 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 			return vertexConsumer.color(red, green, blue, alpha);
 		}
 	}
-	
-	/*@Redirect(method = "method_34808", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;chunkCullingEnabled:Z", ordinal = 0),
-			require = 0 / TODO: sodium? /)
-	private boolean method_34808_chunkCullingEnabled(MinecraftClient client) {
-		EventChunkCulling event = new EventChunkCulling(client.chunkCullingEnabled);
-		BleachHack.eventBus.post(event);
-		
-		return event.shouldCull();
-	}*/
 
 	@Override
 	public Framebuffer getOutlineFramebuffer() {
