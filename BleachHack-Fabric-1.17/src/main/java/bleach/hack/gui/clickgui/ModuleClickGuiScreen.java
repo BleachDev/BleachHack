@@ -77,11 +77,6 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 
 		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state;
 
-		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
-			textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
-			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "clickgui to reset the clickgui", 2, height - 10, 0x9999ff);
-		}
-
 		if (ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
 
@@ -109,5 +104,10 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		}
 
 		super.render(matrix, mouseX, mouseY, delta);
+		
+		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
+			textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
+			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "clickgui to reset the clickgui", 2, height - 10, 0x9999ff);
+		}
 	}
 }
