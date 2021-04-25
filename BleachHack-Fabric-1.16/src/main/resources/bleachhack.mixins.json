@@ -13,7 +13,7 @@
   	"MixinBiomeColors",
     "MixinBlock",
     "MixinBlockEntityRenderDispatcher",
-    "MixinBlockModelRenderer",
+    "MixinBlockRenderManager",
     "MixinBossBarHud",
     "MixinCamera",
     "MixinChunkSkylightProvider",

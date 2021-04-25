@@ -49,8 +49,8 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 	@Shadow private ShaderEffect entityOutlineShader;
 
 	/** Fixes that the outline framebuffer only resets if any glowing entites are drawn **/
-	@ModifyVariable(method = "render", at = @At(value = "STORE"), index = 37)
-	//@ModifyVariable(method = "render", name = "bl3", at = @At("STORE"))
+	@ModifyVariable(method = "render", at = @At(value = "STORE"), index = 37,
+			require = 0 /* TODO: optifabric */)
 	public boolean render_modifyBoolean(boolean bool) {
 		return true;
 	}
@@ -88,7 +88,7 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 		EventWorldRender.Post event = new EventWorldRender.Post(tickDelta);
 		BleachHack.eventBus.post(event);
 	}
-	
+
 	@Redirect(method = "renderEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;render(Lnet/minecraft/entity/Entity;DDDFFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"))
 	public <E extends Entity> void renderEntity_render(EntityRenderDispatcher dispatcher, E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
 		EventEntityRender.Single.Pre event = new EventEntityRender.Single.Pre(entity, matrices, vertexConsumers);

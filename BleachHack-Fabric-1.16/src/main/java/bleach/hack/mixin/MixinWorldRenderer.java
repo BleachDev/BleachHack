@@ -49,7 +49,8 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 	@Shadow private ShaderEffect entityOutlineShader;
 
 	/** Fixes that the outline framebuffer only resets if any glowing entites are drawn **/
-	@ModifyVariable(method = "render", at = @At(value = "STORE"), index = 37)
+	@ModifyVariable(method = "render", at = @At(value = "STORE"), index = 37,
+			require = 0 /* TODO: optifabric */)
 	public boolean render_modifyBoolean(boolean bool) {
 		return true;
 	}
