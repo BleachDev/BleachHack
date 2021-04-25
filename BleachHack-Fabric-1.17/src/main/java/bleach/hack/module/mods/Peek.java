@@ -32,6 +32,7 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
@@ -47,6 +48,8 @@ import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 
 public class Peek extends Module {
@@ -75,7 +78,7 @@ public class Peek extends Module {
 		if (slot == null)
 			return;
 
-		if (!Arrays.equals(new int[] { slot.x, slot.y }, slotPos)) {
+		if (slot.x != slotPos[0] || slot.y != slotPos[1]) {
 			pageCount = 0;
 			pages = null;
 		}
@@ -83,7 +86,7 @@ public class Peek extends Module {
 		slotPos = new int[] { slot.x, slot.y };
 
 		event.matrix.push();
-		event.matrix.translate(0, 0, 300);
+		event.matrix.translate(0, 0, 400);
 
 		if (getSetting(0).asToggle().state)
 			drawShulkerToolTip(event, slot, event.mouseX, event.mouseY);
@@ -177,19 +180,41 @@ public class Peek extends Module {
 			shown = false;
 		}
 
-		String pageString = "Page: " + (pageCount + 1) + "/" + pages.size();
-		int length = mc.textRenderer.getWidth(pageString);
+		mc.getTextureManager().bindTexture(BookScreen.BOOK_TEXTURE);
+		DrawableHelper.drawTexture(
+				matrix,
+				mouseX, mouseY - 143, 0,
+				0, 0,
+				134, 134,
+				179, 179);
 
-		renderTooltipBox(matrix, mouseX + 56 - length / 2, mouseY - pages.get(pageCount).size() * 10 - 19, 5, length, true);
-		renderTooltipBox(matrix, mouseX, mouseY - pages.get(pageCount).size() * 10 - 6, pages.get(pageCount).size() * 10 - 2, 120, true);
+		Text pageIndexText = new TranslatableText("book.pageIndicator", new Object[] {pageCount + 1, pages.size() });
+		int pageIndexLength = mc.textRenderer.getWidth(pageIndexText);
 		
-		mc.textRenderer.drawWithShadow(matrix, pageString, mouseX + 68 - length / 2, mouseY - pages.get(pageCount).size() * 10 - 32, -1);
+		matrix.push();
+		matrix.scale(0.7f, 0.7f, 1f);
+
+		mc.textRenderer.draw(
+				matrix,
+				pageIndexText,
+				(mouseX + 123 - pageIndexLength) * 1.43f,
+				(mouseY - 133) * 1.43f,
+				0x000000);
+		
 
 		int count = 0;
 		for (String s : pages.get(pageCount)) {
-			mc.textRenderer.drawWithShadow(matrix, s, mouseX + 12, mouseY - 18 - pages.get(pageCount).size() * 10 + count * 10, 0x00c0c0);
+			mc.textRenderer.draw(
+					matrix,
+					s,
+					(mouseX + 24) * 1.43f,
+					(mouseY - 123 + count * 7) * 1.43f,
+					0x000000);
+
 			count++;
 		}
+		
+		matrix.pop();
 
 	}
 
@@ -198,7 +223,7 @@ public class Peek extends Module {
 			return;
 		}
 
-		MapState data = FilledMapItem.getOrCreateMapState(slot.getStack(), mc.world);
+		MapState data = FilledMapItem.getMapState(slot.id, mc.world);
 		if (data == null || data.colors == null) {
 			return;
 		}
@@ -212,7 +237,14 @@ public class Peek extends Module {
 		int x = (int) (mouseX * (1 / size) + 12 * (1 / size));
 		int y = (int) (mouseY * (1 / size) - 12 * (1 / size) - 140);
 
-		renderTooltipBox(matrix, x - 12, y + 12, 128, 128, false);
+		mc.getTextureManager().bindTexture(new Identifier("textures/map/map_background_checkerboard.png"));
+		DrawableHelper.drawTexture(
+				matrix,
+				x - 8, y - 8, 0,
+				0, 0,
+				143, 143,
+				143, 143);
+
 		for (byte c : colors) {
 			int c1 = c & 255;
 

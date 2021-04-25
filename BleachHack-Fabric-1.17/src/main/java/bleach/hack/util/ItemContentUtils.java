@@ -45,9 +45,13 @@ public class ItemContentUtils {
 		if (nbt != null && nbt.contains("pages")) {
 			NbtList nbt2 = nbt.getList("pages", 8);
 			for (int i = 0; i < nbt2.size(); i++) {
-				Text text = Text.Serializer.fromLenientJson(nbt2.getString(i));
-
-				pages.add(text != null ? text.getString() : nbt2.getString(i));
+				if (item.getItem() == Items.WRITABLE_BOOK) {
+					pages.add(nbt2.getString(i));
+				} else {
+					Text text = Text.Serializer.fromLenientJson(nbt2.getString(i));
+	
+					pages.add(text != null ? text.getString() : nbt2.getString(i));
+				}
 			}
 		}
 
