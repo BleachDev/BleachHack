@@ -10,7 +10,30 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-macos:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+ 
+    - name: Build 1.16 on macos
+      run: |
+        cd BleachHack-Fabric-1.16
+        chmod +x gradlew
+        ./gradlew build
+        cd ..
+    - name: Build 1.17 on macos
+      run: |
+        cd BleachHack-Fabric-1.17
+        chmod +x gradlew
+        ./gradlew build
+  
+  build-ubuntu:
 
     runs-on: ubuntu-latest
 
@@ -21,25 +44,25 @@ jobs:
       with:
         java-version: 1.8
  
-    - name: Build 1.16 bruh time
+    - name: Build 1.16 on ubuntu
       run: |
         cd BleachHack-Fabric-1.16
         chmod +x gradlew
         ./gradlew build
         cd ..
-    - name: Build 1.17 bruh time
+    - name: Build 1.17 on ubuntu
       run: |
         cd BleachHack-Fabric-1.17
         chmod +x gradlew
         ./gradlew build
         cd ..
 
-    - name: Upload 1.16 bruh bruh
+    - name: Upload 1.16
       uses: actions/upload-artifact@v2
       with:
         name: BleachHack-1.16.5
         path: BleachHack-Fabric-1.16/build/libs/bleachhack-1.16.5.jar
-    - name: Upload 1.17 bruh bruh
+    - name: Upload 1.17
       uses: actions/upload-artifact@v2
       with:
         name: BleachHack-21w16a
