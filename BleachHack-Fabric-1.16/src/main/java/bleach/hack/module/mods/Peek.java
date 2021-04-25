@@ -77,7 +77,7 @@ public class Peek extends Module {
 		if (slot == null)
 			return;
 
-		if (slot.x != slotPos[0] || slot.y != slotPos[1]) {
+		if (slotPos == null || slot.x != slotPos[0] || slot.y != slotPos[1]) {
 			pageCount = 0;
 			pages = null;
 		}
