@@ -22,10 +22,10 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class ElytraFly extends Module {
+public class EcmeElytraFly extends Module {
 
-	public ElytraFly() {
-		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra (but bypasses endcrystal.me)",
+	public EcmeElytraFly() {
+		super("EcmeElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra (but bypasses endcrystal.me)",
 				new SettingMode("Mode", "AutoBoost", "Boost", "Control", "BruhFly", "Pak\u00e8tFly").withDesc("Elytrafly mode"),
 				new SettingSlider("Boost", 0, 0.15, 0.05, 2).withDesc("Boost speed"),
 				new SettingSlider("MaxBoost", 0, 5, 2.5, 1).withDesc("Max boost speed"),
