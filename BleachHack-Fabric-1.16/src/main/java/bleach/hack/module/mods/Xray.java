@@ -58,9 +58,6 @@ public class Xray extends Module {
 
 	@Override
 	public void onDisable() {
-		if (mc.world != null)
-			mc.worldRenderer.setWorld(mc.world);
-
 		mc.options.gamma = gamma;
 
 		mc.worldRenderer.reload();
