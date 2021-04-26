@@ -345,7 +345,7 @@ public class UI extends Module {
 	public static int getRainbow(float sat, float bri, double speed, int offset) {
 		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / speed);
 		rainbowState %= 360.0;
-		return Color.HSBtoRGB((float) (rainbowState / 360.0), sat, bri);
+		return MathHelper.hsvToRgb((float) (rainbowState / 360.0), sat, bri);
 	}
 
 	public static int getRainbowFromSettings(int offset) {
