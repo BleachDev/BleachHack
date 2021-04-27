@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import bleach.hack.util.world.PlayerCopyEntity;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.eventbus.Subscribe;
@@ -163,6 +164,11 @@ public class Nametags extends Module {
 
 		Vec3d rPos = getRenderPos(event.getEntity());
 
+		// Otherways makes LogoutSpot look bad
+		if (event.getEntity() instanceof PlayerCopyEntity) {
+			return;
+		}
+
 		if (event.getEntity() instanceof ItemEntity && getSetting(5).asToggle().state) {
 			ItemEntity e = (ItemEntity) event.getEntity();
 
@@ -170,7 +176,7 @@ public class Nametags extends Module {
 
 			lines.add(Formatting.GOLD + e.getName().getString()
 					+ (getSetting(5).asToggle().getChild(2).asToggle().state
-							? Formatting.YELLOW + " [x" + e.getStack().getCount() + "]" : ""));
+					? Formatting.YELLOW + " [x" + e.getStack().getCount() + "]" : ""));
 
 			if (!e.getName().getString().equals(e.getStack().getName().getString()) && getSetting(5).asToggle().getChild(1).asToggle().state) {
 				lines.add(0, Formatting.GOLD + "\"" + e.getStack().getName().getString() + Formatting.GOLD + "\"");
@@ -310,7 +316,7 @@ public class Nametags extends Module {
 			int w1 = mc.textRenderer.getWidth(subText) / 2;
 			mc.textRenderer.draw(subText, -2 - w1, c * 10 - 19,
 					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0,
-							true, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
+					true, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
 			c--;
 		}
 
@@ -323,9 +329,9 @@ public class Nametags extends Module {
 	private Vec3d getRenderPos(Entity e) {
 		return mc.currentScreen != null && mc.currentScreen.isPauseScreen() ? e.getPos().add(0, e.getHeight(), 0)
 				: new Vec3d(
-						e.lastRenderX + (e.getX() - e.lastRenderX) * mc.getTickDelta(),
-						(e.lastRenderY + (e.getY() - e.lastRenderY) * mc.getTickDelta()) + e.getHeight(),
-						e.lastRenderZ + (e.getZ() - e.lastRenderZ) * mc.getTickDelta());
+				e.lastRenderX + (e.getX() - e.lastRenderX) * mc.getTickDelta(),
+				(e.lastRenderY + (e.getY() - e.lastRenderY) * mc.getTickDelta()) + e.getHeight(),
+				e.lastRenderZ + (e.getZ() - e.lastRenderZ) * mc.getTickDelta());
 	}
 
 	private String getHealthText(LivingEntity e) {
