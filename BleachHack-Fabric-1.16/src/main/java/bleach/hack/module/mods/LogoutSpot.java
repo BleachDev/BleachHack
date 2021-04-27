@@ -81,34 +81,41 @@ public class LogoutSpot extends Module {
             }
         }
 
-        // Despawns fake player when player joins
+        // Removes fake player when player joins
         if (list.getAction().equals(PlayerListS2CPacket.Action.ADD_PLAYER)) {
             for (PlayerListS2CPacket.Entry entry : list.getEntries()) {
-                PlayerEntity player = mc.world.getPlayerByUuid(entry.getProfile().getId());
+                PlayerEntity playerEntity = mc.world.getPlayerByUuid(entry.getProfile().getId());
 
-                if (player != null && !mc.player.equals(player)) {
-                    removePlayer(player);
+                if (playerEntity != null && !mc.player.equals(playerEntity)) {
+                    players.keySet().removeIf(player -> {
+                            players.get(player).getKey().despawn();
+                            return true;
+                    });
                 }
             }
         }
     }
 
-    // Removes the players based on settings
+    // Removes the fake players based on settings
     @Subscribe
     public void onTick(EventTick event) {
         if (getSetting(0).asToggle().state) {
-            players.keySet().stream().forEach(player -> {
+            players.keySet().removeIf(player -> {
                 if (mc.player.distanceTo(players.get(player).getKey()) > getSetting(0).asToggle().getChild(0).asSlider().getValueInt()) {
-                    removePlayer(player);
+                    players.get(player).getKey().despawn();
+                    return true;
                 }
+                return false;
             });
         }
 
         if (getSetting(1).asToggle().state) {
-            players.keySet().stream().forEach(player -> {
-                if ((System.currentTimeMillis() - players.get(player).getValue().longValue()) / 1000 > getSetting(1).asToggle().getChild(0).asSlider().getValueInt()) {
-                    removePlayer(player);
+            players.keySet().removeIf(player -> {
+                if ((System.currentTimeMillis() - players.get(player).getValue()) / 1000 > getSetting(1).asToggle().getChild(0).asSlider().getValueInt()) {
+                    players.get(player).getKey().despawn();
+                    return true;
                 }
+                return false;
             });
         }
     }
@@ -117,17 +124,6 @@ public class LogoutSpot extends Module {
         PlayerCopyEntity dummy = new PlayerCopyEntity(player);
         dummy.spawn();
         return dummy;
-    }
-
-    // Despawns the fakeplayer to the corresponding player. Entry will get deleted
-    private void removePlayer(PlayerEntity player) {
-        players.keySet().removeIf(e -> {
-            if (e.equals(player)) {
-                players.get(e).getKey().despawn();
-                return true;
-            }
-            return false;
-        });
     }
 
     // Ran from MixinClientConnection when leaving world and onDisable()
@@ -162,7 +158,7 @@ public class LogoutSpot extends Module {
         AtomicBoolean shouldRender = new AtomicBoolean(false);
         AtomicLong spawnMillis = new AtomicLong(-1);
         players.values().forEach(entry -> {
-            if (entry.getKey().getUuid().equals(event.getEntity().getUuid())) {
+            if (entry != null && entry.getKey().getUuid().equals(event.getEntity().getUuid())) {
                 shouldRender.set(true);
                 spawnMillis.set(entry.getValue());
             }
