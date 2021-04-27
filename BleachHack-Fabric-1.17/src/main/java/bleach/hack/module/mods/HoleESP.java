@@ -53,7 +53,7 @@ public class HoleESP extends Module {
 				new SettingToggle("Bedrock", true).withDesc("Shows holes with full bedrock").withChildren(
 						new SettingColor("Color", 0f, 1f, 0f, false).withDesc("Color for bedrock holes")),
 				new SettingToggle("Mixed", true).withDesc("Shows holes with a mix of obsidian and bedrock").withChildren(
-						new SettingColor("Mixed", 1f, 1f, 0f, false).withDesc("Color formixed holes")),
+						new SettingColor("Mixed", 1f, 1f, 0f, false).withDesc("Color for mixed holes")),
 				new SettingToggle("Obsidian", true).withDesc("Shows holes with a mix of obsidian and bedrock").withChildren(
 						new SettingColor("Obsidian", 1f, 0f, 0f, false).withDesc("Color for obsidian holes")),
 				new SettingToggle("HideWhenIn", true).withDesc("Hides the hole you're currently in to prevent blocking out screen"));

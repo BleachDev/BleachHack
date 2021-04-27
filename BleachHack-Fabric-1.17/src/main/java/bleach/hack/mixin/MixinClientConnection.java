@@ -8,6 +8,8 @@
  */
 package bleach.hack.mixin;
 
+import bleach.hack.module.mods.LogoutSpot;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +34,7 @@ import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
-	
+
 	@Shadow private Channel channel;
 
 	@Shadow private void sendImmediately(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> callback) {}
@@ -59,7 +61,7 @@ public class MixinClientConnection {
 					callback.cancel();
 				}
 			}
-			
+
 			CommandManager.allowNextMsg = false;
 		}
 
@@ -80,5 +82,10 @@ public class MixinClientConnection {
 				callback.cancel();
 			}
 		}
+	}
+
+	@Inject(method = "disconnect", at = @At("HEAD"), cancellable = true)
+	public void disconnect (Text disconnectReason, CallbackInfo callback) {
+		((LogoutSpot)ModuleManager.getModule("LogoutSpot")).clearHash();
 	}
 }
