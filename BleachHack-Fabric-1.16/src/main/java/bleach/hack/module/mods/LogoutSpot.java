@@ -1,331 +1,197 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventEntityRender;
+import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.BleachQueue;
 import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.PlayerCopyEntity;
 import com.google.common.eventbus.Subscribe;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.gui.screen.DisconnectedScreen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
+import net.minecraft.util.math.Vec3d;
+
+import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
  */
 
 public class LogoutSpot extends Module {
-    private final HashMap<PlayerEntity, Map.Entry<PlayerCopyEntity, Long>> players = new HashMap<>();
 
-    public LogoutSpot() {
-        super("LogoutSpot", KEY_UNBOUND, Category.WORLD, "Shows where a player logged out",
-                new SettingToggle("Distance", true).withDesc("Remove log out spots based on distance").withChildren( // 0
-                        new SettingSlider("Radius", 1, 1000, 200, 0).withDesc("Radius in which log out spots get shown")), // 0-0
-                new SettingToggle("Time", false).withDesc("Remove log out spots based on time since logout").withChildren( // 1
-                        new SettingSlider("Duration", 1, 1800, 120, 0).withDesc("Duration after which a logged out players gets removed")), // 1-1
-                new SettingToggle("Remove", true).withDesc("Whether all log out spots should be cleared after disconnection or disabling"), // 2
-                new SettingToggle("Nametag", true).withDesc("Shows a nametag over the log out spot").withChildren(  // 3
-                        new SettingSlider("Size", 0.5, 5, 2, 1).withDesc("Size of the nametag"), // 3-0
-                        new SettingToggle("Name", true).withDesc("Shows the name of the logged out player"), // 3-1
-                        new SettingToggle("Time", true).withDesc("Shows the time since the player logged out"), // 3-2
-                        new SettingMode("Health", "Number", "Bar", "Percent", "None").withDesc("How to show the health"), // 3-3
-                        new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor")), // 3-4
-                new SettingToggle("Glowing", true).withDesc("Whether logged out players should be glowing")); // 4
-    }
+	private final HashMap<UUID, Pair<PlayerCopyEntity, Long>> players = new HashMap<>();
 
-    @Override
-    public void onDisable() {
-        clearHash();
-        super.onDisable();
-    }
+	public LogoutSpot() {
+		super("LogoutSpot", KEY_UNBOUND, Category.WORLD, "Shows where a player logged out",
+				new SettingToggle("Remove", true).withDesc("Removes logout spots").withChildren( // 1
+						new SettingToggle("Distance", false).withDesc("Remove logout spots based on distance").withChildren( // 0-0
+								new SettingSlider("Radius", 1, 1000, 200, 0).withDesc("Radius in which logout spots get shown")), // 0-0-0
+						new SettingToggle("Time", false).withDesc("Remove logout spots based on time since logout").withChildren( // 0-1
+								new SettingSlider("Duration", 1, 1800, 120, 0).withDesc("Duration after which a logged out players gets removed (in seconds)")), // 0-1-0
+						new SettingToggle("Disconnect", true).withDesc("Removes all logout spots when disconnecting"), // 0-2
+						new SettingToggle("Disable", true).withDesc("Removes all logout spots when disabling LogoutSpot")), // 0-3
+				new SettingToggle("Text", true).withDesc("Adds text next to players").withChildren( // 1
+						new SettingToggle("Name", true).withDesc("Shows the name of the logged player"), // 1-0
+						new SettingToggle("Coords", false).withDesc("Shows the coords of the logged player"), // 1-1
+						new SettingToggle("Health", true).withDesc("Shows the health of the logged player"), // 1-2
+						new SettingToggle("Time", true).withDesc("Shows the time ago the player logged"))); // 1-3
+	}
 
-    @Subscribe
-    public void readPacket(EventReadPacket event) {
-        if (!(event.getPacket() instanceof PlayerListS2CPacket) || mc.world == null) {
-            return;
-        }
+	@Override
+	public void onDisable() {
+		if (mc.world != null) {
+			players.values().forEach(e -> e.getKey().despawn());
+		}
 
-        PlayerListS2CPacket list = (PlayerListS2CPacket) event.getPacket();
+		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(3).asToggle().state) {
+			players.clear();
+		}
 
-        // Spawns fake player when player leaves
-        if (list.getAction().equals(PlayerListS2CPacket.Action.REMOVE_PLAYER)) {
-            for (PlayerListS2CPacket.Entry entry : list.getEntries()) {
-                PlayerEntity player = mc.world.getPlayerByUuid(entry.getProfile().getId());
+		super.onDisable();
+	}
 
-                if (player != null && !mc.player.equals(player)) {
-                    players.put(player, new AbstractMap.SimpleEntry<>(spawnDummy(player), System.currentTimeMillis()));
-                }
-            }
-        }
+	@Override
+	public void onEnable() {
+		super.onEnable();
 
-        // Removes fake player when player joins
-        if (list.getAction().equals(PlayerListS2CPacket.Action.ADD_PLAYER)) {
-            for (PlayerListS2CPacket.Entry entry : list.getEntries()) {
-                PlayerEntity playerEntity = mc.world.getPlayerByUuid(entry.getProfile().getId());
+		if (mc.world != null) {
+			players.values().forEach(e -> e.getKey().spawn());
+		}
+	}
 
-                if (playerEntity != null && !mc.player.equals(playerEntity)) {
-                    players.keySet().removeIf(player -> {
-                            players.get(player).getKey().despawn();
-                            return true;
-                    });
-                }
-            }
-        }
-    }
+	@Subscribe
+	public void onReadPacket(EventReadPacket event) {
+		if (!(event.getPacket() instanceof PlayerListS2CPacket) || mc.world == null) {
+			return;
+		}
 
-    // Removes the fake players based on settings
-    @Subscribe
-    public void onTick(EventTick event) {
-        if (getSetting(0).asToggle().state) {
-            players.keySet().removeIf(player -> {
-                if (mc.player.distanceTo(players.get(player).getKey()) > getSetting(0).asToggle().getChild(0).asSlider().getValueInt()) {
-                    players.get(player).getKey().despawn();
-                    return true;
-                }
-                return false;
-            });
-        }
+		PlayerListS2CPacket list = (PlayerListS2CPacket) event.getPacket();
 
-        if (getSetting(1).asToggle().state) {
-            players.keySet().removeIf(player -> {
-                if ((System.currentTimeMillis() - players.get(player).getValue()) / 1000 > getSetting(1).asToggle().getChild(0).asSlider().getValueInt()) {
-                    players.get(player).getKey().despawn();
-                    return true;
-                }
-                return false;
-            });
-        }
-    }
+		// Spawns fake player when player leaves
+		if (list.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
+			for (PlayerListS2CPacket.Entry entry : list.getEntries()) {
+				PlayerEntity player = mc.world.getPlayerByUuid(entry.getProfile().getId());
 
-    private PlayerCopyEntity spawnDummy(PlayerEntity player) {
-        PlayerCopyEntity dummy = new PlayerCopyEntity(player);
-        dummy.spawn();
-        return dummy;
-    }
+				if (player != null && !mc.player.equals(player)) {
+					Pair<PlayerCopyEntity, Long> fakePlayer = Pair.of(spawnDummy(player), System.currentTimeMillis());
+					BleachQueue.add("logoutspot", () -> players.put(player.getUuid(), fakePlayer));
+				}
+			}
+		}
 
-    // Ran from MixinClientConnection when leaving world and onDisable()
-    public void clearHash() {
-        if (getSetting(2).asToggle().state) {
-            players.values().stream().forEach(e -> {
-                if (mc.world != null) {
-                    e.getKey().despawn();
-                }
-                players.remove(e);
-            });
-        }
-    }
+		// Removes fake player when player joins
+		if (list.getAction().equals(PlayerListS2CPacket.Action.ADD_PLAYER)) {
+			for (PlayerListS2CPacket.Entry entry : list.getEntries()) {
+				Pair<PlayerCopyEntity, Long> fakePlayer = players.remove(entry.getProfile().getId());
 
-    // Disables minecraft's nametags if setting is enabled
-    @Subscribe
-    public void onLivingLabelRender(EventEntityRender.Single.Label event) {
-        if (!getSetting(3).asToggle().state) {
-            return;
-        }
+				if (fakePlayer != null && mc.world != null) {
+					BleachQueue.add("logoutspot", () -> fakePlayer.getLeft().despawn());
+				}
+			}
+		}
+	}
 
-        players.values().stream().forEach(entry -> {
-            if (entry != null && entry.getKey().getUuid().equals(event.getEntity().getUuid()))
-                event.setCancelled(true);
-        });
-    }
+	// Removes the fake players based on settings
+	@Subscribe
+	public void onTick(EventTick event) {
+		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(0).asToggle().state) {
+			players.keySet().removeIf(player -> {
+				if (mc.player.distanceTo(players.get(player).getKey())
+						> getSetting(0).asToggle().getChild(0).asToggle().getChild(0).asSlider().getValue()) {
+					players.get(player).getKey().despawn();
+					return true;
+				}
 
-    // Everything after this is basically just modified code from Nametags.java. It is used for nametags omg
-    @Subscribe
-    public void onLivingRender(EventEntityRender.Single.Post event) {
-        SettingToggle nametagSetting = getSetting(3).asToggle();
-        AtomicBoolean shouldRender = new AtomicBoolean(false);
-        AtomicLong spawnMillis = new AtomicLong(-1);
-        players.values().forEach(entry -> {
-            if (entry != null && entry.getKey().getUuid().equals(event.getEntity().getUuid())) {
-                shouldRender.set(true);
-                spawnMillis.set(entry.getValue());
-            }
-        });
+				return false;
+			});
+		}
 
-        if (shouldRender.get()) {
-            event.getEntity().setGlowing(getSetting(4).asToggle().state);
-        }
+		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(1).asToggle().state) {
+			players.keySet().removeIf(player -> {
+				if ((System.currentTimeMillis() - players.get(player).getValue()) / 1000L
+						> getSetting(0).asToggle().getChild(1).asToggle().getChild(0).asSlider().getValueLong()) {
+					players.get(player).getKey().despawn();
+					return true;
+				}
 
-        if (!nametagSetting.state || !shouldRender.get()) {
-            return;
-        }
+				return false;
+			});
+		}
+	}
 
-        PlayerCopyEntity e = (PlayerCopyEntity) event.getEntity();
+	@Subscribe
+	public void onPostEntityRender(EventEntityRender.PostAll event) {
+		for (Pair<PlayerCopyEntity, Long> playerPair: players.values()) {
+			if (getSetting(1).asToggle().state) {
+				PlayerCopyEntity player = playerPair.getLeft();
 
-        List<String> lines = new ArrayList<>();
-        double scale;
+				Vec3d rVec = new Vec3d(player.lastRenderX + (player.getX() - player.lastRenderX) * mc.getTickDelta(),
+						player.lastRenderY + (player.getY() - player.lastRenderY) * mc.getTickDelta() + player.getHeight(),
+						player.lastRenderZ + (player.getZ() - player.lastRenderZ) * mc.getTickDelta());
 
-        Vec3d rPos = getRenderPos(event.getEntity());
+				Vec3d offset = new Vec3d(0, 0, 0.45 + mc.textRenderer.getWidth(player.getDisplayName().getString()) / 90d)
+						.rotateY((float) -Math.toRadians(mc.player.yaw + 90));
 
-        scale = Math.max(nametagSetting.getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(e) / 20), 1);
+				List<String> lines = new ArrayList<>();
+				lines.add("\u00a74Logout:");
 
-        if (nametagSetting.getChild(2).asToggle().state) {
-            lines.add((System.currentTimeMillis() - spawnMillis.longValue()) / 1000 + "s");
-        }
+				if (getSetting(1).asToggle().getChild(0).asToggle().state)
+					lines.add("\u00a7c" + player.getDisplayName().getString());
 
-        addNameHealthLine(lines, event.getEntity(), BleachHack.friendMang.has(event.getEntity().getName().getString()) ? Formatting.AQUA : Formatting.RED,
-                nametagSetting.getChild(1).asToggle().state,
-                nametagSetting.getChild(3).asMode().mode != 3);
+				if (getSetting(1).asToggle().getChild(1).asToggle().state)
+					lines.add("\u00a7c" + (int) player.getX() + " " + (int) player.getY() + " " + (int) player.getZ());
+				
+				if (getSetting(1).asToggle().getChild(2).asToggle().state)
+					lines.add("\u00a7c" + (int) Math.ceil(player.getHealth() + player.getAbsorptionAmount()) + "hp");
 
+				if (getSetting(1).asToggle().getChild(3).asToggle().state)
+					lines.add("\u00a7c" + getTimeElapsed(playerPair.getRight()));
 
-        /* Drawing Items */
-        double c = 0;
-        double lscale = scale * 0.4;
-        double up = ((0.3 + lines.size() * 0.25) * scale) + lscale / 2;
+				for (int i = 0; i < lines.size(); i++) {
+					WorldRenderUtils.drawText(lines.get(i), rVec.x + offset.x, rVec.y + 0.1 - i * 0.25, rVec.z + offset.z, 1f);
+				}
+			}
+		}
+	}
 
-        if (nametagSetting.getChild(4).asMode().mode == 0) {
-            drawItem(rPos.x, rPos.y + up, rPos.z, -2.5, 0, lscale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-            drawItem(rPos.x, rPos.y + up, rPos.z, 2.5, 0, lscale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+	@Subscribe
+	public void onOpenScreen(EventOpenScreen event) {
+		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(2).asToggle().state
+				&& event.getScreen() instanceof DisconnectedScreen) {
+			players.clear();
+		}
+	}
 
-            for (ItemStack i : e.getArmorItems()) {
-                drawItem(rPos.x, rPos.y + up, rPos.z, c + 1.5, 0, lscale, i);
-                c--;
-            }
-        } else if (nametagSetting.getChild(4).asMode().mode == 1) {
-            drawItem(rPos.x, rPos.y + up, rPos.z, -1.25, 0, lscale, e.getEquippedStack(EquipmentSlot.MAINHAND));
-            drawItem(rPos.x, rPos.y + up, rPos.z, 1.25, 0, lscale, e.getEquippedStack(EquipmentSlot.OFFHAND));
+	private PlayerCopyEntity spawnDummy(PlayerEntity player) {
+		PlayerCopyEntity dummy = new PlayerCopyEntity(player);
+		dummy.spawn();
 
-            for (ItemStack i : e.getArmorItems()) {
-                drawItem(rPos.x, rPos.y + up, rPos.z, 0, c, lscale, i);
-                c++;
-            }
-        }
+		return dummy;
+	}
 
-        if (!lines.isEmpty()) {
-            float offset = 0.25f + lines.size() * 0.25f;
+	private String getTimeElapsed(long time) {
+		long timeDiff = (System.currentTimeMillis() - time) / 1000L;
 
-            for (String s : lines) {
-                WorldRenderUtils.drawText(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
+		if (timeDiff < 60L) {
+			return String.format("%ds", timeDiff);
+		}
 
-                offset -= 0.25f;
-            }
-        }
-    }
+		if (timeDiff < 3600L) {
+			return String.format("%dm %ds", timeDiff / 60L, timeDiff % 60L);
+		}
 
-    private String getHealthText(Entity entity) {
-        PlayerEntity e = (PlayerEntity) entity;
-        SettingToggle nametagSetting = getSetting(3).asToggle();
-        if (nametagSetting.getChild(3).asMode().mode == 0) {
-            return Formatting.GREEN + "[" + getHealthColor(e) + (int) (e.getHealth() + e.getAbsorptionAmount()) + Formatting.GREEN + "/" + (int) e.getMaxHealth() + "]";
-        } else if (nametagSetting.getChild(3).asMode().mode == 1) {
-            /* Health bar */
-            String health = "";
-            /* - Add Green Normal Health */
-            for (int i = 0; i < e.getHealth(); i++)
-                health += Formatting.GREEN + "|";
-            /* - Add Red Empty Health (Remove Based on absorption amount) */
-            for (int i = 0; i < MathHelper.clamp(e.getAbsorptionAmount(), 0, e.getMaxHealth() - e.getHealth()); i++)
-                health += Formatting.YELLOW + "|";
-            /* Add Yellow Absorption Health */
-            for (int i = 0; i < e.getMaxHealth() - (e.getHealth() + e.getAbsorptionAmount()); i++)
-                health += Formatting.RED + "|";
-            /* Add "+??" to the end if the entity has extra hearts */
-            if (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()) > 0) {
-                health += Formatting.YELLOW + " +" + (int) (e.getAbsorptionAmount() - (e.getMaxHealth() - e.getHealth()));
-            }
+		if (timeDiff < 86400L) {
+			return String.format("%dh %dm", timeDiff / 3600L, timeDiff / 60L % 60L);
+		}
 
-            return health;
-        } else {
-            return getHealthColor(e) + "[" + (int) ((e.getHealth() + e.getAbsorptionAmount()) / e.getMaxHealth() * 100) + "%]";
-        }
-    }
-
-    private void addNameHealthLine(List<String> lines, Entity entity, Formatting color, boolean addName, boolean addHealth) {
-        if (getSetting(3).asToggle().getChild(3).asMode().mode == 1) {
-            if (addName) {
-                lines.add(color + entity.getName().getString());
-            }
-
-            if (addHealth) {
-                lines.add(0, getHealthText(entity));
-            }
-        } else if (addName || addHealth) {
-            lines.add((addName ? color + entity.getName().getString() + (addHealth ? " " : "") : "") + (addHealth ? getHealthText(entity) : ""));
-        }
-    }
-
-    private Formatting getHealthColor(LivingEntity entity) {
-        if (entity.getHealth() + entity.getAbsorptionAmount() > entity.getMaxHealth()) {
-            return Formatting.YELLOW;
-        } else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.7) {
-            return Formatting.GREEN;
-        } else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.4) {
-            return Formatting.GOLD;
-        } else if (entity.getHealth() + entity.getAbsorptionAmount() >= entity.getMaxHealth() * 0.1) {
-            return Formatting.RED;
-        } else {
-            return Formatting.DARK_RED;
-        }
-    }
-
-    private void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
-        MatrixStack matrix = WorldRenderUtils.drawGuiItem(x, y, z, offX, offY, scale, item);
-
-        matrix.scale(-0.05F, -0.05F, 0.05f);
-
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthFunc(GL11.GL_ALWAYS);
-
-        if (!item.isEmpty()) {
-            int w = mc.textRenderer.getWidth("x" + item.getCount()) / 2;
-            mc.textRenderer.draw("x" + item.getCount(), 7 - w, 3, 0xffffff, true, matrix.peek().getModel(),
-                    mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
-        }
-
-        matrix.scale(0.85F, 0.85F, 1F);
-
-        int c = 0;
-        for (Map.Entry<Enchantment, Integer> m : EnchantmentHelper.get(item).entrySet()) {
-            String text = I18n.translate(m.getKey().getName(2).getString());
-
-            if (text.isEmpty())
-                continue;
-
-            String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
-
-            int w1 = mc.textRenderer.getWidth(subText) / 2;
-            mc.textRenderer.draw(subText, -2 - w1, c * 10 - 19,
-                    m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0,
-                    true, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
-            c--;
-        }
-
-        RenderSystem.depthFunc(GL11.GL_LEQUAL);
-        RenderSystem.disableDepthTest();
-
-        RenderSystem.disableBlend();
-    }
-
-    private Vec3d getRenderPos(Entity e) {
-        return mc.currentScreen != null && mc.currentScreen.isPauseScreen() ? e.getPos().add(0, e.getHeight(), 0)
-                : new Vec3d(
-                e.lastRenderX + (e.getX() - e.lastRenderX) * mc.getTickDelta(),
-                (e.lastRenderY + (e.getY() - e.lastRenderY) * mc.getTickDelta()) + e.getHeight(),
-                e.lastRenderZ + (e.getZ() - e.lastRenderZ) * mc.getTickDelta());
-    }
-
+		return String.format("%dd %dh", timeDiff / 86400L, timeDiff / 3600L % 24L);
+	}
 }

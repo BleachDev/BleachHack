@@ -28,7 +28,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import bleach.hack.util.world.PlayerCopyEntity;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.eventbus.Subscribe;
@@ -163,11 +162,6 @@ public class Nametags extends Module {
 		double scale = 0;
 
 		Vec3d rPos = getRenderPos(event.getEntity());
-
-		// Otherways makes LogoutSpot look bad
-		if (event.getEntity() instanceof PlayerCopyEntity) {
-			return;
-		}
 
 		if (event.getEntity() instanceof ItemEntity && getSetting(5).asToggle().state) {
 			ItemEntity e = (ItemEntity) event.getEntity();
@@ -327,8 +321,7 @@ public class Nametags extends Module {
 	}
 
 	private Vec3d getRenderPos(Entity e) {
-		return mc.currentScreen != null && mc.currentScreen.isPauseScreen() ? e.getPos().add(0, e.getHeight(), 0)
-				: new Vec3d(
+		return new Vec3d(
 				e.lastRenderX + (e.getX() - e.lastRenderX) * mc.getTickDelta(),
 				(e.lastRenderY + (e.getY() - e.lastRenderY) * mc.getTickDelta()) + e.getHeight(),
 				e.lastRenderZ + (e.getZ() - e.lastRenderZ) * mc.getTickDelta());

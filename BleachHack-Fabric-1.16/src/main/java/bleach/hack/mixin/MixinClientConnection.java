@@ -8,8 +8,6 @@
  */
 package bleach.hack.mixin;
 
-import bleach.hack.module.mods.LogoutSpot;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -82,10 +80,5 @@ public class MixinClientConnection {
 				callback.cancel();
 			}
 		}
-	}
-
-	@Inject(method = "disconnect", at = @At("HEAD"), cancellable = true)
-	public void disconnect (Text disconnectReason, CallbackInfo callback) {
-		((LogoutSpot)ModuleManager.getModule("LogoutSpot")).clearHash();
 	}
 }

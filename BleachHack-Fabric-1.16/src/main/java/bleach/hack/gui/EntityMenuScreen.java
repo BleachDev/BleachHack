@@ -56,8 +56,8 @@ public class EntityMenuScreen extends Screen {
 	}
 
 	private void cursorMode(int mode) {
-		double x = this.client.getWindow().getWidth() / 2;
-		double y = this.client.getWindow().getHeight() / 2;
+		double x = this.client.getWindow().getWidth() / 2d;
+		double y = this.client.getWindow().getHeight() / 2d;
 
 		KeyBinding.unpressAll();
 		InputUtil.setCursorParameters(this.client.getWindow().getHandle(), GLFW.GLFW_CURSOR_HIDDEN, x, y);

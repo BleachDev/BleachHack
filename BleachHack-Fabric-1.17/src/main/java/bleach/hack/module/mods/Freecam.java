@@ -56,7 +56,6 @@ public class Freecam extends Module {
 		playerRot = new float[] { mc.player.yaw, mc.player.pitch };
 
 		dummy = new PlayerCopyEntity(mc.player);
-		dummy.setBoundingBox(dummy.getBoundingBox().expand(0.1));
 
 		dummy.spawn();
 
