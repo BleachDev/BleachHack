@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
@@ -73,7 +74,7 @@ public class Notebot extends Module {
 			setEnabled(false);
 			return;
 		} else if (filePath.isEmpty()) {
-			BleachLogger.errorMessage("No File Loaded!, Use .notebot load [File]");
+			BleachLogger.errorMessage("No Song Loaded!, Use " + Command.PREFIX + "notebot to select a song.");
 			setEnabled(false);
 			return;
 		} else {
@@ -119,7 +120,7 @@ public class Notebot extends Module {
 	public void onRender(EventWorldRender.Post event) {
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
-				RenderUtils.drawBoxBoth(e.getKey(), QuadColor.single(1F, 0F, 0F, 0.8F), 2.5f);
+				RenderUtils.drawBoxBoth(e.getKey(), QuadColor.single(1F, 0F, 0F, 0.4F), 2.5f);
 			} else {
 				RenderUtils.drawBoxBoth(e.getKey(), QuadColor.single(0F, 1F, 0F, 0.4F), 2.5f);
 			}
