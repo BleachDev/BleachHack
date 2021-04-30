@@ -8,7 +8,6 @@
  */
 package bleach.hack.module.mods;
 
-import java.awt.Color;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -170,8 +169,12 @@ public class UI extends Module {
 						e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
 						+ " (" + dist + "m)";
 
-				mc.textRenderer.drawWithShadow(event.matrix, text, 2, 4 + arrayCount * 10,
-						new Color(255 - Math.min(dist * 3, 255), Math.min(dist * 3, 255), 0).brighter().getRGB());
+				int playerColor =
+						0xff000000 |
+						((255 - (int) Math.min(dist * 2.1, 255) & 0xFF) << 16) |
+						(((int) Math.min(dist * 4.28, 255) & 0xFF) << 8);
+
+				mc.textRenderer.drawWithShadow(event.matrix, text, 2, 4 + arrayCount * 10, playerColor);
 				arrayCount++;
 			}
 		}

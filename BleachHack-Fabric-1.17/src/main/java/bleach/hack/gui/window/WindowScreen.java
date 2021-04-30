@@ -8,7 +8,6 @@
  */
 package bleach.hack.gui.window;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -180,11 +179,6 @@ public abstract class WindowScreen extends Screen {
 	}
 
 	public void renderBackgroundTexture(int vOffset) {
-		Color colorTL = new Color(100, 120, 0);
-		Color colorTR = new Color(70, 120, 20);
-		Color colorBL = new Color(60, 160, 0);
-		Color colorBR = new Color(60, 200, 60);
-
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
@@ -193,10 +187,10 @@ public abstract class WindowScreen extends Screen {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		bufferBuilder.vertex(width, 0, 0).color(colorTR.getRed(), colorTR.getBlue(), colorTR.getGreen(), 255).next();
-		bufferBuilder.vertex(0, 0, 0).color(colorTL.getRed(), colorTL.getBlue(), colorTL.getGreen(), 255).next();
-		bufferBuilder.vertex(0, height + 14, 0).color(colorBL.getRed(), colorBL.getBlue(), colorBL.getGreen(), 255).next();
-		bufferBuilder.vertex(width, height + 14, 0).color(colorBR.getRed(), colorBR.getBlue(), colorBR.getGreen(), 255).next();
+		bufferBuilder.vertex(width, 0, 0).color(70, 20, 120, 255).next();
+		bufferBuilder.vertex(0, 0, 0).color(100, 0, 120, 255).next();
+		bufferBuilder.vertex(0, height + 14, 0).color(60, 0, 160, 255).next();
+		bufferBuilder.vertex(width, height + 14, 0).color(60, 60, 200, 255).next();
 		tessellator.draw();
 
 		RenderSystem.disableBlend();
