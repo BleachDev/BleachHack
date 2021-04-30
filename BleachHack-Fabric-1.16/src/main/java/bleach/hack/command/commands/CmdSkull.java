@@ -29,7 +29,8 @@ import net.minecraft.nbt.StringNbtReader;
 public class CmdSkull extends Command {
 
 	public CmdSkull() {
-		super("skull", "Gives you a player skull.", "skull <player> | skull img <image url>", CommandCategory.CREATIVE);
+		super("skull", "Gives you a player skull.", "skull <player> | skull img <image url>", CommandCategory.CREATIVE,
+				"playerhead", "head");
 	}
 
 	@Override

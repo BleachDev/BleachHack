@@ -8,6 +8,8 @@
  */
 package bleach.hack.command.commands;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.command.Command;
@@ -20,23 +22,33 @@ import bleach.hack.util.file.BleachFileHelper;
 public class CmdRpc extends Command {
 
 	public CmdRpc() {
-		super("rpc", "Sets custom discord rpc text.", "rpc <top text> <bottom text>", CommandCategory.MODULES,
+		super("rpc", "Sets custom discord rpc text.", "rpc <top/bottom> <text>", CommandCategory.MODULES,
 				"discordrpc");
 	}
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		if (args.length != 2) {
+		if (args.length < 2) {
 			printSyntaxError();
 			return;
 		}
 
-		((DiscordRPCMod) ModuleManager.getModule("DiscordRPC")).setText(args[0], args[1]);
+		DiscordRPCMod rpc = (DiscordRPCMod) ModuleManager.getModule("DiscordRPC");
+		String text = StringUtils.join(args, ' ', 1, args.length);
+		
+		if (args[0].equalsIgnoreCase("top")) {
+			rpc.setTopText(text);
 
-		BleachLogger.infoMessage("Set RPC to " + args[0] + ", " + args[1]);
+			BleachLogger.infoMessage("Set top RPC text to \"" + text + "\"");
+			BleachFileHelper.saveMiscSetting("discordRPCTopText", new JsonPrimitive(args[0]));
+		} else if (args[0].equalsIgnoreCase("bottom")) {
+			rpc.setBottomText(text);
 
-		BleachFileHelper.saveMiscSetting("discordRPCTopText", new JsonPrimitive(args[0]));
-		BleachFileHelper.saveMiscSetting("discordRPCBottomText", new JsonPrimitive(args[1]));
+			BleachLogger.infoMessage("Set bottom RPC text to \"" + text + "\"");
+			BleachFileHelper.saveMiscSetting("discordRPCBottomText", new JsonPrimitive(args[1]));
+		} else {
+			printSyntaxError();
+		}
 	}
 
 }

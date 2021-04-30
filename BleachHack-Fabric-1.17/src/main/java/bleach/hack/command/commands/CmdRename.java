@@ -8,6 +8,8 @@
  */
 package bleach.hack.command.commands;
 
+import org.apache.commons.lang3.StringUtils;
+
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
@@ -29,11 +31,7 @@ public class CmdRename extends Command {
 
 		ItemStack i = mc.player.getInventory().getMainHandStack();
 
-		String name = "";
-		for (int j = 0; j < args.length; j++)
-			name += args[j] += " ";
-
-		i.setCustomName(new LiteralText(name.replace("&", "\u00a7").replace("\u00a7\u00a7", "&")));
+		i.setCustomName(new LiteralText(StringUtils.join(args).replace("&", "\u00a7").replace("\u00a7\u00a7", "&")));
 		BleachLogger.infoMessage("Renamed Item");
 	}
 

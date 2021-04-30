@@ -162,8 +162,11 @@ public class DiscordRPCMod extends Module {
 		tick++;
 	}
 
-	public void setText(String t1, String t2) {
-		customText1 = t1;
-		customText2 = t2;
+	public void setTopText(String text) {
+		customText1 = text;
+	}
+
+	public void setBottomText(String text) {
+		customText2 = text;
 	}
 }
