@@ -8,12 +8,15 @@
  */
 package bleach.hack.util.render;
 
-import org.lwjgl.opengl.GL11;
+import java.lang.reflect.Field;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -25,6 +28,7 @@ import net.minecraft.util.math.Vec3f;
 public class WorldRenderUtils {
 
 	private static final MinecraftClient mc = MinecraftClient.getInstance();
+	private static Field shaderLightField;
 
 	/**
 	 * Draws a Text string in the world.
@@ -79,27 +83,22 @@ public class WorldRenderUtils {
 
 		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f));
 
-		mc.getBufferBuilders().getEntityVertexConsumers().draw();
+		//mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-
-		RenderSystem.enableDepthTest();
-		RenderSystem.depthFunc(GL11.GL_ALWAYS);
-
-		//DiffuseLighting.disableGuiDepthLighting();
+		
+		Vec3f[] currentLight = getCurrentLight();
+		DiffuseLighting.disableGuiDepthLighting();
 
 		mc.getBufferBuilders().getOutlineVertexConsumers().setColor(255, 255, 255, 255);
+
 		mc.getItemRenderer().renderItem(item, ModelTransformation.Mode.GUI, 0xF000F0,
-				OverlayTexture.DEFAULT_UV, matrix, mc.getBufferBuilders().getOutlineVertexConsumers() /* yeah fuck sure */, 0);
+				OverlayTexture.DEFAULT_UV, matrix, mc.getBufferBuilders().getOutlineVertexConsumers(), 0);
 
-		mc.getBufferBuilders().getEntityVertexConsumers().draw();
+		mc.getBufferBuilders().getOutlineVertexConsumers().draw();
 
-		//DiffuseLighting.enableGuiDepthLighting();
-
-		RenderSystem.depthFunc(GL11.GL_LEQUAL);
-		RenderSystem.disableDepthTest();
-
+		RenderSystem.setShaderLights(currentLight[0], currentLight[1]);
 		RenderSystem.disableBlend();
 
 		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-180f));
@@ -117,5 +116,17 @@ public class WorldRenderUtils {
 		matrix.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
 		return matrix;
+	}
+	
+	public static Vec3f[] getCurrentLight() {
+		if (shaderLightField == null) {
+			shaderLightField = FieldUtils.getField(RenderSystem.class, "shaderLightDirections", true);
+		}
+		
+		try {
+			return (Vec3f[]) shaderLightField.get(null);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
