@@ -13,6 +13,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
@@ -24,16 +25,33 @@ import net.minecraft.util.math.Direction;
 
 public class AutoTotem extends Module {
 
+	private int delay;
+	private boolean holdingTotem;
+
 	public AutoTotem() {
 		super("AutoTotem", KEY_UNBOUND, Category.COMBAT, "Automatically equips totems.",
-				new SettingToggle("Override", false).withDesc("Equips a totem even if theres another item in the offhand"));
+				new SettingToggle("Override", false).withDesc("Equips a totem even if theres another item in the offhand"),
+				new SettingSlider("Delay", 0, 10, 0, 0).withDesc("Minimum delay between equipping totems (in ticks)"),
+				new SettingSlider("PopDelay", 0, 10, 0, 0).withDesc("How long to wait after popping to equip a new totem (in ticks)"));
 	}
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING
-				|| (!mc.player.getOffHandStack().isEmpty() && !getSetting(0).asToggle().state))
+		if (holdingTotem && mc.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING) {
+			delay = Math.max(getSetting(2).asSlider().getValueInt(), delay);
+		}
+
+		holdingTotem = mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING;
+
+		if (delay > 0) {
+			delay--;
+			System.out.println("da baby " + delay);
 			return;
+		}
+
+		if (holdingTotem || (!mc.player.getOffHandStack().isEmpty() && !getSetting(0).asToggle().state)) {
+			return;
+		}
 
 		// Cancel at all non-survival-inventory containers
 		if (mc.player.playerScreenHandler == mc.player.currentScreenHandler) {
@@ -46,6 +64,7 @@ public class AutoTotem extends Module {
 					if (itemInOffhand)
 						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, i, 0, SlotActionType.PICKUP, mc.player);
 
+					delay = getSetting(1).asSlider().getValueInt();
 					return;
 				}
 			}
@@ -59,6 +78,7 @@ public class AutoTotem extends Module {
 					}
 
 					mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.DOWN));
+					delay = getSetting(1).asSlider().getValueInt();
 					return;
 				}
 			}
