@@ -27,6 +27,7 @@ import bleach.hack.epearledition.utils.InvUtils;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.BedItem;
+import net.minecraft.item.Items;
 import net.minecraft.item.SnowballItem;
 import net.minecraft.screen.slot.SlotActionType;
 
@@ -36,7 +37,7 @@ public class BedReplenish extends Module {
         super("BedReplenish", KEY_UNBOUND, Category.COMBAT, "Automatically equips beds.",
                 new SettingToggle("Override", true).withDesc("Equips a bed even if theres another item in the offhand"),
                 new SettingSlider("Slot: ", 0, 8, 8, 0),
-                new SettingMode("Item: ", "Bed", "Snowball"));
+                new SettingMode("Item: ", "Bed", "Snowball", "Packed Ice"));
     }
     //NO WAY EPEARL WROTE OUT EVERY BED COLOR :BRUH:
     @Subscribe
@@ -54,12 +55,24 @@ public class BedReplenish extends Module {
                     }
                 }
             }
-        } else {
+        } else if (getSetting(2).asMode().mode == 1) {
             if (mc.player.inventory.getStack(slot).getItem() instanceof SnowballItem)
                 return;
             if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
                 for (int i = 9; i < 45; i++) {
                     if (mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() instanceof SnowballItem)
+                    {
+                        moveItems(i, slot, false);
+                        return;
+                    }
+                }
+            }
+        } else if (getSetting(2).asMode().mode == 2) {
+            if (mc.player.inventory.getStack(slot).getItem() == Items.PACKED_ICE)
+                return;
+            if (mc.currentScreen instanceof InventoryScreen || mc.currentScreen == null) {
+                for (int i = 9; i < 45; i++) {
+                    if (mc.player.inventory.getStack(i >= 36 ? i - 36 : i).getItem() == Items.PACKED_ICE)
                     {
                         moveItems(i, slot, false);
                         return;

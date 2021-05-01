@@ -13,7 +13,7 @@ import bleach.hack.epearledition.module.Category;
 import bleach.hack.epearledition.module.Module;
 import bleach.hack.epearledition.setting.base.SettingMode;
 import bleach.hack.epearledition.setting.base.SettingSlider;
-import bleach.hack.epearledition.util.FabricReflect;
+import bleach.hack.epearledition.utils.FabricReflect;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
@@ -55,7 +55,7 @@ public class EcmeElytraFly extends Module {
 
 		double currentVel = Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().y) + Math.abs(mc.player.getVelocity().z);
 		float radianYaw = (float) Math.toRadians(mc.player.yaw);
-		float boost = getSetting(1).asSlider().getValueFloat();
+		float boost = (float) getSetting(1).asSlider().getValue();
 
 		switch (getSetting(0).asMode().mode) {
 			case 0:

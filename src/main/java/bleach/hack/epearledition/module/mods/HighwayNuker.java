@@ -334,12 +334,12 @@ public class HighwayNuker extends Module {
 					break;
 				case South:
 					for (int i = 0; i < 7; ++i) {
-						cubeBlocks.add(playerPos.south());
-						cubeBlocks.add(playerPos.south().up());
-						cubeBlocks.add(playerPos.south().up().up());
-						cubeBlocks.add(playerPos.south().west());
-						cubeBlocks.add(playerPos.south().west().up());
-						cubeBlocks.add(playerPos.south().west().up().up());
+						cubeBlocks.add(playerPos.south().down());
+						cubeBlocks.add(playerPos.south().down().up());
+						cubeBlocks.add(playerPos.south().down().up().up());
+						cubeBlocks.add(playerPos.south().down().west());
+						cubeBlocks.add(playerPos.south().down().west().up());
+						cubeBlocks.add(playerPos.south().down().west().up().up());
 						playerPos = new BlockPos(playerPos).south();
 					}
 					break;
