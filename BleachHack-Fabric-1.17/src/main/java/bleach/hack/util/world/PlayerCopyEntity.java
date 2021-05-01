@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class PlayerCopyEntity extends OtherClientPlayerEntity {
@@ -26,16 +27,23 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 
 	public PlayerCopyEntity(PlayerEntity player, double x, double y, double z) {
 		super(MinecraftClient.getInstance().world, player.getGameProfile());
-		
+
 		updateTrackedPosition(player.getX(), player.getY(), player.getZ());
 		refreshPositionAfterTeleport(player.getX(), player.getY(), player.getZ());
 		pitch = player.pitch;
 		yaw = headYaw = bodyYaw = player.yaw;
-		
+
 		// Cache the player textures, then switch to a random uuid
 		// because the world doesn't allow duplicate uuids in 1.17+
 		getPlayerListEntry();
 		setUuid(UUID.randomUUID());
+
+		setHealth(player.getHealth());
+		setAbsorptionAmount(player.getAbsorptionAmount());
+
+		for (StatusEffectInstance effect: player.getStatusEffects()) {
+			addStatusEffect(effect);
+		}
 
 		getInventory().main.set(getInventory().selectedSlot, player.getMainHandStack());
 		getInventory().offHand.set(0, player.getOffHandStack());
