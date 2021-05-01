@@ -45,7 +45,6 @@ public class AutoTotem extends Module {
 
 		if (delay > 0) {
 			delay--;
-			System.out.println("da baby " + delay);
 			return;
 		}
 
