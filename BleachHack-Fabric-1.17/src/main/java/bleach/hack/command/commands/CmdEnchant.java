@@ -25,7 +25,7 @@ import net.minecraft.util.registry.Registry;
 public class CmdEnchant extends Command {
 
 	public CmdEnchant() {
-		super("enchant", "Enchants an item", "enchant <enchant/id> <level> | enchant all <level> | enchant list", CommandCategory.CREATIVE);
+		super("enchant", "Enchants an item.", "enchant <enchant/id> <level> | enchant all <level> | enchant list", CommandCategory.CREATIVE);
 	}
 
 	@Override

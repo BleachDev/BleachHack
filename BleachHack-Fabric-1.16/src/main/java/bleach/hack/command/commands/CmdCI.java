@@ -17,7 +17,7 @@ import net.minecraft.world.GameMode;
 public class CmdCI extends Command {
 
 	public CmdCI() {
-		super("ci", "Clears your inventory", "ci", CommandCategory.CREATIVE,
+		super("ci", "Clears your inventory.", "ci", CommandCategory.CREATIVE,
 				"clear", "clearinv");
 	}
 

@@ -40,7 +40,7 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Hand;
 
-public class AutoDonkeyDupe extends Module {
+public class AutoIStackDupe extends Module {
 
 	private AbstractDonkeyEntity entity;
 	private List<Integer> slotsToMove = new ArrayList<>();
@@ -48,8 +48,8 @@ public class AutoDonkeyDupe extends Module {
 
 	private boolean firstFrameSneak = false;
 
-	public AutoDonkeyDupe() {
-		super("AutoDonkeyDupe", KEY_UNBOUND, Category.EXPLOITS, "Automatically does the mountbypass dupe (PRESS ESCAPE TO CANCEL)",
+	public AutoIStackDupe() {
+		super("AutoIStackDupe", KEY_UNBOUND, Category.EXPLOITS, "Automatically does the mountbypass dupe (PRESS ESCAPE TO CANCEL)",
 				new SettingSlider("Limit", 1, 15, 15, 0).withDesc("Max chests to dupe"),
 				new SettingMode("Mode", "Instant", "Single").withDesc("Whether to dupe all at once one chest per tick"),
 				new SettingToggle("Shulkers Only", true).withDesc("Only dupe shulkers"));

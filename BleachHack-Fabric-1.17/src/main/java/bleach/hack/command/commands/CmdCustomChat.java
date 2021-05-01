@@ -22,7 +22,7 @@ import bleach.hack.util.file.BleachFileHelper;
 public class CmdCustomChat extends Command {
 
 	public CmdCustomChat() {
-		super("customchat", "Changes customchat prefix and suffix", "customchat current | customchat reset | customchat prefix <prefix> | customchat suffix <suffix>", CommandCategory.MODULES);
+		super("customchat", "Changes customchat prefix and suffix.", "customchat current | customchat reset | customchat prefix <prefix> | customchat suffix <suffix>", CommandCategory.MODULES);
 	}
 
 	@Override

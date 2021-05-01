@@ -25,7 +25,7 @@ import net.minecraft.text.LiteralText;
 public class CmdDupe extends Command {
 
 	public CmdDupe() {
-		super("dupe", "Dupes items, (Vanilla mode patched on 1.14.4+)", "dupe <vanilla/book>", CommandCategory.MISC);
+		super("dupe", "Dupes items, (Old aka the 11/11 dupe is patched on 1.14.4+, Book mode works on all vanilla servers)", "dupe <old/book>", CommandCategory.MISC);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class CmdDupe extends Command {
 			return;
 		}
 
-		if (args[0].equalsIgnoreCase("vanilla")) {
+		if (args[0].equalsIgnoreCase("old")) {
 			mc.player.dropSelectedItem(true);
 			mc.player.networkHandler.getConnection().disconnect(new LiteralText("Duping..."));
 		} else if (args[0].equalsIgnoreCase("book")) {
