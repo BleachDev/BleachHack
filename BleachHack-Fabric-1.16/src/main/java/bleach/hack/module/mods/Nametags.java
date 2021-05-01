@@ -414,14 +414,14 @@ public class Nametags extends Module {
 
 		if (getSetting(1).asMode().mode == 2) {
 			if (addName) {
-				lines.add(new String(color + pingText + " " + nameText + " " + gmText).replaceAll("  *", " "));
+				lines.add(new String(color + pingText + " " + nameText + " " + gmText).trim().replaceAll("  *", " "));
 			}
 
 			if (addHealth) {
 				lines.add(0, getHealthText(player));
 			}
 		} else if (addName || addHealth || addPing || addGm) {
-			lines.add(new String(color + pingText + " " + nameText + " " + (addHealth ? getHealthText(player) : "") + " " + gmText).replaceAll("  *", " "));
+			lines.add(new String(color + pingText + " " + nameText + " " + (addHealth ? getHealthText(player) : "") + " " + gmText).trim().replaceAll("  *", " "));
 		}
 	}
 
