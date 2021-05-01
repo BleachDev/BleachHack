@@ -37,10 +37,6 @@ public class Flight extends Module {
 
 	@Override
 	public void onDisable() {
-		if (!mc.player.isCreative() && !mc.player.isSpectator()) {
-			mc.player.getAbilities().allowFlying = false;
-		}
-
 		mc.player.getAbilities().flying = false;
 		
 		super.onDisable();
