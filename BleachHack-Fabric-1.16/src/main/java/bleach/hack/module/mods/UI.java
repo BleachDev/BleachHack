@@ -117,38 +117,38 @@ public class UI extends Module {
 				lines.sort((a, b) -> Integer.compare(mc.textRenderer.getWidth(b), mc.textRenderer.getWidth(a)));
 			}
 
-			int extra = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
+			int inner = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
 			boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
 			boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
 			for (Text t : lines) {
 				int color = getRainbowFromSettings(arrayCount * 40);
 
 				if (fill) {
-					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, mc.textRenderer.getWidth(t) + 3 + extra, 10 + (arrayCount * 10), 0x70003030);
+					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, mc.textRenderer.getWidth(t) + 3 + inner, 10 + (arrayCount * 10), 0x70003030);
 				}
 
-				if (extra == 1) {
-					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, extra, 10 + (arrayCount * 10), color);
+				if (inner == 1) {
+					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, inner, 10 + (arrayCount * 10), color);
 				}
 
 				if (outer) {
-					DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(t) + 3 + extra, (arrayCount * 10), mc.textRenderer.getWidth(t) + 4 + extra,
+					DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(t) + 3 + inner, (arrayCount * 10), mc.textRenderer.getWidth(t) + 4 + inner,
 							10 + (arrayCount * 10), color);
 
 					if (arrayCount + 1 < lines.size()) {
-						DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(lines.get(arrayCount + 1)) + 4 + extra, 10 + (arrayCount * 10),
-								mc.textRenderer.getWidth(t) + 4 + extra, 11 + (arrayCount * 10), color);
+						DrawableHelper.fill(event.matrix, mc.textRenderer.getWidth(lines.get(arrayCount + 1)) + 4 + inner, 10 + (arrayCount * 10),
+								mc.textRenderer.getWidth(t) + 4 + inner, 11 + (arrayCount * 10), color);
 					}
 				}
 
-				mc.textRenderer.drawWithShadow(event.matrix, t, 2 + extra, 1 + (arrayCount * 10), color);
+				mc.textRenderer.drawWithShadow(event.matrix, t, 2 + inner, 1 + (arrayCount * 10), color);
 				arrayCount++;
 			}
 
 			if (outer && !lines.isEmpty()) {
 				DrawableHelper.fill(event.matrix,
 						0, (arrayCount * 10),
-						mc.textRenderer.getWidth(lines.get(arrayCount - 1)) + 4 + extra, 1 + (arrayCount * 10),
+						mc.textRenderer.getWidth(lines.get(arrayCount - 1)) + 4 + inner, 1 + (arrayCount * 10),
 						getRainbowFromSettings(arrayCount * 40));
 			}
 		}
@@ -348,7 +348,7 @@ public class UI extends Module {
 	public static int getRainbow(float sat, float bri, double speed, int offset) {
 		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / speed);
 		rainbowState %= 360.0;
-		return MathHelper.hsvToRgb((float) (rainbowState / 360.0), sat, bri);
+		return 0xff000000 | MathHelper.hsvToRgb((float) (rainbowState / 360.0), sat, bri);
 	}
 
 	public static int getRainbowFromSettings(int offset) {
