@@ -46,8 +46,8 @@ public class Ghosthand extends Module {
 		Set<BlockPos> posList = new HashSet<>();
 
 		Vec3d nextPos = new Vec3d(0, 0, 0.1)
-				.rotateX(-(float) Math.toRadians(mc.player.pitch))
-				.rotateY(-(float) Math.toRadians(mc.player.yaw));
+				.rotateX(-(float) Math.toRadians(mc.player.getPitch()))
+				.rotateY(-(float) Math.toRadians(mc.player.getYaw()));
 
 		for (int i = 1; i < 50; i++) {
 			BlockPos curPos = new BlockPos(mc.player.getCameraPosVec(mc.getTickDelta()).add(nextPos.multiply(i)));

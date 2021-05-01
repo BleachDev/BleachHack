@@ -69,8 +69,8 @@ public class PacketFly extends Module {
 		if (event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
 		
-			FabricReflect.writeField(p, mc.player.yaw, "field_12391", "yaw");
-			FabricReflect.writeField(p, mc.player.pitch, "field_12393", "pitch");
+			FabricReflect.writeField(p, mc.player.getYaw(), "field_12391", "yaw");
+			FabricReflect.writeField(p, mc.player.getPitch(), "field_12393", "pitch");
 			
 			if (getSetting(4).asToggle().state) {
 				event.setCancelled(true);
@@ -110,7 +110,7 @@ public class PacketFly extends Module {
 			if (mc.options.keySneak.isPressed())
 				posY -= vspeed;
 
-			Vec3d forward = new Vec3d(0, 0, hspeed).rotateY(-(float) Math.toRadians(mc.player.yaw));
+			Vec3d forward = new Vec3d(0, 0, hspeed).rotateY(-(float) Math.toRadians(mc.player.getYaw()));
 			Vec3d strafe = forward.rotateY((float) Math.toRadians(90));
 			if (mc.options.keyForward.isPressed()) {
 				posX += forward.x;
@@ -135,13 +135,13 @@ public class PacketFly extends Module {
 			}
 
 			target.noClip = true;
-			target.updatePositionAndAngles(posX, posY, posZ, mc.player.yaw, mc.player.pitch);
+			target.updatePositionAndAngles(posX, posY, posZ, mc.player.getYaw(), mc.player.getPitch());
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(posX, posY, posZ, false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(posX, posY - 0.01, posZ, true));
 			mc.player.networkHandler.sendPacket(new TeleportConfirmC2SPacket(timer));
 
 		} else if (getSetting(0).asMode().mode == 1) {
-			Vec3d forward = new Vec3d(0, 0, hspeed).rotateY(-(float) Math.toRadians(mc.player.yaw));
+			Vec3d forward = new Vec3d(0, 0, hspeed).rotateY(-(float) Math.toRadians(mc.player.getYaw()));
 			
 			if (mc.player.input.jumping) {
 				forward = new Vec3d(0, vspeed, 0);

@@ -346,8 +346,7 @@ public class UI extends Module {
 	}
 
 	public static int getRainbow(float sat, float bri, double speed, int offset) {
-		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / speed);
-		rainbowState %= 360.0;
+		double rainbowState = Math.ceil((System.currentTimeMillis() + offset) / speed) % 360;
 		return 0xff000000 | MathHelper.hsvToRgb((float) (rainbowState / 360.0), sat, bri);
 	}
 

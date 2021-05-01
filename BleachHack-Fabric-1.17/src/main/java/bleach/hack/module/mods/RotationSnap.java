@@ -44,28 +44,28 @@ public class RotationSnap extends Module {
 			int pmode = getSetting(1).asToggle().getChild(0).asMode().mode;
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT) && !lDown) {
-				mc.player.yaw -= ymode == 0 ? 45 : ymode == 1 ? 30 : ymode == 2 ? 15 : 90;
+				mc.player.setYaw(mc.player.getYaw() - ymode == 0 ? 45 : ymode == 1 ? 30 : ymode == 2 ? 15 : 90);
 				lDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) {
 				lDown = false;
 			}
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT) && !rDown) {
-				mc.player.yaw += ymode == 0 ? 45 : ymode == 1 ? 30 : ymode == 2 ? 15 : 90;
+				mc.player.setYaw(mc.player.getYaw() + ymode == 0 ? 45 : ymode == 1 ? 30 : ymode == 2 ? 15 : 90);
 				rDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) {
 				rDown = false;
 			}
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP) && !uDown) {
-				mc.player.pitch = MathHelper.clamp(mc.player.pitch - (pmode == 0 ? 45 : pmode == 1 ? 30 : pmode == 2 ? 15 : 90), -90, 90);
+				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() - (pmode == 0 ? 45 : pmode == 1 ? 30 : pmode == 2 ? 15 : 90), -90, 90));
 				uDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP)) {
 				uDown = false;
 			}
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN) && !dDown) {
-				mc.player.pitch = MathHelper.clamp(mc.player.pitch + (pmode == 0 ? 45 : pmode == 1 ? 30 : pmode == 2 ? 15 : 90), -90, 90);
+				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() + (pmode == 0 ? 45 : pmode == 1 ? 30 : pmode == 2 ? 15 : 90), -90, 90));
 				dDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN)) {
 				dDown = false;
@@ -80,19 +80,19 @@ public class RotationSnap extends Module {
 		if (getSetting(0).asToggle().state) {
 			int mode = getSetting(0).asToggle().getChild(0).asMode().mode;
 			int interval = mode == 0 ? 45 : mode == 1 ? 30 : mode == 2 ? 15 : 90;
-			int rot = (int) mc.player.yaw + (Math.floorMod((int) mc.player.yaw, interval) < interval / 2 ?
-					-Math.floorMod((int) mc.player.yaw, interval) : interval - Math.floorMod((int) mc.player.yaw, interval));
+			int rot = (int) mc.player.getYaw() + (Math.floorMod((int) mc.player.getYaw(), interval) < interval / 2 ?
+					-Math.floorMod((int) mc.player.getYaw(), interval) : interval - Math.floorMod((int) mc.player.getYaw(), interval));
 
-			mc.player.yaw = rot;
+			mc.player.setYaw(rot);
 		}
 
 		if (getSetting(1).asToggle().state) {
 			int mode = getSetting(1).asToggle().getChild(0).asMode().mode;
 			int interval = mode == 0 ? 45 : mode == 1 ? 30 : mode == 2 ? 15 : 90;
-			int rot = MathHelper.clamp(((int) mc.player.pitch + (Math.floorMod((int) mc.player.pitch, interval) < interval / 2 ?
-					-Math.floorMod((int) mc.player.pitch, interval) : interval - Math.floorMod((int) mc.player.pitch, interval))), -90, 90);
+			int rot = MathHelper.clamp(((int) mc.player.getPitch() + (Math.floorMod((int) mc.player.getPitch(), interval) < interval / 2 ?
+					-Math.floorMod((int) mc.player.getPitch(), interval) : interval - Math.floorMod((int) mc.player.getPitch(), interval))), -90, 90);
 
-			mc.player.pitch = rot;
+			mc.player.setPitch(rot);
 		}
 	}
 }

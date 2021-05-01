@@ -166,7 +166,7 @@ public class Dispenser32k extends Module {
 								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1])))
 							continue;
 
-						startRot = new float[] { mc.player.yaw, mc.player.pitch };
+						startRot = new float[] { mc.player.getYaw(), mc.player.getPitch() };
 						WorldUtils.facePos(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
 						WorldUtils.facePosPacket(pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
 						return;
@@ -191,8 +191,8 @@ public class Dispenser32k extends Module {
 
 			WorldUtils.placeBlock(pos, block, 0, false, true);
 			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, 0, false, true);
-			mc.player.yaw = startRot[0];
-			mc.player.pitch = startRot[1];
+			mc.player.setYaw(startRot[0]);
+			mc.player.setPitch(startRot[1]);
 
 			ticksPassed++;
 			return;

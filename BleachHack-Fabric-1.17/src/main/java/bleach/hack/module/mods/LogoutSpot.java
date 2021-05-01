@@ -138,7 +138,7 @@ public class LogoutSpot extends Module {
 						player.lastRenderZ + (player.getZ() - player.lastRenderZ) * mc.getTickDelta());
 
 				Vec3d offset = new Vec3d(0, 0, 0.45 + mc.textRenderer.getWidth(player.getDisplayName().getString()) / 90d)
-						.rotateY((float) -Math.toRadians(mc.player.yaw + 90));
+						.rotateY((float) -Math.toRadians(mc.player.getYaw() + 90));
 
 				List<String> lines = new ArrayList<>();
 				lines.add("\u00a74Logout:");

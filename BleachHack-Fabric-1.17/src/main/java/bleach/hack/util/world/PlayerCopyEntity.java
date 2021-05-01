@@ -30,8 +30,9 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 
 		updateTrackedPosition(player.getX(), player.getY(), player.getZ());
 		refreshPositionAfterTeleport(player.getX(), player.getY(), player.getZ());
-		pitch = player.pitch;
-		yaw = headYaw = bodyYaw = player.yaw;
+		setPitch(player.getPitch());
+		setYaw(player.getYaw());
+		headYaw = bodyYaw = getYaw();
 
 		// Cache the player textures, then switch to a random uuid
 		// because the world doesn't allow duplicate uuids in 1.17+

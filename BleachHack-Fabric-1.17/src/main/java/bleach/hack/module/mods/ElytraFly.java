@@ -59,10 +59,10 @@ public class ElytraFly extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		Vec3d vec3d = new Vec3d(0, 0, getSetting(3).asSlider().getValue())
-				.rotateY(-(float) Math.toRadians(mc.player.yaw));
+				.rotateY(-(float) Math.toRadians(mc.player.getYaw()));
 
 		double currentVel = Math.abs(mc.player.getVelocity().x) + Math.abs(mc.player.getVelocity().y) + Math.abs(mc.player.getVelocity().z);
-		float radianYaw = (float) Math.toRadians(mc.player.yaw);
+		float radianYaw = (float) Math.toRadians(mc.player.getYaw());
 		float boost = getSetting(1).asSlider().getValueFloat();
 
 		switch (getSetting(0).asMode().mode) {
@@ -70,7 +70,7 @@ public class ElytraFly extends Module {
 				if (mc.player.isFallFlying() && currentVel <= getSetting(2).asSlider().getValue()) {
 					if (mc.options.keyBack.isPressed()) {
 						mc.player.addVelocity(MathHelper.sin(radianYaw) * boost, 0, MathHelper.cos(radianYaw) * -boost);
-					} else if (mc.player.pitch > 0) {
+					} else if (mc.player.getPitch() > 0) {
 						mc.player.addVelocity(MathHelper.sin(radianYaw) * -boost, 0, MathHelper.cos(radianYaw) * boost);
 					}
 				}
@@ -154,8 +154,8 @@ public class ElytraFly extends Module {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly() && event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
 
-			FabricReflect.writeField(p, mc.player.yaw, "field_12391", "yaw");
-			FabricReflect.writeField(p, mc.player.pitch, "field_12393", "pitch");
+			FabricReflect.writeField(p, mc.player.getYaw(), "field_12391", "yaw");
+			FabricReflect.writeField(p, mc.player.getPitch(), "field_12393", "pitch");
 		}
 	}
 

@@ -52,8 +52,8 @@ public class EntityMenuScreen extends Screen {
 	public void init() {
 		super.init();
 		this.cursorMode(GLFW.GLFW_CURSOR_HIDDEN);
-		yaw = client.player.yaw;
-		pitch = client.player.pitch;
+		yaw = client.player.getYaw();
+		pitch = client.player.getPitch();
 	}
 
 	private void cursorMode(int mode) {
@@ -142,8 +142,8 @@ public class EntityMenuScreen extends Screen {
 		this.crosshairX = (int) mouse.x + width / 2;
 		this.crosshairY = (int) mouse.y + height / 2;
 
-		client.player.yaw = yaw + mouse.x / 3;
-		client.player.pitch = MathHelper.clamp(pitch + mouse.y / 3, -90f, 90f);
+		client.player.setYaw(yaw + mouse.x / 3);
+		client.player.setPitch(MathHelper.clamp(pitch + mouse.y / 3, -90f, 90f));
 		super.render(matrix, mouseX, mouseY, delta);
 	}
 

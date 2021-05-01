@@ -108,7 +108,7 @@ public class AutoThrow extends Module {
 
 			InventoryUtils.selectSlot(slot);
 
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.yaw, 90, mc.player.isOnGround()));
+			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), 90, mc.player.isOnGround()));
 			mc.interactionManager.interactItem(mc.player, mc.world, slot == 40 ? Hand.OFF_HAND : Hand.MAIN_HAND);
 
 			if (prevSlot != -1) {

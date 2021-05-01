@@ -100,17 +100,17 @@ public class ProjectileSimulator {
 	}
 
 	private static void initProjectile(Entity e, Entity thrower, float addPitch, float strength) {
-		float velX = -MathHelper.sin(thrower.yaw * 0.017453292F) * MathHelper.cos(thrower.pitch * 0.017453292F);
-		float velY = -MathHelper.sin((thrower.pitch + addPitch) * 0.017453292F);
-		float velZ = MathHelper.cos(thrower.yaw * 0.017453292F) * MathHelper.cos(thrower.pitch * 0.017453292F);
+		float velX = -MathHelper.sin(thrower.getYaw() * 0.017453292F) * MathHelper.cos(thrower.getPitch() * 0.017453292F);
+		float velY = -MathHelper.sin((thrower.getPitch() + addPitch) * 0.017453292F);
+		float velZ = MathHelper.cos(thrower.getYaw() * 0.017453292F) * MathHelper.cos(thrower.getPitch() * 0.017453292F);
 
 		Vec3d velVec = new Vec3d(velX, velY, velZ).normalize().multiply(strength);
 		e.setVelocity(velVec);
 		float float_3 = MathHelper.sqrt(Entity.squaredHorizontalLength(velVec));
-		e.yaw = (float) (MathHelper.atan2(velVec.x, velVec.z) * 57.2957763671875D);
-		e.pitch = (float) (MathHelper.atan2(velVec.y, float_3) * 57.2957763671875D);
-		e.prevYaw = e.yaw;
-		e.prevPitch = e.pitch;
+		e.setYaw((float) (MathHelper.atan2(velVec.x, velVec.z) * 57.2957763671875));
+		e.setPitch((float) (MathHelper.atan2(velVec.y, float_3) * 57.2957763671875));
+		e.prevYaw = e.getYaw();
+		e.prevPitch = e.getPitch();
 
 		e.setVelocity(velVec.add(thrower.getVelocity().x, thrower.isOnGround() ? 0.0D : thrower.getVelocity().y, thrower.getVelocity().z));
 	}
@@ -174,7 +174,7 @@ public class ProjectileSimulator {
 			y = realProjectile.getY();
 			z = realProjectile.getZ();
 
-			pitch = realProjectile.pitch;
+			pitch = realProjectile.getPitch();
 
 			velocity = realProjectile.getVelocity();
 

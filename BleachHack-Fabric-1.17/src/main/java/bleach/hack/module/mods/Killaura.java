@@ -129,7 +129,7 @@ public class Killaura extends Module {
 				float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
 				float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
 
-				return Math.abs(MathHelper.wrapDegrees(yaw - mc.player.yaw)) + Math.abs(MathHelper.wrapDegrees(pitch - mc.player.pitch));
+				return Math.abs(MathHelper.wrapDegrees(yaw - mc.player.getYaw())) + Math.abs(MathHelper.wrapDegrees(pitch - mc.player.getPitch()));
 			});
 		} else {
 			comparator = Comparator.comparing(mc.player::distanceTo);

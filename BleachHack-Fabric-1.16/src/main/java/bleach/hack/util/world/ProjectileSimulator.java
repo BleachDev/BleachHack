@@ -107,8 +107,8 @@ public class ProjectileSimulator {
 		Vec3d velVec = new Vec3d(velX, velY, velZ).normalize().multiply(strength);
 		e.setVelocity(velVec);
 		float float_3 = MathHelper.sqrt(Entity.squaredHorizontalLength(velVec));
-		e.yaw = (float) (MathHelper.atan2(velVec.x, velVec.z) * 57.2957763671875D);
-		e.pitch = (float) (MathHelper.atan2(velVec.y, float_3) * 57.2957763671875D);
+		e.yaw = (float) (MathHelper.atan2(velVec.x, velVec.z) * 57.2957763671875);
+		e.pitch = (float) (MathHelper.atan2(velVec.y, float_3) * 57.2957763671875);
 		e.prevYaw = e.yaw;
 		e.prevPitch = e.pitch;
 

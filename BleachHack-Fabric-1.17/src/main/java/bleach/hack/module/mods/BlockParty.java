@@ -69,7 +69,7 @@ public class BlockParty extends Module {
 
 		float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
 
-		mc.player.yaw += MathHelper.wrapDegrees(yaw - mc.player.yaw);
+		mc.player.setYaw(mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw()));
 
 		KeyBinding.setKeyPressed(mc.options.keyForward.getDefaultKey(), true);
 

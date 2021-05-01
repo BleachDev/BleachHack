@@ -72,7 +72,7 @@ public class NoSlow extends Module {
 					&& mc.player.getVelocity().x > -0.15 && mc.player.getVelocity().x < 0.15
 					&& mc.player.getVelocity().z > -0.15 && mc.player.getVelocity().z < 0.15) {
 				mc.player.setVelocity(mc.player.getVelocity().add(addVelocity));
-				addVelocity = addVelocity.add(new Vec3d(0, 0, 0.05).rotateY(-(float) Math.toRadians(mc.player.yaw)));
+				addVelocity = addVelocity.add(new Vec3d(0, 0, 0.05).rotateY(-(float) Math.toRadians(mc.player.getYaw())));
 			} else {
 				addVelocity = addVelocity.multiply(0.75, 0.75, 0.75);
 			}
@@ -168,12 +168,12 @@ public class NoSlow extends Module {
 			}
 
 
-			mc.player.yaw += yaw;
+			mc.player.setYaw(mc.player.getYaw() + yaw);
 
 			if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(0).asToggle().state) {
-				mc.player.pitch = MathHelper.clamp(mc.player.pitch + pitch, -90f, 90f);
+				mc.player.setPitch(mc.player.getPitch() + MathHelper.clamp(mc.player.getPitch() + pitch, -90f, 90f));
 			} else {
-				mc.player.pitch += pitch;
+				mc.player.setPitch(mc.player.getPitch() + pitch);
 			}
 		}
 	}

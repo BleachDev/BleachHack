@@ -73,7 +73,7 @@ public class AutoParkour extends Module {
 				}
 
 				if (getSetting(1).asToggle().state) {
-					Vec3d lookVec = mc.player.getPos().add(new Vec3d(0, 0, 3.5).rotateY(-(float) Math.toRadians(mc.player.yaw)));
+					Vec3d lookVec = mc.player.getPos().add(new Vec3d(0, 0, 3.5).rotateY(-(float) Math.toRadians(mc.player.getYaw())));
 
 					BlockPos nearestPos = null;
 					for (BlockPos pos: BlockPos.iterateOutwards(mc.player.getBlockPos().down(), 4, 1, 4)) {

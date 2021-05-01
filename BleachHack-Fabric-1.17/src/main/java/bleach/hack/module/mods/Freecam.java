@@ -53,7 +53,7 @@ public class Freecam extends Module {
 		mc.chunkCullingEnabled = false;
 
 		playerPos = new double[] { mc.player.getX(), mc.player.getY(), mc.player.getZ() };
-		playerRot = new float[] { mc.player.yaw, mc.player.pitch };
+		playerRot = new float[] { mc.player.getYaw(), mc.player.getPitch() };
 
 		dummy = new PlayerCopyEntity(mc.player);
 

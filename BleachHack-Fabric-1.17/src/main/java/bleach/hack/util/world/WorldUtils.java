@@ -329,8 +329,8 @@ public class WorldUtils {
 		float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
 		float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
 
-		mc.player.yaw += MathHelper.wrapDegrees(yaw - mc.player.yaw);
-		mc.player.pitch += MathHelper.wrapDegrees(pitch - mc.player.pitch);
+		mc.player.setYaw(mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw()));
+		mc.player.setPitch(mc.player.getPitch() + MathHelper.wrapDegrees(pitch - mc.player.getPitch()));
 	}
 
 	public static void facePosPacket(double x, double y, double z) {
@@ -344,14 +344,14 @@ public class WorldUtils {
 		float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
 
 		if (!mc.player.hasVehicle()) {
-			mc.player.headYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
-			mc.player.bodyYaw = mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw);
-			mc.player.renderPitch = mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch);
+			mc.player.headYaw = mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw());
+			mc.player.bodyYaw = mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw());
+			mc.player.renderPitch = mc.player.getPitch() + MathHelper.wrapDegrees(pitch - mc.player.getPitch());
 		}
 
 		mc.player.networkHandler.sendPacket(
 				new PlayerMoveC2SPacket.LookAndOnGround(
-						mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),
-						mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch), mc.player.isOnGround()));
+						mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw()),
+						mc.player.getPitch() + MathHelper.wrapDegrees(pitch - mc.player.getPitch()), mc.player.isOnGround()));
 	}
 }

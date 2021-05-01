@@ -64,7 +64,7 @@ public class EntityControl extends Module {
 		double strafe = mc.player.sidewaysSpeed;
 		float yaw = mc.player.yaw;
 
-		e.yaw = mc.player.yaw;
+		e.yaw = yaw;
 		if (e instanceof LlamaEntity) {
 			((LlamaEntity) e).headYaw = mc.player.headYaw;
 		}
