@@ -10,6 +10,7 @@ package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventEntityControl;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
@@ -20,6 +21,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.FabricReflect;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemSteerable;
 import net.minecraft.entity.passive.LlamaEntity;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -155,6 +157,15 @@ public class EntityControl extends Module {
 					|| event.getPacket() instanceof EntityPassengersSetS2CPacket)
 				event.setCancelled(true);
 		}
+	}
+
+	@Subscribe
+	public void onEntityControl(EventEntityControl event) {
+		if (mc.player.getVehicle() instanceof ItemSteerable && mc.player.forwardSpeed == 0 && mc.player.sidewaysSpeed == 0) {
+			return;
+		}
+
+		event.setControllable(true);
 	}
 
 	// HorseJump handled in MixinClientPlayerEntity.method_3151

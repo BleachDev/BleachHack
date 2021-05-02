@@ -32,7 +32,7 @@
     "MixinInGameOverlayRenderer",
     "MixinKeyboard",
     "MixinLivingEntity",
-    "MixinLlamaEntity",
+    "MixinLlamaPigStriderEntity",
     "MixinMapRenderer",
     "MixinMinecraftClient",
     "MixinPacketInflater",
