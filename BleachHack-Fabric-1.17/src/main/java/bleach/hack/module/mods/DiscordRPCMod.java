@@ -43,7 +43,7 @@ public class DiscordRPCMod extends Module {
 				new SettingMode("Text 2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%").withDesc("Line 2"),
 				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None").withDesc("How to show elapsed time"),
 				new SettingToggle("Silent", false).withDesc("Use a generic Minecraft title and image"));
-		
+
 		JsonElement t1 = BleachFileHelper.readMiscSetting("discordRPCTopText");
 		JsonElement t2 = BleachFileHelper.readMiscSetting("discordRPCBottomText");
 
@@ -168,5 +168,13 @@ public class DiscordRPCMod extends Module {
 
 	public void setBottomText(String text) {
 		customText2 = text;
+	}
+
+	public String getTopText() {
+		return customText1;
+	}
+
+	public String getBottomText() {
+		return customText2;
 	}
 }
