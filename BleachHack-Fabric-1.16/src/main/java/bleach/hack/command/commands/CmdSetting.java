@@ -10,6 +10,7 @@ package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingBase;
@@ -27,8 +28,7 @@ public class CmdSetting extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length < 2) {
-			printSyntaxError();
-			return;
+			throw new CmdSyntaxException();
 		}
 
 		Module m = ModuleManager.getModule(args[0]);

@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,8 +32,7 @@ public class CmdDupe extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length == 0) {
-			printSyntaxError("Invaild dupe method");
-			return;
+			throw new CmdSyntaxException("Invaild dupe method");
 		}
 
 		if (args[0].equalsIgnoreCase("old")) {
@@ -57,7 +57,7 @@ public class CmdDupe extends Command {
 			item.getOrCreateTag().put("pages", textSplit);
 			mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, mc.player.getInventory().selectedSlot));
 		} else {
-			printSyntaxError("Invaild dupe method");
+			throw new CmdSyntaxException("Invaild dupe method");
 		}
 	}
 

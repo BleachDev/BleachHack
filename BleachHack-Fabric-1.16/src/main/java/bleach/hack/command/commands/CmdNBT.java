@@ -10,6 +10,7 @@ package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachJsonHelper;
 import net.minecraft.item.ItemStack;
@@ -29,8 +30,7 @@ public class CmdNBT extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length == 0) {
-			printSyntaxError();
-			return;
+			throw new CmdSyntaxException();
 		}
 
 		ItemStack item = mc.player.inventory.getMainHandStack();
@@ -59,14 +59,13 @@ public class CmdNBT extends Command {
 		} else if (args[0].equalsIgnoreCase("set")) {
 			try {
 				if (args[1].isEmpty()) {
-					printSyntaxError();
-					return;
+					throw new CmdSyntaxException();
 				}
 
 				item.setTag(StringNbtReader.parse(args[1]));
 				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName() + "to\n\u00a7f" + (item.getTag()));
 			} catch (Exception e) {
-				printSyntaxError();
+				throw new CmdSyntaxException();
 			}
 		} else if (args[0].equalsIgnoreCase("wipe")) {
 			item.setTag(new CompoundTag());

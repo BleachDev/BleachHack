@@ -14,6 +14,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
@@ -44,8 +45,7 @@ public class CmdEnchant extends Command {
 		}
 
 		if (!mc.player.abilities.creativeMode) {
-			printSyntaxError("Not In Creative Mode!");
-			return;
+			throw new CmdSyntaxException("Not In Creative Mode!");
 		}
 
 		int level = Integer.parseInt(args[1]);
@@ -174,8 +174,7 @@ public class CmdEnchant extends Command {
 
 	public void enchant(ItemStack item, Enchantment e, int level) {
 		if (e == null) {
-			printSyntaxError("Invalid enchantment!");
-			return;
+			throw new CmdSyntaxException("Invalid enchantment!");
 		}
 
 		if (item.getTag() == null)

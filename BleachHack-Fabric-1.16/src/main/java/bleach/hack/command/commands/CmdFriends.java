@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.text.ClickEvent;
@@ -33,16 +34,14 @@ public class CmdFriends extends Command {
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args[0].equalsIgnoreCase("add")) {
 			if (args.length < 2) {
-				printSyntaxError("No username selected");
-				return;
+				throw new CmdSyntaxException("No username selected");
 			}
 
 			BleachHack.friendMang.add(args[1]);
 			BleachLogger.infoMessage("Added \"" + args[1] + "\" to the friend list");
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (args.length < 2) {
-				printSyntaxError("No username selected");
-				return;
+				throw new CmdSyntaxException("No username selected");
 			}
 
 			BleachHack.friendMang.remove(args[1].toLowerCase(Locale.ENGLISH));
@@ -81,8 +80,7 @@ public class CmdFriends extends Command {
 
 			BleachLogger.infoMessage("Cleared Friend list");
 		} else {
-			printSyntaxError();
-			return;
+			throw new CmdSyntaxException();
 		}
 
 		BleachFileHelper.SCHEDULE_SAVE_FRIENDS = true;

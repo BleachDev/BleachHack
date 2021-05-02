@@ -17,8 +17,13 @@ import com.google.gson.JsonElement;
 
 import bleach.hack.BleachHack;
 import bleach.hack.command.commands.*;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 public class CommandManager {
 
@@ -71,9 +76,33 @@ public class CommandManager {
 			if (c.hasAlias(split[0])) {
 				try {
 					c.onCommand(split[0], ArrayUtils.subarray(split, 1, split.length));
+				} catch (CmdSyntaxException e) {
+					BleachLogger.errorMessage((MutableText) e.getTextMessage());
+
+					MutableText text = new LiteralText("\u00a7b" + Command.PREFIX + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
+					Text tooltip = new LiteralText(
+							"\u00a72Category: " + c.getCategory()
+							+ "\n\u00a7bAliases: \u00a7f" + Command.PREFIX + String.join(" \u00a77/\u00a7f " + Command.PREFIX, c.getAliases())
+							+ "\n\u00a7bUsage: \u00a7f" + c.getSyntax()
+							+ "\n\u00a7bDesc: \u00a7f" + c.getDescription());
+
+					BleachLogger.infoMessage(
+							text.styled(style -> style
+									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, tooltip))));
 				} catch (Exception e) {
 					e.printStackTrace();
-					c.printSyntaxError();
+
+					BleachLogger.errorMessage("\u00a7l" + e.getClass().getSimpleName() + ":");
+					BleachLogger.errorMessage("\u00a7l" + e.getMessage());
+
+					int i = 0;
+					for (StackTraceElement st: e.getStackTrace()) {
+						if (i >= 8) break;
+
+						String[] bruh = st.getClassName().split("\\.");
+						BleachLogger.errorMessage(bruh[bruh.length - 1] + "." + st.getMethodName() + "():" + st.getLineNumber());
+						i++;
+					}
 				}
 
 				return;

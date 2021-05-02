@@ -15,6 +15,7 @@ import com.google.gson.JsonArray;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoRender;
 import bleach.hack.util.BleachLogger;
@@ -31,8 +32,7 @@ public class CmdCustomSign extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) {
 		if (args.length == 0) {
-			printSyntaxError();
-			return;
+			throw new CmdSyntaxException();
 		}
 
 		NoRender noRender = (NoRender) ModuleManager.getModule("NoRender");

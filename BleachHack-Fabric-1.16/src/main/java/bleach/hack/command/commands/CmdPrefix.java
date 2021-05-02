@@ -12,6 +12,7 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
 
@@ -24,8 +25,7 @@ public class CmdPrefix extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args[0].isEmpty()) {
-			printSyntaxError("Prefix Cannot Be Empty");
-			return;
+			throw new CmdSyntaxException("Prefix Cannot Be Empty");
 		}
 
 		PREFIX = args[0];

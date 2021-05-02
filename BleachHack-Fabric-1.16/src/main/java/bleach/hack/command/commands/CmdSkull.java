@@ -20,6 +20,7 @@ import com.google.gson.JsonParser;
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -36,8 +37,7 @@ public class CmdSkull extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length == 0) {
-			printSyntaxError();
-			return;
+			throw new CmdSyntaxException();
 		}
 
 		ItemStack item = new ItemStack(Items.PLAYER_HEAD, 64);

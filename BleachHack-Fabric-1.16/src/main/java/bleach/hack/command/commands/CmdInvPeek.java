@@ -12,6 +12,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.BleachQueue;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -28,8 +29,7 @@ public class CmdInvPeek extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length == 0) {
-			printSyntaxError();
-			return;
+			throw new CmdSyntaxException();
 		}
 
 		for (AbstractClientPlayerEntity e: mc.world.getPlayers()) {

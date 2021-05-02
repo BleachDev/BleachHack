@@ -12,6 +12,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
+import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.ModuleManager;
@@ -28,8 +29,7 @@ public class CmdClickGui extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length != 1 && args.length != 2) {
-			printSyntaxError();
-			return;
+			throw new CmdSyntaxException();
 		}
 
 		if (args[0].equalsIgnoreCase("reset")) {
@@ -56,16 +56,14 @@ public class CmdClickGui extends Command {
 					}
 				}
 			} else {
-				printSyntaxError("Invalid reset mode!");
-				return;
+				throw new CmdSyntaxException("Invalid reset mode!");
 			}
 
 			BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
 			BleachLogger.infoMessage("Reset the clickgui!");
 		} else if (args[0].equalsIgnoreCase("length")) {
 			if (!NumberUtils.isCreatable(args[1])) {
-				printSyntaxError("Invalid clickgui length: " + args[1]);
-				return;
+				throw new CmdSyntaxException("Invalid clickgui length: " + args[1]);
 			}
 
 			ModuleManager.getModule("ClickGui").getSetting(0).asSlider().setValue(NumberUtils.createNumber(args[1]).intValue());
@@ -73,7 +71,7 @@ public class CmdClickGui extends Command {
 
 			BleachLogger.infoMessage("Set the clickgui length to: " + args[1]);
 		} else {
-			printSyntaxError();
+			throw new CmdSyntaxException();
 		}
 	}
 
