@@ -29,6 +29,10 @@ public class CmdRpc extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
+		if (args.length == 0) {
+			throw new CmdSyntaxException();
+		}
+
 		DiscordRPCMod rpc = (DiscordRPCMod) ModuleManager.getModule("DiscordRPC");
 		String text = StringUtils.join(args, ' ', 1, args.length);
 		
