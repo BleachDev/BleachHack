@@ -8,8 +8,6 @@
  */
 package bleach.hack.module.mods;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendMovementPackets;
@@ -37,7 +35,7 @@ public class PacketFly extends Module {
 	private int timer = 0;
 
 	public PacketFly() {
-		super("PacketFly", GLFW.GLFW_KEY_H, Category.MOVEMENT, "Allows you to fly with packets.",
+		super("PacketFly", KEY_UNBOUND, Category.MOVEMENT, "Allows you to fly with packets.",
 				new SettingMode("Mode", "Phase", "Packet").withDesc("Packetfly mode"),
 				new SettingSlider("HSpeed", 0.05, 2, 0.5, 2).withDesc("Horizontal speed"),
 				new SettingSlider("VSpeed", 0.05, 2, 0.5, 2).withDesc("Vertical speed"),

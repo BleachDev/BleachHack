@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
 import com.google.common.eventbus.Subscribe;
@@ -63,7 +62,7 @@ public class CrystalAura extends Module {
 	private HashMap<BlockPos, Integer> blackList = new HashMap<>();
 
 	public CrystalAura() {
-		super("CrystalAura", GLFW.GLFW_KEY_I, Category.COMBAT, "Automatically attacks crystals for you.",
+		super("CrystalAura", KEY_UNBOUND, Category.COMBAT, "Automatically attacks crystals for you.",
 				new SettingToggle("Players", true).withDesc("Target players"),
 				new SettingToggle("Mobs", false).withDesc("Target mobs"),
 				new SettingToggle("Animals", false).withDesc("Target animals"),

@@ -8,8 +8,6 @@
  */
 package bleach.hack.module.mods;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventReadPacket;
@@ -35,7 +33,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityControl extends Module {
 
 	public EntityControl() {
-		super("EntityControl", GLFW.GLFW_KEY_GRAVE_ACCENT, Category.MOVEMENT, "Manipulate Entities.",
+		super("EntityControl", KEY_UNBOUND, Category.MOVEMENT, "Manipulate Entities.",
 				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entites").withChildren(
 						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("Entity speed")),
 				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entites").withChildren(
