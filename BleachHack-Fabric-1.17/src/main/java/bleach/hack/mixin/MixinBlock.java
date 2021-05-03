@@ -24,16 +24,16 @@ import net.minecraft.world.BlockView;
 @Mixin(Block.class)
 public class MixinBlock {
 
-    @Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
-    private static void shouldDrawSide(BlockState state, BlockView world, BlockPos pos, Direction side, BlockPos blockPos, CallbackInfoReturnable<Boolean> callback) {
-        Xray xray = (Xray) ModuleManager.getModule("Xray");
+	@Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
+	private static void shouldDrawSide(BlockState state, BlockView world, BlockPos pos, Direction side, BlockPos blockPos, CallbackInfoReturnable<Boolean> callback) {
+		Xray xray = (Xray) ModuleManager.getModule("Xray");
 
-        if (xray.isEnabled()) {
-        	if (!xray.getSetting(1).asToggle().state) {
-                callback.setReturnValue(xray.isVisible(state.getBlock()));
-            } else if (xray.isVisible(state.getBlock())) {
-        		callback.setReturnValue(true);
-        	}
-        }
-    }
+		if (xray.isEnabled()) {
+			if (!xray.getSetting(1).asToggle().state) {
+				callback.setReturnValue(xray.isVisible(state.getBlock()));
+			} else if (xray.isVisible(state.getBlock())) {
+				callback.setReturnValue(true);
+			}
+		}
+	}
 }

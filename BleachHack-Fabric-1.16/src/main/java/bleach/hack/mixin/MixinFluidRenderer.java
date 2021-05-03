@@ -41,7 +41,7 @@ public class MixinFluidRenderer {
 	private static void isSideCovered(BlockView world, BlockPos pos, Direction direction, float maxDeviation, CallbackInfoReturnable<Boolean> callbackInfo) {
 		Xray xray = (Xray) ModuleManager.getModule("Xray");
 
-		if (!xray.getSetting(0).asToggle().state && xray.isEnabled() && xray.isVisible(world.getBlockState(pos).getBlock())) {
+		if (!xray.getSetting(0).asToggle().state && xray.isVisible(world.getBlockState(pos).getBlock())) {
 			callbackInfo.setReturnValue(false);
 		}
 	}

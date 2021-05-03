@@ -15,6 +15,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
 import net.minecraft.block.Block;
@@ -27,6 +28,9 @@ public class Xray extends Module {
 	public Xray() {
 		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
 				new SettingToggle("Fluids", false).withDesc("Show fluids"),
+				new SettingToggle("Opacity", true).withDesc("Toggles an adjustable alpha level for non-xray blocks").withChildren(
+						new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value"),
+						new SettingToggle("HideSurface", false).withDesc("Hides the surface of the world to make it easier to see blocks")),
 				SettingLists.newBlockList("Edit Blocks", "Edit Xray Blocks",
 						Blocks.IRON_ORE,
 						Blocks.GOLD_ORE,
@@ -43,8 +47,9 @@ public class Xray extends Module {
 						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks"));
 	}
 	
+
 	public boolean isVisible(Block block) {
-		return !isEnabled() || getSetting(1).asList(Block.class).contains(block);
+		return !isEnabled() || getSetting(2).asList(Block.class).contains(block);
 	}
 
 	@Override
@@ -71,9 +76,4 @@ public class Xray extends Module {
 	public void onTick(EventTick eventPreUpdate) {
 		mc.options.gamma = 69.420;
 	}
-	
-	/*@Subscribe
-	public void onChunkCulling(EventChunkCulling event) {
-		event.setCull(false);
-	}*/
 }

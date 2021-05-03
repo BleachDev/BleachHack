@@ -19,7 +19,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 
 @Mixin(Block.class)
@@ -30,20 +29,11 @@ public class MixinBlock {
 		Xray xray = (Xray) ModuleManager.getModule("Xray");
 
 		if (xray.isEnabled()) {
-			callback.setReturnValue(xray.isVisible(state.getBlock()));
+			if (!xray.getSetting(1).asToggle().state) {
+				callback.setReturnValue(xray.isVisible(state.getBlock()));
+			} else if (xray.isVisible(state.getBlock())) {
+				callback.setReturnValue(true);
+			}
 		}
 	}
-
-	@Inject(method = "isShapeFullCube", at = @At("HEAD"), cancellable = true)
-	private static void isShapeFullCube(VoxelShape shape, CallbackInfoReturnable<Boolean> callback) {
-		if (ModuleManager.getModule("Xray").isEnabled()) {
-			callback.setReturnValue(false);
-		}
-	}
-
-	/* @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-	 * public void getRenderType(CallbackInfoReturnable<BlockRenderType> callback) {
-	 * try { if (ModuleManager.getModule(Xray.class).isToggled()) {
-	 * callback.setReturnValue(BlockRenderType.INVISIBLE); callback.cancel(); } }
-	 * catch (Exception ignored) {} } */
 }

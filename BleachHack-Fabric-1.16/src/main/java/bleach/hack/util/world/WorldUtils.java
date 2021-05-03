@@ -16,8 +16,11 @@ import com.google.common.collect.Sets;
 
 import bleach.hack.setting.other.SettingRotate;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.Material;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -34,6 +37,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Direction.Axis;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
@@ -346,5 +350,21 @@ public class WorldUtils {
 				new PlayerMoveC2SPacket.LookOnly(
 						mc.player.yaw + MathHelper.wrapDegrees(yaw - mc.player.yaw),
 						mc.player.pitch + MathHelper.wrapDegrees(pitch - mc.player.pitch), mc.player.isOnGround()));
+	}
+	
+	public static int getTopBlockIgnoreLeaves(int x, int z) {
+		int top = mc.world.getTopY(Heightmap.Type.WORLD_SURFACE, x, z) - 1;
+
+		while (top > 0) {
+			BlockState state = mc.world.getBlockState(new BlockPos(x, top, z));
+
+			if (!(state.isAir() || state.getBlock() instanceof LeavesBlock || state.getBlock() instanceof PlantBlock)) {
+				break;
+			}
+
+			top--;
+		}
+
+		return top;
 	}
 }
