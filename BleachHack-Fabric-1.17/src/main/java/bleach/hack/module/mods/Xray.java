@@ -8,6 +8,8 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingSlider;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
@@ -40,9 +42,11 @@ public class Xray extends Module {
 						Blocks.DIAMOND_BLOCK,
 						Blocks.EMERALD_BLOCK,
 						Blocks.NETHER_GOLD_ORE,
-						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks"));
+						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks"),
+		new SettingToggle("Opacity", false).withDesc("Toggles an adjustable alpha level for non-xray blocks").withChildren(
+				new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value")));
 	}
-	
+
 	public boolean isVisible(Block block) {
 		return !isEnabled() || getSetting(1).asList(Block.class).contains(block);
 	}
