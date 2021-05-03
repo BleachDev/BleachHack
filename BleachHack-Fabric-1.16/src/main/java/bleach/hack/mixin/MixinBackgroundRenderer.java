@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -26,9 +27,7 @@ public class MixinBackgroundRenderer {
 			"applyFog(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/BackgroundRenderer$FogType;FZ)V"},
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
 	private static boolean hasStatusEffect(LivingEntity entity, StatusEffect effect) {
-		if (effect == StatusEffects.BLINDNESS
-				&& ModuleManager.getModule("NoRender").isEnabled()
-				&& ModuleManager.getModule("NoRender").getSetting(0).asToggle().state) {
+		if (effect == StatusEffects.BLINDNESS && ((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveOverlay(0)) {
 			return false;
 		}
 

@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.NoRender;
 import net.minecraft.client.gui.MapRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,7 +25,7 @@ public class MixinMapRenderer {
 
 	@Inject(method = "draw", at = @At("HEAD"), cancellable = true)
 	public void draw(MatrixStack matrices, VertexConsumerProvider vertexConsumers, MapState mapState, boolean bl, int light, CallbackInfo ci) {
-		if (ModuleManager.getModule("NoRender").isEnabled() && ModuleManager.getModule("NoRender").getSetting(11).asToggle().state) {
+		if (((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveWorld(3)) {
 			ci.cancel();
 		}
 	}
