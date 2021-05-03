@@ -31,11 +31,12 @@ import net.minecraft.world.BlockRenderView;
 @Mixin(BlockRenderManager.class)
 public class MixinBlockRenderManager {
 
-	@Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true)
-	private void renderBlock(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrix, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) {
-		if (!((Xray) ModuleManager.getModule("Xray")).isVisible(state.getBlock())) {
-			ci.setReturnValue(false);
-		}
-	}
+    @Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true)
+    private void renderBlock(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrix, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) {
+        Xray xray = (Xray) ModuleManager.getModule("Xray");
 
+        if (xray.isEnabled() && !xray.getSetting(2).asToggle().state && !xray.isVisible(state.getBlock())) {
+            ci.setReturnValue(false);
+        }
+    }
 }
