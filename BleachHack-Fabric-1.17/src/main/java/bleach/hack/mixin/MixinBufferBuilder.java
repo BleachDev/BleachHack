@@ -34,10 +34,10 @@ public abstract class MixinBufferBuilder extends FixedColorVertexConsumer implem
 	@Overwrite
 	public void vertex(float x, float y, float z, float red, float green, float blue, float alpha, float u, float v, int overlay, int light, float normalX, float normalY, float normalZ) {
 		if (this.colorFixed) {
-			if (fixedRed != -1) red = fixedRed;
-			if (fixedGreen != -1) green = fixedGreen;
-			if (fixedBlue != -1) blue = fixedBlue;
-			if (fixedAlpha != -1) alpha = fixedAlpha;
+			if (fixedRed != -1) red = fixedRed / 255f;
+			if (fixedGreen != -1) green = fixedGreen / 255f;
+			if (fixedBlue != -1) blue = fixedBlue / 255f;
+			if (fixedAlpha != -1) alpha = fixedAlpha / 255f;
 		}
 
 		if (this.textured) {
