@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(RenderLayers.class)
 public class MixinRenderLayers {
 
-    @Inject(method = "getBlockLayer", at = @At("HEAD"), cancellable = true)
-    private static void getBlockLayer(BlockState state, CallbackInfoReturnable<RenderLayer> cir) {
-        Xray xray = (Xray) ModuleManager.getModule("Xray");
-        if (xray.isEnabled() && !xray.isVisible(state.getBlock())) {
-            cir.setReturnValue(RenderLayer.getTranslucent());
-            cir.cancel();
-        }
-    }
+	@Inject(method = "getBlockLayer", at = @At("HEAD"), cancellable = true)
+	private static void getBlockLayer(BlockState state, CallbackInfoReturnable<RenderLayer> cir) {
+		Xray xray = (Xray) ModuleManager.getModule("Xray");
+
+		if (xray.isEnabled() && !xray.isVisible(state.getBlock())) {
+			cir.setReturnValue(RenderLayer.getTranslucent());
+		}
+	}
 }

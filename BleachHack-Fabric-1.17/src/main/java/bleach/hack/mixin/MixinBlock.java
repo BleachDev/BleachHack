@@ -30,9 +30,9 @@ public class MixinBlock {
         Xray xray = (Xray) ModuleManager.getModule("Xray");
 
         if (xray.isEnabled()) {
-            if (xray.getSetting(2).asToggle().state && xray.isVisible(state.getBlock())) {
+            if (xray.getSetting(1).asToggle().state && xray.isVisible(state.getBlock())) {
                 callback.setReturnValue(true);
-            } else if (!xray.getSetting(2).asToggle().state) {
+            } else if (!xray.getSetting(1).asToggle().state) {
                 callback.setReturnValue(xray.isVisible(state.getBlock()));
             }
         }

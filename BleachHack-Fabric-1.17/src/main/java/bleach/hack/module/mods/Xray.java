@@ -8,7 +8,6 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import org.lwjgl.glfw.GLFW;
 
@@ -29,6 +28,9 @@ public class Xray extends Module {
 	public Xray() {
 		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
 				new SettingToggle("Fluids", false).withDesc("Show fluids"),
+				new SettingToggle("Opacity", false).withDesc("Toggles an adjustable alpha level for non-xray blocks").withChildren(
+						new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value"),
+						new SettingToggle("HideSurface", false).withDesc("Hides the surface of the world to make it easier to see blocks")),
 				SettingLists.newBlockList("Edit Blocks", "Edit Xray Blocks",
 						Blocks.IRON_ORE,
 						Blocks.GOLD_ORE,
@@ -42,13 +44,11 @@ public class Xray extends Module {
 						Blocks.DIAMOND_BLOCK,
 						Blocks.EMERALD_BLOCK,
 						Blocks.NETHER_GOLD_ORE,
-						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks"),
-		new SettingToggle("Opacity", false).withDesc("Toggles an adjustable alpha level for non-xray blocks").withChildren(
-				new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value")));
+						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks"));
 	}
 
 	public boolean isVisible(Block block) {
-		return !isEnabled() || getSetting(1).asList(Block.class).contains(block);
+		return !isEnabled() || getSetting(2).asList(Block.class).contains(block);
 	}
 
 	@Override

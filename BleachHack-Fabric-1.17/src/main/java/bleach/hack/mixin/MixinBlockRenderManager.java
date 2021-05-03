@@ -35,7 +35,7 @@ public class MixinBlockRenderManager {
     private void renderBlock(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrix, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) {
         Xray xray = (Xray) ModuleManager.getModule("Xray");
 
-        if (xray.isEnabled() && !xray.getSetting(2).asToggle().state && !xray.isVisible(state.getBlock())) {
+        if (xray.isEnabled() && !xray.getSetting(1).asToggle().state && !xray.isVisible(state.getBlock())) {
             ci.setReturnValue(false);
         }
     }
