@@ -38,6 +38,7 @@ public class Xray extends Module {
 						Blocks.REDSTONE_ORE,
 						Blocks.DIAMOND_ORE,
 						Blocks.EMERALD_ORE,
+						Blocks.IRON_BLOCK,
 						Blocks.GOLD_BLOCK,
 						Blocks.LAPIS_BLOCK,
 						Blocks.REDSTONE_BLOCK,
