@@ -45,7 +45,7 @@ public class Nofall extends Module {
     public Nofall() {
         super("Nofall", KEY_UNBOUND, Category.PLAYER, "Prevents you from taking fall damage.",
                 new SettingMode("Mode", "Simple", "Packet", "AutoMLG", "ec.me").withDesc("What mode to use"),
-                new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block for AutoMLG"),
+                new SettingToggle("Autocenter", true).withDesc("Autocenters you to the nearest block for AutoMLG"),
                 new SettingRotate(true).withDesc("Rotates to floor for AutoMLG. Server option recommended"));
 
     }
