@@ -8,7 +8,7 @@
  */
 package bleach.hack.gui.clickgui.window;
 
-import java.util.ArrayList;
+import  java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -67,13 +67,14 @@ public class ModuleWindow extends ClickGuiWindow {
 				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x70303070);
 			}
 
-			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
-					x + 2, y + 2 + curY, m.getKey().isEnabled() ? 0x70efe0 : 0xc0c0c0);
 
 			// If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
 				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x50ff0000);
 			}
+
+			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
+					x + 2, y + 2 + curY, m.getKey().isEnabled() ? 0x70efe0 : 0xc0c0c0);
 
 			// Set which module settings show on
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {

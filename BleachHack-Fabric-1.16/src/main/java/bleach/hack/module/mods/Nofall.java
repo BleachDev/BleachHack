@@ -11,7 +11,6 @@ package bleach.hack.module.mods;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
-import bleach.hack.util.world.EntityUtils;
 import bleach.hack.util.world.WorldUtils;
 import com.google.common.eventbus.Subscribe;
 
@@ -23,8 +22,6 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.util.FabricReflect;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Items;
@@ -35,7 +32,6 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
 
 /**
  * AutoMLG is a modified copy of https://github.com/MeteorDevelopment/meteor-client/blob/master/src/main/java/minegame159/meteorclient/systems/modules/movement/NoFall.java
@@ -49,7 +45,7 @@ public class Nofall extends Module {
     public Nofall() {
         super("Nofall", KEY_UNBOUND, Category.PLAYER, "Prevents you from taking fall damage.",
                 new SettingMode("Mode", "Simple", "Packet", "AutoMLG", "ec.me").withDesc("What mode to use"),
-                new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block and locks you"),
+                new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block for AutoMLG"),
                 new SettingRotate(true).withDesc("Rotates to floor for AutoMLG. Server option recommended"));
 
     }
