@@ -68,7 +68,11 @@ public class Xray extends Module {
 		mc.options.gamma = gamma;
 
 		mc.chunkCullingEnabled = true;
-		mc.worldRenderer.reload();
+		
+		try {
+			mc.worldRenderer.reload();
+		} catch (Exception ignored) {
+		}
 
 		super.onDisable();
 	}
