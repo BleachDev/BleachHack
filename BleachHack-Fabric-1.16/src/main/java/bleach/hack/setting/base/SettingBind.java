@@ -40,7 +40,7 @@ public class SettingBind extends SettingBase {
 			DrawableHelper.fill(matrix, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 		
-		if (window.keyDown >= 0 && window.mouseOver(x, y, x + len, y + 12)) {
+		if (window.keyDown >= 0 && window.keyDown != GLFW.GLFW_KEY_ESCAPE && window.mouseOver(x, y, x + len, y + 12)) {
 			mod.setKey(window.keyDown == GLFW.GLFW_KEY_DELETE ? Module.KEY_UNBOUND : window.keyDown);
 			MinecraftClient.getInstance().getSoundManager().play(
 					PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
