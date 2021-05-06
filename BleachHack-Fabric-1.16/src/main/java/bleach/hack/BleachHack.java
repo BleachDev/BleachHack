@@ -12,6 +12,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.gson.JsonElement;
 
 import bleach.hack.command.CommandManager;
+import bleach.hack.command.CommandSuggestor;
 import bleach.hack.gui.title.BleachTitleScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -70,6 +71,7 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readFriends();
 
 		CommandManager.readPrefix();
+		CommandSuggestor.init();
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
