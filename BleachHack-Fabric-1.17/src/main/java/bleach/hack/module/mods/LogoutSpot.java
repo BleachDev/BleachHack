@@ -42,7 +42,8 @@ public class LogoutSpot extends Module {
 						new SettingToggle("Name", true).withDesc("Shows the name of the logged player"), // 1-0
 						new SettingToggle("Coords", false).withDesc("Shows the coords of the logged player"), // 1-1
 						new SettingToggle("Health", true).withDesc("Shows the health of the logged player"), // 1-2
-						new SettingToggle("Time", true).withDesc("Shows the time ago the player logged"))); // 1-3
+						new SettingToggle("Time", true).withDesc("Shows the time ago the player logged")), // 1-3
+				new SettingToggle("Ghost", true).withDesc("Makes the logout spot players transparent")); // 2
 	}
 
 	@Override
@@ -125,6 +126,8 @@ public class LogoutSpot extends Module {
 				return false;
 			});
 		}
+
+		players.values().forEach(e -> e.getLeft().setGhost(getSetting(2).asToggle().state));
 	}
 
 	@Subscribe
@@ -148,7 +151,7 @@ public class LogoutSpot extends Module {
 
 				if (getSetting(1).asToggle().getChild(1).asToggle().state)
 					lines.add("\u00a7c" + (int) player.getX() + " " + (int) player.getY() + " " + (int) player.getZ());
-				
+
 				if (getSetting(1).asToggle().getChild(2).asToggle().state)
 					lines.add("\u00a7c" + (int) Math.ceil(player.getHealth() + player.getAbsorptionAmount()) + "hp");
 
@@ -172,6 +175,11 @@ public class LogoutSpot extends Module {
 
 	private PlayerCopyEntity spawnDummy(PlayerEntity player) {
 		PlayerCopyEntity dummy = new PlayerCopyEntity(player);
+
+		if (getSetting(2).asToggle().state) {
+			dummy.setGhost(true);
+		}
+
 		dummy.spawn();
 
 		return dummy;

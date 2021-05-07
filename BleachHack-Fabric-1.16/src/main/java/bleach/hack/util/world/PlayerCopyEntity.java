@@ -17,6 +17,8 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public class PlayerCopyEntity extends OtherClientPlayerEntity {
 
+	private boolean ghost;
+
 	public PlayerCopyEntity() {
 		this(MinecraftClient.getInstance().player);
 	}
@@ -54,11 +56,26 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 	}
 
 	public void spawn() {
+		removed = false;
 		MinecraftClient.getInstance().world.addEntity(this.getEntityId(), this);
 	}
 
 	public void despawn() {
 		MinecraftClient.getInstance().world.removeEntity(this.getEntityId());
+	}
+
+	public void setGhost(boolean ghost) {
+		this.ghost = ghost;
+	}
+
+	@Override
+	public boolean isInvisible() {
+		return ghost ? true : super.isInvisible();
+	}
+
+	@Override
+	public boolean isInvisibleTo(PlayerEntity player) {
+		return ghost ? false : super.isInvisibleTo(player);
 	}
 
 }
