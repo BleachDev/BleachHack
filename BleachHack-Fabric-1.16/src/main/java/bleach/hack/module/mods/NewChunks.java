@@ -37,7 +37,7 @@ public class NewChunks extends Module {
 				new SettingToggle("Remove", true).withDesc("Removes the newchunks when disabling the module"),
 				new SettingToggle("Fill", true).withDesc("Fills in the newchunks").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2).withDesc("The opacity of the fill")),
-				new SettingColor("Color", 0.8f, 0.2f, 0.2f, false));
+				new SettingColor("Color", 0.8f, 0.6f, 0.85f, false));
 	}
 
 	@Override
@@ -86,20 +86,19 @@ public class NewChunks extends Module {
 
 	@Subscribe
 	public void onWorldRender(EventWorldRender.Post event) {
+		QuadColor outlineColor = QuadColor.single(0xff000000 | getSetting(2).asColor().getRGB());
+		QuadColor fillColor = QuadColor.single(
+				((int) (getSetting(1).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | getSetting(2).asColor().getRGB());
+
 		synchronized (chunks) {
-			if (getSetting(1).asToggle().state) {
-				QuadColor fillColor = QuadColor.single(
-						((int) (getSetting(1).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | getSetting(2).asColor().getRGB());
-
-				for (ChunkPos c: chunks) {
-					RenderUtils.drawBoxFill(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), fillColor);
-				}
-			}
-
-			QuadColor color = QuadColor.single(0xff000000 | getSetting(2).asColor().getRGB());
-
 			for (ChunkPos c: chunks) {
-				RenderUtils.drawBoxOutline(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), color, 2f);
+				if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
+					if (getSetting(1).asToggle().state) {
+						RenderUtils.drawBoxFill(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), fillColor);
+					}
+		
+					RenderUtils.drawBoxOutline(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), outlineColor, 2f);
+				}
 			}
 		}
 	}
