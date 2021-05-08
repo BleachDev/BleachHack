@@ -196,10 +196,7 @@ public class Search extends Module {
 		for (BlockPos pos : foundBlocks) {
 			BlockState state = mc.world.getBlockState(pos);
 
-			int color = state.getMapColor(mc.world, pos).color;
-			float red = ((color & 0xff0000) >> 16) / 255f;
-			float green = ((color & 0xff00) >> 8) / 255f;
-			float blue = (color & 0xff) / 255f;
+			float[] color = getColorForBlock(state, pos);
 
 			VoxelShape voxelShape = state.getOutlineShape(mc.world, pos);
 			if (voxelShape.isEmpty()) {
@@ -210,7 +207,7 @@ public class Search extends Module {
 				float fillAlpha = getSetting(2).asSlider().getValueFloat();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
+					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(color[0], color[1], color[2], fillAlpha));
 				}
 			}
 
@@ -218,7 +215,7 @@ public class Search extends Module {
 				float outlineWidth = getSetting(1).asSlider().getValueFloat();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);
+					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(color[0], color[1], color[2], 1f), outlineWidth);
 				}
 			}
 
@@ -233,7 +230,7 @@ public class Search extends Module {
 				RenderUtils.drawLine(
 						lookVec.x, lookVec.y, lookVec.z,
 						pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-						LineColor.single(red, green, blue, (float) tracers.getChild(1).asSlider().getValue()),
+						LineColor.single(color[0], color[1], color[2], (float) tracers.getChild(1).asSlider().getValue()),
 						(float) tracers.getChild(0).asSlider().getValue());
 			}
 		}
@@ -266,6 +263,15 @@ public class Search extends Module {
 				return found;
 			}
 		}));
+	}
+	
+	public float[] getColorForBlock(BlockState state, BlockPos pos) {
+		if (state.getBlock() == Blocks.NETHER_PORTAL) {
+			return new float[] { 0.42f, 0f, 0.82f };
+		}
+		
+		int color = state.getMapColor(mc.world, pos).color;
+		return new float[] { ((color & 0xff0000) >> 16) / 255f, ((color & 0xff00) >> 8) / 255f, (color & 0xff) / 255f };
 	}
 
 	private void reset() {
