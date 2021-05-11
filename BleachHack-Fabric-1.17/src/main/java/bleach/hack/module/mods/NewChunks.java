@@ -8,6 +8,7 @@
  */
 package bleach.hack.module.mods;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,20 +31,25 @@ import net.minecraft.util.math.Direction;
 
 public class NewChunks extends Module {
 
-	private Set<ChunkPos> chunks = new HashSet<>();
+	private Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
+	private Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
 
 	public NewChunks() {
 		super("NewChunks", KEY_UNBOUND, Category.WORLD, "Detects completely new chunks using certain traits of them",
-				new SettingToggle("Remove", true).withDesc("Removes the newchunks when disabling the module"),
+				new SettingToggle("Remove", true).withDesc("Removes the cached chunks when disabling the module"),
 				new SettingToggle("Fill", true).withDesc("Fills in the newchunks").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2).withDesc("The opacity of the fill")),
-				new SettingColor("Color", 0.8f, 0.6f, 0.85f, false));
+				new SettingToggle("NewChunks", true).withDesc("Shows all the chunks that are (most likely) completely new").withChildren(
+						new SettingColor("Color", 0.8f, 0.6f, 0.85f, false)),
+				new SettingToggle("OldChunks", false).withDesc("Shows all the chunks that have (most likely) been loaded before").withChildren(
+						new SettingColor("Color", 0.9f, 0.2f, 0.2f, false)));
 	}
 
 	@Override
 	public void onDisable() {
 		if (getSetting(0).asToggle().state) {
-			chunks.clear();
+			newChunks.clear();
+			oldChunks.clear();
 		}
 
 		super.onDisable();
@@ -56,29 +62,41 @@ public class NewChunks extends Module {
 		if (event.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
 			ChunkDeltaUpdateS2CPacket packet = (ChunkDeltaUpdateS2CPacket) event.getPacket();
 
-			synchronized (chunks) {
-				packet.visitUpdates((pos, state) -> {
-					if (!state.getFluidState().isEmpty() && !state.getFluidState().isStill()) {
-						for (Direction dir: searchDirs) {
-							if (mc.world.getBlockState(pos.offset(dir)).getFluidState().isStill()) {
-								chunks.add(new ChunkPos(pos));
-								return;
-							}
-						}
-					}
-				});
-			}
-		} else if (event.getPacket() instanceof BlockUpdateS2CPacket) {
-			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
+			packet.visitUpdates((pos, state) -> {
+				if (!state.getFluidState().isEmpty() && !state.getFluidState().isStill()) {
+					ChunkPos chunkPos = new ChunkPos(pos);
 
-			synchronized (chunks) {
-				if (!packet.getState().getFluidState().isEmpty() && !packet.getState().getFluidState().isStill()) {
 					for (Direction dir: searchDirs) {
-						if (mc.world.getBlockState(packet.getPos().offset(dir)).getFluidState().isStill()) {
-							chunks.add(new ChunkPos(packet.getPos()));
+						if (mc.world.getBlockState(pos.offset(dir)).getFluidState().isStill() && !oldChunks.contains(chunkPos)) {
+							newChunks.add(chunkPos);
 							return;
 						}
 					}
+					
+					if (!mc.world.getBlockState(pos.up()).getFluidState().isEmpty()
+							&& !mc.world.getBlockState(pos.up()).getFluidState().isStill()
+							&& !newChunks.contains(chunkPos)) {
+						oldChunks.add(chunkPos);
+					}
+				}
+			});
+		} else if (event.getPacket() instanceof BlockUpdateS2CPacket) {
+			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
+
+			if (!packet.getState().getFluidState().isEmpty() && !packet.getState().getFluidState().isStill()) {
+				ChunkPos chunkPos = new ChunkPos(packet.getPos());
+
+				for (Direction dir: searchDirs) {
+					if (mc.world.getBlockState(packet.getPos().offset(dir)).getFluidState().isStill() && !oldChunks.contains(chunkPos)) {
+						newChunks.add(chunkPos);
+						return;
+					}
+				}
+				
+				if (!mc.world.getBlockState(packet.getPos().up()).getFluidState().isEmpty()
+						&& !mc.world.getBlockState(packet.getPos().up()).getFluidState().isStill()
+						&& !newChunks.contains(chunkPos)) {
+					oldChunks.add(chunkPos);
 				}
 			}
 		}
@@ -86,18 +104,38 @@ public class NewChunks extends Module {
 
 	@Subscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		QuadColor outlineColor = QuadColor.single(0xff000000 | getSetting(2).asColor().getRGB());
-		QuadColor fillColor = QuadColor.single(
-				((int) (getSetting(1).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | getSetting(2).asColor().getRGB());
+		if (getSetting(2).asToggle().state) {
+			int color = getSetting(2).asToggle().getChild(0).asColor().getRGB();
+			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
+			QuadColor fillColor = QuadColor.single(((int) (getSetting(1).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
 
-		synchronized (chunks) {
-			for (ChunkPos c: chunks) {
-				if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
-					if (getSetting(1).asToggle().state) {
-						RenderUtils.drawBoxFill(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), fillColor);
+			synchronized (newChunks) {
+				for (ChunkPos c: newChunks) {
+					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
+						if (getSetting(1).asToggle().state) {
+							RenderUtils.drawBoxFill(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), fillColor);
+						}
+	
+						RenderUtils.drawBoxOutline(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), outlineColor, 2f);
 					}
-		
-					RenderUtils.drawBoxOutline(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), outlineColor, 2f);
+				}
+			}
+		}
+
+		if (getSetting(3).asToggle().state) {
+			int color = getSetting(3).asToggle().getChild(0).asColor().getRGB();
+			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
+			QuadColor fillColor = QuadColor.single(((int) (getSetting(1).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
+
+			synchronized (oldChunks) {
+				for (ChunkPos c: oldChunks) {
+					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
+						if (getSetting(1).asToggle().state) {
+							RenderUtils.drawBoxFill(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), fillColor);
+						}
+	
+						RenderUtils.drawBoxOutline(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), outlineColor, 2f);
+					}
 				}
 			}
 		}
