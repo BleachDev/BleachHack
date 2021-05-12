@@ -28,21 +28,21 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
-import bleach.hack.gui.widget.BleachCheckbox;
-import bleach.hack.gui.widget.TextPassFieldWidget;
 import bleach.hack.gui.window.WindowScreen;
+import bleach.hack.gui.window.widget.WindowButtonWidget;
+import bleach.hack.gui.window.widget.WindowCheckboxWidget;
+import bleach.hack.gui.window.widget.WindowPassTextFieldWidget;
+import bleach.hack.gui.window.widget.WindowTextFieldWidget;
 import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginManager;
 import bleach.hack.util.file.BleachFileMang;
 import bleach.hack.gui.window.Window;
-import bleach.hack.gui.window.WindowButton;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.Session;
@@ -66,9 +66,9 @@ public class AccountManagerScreen extends WindowScreen {
 
 	private static AccountList accounts = null;
 
-	public TextFieldWidget userField;
-	public TextPassFieldWidget passField;
-	public BleachCheckbox checkBox = new BleachCheckbox(0, 0, new LiteralText("Save Login"), false);
+	public WindowTextFieldWidget userField;
+	public WindowTextFieldWidget passField;
+	public WindowCheckboxWidget checkBox;
 
 	public String loginResult = "";
 
@@ -92,46 +92,41 @@ public class AccountManagerScreen extends WindowScreen {
 		int w = width - width / 4;
 		int h = height - height / 4;
 
-		if (userField == null) {
-			userField = new TextFieldWidget(textRenderer, 0, 0, 196, 18, LiteralText.EMPTY);
-			userField.setMaxLength(32767);
-		}
+		userField = getWindow(0).addWidget(new WindowTextFieldWidget(w / 2 - 98, h / 4, 196, 18, userField != null ? userField.textField.getText() : ""));
+		userField.textField.setMaxLength(32767);
+		
+		passField = getWindow(0).addWidget(new WindowPassTextFieldWidget(w / 2 - 98, h / 4 + 30, 196, 18, passField != null ? passField.textField.getText() : ""));
+		passField.textField.setMaxLength(32767);
 
-		if (passField == null) {
-			passField = new TextPassFieldWidget(textRenderer, 0, 0, 196, 18, LiteralText.EMPTY);
-			passField.setMaxLength(32767);
-		}
+		checkBox = getWindow(0).addWidget(new WindowCheckboxWidget(w / 2 - 99, h / 4 + 53, "Save Login", false));
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
+			onClose();
+		}));
 
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
-					//getWindow(0).closed = true;
-					onClose();
-				}));
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 - 100, h / 3 + 62, w / 2 - 2, h / 3 + 82, "Accounts", () -> {
-					getWindow(1).closed = false;
-					selectWindow(1);
-				}));
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
-					Pair<String, Session> login = LoginManager.login(userField.getText(), passField.getText());
-					loginResult = login.getLeft();
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 62, w / 2 - 2, h / 3 + 82, "Accounts", () -> {
+			getWindow(1).closed = false;
+			selectWindow(1);
+		}));
 
-					try {
-						String email = userField.getText();
-						String pass = passField.getText();
-						Session session = login.getRight();
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
+			Pair<String, Session> login = LoginManager.login(userField.textField.getText(), passField.textField.getText());
+			loginResult = login.getLeft();
 
-						if (checkBox.checked && login.getRight() != null && !accounts.hasEmail(email)) {
-							accountQueue.add(new Account(email, pass, session.getUuid(), session.getUsername()));
-							BleachFileMang.createFile("logins.txt");
-							BleachFileMang.appendFile(
-									email + ":" + session.getUuid() + ":" + session.getUsername() + ":" + crypter.encrypt(pass), "logins.txt");
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}));
+			try {
+				String email = userField.textField.getText();
+				String pass = passField.textField.getText();
+				Session session = login.getRight();
+
+				if (checkBox.checked && login.getRight() != null && !accounts.hasEmail(email)) {
+					accountQueue.add(new Account(email, pass, session.getUuid(), session.getUsername()));
+					BleachFileMang.createFile("logins.txt");
+					BleachFileMang.appendFile(
+							email + ":" + session.getUuid() + ":" + session.getUsername() + ":" + crypter.encrypt(pass), "logins.txt");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}));
 
 		if (accounts == null) {
 			accounts = new AccountList();
@@ -179,16 +174,6 @@ public class AccountManagerScreen extends WindowScreen {
 
 			drawStringWithShadow(matrix, textRenderer, loginResult.isEmpty() ? "" : "|  " + loginResult, x + w / 2 - 24, y + h / 4 + 65, 0xC0C0C0);
 
-			userField.x = x + w / 2 - 98;
-			userField.y = y + h / 4 + 10;
-			passField.x = x + w / 2 - 98;
-			passField.y = y + h / 4 + 40;
-			checkBox.x = x + w / 2 - 99;
-			checkBox.y = y + h / 4 + 63;
-
-			userField.render(matrix, mouseX, mouseY, 1f);
-			passField.render(matrix, mouseX, mouseY, 1f);
-			checkBox.render(matrix, mouseX, mouseY, 1f);
 		} else if (window == 1) {
 			int x = getWindow(1).x1,
 					y = getWindow(1).y1,
@@ -223,7 +208,6 @@ public class AccountManagerScreen extends WindowScreen {
 					x + 2, y + 2,
 					x + height - 2, y + height - 2,
 					0x60d86ceb);
-
 			DrawableHelper.drawTexture(matrix,
 					x + 3, y + 3,
 					(int) (pixelSize * 8), (int) (pixelSize * 8),
@@ -254,11 +238,7 @@ public class AccountManagerScreen extends WindowScreen {
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (!getWindow(0).closed && getWindow(0).selected) {
-			userField.mouseClicked(mouseX, mouseY, button);
-			passField.mouseClicked(mouseX, mouseY, button);
-			checkBox.mouseClicked(mouseX, mouseY, button);
-		} else if (!getWindow(1).closed && getWindow(1).selected) {
+		if (!getWindow(1).closed && getWindow(1).selected) {
 			int x = getWindow(1).x1,
 					y = getWindow(1).y1,
 					w = width - width / 3;
@@ -269,12 +249,12 @@ public class AccountManagerScreen extends WindowScreen {
 
 				if (mouseX >= x + w / 2 - length / 2 && mouseX <= x + w / 2 + length / 2
 						&& mouseY >= y + accStart + c * accHeight && mouseY <= y + accStart + c * accHeight + 28) {
-					userField.setText(a.email);
+					userField.textField.setText(a.email);
 
 					try {
-						passField.setText(a.pass);
+						passField.textField.setText(a.pass);
 					} catch (Exception e1) {
-						passField.setText("");
+						passField.textField.setText("");
 						e1.printStackTrace();
 					}
 
@@ -303,9 +283,6 @@ public class AccountManagerScreen extends WindowScreen {
 	}
 
 	public void tick() {
-		userField.tick();
-		passField.tick();
-
 		for (Future<Account> f: new ArrayList<>(accountFutures)) {
 			if (f.isDone()) {
 				try {
@@ -357,20 +334,6 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 	}
 
-	public boolean charTyped(char chr, int modifiers) {
-		if (userField.isFocused()) userField.charTyped(chr, modifiers);
-		if (passField.isFocused()) passField.charTyped(chr, modifiers);
-
-		return super.charTyped(chr, modifiers);
-	}
-
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		if (userField.isFocused()) userField.keyPressed(keyCode, scanCode, modifiers);
-		if (passField.isFocused()) passField.keyPressed(keyCode, scanCode, modifiers);
-
-		return super.keyPressed(keyCode, scanCode, modifiers);
-	}
-
 	private static class AccountList {
 
 		private Set<Account> accounts = new TreeSet<Account>((i, j) -> i.email.compareTo(j.email));
@@ -415,10 +378,10 @@ public class AccountManagerScreen extends WindowScreen {
 
 		public boolean bindSkin() {
 			if (textures.containsKey(Type.SKIN)) {
-				RenderSystem.setShaderTexture(0, textures.get(Type.SKIN));
+				MinecraftClient.getInstance().getTextureManager().bindTexture(textures.get(Type.SKIN));
 				//System.out.println("Binded custom skin: " + skin);
 			} else {
-				RenderSystem.setShaderTexture(0, DefaultSkinHelper.getTexture());
+				MinecraftClient.getInstance().getTextureManager().bindTexture(DefaultSkinHelper.getTexture());
 			}
 
 			return true;
@@ -426,7 +389,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 		public boolean bindCape() {
 			if (textures.containsKey(Type.CAPE)) {
-				RenderSystem.setShaderTexture(0, textures.get(Type.CAPE));
+				MinecraftClient.getInstance().getTextureManager().bindTexture(textures.get(Type.CAPE));
 				return true;
 			}
 

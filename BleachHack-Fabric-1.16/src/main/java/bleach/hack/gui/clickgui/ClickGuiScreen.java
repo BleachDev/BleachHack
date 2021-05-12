@@ -112,7 +112,7 @@ public abstract class ClickGuiScreen extends WindowScreen {
 		// Fix having to double click windows to move them
 		for (Window w : getWindows()) {
 			if (mouseX > w.x1 && mouseX < w.x2 && mouseY > w.y1 && mouseY < w.y2 && !w.closed) {
-				w.onMousePressed((int) mouseX, (int) mouseY);
+				w.mouseClicked(mouseX, mouseY, button);
 				break;
 			}
 		}

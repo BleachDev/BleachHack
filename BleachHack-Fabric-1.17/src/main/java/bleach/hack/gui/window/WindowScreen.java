@@ -159,7 +159,7 @@ public abstract class WindowScreen extends Screen {
 				}
 
 				if (w.selected) {
-					w.onMousePressed((int) mouseX, (int) mouseY);
+					w.mouseClicked(mouseX, mouseY, button);
 				} else {
 					selectWindow(wi);
 				}
@@ -172,10 +172,34 @@ public abstract class WindowScreen extends Screen {
 
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
 		for (Window w : windows) {
-			w.onMouseReleased((int) mouseX, (int) mouseY);
+			w.mouseReleased(mouseX, mouseY, button);
 		}
 
 		return super.mouseReleased(mouseX, mouseY, button);
+	}
+	
+	public void tick() {
+		for (Window w : windows) {
+			w.tick();
+		}
+
+		super.tick();
+	}
+
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		for (Window w : windows) {
+			w.keyPressed(keyCode, scanCode, modifiers);
+		}
+
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	public boolean charTyped(char chr, int modifiers) {
+		for (Window w : windows) {
+			w.charTyped(chr, modifiers);
+		}
+
+		return super.charTyped(chr, modifiers);
 	}
 
 	public void renderBackgroundTexture(int vOffset) {

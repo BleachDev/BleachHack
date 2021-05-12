@@ -23,8 +23,8 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
 import bleach.hack.gui.window.WindowScreen;
+import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.Window;
-import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.Notebot;
 import bleach.hack.util.NotebotUtils;
 import bleach.hack.util.file.BleachFileMang;
@@ -69,18 +69,18 @@ public class NotebotScreen extends WindowScreen {
 				height / 4 + height / 2,
 				"Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
 
-		getWindow(0).buttons.add(new WindowButton(22, 14, 32, 24, "<", () -> {
+		getWindow(0).addWidget(new WindowButtonWidget(22, 14, 32, 24, "<", () -> {
 			if (page > 0)
 				page--;
 		}));
 
-		getWindow(0).buttons.add(new WindowButton(77, 14, 87, 24, ">", () -> {
+		getWindow(0).addWidget(new WindowButtonWidget(77, 14, 87, 24, ">", () -> {
 			page++;
 		}));
 
 		int yEnd = getWindow(0).x2 - getWindow(0).x1;
 
-		getWindow(0).buttons.add(new WindowButton(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () -> {
+		getWindow(0).addWidget(new WindowButtonWidget(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () -> {
 			Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"));
 		}));
 	}
