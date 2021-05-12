@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.minecraft.class_6367;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlUniform;
@@ -253,13 +254,12 @@ public class StringShaderEffect extends ShaderEffect {
 	}
 
 	public void addTarget(String name, int width, int height) {
-		Framebuffer framebuffer = new Framebuffer(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
+		Framebuffer framebuffer = new class_6367(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
 		framebuffer.setClearColor(0.0F, 0.0F, 0.0F, 0.0F);
 		this.targetsByName.put(name, framebuffer);
 		if (width == this.width && height == this.height) {
 			this.defaultSizedTargets.add(framebuffer);
 		}
-
 	}
 
 	public void close() {

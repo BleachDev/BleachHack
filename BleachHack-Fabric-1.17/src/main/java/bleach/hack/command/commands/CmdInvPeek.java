@@ -47,10 +47,8 @@ public class CmdInvPeek extends Command {
 							RenderSystem.setShader(GameRenderer::getPositionTexShader);
 							RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 							RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-							int i = this.field_2776;
-							int j = this.field_2800;
-							this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
-							drawEntity(i + 51, j + 75, 30, (float) (i + 51) - mouseX, (float) (j + 75 - 50) - mouseY, this.client.player);
+							this.drawTexture(matrices, x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+							drawEntity(x + 51, y + 75, 30, (float) (x + 51) - mouseX, (float) (y + 75 - 50) - mouseY, this.client.player);
 						}
 					});
 				});

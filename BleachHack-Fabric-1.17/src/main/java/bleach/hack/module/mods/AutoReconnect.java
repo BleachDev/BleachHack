@@ -24,6 +24,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
@@ -86,7 +87,7 @@ public class AutoReconnect extends Module {
 			reconnectTime = System.currentTimeMillis();
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 35, 200, 20, new LiteralText("Reconnect"), button -> {
 				if (server != null)
-					client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
+					ConnectScreen.method_36877(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
 			}));
 			addButton(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20,
 					new LiteralText((getSetting(0).asToggle().state ? "\u00a7a" : "\u00a7c") + "AutoReconnect ["
@@ -107,7 +108,7 @@ public class AutoReconnect extends Module {
 
 			if (reconnectTime + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSetting(0).asToggle().state) {
 				if (server != null)
-					client.openScreen(new ConnectScreen(new MultiplayerScreen(new TitleScreen()), client, server));
+					ConnectScreen.method_36877(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
 				reconnectTime = System.currentTimeMillis();
 			}
 		}

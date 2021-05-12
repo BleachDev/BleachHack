@@ -128,7 +128,7 @@ public class EntityMenuScreen extends Screen {
 
 		matrix.push();
 		matrix.scale(2.5f, 2.5f, 1f);
-		drawCenteredString(matrix, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
+		drawCenteredText(matrix, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
 
 		Vector2 center = new Vector2(width / 2, height / 2);
 		Vector2 mouse = new Vector2(mouseX, mouseY).subtract(center).normalize();

@@ -73,9 +73,9 @@ public class ServerScraperScreen extends Screen {
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		renderBackground(matrix);
-		drawCenteredString(matrix, textRenderer, "\u00a77IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
-		drawCenteredString(matrix, textRenderer, "\u00a77" + checked + " / 1792 [\u00a7a" + working + "\u00a77]", this.width / 2, this.height / 4 + 58, -1);
-		drawCenteredString(matrix, textRenderer, result, this.width / 2, this.height / 4 + 70, -1);
+		drawCenteredText(matrix, textRenderer, "\u00a77IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
+		drawCenteredText(matrix, textRenderer, "\u00a77" + checked + " / 1792 [\u00a7a" + working + "\u00a77]", this.width / 2, this.height / 4 + 58, -1);
+		drawCenteredText(matrix, textRenderer, result, this.width / 2, this.height / 4 + 70, -1);
 		ipField.render(matrix, mouseX, mouseY, delta);
 
 		if (abort) {

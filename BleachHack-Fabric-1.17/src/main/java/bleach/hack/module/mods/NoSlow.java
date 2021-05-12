@@ -96,13 +96,13 @@ public class NoSlow extends Module {
 		/* Web */
 		if (getSetting(3).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
 			// still kinda scuffed until i get an actual mixin
-			mc.player.slowMovement(mc.player.getBlockState(), new Vec3d(1.75, 1.75, 1.75));
+			mc.player.slowMovement(mc.world.getBlockState(mc.player.getBlockPos()), new Vec3d(1.75, 1.75, 1.75));
 		}
 
 		/* Berry Bush */
 		if (getSetting(4).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.SWEET_BERRY_BUSH)) {
 			// also scuffed
-			mc.player.slowMovement(mc.player.getBlockState(), new Vec3d(1.7, 1.7, 1.7));
+			mc.player.slowMovement(mc.world.getBlockState(mc.player.getBlockPos()), new Vec3d(1.7, 1.7, 1.7));
 		}
 
 		// Items handled in MixinPlayerEntity:sendMovementPackets_isUsingItem
