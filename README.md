@@ -14,6 +14,16 @@ Works on fabric 1.16 & 1.17 Snapshots (1.14-1.15 is discontinued).
 > Website: https://bleachhack.github.io/  
 > Discord: https://discord.gg/b5Wc4nQ
 
+## Showcase
+<details>
+ <summary>Images:</summary>
+
+ ![](https://github.com/BleachDrinker420/BH-resources/raw/main/images/ClickguiShowcase.jpg)
+
+ ![](https://github.com/BleachDrinker420/BH-resources/raw/main/images/RenderShowcase.jpg)
+
+</details>
+
 ## Installation
 ### For normal people
 
