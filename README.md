@@ -16,7 +16,7 @@ Works on fabric 1.16 & 1.17 Snapshots (1.14-1.15 is discontinued).
 
 ## Showcase
 <details>
- <summary>Images:</summary>
+ <summary>Images</summary>
 
  ![](https://github.com/BleachDrinker420/BH-resources/raw/main/images/ClickguiShowcase.jpg)
 

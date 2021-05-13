@@ -23,11 +23,15 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.chunk.WorldChunk;
 
 public class NewChunks extends Module {
 
@@ -72,12 +76,6 @@ public class NewChunks extends Module {
 							return;
 						}
 					}
-					
-					if (!mc.world.getBlockState(pos.up()).getFluidState().isEmpty()
-							&& !mc.world.getBlockState(pos.up()).getFluidState().isStill()
-							&& !newChunks.contains(chunkPos)) {
-						oldChunks.add(chunkPos);
-					}
 				}
 			});
 		} else if (event.getPacket() instanceof BlockUpdateS2CPacket) {
@@ -92,11 +90,27 @@ public class NewChunks extends Module {
 						return;
 					}
 				}
+			}
+		} else if (event.getPacket() instanceof ChunkDataS2CPacket && mc.world != null) {
+			ChunkDataS2CPacket packet = (ChunkDataS2CPacket) event.getPacket();
+
+			ChunkPos pos = new ChunkPos(packet.getX(), packet.getZ());
+			
+			if (!newChunks.contains(pos) && mc.world.getChunkManager().getChunk(packet.getX(), packet.getZ()) == null) {
+				WorldChunk chunk = new WorldChunk(mc.world, pos, null);
+				chunk.loadFromPacket(null, packet.getReadBuffer(), new CompoundTag(), packet.getVerticalStripBitmask());
 				
-				if (!mc.world.getBlockState(packet.getPos().up()).getFluidState().isEmpty()
-						&& !mc.world.getBlockState(packet.getPos().up()).getFluidState().isStill()
-						&& !newChunks.contains(chunkPos)) {
-					oldChunks.add(chunkPos);
+				for (int x = 0; x < 16; x++) {
+					for (int y = 0; y < mc.world.getHeight(); y++) {
+						for (int z = 0; z < 16; z++) {
+							FluidState fluid = chunk.getFluidState(x, y, z);
+							
+							if (!fluid.isEmpty() && !fluid.isStill()) {
+								oldChunks.add(pos);
+								return;
+							}
+						}
+					}
 				}
 			}
 		}
