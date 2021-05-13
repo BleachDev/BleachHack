@@ -41,7 +41,7 @@ public class EntityMenu extends Module {
 	private boolean buttonHeld;
 	
 	public EntityMenu() {
-		super("EntityMenu", KEY_UNBOUND, Category.MISC, "An interaction screen when looking at an entity and pressing the middle mouse button. Customizable via the " + Command.PREFIX + "interaction command",
+		super("EntityMenu", KEY_UNBOUND, Category.MISC, "An interaction screen when looking at an entity and pressing the middle mouse button. Customizable via the " + Command.PREFIX + "entitymenu command",
 				new SettingToggle("PlayersOnly", false).withDesc("Only opens the menu when clicking on players"));
 	
 		JsonElement je = BleachFileHelper.readMiscSetting("entityMenu");
