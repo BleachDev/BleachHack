@@ -12,7 +12,6 @@ import java.util.UUID;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class PlayerCopyEntity extends OtherClientPlayerEntity {
@@ -32,17 +31,10 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 
 		copyFrom(player);
 
-		byte modelPartFlags = 0;
-		for (PlayerModelPart model: PlayerModelPart.values()) {
-			if (player.isPartVisible(model)) {
-				modelPartFlags |= model.getBitFlag();
-			}
-		}
-
 		// Cache the player textures, then switch to a random uuid
 		// because the world doesn't allow duplicate uuids in 1.17+
 		getPlayerListEntry();
-		dataTracker.set(PLAYER_MODEL_PARTS, modelPartFlags);
+		dataTracker.set(PLAYER_MODEL_PARTS, player.getDataTracker().get(PLAYER_MODEL_PARTS));
 		setUuid(UUID.randomUUID());
 	}
 
