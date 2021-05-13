@@ -35,6 +35,7 @@ import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowCheckboxWidget;
 import bleach.hack.gui.window.widget.WindowPassTextFieldWidget;
 import bleach.hack.gui.window.widget.WindowTextFieldWidget;
+import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginManager;
 import bleach.hack.util.file.BleachFileMang;
@@ -92,13 +93,17 @@ public class AccountManagerScreen extends WindowScreen {
 		int w = width - width / 4;
 		int h = height - height / 4;
 
+		checkBox = getWindow(0).addWidget(new WindowCheckboxWidget(w / 2 - 99, h / 4 + 53, "Save Login", false));
+
 		userField = getWindow(0).addWidget(new WindowTextFieldWidget(w / 2 - 98, h / 4, 196, 18, userField != null ? userField.textField.getText() : ""));
 		userField.textField.setMaxLength(32767);
-		
+
 		passField = getWindow(0).addWidget(new WindowPassTextFieldWidget(w / 2 - 98, h / 4 + 30, 196, 18, passField != null ? passField.textField.getText() : ""));
 		passField.textField.setMaxLength(32767);
 
-		checkBox = getWindow(0).addWidget(new WindowCheckboxWidget(w / 2 - 99, h / 4 + 53, "Save Login", false));
+		getWindow(0).addWidget(new WindowTextWidget("Email:", true, WindowTextWidget.TextAlign.RIGHT, w / 2 - 102, h / 4 + 5, 0xc0c0c0));
+		getWindow(0).addWidget(new WindowTextWidget("Pass:", true, WindowTextWidget.TextAlign.RIGHT, w / 2 - 102, h / 4 + 35, 0xc0c0c0));
+
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
 			onClose();
 		}));
@@ -163,18 +168,7 @@ public class AccountManagerScreen extends WindowScreen {
 	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
 		super.onRenderWindow(matrix, window, mouseX, mouseY);
 
-		if (window == 0) {
-			int x = getWindow(0).x1,
-					y = getWindow(0).y1 - 10,
-					w = width - width / 4,
-					h = height - height / 4;
-
-			drawStringWithShadow(matrix, textRenderer, "Email: ", x + w / 2 - 130, y + h / 4 + 15, 0xC0C0C0);
-			drawStringWithShadow(matrix, textRenderer, "Pass: ", x + w / 2 - 131, y + h / 4 + 45, 0xC0C0C0);
-
-			drawStringWithShadow(matrix, textRenderer, loginResult.isEmpty() ? "" : "|  " + loginResult, x + w / 2 - 24, y + h / 4 + 65, 0xC0C0C0);
-
-		} else if (window == 1) {
+		if (window == 1) {
 			int x = getWindow(1).x1,
 					y = getWindow(1).y1,
 					w = width - width / 3;

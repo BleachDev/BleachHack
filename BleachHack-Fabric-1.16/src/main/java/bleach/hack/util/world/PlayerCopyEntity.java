@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class PlayerCopyEntity extends OtherClientPlayerEntity {
@@ -30,29 +30,20 @@ public class PlayerCopyEntity extends OtherClientPlayerEntity {
 	public PlayerCopyEntity(PlayerEntity player, double x, double y, double z) {
 		super(MinecraftClient.getInstance().world, player.getGameProfile());
 
-		updateTrackedPosition(player.getX(), player.getY(), player.getZ());
-		refreshPositionAfterTeleport(player.getX(), player.getY(), player.getZ());
-		pitch = player.pitch;
-		yaw = headYaw = bodyYaw = player.yaw;
+		copyFrom(player);
+
+		byte modelPartFlags = 0;
+		for (PlayerModelPart model: PlayerModelPart.values()) {
+			if (player.isPartVisible(model)) {
+				modelPartFlags |= model.getBitFlag();
+			}
+		}
 
 		// Cache the player textures, then switch to a random uuid
 		// because the world doesn't allow duplicate uuids in 1.17+
 		getPlayerListEntry();
+		dataTracker.set(PLAYER_MODEL_PARTS, modelPartFlags);
 		setUuid(UUID.randomUUID());
-
-		setHealth(player.getHealth());
-		setAbsorptionAmount(player.getAbsorptionAmount());
-
-		for (StatusEffectInstance effect: player.getStatusEffects()) {
-			addStatusEffect(effect);
-		}
-
-		inventory.main.set(inventory.selectedSlot, player.getMainHandStack());
-		inventory.offHand.set(0, player.getOffHandStack());
-		inventory.armor.set(0, player.inventory.armor.get(0));
-		inventory.armor.set(1, player.inventory.armor.get(1));
-		inventory.armor.set(2, player.inventory.armor.get(2));
-		inventory.armor.set(3, player.inventory.armor.get(3));
 	}
 
 	public void spawn() {

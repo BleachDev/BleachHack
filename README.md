@@ -54,7 +54,7 @@ Generate the needed files for your preferred IDE.
   Use [this link](https://fabricmc.net/wiki/tutorial:setup) for more information.
   It should be pretty similar to the eclipse setup.
   
-###### *(Note: Java 16 is required to run gradle commands)*
+###### *Note: Java 16 is required for 1.17+*
 
 ## Recommended Mods
 
