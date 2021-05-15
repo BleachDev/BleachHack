@@ -33,12 +33,12 @@ import net.minecraft.util.math.BlockPos;
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
  */
 
-public class PlaceInAir extends Module {
+public class AirPlace extends Module {
 
 	private boolean pressed;
 
-	public PlaceInAir() {
-		super("PlaceInAir", KEY_UNBOUND, Category.WORLD, "Allows you to place blocks in thin air",
+	public AirPlace() {
+		super("AirPlace", KEY_UNBOUND, Category.WORLD, "Allows you to place blocks in thin air",
 				new SettingToggle("Highlight", true).withDesc("Renders an overlay where it will place the block").withChildren(
 						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
 						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),

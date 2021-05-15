@@ -30,7 +30,7 @@ public class LogoutSpot extends Module {
 	private final HashMap<UUID, Pair<PlayerCopyEntity, Long>> players = new HashMap<>();
 
 	public LogoutSpot() {
-		super("LogoutSpot", KEY_UNBOUND, Category.WORLD, "Shows where a player logged out",
+		super("LogoutSpot", KEY_UNBOUND, Category.RENDER, "Shows where a player logged out",
 				new SettingToggle("Remove", true).withDesc("Removes logout spots").withChildren( // 1
 						new SettingToggle("Distance", false).withDesc("Remove logout spots based on distance").withChildren( // 0-0
 								new SettingSlider("Radius", 1, 1000, 200, 0).withDesc("Radius in which logout spots get shown")), // 0-0-0

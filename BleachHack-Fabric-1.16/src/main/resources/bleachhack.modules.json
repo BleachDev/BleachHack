@@ -1,6 +1,7 @@
 {
   "package": "bleach.hack.module.mods",
   "modules": [
+    "AirPlace",
     "Ambience",
     "AntiHunger",
     "AntiVoid",
@@ -59,7 +60,6 @@
     "OffhandCrash",
     "PacketFly",
     "Peek",
-    "PlaceInAir",
     "PlayerCrash",
     "RotationSnap",
     "SafeWalk",
