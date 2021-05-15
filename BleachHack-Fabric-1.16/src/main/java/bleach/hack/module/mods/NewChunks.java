@@ -118,6 +118,8 @@ public class NewChunks extends Module {
 
 	@Subscribe
 	public void onWorldRender(EventWorldRender.Post event) {
+		Direction[] skipDirs = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
+
 		if (getSetting(2).asToggle().state) {
 			int color = getSetting(2).asToggle().getChild(0).asColor().getRGB();
 			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
@@ -126,11 +128,13 @@ public class NewChunks extends Module {
 			synchronized (newChunks) {
 				for (ChunkPos c: newChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
+						Box box = new Box(c.getStartX(), 0, c.getStartX(), c.getStartX() + 16, 0, c.getStartZ() + 16);
+
 						if (getSetting(1).asToggle().state) {
-							RenderUtils.drawBoxFill(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), fillColor);
+							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
 						}
 	
-						RenderUtils.drawBoxOutline(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), outlineColor, 2f);
+						RenderUtils.drawBoxOutline(box, outlineColor, 2f, skipDirs);
 					}
 				}
 			}
@@ -144,11 +148,13 @@ public class NewChunks extends Module {
 			synchronized (oldChunks) {
 				for (ChunkPos c: oldChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
+						Box box = new Box(c.getStartX(), 0, c.getStartX(), c.getStartX() + 16, 0, c.getStartZ() + 16);
+
 						if (getSetting(1).asToggle().state) {
-							RenderUtils.drawBoxFill(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), fillColor);
+							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
 						}
 	
-						RenderUtils.drawBoxOutline(new Box(c.getStartPos(), c.getStartPos().add(16, 0, 16)), outlineColor, 2f);
+						RenderUtils.drawBoxOutline(box, outlineColor, 2f, skipDirs);
 					}
 				}
 			}
