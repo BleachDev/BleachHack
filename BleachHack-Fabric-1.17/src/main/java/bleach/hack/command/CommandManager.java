@@ -33,6 +33,7 @@ public class CommandManager {
 			new CmdBind(),
 			new CmdCI(),
 			new CmdClickGui(),
+			new CmdClip(),
 			new CmdCustomChat(),
 			new CmdCustomSign(),
 			new CmdDupe(),
