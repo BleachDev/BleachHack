@@ -50,7 +50,7 @@ public class ESP extends Module {
 	public ESP() {
 		super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
 				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill"),
-				new SettingSlider("Shader", 0, 3, 1.5, 1).withDesc("The thickness of the shader outline"),
+				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline"),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
 				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
 				new SettingToggle("DrawBehind", false).withDesc("Draws the box/fill behind the entity (definitely not a bug turned into a feature)"),
@@ -78,19 +78,6 @@ public class ESP extends Module {
 						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
-	@Override
-	public void onDisable() {
-		for (Entity e : mc.world.getEntities()) {
-			if (e != mc.player) {
-				if (e.isGlowing()) {
-					e.setGlowing(false);
-				}
-			}
-		}
-
-		super.onDisable();
-	}
-
 	@Subscribe
 	public void onEntityRenderPre(EventEntityRender.PreAll event) {
 		if (getSetting(0).asMode().mode <= 1) {
@@ -99,8 +86,8 @@ public class ESP extends Module {
 				try {
 					ShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
 							StaticShaders.MC_SHADER_UNFOMATTED
-									.replace("%1", "" + getSetting(1).asSlider().getValue())
-									.replace("%2", "" + (getSetting(1).asSlider().getValue() / 2)));
+									.replace("%1", "" + getSetting(1).asSlider().getValue() / 2)
+									.replace("%2", "" + getSetting(1).asSlider().getValue() / 4));
 
 					shader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
 					lastWidth = mc.getWindow().getFramebufferWidth();
@@ -159,9 +146,6 @@ public class ESP extends Module {
 
 			if (getSetting(0).asMode().mode == 0) {
 				event.setVertex(getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]));
-				event.getEntity().setGlowing(true);
-			} else {
-				event.getEntity().setGlowing(false);
 			}
 		}
 	}

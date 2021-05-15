@@ -9,12 +9,12 @@
 package bleach.hack.module.mods;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonSyntaxException;
@@ -31,6 +31,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.shader.OutlineShaderManager;
+import bleach.hack.util.shader.OutlineVertexConsumers;
 import bleach.hack.util.shader.StaticShaders;
 import bleach.hack.util.shader.StringShaderEffect;
 import net.minecraft.block.Block;
@@ -48,9 +49,11 @@ import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -77,7 +80,7 @@ public class StorageESP extends Module {
 	public StorageESP() {
 		super("StorageESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.",
 				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill"),
-				new SettingSlider("Shader", 0, 3, 1.5, 1).withDesc("The thickness of the shader outline"),
+				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline"),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
 				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
 
@@ -99,10 +102,6 @@ public class StorageESP extends Module {
 		blockEntities.clear();
 		entities.clear();
 
-		for (Entity e: mc.world.getEntities()) {
-			e.setGlowing(false);
-		}
-
 		super.onDisable();
 	}
 
@@ -111,7 +110,7 @@ public class StorageESP extends Module {
 		blockEntities.clear();
 		entities.clear();
 
-		for (BlockEntity be: new ArrayList<>(mc.world.blockEntities)) {
+		for (BlockEntity be: mc.world.blockEntities) {
 			float[] color = getColorForBlock(be);
 
 			if (color != null) {
@@ -191,8 +190,8 @@ public class StorageESP extends Module {
 				try {
 					ShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
 							StaticShaders.MC_SHADER_UNFOMATTED
-							.replace("%1", "" + getSetting(1).asSlider().getValue())
-							.replace("%2", "" + (getSetting(1).asSlider().getValue() / 2)));
+							.replace("%1", "" + getSetting(1).asSlider().getValue() / 2)
+							.replace("%2", "" + getSetting(1).asSlider().getValue() / 4));
 
 					shader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
 					lastWidth = mc.getWindow().getFramebufferWidth();
@@ -212,21 +211,50 @@ public class StorageESP extends Module {
 	}
 
 	@Subscribe
-	public void onBlockEntityRender(EventBlockEntityRender.Single.Pre event) {
-		if (getSetting(0).asMode().mode == 0 && blockEntities.containsKey(event.getBlockEntity())) {
-			float[] color = blockEntities.get(event.getBlockEntity());
-			event.setVertexConsumers(getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]));
+	public void onBlockEntityRender(EventBlockEntityRender.PreAll event) {
+		if (getSetting(0).asMode().mode == 0) {
+			for (Entry<BlockEntity, float[]> be: blockEntities.entrySet()) {
+				BlockEntityRenderer<BlockEntity> beRenderer = BlockEntityRenderDispatcher.INSTANCE.get(be.getKey());
+	
+				BlockPos pos = be.getKey().getPos();
+				MatrixStack matrix = RenderUtils.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
+				if (beRenderer != null) {
+					beRenderer.render(
+							be.getKey(),
+							mc.getTickDelta(),
+							matrix,
+							OutlineVertexConsumers.outlineOnlyProvider(be.getValue()[0], be.getValue()[1], be.getValue()[2], 1f),
+							0xf000f0, OverlayTexture.DEFAULT_UV);
+				} else {
+					BlockState state = be.getKey().getCachedState();
+	
+					mc.getBlockRenderManager().getModelRenderer().render(
+							mc.world,
+							mc.getBlockRenderManager().getModel(state),
+							state,
+							BlockPos.ORIGIN,
+							matrix,
+							OutlineVertexConsumers.outlineOnlyConsumer(be.getValue()[0], be.getValue()[1], be.getValue()[2], 1f),
+							false,
+							new Random(),
+							0L,
+							OverlayTexture.DEFAULT_UV);
+				}
+			}
 		}
 	}
 
 	@Subscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
-		if (getSetting(0).asMode().mode == 0 && entities.containsKey(event.getEntity())) {
+		if (getSetting(0).asMode().mode == 0) {
 			float[] color = entities.get(event.getEntity());
-			event.setVertex(getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]));
-			event.getEntity().setGlowing(true);
-		} else {
-			event.getEntity().setGlowing(false);
+			
+			if (color != null) {
+				OutlineVertexConsumerProvider ovsp = mc.getBufferBuilders().getOutlineVertexConsumers();
+				ovsp.setColor((int) (color[0] * 255), (int) (color[1] * 255), (int) (color[2] * 255), 255);
+
+				event.setVertex(ovsp);
+			}
 		}
 	}
 
@@ -272,7 +300,7 @@ public class StorageESP extends Module {
 		return null;
 	}
 
-	/** returns the direction of the other chest if its linked, othwise null **/
+	/** returns the direction of the other chest if its linked, otherwise null **/
 	private Direction getChestDirection(BlockPos pos) {
 		BlockState state = mc.world.getBlockState(pos);
 
@@ -281,11 +309,5 @@ public class StorageESP extends Module {
 		}
 
 		return null;
-	}
-
-	private VertexConsumerProvider getOutline(BufferBuilderStorage buffers, float r, float g, float b) {
-		OutlineVertexConsumerProvider ovsp = buffers.getOutlineVertexConsumers();
-		ovsp.setColor((int) (r * 255), (int) (g * 255), (int) (b * 255), 255);
-		return ovsp;
 	}
 }

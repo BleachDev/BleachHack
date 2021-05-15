@@ -57,7 +57,7 @@ public class Tracers extends Module {
 		float opacity = getSetting(7).asSlider().getValueFloat();
 
 		for (Entity e : mc.world.getEntities()) {
-			Vec3d vec = e.getPos();
+			Vec3d vec = e.getPos().subtract(RenderUtils.getInterpolationOffset(e));
 
 			Vec3d vec2 = new Vec3d(0, 0, 75)
 					.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))

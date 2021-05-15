@@ -24,12 +24,14 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
 public class RenderUtils {
@@ -184,6 +186,8 @@ public class RenderUtils {
 		cleanup();
 	}
 
+	// -------------------- Utils --------------------
+
 	public static MatrixStack matrixFrom(double x, double y, double z) {
 		MatrixStack matrix = new MatrixStack();
 
@@ -194,6 +198,14 @@ public class RenderUtils {
 		matrix.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
 		return matrix;
+	}
+
+	public static Vec3d getInterpolationOffset(Entity e) {
+		double tickDelta = (double) MinecraftClient.getInstance().getTickDelta();
+		return new Vec3d(
+				e.getX() - MathHelper.lerp(tickDelta, e.lastRenderX, e.getX()),
+				e.getY() - MathHelper.lerp(tickDelta, e.lastRenderY, e.getY()),
+				e.getZ() - MathHelper.lerp(tickDelta, e.lastRenderZ, e.getZ()));
 	}
 
 	public static void setup() {

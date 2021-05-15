@@ -28,9 +28,7 @@ import bleach.hack.util.shader.StaticShaders;
 import bleach.hack.util.shader.StringShaderEffect;
 import bleach.hack.util.world.EntityUtils;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -39,6 +37,7 @@ import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.util.math.Box;
 
 public class ESP extends Module {
 
@@ -50,7 +49,7 @@ public class ESP extends Module {
 	public ESP() {
 		super("ESP", KEY_UNBOUND, Category.RENDER, "Allows you to see entities though walls.",
 				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill"),
-				new SettingSlider("Shader", 0, 3, 1.5, 1).withDesc("The thickness of the shader outline"),
+				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline"),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
 				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
 				new SettingToggle("DrawBehind", false).withDesc("Draws the box/fill behind the entity (definitely not a bug turned into a feature)"),
@@ -78,19 +77,6 @@ public class ESP extends Module {
 						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
-	@Override
-	public void onDisable() {
-		for (Entity e : mc.world.getEntities()) {
-			if (e != mc.player) {
-				if (e.isGlowing()) {
-					e.setGlowing(false);
-				}
-			}
-		}
-
-		super.onDisable();
-	}
-
 	@Subscribe
 	public void onEntityRenderPre(EventEntityRender.PreAll event) {
 		if (getSetting(0).asMode().mode == 0) {
@@ -99,8 +85,8 @@ public class ESP extends Module {
 				try {
 					ShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
 							StaticShaders.MC_SHADER_UNFOMATTED
-							.replace("%1", "" + getSetting(1).asSlider().getValue())
-							.replace("%2", "" + (getSetting(1).asSlider().getValue() / 2)));
+							.replace("%1", "" + getSetting(1).asSlider().getValue() / 2)
+							.replace("%2", "" + getSetting(1).asSlider().getValue() / 4));
 
 					shader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
 					lastWidth = mc.getWindow().getFramebufferWidth();
@@ -129,12 +115,14 @@ public class ESP extends Module {
 
 				float[] color = getColorForEntity(e);
 				if (color != null) {
+					Box renderBox = e.getBoundingBox().offset(RenderUtils.getInterpolationOffset(e).negate());
+
 					if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-						RenderUtils.drawBoxFill(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], getSetting(3).asSlider().getValueFloat()));
+						RenderUtils.drawBoxFill(renderBox, QuadColor.single(color[0], color[1], color[2], getSetting(3).asSlider().getValueFloat()));
 					}
 
 					if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-						RenderUtils.drawBoxOutline(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asSlider().getValueFloat());
+						RenderUtils.drawBoxOutline(renderBox, QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asSlider().getValueFloat());
 					}
 				}
 			}
@@ -147,20 +135,22 @@ public class ESP extends Module {
 
 		if (color != null) {
 			if (getSetting(4).asToggle().state) {
+				Box renderBox = event.getEntity().getBoundingBox().offset(RenderUtils.getInterpolationOffset(event.getEntity()).negate());
+
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-					RenderUtils.drawBoxOutline(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asSlider().getValueFloat());
+					RenderUtils.drawBoxOutline(renderBox, QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asSlider().getValueFloat());
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawBoxFill(event.getEntity().getBoundingBox(), QuadColor.single(color[0], color[1], color[2], getSetting(3).asSlider().getValueFloat()));
+					RenderUtils.drawBoxFill(renderBox, QuadColor.single(color[0], color[1], color[2], getSetting(3).asSlider().getValueFloat()));
 				}
 			}
 
 			if (getSetting(0).asMode().mode == 0) {
-				event.setVertex(getOutline(mc.getBufferBuilders(), color[0], color[1], color[2]));
-				event.getEntity().setGlowing(true);
-			} else {
-				event.getEntity().setGlowing(false);
+				OutlineVertexConsumerProvider ovsp = mc.getBufferBuilders().getOutlineVertexConsumers();
+				ovsp.setColor((int) (color[0] * 255), (int) (color[1] * 255), (int) (color[2] * 255), 255);
+
+				event.setVertex(ovsp);
 			}
 		}
 	}
@@ -184,11 +174,5 @@ public class ESP extends Module {
 		}
 
 		return null;
-	}
-
-	private VertexConsumerProvider getOutline(BufferBuilderStorage buffers, float r, float g, float b) {
-		OutlineVertexConsumerProvider ovsp = buffers.getOutlineVertexConsumers();
-		ovsp.setColor((int) (r * 255), (int) (g * 255), (int) (b * 255), 255);
-		return ovsp;
 	}
 }
