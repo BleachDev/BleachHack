@@ -36,9 +36,9 @@ public class EntityControl extends Module {
 
 	public EntityControl() {
 		super("EntityControl", KEY_UNBOUND, Category.MOVEMENT, "Manipulate Entities.",
-				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entites").withChildren(
+				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entities").withChildren(
 						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("Entity speed")),
-				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entites").withChildren(
+				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entities").withChildren(
 						new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed"),
 						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed"),
 						new SettingToggle("EcmeBypass", false).withDesc("Prevents you from getting kicked off when flying on ec.me")),
