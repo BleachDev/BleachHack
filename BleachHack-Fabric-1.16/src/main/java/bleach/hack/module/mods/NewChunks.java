@@ -128,7 +128,7 @@ public class NewChunks extends Module {
 			synchronized (newChunks) {
 				for (ChunkPos c: newChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
-						Box box = new Box(c.getStartX(), 0, c.getStartX(), c.getStartX() + 16, 0, c.getStartZ() + 16);
+						Box box = new Box(c.getStartX(), 0, c.getStartZ(), c.getStartX() + 16, 0, c.getStartZ() + 16);
 
 						if (getSetting(1).asToggle().state) {
 							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
@@ -148,7 +148,7 @@ public class NewChunks extends Module {
 			synchronized (oldChunks) {
 				for (ChunkPos c: oldChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
-						Box box = new Box(c.getStartX(), 0, c.getStartX(), c.getStartX() + 16, 0, c.getStartZ() + 16);
+						Box box = new Box(c.getStartX(), 0, c.getStartZ(), c.getStartX() + 16, 0, c.getStartZ() + 16);
 
 						if (getSetting(1).asToggle().state) {
 							RenderUtils.drawBoxFill(box, fillColor, skipDirs);

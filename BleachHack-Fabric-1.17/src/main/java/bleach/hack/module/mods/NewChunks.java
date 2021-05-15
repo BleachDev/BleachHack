@@ -129,7 +129,7 @@ public class NewChunks extends Module {
 				for (ChunkPos c: newChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
 						Box box = new Box(
-								c.getStartX(), mc.world.getBottomY(), c.getStartX(),
+								c.getStartX(), mc.world.getBottomY(), c.getStartZ(),
 								c.getStartX() + 16, mc.world.getBottomY(), c.getStartZ() + 16);
 
 						if (getSetting(1).asToggle().state) {
@@ -151,7 +151,7 @@ public class NewChunks extends Module {
 				for (ChunkPos c: oldChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
 						Box box = new Box(
-								c.getStartX(), mc.world.getBottomY(), c.getStartX(),
+								c.getStartX(), mc.world.getBottomY(), c.getStartZ(),
 								c.getStartX() + 16, mc.world.getBottomY(), c.getStartZ() + 16);
 
 						if (getSetting(1).asToggle().state) {
