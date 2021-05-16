@@ -50,10 +50,11 @@ public abstract class SettingList<E> extends SettingBase {
 	public SettingList(String text, String windowText, Collection<E> itemPool, E... defaultItems) {
 		this.text = text;
 		this.windowText = windowText;
-		this.itemPool.addAll(itemPool);
 
 		Collections.addAll(this.defaultItems, defaultItems);
-		items.addAll(this.defaultItems);
+		this.itemPool.addAll(itemPool);
+		this.itemPool.removeAll(this.defaultItems);
+		this.items.addAll(this.defaultItems);
 	}
 
 	public String getName() {
@@ -234,7 +235,7 @@ public abstract class SettingList<E> extends SettingBase {
 				//Window.horizontalGradient(matrix, x1 + 1, y2 - 25, x2 - 1, y2 - 1, 0x70606090, 0x00606090);
 				Window.horizontalGradient(matrix, x1 + 1, y2 - 27, x2 - 1, y2 - 26, 0xff606090, 0x50606090);
 
-				if (inputField.textField.isFocused() && !inputField.textField.getText().isEmpty()) {
+				if (inputField.textField.isFocused()) {
 					Set<E> toDraw = new LinkedHashSet<>();
 
 					for (E e: itemPool) {

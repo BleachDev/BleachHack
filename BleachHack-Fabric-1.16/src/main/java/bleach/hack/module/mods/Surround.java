@@ -47,10 +47,10 @@ public class Surround extends Module {
 		super("Surround", KEY_UNBOUND, Category.COMBAT, "Surrounds yourself with obsidian",
 				new SettingMode("Mode", "1x1", "Fit").withDesc("Mode, 1x1 places 4 blocks around you, fit fits the blocks around you so it doesn't place inside of you"),
 				new SettingMode("Support", "Place", "AirPlace", "Skip").withDesc("What to do when theres no blocks to place surround blocks on"),
+				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
 				new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block"),
 				new SettingToggle("Keep on", true).withDesc("Keeps the module on after placing the obsidian"),
 				new SettingToggle("Jump disable", true).withDesc("Disables the module if you jump"),
-				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
 				new SettingRotate(false).withDesc("Rotates when placing"),
 				SettingLists.newBlockList("Blocks", "Surround Blocks", SURROUND_BLOCKS::contains, Blocks.OBSIDIAN).withDesc("What blocks to surround with"));
 	}
@@ -58,7 +58,7 @@ public class Surround extends Module {
 	public void onEnable() {
 		super.onEnable();
 
-		if (getSetting(2).asToggle().state) {
+		if (getSetting(3).asToggle().state) {
 			Vec3d centerPos = Vec3d.of(mc.player.getBlockPos()).add(0.5, 0, 0.5);
 			mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionOnly(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
@@ -69,7 +69,7 @@ public class Surround extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		if (getSetting(4).asToggle().state && mc.options.keyJump.isPressed()) {
+		if (getSetting(5).asToggle().state && mc.options.keyJump.isPressed()) {
 			setEnabled(false);
 			return;
 		}
@@ -114,7 +114,7 @@ public class Surround extends Module {
 
 		int supportMode = getSetting(1).asMode().mode;
 		for (BlockPos pos : placePoses) {
-			if (cap >= getSetting(5).asSlider().getValueInt()) {
+			if (cap >= getSetting(2).asSlider().getValueInt()) {
 				return;
 			}
 
@@ -128,7 +128,7 @@ public class Surround extends Module {
 				if (WorldUtils.placeBlock(pos.down(), -1, getSetting(6).asRotate(), false, supportMode == 1, true)) {
 					cap++;
 
-					if (cap >= getSetting(5).asSlider().getValueInt()) {
+					if (cap >= getSetting(2).asSlider().getValueInt()) {
 						return;
 					}
 
@@ -139,7 +139,7 @@ public class Surround extends Module {
 			}
 		}
 
-		if (!getSetting(3).asToggle().state) {
+		if (!getSetting(4).asToggle().state) {
 			setEnabled(false);
 		}
 	}
