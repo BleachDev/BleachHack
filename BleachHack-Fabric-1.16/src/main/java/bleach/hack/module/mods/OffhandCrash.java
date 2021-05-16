@@ -32,7 +32,7 @@ public class OffhandCrash extends Module {
 	@Subscribe
 	public void onTick(EventTick event) {
 		for (int i = 0; i < getSetting(0).asSlider().getValue(); i++) {
-			mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.UP));
+			mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.DOWN));
 			if (getSetting(1).asToggle().state)
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket(true));
 		}
