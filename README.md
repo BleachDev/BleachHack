@@ -12,7 +12,7 @@ Very cool client.
 Works on fabric 1.16 & 1.17 Snapshots (1.14-1.15 is discontinued).
 
 > Website: https://bleachhack.github.io/  
-> Discord: https://discord.gg/b5Wc4nQ
+> Discord: https://bleachhack.github.io/discord
 
 ## Showcase
 <details>
