@@ -139,11 +139,11 @@ public class Dispenser32k extends Module {
 				return;
 			}
 
-			WorldUtils.placeBlock(pos, block, getSetting(0).asRotate(), false, true);
+			WorldUtils.placeBlock(pos, block, getSetting(0).asRotate(), false, false, true);
 
 			WorldUtils.facePosPacket(
 					pos.add(-rot[0], 1, -rot[1]).getX() + 0.5, pos.getY() + 1, pos.add(-rot[0], 1, -rot[1]).getZ() + 0.5);
-			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, 0, false, true);
+			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, 0, false, false, true);
 			return;
 
 		} else {
@@ -189,8 +189,8 @@ public class Dispenser32k extends Module {
 		if (ticksPassed == 1) {
 			// boolean rotate = getSetting(0).toToggle().state;
 
-			WorldUtils.placeBlock(pos, block, 0, false, true);
-			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, 0, false, true);
+			WorldUtils.placeBlock(pos, block, 0, false, false, true);
+			WorldUtils.placeBlock(pos.add(0, 1, 0), dispenser, 0, false, false, true);
 			mc.player.yaw = startRot[0];
 			mc.player.pitch = startRot[1];
 
@@ -265,12 +265,12 @@ public class Dispenser32k extends Module {
 
 		if (dispenserTicks == 1) {
 			mc.openScreen(null);
-			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSetting(0).asRotate(), false, true);
+			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSetting(0).asRotate(), false, false, true);
 		}
 
 		if (mc.world.getBlockState(pos.add(rot[0], 1, rot[1])).getBlock() instanceof ShulkerBoxBlock
 				&& mc.world.getBlockState(pos.add(rot[0], 0, rot[1])).getBlock() != Blocks.HOPPER) {
-			WorldUtils.placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSetting(0).asRotate(), false, true);
+			WorldUtils.placeBlock(pos.add(rot[0], 0, rot[1]), hopper, getSetting(0).asRotate(), false, false, true);
 			openBlock(pos.add(rot[0], 0, rot[1]));
 		}
 

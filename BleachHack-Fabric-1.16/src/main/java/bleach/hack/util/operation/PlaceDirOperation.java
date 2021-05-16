@@ -41,7 +41,7 @@ public class PlaceDirOperation extends PlaceOperation {
 						return false;
 					}
 
-					return WorldUtils.placeBlock(pos, i, 0, false, true);
+					return WorldUtils.placeBlock(pos, i, 0, false, false, true);
 				}
 			}
 		}

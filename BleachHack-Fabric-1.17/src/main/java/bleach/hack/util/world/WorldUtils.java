@@ -139,16 +139,13 @@ public class WorldUtils {
 		return true;
 	}
 
-	public static boolean placeBlock(BlockPos pos, int slot, SettingRotate sr, boolean forceLegit, boolean swingHand) {
-		return placeBlock(pos, slot, !sr.state ? 0 : sr.getRotateMode() + 1, forceLegit, swingHand);
+	public static boolean placeBlock(BlockPos pos, int slot, SettingRotate sr, boolean forceLegit, boolean airPlace, boolean swingHand) {
+		return placeBlock(pos, slot, !sr.state ? 0 : sr.getRotateMode() + 1, forceLegit, airPlace, swingHand);
 	}
 
-	public static boolean placeBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean swingHand) {
+	public static boolean placeBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean airPlace, boolean swingHand) {
 		if (!mc.world.isInBuildLimit(pos) || !isBlockEmpty(pos))
 			return false;
-
-		if (slot != mc.player.getInventory().selectedSlot && slot >= 0 && slot <= 8)
-			mc.player.getInventory().selectedSlot = slot;
 
 		for (Direction d : Direction.values()) {
 			if (!mc.world.isInBuildLimit(pos.offset(d)))
@@ -156,7 +153,7 @@ public class WorldUtils {
 
 			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
 
-			if (neighborBlock.getDefaultState().getMaterial().isReplaceable())
+			if (!airPlace && neighborBlock.getDefaultState().getMaterial().isReplaceable())
 				continue;
 
 			Vec3d vec = getLegitLookPos(pos.offset(d), d.getOpposite(), true, 5);
@@ -173,51 +170,8 @@ public class WorldUtils {
 				}
 			}
 
-			if (rotateMode == 1) {
-				facePosPacket(vec.x, vec.y, vec.z);
-			} else if (rotateMode == 2) {
-				facePos(vec.x, vec.y, vec.z);
-			}
-
-			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock)) {
-				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.PRESS_SHIFT_KEY));
-			}
-
-			if (swingHand) {
-				mc.player.swingHand(Hand.MAIN_HAND);
-			} else {
-				mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
-			}
-
-			mc.interactionManager.interactBlock(
-					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.offset(d), false));
-
-			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
-				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
-
-			return true;
-		}
-
-		return false;
-	}
-
-	public static boolean airPlaceBlock(BlockPos pos, int slot, SettingRotate sr, boolean forceLegit, boolean swingHand) {
-		return airPlaceBlock(pos, slot, !sr.state ? 0 : sr.getRotateMode() + 1, forceLegit, swingHand);
-	}
-
-	public static boolean airPlaceBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean swingHand) {
-		if (!mc.world.isInBuildLimit(pos) || !isBlockEmpty(pos))
-			return false;
-
-		if (slot != mc.player.getInventory().selectedSlot && slot >= 0 && slot <= 8)
-			mc.player.getInventory().selectedSlot = slot;
-
-		for (Direction d : Direction.values()) {
-			if (!mc.world.isInBuildLimit(pos.offset(d)))
-				continue;
-
-			Block neighborBlock = mc.world.getBlockState(pos.offset(d)).getBlock();
-			Vec3d vec = Vec3d.of(pos).add(0.5 + d.getOffsetX() * 0.5, 0.5 + d.getOffsetY() * 0.5, 0.5 + d.getOffsetZ() * 0.5);
+			if (slot != mc.player.getInventory().selectedSlot && slot >= 0 && slot <= 8)
+				mc.player.getInventory().selectedSlot = slot;
 
 			if (rotateMode == 1) {
 				facePosPacket(vec.x, vec.y, vec.z);
@@ -235,8 +189,8 @@ public class WorldUtils {
 				mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
 			}
 
-			mc.interactionManager.interactBlock(
-					mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(Vec3d.of(pos), d.getOpposite(), pos.offset(d), false));
+			mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
+					new BlockHitResult(Vec3d.of(pos), airPlace ? d : d.getOpposite(), airPlace ? pos : pos.offset(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
@@ -358,20 +312,20 @@ public class WorldUtils {
 						mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw()),
 						mc.player.getPitch() + MathHelper.wrapDegrees(pitch - mc.player.getPitch()), mc.player.isOnGround()));
 	}
-	
+
 	public static int getTopBlockIgnoreLeaves(int x, int z) {
 		int top = mc.world.getTopY(Heightmap.Type.WORLD_SURFACE, x, z) - 1;
-		
+
 		while (top > mc.world.getBottomY()) {
 			BlockState state = mc.world.getBlockState(new BlockPos(x, top, z));
-			
+
 			if (!(state.isAir() || state.getBlock() instanceof LeavesBlock || state.getBlock() instanceof PlantBlock)) {
 				break;
 			}
-			
+
 			top--;
 		}
-		
+
 		return top;
 	}
 }
