@@ -66,6 +66,52 @@ public class AutoBuild extends Module {
 					new PlaceOperationBlueprint(0, 0, 0, Items.SNOW_BLOCK),
 					new PlaceOperationBlueprint(0, 1, 0, Items.SNOW_BLOCK),
 					new PlaceOperationBlueprint(0, 2, 0, Items.CARVED_PUMPKIN)),
+			Arrays.asList( // Nomad Hut
+					new PlaceOperationBlueprint(-2, 0, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 0, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(0, 0, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 0, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 0, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 0, 0, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 0, 1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 0, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(0, 0, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 0, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-2, 0, 1, Items.OBSIDIAN),
+					
+					new PlaceOperationBlueprint(-2, 1, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 1, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 1, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 1, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 1, 1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 1, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 1, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-2, 1, 1, Items.OBSIDIAN),
+					
+					new PlaceOperationBlueprint(-2, 2, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 2, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(0, 2, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 2, -2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 2, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 2, 0, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 2, 1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 2, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(0, 2, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 2, 2, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-2, 2, 1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-2, 2, 0, Items.OBSIDIAN),
+					
+					new PlaceOperationBlueprint(-2, 3, 0, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 3, 0, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 3, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(-1, 3, 1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(0, 3, 0, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(0, 3, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(0, 3, 1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 3, 0, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 3, -1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(1, 3, 1, Items.OBSIDIAN),
+					new PlaceOperationBlueprint(2, 3, 0, Items.OBSIDIAN)),
 			Arrays.asList( // Bomber Mid
 					new PlaceOperationBlueprint(0, 0, 0, Items.SLIME_BLOCK),
 					new PlaceOperationBlueprint(0, -1, 0, Items.SLIME_BLOCK),
@@ -101,7 +147,7 @@ public class AutoBuild extends Module {
 
 	public AutoBuild() {
 		super("AutoBuild", KEY_UNBOUND, ModuleCategory.WORLD, "Auto builds stuff",
-				new SettingMode("Build", "Wither", "WitherH", "IronGolem", "SnowGolem", "Bomber-Mid", "Bomber-End").withDesc("What to build"),
+				new SettingMode("Build", "Wither", "WitherH", "IronGolem", "SnowGolem", "NomadHut", "Bomber-Mid", "Bomber-End").withDesc("What to build"),
 				new SettingToggle("Repeat", false).withDesc("Lets you build multiple things without having to re-enable the module"));
 	}
 
