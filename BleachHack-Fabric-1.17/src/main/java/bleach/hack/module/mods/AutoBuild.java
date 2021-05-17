@@ -10,13 +10,18 @@ package bleach.hack.module.mods;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventInteract;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
+import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.operation.Operation;
 import bleach.hack.util.operation.OperationList;
 import bleach.hack.util.operation.blueprint.OperationBlueprint;
@@ -35,6 +40,32 @@ import net.minecraft.util.math.Direction.Axis;
 public class AutoBuild extends Module {
 
 	private static List<List<OperationBlueprint>> BLUEPRINTS = Arrays.asList(
+			Arrays.asList( // Wither
+					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(0, 1, 0, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(0, 1, -1, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(0, 1, 1, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(0, 2, -1, Items.WITHER_SKELETON_SKULL),
+					new PlaceOperationBlueprint(0, 2, 0, Items.WITHER_SKELETON_SKULL),
+					new PlaceOperationBlueprint(0, 2, 1, Items.WITHER_SKELETON_SKULL)),
+			Arrays.asList( // WitherH
+					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(1, 0, 0, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(1, 0, -1, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(1, 0, 1, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(2, 0, -1, Items.WITHER_SKELETON_SKULL),
+					new PlaceOperationBlueprint(2, 0, 0, Items.WITHER_SKELETON_SKULL),
+					new PlaceOperationBlueprint(2, 0, 1, Items.WITHER_SKELETON_SKULL)),
+			Arrays.asList( // Iron Golem
+					new PlaceOperationBlueprint(0, 0, 0, Items.IRON_BLOCK),
+					new PlaceOperationBlueprint(0, 1, 0, Items.IRON_BLOCK),
+					new PlaceOperationBlueprint(0, 1, -1, Items.IRON_BLOCK),
+					new PlaceOperationBlueprint(0, 1, 1, Items.IRON_BLOCK),
+					new PlaceOperationBlueprint(0, 2, 0, Items.CARVED_PUMPKIN)),
+			Arrays.asList( // Snow Golem
+					new PlaceOperationBlueprint(0, 0, 0, Items.SNOW_BLOCK),
+					new PlaceOperationBlueprint(0, 1, 0, Items.SNOW_BLOCK),
+					new PlaceOperationBlueprint(0, 2, 0, Items.CARVED_PUMPKIN)),
 			Arrays.asList( // Bomber Mid
 					new PlaceOperationBlueprint(0, 0, 0, Items.SLIME_BLOCK),
 					new PlaceOperationBlueprint(0, -1, 0, Items.SLIME_BLOCK),
@@ -70,9 +101,11 @@ public class AutoBuild extends Module {
 
 	public AutoBuild() {
 		super("AutoBuild", KEY_UNBOUND, ModuleCategory.WORLD, "Auto builds stuff",
-				new SettingMode("Build", "Bomber-Mid", "Bomber-End").withDesc("What to build (more things soon)"));
+				new SettingMode("Build", "Wither", "WitherH", "IronGolem", "SnowGolem", "Bomber-Mid", "Bomber-End").withDesc("What to build"),
+				new SettingToggle("Repeat", false).withDesc("Lets you build multiple things without having to re-enable the module"));
 	}
 
+	@Override
 	public void onDisable() {
 		current = null;
 		ray = null;
@@ -101,6 +134,10 @@ public class AutoBuild extends Module {
 		} else {
 			if (current.executeNext() && current.isDone()) {
 				setEnabled(false);
+
+				if (getSetting(1).asToggle().state) {
+					setEnabled(true);
+				}
 			}
 		}
 	}
@@ -113,17 +150,21 @@ public class AutoBuild extends Module {
 			for (Operation o: current.getRemainingOps()) {
 				o.render();
 			}
-			
+
 			RenderUtils.drawBoxOutline(new Box(current.getNext().pos).contract(0.01), QuadColor.single(1f, 1f, 0f, 0.5f), 3f);
 		}
 
 		if (ray != null && !active) {
 			BlockPos pos = ray.getBlockPos();
-			Direction dir = ray.getSide();
-			RenderUtils.drawBoxBoth(new Box(
-					pos.getX() + (dir == Direction.EAST ? 0.98 : 0), pos.getY() + (dir == Direction.UP ? 0.98 : 0), pos.getZ() + (dir == Direction.SOUTH ? 0.98 : 0),
-					pos.getX() + (dir == Direction.WEST ? 0.02 : 1), pos.getY() + (dir == Direction.DOWN ? 0.02 : 1), pos.getZ() + (dir == Direction.NORTH ? 0.02 : 1)),
-					QuadColor.single(1f, 1f, 0f, 0.3f), 2.5f);
+
+			RenderUtils.drawBoxFill(pos, QuadColor.single(1f, 1f, 0f, 0.3f), ArrayUtils.remove(Direction.values(), ray.getSide().ordinal()));
+		}
+	}
+
+	@Subscribe
+	public void onInteract(EventInteract.InteractBlock event) {
+		if (ray != null && !active) {
+			event.setCancelled(true);
 		}
 	}
 }
