@@ -14,7 +14,7 @@ import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -44,7 +44,7 @@ public class Surround extends Module {
 			Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS);
 
 	public Surround() {
-		super("Surround", KEY_UNBOUND, Category.COMBAT, "Surrounds yourself with obsidian",
+		super("Surround", KEY_UNBOUND, ModuleCategory.COMBAT, "Surrounds yourself with obsidian",
 				new SettingMode("Mode", "1x1", "Fit").withDesc("Mode, 1x1 places 4 blocks around you, fit fits the blocks around you so it doesn't place inside of you"),
 				new SettingMode("Support", "Place", "AirPlace", "Skip").withDesc("What to do when theres no blocks to place surround blocks on"),
 				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),

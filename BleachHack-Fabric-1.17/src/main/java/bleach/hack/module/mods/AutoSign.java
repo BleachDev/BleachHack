@@ -16,7 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -30,7 +30,7 @@ public class AutoSign extends Module {
 	public String[] text = new String[] {};
 
 	public AutoSign() {
-		super("AutoSign", KEY_UNBOUND, Category.PLAYER, "Automatically writes on signs",
+		super("AutoSign", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically writes on signs",
 				new SettingToggle("Random", false).withDesc("Writes random unicode in the sign").withChildren(
 						new SettingSlider("Length", 1, 1000, 500, 0).withDesc("How many characters to write per line")));
 	}

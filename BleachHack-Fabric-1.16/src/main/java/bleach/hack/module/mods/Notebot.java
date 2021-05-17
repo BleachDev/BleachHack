@@ -25,7 +25,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
@@ -57,7 +57,7 @@ public class Notebot extends Module {
 	public static String filePath = "";
 
 	public Notebot() {
-		super("Notebot", KEY_UNBOUND, Category.MISC, "Plays those noteblocks nicely",
+		super("Notebot", KEY_UNBOUND, ModuleCategory.MISC, "Plays those noteblocks nicely",
 				new SettingToggle("Tune", true).withDesc("Tune the noteblocks before and while playing").withChildren(
 						new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All").withDesc("How to tune the noteblocks")),
 				new SettingToggle("Loop", false).withDesc("Loop the song you are playing"),

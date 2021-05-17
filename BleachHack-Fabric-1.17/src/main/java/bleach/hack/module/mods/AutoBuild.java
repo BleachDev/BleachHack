@@ -14,7 +14,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.util.operation.Operation;
@@ -69,7 +69,7 @@ public class AutoBuild extends Module {
 	private boolean active = false;
 
 	public AutoBuild() {
-		super("AutoBuild", KEY_UNBOUND, Category.WORLD, "Auto builds stuff",
+		super("AutoBuild", KEY_UNBOUND, ModuleCategory.WORLD, "Auto builds stuff",
 				new SettingMode("Build", "Bomber-Mid", "Bomber-End").withDesc("What to build (more things soon)"));
 	}
 

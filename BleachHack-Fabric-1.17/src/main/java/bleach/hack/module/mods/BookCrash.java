@@ -16,7 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -41,7 +41,7 @@ public class BookCrash extends Module {
 	private int delay = 0;
 
 	public BookCrash() {
-		super("BookCrash", KEY_UNBOUND, Category.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
+		super("BookCrash", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
 				new SettingMode("Mode", "Jessica", "Raion", "Sign").withDesc("What method to use"),
 				new SettingSlider("Uses", 1, 20, 5, 0).withDesc("How many uses per tick"),
 				new SettingSlider("Delay", 0, 5, 0, 0).withDesc("How many ticks to wait between uses"),

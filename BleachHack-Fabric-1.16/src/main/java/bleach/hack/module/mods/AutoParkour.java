@@ -15,7 +15,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
@@ -37,7 +37,7 @@ public class AutoParkour extends Module {
 	private BlockPos smartPos = null;
 
 	public AutoParkour() {
-		super("AutoParkour", KEY_UNBOUND, Category.MOVEMENT, "You jump when you reach the edge of a block (Use this if you suck at parkouring)",
+		super("AutoParkour", KEY_UNBOUND, ModuleCategory.MOVEMENT, "You jump when you reach the edge of a block (Use this if you suck at parkouring)",
 				new SettingToggle("AutoSprint", true).withDesc("Automatically makes you sprint when jumping"),
 				new SettingToggle("Smart", true).withDesc("Tries to figure out what block you're jumping to then auto jumps to that block").withChildren(
 						new SettingToggle("Snap", false).withDesc("Snaps you to the target block to prevent you from overshooting it"),

@@ -13,7 +13,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3d;
 public class AntiVoid extends Module {
 
 	public AntiVoid() {
-		super("AntiVoid", KEY_UNBOUND, Category.MOVEMENT, "Prevents you from falling in the void",
+		super("AntiVoid", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Prevents you from falling in the void",
 				new SettingMode("Mode", "Jump", "Floor", "Vanilla").withDesc("What mode to use when you're in the void"),
 				new SettingToggle("AntiTP", true).withDesc("Prevents you from accidentally tping in to the void (i.e., using PacketFly)"));
 	}

@@ -28,7 +28,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -77,7 +77,7 @@ public class Search extends Module {
 	private int oldViewDistance = -1;
 
 	public Search() {
-		super("Search", KEY_UNBOUND, Category.RENDER, "Highlights specified Blocks",
+		super("Search", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights specified Blocks",
 				new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
 				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),

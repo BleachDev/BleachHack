@@ -14,7 +14,7 @@ import java.util.Deque;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -29,7 +29,7 @@ public class Step extends Module {
 	private Deque<Double> queue = new ArrayDeque<>();
 
 	public Step() {
-		super("Step", KEY_UNBOUND, Category.MOVEMENT, "Allows you to Run up blocks like stairs.",
+		super("Step", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Allows you to Run up blocks like stairs.",
 				new SettingMode("Mode", "Packet", "Vanilla", "Spider", "Jump").withDesc("Step mode"),
 				new SettingSlider("Height", 0.1, 20, 2, 1).withDesc("How high to be able to step (Vanilla only)"),
 				new SettingToggle("Cooldown", false).withDesc("Adds a cooldown between stepping to bypass some anticheats").withChildren(

@@ -23,7 +23,7 @@ public class QuadColor extends RenderColor {
 	}
 
 	public static QuadColor single(int red, int green, int blue, int alpha) {
-		return new QuadColor((curVertex) -> new int[] { red, green, blue, alpha });
+		return new QuadColor(curVertex -> new int[] { red, green, blue, alpha });
 	}
 
 	public static QuadColor gradient(float red1, float green1, float blue1, float alpha1, float red2, float green2, float blue2, float alpha2, CardinalDirection direction) {
@@ -41,7 +41,7 @@ public class QuadColor extends RenderColor {
 	}
 
 	public static QuadColor gradient(int red1, int green1, int blue1, int alpha1, int red2, int green2, int blue2, int alpha2, CardinalDirection direction) {
-		return new QuadColor((curVertex) -> {
+		return new QuadColor(curVertex -> {
 			if (direction.isStartVertex(curVertex)) {
 				return new int[] { red1, green1, blue1, alpha1 };
 			}
@@ -67,7 +67,7 @@ public class QuadColor extends RenderColor {
 	}
 
 	public static QuadColor custom(int red1, int green1, int blue1, int alpha1, int red2, int green2, int blue2, int alpha2, int red3, int green3, int blue3, int alpha3, int red4, int green4, int blue4, int alpha4) {
-		return new QuadColor((curVertex) -> {
+		return new QuadColor(curVertex -> {
 			switch (curVertex) {
 				case 0 : return new int[] { red1, green1, blue1, alpha1 };
 				case 1 : return new int[] { red2, green2, blue2, alpha2 };

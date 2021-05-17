@@ -14,7 +14,7 @@ import bleach.hack.event.events.EventEntityControl;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -35,7 +35,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityControl extends Module {
 
 	public EntityControl() {
-		super("EntityControl", KEY_UNBOUND, Category.MOVEMENT, "Manipulate Entities.",
+		super("EntityControl", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Manipulate Entities.",
 				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entities").withChildren(
 						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("Entity speed")),
 				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entities").withChildren(

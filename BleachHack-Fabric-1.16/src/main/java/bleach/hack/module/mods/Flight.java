@@ -14,7 +14,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -29,7 +29,7 @@ public class Flight extends Module {
 	private boolean flyTick = false;
 
 	public Flight() {
-		super("Flight", GLFW.GLFW_KEY_G, Category.MOVEMENT, "Allows you to fly",
+		super("Flight", GLFW.GLFW_KEY_G, ModuleCategory.MOVEMENT, "Allows you to fly",
 				new SettingMode("Mode", "Static", "Jetpack", "ec.me").withDesc("Flight mode"),
 				new SettingSlider("Speed", 0, 5, 1, 1).withDesc("Flight speed"),
 				new SettingMode("AntiKick", "Off", "Fall", "Bob", "Packet").withDesc("How to bypass \"you have been kicked for flying\" kicks"));

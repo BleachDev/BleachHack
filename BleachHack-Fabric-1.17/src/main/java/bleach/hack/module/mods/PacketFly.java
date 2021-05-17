@@ -15,7 +15,7 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -35,7 +35,7 @@ public class PacketFly extends Module {
 	private int timer = 0;
 
 	public PacketFly() {
-		super("PacketFly", KEY_UNBOUND, Category.MOVEMENT, "Allows you to fly with packets.",
+		super("PacketFly", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Allows you to fly with packets.",
 				new SettingMode("Mode", "Phase", "Packet").withDesc("Packetfly mode"),
 				new SettingSlider("HSpeed", 0.05, 2, 0.5, 2).withDesc("Horizontal speed"),
 				new SettingSlider("VSpeed", 0.05, 2, 0.5, 2).withDesc("Vertical speed"),

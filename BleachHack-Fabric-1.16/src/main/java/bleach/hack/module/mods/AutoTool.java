@@ -12,7 +12,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.block.BlockState;
@@ -33,7 +33,7 @@ public class AutoTool extends Module {
 	private int queueSlot = -1;
 
 	public AutoTool() {
-		super("AutoTool", KEY_UNBOUND, Category.PLAYER, "Automatically uses best tool",
+		super("AutoTool", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically uses best tool",
 				new SettingToggle("Anti Break", false).withDesc("Doesn't use tool if its about to break"),
 				new SettingToggle("Switch Back", true).withDesc("Switches back to your previous item when done breaking"),
 				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damagable item if possible"));

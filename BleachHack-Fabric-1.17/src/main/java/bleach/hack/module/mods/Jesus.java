@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;
@@ -22,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 public class Jesus extends Module {
 
 	public Jesus() {
-		super("Jesus", GLFW.GLFW_KEY_J, Category.PLAYER, "Allows you to walk on water");
+		super("Jesus", GLFW.GLFW_KEY_J, ModuleCategory.PLAYER, "Allows you to walk on water");
 	}
 
 	@Subscribe

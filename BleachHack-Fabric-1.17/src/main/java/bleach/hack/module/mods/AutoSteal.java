@@ -21,7 +21,7 @@ import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -66,7 +66,7 @@ public class AutoSteal extends Module {
 	private int lastOpen = 0;
 
 	public AutoSteal() {
-		super("AutoSteal", KEY_UNBOUND, Category.PLAYER, "Automatically steals items from chests",
+		super("AutoSteal", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically steals items from chests",
 				new SettingMode("Gui", "Normal", "Project", "NoGui" /* Novoline cheststealer*/).withDesc("How to display the chest gui when stealing"),
 				new SettingSlider("Delay", 0, 20, 2, 0).withDesc("Delay between taking items (in ticks)"),
 				new SettingSlider("RandDelay", 0, 8, 2, 0).withDesc("Extra random delay between taking items (in ticks)"),

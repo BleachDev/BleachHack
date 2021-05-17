@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
 import bleach.hack.gui.clickgui.ModuleClickGuiScreen;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -22,7 +22,7 @@ public class ClickGui extends Module {
 	public static final ClickGuiScreen clickGui = new ModuleClickGuiScreen();
 
 	public ClickGui() {
-		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
+		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, ModuleCategory.RENDER, "Draws the clickgui",
 				new SettingSlider("Length", 70, 85, 70, 0).withDesc("The length of each window"),
 				new SettingToggle("Search bar", false).withDesc("Shows a search bar"),
 				new SettingToggle("Help", true).withDesc("Shows the help text"));

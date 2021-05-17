@@ -12,7 +12,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
@@ -32,7 +32,7 @@ import net.minecraft.util.math.Vec3d;
 public class Tracers extends Module {
 
 	public Tracers() {
-		super("Tracers", KEY_UNBOUND, Category.RENDER, "Shows lines to entities you select.",
+		super("Tracers", KEY_UNBOUND, ModuleCategory.RENDER, "Shows lines to entities you select.",
 				new SettingToggle("Players", true).withDesc("Show Player Tracers").withChildren(
 						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players"),
 						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Tracer color for friends")),

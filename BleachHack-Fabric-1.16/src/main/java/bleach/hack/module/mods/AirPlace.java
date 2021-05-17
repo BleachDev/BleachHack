@@ -14,7 +14,7 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.mixin.AccessorMinecraftClient;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
@@ -38,7 +38,7 @@ public class AirPlace extends Module {
 	private boolean pressed;
 
 	public AirPlace() {
-		super("AirPlace", KEY_UNBOUND, Category.WORLD, "Allows you to place blocks in thin air",
+		super("AirPlace", KEY_UNBOUND, ModuleCategory.WORLD, "Allows you to place blocks in thin air",
 				new SettingToggle("Highlight", true).withDesc("Renders an overlay where it will place the block").withChildren(
 						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
 						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),

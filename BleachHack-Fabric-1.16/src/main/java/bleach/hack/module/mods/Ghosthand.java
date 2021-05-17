@@ -14,7 +14,7 @@ import java.util.Set;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.Hand;
@@ -26,7 +26,7 @@ import net.minecraft.util.math.Vec3d;
 public class Ghosthand extends Module {
 
 	public Ghosthand() {
-		super("Ghosthand", KEY_UNBOUND, Category.PLAYER, "Opens Containers Through Walls");
+		super("Ghosthand", KEY_UNBOUND, ModuleCategory.PLAYER, "Opens Containers Through Walls");
 	}
 
 	@Subscribe

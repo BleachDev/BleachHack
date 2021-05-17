@@ -42,7 +42,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.command.commands.CmdEntityStats;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -81,7 +81,7 @@ public class Nametags extends Module {
 	private long lastLookup = 0;
 
 	public Nametags() {
-		super("Nametags", KEY_UNBOUND, Category.RENDER, "Shows bigger/cooler nametags above entities.",
+		super("Nametags", KEY_UNBOUND, ModuleCategory.RENDER, "Shows bigger/cooler nametags above entities.",
 				new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor"),
 				new SettingMode("Health", "Number", "NumberOf", "Bar", "Percent").withDesc("How to show health"),
 				new SettingToggle("Players", true).withDesc("Show player nametags").withChildren(

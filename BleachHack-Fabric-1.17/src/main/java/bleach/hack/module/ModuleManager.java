@@ -78,7 +78,7 @@ public class ModuleManager {
 		return modules.get(name);
 	}
 
-	public static List<Module> getModulesInCat(Category cat) {
+	public static List<Module> getModulesInCat(ModuleCategory cat) {
 		return modules.values().stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
 	}
 

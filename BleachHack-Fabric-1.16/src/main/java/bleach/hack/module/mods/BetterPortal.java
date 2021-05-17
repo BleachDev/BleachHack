@@ -13,7 +13,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.event.events.EventSoundPlay;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.world.WorldUtils;
@@ -23,7 +23,7 @@ import net.minecraft.client.particle.PortalParticle;
 public class BetterPortal extends Module {
 
 	public BetterPortal() {
-		super("BetterPortal", KEY_UNBOUND, Category.MISC, "Removes some of the effects of going through a nether portal",
+		super("BetterPortal", KEY_UNBOUND, ModuleCategory.MISC, "Removes some of the effects of going through a nether portal",
 				new SettingToggle("Gui", true).withDesc("Allows you to open guis in a nether portal"),
 				new SettingToggle("Overlay", true).withDesc("Removes the portal overlay"),
 				new SettingToggle("Particles", false).withDesc("Removes the portal particles that fly out of the portal"),

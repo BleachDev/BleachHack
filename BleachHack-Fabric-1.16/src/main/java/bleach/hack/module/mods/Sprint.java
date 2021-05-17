@@ -11,13 +11,13 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 
 public class Sprint extends Module {
 
 	public Sprint() {
-		super("Sprint", KEY_UNBOUND, Category.MOVEMENT, "Makes the player automatically sprint.");
+		super("Sprint", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Makes the player automatically sprint.");
 	}
 
 	@Subscribe

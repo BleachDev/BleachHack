@@ -6,14 +6,14 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.module.mods;
+package bleach.hack.module;
 
-import bleach.hack.module.ModuleCategory;
-import bleach.hack.module.Module;
-
-public class SafeWalk extends Module {
-
-	public SafeWalk() {
-		super("SafeWalk", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Stops you walking off blocks");
-	}
+public enum ModuleCategory {
+	PLAYER,
+	RENDER,
+	COMBAT,
+	MOVEMENT,
+	EXPLOITS,
+	MISC,
+	WORLD
 }

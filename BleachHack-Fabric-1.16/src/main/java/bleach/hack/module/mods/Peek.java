@@ -17,7 +17,7 @@ import com.google.common.eventbus.Subscribe;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.event.events.EventDrawTooltip;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -59,7 +59,7 @@ public class Peek extends Module {
 	private boolean shown = false;
 
 	public Peek() {
-		super("Peek", KEY_UNBOUND, Category.MISC, "Shows whats inside containers",
+		super("Peek", KEY_UNBOUND, ModuleCategory.MISC, "Shows whats inside containers",
 				new SettingToggle("Containers", true).withDesc("Shows a tooltip for containers").withChildren(
 						new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
 				new SettingToggle("Books", true).withDesc("Show tooltips for books"),

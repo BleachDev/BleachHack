@@ -14,7 +14,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
@@ -37,7 +37,7 @@ public class ClickTp extends Module {
 	private boolean antiSpamClick = false;
 
 	public ClickTp() {
-		super("ClickTp", KEY_UNBOUND, Category.MOVEMENT, "Allows you to teleport by clicking",
+		super("ClickTp", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Allows you to teleport by clicking",
 				new SettingToggle("In Air", true).withDesc("Teleports even if you are pointing in the air"),
 				new SettingToggle("Liquids", false).withDesc("Interacts with liquids"),
 				new SettingToggle("Y First", false).withDesc("Sets you to the correct Y level first, then to your XZ coords, might fix going through walls"),

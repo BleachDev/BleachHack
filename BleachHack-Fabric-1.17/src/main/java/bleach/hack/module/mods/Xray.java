@@ -14,7 +14,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
@@ -26,7 +26,7 @@ public class Xray extends Module {
 	private double gamma;
 
 	public Xray() {
-		super("Xray", GLFW.GLFW_KEY_X, Category.RENDER, "Baritone is for zoomers",
+		super("Xray", GLFW.GLFW_KEY_X, ModuleCategory.RENDER, "Baritone is for zoomers",
 				new SettingToggle("Fluids", false).withDesc("Show fluids"),
 				new SettingToggle("Opacity", true).withDesc("Toggles an adjustable alpha level for non-xray blocks").withChildren(
 						new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value"),

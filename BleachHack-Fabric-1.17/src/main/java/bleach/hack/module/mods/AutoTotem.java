@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -29,7 +29,7 @@ public class AutoTotem extends Module {
 	private boolean holdingTotem;
 
 	public AutoTotem() {
-		super("AutoTotem", KEY_UNBOUND, Category.COMBAT, "Automatically equips totems.",
+		super("AutoTotem", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically equips totems.",
 				new SettingToggle("Override", false).withDesc("Equips a totem even if theres another item in the offhand"),
 				new SettingSlider("Delay", 0, 10, 0, 0).withDesc("Minimum delay between equipping totems (in ticks)"),
 				new SettingSlider("PopDelay", 0, 10, 0, 0).withDesc("How long to wait after popping to equip a new totem (in ticks)"));

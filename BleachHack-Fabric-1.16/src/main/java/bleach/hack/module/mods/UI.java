@@ -25,7 +25,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventDrawOverlay;
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingMode;
@@ -61,7 +61,7 @@ public class UI extends Module {
 	private int chunkSize = 0;
 
 	public UI() {
-		super("UI", KEY_UNBOUND, Category.RENDER, true, "Shows stuff onscreen.",
+		super("UI", KEY_UNBOUND, ModuleCategory.RENDER, true, "Shows stuff onscreen.",
 				new SettingToggle("Modulelist", true).withDesc("Shows the module list").withChildren( // 0
 						new SettingToggle("Inner Line", true).withDesc("Adds an extra line to the front of the module list"), // 0-0
 						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the module list"), // 0-1

@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
@@ -28,7 +28,7 @@ public class RotationSnap extends Module {
 	private boolean dDown = false;
 
 	public RotationSnap() {
-		super("RotationSnap", KEY_UNBOUND, Category.PLAYER, "Snaps your rotations to angles",
+		super("RotationSnap", KEY_UNBOUND, ModuleCategory.PLAYER, "Snaps your rotations to angles",
 				new SettingToggle("Yaw", true).withDesc("Fixes your yaw").withChildren(
 						new SettingMode("Interval", "45", "30", "15", "90").withDesc("What angles to snap to")),
 				new SettingToggle("Pitch", false).withDesc("Fixes your pitch").withChildren(

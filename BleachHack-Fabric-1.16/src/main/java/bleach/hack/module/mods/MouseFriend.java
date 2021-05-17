@@ -16,7 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import net.minecraft.client.render.debug.DebugRenderer;
@@ -28,7 +28,7 @@ public class MouseFriend extends Module {
 	private boolean buttonHeld = false;
 
 	public MouseFriend() {
-		super("MouseFriend", KEY_UNBOUND, Category.MISC, "Add/Remove friends with mouse buttons",
+		super("MouseFriend", KEY_UNBOUND, ModuleCategory.MISC, "Add/Remove friends with mouse buttons",
 				new SettingMode("Button", "Middle", "Right", "MOUSE4", "MOUSE5", "MOUSE6").withDesc("What mouse button to use"));
 	}
 

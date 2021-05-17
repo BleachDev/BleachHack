@@ -16,7 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
@@ -39,7 +39,7 @@ public class NewChunks extends Module {
 	private Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
 
 	public NewChunks() {
-		super("NewChunks", KEY_UNBOUND, Category.WORLD, "Detects completely new chunks using certain traits of them",
+		super("NewChunks", KEY_UNBOUND, ModuleCategory.WORLD, "Detects completely new chunks using certain traits of them",
 				new SettingToggle("Remove", true).withDesc("Removes the cached chunks when disabling the module"),
 				new SettingToggle("Fill", true).withDesc("Fills in the newchunks").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2).withDesc("The opacity of the fill")),

@@ -16,7 +16,7 @@ import java.util.List;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -31,7 +31,7 @@ import net.minecraft.util.math.Vec3d;
 public class ArrowJuke extends Module {
 
 	public ArrowJuke() {
-		super("ArrowJuke", KEY_UNBOUND, Category.COMBAT, "Tries to dodge arrows coming at you",
+		super("ArrowJuke", KEY_UNBOUND, ModuleCategory.COMBAT, "Tries to dodge arrows coming at you",
 				new SettingMode("Move", "Client", "Packet").withDesc("How to move to avoid the arrow"),
 				new SettingSlider("Speed", 0.01, 2, 1, 2).withDesc("Move speed"),
 				new SettingSlider("Lookahead", 1, 500, 250, 0).withDesc("How many steps in the future to look ahead"),

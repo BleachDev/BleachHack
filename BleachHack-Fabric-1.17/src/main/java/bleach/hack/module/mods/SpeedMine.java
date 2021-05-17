@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -22,7 +22,7 @@ import net.minecraft.entity.effect.StatusEffects;
 public class SpeedMine extends Module {
 
 	public SpeedMine() {
-		super("SpeedMine", KEY_UNBOUND, Category.EXPLOITS, "Allows you to mine at sanic speeds",
+		super("SpeedMine", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Allows you to mine at sanic speeds",
 				new SettingMode("Mode", "Haste", "OG").withDesc("Haste mode"),
 				new SettingSlider("Haste Lvl", 1, 3, 1, 0).withDesc("Haste Level"),
 				new SettingSlider("Cooldown", 0, 4, 1, 0).withDesc("Cooldown between mining blocks"),

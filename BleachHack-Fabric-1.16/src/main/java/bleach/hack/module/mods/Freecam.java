@@ -16,7 +16,7 @@ import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -41,7 +41,7 @@ public class Freecam extends Module {
 	private float prevFlySpeed;
 
 	public Freecam() {
-		super("Freecam", GLFW.GLFW_KEY_U, Category.PLAYER, "Its freecam, you know what it does",
+		super("Freecam", GLFW.GLFW_KEY_U, ModuleCategory.PLAYER, "Its freecam, you know what it does",
 				new SettingSlider("Speed", 0, 3, 0.5, 2).withDesc("Moving speed in freecam"),
 				new SettingToggle("Horse Inv", true).withDesc("Open Horse inventory when riding a horse"));
 	}

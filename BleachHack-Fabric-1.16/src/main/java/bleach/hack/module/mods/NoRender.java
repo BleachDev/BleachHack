@@ -16,7 +16,7 @@ import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventParticle;
 import bleach.hack.event.events.EventRenderOverlay;
 import bleach.hack.event.events.EventSoundPlay;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -37,7 +37,7 @@ public class NoRender extends Module {
 	public Text[] signText = new Text[] { LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY };
 
 	public NoRender() {
-		super("NoRender", KEY_UNBOUND, Category.RENDER, "Blocks certain elements from rendering",
+		super("NoRender", KEY_UNBOUND, ModuleCategory.RENDER, "Blocks certain elements from rendering",
 				new SettingToggle("Overlays", true).withDesc("Removes certain overlays").withChildren( // 0
 						new SettingToggle("Blindness", true).withDesc("Removes the blindness effect"), // 0-0
 						new SettingToggle("Fire", true).withDesc("Removes the fire overlay"), // 0-1

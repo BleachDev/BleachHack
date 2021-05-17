@@ -21,7 +21,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
@@ -47,7 +47,7 @@ public class Nuker extends Module {
 	private Set<BlockPos> renderBlocks = new HashSet<>();
 
 	public Nuker() {
-		super("Nuker", KEY_UNBOUND, Category.WORLD, "Breaks blocks around you",
+		super("Nuker", KEY_UNBOUND, ModuleCategory.WORLD, "Breaks blocks around you",
 				new SettingMode("Mode", "Normal", "SurvMulti", "Multi", "Instant").withDesc("Mining mode"),
 				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if Multi/SurvMulti mode is on"),
 				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range"),

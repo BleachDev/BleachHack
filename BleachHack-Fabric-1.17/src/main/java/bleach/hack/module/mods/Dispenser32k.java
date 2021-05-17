@@ -16,7 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -63,7 +63,7 @@ public class Dispenser32k extends Module {
 	private int timer = 0;
 
 	public Dispenser32k() {
-		super("Dispenser32k", KEY_UNBOUND, Category.COMBAT, "ching chong auto32k no skid 2020",
+		super("Dispenser32k", KEY_UNBOUND, ModuleCategory.COMBAT, "ching chong auto32k no skid 2020",
 				new SettingRotate(true),
 				new SettingToggle("Killaura", true).withDesc("Automatically attacks"),
 				new SettingSlider("CPS", 0, 20, 20, 0).withDesc("Attack Speed"),

@@ -13,7 +13,7 @@ import java.util.Random;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.util.PlayerInteractEntityC2SUtils;
 import bleach.hack.util.PlayerInteractEntityC2SUtils.InteractType;
@@ -28,7 +28,7 @@ import net.minecraft.particle.ParticleTypes;
 public class Criticals extends Module {
 
 	public Criticals() {
-		super("Criticals", KEY_UNBOUND, Category.COMBAT, "Attempts to force Critical hits on entities you hit.");
+		super("Criticals", KEY_UNBOUND, ModuleCategory.COMBAT, "Attempts to force Critical hits on entities you hit.");
 	}
 
 	@Subscribe

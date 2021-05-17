@@ -16,7 +16,7 @@ import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -32,7 +32,7 @@ public class FastUse extends Module {
 			Items.ENDER_EYE, Items.ENDER_PEARL, Items.SPLASH_POTION, Items.LINGERING_POTION);
 
 	public FastUse() {
-		super("FastUse", GLFW.GLFW_KEY_B, Category.PLAYER, "Allows you to use items faster",
+		super("FastUse", GLFW.GLFW_KEY_B, ModuleCategory.PLAYER, "Allows you to use items faster",
 				new SettingMode("Mode", "Single", "Multi").withDesc("Whether to throw once per tick or multiple times"),
 				new SettingSlider("Multi", 1, 100, 20, 0).withDesc("How many items to user per tick if on multi mode"),
 				new SettingToggle("Throwables Only", true).withDesc("Only use throwables").withChildren(

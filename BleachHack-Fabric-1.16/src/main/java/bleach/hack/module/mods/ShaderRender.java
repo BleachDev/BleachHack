@@ -17,7 +17,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonSyntaxException;
 
 import bleach.hack.event.events.EventRenderShader;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import net.minecraft.client.gl.ShaderEffect;
@@ -33,7 +33,7 @@ public class ShaderRender extends Module {
 	private List<Identifier> shaders = new ArrayList<>();
 
 	public ShaderRender() {
-		super("ShaderRender", KEY_UNBOUND, Category.RENDER, "1.7 Super secret settings (tell mojang to fix their shit if you don't want a white hotbar)",
+		super("ShaderRender", KEY_UNBOUND, ModuleCategory.RENDER, "1.7 Super secret settings (tell mojang to fix their shit if you don't want a white hotbar)",
 				new SettingMode("Shader", "Notch", "FXAA", "Art", "Bumpy", "Blobs", "Blobs2", "Pencil", "Vibrant",
 						"Deconverge", "Flip", "Invert", "NTSC", "Outline", "Phosphor", "Scanline", "Sobel",
 						"Bits", "Desaturate", "Green", "Blur", "Wobble", "Antialias", "Creeper", "Spider").withDesc("Shader mode"));

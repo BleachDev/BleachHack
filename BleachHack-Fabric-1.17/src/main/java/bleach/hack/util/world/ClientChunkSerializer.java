@@ -72,7 +72,7 @@ public class ClientChunkSerializer {
 
 		for(int i = lightingProvider.method_31929(); i < lightingProvider.method_31930(); ++i) {
 			int fi = i;
-			ChunkSection chunkSection = (ChunkSection) Arrays.stream(chunkSections).filter((chunkSectionx) -> {
+			ChunkSection chunkSection = (ChunkSection) Arrays.stream(chunkSections).filter(chunkSectionx -> {
 				return chunkSectionx != null && ChunkSectionPos.getSectionCoord(chunkSectionx.getYOffset()) == fi;
 			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
 			ChunkNibbleArray chunkNibbleArray = lightingProvider.get(LightType.BLOCK).getLightSection(ChunkSectionPos.from(chunkPos, i));

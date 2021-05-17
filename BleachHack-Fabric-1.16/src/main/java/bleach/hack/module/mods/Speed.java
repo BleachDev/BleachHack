@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -25,7 +25,7 @@ public class Speed extends Module {
 	private boolean jumping;
 
 	public Speed() {
-		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
+		super("Speed", GLFW.GLFW_KEY_V, ModuleCategory.MOVEMENT, "Allows you to go faster, what did you expect?",
 				new SettingMode("Mode", "StrafeHop", "Strafe", "OnGround", "MiniHop", "Bhop").withDesc("Speed mode"),
 				new SettingSlider("Strafe", 0.15, 0.4, 0.27, 2).withDesc("Strafe speed"),
 				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround speed"),

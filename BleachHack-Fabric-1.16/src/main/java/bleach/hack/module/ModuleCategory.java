@@ -8,7 +8,7 @@
  */
 package bleach.hack.module;
 
-public enum Category {
+public enum ModuleCategory {
 	PLAYER,
 	RENDER,
 	COMBAT,

@@ -15,7 +15,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -28,7 +28,7 @@ public class FakeLag extends Module {
 	public long startTime = 0;
 
 	public FakeLag() {
-		super("FakeLag", KEY_UNBOUND, Category.MOVEMENT, "Stores up movement packets",
+		super("FakeLag", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Stores up movement packets",
 				new SettingMode("Mode", "Always", "Pulse").withDesc("Lag mode"),
 				new SettingToggle("Limit", false).withDesc("Disable lag after x seconds").withChildren(
 						new SettingSlider("Limit", 0, 15, 5, 1).withDesc("How muny seconds before disabling")),

@@ -17,7 +17,7 @@ import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendMovementPackets;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -33,7 +33,7 @@ import net.minecraft.util.math.Vec3d;
 public class ElytraFly extends Module {
 
 	public ElytraFly() {
-		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
+		super("ElytraFly", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Improves the elytra",
 				new SettingMode("Mode", "AutoBoost", "Boost", "Control", "BruhFly", "Pak\u00e8tFly").withDesc("Elytrafly mode"),
 				new SettingSlider("Boost", 0, 0.15, 0.05, 2).withDesc("Boost speed"),
 				new SettingSlider("MaxBoost", 0, 5, 2.5, 1).withDesc("Max boost speed"),

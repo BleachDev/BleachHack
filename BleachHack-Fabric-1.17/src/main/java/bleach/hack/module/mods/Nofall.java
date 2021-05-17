@@ -12,7 +12,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.util.FabricReflect;
@@ -24,7 +24,7 @@ public class Nofall extends Module {
 	private boolean altBool = false;
 
 	public Nofall() {
-		super("Nofall", KEY_UNBOUND, Category.PLAYER, "Prevents you from taking fall damage.",
+		super("Nofall", KEY_UNBOUND, ModuleCategory.PLAYER, "Prevents you from taking fall damage.",
 				new SettingMode("Mode", "Simple", "Packet", "ec.me").withDesc("What nofall mode to use"));
 	}
 

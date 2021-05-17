@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -36,7 +36,7 @@ public class AutoArmor extends Module {
 	private int tickDelay = 0;
 
 	public AutoArmor() {
-		super("AutoArmor", KEY_UNBOUND, Category.PLAYER, "Automatically equips armor",
+		super("AutoArmor", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically equips armor",
 				new SettingToggle("Anti Break", false).withDesc("Unequips your armor when its about to break"),
 				new SettingToggle("Prefer Elytra", false).withDesc("Equips elytras instead of chestplates when possible"),
 				new SettingToggle("Delay", true).withDesc("Adds a delay between equipping armor pieces to make it bypass more anticheats").withChildren(

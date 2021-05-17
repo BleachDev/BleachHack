@@ -23,7 +23,7 @@ import bleach.hack.event.events.EventBlockEntityRender;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -78,7 +78,7 @@ public class StorageESP extends Module {
 	private boolean shaderUnloaded = true;
 
 	public StorageESP() {
-		super("StorageESP", KEY_UNBOUND, Category.RENDER, "Draws a box around storage containers.",
+		super("StorageESP", KEY_UNBOUND, ModuleCategory.RENDER, "Draws a box around storage containers.",
 				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill"),
 				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline"),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),

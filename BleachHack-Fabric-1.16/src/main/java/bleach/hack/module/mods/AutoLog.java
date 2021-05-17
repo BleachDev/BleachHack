@@ -12,7 +12,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -31,7 +31,7 @@ public class AutoLog extends Module {
 	private boolean smartDisabled = false;
 
 	public AutoLog() {
-		super("AutoLog", KEY_UNBOUND, Category.COMBAT, "Automatically disconnect from a server",
+		super("AutoLog", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically disconnect from a server",
 				new SettingToggle("Health", true).withDesc("Disconnects when you're under a certain health").withChildren(
 						new SettingSlider("Health", 1, 20, 5, 0).withDesc("The health to log at"),
 						new SettingToggle("IgnoreTotems", false).withDesc("Makes you disconnect even if you have totems"),

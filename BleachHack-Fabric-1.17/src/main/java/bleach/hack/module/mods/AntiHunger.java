@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.FabricReflect;
@@ -22,7 +22,7 @@ public class AntiHunger extends Module {
 	private boolean bool = false;
 
 	public AntiHunger() {
-		super("AntiHunger", KEY_UNBOUND, Category.PLAYER, "Minimizes the amount of hunger you use",
+		super("AntiHunger", KEY_UNBOUND, ModuleCategory.PLAYER, "Minimizes the amount of hunger you use",
 				new SettingToggle("Relaxed", false).withDesc("Only activates every other ticks, might fix getting fly kicked"));
 	}
 

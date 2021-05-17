@@ -17,7 +17,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
@@ -44,7 +44,7 @@ public class Trajectories extends Module {
 	private List<Triple<List<Vec3d>, Entity, BlockPos>> poses = new ArrayList<>();
 
 	public Trajectories() {
-		super("Trajectories", KEY_UNBOUND, Category.RENDER, "Shows the trajectories of projectiles",
+		super("Trajectories", KEY_UNBOUND, ModuleCategory.RENDER, "Shows the trajectories of projectiles",
 				new SettingMode("Draw", "Line", "Dots").withDesc("How to draw the line where the projectile is going"),
 				new SettingToggle("Throwables", true).withDesc("Shows snowballs/eggs/epearls"),
 				new SettingToggle("XP Bottles", true).withDesc("Shows XP bottles"),

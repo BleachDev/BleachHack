@@ -4,7 +4,7 @@ import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -30,7 +30,7 @@ public class LogoutSpot extends Module {
 	private final HashMap<UUID, Pair<PlayerCopyEntity, Long>> players = new HashMap<>();
 
 	public LogoutSpot() {
-		super("LogoutSpot", KEY_UNBOUND, Category.RENDER, "Shows where a player logged out",
+		super("LogoutSpot", KEY_UNBOUND, ModuleCategory.RENDER, "Shows where a player logged out",
 				new SettingToggle("Remove", true).withDesc("Removes logout spots").withChildren( // 1
 						new SettingToggle("Distance", false).withDesc("Remove logout spots based on distance").withChildren( // 0-0
 								new SettingSlider("Radius", 1, 1000, 200, 0).withDesc("Radius in which logout spots get shown")), // 0-0-0

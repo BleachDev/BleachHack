@@ -13,7 +13,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -37,7 +37,7 @@ public class AutoReconnect extends Module {
 	public ServerInfo server;
 
 	public AutoReconnect() {
-		super("AutoReconnect", KEY_UNBOUND, Category.MISC, "Shows reconnect options when disconnecting from a server",
+		super("AutoReconnect", KEY_UNBOUND, ModuleCategory.MISC, "Shows reconnect options when disconnecting from a server",
 				new SettingToggle("Auto", true).withDesc("Automatically reconnects").withChildren(
 						new SettingSlider("Time", 0.2, 10, 5, 2).withDesc("How long to wait before reconnecting")));
 	}

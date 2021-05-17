@@ -15,7 +15,7 @@ import com.google.common.collect.Streams;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -32,7 +32,7 @@ import net.minecraft.util.math.Direction;
 public class BowBot extends Module {
 
 	public BowBot() {
-		super("BowBot", KEY_UNBOUND, Category.COMBAT, "Automatically aims and shoots at entities",
+		super("BowBot", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically aims and shoots at entities",
 				new SettingToggle("Shoot", true).withDesc("Automatically shoots arrows"),
 				new SettingSlider("Charge", 0.1, 1, 0.5, 2).withDesc("How much to charge the bow"),
 				new SettingToggle("Aim", false).withDesc("Automatically aims"));

@@ -33,15 +33,15 @@ public class Module {
 	private boolean enabled = false;
 	private final boolean defaultEnabled;
 	
-	private Category category;
+	private ModuleCategory category;
 	private String desc;
 	private List<SettingBase> settings = new ArrayList<>();
 
-	public Module(String nm, int k, Category c, String d, SettingBase... s) {
+	public Module(String nm, int k, ModuleCategory c, String d, SettingBase... s) {
 		this(nm, k, c, false, d, s);
 	}
 
-	public Module(String nm, int k, Category c, boolean enabled, String d, SettingBase... s) {
+	public Module(String nm, int k, ModuleCategory c, boolean enabled, String d, SettingBase... s) {
 		name = nm;
 		setKey(k);
 		defaultKey = getKey();
@@ -96,7 +96,7 @@ public class Module {
 		return name;
 	}
 
-	public Category getCategory() {
+	public ModuleCategory getCategory() {
 		return category;
 	}
 

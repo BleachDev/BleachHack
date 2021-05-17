@@ -14,7 +14,7 @@ import bleach.hack.event.events.EventBiomeColor;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 public class Ambience extends Module {
 
 	public Ambience() {
-		super("Ambience", KEY_UNBOUND, Category.WORLD, "Changes the world ambience",
+		super("Ambience", KEY_UNBOUND, ModuleCategory.WORLD, "Changes the world ambience",
 				new SettingToggle("Weather", true).withDesc("Changes the world weather").withChildren(
 						new SettingMode("Weather", "Clear", "Rain").withDesc("What weather to use"),
 						new SettingSlider("Rain", 0, 2, 0, 2).withDesc("How much rain")),

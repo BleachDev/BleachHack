@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -24,7 +24,7 @@ import net.minecraft.util.math.Direction;
 public class OffhandCrash extends Module {
 
 	public OffhandCrash() {
-		super("OffhandCrash", KEY_UNBOUND, Category.EXPLOITS, "Lags people using the snowball exploit",
+		super("OffhandCrash", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Lags people using the snowball exploit",
 				new SettingSlider("Switches", 0, 2000, 420, 0).withDesc("How many switches per tick"),
 				new SettingToggle("Player Packet", true).withDesc("Send player packets between switches"));
 	}

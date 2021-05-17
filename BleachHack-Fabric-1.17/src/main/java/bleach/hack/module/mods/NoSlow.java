@@ -16,7 +16,7 @@ import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.world.WorldUtils;
@@ -46,7 +46,7 @@ public class NoSlow extends Module {
 	private long lastTime;
 
 	public NoSlow() {
-		super("NoSlow", KEY_UNBOUND, Category.MOVEMENT, "Disables Stuff From Slowing You Down",
+		super("NoSlow", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Disables Stuff From Slowing You Down",
 				new SettingToggle("Slowness", true).withDesc("Removes slowness effects"),
 				new SettingToggle("Soul Sand", true).withDesc("Removes the soul sand slowness"),
 				new SettingToggle("Slime Blocks", true).withDesc("Removes the slimeblock slowness"),

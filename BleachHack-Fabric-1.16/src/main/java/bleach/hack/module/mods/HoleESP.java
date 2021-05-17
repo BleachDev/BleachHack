@@ -16,7 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
@@ -40,7 +40,7 @@ public class HoleESP extends Module {
 	private Map<BlockPos, float[]> holes = new HashMap<>();
 
 	public HoleESP() {
-		super("HoleESP", KEY_UNBOUND, Category.RENDER, "Highlights save and not so save holes. Used for CrystalPvP",
+		super("HoleESP", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights save and not so save holes. Used for CrystalPvP",
 				new SettingSlider("Radius", 1, 20, 10, 0).withDesc("Radius in which holes are getting searched"),
 				new SettingToggle("RenderBottom", true).withDesc("Render the bottom of this hole").withChildren(
 						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),

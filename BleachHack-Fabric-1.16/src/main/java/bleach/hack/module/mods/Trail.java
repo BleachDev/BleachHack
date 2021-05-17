@@ -16,7 +16,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
@@ -31,7 +31,7 @@ public class Trail extends Module {
 	private Vec3d lastVec = null;
 
 	public Trail() {
-		super("Trail", KEY_UNBOUND, Category.RENDER, "Shows a trail where you go",
+		super("Trail", KEY_UNBOUND, ModuleCategory.RENDER, "Shows a trail where you go",
 				new SettingToggle("Trail", true).withDesc("Enable trailing"),
 				new SettingToggle("KeepTrail", false).withDesc("Keep the trail after turning the module off"),
 				new SettingColor("Color", 0.8f, 0.2f, 0.2f, false).withDesc("Main trail color"),

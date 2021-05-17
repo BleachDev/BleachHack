@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
@@ -24,7 +24,7 @@ import net.minecraft.entity.effect.StatusEffects;
 public class Fullbright extends Module {
 
 	public Fullbright() {
-		super("Fullbright", GLFW.GLFW_KEY_C, Category.RENDER, "Turns your gamma setting up.",
+		super("Fullbright", GLFW.GLFW_KEY_C, ModuleCategory.RENDER, "Turns your gamma setting up.",
 				new SettingMode("Mode", "Gamma", "Potion").withDesc("Fullbright mode"),
 				new SettingSlider("Gamma", 1, 12, 9, 1).withDesc("How much to turn the gamma up when using gamma mode"));
 	}

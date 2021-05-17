@@ -8,14 +8,14 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import net.minecraft.util.Util;
 
 public class StarGithub extends Module {
 
 	public StarGithub() {
-		super("StarGithub", KEY_UNBOUND, Category.MISC, "i need to feed my 420 children pls star github");
+		super("StarGithub", KEY_UNBOUND, ModuleCategory.MISC, "i need to feed my 420 children pls star github");
 	}
 
 	public void onEnable() {

@@ -12,7 +12,7 @@ import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventPlayerPushed;
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.module.Category;
+import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -26,7 +26,7 @@ import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
 public class NoVelocity extends Module {
 
 	public NoVelocity() {
-		super("NoVelocity", KEY_UNBOUND, Category.PLAYER, "If you take some damage, you don't move.",
+		super("NoVelocity", KEY_UNBOUND, ModuleCategory.PLAYER, "If you take some damage, you don't move.",
 				new SettingToggle("Knockback", true).withDesc("Reduces knockback from other entities").withChildren(
 						new SettingSlider("VelXZ", 0, 100, 0, 1).withDesc("How much horizontal velocity"),
 						new SettingSlider("VelY", 0, 100, 0, 1).withDesc("How much vertical velocity")),
