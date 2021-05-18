@@ -16,21 +16,22 @@ import net.minecraft.item.ItemStack;
 
 @Mixin(HeldItemRenderer.class)
 public interface AccessorHeldItemRenderer {
-	@Accessor("mainHand")
-	void setItemStackMainHand(ItemStack value);
 
-	@Accessor("offHand")
-	void setItemStackOffHand(ItemStack value);
+	@Accessor
+	void setMainHand(ItemStack value);
 
-	@Accessor("equipProgressMainHand")
-	void setEquippedProgressMainHand(float value);
+	@Accessor
+	void setOffHand(ItemStack value);
 
-	@Accessor("prevEquipProgressMainHand")
-	void setPrevEquippedProgressMainHand(float value);
+	@Accessor
+	float getEquipProgressMainHand();
 
-	@Accessor("equipProgressOffHand")
-	void setEquippedProgressOffHand(float value);
+	@Accessor
+	void setEquipProgressMainHand(float value);
 
-	@Accessor("prevEquipProgressOffHand")
-	void setPrevEquippedProgressOffHand(float value);
+	@Accessor
+	float getEquipProgressOffHand();
+
+	@Accessor
+	void setEquipProgressOffHand(float value);
 }
