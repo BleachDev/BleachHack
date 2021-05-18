@@ -25,6 +25,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
+import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
@@ -59,23 +60,26 @@ public class Scaffold extends Module {
 						new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed")));
 	}
 
+	private boolean shouldUseItem(Item item) {
+		if (!(item instanceof BlockItem)) {
+			return false;
+		}
+
+		if (getSetting(5).asToggle().state) {
+			boolean contains = getSetting(5).asToggle().getChild(1).asList(Item.class).contains(item);
+
+			return (getSetting(5).asToggle().getChild(0).asMode().mode == 0 && !contains)
+					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && contains);
+		}
+
+		return true;
+	}
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		renderBlocks.clear();
 
-		int slot = -1;
-		int prevSlot = mc.player.inventory.selectedSlot;
-
-		if (mc.player.inventory.getMainHandStack().getItem() instanceof BlockItem) {
-			slot = mc.player.inventory.selectedSlot;
-		} else {
-			for (int i = 0; i < 9; i++) {
-				if (mc.player.inventory.getStack(i).getItem() instanceof BlockItem) {
-					slot = i;
-					break;
-				}
-			}
-		}
+		int slot = InventoryUtils.getSlot(false, i -> shouldUseItem(mc.player.inventory.getStack(i).getItem()));
 
 		if (slot == -1) {
 			if (getSetting(10).asToggle().state) {
@@ -85,19 +89,7 @@ public class Scaffold extends Module {
 			return;
 		}
 
-		if (getSetting(5).asToggle().state) {
-			boolean contains = getSetting(5).asToggle().getChild(1).asList(Item.class).contains(mc.player.inventory.getStack(slot).getItem());
-
-			if ((getSetting(5).asToggle().getChild(0).asMode().mode == 0 && contains)
-					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
-				if (getSetting(10).asToggle().state) {
-					setEnabled(false);
-				}
-
-				return;
-			}
-		}
-
+		int prevSlot = mc.player.inventory.selectedSlot;
 		double range = getSetting(2).asSlider().getValue();
 		int mode = getSetting(0).asMode().mode;
 
@@ -109,7 +101,7 @@ public class Scaffold extends Module {
 						new BlockPos(placeVec.add(-range, 0, 0)),
 						new BlockPos(placeVec.add(0, 0, range)),
 						new BlockPos(placeVec.add(0, 0, -range)))
-				: getSpiral(mode, new BlockPos(placeVec));
+						: getSpiral(mode, new BlockPos(placeVec));
 
 		if (getSetting(6).asToggle().state
 				&& InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
@@ -142,10 +134,12 @@ public class Scaffold extends Module {
 			}
 		}
 
+		InventoryUtils.selectSlot(slot);
+
 		int cap = 0;
 		for (BlockPos bp : blocks) {
 			boolean placed = WorldUtils.placeBlock(
-					bp, slot,
+					bp, -1,
 					getSetting(3).asRotate(),
 					getSetting(4).asToggle().state,
 					getSetting(7).asToggle().state,

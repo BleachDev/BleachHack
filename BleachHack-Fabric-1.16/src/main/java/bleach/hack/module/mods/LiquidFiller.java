@@ -19,7 +19,6 @@ import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
-import net.minecraft.block.Block;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.fluid.WaterFluid;
@@ -44,7 +43,7 @@ public class LiquidFiller extends Module {
 				new SettingToggle("LegitPlace", false).withDesc("Only places on sides of blocks you can see"),
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks from being placed").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
-						SettingLists.newBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks")),
+						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks")),
 				new SettingRotate(false).withDesc("Rotates when placing blocks"),
 				new SettingToggle("Highlight", true).withDesc("Highlights liquids to fill").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2),
@@ -58,7 +57,7 @@ public class LiquidFiller extends Module {
 		}
 
 		if (getSetting(5).asToggle().state) {
-			boolean contains = getSetting(5).asToggle().getChild(1).asList(Block.class).contains(((BlockItem) item).getBlock());
+			boolean contains = getSetting(5).asToggle().getChild(1).asList(Item.class).contains(item);
 
 			return (getSetting(5).asToggle().getChild(0).asMode().mode == 0 && !contains)
 					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && contains);
