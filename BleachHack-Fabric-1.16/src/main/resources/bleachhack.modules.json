@@ -3,6 +3,7 @@
   "modules": [
     "AirPlace",
     "Ambience",
+    "AntiChunkBan",
     "AntiHunger",
     "AntiVoid",
     "ArrowJuke",
