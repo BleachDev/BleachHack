@@ -26,14 +26,9 @@ import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class Surround extends Module {
@@ -105,34 +100,27 @@ public class Surround extends Module {
 			return;
 		}
 
-		if (InventoryUtils.selectSlot(slot) == Hand.OFF_HAND) {
-			ItemStack itemStack = mc.player.getStackInHand(Hand.OFF_HAND);
-			mc.player.setStackInHand(Hand.OFF_HAND, mc.player.getStackInHand(Hand.MAIN_HAND));
-			mc.player.setStackInHand(Hand.MAIN_HAND, itemStack);
-			mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.UP));
-		}
-
 		int supportMode = getSetting(1).asMode().mode;
 		for (BlockPos pos : placePoses) {
 			if (cap >= getSetting(2).asSlider().getValueInt()) {
 				return;
 			}
 
-			if (WorldUtils.placeBlock(pos, -1, getSetting(6).asRotate(), false, supportMode == 1, true)) {
+			if (WorldUtils.placeBlock(pos, slot, getSetting(6).asRotate(), false, supportMode == 1, true)) {
 				cap++;
 			} else {
 				if (supportMode == 2) {
 					continue;
 				}
 
-				if (WorldUtils.placeBlock(pos.down(), -1, getSetting(6).asRotate(), false, supportMode == 1, true)) {
+				if (WorldUtils.placeBlock(pos.down(), slot, getSetting(6).asRotate(), false, supportMode == 1, true)) {
 					cap++;
 
 					if (cap >= getSetting(2).asSlider().getValueInt()) {
 						return;
 					}
 
-					if (WorldUtils.placeBlock(pos, -1, getSetting(6).asRotate(), false, supportMode == 1, true)) {
+					if (WorldUtils.placeBlock(pos, slot, getSetting(6).asRotate(), false, supportMode == 1, true)) {
 						cap++;
 					}
 				}

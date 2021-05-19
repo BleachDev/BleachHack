@@ -89,7 +89,6 @@ public class Scaffold extends Module {
 			return;
 		}
 
-		int prevSlot = mc.player.getInventory().selectedSlot;
 		double range = getSetting(2).asSlider().getValue();
 		int mode = getSetting(0).asMode().mode;
 
@@ -134,20 +133,16 @@ public class Scaffold extends Module {
 			}
 		}
 
-		InventoryUtils.selectSlot(slot);
-
 		int cap = 0;
 		for (BlockPos bp : blocks) {
 			boolean placed = WorldUtils.placeBlock(
-					bp, -1,
+					bp, slot,
 					getSetting(3).asRotate(),
 					getSetting(4).asToggle().state,
 					getSetting(7).asToggle().state,
 					!getSetting(9).asToggle().state);
 
 			if (placed) {
-				mc.player.getInventory().selectedSlot = prevSlot;
-
 				cap++;
 
 				if (cap >= getSetting(1).asSlider().getValueInt()) {

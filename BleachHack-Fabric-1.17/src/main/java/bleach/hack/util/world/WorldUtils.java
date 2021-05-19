@@ -15,6 +15,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import bleach.hack.setting.other.SettingRotate;
+import bleach.hack.util.InventoryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -170,8 +171,12 @@ public class WorldUtils {
 				}
 			}
 
-			if (slot != mc.player.getInventory().selectedSlot && slot >= 0 && slot <= 8)
-				mc.player.getInventory().selectedSlot = slot;
+			int prevSlot = mc.player.getInventory().selectedSlot;
+			Hand hand = InventoryUtils.selectSlot(slot);
+
+			if (hand == null) {
+				return false;
+			}
 
 			if (rotateMode == 1) {
 				facePosPacket(vec.x, vec.y, vec.z);
@@ -184,16 +189,18 @@ public class WorldUtils {
 			}
 
 			if (swingHand) {
-				mc.player.swingHand(Hand.MAIN_HAND);
+				mc.player.swingHand(hand);
 			} else {
-				mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
+				mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(hand));
 			}
 
-			mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
+			mc.interactionManager.interactBlock(mc.player, mc.world, hand,
 					new BlockHitResult(Vec3d.of(pos), airPlace ? d : d.getOpposite(), airPlace ? pos : pos.offset(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
+
+			mc.player.getInventory().selectedSlot = prevSlot;
 
 			return true;
 		}

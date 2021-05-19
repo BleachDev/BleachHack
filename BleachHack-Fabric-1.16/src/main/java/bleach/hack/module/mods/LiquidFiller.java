@@ -73,11 +73,11 @@ public class LiquidFiller extends Module {
 		for (BlockPos pos: BlockPos.iterateOutwards(mc.player.getBlockPos().up(), ceilRange, ceilRange, ceilRange)) {
 			FluidState fluid = mc.world.getFluidState(pos);
 
-			if (((fluid.getFluid() instanceof WaterFluid.Still && getSetting(0).asMode().mode != 0)
-							|| (fluid.getFluid() instanceof LavaFluid.Still && getSetting(0).asMode().mode != 1))
-					&& InventoryUtils.selectSlot(false, i -> shouldUseItem(mc.player.inventory.getStack(i).getItem())) != null) {
+			int slot = InventoryUtils.getSlot(true, i -> shouldUseItem(mc.player.inventory.getStack(i).getItem()));
+			if ((fluid.getFluid() instanceof WaterFluid.Still && getSetting(0).asMode().mode != 0)
+							|| (fluid.getFluid() instanceof LavaFluid.Still && getSetting(0).asMode().mode != 1)) {
 					if (WorldUtils.placeBlock(
-							pos, -1,
+							pos, slot,
 							getSetting(6).asRotate(),
 							getSetting(4).asToggle().state,
 							getSetting(3).asToggle().state,

@@ -10,6 +10,7 @@ package bleach.hack.util.operation;
 
 import java.util.Random;
 
+import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.render.color.QuadColor;
@@ -45,13 +46,9 @@ public class PlaceOperation extends Operation {
 
 	@Override
 	public boolean execute() {
-		for (int i = 0; i < 9; i++) {
-			if (mc.player.inventory.getStack(i).getItem() == item) {
-				return WorldUtils.placeBlock(pos, i, 0, false, false, true);
-			}
-		}
+		int slot = InventoryUtils.getSlot(true, i -> mc.player.inventory.getStack(i).getItem() == item);
 
-		return false;
+		return WorldUtils.placeBlock(pos, slot, 0, false, false, true);
 	}
 
 	@Override

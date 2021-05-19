@@ -8,6 +8,7 @@
  */
 package bleach.hack.util.operation;
 
+import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
@@ -30,20 +31,18 @@ public class PlaceDirOperation extends PlaceOperation {
 
 	@Override
 	public boolean execute() {
-		for (int i = 0; i < 9; i++) {
-			if (mc.player.inventory.getStack(i).getItem() == item) {
-				if (WorldUtils.canPlaceBlock(pos)) {
-					Vec3d lookPos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).add(dir.getOffsetX(), dir.getOffsetY(), dir.getOffsetZ());
-					WorldUtils.facePosPacket(lookPos.getX(), lookPos.getY(), lookPos.getZ());
+		int slot = InventoryUtils.getSlot(true, i -> mc.player.inventory.getStack(i).getItem() == item);
 
-					if (!faced) {
-						faced = true;
-						return false;
-					}
+		if (slot != -1 && WorldUtils.canPlaceBlock(pos)) {
+			if (!faced) {
+				Vec3d lookPos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).add(dir.getOffsetX(), dir.getOffsetY(), dir.getOffsetZ());
+				WorldUtils.facePosPacket(lookPos.getX(), lookPos.getY(), lookPos.getZ());
 
-					return WorldUtils.placeBlock(pos, i, 0, false, false, true);
-				}
+				faced = true;
+				return false;
 			}
+
+			return WorldUtils.placeBlock(pos, slot, 0, false, false, true);
 		}
 
 		return false;
