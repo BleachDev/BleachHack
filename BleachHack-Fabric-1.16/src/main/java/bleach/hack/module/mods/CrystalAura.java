@@ -42,7 +42,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
@@ -56,7 +56,6 @@ import net.minecraft.util.math.Vec3d;
 public class CrystalAura extends Module {
 
 	private BlockPos render = null;
-	private int oldSlot = -1;
 	private int breakCooldown = 0;
 	private int placeCooldown = 0;
 	private HashMap<BlockPos, Integer> blackList = new HashMap<>();
@@ -105,6 +104,17 @@ public class CrystalAura extends Module {
 			return;
 		}
 
+		List<LivingEntity> targets = Streams.stream(mc.world.getEntities())
+				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
+						&& e.isAlive()
+						&& !e.getEntityName().equals(mc.getSession().getUsername())
+						&& e != mc.player.getVehicle())
+				.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state)
+						|| (e instanceof Monster && getSetting(1).asToggle().state)
+						|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state))
+				.map(e -> (LivingEntity) e)
+				.collect(Collectors.toList());
+
 		// Explode
 		List<EndCrystalEntity> nearestCrystals = Streams.stream(mc.world.getEntities())
 				.filter(e -> (e instanceof EndCrystalEntity))
@@ -117,21 +127,19 @@ public class CrystalAura extends Module {
 
 		int breaks = 0;
 		if (getSetting(3).asToggle().state && !nearestCrystals.isEmpty() && breakCooldown <= 0) {
-			if (getSetting(3).asToggle().getChild(0).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
-				this.oldSlot = mc.player.inventory.selectedSlot;
-				InventoryUtils.selectSlot(false, true, Comparator.comparing(i -> mc.player.inventory.getStack(i).getDamage()));
-			}
-
 			boolean end = false;
 			for (EndCrystalEntity c: nearestCrystals) {
 				if (mc.player.distanceTo(c) > getSetting(7).asSlider().getValue()
 						|| DamageUtils.willExplosionKill(c.getPos(), 6f, mc.player)
 						|| (mc.player.getHealth() + mc.player.getAbsorptionAmount()) - DamageUtils.getExplosionDamage(c.getPos(), 6f, mc.player) 
 						< getSetting(3).asToggle().getChild(4).asSlider().getValue()
-						|| mc.world.getOtherEntities(null,
-								new Box(c.getPos(), c.getPos()).expand(7),
-								e -> e instanceof LivingEntity && e != mc.player && e != mc.player.getVehicle()).isEmpty()) {
+						|| mc.world.getOtherEntities(null, new Box(c.getPos(), c.getPos()).expand(7), targets::contains).isEmpty()) {
 					continue;
+				}
+
+				int oldSlot = mc.player.inventory.selectedSlot;
+				if (getSetting(3).asToggle().getChild(0).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
+					InventoryUtils.selectSlot(false, true, Comparator.comparing(i -> DamageUtils.getItemAttackDamage(mc.player.inventory.getStack(i))));
 				}
 
 				if (getSetting(6).asRotate().state) {
@@ -150,6 +158,8 @@ public class CrystalAura extends Module {
 				mc.interactionManager.attackEntity(mc.player, c);
 				mc.player.swingHand(Hand.MAIN_HAND);
 
+				mc.player.inventory.selectedSlot = oldSlot;
+
 				end = true;
 				breaks++;
 				if (breaks >= getSetting(3).asToggle().getChild(2).asSlider().getValue()) {
@@ -162,9 +172,6 @@ public class CrystalAura extends Module {
 			if (!getSetting(5).asToggle().state && end) {
 				return;
 			}
-		} else if (this.oldSlot != -1) {
-			mc.player.inventory.selectedSlot = this.oldSlot;
-			this.oldSlot = -1;
 		}
 
 		// Place
@@ -178,17 +185,6 @@ public class CrystalAura extends Module {
 			if (crystalSlot == -1) {
 				return;
 			}
-
-			List<LivingEntity> targets = Streams.stream(mc.world.getEntities())
-					.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
-							&& e.isAlive()
-							&& !e.getEntityName().equals(mc.getSession().getUsername())
-							&& e != mc.player.getVehicle())
-					.filter(e -> (e instanceof PlayerEntity && getSetting(0).asToggle().state)
-							|| (e instanceof MobEntity && getSetting(1).asToggle().state)
-							|| (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state))
-					.map(e -> (LivingEntity) e)
-					.collect(Collectors.toList());
 
 			Map<BlockPos, Float> placeBlocks = new LinkedHashMap<>();
 

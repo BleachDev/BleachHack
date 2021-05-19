@@ -11,11 +11,15 @@ package bleach.hack.util.world;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityGroup;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -27,11 +31,28 @@ public class DamageUtils {
 
 	private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-	public static float getAttackDamage(PlayerEntity attacker, LivingEntity target) {
+	public static float getItemAttackDamage(ItemStack stack) {
+		float damage = 1f
+				+ stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+				.stream()
+				.map(e -> (float) e.getValue())
+				.findFirst().orElse(0f);
+
+		return damage + EnchantmentHelper.getAttackDamage(stack, EntityGroup.DEFAULT);
+	}
+
+	public static float getAttackDamage(PlayerEntity attacker, Entity target) {
 		float cooldown = attacker.getAttackCooldownProgress(0.5F);
 
-		float damage = (float) attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) * (0.2f + cooldown * cooldown * 0.8f);
-		float enchDamage = EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup()) * cooldown;
+		float damage = (float) attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+				+ attacker.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+				.stream()
+				.map(e -> (float) e.getValue())
+				.findFirst().orElse(0f);
+
+		damage *= 0.2f + cooldown * cooldown * 0.8f;
+		float enchDamage = EnchantmentHelper.getAttackDamage(
+				attacker.getMainHandStack(), target instanceof LivingEntity ? ((LivingEntity) target).getGroup() : EntityGroup.DEFAULT) * cooldown;
 
 		if (damage <= 0f && enchDamage <= 0f) {
 			return 0f;
@@ -52,15 +73,18 @@ public class DamageUtils {
 
 		damage += enchDamage;
 
-		// Armor
-		damage = DamageUtil.getDamageLeft(damage, target.getArmor(),
-				(float) target.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
-		
-		// Enchantments
-		if (target.hasStatusEffect(StatusEffects.RESISTANCE)) {
-			int resistance = 25 - (target.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
-			float resistance_1 = damage * resistance;
-			damage = Math.max(resistance_1 / 25f, 0f);
+		if (target instanceof LivingEntity) {
+			LivingEntity livingTarget = (LivingEntity) target;
+			// Armor
+			damage = DamageUtil.getDamageLeft(damage, livingTarget.getArmor(),
+					(float) livingTarget.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
+
+			// Enchantments
+			if (livingTarget.hasStatusEffect(StatusEffects.RESISTANCE)) {
+				int resistance = 25 - (livingTarget.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+				float resistance_1 = damage * resistance;
+				damage = Math.max(resistance_1 / 25f, 0f);
+			}
 		}
 
 		if (damage <= 0f) {
@@ -71,7 +95,7 @@ public class DamageUtils {
 				damage = DamageUtil.getInflictedDamage(damage, protAmount);
 			}
 		}
-		
+
 		return damage;
 	}
 
