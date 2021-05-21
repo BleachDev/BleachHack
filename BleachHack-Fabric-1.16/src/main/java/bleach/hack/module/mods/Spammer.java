@@ -14,6 +14,7 @@ import java.util.Random;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
@@ -28,7 +29,7 @@ public class Spammer extends Module {
 	private int lineCount = 0;
 
 	public Spammer() {
-		super("Spammer", KEY_UNBOUND, ModuleCategory.MISC, "Spams chat with messagees you set (edit in spammer.txt)",
+		super("Spammer", KEY_UNBOUND, ModuleCategory.MISC, "Spams chat with messages you set (edit with " + Command.PREFIX + "spammer)",
 				new SettingMode("Read", "Random", "Order").withDesc("How to read the spammer file"),
 				new SettingSlider("Delay", 1, 120, 20, 0).withDesc("Delay between messages"));
 	}
