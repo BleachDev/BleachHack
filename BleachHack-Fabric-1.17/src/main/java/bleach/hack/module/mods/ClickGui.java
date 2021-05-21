@@ -23,7 +23,7 @@ public class ClickGui extends Module {
 
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, ModuleCategory.RENDER, "Draws the clickgui",
-				new SettingSlider("Length", 70, 85, 70, 0).withDesc("The length of each window"),
+				new SettingSlider("Length", 70, 85, 75, 0).withDesc("The length of each window"),
 				new SettingToggle("Search bar", false).withDesc("Shows a search bar"),
 				new SettingToggle("Help", true).withDesc("Shows the help text"));
 	}
