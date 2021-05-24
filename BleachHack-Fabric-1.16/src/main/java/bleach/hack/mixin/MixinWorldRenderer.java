@@ -13,7 +13,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -49,10 +50,12 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 	@Shadow private ShaderEffect entityOutlineShader;
 
 	/** Fixes that the outline framebuffer only resets if any glowing entities are drawn **/
-	@ModifyVariable(method = "render", at = @At(value = "STORE"), index = 37,
-			require = 0 /* TODO: optifabric */)
-	public boolean render_modifyBoolean(boolean bool) {
-		return true;
+	@ModifyConstant(method = "render", require = 1,
+			slice = @Slice(
+					from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;beginWrite(Z)V", ordinal = 1),
+					to = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilderStorage;getEntityVertexConsumers()Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;")))
+	public int render_modifyBoolean(int old) {
+		return 1;
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
@@ -88,7 +91,7 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 		EventWorldRender.Post event = new EventWorldRender.Post(tickDelta);
 		BleachHack.eventBus.post(event);
 	}
-	
+
 	@Redirect(method = "renderEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;render(Lnet/minecraft/entity/Entity;DDDFFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"))
 	public <E extends Entity> void renderEntity_render(EntityRenderDispatcher dispatcher, E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
 		EventEntityRender.Single.Pre event = new EventEntityRender.Single.Pre(entity, matrices, vertexConsumers);
@@ -111,13 +114,13 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 			return vertexConsumer.color(red, green, blue, alpha);
 		}
 	}
-	
+
 	/*@Redirect(method = "setupTerrain", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;chunkCullingEnabled:Z", ordinal = 0),
 			require = 0 / TODO: sodium? /)
 	private boolean setupTerrain_chunkCullingEnabled(MinecraftClient client) {
 		EventChunkCulling event = new EventChunkCulling(client.chunkCullingEnabled);
 		BleachHack.eventBus.post(event);
-		
+
 		return event.shouldCull();
 	}*/
 
