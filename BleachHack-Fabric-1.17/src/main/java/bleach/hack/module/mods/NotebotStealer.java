@@ -51,7 +51,7 @@ public class NotebotStealer extends Module {
 		int i = 0;
 		String s = "";
 
-		// TODO: Figure out how to use BleachFileMang instead
+		// Figure out how to use BleachFileMang instead
 		File theDir = new File("./bleach/notebot");
 		if (!theDir.exists()) {
 			theDir.mkdirs();
