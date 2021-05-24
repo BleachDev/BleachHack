@@ -47,8 +47,6 @@ public class Window {
 	private int dragOffX;
 	private int dragOffY;
 
-	public int inactiveTime = 0;
-
 	public Window(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
 		this(x1, y1, x2, y2, title, icon, false);
 	}
@@ -106,10 +104,6 @@ public class Window {
 		/* window title */
 		textRend.drawWithShadow(matrix, title,
 				x1 + (icon == null || icon.getItem() == Items.AIR ? 4 : (blockItem ? 15 : 14)), y1 + 3, -1);
-
-		if (inactiveTime >= 0) {
-			inactiveTime--;
-		}
 	}
 
 	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
@@ -139,10 +133,6 @@ public class Window {
 	}
 
 	public void mouseClicked(double mouseX, double mouseY, int button) {
-		if (inactiveTime > 0) {
-			return;
-		}
-
 		if (mouseX >= x1 && mouseX <= x2 - 2 && mouseY >= y1 && mouseY <= y1 + 11) {
 			dragging = true;
 			dragOffX = (int) mouseX - x1;
