@@ -161,6 +161,7 @@ public abstract class WindowScreen extends Screen {
 				break;
 			}
 		}
+
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 

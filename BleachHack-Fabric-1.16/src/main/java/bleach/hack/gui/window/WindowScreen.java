@@ -37,9 +37,10 @@ public abstract class WindowScreen extends Screen {
 		super(title);
 	}
 
-	public void addWindow(Window window) {
+	public <T extends Window> T addWindow(T window) {
 		windows.add(window);
 		windowOrder.put(windows.size() - 1, windows.size() - 1);
+		return window;
 	}
 
 	public Window getWindow(int i) {

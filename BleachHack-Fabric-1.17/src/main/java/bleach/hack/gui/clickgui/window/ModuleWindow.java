@@ -54,6 +54,7 @@ public class ModuleWindow extends ClickGuiWindow {
 		int x = x1 + 1;
 		int y = y1 + 13;
 		x2 = x + len + 1;
+		y2 = hiding ? y1 + 13 : y1 + 13 + getHeight();
 
 		super.render(matrix, mouseX, mouseY);
 

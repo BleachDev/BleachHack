@@ -37,12 +37,10 @@ public class MixinClientWorld {
 	public void tickEntities(CallbackInfo info) {
 		try {
 			if (MinecraftClient.getInstance().player.age % 100 == 0) {
-				if (BleachFileHelper.SCHEDULE_SAVE_MODULES)
-					BleachFileHelper.saveModules();
-				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI)
-					BleachFileHelper.saveClickGui();
-				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS)
-					BleachFileHelper.saveFriends();
+				if (BleachFileHelper.SCHEDULE_SAVE_MODULES) BleachFileHelper.saveModules();
+				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
+				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
+				if (BleachFileHelper.SCHEDULE_SAVE_UI) BleachFileHelper.saveUI();
 			}
 
 			BleachQueue.nextQueue();

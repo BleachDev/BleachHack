@@ -10,7 +10,6 @@ package bleach.hack.module.mods;
 
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.ClickGuiScreen;
 import bleach.hack.gui.clickgui.ModuleClickGuiScreen;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
@@ -19,7 +18,7 @@ import bleach.hack.setting.base.SettingToggle;
 
 public class ClickGui extends Module {
 
-	public static final ClickGuiScreen clickGui = new ModuleClickGuiScreen();
+	public static final ModuleClickGuiScreen clickGui = new ModuleClickGuiScreen();
 
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, ModuleCategory.RENDER, "Draws the clickgui",

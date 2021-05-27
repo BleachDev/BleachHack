@@ -11,6 +11,8 @@ package bleach.hack.gui.clickgui;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.window.Window;
@@ -18,6 +20,7 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.util.file.BleachFileHelper;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -104,7 +107,10 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		}
 
 		super.render(matrix, mouseX, mouseY, delta);
-		
+
+		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x305090);
+		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6090d0);
+
 		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
 			textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
 			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "clickgui to reset the clickgui", 2, height - 10, 0x9999ff);

@@ -69,6 +69,7 @@ public class BleachHack implements ModInitializer {
 		ClickGui.clickGui.initWindows();
 		BleachFileHelper.readClickGui();
 		BleachFileHelper.readFriends();
+		BleachFileHelper.readUI();
 
 		CommandManager.readPrefix();
 		CommandSuggestor.init();

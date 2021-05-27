@@ -43,9 +43,9 @@ public class Window {
 
 	private List<WindowWidget> widgets = new ArrayList<>();
 
-	private boolean dragging = false;
-	private int dragOffX;
-	private int dragOffY;
+	protected boolean dragging = false;
+	protected int dragOffX;
+	protected int dragOffY;
 
 	public Window(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
 		this(x1, y1, x2, y2, title, icon, false);
