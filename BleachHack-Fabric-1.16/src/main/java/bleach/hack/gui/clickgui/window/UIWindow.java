@@ -84,12 +84,12 @@ public class UIWindow extends ClickGuiWindow {
 
 			if (mouseX - dragOffX < sens) {
 				newPos.addAttachment(Pair.of("l", 1));
-				x2 = x2 - x1;
-				x1 = 0;
+				x2 = x2 - x1 - 1;
+				x1 = -1;
 			} else if (mouseX - dragOffX + (x2 - x1) > mc.getWindow().getScaledWidth() - sens) {
 				newPos.addAttachment(Pair.of("r", 3));
-				x1 = mc.getWindow().getScaledWidth() - (x2 - x1);
-				x2 = mc.getWindow().getScaledWidth();
+				x1 = mc.getWindow().getScaledWidth() + 1 - (x2 - x1);
+				x2 = mc.getWindow().getScaledWidth() + 1;
 			} else {
 				for (Entry<String, UIWindow> e: otherWindows.entrySet()) {
 					UIWindow window = e.getValue();
@@ -113,12 +113,12 @@ public class UIWindow extends ClickGuiWindow {
 
 			if (mouseY - dragOffY < sens) {
 				newPos.addAttachment(Pair.of("t", 2));
-				y2 = y2 - y1;
-				y1 = 0;
+				y2 = y2 - y1 - 1;
+				y1 = -1;
 			} else if (mouseY - dragOffY + (y2 - y1) > mc.getWindow().getScaledHeight() - sens) {
 				newPos.addAttachment(Pair.of("b", 0));
-				y1 = mc.getWindow().getScaledHeight() - (y2 - y1);
-				y2 = mc.getWindow().getScaledHeight();
+				y1 = mc.getWindow().getScaledHeight() + 1 - (y2 - y1);
+				y2 = mc.getWindow().getScaledHeight() + 1;
 			} else {
 				for (Entry<String, UIWindow> e: otherWindows.entrySet()) {
 					UIWindow window = e.getValue();
