@@ -37,30 +37,35 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 
 		uiWindows.put("ml",
 				new UIWindow(new Position(Pair.of("l", 1), Pair.of("t", 2)), uiWindows,
+						ui -> ui.getSetting(0).asToggle().state,
 						() -> uiModule.getModuleListSize(),
 						(ms, x, y) -> uiModule.drawModuleList(ms, x, y))
 				);
 
-		uiWindows.put("pl",
-				new UIWindow(new Position(Pair.of("l", 1), Pair.of("ml", 2)), uiWindows,
-						() -> uiModule.getPlayerSize(),
-						(ms, x, y) -> uiModule.drawPlayerList(ms, x, y))
-				);
-
 		uiWindows.put("if",
 				new UIWindow(new Position(Pair.of("l", 1), Pair.of("b", 0)), uiWindows,
+						ui -> ui.getSetting(1).asToggle().state,
 						() -> uiModule.getInfoSize(),
 						(ms, x, y) -> uiModule.drawInfo(ms, x, y))
 				);
 
+		uiWindows.put("pl",
+				new UIWindow(new Position(Pair.of("l", 1), Pair.of("ml", 2)), uiWindows,
+						ui -> ui.getSetting(2).asToggle().state,
+						() -> uiModule.getPlayerSize(),
+						(ms, x, y) -> uiModule.drawPlayerList(ms, x, y))
+				);
+
 		uiWindows.put("ar",
 				new UIWindow(new Position(0.5, 0.85), uiWindows,
+						ui -> ui.getSetting(3).asToggle().state,
 						() -> uiModule.getArmorSize(),
 						(ms, x, y) -> uiModule.drawArmor(ms, x, y))
 				);
 
 		uiWindows.put("lm",
-				new UIWindow(new Position(0.5, 0), uiWindows,
+				new UIWindow(new Position(0.4, 0), uiWindows,
+						ui -> ui.getSetting(4).asToggle().state,
 						() -> uiModule.getLagMeterSize(),
 						(ms, x, y) -> uiModule.drawLagMeter(ms, x, y))
 				);

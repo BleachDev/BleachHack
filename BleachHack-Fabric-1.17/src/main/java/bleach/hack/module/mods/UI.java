@@ -128,7 +128,7 @@ public class UI extends Module {
 		uiScreen.init(mc, mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
 
 		uiScreen.uiWindows.values().forEach(window -> {
-			if (!window.closed) {
+			if (!window.shouldClose(this)) {
 				window.renderUI(event.matrix);
 			}
 		});

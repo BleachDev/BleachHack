@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.TriConsumer;
 
+import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.UI;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -25,18 +28,20 @@ public class UIWindow extends ClickGuiWindow {
 
 	public Position position;
 
+	private Function<UI, Boolean> enabledFunction;
 	private Supplier<int[]> sizeSupplier;
 	private TriConsumer<MatrixStack, Integer, Integer> renderConsumer;
 
 	private Map<String, UIWindow> otherWindows;
 
-	public UIWindow(Position pos, Map<String, UIWindow> otherWindows, Supplier<int[]> sizeSupplier, TriConsumer<MatrixStack, Integer, Integer> renderConsumer) {
+	public UIWindow(Position pos, Map<String, UIWindow> otherWindows, Function<UI, Boolean> enabledFunction, Supplier<int[]> sizeSupplier, TriConsumer<MatrixStack, Integer, Integer> renderConsumer) {
 		super(0, 0, 0, 0, "", null);
 
 		this.position = pos;
+		this.otherWindows = otherWindows;
+		this.enabledFunction = enabledFunction;
 		this.sizeSupplier = sizeSupplier;
 		this.renderConsumer = renderConsumer;
-		this.otherWindows = otherWindows;
 	}
 
 	public int[] getSize() {
@@ -47,8 +52,16 @@ public class UIWindow extends ClickGuiWindow {
 	public void renderUI(MatrixStack matrix) {
 		renderConsumer.accept(matrix, x1 + 1, y1 + 1);
 	}
+	
+	public boolean shouldClose(UI uiModule) {
+		return !enabledFunction.apply(uiModule);
+	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY) {
+		if (shouldClose((UI) ModuleManager.getModule("UI"))) {
+			return;
+		}
+
 		// Snapping
 		int sens = 5;
 		if (dragging) {
@@ -81,6 +94,7 @@ public class UIWindow extends ClickGuiWindow {
 				for (Entry<String, UIWindow> e: otherWindows.entrySet()) {
 					UIWindow window = e.getValue();
 					if (window != this
+							&& !window.shouldClose((UI) ModuleManager.getModule("UI"))
 							&& ((y1 >= window.y1 && y1 <= window.y2)
 									|| (y2 >= window.y1 && y2 <= window.y2)
 									|| (y1 <= window.y1 && y2 >= window.y2))) {
@@ -109,6 +123,7 @@ public class UIWindow extends ClickGuiWindow {
 				for (Entry<String, UIWindow> e: otherWindows.entrySet()) {
 					UIWindow window = e.getValue();
 					if (window != this
+							&& !window.shouldClose((UI) ModuleManager.getModule("UI"))
 							&& ((x1 >= window.x1 && x1 <= window.x2)
 									|| (x2 >= window.x1 && x2 <= window.x2)
 									|| (x1 <= window.x1 && x2 >= window.x2))) {
