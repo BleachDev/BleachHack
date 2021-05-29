@@ -14,6 +14,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -137,77 +138,84 @@ public class UI extends Module {
 
 	public int[] getModuleListSize() {
 		List<Text> lines = getModuleListText();
-		lines.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
 
 		if (lines.isEmpty()) {
 			return new int[] { 0, 0 };
 		}
 
 		int inner = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
-		int outer = getSetting(0).asToggle().getChild(1).asToggle().state ? 4 : 2;
+		int outer = getSetting(0).asToggle().getChild(1).asToggle().state ? 4 : 3;
 		return new int[] { mc.textRenderer.getWidth(lines.get(0)) + inner + outer, lines.size() * 10};
 	}
 
 	public void drawModuleList(MatrixStack matrices, int x, int y) {
 		List<Text> lines = getModuleListText();
-		lines.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
+
+		if (lines.isEmpty()) return;
 
 		int arrayCount = 0;
-		int inner = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
+		boolean inner = getSetting(0).asToggle().getChild(0).asToggle().state;
 		boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
 		boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
+		boolean rightAlign = x + mc.textRenderer.getWidth(lines.get(0)) / 2 > mc.getWindow().getScaledWidth() / 2;
+
+		int startX = rightAlign ? x + mc.textRenderer.getWidth(lines.get(0)) + 3 + (inner ? 1 : 0) + (outer ? 1 : 0) : x;
 		for (Text t : lines) {
 			int color = getRainbowFromSettings(arrayCount * 40);
+			int textStart = (rightAlign ? startX - mc.textRenderer.getWidth(t) - 1 : startX + 2) + (inner ? 1 : 0) * (rightAlign ? -1 : 1);
+			int outerX = rightAlign ? textStart - 3 : textStart + mc.textRenderer.getWidth(t) + 1;
 
 			if (fill) {
-				DrawableHelper.fill(matrices, x, y + arrayCount * 10, x + mc.textRenderer.getWidth(t) + 3 + inner, y + 10 + arrayCount * 10, 0x70003030);
+				DrawableHelper.fill(matrices, rightAlign ? textStart - 2 : startX, y + arrayCount * 10, rightAlign ? startX : outerX, y + 10 + arrayCount * 10, 0x70003030);
 			}
 
-			if (inner == 1) {
-				DrawableHelper.fill(matrices, x, y + arrayCount * 10, x + inner, y + 10 + arrayCount * 10, color);
+			if (inner) {
+				DrawableHelper.fill(matrices, rightAlign ? startX - 1 : startX, y + arrayCount * 10, rightAlign ? startX : startX + 1, y + 10 + arrayCount * 10, color);
 			}
 
 			if (outer) {
-				DrawableHelper.fill(matrices, x + mc.textRenderer.getWidth(t) + 3 + inner, y + arrayCount * 10, x + mc.textRenderer.getWidth(t) + 4 + inner,
-						y + 10 + arrayCount * 10, color);
+				DrawableHelper.fill(matrices, outerX, y + arrayCount * 10, outerX + 1, y + 10 + arrayCount * 10, color);
 
-				if (arrayCount + 1 < lines.size()) {
+				/*if (arrayCount + 1 < lines.size()) {
 					DrawableHelper.fill(matrices, x + mc.textRenderer.getWidth(t) + 4 + inner, y + 10 + arrayCount * 10,
 							x + mc.textRenderer.getWidth(t) + 4 + inner, y + 11 + arrayCount * 10, color);
-				}
+				}*/
 			}
 
-			mc.textRenderer.drawWithShadow(matrices, t, x + 2 + inner, y + 1 + arrayCount * 10, color);
+			mc.textRenderer.drawWithShadow(matrices, t, textStart, y + 1 + arrayCount * 10, color);
 			arrayCount++;
 		}
 
-		if (outer && !lines.isEmpty()) {
+		/*if (outer) {
 			DrawableHelper.fill(matrices,
 					x, y + arrayCount * 10,
 					x + mc.textRenderer.getWidth(lines.get(arrayCount - 1)) + 4 + inner, y + 1 + arrayCount * 10,
 					getRainbowFromSettings(arrayCount * 40));
-		}
+		}*/
 	}
 
 	private List<Text> getModuleListText() {
 		List<Text> lines = new ArrayList<>();
 
+		for (Module m : ModuleManager.getModules())
+			if (m.isEnabled())
+				lines.add(new LiteralText(m.getName()));
+
+		lines.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
+
 		if (getSetting(0).asToggle().getChild(3).asToggle().state) {
 			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
 
 			if (watermarkMode == 0) {
-				MutableText text1 = new LiteralText("> Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
-				MutableText text2 = new LiteralText("Hack " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
+				MutableText text1 = new LiteralText("Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
+				MutableText text2 = new LiteralText("Hack ").styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
+				MutableText text3 = new LiteralText(BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)));
 
-				lines.add(0, text1.append(text2));
+				lines.add(0, text1.append(text2).append(text3));
 			} else {
 				lines.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
 			}
 		}
-
-		for (Module m : ModuleManager.getModules())
-			if (m.isEnabled())
-				lines.add(new LiteralText(m.getName()));
 
 		return lines;
 	}
@@ -222,9 +230,16 @@ public class UI extends Module {
 	public void drawInfo(MatrixStack matrices, int x, int y) {
 		List<String> infoList = getInfoText();
 
+		if (y + infoList.size() * 5 > mc.getWindow().getScaledHeight() / 2) {
+			Collections.reverse(infoList);
+		}
+		
 		int count = 0;
+		int longestText = infoList.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
+		boolean rightAlign = x + longestText / 2 > mc.getWindow().getScaledWidth() / 2;
 		for (String s : infoList) {
-			mc.textRenderer.drawWithShadow(matrices, s, x + 1, y + 1 + count * 10, 0xa0a0a0);
+			mc.textRenderer.drawWithShadow(matrices, s,
+					rightAlign ? x + longestText - mc.textRenderer.getWidth(s) - 1 : x + 1, y + 1 + count * 10, 0xa0a0a0);
 			count++;
 		}
 	}
@@ -327,7 +342,7 @@ public class UI extends Module {
 		nameLengths.add(mc.textRenderer.getWidth("Players:"));
 		nameLengths.sort(Comparator.reverseOrder());
 
-		return new int[] { nameLengths.get(0) + 2, nameLengths.size() * 10 + 2 };
+		return new int[] { nameLengths.get(0) + 2, nameLengths.size() * 10 + 1 };
 	}
 
 	public void drawPlayerList(MatrixStack matrices, int x, int y) {

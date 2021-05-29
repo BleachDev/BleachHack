@@ -39,6 +39,8 @@ public class SettingButton extends SettingBase {
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text, x + 3, y + 2, 0xcfe0cf);
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
+			window.mouseReleased(window.mouseX, window.mouseY, 1);
+			MinecraftClient.getInstance().currentScreen.mouseReleased(window.mouseX, window.mouseY, 0);
 			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
 			action.run();
 		}

@@ -41,11 +41,12 @@ public class UIWindow extends ClickGuiWindow {
 	}
 
 	public int[] getSize() {
-		return sizeSupplier.get();
+		int[] size = sizeSupplier.get();
+		return new int[] { size[0] + 2, size[1] + 2 };
 	}
 
 	public void renderUI(MatrixStack matrix) {
-		renderConsumer.accept(matrix, x1, y1);
+		renderConsumer.accept(matrix, x1 + 1, y1 + 1);
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY) {
@@ -134,17 +135,17 @@ public class UIWindow extends ClickGuiWindow {
 		super.render(matrix, mouseX, mouseY);
 		dragging = realDragging;
 
-		renderConsumer.accept(matrix, x1, y1);
+		renderUI(matrix);
 	}
 
 	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
-		DrawableHelper.fill(matrix, x1 - 1, y1, x1, y2, 0xff6060b0);
-		horizontalGradient(matrix, x1, y1 - 1, x2, y1, 0xff6060b0, 0xff8070b0);
-		DrawableHelper.fill(matrix, x2, y1, x2 + 1, y2, 0xff8070b0);
-		horizontalGradient(matrix, x1, y2, x2, y2 + 1, 0xff6060b0, 0xff8070b0);
+		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
+		horizontalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
+		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
+		horizontalGradient(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
 
-		DrawableHelper.fill(matrix, x1, y1, x2, y2, 0x90606090);
+		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0x90606090);
 	}
 
 	public void mouseClicked(double mouseX, double mouseY, int button) {
