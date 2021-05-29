@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.gson.JsonElement;
@@ -20,9 +19,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
-import bleach.hack.gui.clickgui.UIClickGuiScreen.Position;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.clickgui.window.UIWindow;
+import bleach.hack.gui.clickgui.window.UIWindow.Position;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -196,13 +195,13 @@ public class BleachFileHelper {
 
 		JsonObject jo = new JsonObject();
 
-		for (Entry<String, MutablePair<Position, UIWindow>> w : UI.uiScreen.uiWindows.entrySet()) {
+		for (Entry<String, UIWindow> w : UI.uiScreen.uiWindows.entrySet()) {
 			JsonObject jw = new JsonObject();
-			jw.addProperty("x", w.getValue().left.xPercent);
-			jw.addProperty("y", w.getValue().left.yPercent);
+			jw.addProperty("x", w.getValue().position.xPercent);
+			jw.addProperty("y", w.getValue().position.yPercent);
 
 			JsonObject ja = new JsonObject();
-			for (Pair<String, Integer> atm: w.getValue().left.getAttachments()) {
+			for (Pair<String, Integer> atm: w.getValue().position.getAttachments()) {
 				ja.add(atm.getLeft(), new JsonPrimitive(atm.getRight()));
 			}
 
@@ -222,7 +221,7 @@ public class BleachFileHelper {
 		if (jo == null)
 			return;
 
-		Map<String, MutablePair<Position, UIWindow>> uiWindows = UI.uiScreen.uiWindows;
+		Map<String, UIWindow> uiWindows = UI.uiScreen.uiWindows;
 		for (Entry<String, JsonElement> e : jo.entrySet()) {
 			if (!e.getValue().isJsonObject() || !uiWindows.containsKey(e.getKey()))
 				continue;
@@ -239,7 +238,7 @@ public class BleachFileHelper {
 				}
 			}
 
-			uiWindows.get(e.getKey()).left = pos;
+			uiWindows.get(e.getKey()).position = pos;
 		}
 	}
 

@@ -127,9 +127,9 @@ public class UI extends Module {
 		// Shit way to keep the ui synced
 		uiScreen.init(mc, mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
 
-		uiScreen.uiWindows.values().forEach(pair -> {
-			if (!pair.right.closed) {
-				pair.right.renderUI(event.matrix);
+		uiScreen.uiWindows.values().forEach(window -> {
+			if (!window.closed) {
+				window.renderUI(event.matrix);
 			}
 		});
 	}
