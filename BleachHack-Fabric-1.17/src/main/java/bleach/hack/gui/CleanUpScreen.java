@@ -28,6 +28,11 @@ public class CleanUpScreen extends Screen {
 	private List<ServerInfo> servers = new ArrayList<>();
 	private String result = "";
 
+	private ButtonWidget noHostButton;
+	private ButtonWidget versionButton;
+	private ButtonWidget noPingButton;
+	private ButtonWidget allButton;
+
 	private boolean cleanNoHost = true;
 	private boolean cleanVersion = true;
 	private boolean cleanNoPing = false;
@@ -48,19 +53,19 @@ public class CleanUpScreen extends Screen {
 		} catch (Exception e) {
 		}
 
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 - 32, 200, 20, new LiteralText("Unknown Host"), button -> {
+		noHostButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 3 - 32, 200, 20, new LiteralText("Unknown Host"), button -> {
 			cleanNoHost = !cleanNoHost;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 - 10, 200, 20, new LiteralText("Outdated Version"), button -> {
+		versionButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 3 - 10, 200, 20, new LiteralText("Outdated Version"), button -> {
 			cleanVersion = !cleanVersion;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 12, 200, 20, new LiteralText("Failed Ping"), button -> {
+		noPingButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 3 + 12, 200, 20, new LiteralText("Failed Ping"), button -> {
 			cleanNoPing = !cleanNoPing;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 34, 200, 20, new LiteralText("Clear All"), button -> {
+		allButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 3 + 34, 200, 20, new LiteralText("Clear All"), button -> {
 			cleanAll = !cleanAll;
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, new LiteralText("Clean"), button -> {
+		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 3 + 82, 200, 20, new LiteralText("Clean"), button -> {
 			for (ServerInfo s : servers) {
 				try {
 					if (s.label == null)
@@ -78,7 +83,7 @@ public class CleanUpScreen extends Screen {
 			}
 			result = "\u00a7aFinished";
 		}));
-		addButton(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, new LiteralText("Done"), button -> {
+		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, new LiteralText("Done"), button -> {
 			client.openScreen(new MultiplayerScreen(new TitleScreen(false)));
 		}));
 
@@ -86,10 +91,10 @@ public class CleanUpScreen extends Screen {
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		renderBackground(matrix);
-		buttons.get(0).setMessage(new LiteralText((cleanNoHost ? "\u00a7a" : "\u00a7c") + "Unknown Host"));
-		buttons.get(1).setMessage(new LiteralText((cleanVersion ? "\u00a7a" : "\u00a7c") + "Wrong Version"));
-		buttons.get(2).setMessage(new LiteralText((cleanNoPing ? "\u00a7a" : "\u00a7c") + "Failed Ping"));
-		buttons.get(3).setMessage(new LiteralText((cleanAll ? "\u00a7a" : "\u00a7c") + "Clear All"));
+		noHostButton.setMessage(new LiteralText((cleanNoHost ? "\u00a7a" : "\u00a7c") + "Unknown Host"));
+		versionButton.setMessage(new LiteralText((cleanVersion ? "\u00a7a" : "\u00a7c") + "Wrong Version"));
+		noPingButton.setMessage(new LiteralText((cleanNoPing ? "\u00a7a" : "\u00a7c") + "Failed Ping"));
+		allButton.setMessage(new LiteralText((cleanAll ? "\u00a7a" : "\u00a7c") + "Clear All"));
 		drawCenteredText(matrix, textRenderer, result, width / 2, height / 3 + 58, -1);
 
 		super.render(matrix, mouseX, mouseY, delta);

@@ -50,11 +50,11 @@ public abstract class MixinHandledScreen extends Screen {
 			HorseBaseEntity entity = (HorseBaseEntity) client.player.getVehicle();
 
 			if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
-				addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
+				addDrawable(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("AutoDupe"), button -> {
 					ModuleManager.getModule("AutoIStackDupe").setEnabled(true);
 				}));
 
-				addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {
+				addDrawable(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("Dupe"), button -> {
 					((MountBypass) ModuleManager.getModule("MountBypass")).dontCancel = true;
 
 					client.player.networkHandler.sendPacket(
@@ -72,8 +72,7 @@ public abstract class MixinHandledScreen extends Screen {
 
 	@Inject(method = "render", at = @At("RETURN"))
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
-		EventDrawContainer event = new EventDrawContainer(
-				(HandledScreen<?>) client.currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
+		EventDrawContainer event = new EventDrawContainer((HandledScreen<?>) (Object) this, mouseX, mouseY, matrix);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();

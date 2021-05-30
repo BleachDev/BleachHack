@@ -58,10 +58,12 @@ public class WindowManagerScreen extends Screen {
 		return windows[selected].getRight();
 	}
 
+	@Override
 	public Text getTitle() {
 		return getSelectedScreen().getTitle();
 	}
 
+	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		getSelectedScreen().render(matrices, mouseX, mouseY, delta);
 
@@ -93,62 +95,61 @@ public class WindowManagerScreen extends Screen {
 	/**
 	 * Checks whether this screen should be closed when the escape key is pressed.
 	 */
+	@Override
 	public boolean shouldCloseOnEsc() {
 		return getSelectedScreen().shouldCloseOnEsc();
 	}
 
+	@Override
 	public void onClose() {
 		getSelectedScreen().onClose();
 	}
 
+	@Override
 	public List<Text> getTooltipFromItem(ItemStack stack) {
 		return getSelectedScreen().getTooltipFromItem(stack);
 	}
 
+	@Override
 	public void renderOrderedTooltip(MatrixStack matrices, List<? extends OrderedText> lines, int x, int y) {
 		getSelectedScreen().renderOrderedTooltip(matrices, lines, x, y);
 	}
 
+	@Override
 	public boolean handleTextClick(Style style) {
 		return getSelectedScreen().handleTextClick(style);
 	}
 
+	@Override
 	public void sendMessage(String message) {
 		getSelectedScreen().sendMessage(message, true);
 	}
 
+	@Override
 	public void sendMessage(String message, boolean toHud) {
 		getSelectedScreen().sendMessage(message, toHud);
 	}
 
+	/*@Override
 	public void init(MinecraftClient client, int width, int height) {
 		super.init(client, width, height);
 
-		this.client = client;
-		this.itemRenderer = client.getItemRenderer();
-		this.textRenderer = client.textRenderer;
-		this.width = width;
-		this.height = height;
-		this.buttons.clear();
-		this.children.clear();
-		this.setFocused((Element)null);
 		getSelectedScreen().init(client, width, height - 14);
-	}
+	}*/
 
-	/**
-	 * Called when a screen should be initialized.
-	 * 
-	 * <p>This method is called when this screen is {@link MinecraftClient#openScreen(Screen) opened} or resized.
-	 */
+	@Override
 	protected void init() {
 		super.init();
-		getSelectedScreen().init();
+		selectWindow(selected);
+		//getSelectedScreen().init();
 	}
 
+	@Override
 	public void tick() {
 		getSelectedScreen().tick();
 	}
 
+	@Override
 	public void removed() {
 		getSelectedScreen().removed();
 	}
@@ -161,6 +162,7 @@ public class WindowManagerScreen extends Screen {
 	 * 
 	 * @param vOffset an offset applied to the V coordinate of the background texture
 	 */
+	@Override
 	public void renderBackground(MatrixStack matrices, int vOffset) {
 		getSelectedScreen().renderBackground(matrices, vOffset);
 	}
@@ -170,26 +172,32 @@ public class WindowManagerScreen extends Screen {
 	 * 
 	 * @param vOffset an offset applied to the V coordinate of the background texture
 	 */
+	@Override
 	public void renderBackgroundTexture(int vOffset) {
 		getSelectedScreen().renderBackgroundTexture(vOffset);
 	}
 
+	@Override
 	public boolean isPauseScreen() {
 		return getSelectedScreen().isPauseScreen();
 	}
 
+	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
 		return getSelectedScreen().isMouseOver(mouseX, mouseY);
 	}
 
+	@Override
 	public void filesDragged(List<Path> paths) {
 		getSelectedScreen().filesDragged(paths);
 	}
 
+	@Override
 	public Optional<Element> hoveredElement(double mouseX, double mouseY) {
 		return getSelectedScreen().hoveredElement(mouseX, mouseY);
 	}
 
+	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (mouseX > 0 && mouseX < 20 && mouseY > height - 14 && mouseY < height) {
 			selectWindow(0);
@@ -212,42 +220,52 @@ public class WindowManagerScreen extends Screen {
 		return getSelectedScreen().mouseClicked(mouseX, mouseY, button);
 	}
 
+	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
 		return getSelectedScreen().mouseReleased(mouseX, mouseY, button);
 	}
 
+	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
 		return this.getFocused() != null && this.isDragging() && button == 0 ? this.getFocused().mouseDragged(mouseX, mouseY, button, deltaX, deltaY) : false;
 	}
 
+	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		return getSelectedScreen().mouseScrolled(mouseX, mouseY, amount);
 	}
 
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		return getSelectedScreen().keyPressed(keyCode, scanCode, modifiers);
 	}
 
+	@Override
 	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 		return getSelectedScreen().keyReleased(keyCode, scanCode, modifiers);
 	}
 
+	@Override
 	public boolean charTyped(char chr, int modifiers) {
 		return getSelectedScreen().charTyped(chr, modifiers);
 	}
 
+	@Override
 	public void setInitialFocus(Element element) {
 		getSelectedScreen().setInitialFocus(element);
 	}
 
+	@Override
 	public void focusOn(Element element) {
 		getSelectedScreen().setFocused(element);
 	}
 
+	@Override
 	public boolean changeFocus(boolean lookForwards) {
 		return getSelectedScreen().changeFocus(lookForwards);
 	}
 
+	@Override
 	public List<? extends Element> children() {
 		return getSelectedScreen().children();
 	}

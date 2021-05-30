@@ -40,7 +40,7 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
-import net.minecraft.client.realms.gui.screen.RealmsBridgeScreen;
+import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -101,8 +101,7 @@ public class BleachTitleScreen extends WindowScreen {
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 86, w / 2 + 100, h / 4 + 106, I18n.translate("menu.online"), () -> {
-			RealmsBridgeScreen realmsBridgeScreen = new RealmsBridgeScreen();
-			realmsBridgeScreen.switchToRealms(client.currentScreen);
+			client.openScreen(new RealmsMainScreen(this));
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {

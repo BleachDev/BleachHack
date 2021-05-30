@@ -69,8 +69,7 @@ public abstract class MixinHandledScreen extends Screen {
 
 	@Inject(method = "render", at = @At("RETURN"))
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
-		EventDrawContainer event = new EventDrawContainer(
-				(HandledScreen<?>) client.currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
+		EventDrawContainer event = new EventDrawContainer((HandledScreen<?>) (Object) this, mouseX, mouseY, matrix);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();

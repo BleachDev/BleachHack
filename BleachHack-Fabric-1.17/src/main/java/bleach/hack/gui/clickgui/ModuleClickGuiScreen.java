@@ -42,7 +42,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		searchField.visible = false;
 		searchField.setMaxLength(20);
 		searchField.setSuggestion("Search here");
-		addButton(searchField);
+		addDrawableChild(searchField);
 	}
 
 	public void initWindows() {

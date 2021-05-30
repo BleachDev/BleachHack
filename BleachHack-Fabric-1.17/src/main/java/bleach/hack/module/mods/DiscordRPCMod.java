@@ -8,34 +8,22 @@
  */
 package bleach.hack.module.mods;
 
-import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonElement;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.DiscordRPCManager;
 import bleach.hack.util.file.BleachFileHelper;
-import net.arikia.dev.drpc.DiscordRPC;
-import net.arikia.dev.drpc.DiscordRichPresence;
-import net.minecraft.SharedConstants;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
 public class DiscordRPCMod extends Module {
 
 	private String customText1 = "top text";
 	private String customText2 = "bottom text";
 
-	private int tick = 0;
+	/*private int tick = 0;
 
-	private boolean silent;
+	private boolean silent;*/
 
 	public DiscordRPCMod() {
 		super("DiscordRPC", KEY_UNBOUND, ModuleCategory.MISC, true, "Dicord RPC, use the \"rpc\" command to set a custom status",
@@ -56,7 +44,7 @@ public class DiscordRPCMod extends Module {
 		}
 	}
 
-	public void onEnable() {
+	/*public void onEnable() {
 		silent = getSetting(3).asToggle().state;
 
 		tick = 0;
@@ -160,7 +148,7 @@ public class DiscordRPCMod extends Module {
 		}
 
 		tick++;
-	}
+	}*/
 
 	public void setTopText(String text) {
 		customText1 = text;

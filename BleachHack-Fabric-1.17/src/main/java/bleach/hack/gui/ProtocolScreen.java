@@ -36,7 +36,7 @@ public class ProtocolScreen extends Screen {
 	public void init() {
 		super.init();
 
-		addButton(new ButtonWidget(width / 2 - 100, height / 2 + 50, 98, 20, new LiteralText("Update"), button -> {
+		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 50, 98, 20, new LiteralText("Update"), button -> {
 			try {
 				int i = Integer.parseInt(protocolField.getText());
 				int i1 = Integer.parseInt(packVerField.getText());
@@ -50,7 +50,7 @@ public class ProtocolScreen extends Screen {
 				e.printStackTrace();
 			}
 		}));
-		addButton(new ButtonWidget(width / 2 + 2, height / 2 + 50, 98, 20, new LiteralText("Done"), button -> {
+		addDrawableChild(new ButtonWidget(width / 2 + 2, height / 2 + 50, 98, 20, new LiteralText("Done"), button -> {
 			client.openScreen(serverScreen);
 		}));
 

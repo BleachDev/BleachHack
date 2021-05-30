@@ -23,13 +23,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.minecraft.class_6367;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.gl.ShaderParseException;
+import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.Resource;
@@ -254,7 +254,7 @@ public class StringShaderEffect extends ShaderEffect {
 	}
 
 	public void addTarget(String name, int width, int height) {
-		Framebuffer framebuffer = new class_6367(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
+		Framebuffer framebuffer = new SimpleFramebuffer(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
 		framebuffer.setClearColor(0.0F, 0.0F, 0.0F, 0.0F);
 		this.targetsByName.put(name, framebuffer);
 		if (width == this.width && height == this.height) {
@@ -281,7 +281,7 @@ public class StringShaderEffect extends ShaderEffect {
 	}
 
 	private void setupProjectionMatrix() {
-		this.projectionMatrix = Matrix4f.method_34239(0.0F, (float) this.mainTarget.textureWidth, (float) this.mainTarget.textureHeight, 0.0F, 0.1F, 1000.0F);
+		this.projectionMatrix = Matrix4f.projectionMatrix(0.0F, (float) this.mainTarget.textureWidth, (float) this.mainTarget.textureHeight, 0.0F, 0.1F, 1000.0F);
 	}
 
 	public void setupDimensions(int targetsWidth, int targetsHeight) {

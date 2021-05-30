@@ -70,7 +70,7 @@ public class ClientChunkSerializer {
 		LightingProvider lightingProvider = world.getChunkManager().getLightingProvider();
 		boolean bl = chunk.isLightOn();
 
-		for(int i = lightingProvider.method_31929(); i < lightingProvider.method_31930(); ++i) {
+		for(int i = lightingProvider.getBottomY(); i < lightingProvider.getTopY(); ++i) {
 			int fi = i;
 			ChunkSection chunkSection = (ChunkSection) Arrays.stream(chunkSections).filter(chunkSectionx -> {
 				return chunkSectionx != null && ChunkSectionPos.getSectionCoord(chunkSectionx.getYOffset()) == fi;

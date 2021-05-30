@@ -117,12 +117,12 @@ public class DamageUtils {
 		}
 
 		if (!target.isImmuneToExplosion() && !target.isInvulnerable()) {
-			double distExposure = MathHelper.sqrt(target.squaredDistanceTo(explosionPos)) / maxDist;
+			double distExposure = Math.sqrt(target.squaredDistanceTo(explosionPos)) / maxDist;
 			if (distExposure <= 1.0) {
 				double xDiff = target.getX() - explosionPos.x;
 				double yDiff = target.getEyeY() - explosionPos.y;
 				double zDiff = target.getZ() - explosionPos.z;
-				double diff = MathHelper.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+				double diff = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
 				if (diff != 0.0) {
 					double exposure = Explosion.getExposure(explosionPos, target);
 					double finalExposure = (1.0 - distExposure) * exposure;
