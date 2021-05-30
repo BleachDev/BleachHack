@@ -22,18 +22,20 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
 
 public class WorldRenderUtils {
 
 	private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-	/**
-	 * Draws a Text string in the world.
-	 *  
-	 * @return The used MatrixStack for further use
-	 */
-	public static MatrixStack drawText(String str, double x, double y, double z, double scale) {
+	/** Draws text in the world. **/
+	public static void drawText(Text text, double x, double y, double z, double scale, boolean shadow) {
+		drawText(text, x, y, z, 0, 0, scale, shadow);
+	}
+
+	/** Draws text in the world. **/
+	public static void drawText(Text text, double x, double y, double z, double offX, double offY, double scale, boolean fill) {
 		MatrixStack matrix = matrixFrom(x, y, z);
 
 		Camera camera = mc.gameRenderer.getCamera();
@@ -43,41 +45,45 @@ public class WorldRenderUtils {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
+		matrix.translate(offX, offY, 0);
 		matrix.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
 
-		int halfWidth = mc.textRenderer.getWidth(str) / 2;
-
-		int opacity = (int) (MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F) * 255.0F) << 24;
+		int halfWidth = mc.textRenderer.getWidth(text) / 2;
 
 		VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
 
-		mc.textRenderer.draw(str, -halfWidth, 0f, 553648127, false, matrix.peek().getModel(), immediate, true, opacity, 0xf000f0);
-		immediate.draw();
-		mc.textRenderer.draw(str, -halfWidth, 0f, -1, false, matrix.peek().getModel(), immediate, true, 0, 0xf000f0);
+		if (fill) {
+			int opacity = (int) (MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F) * 255.0F) << 24;
+			mc.textRenderer.draw(text, -halfWidth, 0f, 553648127, false, matrix.peek().getModel(), immediate, true, opacity, 0xf000f0);
+			immediate.draw();
+		} else {
+			matrix.push();
+			matrix.translate(1, 1, 0);
+			mc.textRenderer.draw(text.copy(), -halfWidth, 0f, 0x202020, false, matrix.peek().getModel(), immediate, true, 0, 0xf000f0);
+			immediate.draw();
+			matrix.pop();
+		}
+
+		mc.textRenderer.draw(text, -halfWidth, 0f, -1, false, matrix.peek().getModel(), immediate, true, 0, 0xf000f0);
 		immediate.draw();
 
 		RenderSystem.disableBlend();
-
-		return matrix;
 	}
 
-	/**
-	 * Draws a 2D gui items somewhere in the world.
-	 *  
-	 * @return The used MatrixStack for further use
-	 */
-	public static MatrixStack drawGuiItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
+	/** Draws a 2D gui items somewhere in the world. **/
+	public static void drawGuiItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
+		if (item.isEmpty()) {
+			return;
+		}
+
 		MatrixStack matrix = matrixFrom(x, y, z);
 
 		Camera camera = mc.gameRenderer.getCamera();
 		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
 		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
-		matrix.scale((float) scale, (float) scale, 0.001f);
 		matrix.translate(offX, offY, 0);
-
-		if (item.isEmpty())
-			return matrix;
+		matrix.scale((float) scale, (float) scale, 0.001f);
 
 		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180f));
 
@@ -94,10 +100,6 @@ public class WorldRenderUtils {
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 
 		RenderSystem.setupLevelDiffuseLighting(currentLight[0], currentLight[1], Matrix4f.translate(0f, 0f, 0f));
-
-		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-180f));
-
-		return matrix;
 	}
 
 
@@ -112,13 +114,13 @@ public class WorldRenderUtils {
 
 		return matrix;
 	}
-	
+
 	public static Vector3f[] getCurrentLight() {
 		float[] light1 = new float[4];
 		float[] light2 = new float[4];
 		GL11.glGetLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, light1);
 		GL11.glGetLightfv(GL11.GL_LIGHT1, GL11.GL_POSITION, light2);
-		
+
 		return new Vector3f[] { new Vector3f(light1[0], light1[1], light1[2]), new Vector3f(light2[0], light2[1], light2[2]) };
 	}
 }

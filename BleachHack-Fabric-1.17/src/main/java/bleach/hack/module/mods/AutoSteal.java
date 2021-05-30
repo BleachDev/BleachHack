@@ -35,7 +35,6 @@ import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
@@ -45,6 +44,7 @@ import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -172,17 +172,19 @@ public class AutoSteal extends Module {
 				Vec3d startPos = new Vec3d(currentPos.getX() + 0.5, currentPos.getY() + 1 + (renderItems.size() / 9) * 0.4, currentPos.getZ() + 0.5);
 
 				for (int i = 0; i < renderItems.size(); i++) {
-					MatrixStack matrix = WorldRenderUtils.drawGuiItem(startPos.x, startPos.y - (i / 9) * 0.4, startPos.z, i % 9 - 4.5, 0, 0.3, renderItems.get(i));
+					WorldRenderUtils.drawGuiItem(startPos.x, startPos.y - i / 9 * 0.4, startPos.z, (4.5 - i % 9) * 0.3, 0, 0.3, renderItems.get(i));
 
 					if (renderItems.get(i).getCount() > 1) {
-						matrix.scale(-0.05F, -0.05F, 1f);
-						int w = mc.textRenderer.getWidth("" + renderItems.get(i).getCount()) / 2;
-						mc.textRenderer.drawWithShadow(matrix, "" + renderItems.get(i).getCount(), 7 - w, 3, 0xffffff);
+						double w = mc.textRenderer.getWidth(renderItems.get(i).getCount() + "") / 300d;
+						WorldRenderUtils.drawText(
+								new LiteralText(renderItems.get(i).getCount() + ""),
+								startPos.x, startPos.y - i / 9 * 0.4 - 0.03, startPos.z, (4.5 - i % 9) * 0.3 - w, 0, 0.5, false);
 					}
 				}
 			} else if (getSetting(0).asMode().mode == 2) {
-				WorldRenderUtils.drawText("[" + currentItems.stream().filter(i -> !i.isEmpty() && !isBlacklisted(i.getItem())).count() + "]",
-						currentPos.getX() + 0.5, currentPos.getY() + 1.2, currentPos.getZ() + 0.5, 0.8f);
+				WorldRenderUtils.drawText(
+						new LiteralText("[" + currentItems.stream().filter(i -> !i.isEmpty() && !isBlacklisted(i.getItem())).count() + "]"),
+						currentPos.getX() + 0.5, currentPos.getY() + 1.2, currentPos.getZ() + 0.5, 0.8, false);
 			}
 		}
 	}

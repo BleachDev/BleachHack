@@ -16,6 +16,7 @@ import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.gui.screen.DisconnectedScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -159,7 +160,7 @@ public class LogoutSpot extends Module {
 					lines.add("\u00a7c" + getTimeElapsed(playerPair.getRight()));
 
 				for (int i = 0; i < lines.size(); i++) {
-					WorldRenderUtils.drawText(lines.get(i), rVec.x + offset.x, rVec.y + 0.1 - i * 0.25, rVec.z + offset.z, 1f);
+					WorldRenderUtils.drawText(new LiteralText(lines.get(i)), rVec.x + offset.x, rVec.y + 0.1 - i * 0.25, rVec.z + offset.z, 1, true);
 				}
 			}
 		}

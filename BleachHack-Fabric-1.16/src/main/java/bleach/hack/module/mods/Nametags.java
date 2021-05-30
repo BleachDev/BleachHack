@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.lwjgl.opengl.GL11;
+import org.apache.commons.lang3.text.WordUtils;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.common.io.Resources;
@@ -36,8 +36,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import bleach.hack.BleachHack;
 import bleach.hack.command.commands.CmdEntityStats;
 import bleach.hack.event.events.EventEntityRender;
@@ -52,10 +50,8 @@ import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.EntityUtils;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
@@ -65,6 +61,8 @@ import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -221,7 +219,7 @@ public class Nametags extends Module {
 				float offset = 0.25f + lines.size() * 0.25f;
 
 				for (String s: lines) {
-					WorldRenderUtils.drawText(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
+					WorldRenderUtils.drawText(new LiteralText(s), rPos.x, rPos.y + (offset * scale), rPos.z, scale, true);
 
 					offset -= 0.25f;
 				}
@@ -303,22 +301,13 @@ public class Nametags extends Module {
 	}
 
 	private void drawItem(double x, double y, double z, double offX, double offY, double scale, ItemStack item) {
-		MatrixStack matrix = WorldRenderUtils.drawGuiItem(x, y, z, offX, offY, scale, item);
-
-		matrix.scale(-0.05F, -0.05F, 0.05f);
-
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		RenderSystem.enableDepthTest();
-		RenderSystem.depthFunc(GL11.GL_ALWAYS);
+		WorldRenderUtils.drawGuiItem(x, y, z, offX * scale, offY * scale, scale, item);
 
 		if (!item.isEmpty()) {
-			int w = mc.textRenderer.getWidth("x" + item.getCount()) / 2;
-			mc.textRenderer.draw("x" + item.getCount(), 7 - w, 3, 0xffffff, true, matrix.peek().getModel(),
-					mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
+			double w = mc.textRenderer.getWidth("x" + item.getCount()) / 75d;
+			WorldRenderUtils.drawText(new LiteralText("x" + item.getCount()),
+					x, y, z, (offX - w) * scale, (offY - 0.04) * scale, scale * 1.75, false);
 		}
-
-		matrix.scale(0.85F, 0.85F, 1F);
 
 		int c = 0;
 		for (Entry<Enchantment, Integer> m : EnchantmentHelper.get(item).entrySet()) {
@@ -326,20 +315,15 @@ public class Nametags extends Module {
 
 			if (text.isEmpty())
 				continue;
+			
+			text = WordUtils.capitalizeFully(text.replaceFirst("Curse of (.)", "C$1"));
 
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
-			int w1 = mc.textRenderer.getWidth(subText) / 2;
-			mc.textRenderer.draw(subText, -2 - w1, c * 10 - 19,
-					m.getKey() == Enchantments.VANISHING_CURSE || m.getKey() == Enchantments.BINDING_CURSE ? 0xff5050 : 0xffb0e0,
-							true, matrix.peek().getModel(), mc.getBufferBuilders().getEntityVertexConsumers(), true, 0, 0xf000f0);
+			WorldRenderUtils.drawText(new LiteralText(subText).styled(s-> s.withColor(TextColor.fromRgb(m.getKey().isCursed() ? 0xff5050 : 0xffb0e0))),
+					x, y, z, offX * scale, (offY + 0.7 - c * 0.3) * scale, scale * 1.25, false);
 			c--;
 		}
-
-		RenderSystem.depthFunc(GL11.GL_LEQUAL);
-		RenderSystem.disableDepthTest();
-
-		RenderSystem.disableBlend();
 	}
 
 	private Vec3d getRenderPos(Entity e) {

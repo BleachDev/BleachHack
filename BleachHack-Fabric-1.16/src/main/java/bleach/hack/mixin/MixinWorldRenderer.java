@@ -55,7 +55,7 @@ public class MixinWorldRenderer implements IMixinWorldRenderer {
 			slice = @Slice(
 					from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;beginWrite(Z)V", ordinal = 1),
 					to = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilderStorage;getEntityVertexConsumers()Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;")))
-	public int render_modifyBoolean(int oldBoolean) {
+	public int render_modifyBoolean(int old) {
 		return 1;
 	}
 
