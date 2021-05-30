@@ -91,12 +91,12 @@ public class WorldRenderUtils {
 		Vec3f[] currentLight = getCurrentLight();
 		DiffuseLighting.disableGuiDepthLighting();
 
-		mc.getBufferBuilders().getOutlineVertexConsumers().setColor(255, 255, 255, 255);
+		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
 		mc.getItemRenderer().renderItem(item, ModelTransformation.Mode.GUI, 0xF000F0,
-				OverlayTexture.DEFAULT_UV, matrix, mc.getBufferBuilders().getOutlineVertexConsumers(), 0);
+				OverlayTexture.DEFAULT_UV, matrix, mc.getBufferBuilders().getEntityVertexConsumers(), 0);
 
-		mc.getBufferBuilders().getOutlineVertexConsumers().draw();
+		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
 		RenderSystem.setShaderLights(currentLight[0], currentLight[1]);
 		RenderSystem.disableBlend();

@@ -42,6 +42,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.command.commands.CmdEntityStats;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
@@ -161,69 +162,69 @@ public class Nametags extends Module {
 	}
 
 	@Subscribe
-	public void onLivingRender(EventEntityRender.Single.Post event) {
-		List<String> lines = new ArrayList<>();
-		double scale = 0;
+	public void onWorldRender(EventWorldRender.Post event) {
+		for (Entity entity: mc.world.getEntities()) {
+			Vec3d rPos = getRenderPos(entity);
+			List<String> lines = new ArrayList<>();
+			double scale = 0;
 
-		Entity entity = event.getEntity();
-		Vec3d rPos = getRenderPos(entity);
+			if (entity instanceof ItemEntity && getSetting(5).asToggle().state) {
+				scale = Math.max(getSetting(5).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
 
-		if (event.getEntity() instanceof ItemEntity && getSetting(5).asToggle().state) {
-			scale = Math.max(getSetting(5).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
-
-			addItemLines(lines, (ItemEntity) entity);
-		} else if (entity instanceof LivingEntity) {
-			if (entity == mc.player || entity.hasPassenger(mc.player) || mc.player.hasPassenger(entity)) {
-				return;
-			}
-
-			LivingEntity livingEntity = (LivingEntity) entity;
-
-			if (entity instanceof PlayerEntity && getSetting(2).asToggle().state) {
-				scale = Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
-
-				addPlayerLines(lines, (PlayerEntity) entity);
-			} else if (EntityUtils.isAnimal(entity) && getSetting(3).asToggle().state) {
-				scale = Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
-
-				addAnimalLines(lines, livingEntity);
-			} else if (entity instanceof Monster && getSetting(4).asToggle().state) {
-				scale = Math.max(getSetting(4).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
-
-				addMobLines(lines, livingEntity);
-			}
-
-			/* Drawing Items */
-			double c = 0;
-			double lscale = scale * 0.4;
-			double up = ((0.3 + lines.size() * 0.25) * scale) + lscale / 2;
-
-			if (getSetting(0).asMode().mode == 0) {
-				drawItem(rPos.x, rPos.y + up, rPos.z, -2.5, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.MAINHAND));
-				drawItem(rPos.x, rPos.y + up, rPos.z, 2.5, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.OFFHAND));
-
-				for (ItemStack i : livingEntity.getArmorItems()) {
-					drawItem(rPos.x, rPos.y + up, rPos.z, c + 1.5, 0, lscale, i);
-					c--;
+				addItemLines(lines, (ItemEntity) entity);
+			} else if (entity instanceof LivingEntity) {
+				if (entity == mc.player || entity.hasPassenger(mc.player) || mc.player.hasPassenger(entity)) {
+					continue;
 				}
-			} else if (getSetting(0).asMode().mode == 1) {
-				drawItem(rPos.x, rPos.y + up, rPos.z, -1.25, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.MAINHAND));
-				drawItem(rPos.x, rPos.y + up, rPos.z, 1.25, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.OFFHAND));
 
-				for (ItemStack i : livingEntity.getArmorItems()) {
-					drawItem(rPos.x, rPos.y + up, rPos.z, 0, c, lscale, i);
-					c++;
+				LivingEntity livingEntity = (LivingEntity) entity;
+
+				if (entity instanceof PlayerEntity && getSetting(2).asToggle().state) {
+					scale = Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
+
+					addPlayerLines(lines, (PlayerEntity) entity);
+				} else if (EntityUtils.isAnimal(entity) && getSetting(3).asToggle().state) {
+					scale = Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
+
+					addAnimalLines(lines, livingEntity);
+				} else if (entity instanceof Monster && getSetting(4).asToggle().state) {
+					scale = Math.max(getSetting(4).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
+
+					addMobLines(lines, livingEntity);
+				}
+
+				/* Drawing Items */
+				double c = 0;
+				double lscale = scale * 0.4;
+				double up = ((0.3 + lines.size() * 0.25) * scale) + lscale / 2;
+
+				if (getSetting(0).asMode().mode == 0) {
+					drawItem(rPos.x, rPos.y + up, rPos.z, -2.5, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.MAINHAND));
+					drawItem(rPos.x, rPos.y + up, rPos.z, 2.5, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.OFFHAND));
+
+					for (ItemStack i : livingEntity.getArmorItems()) {
+						drawItem(rPos.x, rPos.y + up, rPos.z, c + 1.5, 0, lscale, i);
+						c--;
+					}
+				} else if (getSetting(0).asMode().mode == 1) {
+					drawItem(rPos.x, rPos.y + up, rPos.z, -1.25, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.MAINHAND));
+					drawItem(rPos.x, rPos.y + up, rPos.z, 1.25, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.OFFHAND));
+
+					for (ItemStack i : livingEntity.getArmorItems()) {
+						drawItem(rPos.x, rPos.y + up, rPos.z, 0, c, lscale, i);
+						c++;
+					}
 				}
 			}
-		}
 
-		if (!lines.isEmpty()) {
-			float offset = 0.25f + lines.size() * 0.25f;
+			if (!lines.isEmpty()) {
+				float offset = 0.25f + lines.size() * 0.25f;
 
-			for (String s: lines) {
-				WorldRenderUtils.drawText(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
+				for (String s: lines) {
+					WorldRenderUtils.drawText(s, rPos.x, rPos.y + (offset * scale), rPos.z, scale);
 
-				offset -= 0.25f;
+					offset -= 0.25f;
+				}
 			}
 		}
 	}
