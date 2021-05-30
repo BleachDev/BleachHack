@@ -8,22 +8,33 @@
  */
 package bleach.hack.module.mods;
 
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.rpc.DiscordEventHandlers;
+import bleach.hack.util.rpc.DiscordRPCManager;
+import bleach.hack.util.rpc.DiscordRichPresence;
+import net.minecraft.SharedConstants;
+import net.minecraft.item.ItemStack;
 
 public class DiscordRPCMod extends Module {
 
 	private String customText1 = "top text";
 	private String customText2 = "bottom text";
 
-	/*private int tick = 0;
+	private int tick = 0;
 
-	private boolean silent;*/
+	private boolean silent;
 
 	public DiscordRPCMod() {
 		super("DiscordRPC", KEY_UNBOUND, ModuleCategory.MISC, true, "Dicord RPC, use the \"rpc\" command to set a custom status",
@@ -44,17 +55,22 @@ public class DiscordRPCMod extends Module {
 		}
 	}
 
-	/*public void onEnable() {
+	public void onEnable() {
 		silent = getSetting(3).asToggle().state;
 
 		tick = 0;
-		DiscordRPCManager.start(silent ? "727434331089272903" : "740928841433743370");
+
+		BleachHack.logger.info("Initing Discord RPC...");
+		DiscordRPCManager.initialize(silent ? "727434331089272903" : "740928841433743370",
+				new DiscordEventHandlers.Builder()
+				.withReadyEventHandler(user -> BleachHack.logger.info(user.username + "#" + user.discriminator + " is big gay"))
+				.build());
 
 		super.onEnable();
 	}
 
 	public void onDisable() {
-		DiscordRPCManager.stop();
+		DiscordRPCManager.shutdown();
 
 		super.onDisable();
 	}
@@ -103,7 +119,7 @@ public class DiscordRPCMod extends Module {
 			}
 
 			String name = currentItem.getItem().getName().getString();
-			String itemName = currentItem.getItem() == Items.AIR ? "Nothing"
+			String itemName = currentItem.isEmpty() ? "Nothing"
 					: (currentItem.getCount() > 1 ? currentItem.getCount() + " " : "")
 					+ (currentItem.hasCustomName() ? "\"" + customName + "\" (" + name + ")" : name);
 
@@ -137,18 +153,18 @@ public class DiscordRPCMod extends Module {
 					break;
 			}
 
-			DiscordRPC.discordUpdatePresence(
+			DiscordRPCManager.updatePresence(
 					new DiscordRichPresence.Builder(text2)
 					.setBigImage(silent ? "mc" : "bh", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION)
 					.setDetails(text1).setStartTimestamps(start).build());
 		}
 
 		if (tick % 200 == 0) {
-			DiscordRPC.discordRunCallbacks();
+			DiscordRPCManager.runCallbacks();
 		}
 
 		tick++;
-	}*/
+	}
 
 	public void setTopText(String text) {
 		customText1 = text;

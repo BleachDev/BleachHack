@@ -3,12 +3,6 @@ plugins {
 	id 'maven-publish'
 }
 
-allprojects {
-	repositories {
-		maven { url 'https://jitpack.io' }
-	}
-}
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -24,9 +18,6 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	//modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
-    include 'com.github.Vatuu:discord-rpc:1.6.2'
 }
 
 processResources {
