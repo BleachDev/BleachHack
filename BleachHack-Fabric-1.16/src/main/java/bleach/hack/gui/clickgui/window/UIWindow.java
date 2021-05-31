@@ -74,6 +74,7 @@ public class UIWindow extends ClickGuiWindow {
 			.filter(p -> p.getLeft().length() > 1)
 			.forEach(p -> otherWindows.get(p.getLeft()).position.getAttachments()
 					.removeIf(a -> a.getLeft().equals(thisId)));
+			position.getAttachments().clear();
 
 			x2 = (x2 - x1) + mouseX - dragOffX - Math.min(0, mouseX - dragOffX);
 			y2 = (y2 - y1) + mouseY - dragOffY - Math.min(0, mouseY - dragOffY);
