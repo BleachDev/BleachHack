@@ -10,6 +10,7 @@ package bleach.hack.gui;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -25,9 +26,6 @@ import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
 
-/**
- * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
- */
 public class EntityMenuEditScreen extends WindowScreen {
 
 	private PairList<String, String> interactions;
@@ -41,6 +39,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 	private boolean addEntry;
 
 	private String insertString;
+	private String insertStartString;
 
 	private TextFieldWidget editNameField;
 	private TextFieldWidget editValueField;
@@ -80,6 +79,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 		super.render(matrix, mouseX, mouseY, delta);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
 		super.onRenderWindow(matrix, window, mouseX, mouseY);
@@ -95,6 +95,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 			scrollOffset = 0;
 			addEntry = false;
 			insertString = null;
+			insertStartString = null;
 
 			int seperator = (int) (x + w / 3.25);
 			fill(matrix, seperator, y, seperator + 1, y + h, 0xff606090);
@@ -183,7 +184,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 				editValueField.setWidth(w - (seperator - x) - 16);
 				editValueField.render(matrix, mouseX, mouseY, client.getTickDelta());
 
-				if (!selectedEntry.equals(editNameField.getText())) {
+				if (!selectedEntry.equals(editNameField.getText()) && !interactions.containsKey(editNameField.getText())) {
 					MutablePair<String, String> pair = interactions.getPair(selectedEntry);
 					selectedEntry = editNameField.getText();
 					pair.setLeft(selectedEntry);
@@ -211,6 +212,30 @@ public class EntityMenuEditScreen extends WindowScreen {
 					
 					if (mouseOverInsert) {
 						insertString = insert;
+					}
+					
+					curX += textLen + 7;
+				}
+				
+				textRenderer.drawWithShadow(matrix, "Mode:", seperator + 8, y + 120 + line * 14, 0xffffff);
+
+				int startY = y + 132 + line * 14;
+				line = 0;
+				curX = 0;
+				for (Pair<String, String> pair: new Pair[] { Pair.of("Normal", ""), Pair.of("Suggest", ">suggest "), Pair.of("Open Url", ">url ") }) {
+					int textLen = textRenderer.getWidth(pair.getLeft());
+					
+					if (seperator + 9 + curX + textLen > x + w) {
+						line++;
+						curX = 0;
+					}
+
+					boolean mouseOverInsert = mouseX >= seperator + 7 + curX && mouseX <= seperator + 10 + curX + textLen && mouseY >= startY + line * 14 && mouseY <= startY + 11 + line * 14;
+					fill(matrix, seperator + 7 + curX, startY + line * 14, seperator + 10 + curX + textLen, startY + 11 + line * 14, mouseOverInsert ? 0x9f6060b0 : 0x9f8070b0);
+					textRenderer.drawWithShadow(matrix, pair.getLeft(), seperator + 9 + curX, startY + 2 + line * 14, 0xffffff);
+					
+					if (mouseOverInsert) {
+						insertStartString = pair.getRight();
 					}
 					
 					curX += textLen + 7;
@@ -270,6 +295,15 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 		if (insertString != null) {
 			editValueField.write(insertString);
+			insertString = null;
+		}
+		
+		if (insertStartString != null) {
+			if (editValueField.getText().startsWith(">")) {
+				editValueField.setText(editValueField.getText().replaceFirst(">.*? ", ""));
+			}
+
+			editValueField.setText(insertStartString + editValueField.getText());
 			insertString = null;
 		}
 
