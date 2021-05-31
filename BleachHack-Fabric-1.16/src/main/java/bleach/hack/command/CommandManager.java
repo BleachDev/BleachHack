@@ -56,6 +56,7 @@ public class CommandManager {
 			new CmdSetting(),
 			new CmdSkull(),
 			new CmdSpammer(),
+			new CmdTerrain(),
 			new CmdToggle());
 
 	public static List<Command> getCommands() {
