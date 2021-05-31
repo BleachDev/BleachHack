@@ -8,6 +8,9 @@
  */
 package bleach.hack.command.commands;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
@@ -58,12 +61,12 @@ public class CmdNBT extends Command {
 			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + (item.getTag() + "\n") + "\u00a76to clipboard.");
 		} else if (args[0].equalsIgnoreCase("set")) {
 			try {
-				if (args[1].isEmpty()) {
+				if (args.length < 2) {
 					throw new CmdSyntaxException();
 				}
 
-				item.setTag(StringNbtReader.parse(args[1]));
-				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName() + "to\n\u00a7f" + (item.getTag()));
+				item.setTag(StringNbtReader.parse(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), ' ')));
+				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getTag().toString()));
 			} catch (Exception e) {
 				throw new CmdSyntaxException();
 			}

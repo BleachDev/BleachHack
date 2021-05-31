@@ -32,6 +32,10 @@ public class CmdFriends extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
+		if (args.length == 0 || args.length > 2) {
+			throw new CmdSyntaxException();
+		}
+
 		if (args[0].equalsIgnoreCase("add")) {
 			if (args.length < 2) {
 				throw new CmdSyntaxException("No username selected");
