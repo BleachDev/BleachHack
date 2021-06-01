@@ -10,7 +10,8 @@ import net.minecraft.network.PacketInflater;
 @Mixin(PacketInflater.class)
 public class MixinPacketInflater {
 
-	@ModifyConstant(method = "decode", constant = @Constant(intValue = 2097152))
+	@ModifyConstant(method = "decode", constant = @Constant(intValue = 2097152),
+			require = 0 /* TODO inertia */)
 	private int increaseDecodeLimit(int old) {
 		return ModuleManager.getModule("AntiChunkBan").isEnabled() ? Integer.MAX_VALUE : old;
 	}
