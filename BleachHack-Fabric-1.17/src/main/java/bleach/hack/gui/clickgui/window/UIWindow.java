@@ -91,6 +91,11 @@ public class UIWindow extends ClickGuiWindow {
 				newPos.addAttachment(Pair.of("r", 3));
 				x1 = mc.getWindow().getScaledWidth() + 1 - (x2 - x1);
 				x2 = mc.getWindow().getScaledWidth() + 1;
+			} else if (Math.abs(mouseX - dragOffX + (x2 - x1) / 2 - mc.getWindow().getScaledWidth() / 2) < sens) {
+				newPos.addAttachment(Pair.of("c", 1));
+				int w = x2 - x1;
+				x1 = mc.getWindow().getScaledWidth() / 2 - w / 2;
+				x2 = x1 + w;
 			} else {
 				for (Entry<String, UIWindow> e: otherWindows.entrySet()) {
 					UIWindow window = e.getValue();

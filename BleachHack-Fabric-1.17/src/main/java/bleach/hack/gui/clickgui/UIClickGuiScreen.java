@@ -64,7 +64,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 				);
 
 		uiWindows.put("lm",
-				new UIWindow(new Position(0.4, 0), uiWindows,
+				new UIWindow(new Position(0, 0.05, Pair.of("c", 1)), uiWindows,
 						ui -> ui.getSetting(4).asToggle().state,
 						() -> uiModule.getLagMeterSize(),
 						(ms, x, y) -> uiModule.drawLagMeter(ms, x, y))
@@ -112,6 +112,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 			if (ArrayUtils.contains(passIds, id)) continue;
 			if (atm.getLeft().equals("l")) return -1;
 			if (atm.getLeft().equals("r")) return client.getWindow().getScaledWidth() + 1 - window.getSize()[0];
+			if (atm.getLeft().equals("c")) return client.getWindow().getScaledWidth() / 2 - window.getSize()[0] / 2;
 			if (atm.getRight() == 1) return getRight(atm.getLeft(), ArrayUtils.add(passIds, id));
 			if (atm.getRight() == 3) return getLeft(atm.getLeft(), ArrayUtils.add(passIds, id)) - window.getSize()[0];
 		}
@@ -126,6 +127,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 			if (ArrayUtils.contains(passIds, id)) continue;
 			if (atm.getLeft().equals("l")) return window.getSize()[0] - 1;
 			if (atm.getLeft().equals("r")) return client.getWindow().getScaledWidth() + 1;
+			if (atm.getLeft().equals("c")) return client.getWindow().getScaledWidth() / 2 + window.getSize()[0] / 2;
 			if (atm.getRight() == 1) return getRight(atm.getLeft(), ArrayUtils.add(passIds, id)) + window.getSize()[0];
 			if (atm.getRight() == 3) return getLeft(atm.getLeft(), ArrayUtils.add(passIds, id));
 		}
