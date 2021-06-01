@@ -175,10 +175,10 @@ public class AutoSteal extends Module {
 					WorldRenderUtils.drawGuiItem(startPos.x, startPos.y - i / 9 * 0.4, startPos.z, (4.5 - i % 9) * 0.3, 0, 0.3, renderItems.get(i));
 
 					if (renderItems.get(i).getCount() > 1) {
-						double w = mc.textRenderer.getWidth(renderItems.get(i).getCount() + "") / 300d;
+						double w = mc.textRenderer.getWidth(renderItems.get(i).getCount() + "") / 220d;
 						WorldRenderUtils.drawText(
 								new LiteralText(renderItems.get(i).getCount() + ""),
-								startPos.x, startPos.y - i / 9 * 0.4 - 0.03, startPos.z, (4.5 - i % 9) * 0.3 - w, 0, 0.5, false);
+								startPos.x, startPos.y - i / 9 * 0.4 - 0.04, startPos.z, (4.5 - i % 9) * 0.3 - w, 0, 0.5, false);
 					}
 				}
 			} else if (getSetting(0).asMode().mode == 2) {

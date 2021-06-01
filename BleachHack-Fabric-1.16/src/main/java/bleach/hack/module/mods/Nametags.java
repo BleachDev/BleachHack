@@ -304,9 +304,9 @@ public class Nametags extends Module {
 		WorldRenderUtils.drawGuiItem(x, y, z, offX * scale, offY * scale, scale, item);
 
 		if (!item.isEmpty()) {
-			double w = mc.textRenderer.getWidth("x" + item.getCount()) / 75d;
+			double w = mc.textRenderer.getWidth("x" + item.getCount()) / 52d;
 			WorldRenderUtils.drawText(new LiteralText("x" + item.getCount()),
-					x, y, z, (offX - w) * scale, (offY - 0.04) * scale, scale * 1.75, false);
+					x, y, z, (offX - w) * scale, (offY - 0.07) * scale, scale * 1.75, false);
 		}
 
 		int c = 0;
