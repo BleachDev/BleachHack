@@ -84,8 +84,8 @@ public class WorldRenderUtils {
 		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
 		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
-		matrix.scale((float) scale, (float) scale, 0.001f);
 		matrix.translate(offX, offY, 0);
+		matrix.scale((float) scale, (float) scale, 0.001f);
 
 		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f));
 
