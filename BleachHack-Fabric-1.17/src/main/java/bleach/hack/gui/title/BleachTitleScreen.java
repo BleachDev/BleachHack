@@ -70,7 +70,7 @@ public class BleachTitleScreen extends WindowScreen {
 		super.init();
 
 		if (version == null) {
-			version = BleachGithubReader.readJson("update", SharedConstants.getGameVersion().getName() + ".json");
+			version = BleachGithubReader.readJson("update", SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
 
 			if (version == null) {
 				version = new JsonObject();
