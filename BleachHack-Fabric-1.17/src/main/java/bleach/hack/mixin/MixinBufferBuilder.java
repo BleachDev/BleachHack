@@ -14,7 +14,7 @@ import net.minecraft.client.render.FixedColorVertexConsumer;
 @Mixin(BufferBuilder.class)
 public abstract class MixinBufferBuilder extends FixedColorVertexConsumer implements BufferVertexConsumer {
 
-	@Redirect(method = { "color", "vertex" }, at = @At(value = "FIELD", target = "*", ordinal = 0, remap = false))
+	@Redirect(method = { "color", "vertex" }, at = @At(value = "FIELD", target = "*:Z", ordinal = 0, remap = false))
 	private boolean redirect_colorFixed(BufferBuilder self) {
 		return false;
 	}
