@@ -1,13 +1,12 @@
 package bleach.hack.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferVertexConsumer;
 import net.minecraft.client.render.FixedColorVertexConsumer;
-import net.minecraft.client.render.VertexConsumer;
 
 /**
  * BufferBuilder patch that allows the color to be temporarily fixed even when the VertexFormatElement isn't COLOR
@@ -15,59 +14,48 @@ import net.minecraft.client.render.VertexConsumer;
 @Mixin(BufferBuilder.class)
 public abstract class MixinBufferBuilder extends FixedColorVertexConsumer implements BufferVertexConsumer {
 
-	@Shadow private int elementOffset;
-	@Shadow private boolean textured;
-	@Shadow private boolean hasOverlay;
-
-	@Overwrite
-	public VertexConsumer color(int red, int green, int blue, int alpha) {
-		if (this.colorFixed) {
-			if (fixedRed != -1) red = fixedRed;
-			if (fixedGreen != -1) green = fixedGreen;
-			if (fixedBlue != -1) blue = fixedBlue;
-			if (fixedAlpha != -1) alpha = fixedAlpha;
-		}
-
-		return BufferVertexConsumer.super.color(red, green, blue, alpha);
+	@Redirect(method = { "color", "vertex" }, at = @At(value = "FIELD", target = "*", ordinal = 0, remap = false))
+	private boolean redirect_colorFixed(BufferBuilder self) {
+		return false;
 	}
 
-	@Overwrite
-	public void vertex(float x, float y, float z, float red, float green, float blue, float alpha, float u, float v, int overlay, int light, float normalX, float normalY, float normalZ) {
-		if (this.colorFixed) {
-			if (fixedRed != -1) red = fixedRed / 255f;
-			if (fixedGreen != -1) green = fixedGreen / 255f;
-			if (fixedBlue != -1) blue = fixedBlue / 255f;
-			if (fixedAlpha != -1) alpha = fixedAlpha / 255f;
-		}
+	@ModifyVariable(method = "color", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+	public int color_modifyColor1(int red) {
+		return colorFixed && fixedRed != -1 ? fixedRed : red;
+	}
 
-		if (this.textured) {
-			this.putFloat(0, x);
-			this.putFloat(4, y);
-			this.putFloat(8, z);
-			this.putByte(12, (byte)((int)(red * 255.0F)));
-			this.putByte(13, (byte)((int)(green * 255.0F)));
-			this.putByte(14, (byte)((int)(blue * 255.0F)));
-			this.putByte(15, (byte)((int)(alpha * 255.0F)));
-			this.putFloat(16, u);
-			this.putFloat(20, v);
-			byte j;
-			if (this.hasOverlay) {
-				this.putShort(24, (short)(overlay & '\uffff'));
-				this.putShort(26, (short)(overlay >> 16 & '\uffff'));
-				j = 28;
-			} else {
-				j = 24;
-			}
+	@ModifyVariable(method = "color", at = @At("HEAD"), ordinal = 1, argsOnly = true)
+	public int color_modifyColor2(int green) {
+		return colorFixed && fixedGreen != -1 ? fixedGreen : green;
+	}
 
-			this.putShort(j + 0, (short)(light & '\uffff'));
-			this.putShort(j + 2, (short)(light >> 16 & '\uffff'));
-			this.putByte(j + 4, BufferVertexConsumer.packByte(normalX));
-			this.putByte(j + 5, BufferVertexConsumer.packByte(normalY));
-			this.putByte(j + 6, BufferVertexConsumer.packByte(normalZ));
-			this.elementOffset += j + 8;
-			this.next();
-		} else {
-			super.vertex(x, y, z, red, green, blue, alpha, u, v, overlay, light, normalX, normalY, normalZ);
-		}
+	@ModifyVariable(method = "color", at = @At("HEAD"), ordinal = 2, argsOnly = true)
+	public int color_modifyColor3(int blue) {
+		return colorFixed && fixedBlue != -1 ? fixedBlue : blue;
+	}
+
+	@ModifyVariable(method = "color", at = @At("HEAD"), ordinal = 3, argsOnly = true)
+	public int color_modifyColor4(int alpha) {
+		return colorFixed && fixedAlpha != -1 ? fixedAlpha : alpha;
+	}
+
+	@ModifyVariable(method = "vertex", at = @At("HEAD"), ordinal = 3, argsOnly = true)
+	public float vertex_modifyColor1(float red) {
+		return colorFixed && fixedRed != -1 ? fixedRed / 255f : red;
+	}
+
+	@ModifyVariable(method = "vertex", at = @At("HEAD"), ordinal = 4, argsOnly = true)
+	public float vertex_modifyColor2(float green) {
+		return colorFixed && fixedGreen != -1 ? fixedGreen / 255f : green;
+	}
+
+	@ModifyVariable(method = "vertex", at = @At("HEAD"), ordinal = 5, argsOnly = true)
+	public float vertex_modifyColor3(float blue) {
+		return colorFixed && fixedBlue != -1 ? fixedBlue / 255f : blue;
+	}
+
+	@ModifyVariable(method = "vertex", at = @At("HEAD"), ordinal = 6, argsOnly = true)
+	public float vertex_modifyColor4(float alpha) {
+		return colorFixed && fixedAlpha != -1 ? fixedAlpha / 255f : alpha;
 	}
 }
