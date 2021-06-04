@@ -121,7 +121,7 @@ public class Dispenser32k extends Module {
 
 		if (getSetting(5).asMode().mode == 1) {
 			HitResult ray = mc.player.raycast(5, mc.getTickDelta(), false);
-			pos = new BlockPos(ray.getPos()).up();
+			pos = new BlockPos(ray.getPos().x, Math.ceil(ray.getPos().y), ray.getPos().z);
 
 			double x = pos.getX() - mc.player.getPos().x;
 			double z = pos.getZ() - mc.player.getPos().z;

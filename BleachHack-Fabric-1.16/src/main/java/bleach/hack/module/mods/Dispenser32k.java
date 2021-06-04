@@ -121,14 +121,14 @@ public class Dispenser32k extends Module {
 
 		if (getSetting(5).asMode().mode == 1) {
 			HitResult ray = mc.player.raycast(5, mc.getTickDelta(), false);
-			pos = new BlockPos(ray.getPos()).up();
+			pos = new BlockPos(ray.getPos().x, Math.ceil(ray.getPos().y), ray.getPos().z);
 
 			double x = pos.getX() - mc.player.getPos().x;
 			double z = pos.getZ() - mc.player.getPos().z;
 
 			rot = Math.abs(x) > Math.abs(z) ? x > 0 ? new int[] { -1, 0 } : new int[] { 1, 0 } : z > 0 ? new int[] { 0, -1 } : new int[] { 0, 1 };
 
-			if (!(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */)
+			if (!WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */
 					|| !WorldUtils.isBlockEmpty(pos)
 					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))
 					|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
