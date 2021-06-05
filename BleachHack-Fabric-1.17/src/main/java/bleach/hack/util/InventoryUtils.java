@@ -62,7 +62,7 @@ public class InventoryUtils {
 
 						if (i != mc.player.getInventory().selectedSlot) {
 							mc.player.getInventory().selectedSlot = i;
-							mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
+							mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
 						}
 
 						return Hand.MAIN_HAND;
