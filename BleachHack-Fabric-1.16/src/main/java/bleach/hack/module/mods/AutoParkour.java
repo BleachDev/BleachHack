@@ -8,6 +8,7 @@
  */
 package bleach.hack.module.mods;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 import com.google.common.eventbus.Subscribe;
@@ -21,6 +22,7 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
+import net.minecraft.block.LadderBlock;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.math.BlockPos;
@@ -73,18 +75,17 @@ public class AutoParkour extends Module {
 				}
 
 				if (getSetting(1).asToggle().state) {
-					Vec3d lookVec = mc.player.getPos().add(new Vec3d(0, 0, 3.5).rotateY(-(float) Math.toRadians(mc.player.yaw)));
+					Vec3d lookVec = mc.player.getPos().add(new Vec3d(0, 0, 3.25).rotateY(-(float) Math.toRadians(mc.player.yaw)));
 
-					BlockPos nearestPos = null;
-					for (BlockPos pos: BlockPos.iterateOutwards(mc.player.getBlockPos().down(), 4, 1, 4)) {
-						if (mc.world.isTopSolid(pos, mc.player)
-								&& mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) >= 1
-								&& mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) <= 4.5 /* ? */
-								&& !mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 2, 1))).findAny().isPresent()
-								&& (nearestPos == null || pos.getSquaredDistance(lookVec, false) < nearestPos.getSquaredDistance(lookVec, false))) {
-							nearestPos = pos.toImmutable();
-						}
-					}
+					BlockPos nearestPos = BlockPos.streamOutwards(mc.player.getBlockPos().down(), 4, 1, 4)
+							.map(pos -> pos.toImmutable())
+							.filter(pos -> (mc.world.isTopSolid(pos, mc.player) && mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 3, 1))).findAny().isEmpty())
+									|| mc.world.getBlockState(pos).getBlock() instanceof LadderBlock
+									|| mc.world.getBlockState(pos.up()).getBlock() instanceof LadderBlock)
+							.filter(pos -> mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) >= 1)
+							.filter(pos -> mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) <= 4.5 /* ? */)
+							.sorted(Comparator.comparing(pos -> pos.getSquaredDistance(lookVec, false)))
+							.findFirst().orElse(null);
 
 					if (nearestPos != null) {
 						smartPos = nearestPos;
@@ -95,7 +96,7 @@ public class AutoParkour extends Module {
 			}
 		}
 	}
-	
+
 	@Subscribe
 	public void onWorldRender(EventWorldRender event) {
 		if (smartPos != null && getSetting(1).asToggle().getChild(1).asToggle().state) {
@@ -109,9 +110,9 @@ public class AutoParkour extends Module {
 		if (smartPos != null && getSetting(1).asToggle().state) {
 			if (!getSetting(1).asToggle().getChild(0).asToggle().state
 					&& (mc.player.getBoundingBox().maxX < smartPos.getX()
-						|| mc.player.getBoundingBox().minX > smartPos.getX() + 1
-						|| mc.player.getBoundingBox().maxZ < smartPos.getZ()
-						|| mc.player.getBoundingBox().minZ > smartPos.getZ() + 1)) {
+							|| mc.player.getBoundingBox().minX > smartPos.getX() + 1
+							|| mc.player.getBoundingBox().maxZ < smartPos.getZ()
+							|| mc.player.getBoundingBox().minZ > smartPos.getZ() + 1)) {
 				return;
 			}
 
