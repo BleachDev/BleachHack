@@ -8,10 +8,7 @@
  */
 package bleach.hack.mixin;
 
-import java.util.List;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +28,6 @@ import net.minecraft.text.Text;
 public abstract class MixinBeaconScreen extends HandledScreen<BeaconScreenHandler> {
 
 	@Unique private boolean unlocked = false;
-	@Shadow private List<Drawable> drawables;
 
 	public MixinBeaconScreen(BeaconScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
@@ -45,7 +41,7 @@ public abstract class MixinBeaconScreen extends HandledScreen<BeaconScreenHandle
 	@Inject(method = "tick", at = @At("RETURN"))
 	public void tick(CallbackInfo ci) {
 		if (unlocked) {
-			for (Drawable b: drawables) {
+			for (Drawable b: ((AccessorScreen) this).getDrawables()) {
 				if (b instanceof ClickableWidget) {
 					((ClickableWidget) b).active = true;
 				}
