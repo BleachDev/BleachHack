@@ -16,6 +16,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.gson.Gson;
 
+import bleach.hack.BleachHack;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
@@ -26,8 +27,8 @@ public class ModuleManager {
 	private static final Map<String, Module> modules = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
 	public static Map<String, Module> getModuleMap() {
-	    return modules;
-    }
+		return modules;
+	}
 
 	public static Iterable<Module> getModules() {
 		return modules.values();
@@ -46,14 +47,14 @@ public class ModuleManager {
 
 						loadModule(module);
 					} catch (Exception exception) {
-						System.err.printf("Failed to load module %s: could not instantiate.%n", moduleClass);
+						BleachHack.logger.error("Failed to load module %s: could not instantiate.", moduleClass);
 						exception.printStackTrace();
 					}
 				} else {
-					System.err.printf("Failed to load module %s: not a descendant of Module.%n", moduleClass);
+					BleachHack.logger.error("Failed to load module %s: not a descendant of Module.", moduleClass);
 				}
 			} catch (Exception exception) {
-				System.err.printf("Failed to load module %s.%n", moduleString);
+				BleachHack.logger.error("Failed to load module %s.", moduleString);
 				exception.printStackTrace();
 			}
 		}
@@ -61,17 +62,11 @@ public class ModuleManager {
 
 	public static void loadModule(Module module) {
 		if (modules.containsValue(module)) {
-			System.err.printf("Failed to load module %s: a module with this name is already loaded.%n", module.getName());
+			BleachHack.logger.error("Failed to load module %s: a module with this name is already loaded.", module.getName());
 		} else {
 			modules.put(module.getName(), module);
 			// TODO: Setup init system for modules
 		}
-	}
-
-	@Deprecated
-	@SuppressWarnings("unchecked")
-	public static <T extends Module> T getModuleByClass(Class<T> clazz) {
-		return (T) modules.values().stream().filter(clazz::isInstance).findFirst().orElse(null);
 	}
 
 	public static Module getModule(String name) {
