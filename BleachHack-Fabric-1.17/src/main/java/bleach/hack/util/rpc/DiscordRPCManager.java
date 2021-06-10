@@ -43,7 +43,8 @@ public class DiscordRPCManager {
 				libName = "linux";
 			}
 
-			File file = File.createTempFile("drpc-", "-" + libName);
+			File file = new File(System.getProperty("java.io.tmpdir"), libName);
+			file.mkdirs();
 
 			InputStream is = DiscordRPCManager.class.getResourceAsStream("/assets/bleachhack/rpc/" + libName);
 			Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
