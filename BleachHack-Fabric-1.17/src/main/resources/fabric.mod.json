@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "bleachhack",
-  "version": "${version}",
+  "version": "1.0.1",
 
   "name": "BleachHack",
   "description": "gamer hack",
