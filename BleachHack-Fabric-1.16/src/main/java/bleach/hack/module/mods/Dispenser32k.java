@@ -232,26 +232,7 @@ public class Dispenser32k extends Module {
 			// System.out.println(EnchantmentHelper.getEnchantmentLevel(Enchantments.SHARPNESS,
 			// mc.player.inventory.getCurrentItem()));
 			if (!(gui.getScreenHandler().getSlot(0).getStack().getItem() instanceof AirBlockItem) && active) {
-				int slot = mc.player.inventory.selectedSlot;
-				boolean pull = false;
-				for (int i = 40; i >= 32; i--) {
-					if (gui.getScreenHandler().getSlot(i).getStack().isEmpty()) {
-						slot = i;
-						pull = true;
-						break;
-					}
-				}
-
-				// mc.playerController.windowClick(gui.inventorySlots.windowId, 0, 0,
-				// ClickType.QUICK_MOVE, mc.player);
-				if (pull) {
-					// mc.interactionManager.method_2906(gui.getContainer().syncId, 0, 0,
-					// SlotActionType.PICKUP, mc.player);
-					// mc.interactionManager.method_2906(gui.getContainer().syncId, slot, 0,
-					// SlotActionType.PICKUP, mc.player);
-					mc.interactionManager.clickSlot(gui.getScreenHandler().syncId, 0, 0, SlotActionType.QUICK_MOVE, mc.player);
-					mc.player.inventory.selectedSlot = slot - 32;
-				}
+				mc.interactionManager.clickSlot(gui.getScreenHandler().syncId, 0, mc.player.inventory.selectedSlot, SlotActionType.SWAP, mc.player);
 			}
 		}
 
