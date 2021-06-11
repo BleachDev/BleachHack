@@ -8,9 +8,13 @@
  */
 package bleach.hack.command;
 
+import java.util.stream.Stream;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public abstract class Command {
 
@@ -47,13 +51,15 @@ public abstract class Command {
 	}
 
 	public boolean hasAlias(String alias) {
-		for (String a: aliases) {
-			if (alias.equalsIgnoreCase(a)) {
-				return true;
-			}
-		}
+		return Stream.of(aliases).anyMatch(alias::equalsIgnoreCase);
+	}
 
-		return false;
+	public Text getHelpTooltip() {
+		return new LiteralText(
+				"\u00a72Category: " + getCategory()
+				+ "\n\u00a7bAliases: \u00a7f" + PREFIX + String.join(" \u00a77/\u00a7f " + PREFIX, getAliases())
+				+ "\n\u00a7bUsage: \u00a7f" + getSyntax()
+				+ "\n\u00a7bDesc: \u00a7f" + getDescription());
 	}
 
 	public abstract void onCommand(String alias, String[] args) throws Exception;

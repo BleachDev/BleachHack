@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import bleach.hack.BleachHack;
 import net.minecraft.client.MinecraftClient;
@@ -81,6 +82,23 @@ public class ModuleManager {
 	public static void handleKeyPress(int key) {
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
 			modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
+		}
+	}
+
+	private class ModuleListJson {
+
+		@SerializedName("package")
+		private String packageName;
+
+		@SerializedName("modules")
+		private List<String> modules;
+
+		public String getPackage() {
+			return this.packageName;
+		}
+
+		public List<String> getModules() {
+			return this.modules;
 		}
 	}
 }

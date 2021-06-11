@@ -1,0 +1,33 @@
+{
+  "package": "bleach.hack.command.commands",
+  "commands": [
+    "CmdBind",
+	"CmdCI",
+	"CmdClickGui",
+	"CmdClip",
+	"CmdCustomChat",
+	"CmdCustomSign",
+	"CmdDupe",
+	"CmdEnchant",
+	"CmdEntityMenu",
+	"CmdEntityStats",
+	"CmdFriends",
+	"CmdGamemode",
+	"CmdGive",
+	"CmdHelp",
+	"CmdInvPeek",
+	"CmdNBT",
+	"CmdNotebot",
+	"CmdPeek",
+	"CmdPrefix",
+	"CmdRbook",
+	"CmdRename",
+	"CmdRpc",
+	"CmdSay",
+	"CmdSetting",
+	"CmdSkull",
+	"CmdSpammer",
+	"CmdTerrain",
+	"CmdToggle"
+  ]
+}

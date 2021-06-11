@@ -35,11 +35,11 @@ public class CommandSuggestor {
 		return INSTANCE;
 	}
 
-	public static void init() {
+	public static void start() {
 		BleachHack.eventBus.register(getInstance());
 	}
 
-	public static void terminate() {
+	public static void stop() {
 		getInstance().reset();
 		BleachHack.eventBus.unregister(getInstance());
 	}
