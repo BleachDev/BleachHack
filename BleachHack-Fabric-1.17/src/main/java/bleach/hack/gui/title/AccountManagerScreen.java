@@ -264,7 +264,7 @@ public class AccountManagerScreen extends WindowScreen {
 					lines.removeIf(s -> s.startsWith(a.email));
 
 					BleachFileMang.createEmptyFile("logins.txt");
-					BleachFileMang.appendFile(String.join("", lines), "logins.txt");
+					BleachFileMang.appendFile(String.join("\n", lines), "logins.txt");
 					accounts.getAccounts().removeIf(ac -> ac.email.equals(a.email));
 					break;
 				}
