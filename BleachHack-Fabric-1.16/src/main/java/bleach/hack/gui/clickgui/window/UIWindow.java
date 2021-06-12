@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.TriConsumer;
 
+import bleach.hack.gui.clickgui.UIClickGuiScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.UI;
 import net.minecraft.client.font.TextRenderer;
@@ -136,7 +137,7 @@ public class UIWindow extends ClickGuiWindow {
 				newPos.addAttachment(Pair.of("t", 2));
 				y2 = y2 - y1 - 1;
 				y1 = -1;
-			} else if (mouseY - dragOffY + (y2 - y1) > mc.getWindow().getScaledHeight() - sens) {
+			} else if (mouseY - dragOffY + (y2 - y1) > UIClickGuiScreen.getScreenBottom(mc) - sens) {
 				newPos.addAttachment(Pair.of("b", 0));
 				y1 = mc.getWindow().getScaledHeight() + 1 - (y2 - y1);
 				y2 = mc.getWindow().getScaledHeight() + 1;
