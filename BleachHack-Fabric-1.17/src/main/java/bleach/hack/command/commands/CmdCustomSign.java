@@ -26,7 +26,7 @@ import net.minecraft.text.Text;
 public class CmdCustomSign extends Command {
 
 	public CmdCustomSign() {
-		super("customsign", "Sets the NoRender custom sign text.", "customsign <line1/line2/line3/line4/all> <text> | customsign list", CommandCategory.MODULES);
+		super("customsign", "Sets the NoRender custom sign text.", "customsign [line1/line2/line3/line4/all] <text> | customsign list", CommandCategory.MODULES);
 	}
 
 	@Override

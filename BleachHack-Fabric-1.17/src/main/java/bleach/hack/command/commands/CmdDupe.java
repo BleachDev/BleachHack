@@ -26,7 +26,7 @@ import net.minecraft.text.LiteralText;
 public class CmdDupe extends Command {
 
 	public CmdDupe() {
-		super("dupe", "Dupes items, (Old aka the 11/11 dupe is patched on 1.14.4+, Book mode works on all vanilla servers)", "dupe <old/book>", CommandCategory.MISC);
+		super("dupe", "Dupes items, (Old aka the 11/11 dupe is patched on 1.14.4+, Book mode works on all vanilla servers)", "dupe [old/book]", CommandCategory.MISC);
 	}
 
 	@Override

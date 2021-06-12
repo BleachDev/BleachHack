@@ -23,7 +23,7 @@ import bleach.hack.util.file.BleachFileHelper;
 public class CmdRpc extends Command {
 
 	public CmdRpc() {
-		super("rpc", "Sets custom discord rpc text.", "rpc <top/bottom> <text> | rpc current", CommandCategory.MODULES,
+		super("rpc", "Sets custom discord rpc text.", "rpc [top/bottom] <text> | rpc current", CommandCategory.MODULES,
 				"discordrpc");
 	}
 

@@ -19,7 +19,7 @@ import bleach.hack.command.exception.CmdSyntaxException;
 public class CmdClip extends Command {
 
 	public CmdClip() {
-		super("clip", "Teleports you a certain amount of blocks horizontally/vertically.", "clip v <distance> | clips h <x distance> <z distance>", CommandCategory.MISC);
+		super("clip", "Teleports you a certain amount of blocks horizontally/vertically.", "clip v <distance> | clip h <x distance> <z distance>", CommandCategory.MISC);
 	}
 
 	@Override

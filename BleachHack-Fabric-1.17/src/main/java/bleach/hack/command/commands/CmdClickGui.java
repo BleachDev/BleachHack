@@ -23,7 +23,7 @@ import bleach.hack.util.file.BleachFileHelper;
 public class CmdClickGui extends Command {
 
 	public CmdClickGui() {
-		super("clickgui", "Modify the clickgui windows.", "clickgui reset <open/closed> | clickgui length <length>", CommandCategory.MODULES);
+		super("clickgui", "Modify the clickgui windows.", "clickgui reset [open/closed] | clickgui length <length>", CommandCategory.MODULES);
 	}
 
 	@Override

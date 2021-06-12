@@ -30,7 +30,7 @@ import net.minecraft.util.registry.Registry;
 public class CmdGive extends Command {
 
 	public CmdGive() {
-		super("give", "Gives you an item.", "give <item> <count> <damage> <nbt> | give preset <negs/stacked/spawners/bookban/eggs> <chest/shulker/egg>", CommandCategory.CREATIVE);
+		super("give", "Gives you an item.", "give <item> <count> <damage> <nbt> | give preset [negs/stacked/spawners/bookban/eggs] [chest/shulker/egg]", CommandCategory.CREATIVE);
 	}
 
 	@Override

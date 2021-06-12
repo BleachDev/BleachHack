@@ -56,4 +56,19 @@ public class EventKeyPress extends Event {
 		}
 
 	}
+
+	public static class InChat extends EventKeyPress {
+
+		private int modifiers;
+
+		public InChat(int key, int scanCode, int modifiers) {
+			super(key, scanCode);
+			this.modifiers = modifiers;
+		}
+
+		public int getModifiers() {
+			return modifiers;
+		}
+
+	}
 }

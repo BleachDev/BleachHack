@@ -35,6 +35,7 @@ public class CommandManager {
 
 	private static final Gson commandGson = new Gson();
 	private static final Map<String, Command> commands = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	private static CommandSuggestionProvider suggestionProvider = new CommandSuggestionProvider();
 
 	public static Map<String, Command> getCommandMap() {
 		return commands;
@@ -42,6 +43,10 @@ public class CommandManager {
 
 	public static Iterable<Command> getCommands() {
 		return commands.values();
+	}
+
+	public static CommandSuggestionProvider getSuggestionProvider() {
+		return suggestionProvider;
 	}
 
 	public static void loadCommands(InputStream jsonInputStream) {
@@ -75,6 +80,13 @@ public class CommandManager {
 			BleachHack.logger.error("Failed to load module %s: a module with this name is already loaded.", command.getAliases()[0]);
 		} else {
 			commands.put(command.getAliases()[0], command);
+
+			try {
+				suggestionProvider.addSuggestion(command.getSyntax());
+			} catch (Exception e) {
+				BleachHack.logger.error(String.format("Error trying to load suggestsions for $%s (Syntax: %s)", command.getAliases()[0], command.getSyntax()) , e);
+				suggestionProvider.addSuggestion(command.getAliases()[0]);
+			}
 		}
 	}
 
