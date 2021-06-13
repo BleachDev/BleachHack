@@ -8,9 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import java.util.Comparator;
 import com.google.common.collect.Streams;
 import com.google.common.eventbus.Subscribe;
 
@@ -19,23 +17,33 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.world.EntityUtils;
 import bleach.hack.util.world.WorldUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.CrossbowItem;
+import net.minecraft.item.Items;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 public class BowBot extends Module {
 
 	public BowBot() {
 		super("BowBot", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically aims and shoots at entities",
-				new SettingToggle("Shoot", true).withDesc("Automatically shoots arrows"),
-				new SettingSlider("Charge", 0.1, 1, 0.5, 2).withDesc("How much to charge the bow"),
-				new SettingToggle("Aim", false).withDesc("Automatically aims"));
+				new SettingToggle("Shoot", true).withDesc("Automatically shoots arrows").withChildren(
+						new SettingSlider("Charge", 0.1, 1, 0.5, 2).withDesc("How much to charge the bow before shooting")),
+				new SettingToggle("Aim", false).withDesc("Automatically aims").withChildren(
+						new SettingToggle("Players", true).withDesc("Aims at players"),
+						new SettingToggle("Mobs", false).withDesc("Aims at mobs"),
+						new SettingToggle("Animals", false).withDesc("Aims at animals"),
+						new SettingToggle("Raycast", true).withDesc("Doesn't aim at entites that you can't see")));
 	}
 
 	@Subscribe
@@ -43,39 +51,43 @@ public class BowBot extends Module {
 		if (!(mc.player.getMainHandStack().getItem() instanceof RangedWeaponItem) || !mc.player.isUsingItem())
 			return;
 
-		if (getSetting(0).asToggle().state && BowItem.getPullProgress(mc.player.getItemUseTime()) >= getSetting(1).asSlider().getValue()) {
-			mc.player.stopUsingItem();
-			mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.UP));
+		if (getSetting(0).asToggle().state) {
+			if (mc.player.getMainHandStack().getItem() == Items.CROSSBOW
+					&& (float) mc.player.getItemUseTime() / (float) CrossbowItem.getPullTime(mc.player.getMainHandStack()) >= 1f) {
+				mc.player.stopUsingItem();
+				mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.UP));
+				mc.interactionManager.interactItem(mc.player, mc.world, Hand.MAIN_HAND);
+			} else if (mc.player.getMainHandStack().getItem() == Items.BOW
+					&& BowItem.getPullProgress(mc.player.getItemUseTime()) >= getSetting(0).asToggle().getChild(0).asSlider().getValueFloat()) {
+				mc.player.stopUsingItem();
+				mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.UP));
+			}
 		}
 
 		// skidded from wurst no bully pls
-		if (getSetting(2).asToggle().state) {
-			List<Entity> targets = Streams.stream(mc.world.getEntities())
+		if (getSetting(1).asToggle().state) {
+			LivingEntity target = (LivingEntity) Streams.stream(mc.world.getEntities())
 					.filter(e -> e instanceof LivingEntity && e != mc.player)
-					.sorted((a, b) -> Float.compare(a.distanceTo(mc.player), b.distanceTo(mc.player))).collect(Collectors.toList());
+					.filter(e -> getSetting(1).asToggle().getChild(0).asToggle().state || !(e instanceof PlayerEntity))
+					.filter(e -> getSetting(1).asToggle().getChild(1).asToggle().state || !(e instanceof Monster))
+					.filter(e -> getSetting(1).asToggle().getChild(2).asToggle().state || !EntityUtils.isAnimal(e))
+					.filter(e -> !getSetting(1).asToggle().getChild(3).asToggle().state || mc.player.canSee(e))
+					.sorted(Comparator.comparing(mc.player::distanceTo))
+					.findFirst().orElse(null);
 
-			if (targets.isEmpty())
+			if (target == null)
 				return;
-
-			LivingEntity target = (LivingEntity) targets.get(0);
 
 			// set velocity
 			float velocity = (72000 - mc.player.getItemUseTimeLeft()) / 20F;
-			velocity = (velocity * velocity + velocity * 2) / 3;
-
-			if (velocity > 1)
-				velocity = 1;
+			velocity = Math.min(1f, (velocity * velocity + velocity * 2) / 3);
 
 			// set position to aim at
-			double d = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
-					.distanceTo(target.getBoundingBox().getCenter());
-			double x = target.getX() + (target.getX() - target.prevX) * d
-					- mc.player.getX();
-			double y = target.getY() + (target.getY() - target.prevY) * d
-					+ target.getHeight() * 0.5 - mc.player.getY()
-					- mc.player.getEyeHeight(mc.player.getPose());
-			double z = target.getZ() + (target.getZ() - target.prevZ) * d
-					- mc.player.getZ();
+			Vec3d newTargetVec = target.getPos().add(target.getVelocity());
+			double d = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(target.getBoundingBox().offset(target.getVelocity()).getCenter());
+			double x = newTargetVec.x + (newTargetVec.x - target.getX()) * d - mc.player.getX();
+			double y = newTargetVec.y + (newTargetVec.y - target.getY()) * d + target.getHeight() * 0.5 - mc.player.getY() - mc.player.getEyeHeight(mc.player.getPose());
+			double z = newTargetVec.z + (newTargetVec.z - target.getZ()) * d - mc.player.getZ();
 
 			// set yaw
 			mc.player.setYaw((float) Math.toDegrees(Math.atan2(z, x)) - 90);
@@ -98,5 +110,4 @@ public class BowBot extends Module {
 			}
 		}
 	}
-
 }
