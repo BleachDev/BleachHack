@@ -32,11 +32,8 @@ public class CmdClip extends Command {
 			if (!NumberUtils.isCreatable(args[1])) {
 				throw new CmdSyntaxException("Invalid distance \"" + args[1] + "\"");
 			}
-			
-			mc.player.updatePosition(
-					mc.player.getX(),
-					mc.player.getY() + NumberUtils.createNumber(args[1]).doubleValue(),
-					mc.player.getZ());
+
+			move(0, NumberUtils.createNumber(args[1]).doubleValue(), 0);
 		} else if (args.length == 3 && args[0].toLowerCase(Locale.ENGLISH).startsWith("h")) {
 			if (!NumberUtils.isCreatable(args[1])) {
 				throw new CmdSyntaxException("Invalid x distance \"" + args[1] + "\"");
@@ -46,13 +43,20 @@ public class CmdClip extends Command {
 				throw new CmdSyntaxException("Invalid z distance \"" + args[2] + "\"");
 			}
 			
-			mc.player.updatePosition(
-					mc.player.getX() + NumberUtils.createNumber(args[1]).doubleValue(),
-					mc.player.getY(),
-					mc.player.getZ() + NumberUtils.createNumber(args[2]).doubleValue());
+			move(NumberUtils.createNumber(args[1]).doubleValue(), 0, NumberUtils.createNumber(args[2]).doubleValue());
 		} else {
 			throw new CmdSyntaxException();
 		}
+	}
+	
+	private void move(double xOffset, double yOffset, double zOffset) {
+		if (mc.player.hasVehicle()) {
+			mc.player.getVehicle().updatePosition(
+					mc.player.getVehicle().getX() + xOffset,
+					mc.player.getVehicle().getY() + yOffset,
+					mc.player.getVehicle().getZ() + zOffset);
+		}
+		mc.player.updatePosition(mc.player.getX() + xOffset, mc.player.getY() + yOffset, mc.player.getZ() + zOffset);
 	}
 
 }
