@@ -39,23 +39,33 @@ public class CmdDupe extends Command {
 			mc.player.dropSelectedItem(true);
 			mc.player.networkHandler.getConnection().disconnect(new LiteralText("Duping..."));
 		} else if (args[0].equalsIgnoreCase("book")) {
-			ItemStack item = mc.player.getInventory().getMainHandStack();
-
-			if (item.getItem() != Items.WRITABLE_BOOK) {
+			if (mc.player.getInventory().getMainHandStack().getItem() != Items.WRITABLE_BOOK) {
 				BleachLogger.errorMessage("Not holding a writable book!");
 				return;
 			}
 
-			IntStream chars = new Random().ints(0, 0x10ffff);
-			String text = chars.limit(25000 * 50).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
+			NbtList listTag = new NbtList();
 
-			NbtList textSplit = new NbtList();
+			StringBuilder builder1 = new StringBuilder();
+			for(int i = 0; i < 21845; i++)
+				builder1.append((char)2077);
 
-			for (int t = 0; t < 50; t++)
-				textSplit.add(NbtString.of(text.substring(t * 25000, (t + 1) * 25000)));
+			listTag.addElement(0, NbtString.of(builder1.toString()));
 
-			item.getOrCreateTag().put("pages", textSplit);
-			mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, mc.player.getInventory().selectedSlot));
+			StringBuilder builder2 = new StringBuilder();
+			for(int i = 0; i < 32; i++)
+				builder2.append("BleachHK");
+
+			String string2 = builder2.toString();
+			for(int i = 1; i < 40; i++)
+				listTag.addElement(i, NbtString.of(string2));
+
+			ItemStack bookStack = new ItemStack(Items.WRITABLE_BOOK, 1);
+			bookStack.putSubTag("title",
+					NbtString.of("If you can see this, it didn't work"));
+			bookStack.putSubTag("pages", listTag);
+
+			mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(bookStack, true, mc.player.getInventory().selectedSlot));
 		} else {
 			throw new CmdSyntaxException("Invaild dupe method");
 		}
