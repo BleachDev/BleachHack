@@ -48,7 +48,7 @@ public class MixinCamera {
 							? betterCamera.getSetting(1).asToggle().getChild(0).asSlider().getValue() : desiredCameraDistance);
 				} else if (betterCamera.getSetting(1).asToggle().state) {
 					bypassCameraClip = true;
-					clipToSpace(desiredCameraDistance);
+					info.setReturnValue(clipToSpace(betterCamera.getSetting(1).asToggle().getChild(0).asSlider().getValue()));
 				}
 			}
 		}
