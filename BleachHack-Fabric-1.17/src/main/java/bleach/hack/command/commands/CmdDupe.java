@@ -8,10 +8,6 @@
  */
 package bleach.hack.command.commands;
 
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
@@ -48,7 +44,7 @@ public class CmdDupe extends Command {
 
 			StringBuilder builder1 = new StringBuilder();
 			for(int i = 0; i < 21845; i++)
-				builder1.append((char)2077);
+				builder1.append((char) 2077);
 
 			listTag.addElement(0, NbtString.of(builder1.toString()));
 
@@ -61,8 +57,7 @@ public class CmdDupe extends Command {
 				listTag.addElement(i, NbtString.of(string2));
 
 			ItemStack bookStack = new ItemStack(Items.WRITABLE_BOOK, 1);
-			bookStack.putSubTag("title",
-					NbtString.of("If you can see this, it didn't work"));
+			bookStack.putSubTag("title", NbtString.of("If you can see this, it didn't work"));
 			bookStack.putSubTag("pages", listTag);
 
 			mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(bookStack, true, mc.player.getInventory().selectedSlot));

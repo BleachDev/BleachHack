@@ -8,10 +8,6 @@
  */
 package bleach.hack.command.commands;
 
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
@@ -39,23 +35,32 @@ public class CmdDupe extends Command {
 			mc.player.dropSelectedItem(true);
 			mc.player.networkHandler.getConnection().disconnect(new LiteralText("Duping..."));
 		} else if (args[0].equalsIgnoreCase("book")) {
-			ItemStack item = mc.player.inventory.getMainHandStack();
-
-			if (item.getItem() != Items.WRITABLE_BOOK) {
+			if (mc.player.inventory.getMainHandStack().getItem() != Items.WRITABLE_BOOK) {
 				BleachLogger.errorMessage("Not holding a writable book!");
 				return;
 			}
 
-			IntStream chars = new Random().ints(0, 0x10ffff);
-			String text = chars.limit(25000 * 50).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
+			ListTag listTag = new ListTag();
 
-			ListTag textSplit = new ListTag();
+			StringBuilder builder1 = new StringBuilder();
+			for(int i = 0; i < 21845; i++)
+				builder1.append((char) 2077);
 
-			for (int t = 0; t < 50; t++)
-				textSplit.add(StringTag.of(text.substring(t * 25000, (t + 1) * 25000)));
+			listTag.add(0, StringTag.of(builder1.toString()));
 
-			item.getOrCreateTag().put("pages", textSplit);
-			mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, mc.player.inventory.selectedSlot));
+			StringBuilder builder2 = new StringBuilder();
+			for(int i = 0; i < 32; i++)
+				builder2.append("BleachHK");
+
+			String string2 = builder2.toString();
+			for(int i = 1; i < 40; i++)
+				listTag.add(i, StringTag.of(string2));
+
+			ItemStack bookStack = new ItemStack(Items.WRITABLE_BOOK, 1);
+			bookStack.putSubTag("title", StringTag.of("If you can see this, it didn't work"));
+			bookStack.putSubTag("pages", listTag);
+
+			mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(bookStack, true, mc.player.inventory.selectedSlot));
 		} else {
 			throw new CmdSyntaxException("Invaild dupe method");
 		}
