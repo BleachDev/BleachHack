@@ -27,7 +27,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -138,7 +138,7 @@ public class EntityMenuScreen extends Screen {
 
 		matrix.push();
 		matrix.scale(2.5f, 2.5f, 1f);
-		drawCenteredString(matrix, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
+		drawCenteredText(matrix, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
 		matrix.pop();
 
 		Vector2 center = new Vector2(width / 2, height / 2);

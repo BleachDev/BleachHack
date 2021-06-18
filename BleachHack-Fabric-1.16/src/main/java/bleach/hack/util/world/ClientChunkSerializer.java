@@ -22,10 +22,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.LongArrayTag;
-import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtLongArray;
+import net.minecraft.nbt.NbtShort;
 import net.minecraft.server.world.SimpleTickScheduler;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.util.math.BlockPos;
@@ -50,28 +50,28 @@ import net.minecraft.world.gen.feature.StructureFeature;
 
 public class ClientChunkSerializer {
 	
-	public static CompoundTag serialize(ClientWorld world, Chunk chunk) {
+	public static NbtCompound serialize(ClientWorld world, Chunk chunk) {
 		ChunkPos chunkPos = chunk.getPos();
-		CompoundTag compoundTag = new CompoundTag();
-		CompoundTag compoundTag2 = new CompoundTag();
-		compoundTag.putInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
-		compoundTag.put("Level", compoundTag2);
-		compoundTag2.putInt("xPos", chunkPos.x);
-		compoundTag2.putInt("zPos", chunkPos.z);
-		compoundTag2.putLong("LastUpdate", world.getTime());
-		compoundTag2.putLong("InhabitedTime", chunk.getInhabitedTime());
-		compoundTag2.putString("Status", chunk.getStatus().getId());
+		NbtCompound NbtCompound = new NbtCompound();
+		NbtCompound NbtCompound2 = new NbtCompound();
+		NbtCompound.putInt("DataVersion", SharedConstants.getGameVersion().getWorldVersion());
+		NbtCompound.put("Level", NbtCompound2);
+		NbtCompound2.putInt("xPos", chunkPos.x);
+		NbtCompound2.putInt("zPos", chunkPos.z);
+		NbtCompound2.putLong("LastUpdate", world.getTime());
+		NbtCompound2.putLong("InhabitedTime", chunk.getInhabitedTime());
+		NbtCompound2.putString("Status", chunk.getStatus().getId());
 		UpgradeData upgradeData = chunk.getUpgradeData();
 		if (!upgradeData.isDone()) {
-			compoundTag2.put("UpgradeData", upgradeData.toTag());
+			NbtCompound2.put("UpgradeData", upgradeData.toNbt());
 		}
 
 		ChunkSection[] chunkSections = chunk.getSectionArray();
-		ListTag listTag = new ListTag();
+		NbtList NbtList = new NbtList();
 		LightingProvider lightingProvider = world.getChunkManager().getLightingProvider();
 		boolean bl = chunk.isLightOn();
 
-		CompoundTag compoundTag7;
+		NbtCompound NbtCompound7;
 		for (int i = -1; i < 17; ++i) {
 			final int finalI = i;
 			ChunkSection chunkSection = Arrays.stream(chunkSections).filter(chunkSectionx -> (chunkSectionx != null && chunkSectionx.getYOffset() >> 4 == finalI)).findFirst().orElse(WorldChunk.EMPTY_SECTION);
@@ -80,48 +80,48 @@ public class ClientChunkSerializer {
 			ChunkNibbleArray chunkNibbleArray2 = lightingProvider.get(LightType.SKY)
 					.getLightSection(ChunkSectionPos.from(chunkPos, i));
 			if (chunkSection != WorldChunk.EMPTY_SECTION || chunkNibbleArray != null || chunkNibbleArray2 != null) {
-				compoundTag7 = new CompoundTag();
-				compoundTag7.putByte("Y", (byte) (i & 255));
+				NbtCompound7 = new NbtCompound();
+				NbtCompound7.putByte("Y", (byte) (i & 255));
 				if (chunkSection != WorldChunk.EMPTY_SECTION) {
-					chunkSection.getContainer().write(compoundTag7, "Palette", "BlockStates");
+					chunkSection.getContainer().write(NbtCompound7, "Palette", "BlockStates");
 				}
 
 				if (chunkNibbleArray != null && !chunkNibbleArray.isUninitialized()) {
-					compoundTag7.putByteArray("BlockLight", chunkNibbleArray.asByteArray());
+					NbtCompound7.putByteArray("BlockLight", chunkNibbleArray.asByteArray());
 				}
 
 				if (chunkNibbleArray2 != null && !chunkNibbleArray2.isUninitialized()) {
-					compoundTag7.putByteArray("SkyLight", chunkNibbleArray2.asByteArray());
+					NbtCompound7.putByteArray("SkyLight", chunkNibbleArray2.asByteArray());
 				}
 
-				listTag.add(compoundTag7);
+				NbtList.add(NbtCompound7);
 			}
 		}
 
-		compoundTag2.put("Sections", listTag);
+		NbtCompound2.put("Sections", NbtList);
 		if (bl) {
-			compoundTag2.putBoolean("isLightOn", true);
+			NbtCompound2.putBoolean("isLightOn", true);
 		}
 
 		BiomeArray biomeArray = chunk.getBiomeArray();
 		if (biomeArray != null) {
-			compoundTag2.putIntArray("Biomes", biomeArray.toIntArray());
+			NbtCompound2.putIntArray("Biomes", biomeArray.toIntArray());
 		}
 
-		ListTag listTag2 = new ListTag();
+		NbtList NbtList2 = new NbtList();
 		Iterator<BlockPos> var21 = chunk.getBlockEntityPositions().iterator();
 
-		CompoundTag compoundTag6;
+		NbtCompound NbtCompound6;
 		while (var21.hasNext()) {
 			BlockPos blockPos = var21.next();
-			compoundTag6 = chunk.getPackedBlockEntityTag(blockPos);
-			if (compoundTag6 != null) {
-				listTag2.add(compoundTag6);
+			NbtCompound6 = chunk.getPackedBlockEntityNbt(blockPos);
+			if (NbtCompound6 != null) {
+				NbtList2.add(NbtCompound6);
 			}
 		}
 
-		compoundTag2.put("TileEntities", listTag2);
-		ListTag listTag3 = new ListTag();
+		NbtCompound2.put("TileEntities", NbtList2);
+		NbtList NbtList3 = new NbtList();
 		if (chunk.getStatus().getChunkType() == ChunkStatus.ChunkType.field_12807) {
 			WorldChunk worldChunk = (WorldChunk) chunk;
 			worldChunk.setUnsaved(false);
@@ -131,18 +131,18 @@ public class ClientChunkSerializer {
 
 				while (var29.hasNext()) {
 					Entity entity = var29.next();
-					CompoundTag compoundTag5 = new CompoundTag();
-					if (entity.saveToTag(compoundTag5)) {
+					NbtCompound NbtCompound5 = new NbtCompound();
+					if (entity.saveNbt(NbtCompound5)) {
 						worldChunk.setUnsaved(true);
-						listTag3.add(compoundTag5);
+						NbtList3.add(NbtCompound5);
 					}
 				}
 			}
 		} else {
 			ProtoChunk protoChunk = (ProtoChunk) chunk;
-			listTag3.addAll(protoChunk.getEntities());
-			compoundTag2.put("Lights", toNbt(protoChunk.getLightSourcesBySection()));
-			compoundTag6 = new CompoundTag();
+			NbtList3.addAll(protoChunk.getEntities());
+			NbtCompound2.put("Lights", toNbt(protoChunk.getLightSourcesBySection()));
+			NbtCompound6 = new NbtCompound();
 			GenerationStep.Carver[] var30 = GenerationStep.Carver.values();
 			int var32 = var30.length;
 
@@ -150,93 +150,93 @@ public class ClientChunkSerializer {
 				GenerationStep.Carver carver = var30[var34];
 				BitSet bitSet = protoChunk.getCarvingMask(carver);
 				if (bitSet != null) {
-					compoundTag6.putByteArray(carver.toString(), bitSet.toByteArray());
+					NbtCompound6.putByteArray(carver.toString(), bitSet.toByteArray());
 				}
 			}
 
-			compoundTag2.put("CarvingMasks", compoundTag6);
+			NbtCompound2.put("CarvingMasks", NbtCompound6);
 		}
 
-		compoundTag2.put("Entities", listTag3);
+		NbtCompound2.put("Entities", NbtList3);
 		TickScheduler<Block> tickScheduler = chunk.getBlockTickScheduler();
 		if (tickScheduler instanceof ChunkTickScheduler) {
-			compoundTag2.put("ToBeTicked", ((ChunkTickScheduler<Block>) tickScheduler).toNbt());
+			NbtCompound2.put("ToBeTicked", ((ChunkTickScheduler<Block>) tickScheduler).toNbt());
 		} else if (tickScheduler instanceof SimpleTickScheduler) {
-			compoundTag2.put("TileTicks", ((SimpleTickScheduler<Block>) tickScheduler).toNbt());
+			NbtCompound2.put("TileTicks", ((SimpleTickScheduler<Block>) tickScheduler).toNbt());
 		}
 
 		TickScheduler<Fluid> tickScheduler2 = chunk.getFluidTickScheduler();
 		if (tickScheduler2 instanceof ChunkTickScheduler) {
-			compoundTag2.put("LiquidsToBeTicked", ((ChunkTickScheduler<Fluid>) tickScheduler2).toNbt());
+			NbtCompound2.put("LiquidsToBeTicked", ((ChunkTickScheduler<Fluid>) tickScheduler2).toNbt());
 		} else if (tickScheduler2 instanceof SimpleTickScheduler) {
-			compoundTag2.put("LiquidTicks", ((SimpleTickScheduler<Fluid>) tickScheduler2).toNbt());
+			NbtCompound2.put("LiquidTicks", ((SimpleTickScheduler<Fluid>) tickScheduler2).toNbt());
 		}
 
-		compoundTag2.put("PostProcessing", toNbt(chunk.getPostProcessingLists()));
-		compoundTag7 = new CompoundTag();
+		NbtCompound2.put("PostProcessing", toNbt(chunk.getPostProcessingLists()));
+		NbtCompound7 = new NbtCompound();
 		Iterator<Entry<Type, Heightmap>> var33 = chunk.getHeightmaps().iterator();
 
 		while (var33.hasNext()) {
 			Entry<Heightmap.Type, Heightmap> entry = var33.next();
 			if (chunk.getStatus().getHeightmapTypes().contains(entry.getKey())) {
-				compoundTag7.put(entry.getKey().getName(),
-						new LongArrayTag(entry.getValue().asLongArray()));
+				NbtCompound7.put(entry.getKey().getName(),
+						new NbtLongArray(entry.getValue().asLongArray()));
 			}
 		}
 
-		compoundTag2.put("Heightmaps", compoundTag7);
-		compoundTag2.put("Structures",
+		NbtCompound2.put("Heightmaps", NbtCompound7);
+		NbtCompound2.put("Structures",
 				writeStructures(chunkPos, chunk.getStructureStarts(), chunk.getStructureReferences()));
-		return compoundTag;
+		return NbtCompound;
 	}
 
-	private static CompoundTag writeStructures(ChunkPos pos, Map<StructureFeature<?>, StructureStart<?>> structureStarts,
+	private static NbtCompound writeStructures(ChunkPos pos, Map<StructureFeature<?>, StructureStart<?>> structureStarts,
 			Map<StructureFeature<?>, LongSet> structureReferences) {
-		CompoundTag compoundTag = new CompoundTag();
-		CompoundTag compoundTag2 = new CompoundTag();
+		NbtCompound NbtCompound = new NbtCompound();
+		NbtCompound NbtCompound2 = new NbtCompound();
 		Iterator<Entry<StructureFeature<?>, StructureStart<?>>> var5 = structureStarts.entrySet().iterator();
 
 		while (var5.hasNext()) {
 			Entry<StructureFeature<?>, StructureStart<?>> entry = var5
 					.next();
-			compoundTag2.put(((StructureFeature<?>) entry.getKey()).getName(),
+			NbtCompound2.put(((StructureFeature<?>) entry.getKey()).getName(),
 					((StructureStart<?>) entry.getValue()).toTag(pos.x, pos.z));
 		}
 
-		compoundTag.put("Starts", compoundTag2);
-		CompoundTag compoundTag3 = new CompoundTag();
+		NbtCompound.put("Starts", NbtCompound2);
+		NbtCompound NbtCompound3 = new NbtCompound();
 		Iterator<Entry<StructureFeature<?>, LongSet>> var9 = structureReferences.entrySet().iterator();
 
 		while (var9.hasNext()) {
 			Entry<StructureFeature<?>, LongSet> entry2 = var9.next();
-			compoundTag3.put(((StructureFeature<?>) entry2.getKey()).getName(),
-					new LongArrayTag(entry2.getValue()));
+			NbtCompound3.put(((StructureFeature<?>) entry2.getKey()).getName(),
+					new NbtLongArray(entry2.getValue()));
 		}
 
-		compoundTag.put("References", compoundTag3);
-		return compoundTag;
+		NbtCompound.put("References", NbtCompound3);
+		return NbtCompound;
 	}
 
-	private static ListTag toNbt(ShortList[] lists) {
-		ListTag listTag = new ListTag();
+	private static NbtList toNbt(ShortList[] lists) {
+		NbtList NbtList = new NbtList();
 		ShortList[] var2 = lists;
 		int var3 = lists.length;
 
 		for (int var4 = 0; var4 < var3; ++var4) {
 			ShortList shortList = var2[var4];
-			ListTag listTag2 = new ListTag();
+			NbtList NbtList2 = new NbtList();
 			if (shortList != null) {
 				ShortListIterator var7 = shortList.iterator();
 
 				while (var7.hasNext()) {
 					Short short_ = var7.nextShort();
-					listTag2.add(ShortTag.of(short_));
+					NbtList2.add(NbtShort.of(short_));
 				}
 			}
 
-			listTag.add(listTag2);
+			NbtList.add(NbtList2);
 		}
 
-		return listTag;
+		return NbtList;
 	}
 }

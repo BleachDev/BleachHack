@@ -17,7 +17,7 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.options.ServerList;
+import net.minecraft.client.option.ServerList;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
@@ -90,7 +90,7 @@ public class CleanUpScreen extends Screen {
 		buttons.get(1).setMessage(new LiteralText((cleanVersion ? "\u00a7a" : "\u00a7c") + "Wrong Version"));
 		buttons.get(2).setMessage(new LiteralText((cleanNoPing ? "\u00a7a" : "\u00a7c") + "Failed Ping"));
 		buttons.get(3).setMessage(new LiteralText((cleanAll ? "\u00a7a" : "\u00a7c") + "Clear All"));
-		drawCenteredString(matrix, textRenderer, result, width / 2, height / 3 + 58, -1);
+		drawCenteredText(matrix, textRenderer, result, width / 2, height / 3 + 58, -1);
 
 		super.render(matrix, mouseX, mouseY, delta);
 	}

@@ -121,7 +121,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 				Window.fill(matrix, x + 3, y + 17, seperator - 2, y + 33,
 						mouseOver ? 0x4fb070f0 : 0x50606090);
-				drawCenteredString(matrix, textRenderer,
+				drawCenteredText(matrix, textRenderer,
 						"\u00a7a\u00a7l^", x + (seperator - x) / 2, y + 21, 0xffffff);
 
 				entries++;
@@ -135,7 +135,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 				Window.fill(matrix, x + 3, y + 17 + (maxEntries * 17), seperator - 2, y + 33 + (maxEntries * 17),
 						mouseOver ? 0x4fb070f0 : 0x50606090);
-				drawCenteredString(matrix, textRenderer,
+				drawCenteredText(matrix, textRenderer,
 						"\u00a7a\u00a7lv", x + (seperator - x) / 2, y + 21 + (maxEntries * 17), 0xffffff);
 
 				maxEntries--;
@@ -156,7 +156,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 				Window.fill(matrix, x + 3, curY, seperator - 2, curY + 16,
 						entry.equals(selectedEntry) ? 0x4f90f090 : mouseOver ? 0x4fb070f0 : 0x50606090);
-				drawCenteredString(matrix, textRenderer,
+				drawCenteredText(matrix, textRenderer,
 						textRenderer.trimToWidth(entry, seperator - x - 6), x + (seperator - x) / 2, curY + 4, 0xffffff);
 
 				if (mouseOver) {
@@ -243,7 +243,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 				boolean mouseOverDelete = mouseX >= x + w - 70 && mouseX <= x + w - 5 && mouseY >= y + h - 22 && mouseY <= y + h - 4;
 				Window.fill(matrix, x + w - 70, y + h - 22, x + w - 5, y + h - 4, 0x60e05050, 0x60c07070, mouseOverDelete ? 0x20e05050 : 0x10e07070);
-				drawCenteredString(matrix, textRenderer, "Delete", x + w - 37, y + h - 17, 0xf0f0f0);
+				drawCenteredText(matrix, textRenderer, "Delete", x + w - 37, y + h - 17, 0xf0f0f0);
 
 				if (mouseOverDelete) {
 					deleteEntry = selectedEntry;

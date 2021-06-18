@@ -50,7 +50,7 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.text.LiteralText;
@@ -288,7 +288,7 @@ public class UI extends Module {
 			} else if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
 				lastChunkTime = System.currentTimeMillis();
 				chunkFuture = Pair.of(new ChunkPos(mc.player.getBlockPos()), chunkExecutor.submit(() -> {
-					CompoundTag tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
+					NbtCompound tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
 					DataOutputStream output = new DataOutputStream(
 							new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
 					try {

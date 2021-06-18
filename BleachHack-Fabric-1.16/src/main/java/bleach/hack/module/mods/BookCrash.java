@@ -23,9 +23,9 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
@@ -55,8 +55,8 @@ public class BookCrash extends Module {
 			return;
 
 		ItemStack bookObj = new ItemStack(Items.WRITABLE_BOOK);
-		ListTag list = new ListTag();
-		CompoundTag tag = new CompoundTag();
+		NbtList list = new NbtList();
+		NbtCompound tag = new NbtCompound();
 		String author = "Bleach";
 		String title = "\n Bleachhack Owns All \n";
 
@@ -86,7 +86,7 @@ public class BookCrash extends Module {
 		} else {
 			for (int i = 0; i < pages; i++) {
 				String siteContent = size;
-				StringTag tString = StringTag.of(siteContent);
+				NbtString tString = NbtString.of(siteContent);
 				list.add(tString);
 			}
 

@@ -5,9 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3f;
 
 public class WindowTextWidget extends WindowWidget {
 
@@ -61,7 +61,7 @@ public class WindowTextWidget extends WindowWidget {
 		matrix.push();
 		matrix.scale(scale, scale, 1f);
 		matrix.translate((windowX + x1 - offset) / scale, (windowY + y1) / scale, 0);
-		matrix.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(rotation));
+		matrix.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation));
 
 		RenderSystem.enableAlphaTest();
 		VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());

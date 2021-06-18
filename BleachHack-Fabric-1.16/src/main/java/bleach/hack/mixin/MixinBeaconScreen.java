@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.gui.screen.ingame.BeaconScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.BeaconScreenHandler;
 import net.minecraft.text.LiteralText;
@@ -41,7 +41,7 @@ public abstract class MixinBeaconScreen extends HandledScreen<BeaconScreenHandle
 	@Inject(method = "tick", at = @At("RETURN"))
 	public void tick(CallbackInfo ci) {
 		if (unlocked) {
-			for (AbstractButtonWidget b: buttons) {
+			for (ClickableWidget b: buttons) {
 				b.active = true;
 			}
 		}

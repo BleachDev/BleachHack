@@ -17,7 +17,7 @@ import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachJsonHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
@@ -39,7 +39,7 @@ public class CmdNBT extends Command {
 		ItemStack item = mc.player.inventory.getMainHandStack();
 
 		if (args[0].equalsIgnoreCase("get")) {
-			CompoundTag tag = item.getTag();
+			NbtCompound tag = item.getTag();
 
 			if (tag == null) {
 				BleachLogger.infoMessage("\u00a7c\u00a7lNo NBT on this item!");
@@ -67,7 +67,7 @@ public class CmdNBT extends Command {
 			item.setTag(StringNbtReader.parse(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), ' ')));
 			BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getTag().toString()));
 		} else if (args[0].equalsIgnoreCase("wipe")) {
-			item.setTag(new CompoundTag());
+			item.setTag(new NbtCompound());
 		}
 
 	}

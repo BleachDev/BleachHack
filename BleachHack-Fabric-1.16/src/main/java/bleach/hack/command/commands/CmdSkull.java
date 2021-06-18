@@ -24,7 +24,7 @@ import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 
 public class CmdSkull extends Command {
@@ -63,7 +63,7 @@ public class CmdSkull extends Command {
 				BleachLogger.errorMessage("Error getting head! (" + e.getClass().getSimpleName() + ")");
 			}
 		} else if (args[0].equalsIgnoreCase("img")) {
-			CompoundTag tag = StringNbtReader.parse(
+			NbtCompound tag = StringNbtReader.parse(
 					"{SkullOwner:{Id:" + id + ",Properties:{textures:[{Value:\"" + encodeUrl(args[1]) + "\"}]}}}");
 			item.setTag(tag);
 			BleachHack.logger.info(tag);

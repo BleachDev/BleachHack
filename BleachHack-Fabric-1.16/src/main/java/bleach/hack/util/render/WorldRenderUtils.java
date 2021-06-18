@@ -20,10 +20,10 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 
 public class WorldRenderUtils {
 
@@ -39,8 +39,8 @@ public class WorldRenderUtils {
 		MatrixStack matrix = matrixFrom(x, y, z);
 
 		Camera camera = mc.gameRenderer.getCamera();
-		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
@@ -79,17 +79,17 @@ public class WorldRenderUtils {
 		MatrixStack matrix = matrixFrom(x, y, z);
 
 		Camera camera = mc.gameRenderer.getCamera();
-		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
 		matrix.translate(offX, offY, 0);
 		matrix.scale((float) scale, (float) scale, 0.001f);
 
-		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180f));
+		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f));
 
 		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
-		Vector3f[] currentLight = getCurrentLight();
+		Vec3f[] currentLight = getCurrentLight();
 		DiffuseLighting.disableGuiDepthLighting();
 
 		GL11.glDepthFunc(GL11.GL_ALWAYS);
@@ -107,20 +107,20 @@ public class WorldRenderUtils {
 		MatrixStack matrix = new MatrixStack();
 
 		Camera camera = mc.gameRenderer.getCamera();
-		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
 
 		matrix.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
 		return matrix;
 	}
 
-	public static Vector3f[] getCurrentLight() {
+	public static Vec3f[] getCurrentLight() {
 		float[] light1 = new float[4];
 		float[] light2 = new float[4];
 		GL11.glGetLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, light1);
 		GL11.glGetLightfv(GL11.GL_LIGHT1, GL11.GL_POSITION, light2);
 
-		return new Vector3f[] { new Vector3f(light1[0], light1[1], light1[2]), new Vector3f(light2[0], light2[1], light2[2]) };
+		return new Vec3f[] { new Vec3f(light1[0], light1[1], light1[2]), new Vec3f(light2[0], light2[1], light2[2]) };
 	}
 }

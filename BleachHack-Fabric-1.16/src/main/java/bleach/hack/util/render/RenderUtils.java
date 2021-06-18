@@ -23,7 +23,6 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -32,6 +31,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 
 public class RenderUtils {
 
@@ -183,8 +183,8 @@ public class RenderUtils {
 		MatrixStack matrix = new MatrixStack();
 
 		Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
-		matrix.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-		matrix.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
 
 		matrix.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
@@ -337,7 +337,7 @@ public class RenderUtils {
 			Matrix4f model = matrix.peek().getModel();
 			Matrix3f normal = matrix.peek().getNormal();
 
-			Vector3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
+			Vec3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
 
 			int[] color1 = lineColor.getColor(x1, y1, z1, 0);
 			int[] color2 = lineColor.getColor(x2, y2, z2, 1);
@@ -348,13 +348,13 @@ public class RenderUtils {
 			vertexConsumer.vertex(model, x2, y2, z2).color(color1[0], color1[1], color1[2], 0).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
 		}
 
-		public static Vector3f getNormal(Matrix3f normal, float x1, float y1, float z1, float x2, float y2, float z2) {
+		public static Vec3f getNormal(Matrix3f normal, float x1, float y1, float z1, float x2, float y2, float z2) {
 			float xNormal = x2 - x1;
 			float yNormal = y2 - y1;
 			float zNormal = z2 - z1;
 			float normalSqrt = MathHelper.sqrt(xNormal * xNormal + yNormal * yNormal + zNormal * zNormal);
 
-			return new Vector3f(xNormal / normalSqrt, yNormal / normalSqrt, zNormal / normalSqrt);
+			return new Vec3f(xNormal / normalSqrt, yNormal / normalSqrt, zNormal / normalSqrt);
 		}
 	}
 }

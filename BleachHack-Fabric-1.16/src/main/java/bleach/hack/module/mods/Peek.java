@@ -30,7 +30,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HopperBlock;
-import net.minecraft.block.MaterialColor;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
@@ -248,7 +248,7 @@ public class Peek extends Module {
 			int c1 = c & 255;
 
 			if (c1 / 4 != 0)
-				DrawableHelper.fill(matrix, x, y, x + 1, y + 1, getRenderColorFix(MaterialColor.COLORS[c1 / 4].color, c1 & 3));
+				DrawableHelper.fill(matrix, x, y, x + 1, y + 1, getRenderColorFix(MapColor.COLORS[c1 / 4].color, c1 & 3));
 			if (x - (int) (mouseX * (1 / size) + 12 * (1 / size)) == 127) {
 				x = (int) (mouseX * (1 / size) + 12 * (1 / size));
 				y++;

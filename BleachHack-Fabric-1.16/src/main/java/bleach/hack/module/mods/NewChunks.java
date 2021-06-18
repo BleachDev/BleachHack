@@ -24,7 +24,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
@@ -98,7 +98,7 @@ public class NewChunks extends Module {
 			
 			if (!newChunks.contains(pos) && mc.world.getChunkManager().getChunk(packet.getX(), packet.getZ()) == null) {
 				WorldChunk chunk = new WorldChunk(mc.world, pos, null);
-				chunk.loadFromPacket(null, packet.getReadBuffer(), new CompoundTag(), packet.getVerticalStripBitmask());
+				chunk.loadFromPacket(null, packet.getReadBuffer(), new NbtCompound(), packet.getVerticalStripBitmask());
 				
 				for (int x = 0; x < 16; x++) {
 					for (int y = 0; y < mc.world.getHeight(); y++) {

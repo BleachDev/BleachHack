@@ -14,8 +14,8 @@ import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.c2s.play.BookUpdateC2SPacket;
 import net.minecraft.text.LiteralText;
 
@@ -40,13 +40,13 @@ public class CmdDupe extends Command {
 				return;
 			}
 
-			ListTag listTag = new ListTag();
+			NbtList listTag = new NbtList();
 
 			StringBuilder builder1 = new StringBuilder();
 			for(int i = 0; i < 21845; i++)
 				builder1.append((char) 2077);
 
-			listTag.add(0, StringTag.of(builder1.toString()));
+			listTag.add(0, NbtString.of(builder1.toString()));
 
 			StringBuilder builder2 = new StringBuilder();
 			for(int i = 0; i < 32; i++)
@@ -54,10 +54,10 @@ public class CmdDupe extends Command {
 
 			String string2 = builder2.toString();
 			for(int i = 1; i < 40; i++)
-				listTag.add(i, StringTag.of(string2));
+				listTag.add(i, NbtString.of(string2));
 
 			ItemStack bookStack = new ItemStack(Items.WRITABLE_BOOK, 1);
-			bookStack.putSubTag("title", StringTag.of("If you can see this, it didn't work"));
+			bookStack.putSubTag("title", NbtString.of("If you can see this, it didn't work"));
 			bookStack.putSubTag("pages", listTag);
 
 			mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(bookStack, true, mc.player.inventory.selectedSlot));

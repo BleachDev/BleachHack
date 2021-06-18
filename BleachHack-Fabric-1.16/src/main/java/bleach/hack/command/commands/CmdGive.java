@@ -22,7 +22,7 @@ import bleach.hack.util.BleachLogger;
 import net.minecraft.item.AirBlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -48,7 +48,7 @@ public class CmdGive extends Command {
 			String args2 = (args.length >= 3 ? args[2] : "");
 
 			ItemStack item = new ItemStack(args2.equalsIgnoreCase("egg") ? Items.STRIDER_SPAWN_EGG : args2.equalsIgnoreCase("chest") ? Items.CHEST : Items.PINK_SHULKER_BOX);
-			CompoundTag tag = null;
+			NbtCompound tag = null;
 
 			if (args[1].equalsIgnoreCase("negs")) {
 				long dmg = args.length < 2 ? 0 : NumberUtils.toLong(args[1]);
@@ -200,9 +200,9 @@ public class CmdGive extends Command {
 			}
 
 			if (args2.equalsIgnoreCase("egg")) {
-				CompoundTag ct = new CompoundTag();
+				NbtCompound ct = new NbtCompound();
 				ct.put("EntityTag", StringNbtReader.parse("{Time:1,id:\"minecraft:falling_block\",BlockState:{Name:\"minecraft:chest\"}}"));
-				((CompoundTag) ct.get("EntityTag")).put("TileEntityData", tag.get("BlockEntityTag"));
+				((NbtCompound) ct.get("EntityTag")).put("TileEntityData", tag.get("BlockEntityTag"));
 
 				item.setTag(ct);
 			} else {

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoRender;
-import net.minecraft.client.gui.MapRenderer;
+import net.minecraft.client.render.MapRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.map.MapState;
