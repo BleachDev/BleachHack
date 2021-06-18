@@ -9,6 +9,7 @@
 package bleach.hack.command.commands;
 
 import java.util.Locale;
+import java.util.stream.Stream;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
@@ -35,7 +36,7 @@ public class CmdHelp extends Command {
 		}
 
 		for (Command c : CommandManager.getCommands()) {
-			if (!cmd.isEmpty() && !cmd.equalsIgnoreCase(c.getAliases()[0]))
+			if (!cmd.isEmpty() && Stream.of(c.getAliases()).noneMatch(cmd::equalsIgnoreCase))
 				continue;
 
 			MutableText text = new LiteralText("\u00a7b" + PREFIX + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
