@@ -22,11 +22,15 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.client.render.SkyProperties.SkyType;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class Ambience extends Module {
+
+	private WeatherManager weatherManager = new WeatherManager();
 
 	public Ambience() {
 		super("Ambience", KEY_UNBOUND, ModuleCategory.WORLD, "Changes the world ambience",
@@ -75,15 +79,33 @@ public class Ambience extends Module {
 			}
 		};
 	}
+	
+	@Override
+	public void onDisable() {
+		weatherManager.applyWeather(mc.world);
+		weatherManager.reset();
+
+		super.onDisable();
+	}
 
 	@Subscribe
-	public void onPreTick(EventTick event) {
+	public void onTick(EventTick event) {
 		if (getSetting(0).asToggle().state) {
+			if (!weatherManager.isActive()) {
+				weatherManager.setRain(mc.world.getRainGradient(mc.getTickDelta()));
+				weatherManager.setThunder(mc.world.getThunderGradient(mc.getTickDelta()));
+			}
+
 			if (getSetting(0).asToggle().getChild(0).asMode().mode == 0) {
+				mc.world.getLevelProperties().setRaining(false);
 				mc.world.setRainGradient(0f);
 			} else {
+				mc.world.getLevelProperties().setRaining(true);
 				mc.world.setRainGradient(getSetting(0).asToggle().getChild(1).asSlider().getValueFloat());
 			}
+		} else if (weatherManager.isActive()) {
+			weatherManager.applyWeather(mc.world);
+			weatherManager.reset();
 		}
 
 		if (getSetting(1).asToggle().state) {
@@ -93,7 +115,24 @@ public class Ambience extends Module {
 
 	@Subscribe
 	public void readPacket(EventReadPacket event) {
-		if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+		if (event.getPacket() instanceof GameStateChangeS2CPacket && getSetting(0).asToggle().state) {
+			GameStateChangeS2CPacket packet = (GameStateChangeS2CPacket) event.getPacket();
+			if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STARTED) {
+				weatherManager.setRain(1f);
+			} else if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STOPPED) {
+				weatherManager.setRain(0f);
+			} else if (packet.getReason() == GameStateChangeS2CPacket.RAIN_GRADIENT_CHANGED) {
+				weatherManager.setRain(packet.getValue());
+			} else if (packet.getReason() == GameStateChangeS2CPacket.THUNDER_GRADIENT_CHANGED) {
+				weatherManager.setThunder(packet.getValue());
+			} else {
+				return;
+			}
+
+			event.setCancelled(true);
+		} else if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(0).asToggle().state) {
+			weatherManager.reset();
+		} else if (event.getPacket() instanceof WorldTimeUpdateS2CPacket && getSetting(1).asToggle().state) {
 			event.setCancelled(true);
 		}
 	}
@@ -136,5 +175,39 @@ public class Ambience extends Module {
 
 	private SettingToggle getCurrentDimSetting() {
 		return getSetting(mc.world.getRegistryKey() == World.END ? 4 : mc.world.getRegistryKey() == World.NETHER ? 3 : 2).asToggle();
+	}
+	
+	private static class WeatherManager {
+		
+		private float rain = -1f;
+		private float thunder = -1f;
+		
+		public void setRain(float rain) {
+			this.rain = rain;
+		}
+		
+		public void setThunder(float thunder) {
+			this.thunder = thunder;
+		}
+		
+		public void reset() {
+			rain = -1f;
+			thunder = -1f;
+		}
+		
+		public void applyWeather(World world) {
+			if (rain >= 0f) {
+				world.getLevelProperties().setRaining(rain > 0f);
+				world.setRainGradient(rain);
+			}
+			
+			if (thunder >= 0f) {
+				world.setThunderGradient(thunder);
+			}
+		}
+		
+		public boolean isActive() {
+			return rain >= 0f || thunder >= 1f;
+		}
 	}
 }
