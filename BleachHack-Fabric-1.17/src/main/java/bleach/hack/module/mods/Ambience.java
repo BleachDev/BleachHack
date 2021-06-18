@@ -21,7 +21,6 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.render.SkyProperties;
-import net.minecraft.client.render.SkyProperties.SkyType;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
@@ -63,21 +62,6 @@ public class Ambience extends Module {
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Foilage color")),
 						new SettingToggle("Water Color", false).withDesc("Changes the water color").withChildren(
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Water color"))));
-	}
-
-	public SkyProperties getCurrentSky() {
-		return new SkyProperties(128f, false, SkyType.NORMAL, false, false) {
-
-			@Override
-			public boolean useThickFog(int camouseX, int camouseY) {
-				return false;
-			}
-
-			@Override
-			public Vec3d adjustFogColor(Vec3d color, float sunHeight) {
-				return color;
-			}
-		};
 	}
 	
 	@Override
