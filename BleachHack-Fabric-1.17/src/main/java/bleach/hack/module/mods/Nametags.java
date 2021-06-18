@@ -320,7 +320,7 @@ public class Nametags extends Module {
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
 			WorldRenderUtils.drawText(new LiteralText(subText).styled(s-> s.withColor(TextColor.fromRgb(m.getKey().isCursed() ? 0xff5050 : 0xffb0e0))),
-					x, y, z, offX * scale, (offY + 0.7 - c * 0.3) * scale, scale * 1.25, false);
+					x, y, z, (offX + 0.01) * scale, (offY + 0.75 - c * 0.34) * scale, scale * 1.4, false);
 			c--;
 		}
 	}
