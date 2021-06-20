@@ -34,7 +34,7 @@ public class AntiHunger extends Module {
 				// event.setCancelled(true);
 				boolean onGround = mc.player.fallDistance >= 0.1f;
 				mc.player.setOnGround(onGround);
-				FabricReflect.writeField(event.getPacket(), onGround, "field_12891", "onGround");
+				FabricReflect.writeField(event.getPacket(), onGround, "field_29179", "onGround");
 				bool = true;
 			} else {
 				bool = false;

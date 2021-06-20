@@ -109,7 +109,7 @@ public class Flight extends Module {
 			if (!flyTick) {
 				boolean onGround = true;// mc.player.fallDistance >= 0.1f;
 				mc.player.setOnGround(onGround);
-				FabricReflect.writeField(event.getPacket(), onGround, "field_12891", "onGround");
+				FabricReflect.writeField(event.getPacket(), onGround, "field_29179", "onGround");
 
 				flyTick = true;
 			} else {

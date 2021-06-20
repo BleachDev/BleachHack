@@ -51,7 +51,7 @@ public class Nofall extends Module {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket && getSetting(0).asMode().mode == 2) {
 			if (mc.player.fallDistance > 2.5f && !altBool) {
 				mc.player.setOnGround(true);
-				FabricReflect.writeField(event.getPacket(), true, "field_12891", "onGround");
+				FabricReflect.writeField(event.getPacket(), true, "field_29179", "onGround");
 				altBool = true;
 			} else {
 				altBool = false;

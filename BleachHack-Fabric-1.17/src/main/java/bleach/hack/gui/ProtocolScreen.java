@@ -43,7 +43,7 @@ public class ProtocolScreen extends Screen {
 
 				FabricReflect.writeField(SharedConstants.getGameVersion(), nameField.getText(), "field_16733", "name");
 				FabricReflect.writeField(SharedConstants.getGameVersion(), i, "field_16735", "protocolVersion");
-				FabricReflect.writeField(SharedConstants.getGameVersion(), i1, "field_16734", "packVersion");
+				FabricReflect.writeField(SharedConstants.getGameVersion(), i1, "field_16734", "dataPackVersion");
 				FabricReflect.writeField(SharedConstants.getGameVersion(), targetField.getText(), "field_16740", "releaseTarget");
 				BleachHack.logger.info("Set Protocol");
 			} catch (Exception e) {
