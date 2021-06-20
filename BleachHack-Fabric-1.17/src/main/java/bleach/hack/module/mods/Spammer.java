@@ -26,7 +26,8 @@ public class Spammer extends Module {
 
 	private Random rand = new Random();
 	private List<String> lines = new ArrayList<>();
-	private int lineCount = 0;
+	private int lineCount;
+	private int tickCount;
 
 	public Spammer() {
 		super("Spammer", KEY_UNBOUND, ModuleCategory.MISC, "Spams chat with messages you set (edit with " + Command.PREFIX + "spammer)",
@@ -44,10 +45,12 @@ public class Spammer extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
+		tickCount++;
+
 		if (lines.isEmpty())
 			return;
 
-		if (mc.player.age % (int) (getSetting(1).asSlider().getValue() * 20) == 0) {
+		if (tickCount % getSetting(1).asSlider().getValueInt() * 20 == 0) {
 			if (getSetting(0).asMode().mode == 0) {
 				mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())));
 			} else if (getSetting(0).asMode().mode == 1) {
