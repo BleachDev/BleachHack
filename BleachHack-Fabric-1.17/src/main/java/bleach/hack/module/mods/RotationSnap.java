@@ -40,32 +40,35 @@ public class RotationSnap extends Module {
 	public void onTick(EventTick event) {
 		/* yes looks like a good way to do it to me */
 		if (getSetting(2).asToggle().state && mc.currentScreen == null) {
-			int ymode = getSetting(0).asToggle().getChild(0).asMode().mode;
-			int pmode = getSetting(1).asToggle().getChild(0).asMode().mode;
+			int yMode = getSetting(0).asToggle().getChild(0).asMode().mode;
+			int pMode = getSetting(1).asToggle().getChild(0).asMode().mode;
+			
+			int yAngle = yMode == 0 ? 45 : yMode == 1 ? 30 : yMode == 2 ? 15 : 90;
+			int pAngle = pMode == 0 ? 45 : pMode == 1 ? 30 : pMode == 2 ? 15 : 90;
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT) && !lDown) {
-				mc.player.setYaw(mc.player.getYaw() - ymode == 0 ? 45 : ymode == 1 ? 30 : ymode == 2 ? 15 : 90);
+				mc.player.setYaw(mc.player.getYaw() - yAngle);
 				lDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT)) {
 				lDown = false;
 			}
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT) && !rDown) {
-				mc.player.setYaw(mc.player.getYaw() + ymode == 0 ? 45 : ymode == 1 ? 30 : ymode == 2 ? 15 : 90);
+				mc.player.setYaw(mc.player.getYaw() + yAngle);
 				rDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT)) {
 				rDown = false;
 			}
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP) && !uDown) {
-				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() - (pmode == 0 ? 45 : pmode == 1 ? 30 : pmode == 2 ? 15 : 90), -90, 90));
+				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() - pAngle, -90, 90));
 				uDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_UP)) {
 				uDown = false;
 			}
 
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN) && !dDown) {
-				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() + (pmode == 0 ? 45 : pmode == 1 ? 30 : pmode == 2 ? 15 : 90), -90, 90));
+				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() + pAngle, -90, 90));
 				dDown = true;
 			} else if (!InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN)) {
 				dDown = false;
