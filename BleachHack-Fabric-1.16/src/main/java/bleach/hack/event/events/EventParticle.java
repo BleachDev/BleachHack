@@ -9,10 +9,8 @@
 package bleach.hack.event.events;
 
 import bleach.hack.event.Event;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.util.math.BlockPos;
 
 public class EventParticle extends Event {
 
@@ -39,25 +37,6 @@ public class EventParticle extends Event {
 
 		public ParticleEffect getEffect() {
 			return effect;
-		}
-	}
-
-	public static class BlockBreaking extends EventParticle {
-
-		private BlockPos pos;
-		private BlockState state;
-
-		public BlockBreaking(BlockPos pos, BlockState state) {
-			this.pos = pos;
-			this.state = state;
-		}
-
-		public BlockPos getPos() {
-			return pos;
-		}
-
-		public BlockState getState() {
-			return state;
 		}
 	}
 }
