@@ -23,8 +23,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import bleach.hack.BleachHack;
-import bleach.hack.util.file.BleachFileMang;
-import bleach.hack.util.file.BleachGithubReader;
+import bleach.hack.util.io.BleachFileMang;
+import bleach.hack.util.io.BleachGithubReader;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;

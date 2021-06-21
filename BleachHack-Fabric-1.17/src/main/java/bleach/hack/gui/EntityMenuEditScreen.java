@@ -17,8 +17,8 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowScreen;
-import bleach.hack.util.PairList;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.collections.MutablePairList;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -28,7 +28,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class EntityMenuEditScreen extends WindowScreen {
 
-	private PairList<String, String> interactions;
+	private MutablePairList<String, String> interactions;
 	private String selectedEntry;
 	private String hoverEntry;
 	private String deleteEntry;
@@ -44,7 +44,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 	private TextFieldWidget editNameField;
 	private TextFieldWidget editValueField;
 
-	public EntityMenuEditScreen(PairList<String, String> interactions) {
+	public EntityMenuEditScreen(MutablePairList<String, String> interactions) {
 		super(new LiteralText("Interaction Edit Screen"));
 
 		this.interactions = interactions;
@@ -277,8 +277,8 @@ public class EntityMenuEditScreen extends WindowScreen {
 			editValueField.setText(interactions.getValue(selectedEntry));
 		}
 
-		if (deleteEntry != null && interactions.containsKey(deleteEntry)) {
-			interactions.remove(interactions.getPair(deleteEntry));
+		if (deleteEntry != null) {
+			interactions.removeKey(deleteEntry);
 			deleteEntry = null;
 			selectedEntry = null;
 		}
@@ -289,7 +289,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 		}
 
 		if (addEntry) {
-			interactions.add(new MutablePair<>(RandomStringUtils.randomAlphabetic(6), "bruh"));
+			interactions.add(RandomStringUtils.randomAlphabetic(6), "bruh");
 			addEntry = false;
 		}
 

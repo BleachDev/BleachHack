@@ -11,7 +11,6 @@ package bleach.hack.module.mods;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
@@ -23,8 +22,8 @@ import bleach.hack.gui.EntityMenuScreen;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.PairList;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.collections.MutablePairList;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -36,7 +35,7 @@ import net.minecraft.entity.player.PlayerEntity;
 public class EntityMenu extends Module {
 	
 	// fuck maps
-	public PairList<String, String> interactions = new PairList<>();
+	public MutablePairList<String, String> interactions = new MutablePairList<>();
 
 	private boolean buttonHeld;
 	
@@ -49,7 +48,7 @@ public class EntityMenu extends Module {
 		if (je != null && je.isJsonObject()) {
 			for (Entry<String, JsonElement> entry: je.getAsJsonObject().entrySet()) {
 				if (entry.getValue().isJsonPrimitive()) {
-					interactions.add(new MutablePair<>(entry.getKey(), entry.getValue().getAsString()));
+					interactions.add(entry.getKey(), entry.getValue().getAsString());
 				}
 			}
 		}

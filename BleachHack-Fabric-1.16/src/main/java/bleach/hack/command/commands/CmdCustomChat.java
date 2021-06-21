@@ -18,7 +18,7 @@ import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.CustomChat;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 
 public class CmdCustomChat extends Command {
 

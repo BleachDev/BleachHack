@@ -15,7 +15,7 @@ import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachJsonHelper;
+import bleach.hack.util.io.BleachJsonHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;

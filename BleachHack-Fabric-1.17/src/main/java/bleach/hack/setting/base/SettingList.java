@@ -25,7 +25,7 @@ import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowScrollbarWidget;
 import bleach.hack.gui.window.widget.WindowTextFieldWidget;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;

@@ -11,7 +11,7 @@ package bleach.hack.command.commands;
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.util.io.BleachFileMang;
 import net.minecraft.util.Util;
 
 public class CmdSpammer extends Command {

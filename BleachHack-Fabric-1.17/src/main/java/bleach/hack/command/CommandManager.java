@@ -24,7 +24,7 @@ import com.google.gson.annotations.SerializedName;
 import bleach.hack.BleachHack;
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;

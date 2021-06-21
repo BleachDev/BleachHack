@@ -16,7 +16,7 @@ import bleach.hack.gui.NotebotScreen;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.BleachQueue;
 import bleach.hack.util.Midi2Notebot;
-import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.util.io.BleachFileMang;
 
 public class CmdNotebot extends Command {
 

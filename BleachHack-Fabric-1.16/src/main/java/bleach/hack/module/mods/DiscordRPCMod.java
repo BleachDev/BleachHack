@@ -20,7 +20,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.rpc.DiscordEventHandlers;
 import bleach.hack.util.rpc.DiscordRPCManager;
 import bleach.hack.util.rpc.DiscordRichPresence;

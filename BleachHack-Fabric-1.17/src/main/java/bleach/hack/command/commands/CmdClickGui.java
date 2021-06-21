@@ -18,7 +18,7 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 
 public class CmdClickGui extends Command {
 

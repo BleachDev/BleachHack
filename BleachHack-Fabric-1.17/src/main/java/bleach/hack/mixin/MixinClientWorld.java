@@ -21,7 +21,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.util.BleachQueue;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.client.world.ClientWorld;

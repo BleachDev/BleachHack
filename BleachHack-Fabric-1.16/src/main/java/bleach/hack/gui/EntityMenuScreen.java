@@ -22,7 +22,7 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.EntityMenu;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.Boxes;
-import bleach.hack.util.PairList;
+import bleach.hack.util.collections.MutablePairList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -159,9 +159,9 @@ public class EntityMenuScreen extends Screen {
 	}
 
 	private void drawDots(MatrixStack matrix, int radius, int mouseX, int mouseY) {
-		PairList<String, String> map = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
+		MutablePairList<String, String> map = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
 		List<Vector2> pointList = new ArrayList<>();
-		String cache[] = new String[map.size()];
+		String[] cache = new String[map.size()];
 
 		int i = 0;
 		double lowestDistance = Double.MAX_VALUE;
@@ -184,9 +184,7 @@ public class EntityMenuScreen extends Screen {
 		}
 
 		// Go through all point and if it is focused -> drawing different color, changing closest string value
-		for (int j = 0; j < map.size(); j++) {
-			Vector2 point = pointList.get(j);
-
+		for (Vector2 point: pointList) {
 			if (pointList.get(focusedDot).equals(point)) {
 				drawDot(matrix, (int) point.x, (int) point.y, 0xFF4CFF00);
 				this.focusedString = cache[focusedDot];

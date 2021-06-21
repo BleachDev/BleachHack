@@ -20,7 +20,7 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.util.io.BleachFileMang;
 
 public class Spammer extends Module {
 

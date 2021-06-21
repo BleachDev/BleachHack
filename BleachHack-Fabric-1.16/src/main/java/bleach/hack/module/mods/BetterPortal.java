@@ -43,7 +43,7 @@ public class BetterPortal extends Module {
 
 	@Subscribe
 	public void onParticle(EventParticle.Normal event) {
-		if (getSetting(2).asToggle().state && event.particle instanceof PortalParticle) {
+		if (getSetting(2).asToggle().state && event.getParticle() instanceof PortalParticle) {
 			event.setCancelled(true);
 		}
 	}

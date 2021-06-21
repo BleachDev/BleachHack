@@ -19,7 +19,7 @@ import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.NoRender;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 

@@ -21,7 +21,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.particle.CampfireSmokeParticle;
 import net.minecraft.client.particle.ElderGuardianAppearanceParticle;
@@ -131,20 +131,20 @@ public class NoRender extends Module {
 
 	@Subscribe
 	public void onParticle(EventParticle.Normal event) {
-		if (shouldRemoveWorld(2) && event.particle instanceof ElderGuardianAppearanceParticle) {
+		if (shouldRemoveWorld(2) && event.getParticle() instanceof ElderGuardianAppearanceParticle) {
 			event.setCancelled(true);
-		} else if (shouldRemoveWorld(5) && event.particle instanceof ExplosionLargeParticle) {
-			if (Math.abs(event.particle.getBoundingBox().hashCode() % 101) >= getWorldChild(5).getChild(0).asSlider().getValueInt()) {
+		} else if (shouldRemoveWorld(5) && event.getParticle() instanceof ExplosionLargeParticle) {
+			if (Math.abs(event.getParticle().getBoundingBox().hashCode() % 101) >= getWorldChild(5).getChild(0).asSlider().getValueInt()) {
 				event.setCancelled(true);
 			}
-		} else if (shouldRemoveWorld(8) && event.particle instanceof CampfireSmokeParticle) {
+		} else if (shouldRemoveWorld(8) && event.getParticle() instanceof CampfireSmokeParticle) {
 			event.setCancelled(true);
 		}
 	}
 
 	@Subscribe
 	public void onParticleEmitter(EventParticle.Emitter event) {
-		if (shouldRemoveWorld(1) && getWorldChild(1).getChild(0).asToggle().state && event.effect.getType() == ParticleTypes.TOTEM_OF_UNDYING) {
+		if (shouldRemoveWorld(1) && getWorldChild(1).getChild(0).asToggle().state && event.getEffect().getType() == ParticleTypes.TOTEM_OF_UNDYING) {
 			event.setCancelled(true);
 		}
 	}

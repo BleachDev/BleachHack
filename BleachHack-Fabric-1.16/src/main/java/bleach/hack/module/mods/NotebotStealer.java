@@ -22,7 +22,7 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
-import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.util.io.BleachFileMang;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 

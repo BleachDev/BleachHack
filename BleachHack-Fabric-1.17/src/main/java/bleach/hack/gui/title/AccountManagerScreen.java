@@ -39,7 +39,7 @@ import bleach.hack.gui.window.widget.WindowTextFieldWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginManager;
-import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.util.io.BleachFileMang;
 import bleach.hack.gui.window.Window;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;

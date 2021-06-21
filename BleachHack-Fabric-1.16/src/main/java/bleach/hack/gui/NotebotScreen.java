@@ -27,7 +27,7 @@ import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.Notebot;
 import bleach.hack.util.NotebotUtils;
-import bleach.hack.util.file.BleachFileMang;
+import bleach.hack.util.io.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.util.math.MatrixStack;

@@ -18,7 +18,7 @@ import com.google.common.eventbus.Subscribe;
 import bleach.hack.BleachHack;
 import bleach.hack.setting.base.SettingBase;
 import bleach.hack.setting.base.SettingBind;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 
 public class Module {

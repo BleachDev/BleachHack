@@ -14,7 +14,7 @@ import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.util.io.BleachFileHelper;
 
 public class CmdPrefix extends Command {
 

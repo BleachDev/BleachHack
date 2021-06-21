@@ -14,7 +14,7 @@ import bleach.hack.gui.EntityMenuEditScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.EntityMenu;
 import bleach.hack.util.BleachQueue;
-import bleach.hack.util.PairList;
+import bleach.hack.util.collections.MutablePairList;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -28,7 +28,7 @@ public class CmdEntityMenu extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		PairList<String, String> interactions = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
+		MutablePairList<String, String> interactions = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
 
 		BleachQueue.add(() -> mc.openScreen(new EntityMenuEditScreen(interactions)));
 	}
