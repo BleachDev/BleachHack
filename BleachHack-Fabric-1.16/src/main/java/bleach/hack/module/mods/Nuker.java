@@ -61,6 +61,7 @@ public class Nuker extends Module {
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
 						SettingLists.newBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks")),
+				new SettingToggle("Raycast", true).withDesc("Only mines blocks you can see"),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
 				new SettingRotate(false).withDesc("Rotate to blocks that you are mining"),
 				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
@@ -89,7 +90,7 @@ public class Nuker extends Module {
 
 		/* Add blocks around player */
 		for (int x = MathHelper.ceil(range); x >= MathHelper.floor(-range); x--) {
-			for (int y = MathHelper.ceil(range); y >= (getSetting(7).asToggle().state ? -mc.player.getEyeHeight(mc.player.getPose()) + 0.2 : MathHelper.floor(-range)); y--) {
+			for (int y = MathHelper.ceil(range); y >= (getSetting(8).asToggle().state ? -mc.player.getEyeHeight(mc.player.getPose()) + 0.2 : MathHelper.floor(-range)); y--) {
 				for (int z = MathHelper.ceil(range); z >= MathHelper.floor(-range); z--) {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + mc.player.getEyeHeight(mc.player.getPose()), z));
 
@@ -103,6 +104,8 @@ public class Nuker extends Module {
 
 						if (vec != null) {
 							blocks.add(pos, vec);
+						} else if (!getSetting(7).asToggle().state) {
+							blocks.add(pos, Pair.of(Vec3d.ofCenter(pos), Direction.UP));
 						}
 					}
 				}
@@ -136,9 +139,9 @@ public class Nuker extends Module {
 				return;
 			}
 
-			if (getSetting(8).asRotate().state) {
+			if (getSetting(9).asRotate().state) {
 				Vec3d v = pos.getValue().getLeft();
-				WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(8).asRotate());
+				WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(9).asRotate());
 			}
 
 			mc.interactionManager.updateBlockBreakingProgress(pos.getKey(), pos.getValue().getRight());
@@ -158,8 +161,8 @@ public class Nuker extends Module {
 
 	@Subscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		if (getSetting(10).asToggle().state) {
-			float[] color = getSetting(10).asToggle().getChild(1).asColor().getRGBFloat();
+		if (getSetting(11).asToggle().state) {
+			float[] color = getSetting(11).asToggle().getChild(1).asColor().getRGBFloat();
 
 			float breakingProgress = (float) FabricReflect.getFieldValue(mc.interactionManager, "field_3715", "currentBreakingProgress");
 
@@ -167,7 +170,7 @@ public class Nuker extends Module {
 				VoxelShape shape = mc.world.getBlockState(pos).getOutlineShape(mc.world, pos);
 
 				if (!shape.isEmpty()) {
-					if (getSetting(10).asToggle().getChild(0).asMode().mode == 0) {
+					if (getSetting(11).asToggle().getChild(0).asMode().mode == 0) {
 						RenderUtils.drawBoxBoth(shape.getBoundingBox().offset(pos),
 								QuadColor.single(color[0], color[1], color[2], breakingProgress * 0.8f), 2.5f);
 					} else {
@@ -178,11 +181,11 @@ public class Nuker extends Module {
 			}
 		}
 
-		if (getSetting(11).asToggle().state) {
+		if (getSetting(12).asToggle().state) {
 			Vec3d pos = mc.player.getPos().subtract(RenderUtils.getInterpolationOffset(mc.player));
 			double range = getSetting(4).asSlider().getValue();
-			int color = 0xff000000 | getSetting(11).asToggle().getChild(1).asColor().getRGB();
-			float width = getSetting(11).asToggle().getChild(0).asSlider().getValueFloat();
+			int color = 0xff000000 | getSetting(12).asToggle().getChild(1).asColor().getRGB();
+			float width = getSetting(12).asToggle().getChild(0).asSlider().getValueFloat();
 
 			if (getSetting(3).asMode().mode == 0) {
 				RenderUtils.drawBoxOutline(new Box(pos, pos).expand(range, 0, range), QuadColor.single(color), width,
@@ -211,7 +214,7 @@ public class Nuker extends Module {
 
 	@Subscribe
 	public void onParticle(EventParticle.Normal event) {
-		if (event.getParticle() instanceof BlockDustParticle && getSetting(9).asToggle().state) {
+		if (event.getParticle() instanceof BlockDustParticle && getSetting(10).asToggle().state) {
 			event.setCancelled(true);
 		}
 	}
