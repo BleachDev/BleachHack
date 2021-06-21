@@ -37,7 +37,7 @@ public class PlaceOperation extends Operation {
 	public boolean canExecute() {
 		for (int i = 0; i < 9; i++) {
 			if (mc.player.getInventory().getStack(i).getItem() == item) {
-				return mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(Vec3d.of(pos).add(0.5, 0.5, 0.5)) < 4.5;
+				return mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(Vec3d.ofCenter(pos)) < 4.5;
 			}
 		}
 

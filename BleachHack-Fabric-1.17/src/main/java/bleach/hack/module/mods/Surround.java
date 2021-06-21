@@ -54,7 +54,7 @@ public class Surround extends Module {
 		super.onEnable();
 
 		if (getSetting(3).asToggle().state) {
-			Vec3d centerPos = Vec3d.of(mc.player.getBlockPos()).add(0.5, 0, 0.5);
+			Vec3d centerPos = Vec3d.ofBottomCenter(mc.player.getBlockPos());
 			mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
 		}

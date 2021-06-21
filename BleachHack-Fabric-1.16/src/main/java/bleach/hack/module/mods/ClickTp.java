@@ -83,7 +83,7 @@ public class ClickTp extends Module {
 			if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == 1 && mc.currentScreen == null && !antiSpamClick) {
 				antiSpamClick = true;
 
-				Vec3d tpPos = Vec3d.of(pos.offset(dir, dir == Direction.DOWN ? 2 : 1)).add(0.5, 0, 0.5);
+				Vec3d tpPos = Vec3d.ofBottomCenter(pos.offset(dir, dir == Direction.DOWN ? 2 : 1));
 
 				if (getSetting(2).asToggle().state) {
 					mc.player.updatePosition(mc.player.getX(), tpPos.y, mc.player.getZ());

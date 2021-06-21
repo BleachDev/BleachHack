@@ -244,7 +244,7 @@ public class Nuker extends Module {
 		Comparator<BlockPos> keepBlockUnderComparator = Comparator.comparing(new BlockPos(mc.player.getPos().add(0, -0.8, 0))::equals);
 
 		Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
-		Comparator<BlockPos> distComparator = Comparator.comparing(b -> eyePos.distanceTo(Vec3d.of(b).add(0.5, 0.5, 0.5)));
+		Comparator<BlockPos> distComparator = Comparator.comparing(b -> eyePos.distanceTo(Vec3d.ofCenter(b)));
 		Comparator<BlockPos> hardnessComparator = Comparator.comparing(b -> mc.world.getBlockState(b).getHardness(mc.world, b));
 
 		switch (getSetting(5).asMode().mode) {
