@@ -10,6 +10,7 @@ package bleach.hack.module.mods;
 
 import com.google.common.eventbus.Subscribe;
 
+import bleach.hack.event.events.EventBlockBreakCooldown;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
@@ -23,9 +24,9 @@ public class SpeedMine extends Module {
 
 	public SpeedMine() {
 		super("SpeedMine", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Allows you to mine at sanic speeds",
-				new SettingMode("Mode", "Haste", "OG").withDesc("Haste mode"),
-				new SettingSlider("Haste Lvl", 1, 3, 1, 0).withDesc("Haste Level"),
-				new SettingSlider("Cooldown", 0, 4, 1, 0).withDesc("Cooldown between mining blocks"),
+				new SettingMode("Mode", "Haste", "OG").withDesc("SpeedMine Mode"),
+				new SettingSlider("HasteLvl", 1, 3, 1, 0).withDesc("Haste Level"),
+				new SettingSlider("Cooldown", 0, 4, 1, 0).withDesc("Cooldown between mining blocks (in ticks)"),
 				new SettingSlider("Multiplier", 1, 3, 1.3, 1).withDesc("OG Mode multiplier"),
 				new SettingToggle("AntiFatigue", true).withDesc("Removes the fatigue effect"),
 				new SettingToggle("AntiOffGround", true).withDesc("Removing mining slowness from being offground"));
@@ -42,5 +43,10 @@ public class SpeedMine extends Module {
 		if (this.getSetting(0).asMode().mode == 0) {
 			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, getSetting(1).asSlider().getValueInt() - 1));
 		}
+	}
+
+	@Subscribe
+	public void onBlockBreakCooldown(EventBlockBreakCooldown event) {
+		event.setCooldown(getSetting(2).asSlider().getValueInt());
 	}
 }

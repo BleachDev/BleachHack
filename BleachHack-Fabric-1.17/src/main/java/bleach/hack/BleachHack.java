@@ -20,7 +20,12 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.util.Util;
 
+import java.lang.reflect.Method;
+
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +38,16 @@ public class BleachHack implements ModInitializer {
 	public static final String VERSION = "1.0.1";
 	public static final int INTVERSION = 32;
 
-	public static final EventBus eventBus = new EventBus();
+	// TODO: custom eventbus
+	public static final EventBus eventBus = Util.make(new EventBus("bleachhack"), bus -> {
+		try {
+			Method m = ClassUtils.getClass("com.google.common.eventbus.Dispatcher").getDeclaredMethod("immediate");
+			m.setAccessible(true);
+			FieldUtils.writeDeclaredField(bus, "dispatcher", m.invoke(null), true);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	});
 
 	public static FriendManager friendMang;
 
@@ -71,7 +85,7 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readClickGui();
 		BleachFileHelper.readFriends();
 		BleachFileHelper.readUI();
-		
+
 		CommandManager.readPrefix();
 		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
 		CommandSuggestor.start();

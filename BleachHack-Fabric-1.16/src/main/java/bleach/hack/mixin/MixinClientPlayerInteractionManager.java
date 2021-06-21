@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventBlockBreakCooldown;
 import bleach.hack.event.events.EventInteract;
-import bleach.hack.module.ModuleManager;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
@@ -34,31 +34,31 @@ public class MixinClientPlayerInteractionManager {
 
 	@Shadow private int blockBreakingCooldown;
 
-	private int getCooldown() {
-		return (ModuleManager.getModule("Nuker").isEnabled()
-				? (int) ModuleManager.getModule("Nuker").getSetting(3).asSlider().getValue()
-						: ModuleManager.getModule("SpeedMine").isEnabled()
-						&& ModuleManager.getModule("SpeedMine").getSetting(0).asMode().mode == 1
-						? (int) ModuleManager.getModule("SpeedMine").getSetting(2).asSlider().getValue()
-								: 5);
-	}
-
 	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 3),
 			require = 0 /* TODO: meteor */)
-	public void updateBlockBreakingProgress(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
-		this.blockBreakingCooldown = getCooldown();
+	public void updateBlockBreakingProgress(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
+		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
+		BleachHack.eventBus.post(event);
+
+		this.blockBreakingCooldown = event.getCooldown();
 	}
 
 	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 4),
 			require = 0 /* TODO: meteor */)
-	public void updateBlockBreakingProgress2(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
-		this.blockBreakingCooldown = getCooldown();
+	public void updateBlockBreakingProgress2(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
+		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
+		BleachHack.eventBus.post(event);
+
+		this.blockBreakingCooldown = event.getCooldown();
 	}
 
 	@Redirect(method = "attackBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I"),
 			require = 0 /* TODO: meteor */)
-	public void attackBlock(ClientPlayerInteractionManager clientPlayerInteractionManager, int i) {
-		this.blockBreakingCooldown = getCooldown();
+	public void attackBlock(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
+		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
+		BleachHack.eventBus.post(event);
+
+		this.blockBreakingCooldown = event.getCooldown();
 	}
 
 	@Inject(method = "breakBlock", at = @At("HEAD"), cancellable = true)
