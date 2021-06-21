@@ -192,6 +192,10 @@ public class RenderUtils {
 	}
 
 	public static Vec3d getInterpolationOffset(Entity e) {
+		if (MinecraftClient.getInstance().isPaused()) {
+			return Vec3d.ZERO;
+		}
+
 		double tickDelta = (double) MinecraftClient.getInstance().getTickDelta();
 		return new Vec3d(
 				e.getX() - MathHelper.lerp(tickDelta, e.lastRenderX, e.getX()),
