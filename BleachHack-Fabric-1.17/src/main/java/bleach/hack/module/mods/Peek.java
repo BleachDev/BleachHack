@@ -11,7 +11,6 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -29,7 +28,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HopperBlock;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
@@ -37,7 +35,9 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
@@ -54,6 +54,8 @@ import net.minecraft.util.math.Matrix4f;
 
 public class Peek extends Module {
 
+	private static final RenderLayer MAP_BACKGROUND_CHECKERBOARD = RenderLayer.getText(new Identifier("textures/map/map_background_checkerboard.png"));
+
 	private List<List<String>> pages;
 	private int[] slotPos;
 	private int pageCount = 0;
@@ -65,7 +67,7 @@ public class Peek extends Module {
 						new SettingMode("Info", "All", "Name", "None").withDesc("How to show the old tooltip")),
 				new SettingToggle("Books", true).withDesc("Show tooltips for books"),
 				new SettingToggle("Maps", true).withDesc("Show tooltips for maps").withChildren(
-						new SettingSlider("Map Size", 0.25, 1.5, 0.5, 2).withDesc("How big to make the map")));
+						new SettingSlider("Map Size", 0.25, 1.5, 0.85, 2).withDesc("How big to make the map")));
 	}
 
 	@Subscribe
@@ -123,7 +125,7 @@ public class Peek extends Module {
 		if (getSetting(0).asToggle().getChild(0).asMode().mode == 2) {
 			event.setCancelled(true);
 		} else if (getSetting(0).asToggle().getChild(0).asMode().mode == 1) {
-			event.text = Lists.transform(Arrays.asList(slot.getStack().getName()), Text::asOrderedText);
+			event.text = Arrays.asList(slot.getStack().getName());
 		}
 
 		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mouseY + 24 : mouseY;
@@ -180,7 +182,9 @@ public class Peek extends Module {
 			shown = false;
 		}
 
-		mc.getTextureManager().bindTexture(BookScreen.BOOK_TEXTURE);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, BookScreen.BOOK_TEXTURE);
 		DrawableHelper.drawTexture(
 				matrix,
 				mouseX, mouseY - 143, 0,
@@ -190,7 +194,7 @@ public class Peek extends Module {
 
 		Text pageIndexText = new TranslatableText("book.pageIndicator", new Object[] {pageCount + 1, pages.size() });
 		int pageIndexLength = mc.textRenderer.getWidth(pageIndexText);
-		
+
 		matrix.push();
 		matrix.scale(0.7f, 0.7f, 1f);
 
@@ -200,7 +204,7 @@ public class Peek extends Module {
 				(mouseX + 123 - pageIndexLength) * 1.43f,
 				(mouseY - 133) * 1.43f,
 				0x000000);
-		
+
 
 		int count = 0;
 		for (String s : pages.get(pageCount)) {
@@ -213,7 +217,7 @@ public class Peek extends Module {
 
 			count++;
 		}
-		
+
 		matrix.pop();
 
 	}
@@ -223,52 +227,31 @@ public class Peek extends Module {
 			return;
 		}
 
-		MapState data = FilledMapItem.getMapState(slot.id, mc.world);
-		if (data == null || data.colors == null) {
+		Integer id = FilledMapItem.getMapId(slot.getStack());
+		MapState mapState = FilledMapItem.getMapState(id, mc.world);
+
+		if (mapState == null) {
 			return;
 		}
 
-		byte[] colors = data.colors;
-
-		float size = getSetting(2).asToggle().getChild(0).asSlider().getValueFloat();
+		float scale = getSetting(2).asToggle().getChild(0).asSlider().getValueFloat() / 1.25f;
 
 		matrix.push();
-		matrix.scale(size, size, 1.0f);
-		int x = (int) (mouseX * (1 / size) + 12 * (1 / size));
-		int y = (int) (mouseY * (1 / size) - 12 * (1 / size) - 140);
+		matrix.translate(mouseX + 14, mouseY - 18 - 135 * scale, 0);
+		matrix.scale(scale, scale, 1f);
 
-		mc.getTextureManager().bindTexture(new Identifier("textures/map/map_background_checkerboard.png"));
-		DrawableHelper.drawTexture(
-				matrix,
-				x - 7, y - 7, 0,
-				0, 0,
-				142, 142,
-				142, 142);
+		VertexConsumer vertexConsumer = mc.getBufferBuilders().getEntityVertexConsumers().getBuffer(MAP_BACKGROUND_CHECKERBOARD);
+		Matrix4f matrix4f = matrix.peek().getModel();
+		vertexConsumer.vertex(matrix4f, -7f, 135f, -10f).color(255, 255, 255, 255).texture(0f, 1f).light(0xf000f0).next();
+		vertexConsumer.vertex(matrix4f, 135f, 135f, -10f).color(255, 255, 255, 255).texture(1f, 1f).light(0xf000f0).next();
+		vertexConsumer.vertex(matrix4f, 135f, -7f, -10f).color(255, 255, 255, 255).texture(1f, 0f).light(0xf000f0).next();
+		vertexConsumer.vertex(matrix4f, -7f, -7f, -10f).color(255, 255, 255, 255).texture(0f, 0f).light(0xf000f0).next();
+		mc.getBufferBuilders().getEntityVertexConsumers().draw(MAP_BACKGROUND_CHECKERBOARD);
 
-		for (byte c : colors) {
-			int c1 = c & 255;
-
-			if (c1 / 4 != 0)
-				DrawableHelper.fill(matrix, x, y, x + 1, y + 1, getRenderColorFix(MapColor.COLORS[c1 / 4].color, c1 & 3));
-			if (x - (int) (mouseX * (1 / size) + 12 * (1 / size)) == 127) {
-				x = (int) (mouseX * (1 / size) + 12 * (1 / size));
-				y++;
-			} else {
-				x++;
-			}
-		}
+		mc.gameRenderer.getMapRenderer().draw(matrix, mc.getBufferBuilders().getEntityVertexConsumers(), id, mapState, false, 0xf000f0);
 
 		matrix.pop();
-	}
 
-	/* Fix your game [B]ojang */
-	private int getRenderColorFix(int color, int offset) {
-		int int_2 = (offset == 3 ? 135 : offset == 2 ? 255 : offset == 0 ? 180 : 220);
-
-		int r = (color >> 16 & 255) * int_2 / 255;
-		int g = (color >> 8 & 255) * int_2 / 255;
-		int b = (color & 255) * int_2 / 255;
-		return -16777216 | r << 16 | g << 8 | b;
 	}
 
 	private void renderTooltipBox(MatrixStack matrix, int x1, int y1, int x2, int y2, boolean wrap) {
@@ -280,7 +263,7 @@ public class Peek extends Module {
 			if (yStart + x2 + 6 > mc.currentScreen.height)
 				yStart = mc.currentScreen.height - x2 - 6;
 		}
-		
+
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
@@ -295,14 +278,14 @@ public class Peek extends Module {
 		fillGradient(matrix4f, bufferBuilder, xStart + y2 + 2, yStart - 3 + 1, xStart + y2 + 3, yStart + x2 + 3 - 1, 1347420415, 1344798847);
 		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 3, xStart + y2 + 3, yStart - 3 + 1, 1347420415, 1347420415);
 		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart + x2 + 2, xStart + y2 + 3, yStart + x2 + 3, 1344798847, 1344798847);
-		
+
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
-        RenderSystem.disableBlend();
+		bufferBuilder.end();
+		BufferRenderer.draw(bufferBuilder);
+		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
 	}
 

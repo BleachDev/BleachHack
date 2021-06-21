@@ -15,6 +15,7 @@ import net.minecraft.network.Packet;
  * @author sl
  */
 public class EventReadPacket extends Event {
+
 	private Packet<?> packet;
 
 	public EventReadPacket(Packet<?> packet) {
