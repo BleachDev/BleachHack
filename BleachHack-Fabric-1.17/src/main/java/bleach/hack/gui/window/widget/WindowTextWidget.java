@@ -51,21 +51,21 @@ public class WindowTextWidget extends WindowWidget {
 	}
 
 	@Override
-	public void render(MatrixStack matrix, int windowX, int windowY, int mouseX, int mouseY) {
-		super.render(matrix, windowX, windowY, mouseX, mouseY);
+	public void render(MatrixStack matrices, int windowX, int windowY, int mouseX, int mouseY) {
+		super.render(matrices, windowX, windowY, mouseX, mouseY);
 
 		float offset = mc.textRenderer.getWidth(text) * align.offset * scale;
 
-		matrix.push();
-		matrix.scale(scale, scale, 1f);
-		matrix.translate((windowX + x1 - offset) / scale, (windowY + y1) / scale, 0);
-		matrix.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation));
+		matrices.push();
+		matrices.scale(scale, scale, 1f);
+		matrices.translate((windowX + x1 - offset) / scale, (windowY + y1) / scale, 0);
+		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation));
 
 		VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-		mc.textRenderer.draw(text, 0, 0, color, shadow, matrix.peek().getModel(), immediate, false, 0, 0xf000f0);
+		mc.textRenderer.draw(text, 0, 0, color, shadow, matrices.peek().getModel(), immediate, false, 0, 0xf000f0);
 		immediate.draw();
 
-		matrix.pop();
+		matrices.pop();
 	}
 
 	public Text getText() {

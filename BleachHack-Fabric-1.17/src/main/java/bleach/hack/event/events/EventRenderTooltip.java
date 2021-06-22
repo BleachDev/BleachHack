@@ -18,15 +18,15 @@ import net.minecraft.text.Text;
 public class EventRenderTooltip extends Event {
 
 	private Screen screen;
-	private MatrixStack matrix;
+	private MatrixStack matrices;
 	private List<Text> text;
 	private int x;
 	private int y;
 	private int mouseX;
 	private int mouseY;
 
-	public EventRenderTooltip(Screen screen, MatrixStack matrix, List<Text> text, int x, int y, int mouseX, int mouseY) {
-		this.matrix = matrix;
+	public EventRenderTooltip(Screen screen, MatrixStack matrices, List<Text> text, int x, int y, int mouseX, int mouseY) {
+		this.matrices = matrices;
 		this.screen = screen;
 		this.text = text;
 		this.x = x;
@@ -40,11 +40,11 @@ public class EventRenderTooltip extends Event {
 	}
 
 	public MatrixStack getMatrix() {
-		return matrix;
+		return matrices;
 	}
 
-	public void setMatrix(MatrixStack matrix) {
-		this.matrix = matrix;
+	public void setMatrix(MatrixStack matrices) {
+		this.matrices = matrices;
 	}
 
 	public List<Text> getText() {

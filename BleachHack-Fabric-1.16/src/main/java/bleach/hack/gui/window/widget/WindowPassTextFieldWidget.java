@@ -21,12 +21,12 @@ public class WindowPassTextFieldWidget extends WindowTextFieldWidget {
 	}
 
 	@Override
-	public void render(MatrixStack matrix, int windowX, int windowY, int mouseX, int mouseY) {
+	public void render(MatrixStack matrices, int windowX, int windowY, int mouseX, int mouseY) {
 		String realText = textField.getText();
 
 		try {
 			TEXT_FIELD.set(textField, new String(new char[realText.length()]).replace("\0", "\u2022"));
-			super.render(matrix, windowX, windowY, mouseX, mouseY);
+			super.render(matrices, windowX, windowY, mouseX, mouseY);
 			TEXT_FIELD.set(textField, realText);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			BleachHack.logger.error("Error reflecting TextFieldWidget text field");

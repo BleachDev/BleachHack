@@ -112,7 +112,7 @@ public class EntityMenuScreen extends Screen {
 		return false;
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		// Draw entity
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		client.getTextureManager().bindTexture(InventoryScreen.BACKGROUND_TEXTURE);
@@ -132,14 +132,14 @@ public class EntityMenuScreen extends Screen {
 		RenderSystem.blendFuncSeparate(
 				GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR,
 				GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-		drawTexture(matrix, crosshairX - 8, crosshairY - 8, 0, 0, 15, 15);
+		drawTexture(matrices, crosshairX - 8, crosshairY - 8, 0, 0, 15, 15);
 
-		drawDots(matrix, (int) (Math.min(height, width) / 2 * 0.75), mouseX, mouseY);
+		drawDots(matrices, (int) (Math.min(height, width) / 2 * 0.75), mouseX, mouseY);
 
-		matrix.push();
-		matrix.scale(2.5f, 2.5f, 1f);
-		drawCenteredText(matrix, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
-		matrix.pop();
+		matrices.push();
+		matrices.scale(2.5f, 2.5f, 1f);
+		drawCenteredText(matrices, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
+		matrices.pop();
 
 		Vector2 center = new Vector2(width / 2, height / 2);
 		Vector2 mouse = new Vector2(mouseX, mouseY).subtract(center).normalize();
@@ -155,10 +155,10 @@ public class EntityMenuScreen extends Screen {
 
 		client.player.yaw = yaw + mouse.x / 3;
 		client.player.pitch = MathHelper.clamp(pitch + mouse.y / 3, -90f, 90f);
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 	}
 
-	private void drawDots(MatrixStack matrix, int radius, int mouseX, int mouseY) {
+	private void drawDots(MatrixStack matrices, int radius, int mouseX, int mouseY) {
 		MutablePairList<String, String> map = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
 		List<Vector2> pointList = new ArrayList<>();
 		String[] cache = new String[map.size()];
@@ -170,7 +170,7 @@ public class EntityMenuScreen extends Screen {
 			double s = (double) i / map.size() * 2 * Math.PI;
 			int x = (int) Math.round(radius * Math.cos(s) + width / 2);
 			int y = (int) Math.round(radius * Math.sin(s) + height / 2);
-			drawTextField(matrix, x, y, string);
+			drawTextField(matrices, x, y, string);
 
 			// Calculate lowest distance between mouse and dot
 			if (Math.hypot(x - mouseX, y - mouseY) < lowestDistance) {
@@ -186,48 +186,48 @@ public class EntityMenuScreen extends Screen {
 		// Go through all point and if it is focused -> drawing different color, changing closest string value
 		for (Vector2 point: pointList) {
 			if (pointList.get(focusedDot).equals(point)) {
-				drawDot(matrix, (int) point.x, (int) point.y, 0xFF4CFF00);
+				drawDot(matrices, (int) point.x, (int) point.y, 0xFF4CFF00);
 				this.focusedString = cache[focusedDot];
 			} else {
-				drawDot(matrix, (int) point.x, (int) point.y, 0xFF0094FF);
+				drawDot(matrices, (int) point.x, (int) point.y, 0xFF0094FF);
 			}
 		}
 	}
 
-	private void drawRect(MatrixStack matrix, int startX, int startY, int width, int height, int colorInner,int colorOuter) {
-		drawHorizontalLine(matrix, startX, startX + width, startY, colorOuter);
-		drawHorizontalLine(matrix, startX, startX + width, startY + height, colorOuter);
-		drawVerticalLine(matrix, startX, startY, startY + height, colorOuter);
-		drawVerticalLine(matrix, startX + width, startY, startY + height, colorOuter);
-		fill(matrix, startX + 1, startY + 1, startX + width, startY + height, colorInner);
+	private void drawRect(MatrixStack matrices, int startX, int startY, int width, int height, int colorInner,int colorOuter) {
+		drawHorizontalLine(matrices, startX, startX + width, startY, colorOuter);
+		drawHorizontalLine(matrices, startX, startX + width, startY + height, colorOuter);
+		drawVerticalLine(matrices, startX, startY, startY + height, colorOuter);
+		drawVerticalLine(matrices, startX + width, startY, startY + height, colorOuter);
+		fill(matrices, startX + 1, startY + 1, startX + width, startY + height, colorInner);
 	}
 
-	private void drawTextField(MatrixStack matrix, int x, int y, String text) {
+	private void drawTextField(MatrixStack matrices, int x, int y, String text) {
 		if (x >= width / 2) {
-			drawRect(matrix, x + 10, y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
-			drawStringWithShadow(matrix, textRenderer, text, x + 12, y - 4, 0xFFFFFFFF);
+			drawRect(matrices, x + 10, y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
+			drawStringWithShadow(matrices, textRenderer, text, x + 12, y - 4, 0xFFFFFFFF);
 		} else {
-			drawRect(matrix, x - 14 - textRenderer.getWidth(text), y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
-			drawStringWithShadow(matrix, textRenderer, text, x - 12 - textRenderer.getWidth(text), y - 4, 0xFFFFFFFF);
+			drawRect(matrices, x - 14 - textRenderer.getWidth(text), y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
+			drawStringWithShadow(matrices, textRenderer, text, x - 12 - textRenderer.getWidth(text), y - 4, 0xFFFFFFFF);
 		}
 	}
 
 	// Literally drawing it in code
-	private void drawDot(MatrixStack matrix, int centerX, int centerY, int colorInner) {
+	private void drawDot(MatrixStack matrices, int centerX, int centerY, int colorInner) {
 		// Black background
-		fill(matrix, centerX - 1, centerY - 5, centerX + 2, centerY + 6, 0xff000000);
-		fill(matrix, centerX - 3, centerY - 4, centerX + 4, centerY + 5, 0xff000000);
-		fill(matrix, centerX - 4, centerY - 3, centerX + 5, centerY + 4, 0xff000000);
-		fill(matrix, centerX - 5, centerY - 1, centerX + 6, centerY + 2, 0xff000000);
+		fill(matrices, centerX - 1, centerY - 5, centerX + 2, centerY + 6, 0xff000000);
+		fill(matrices, centerX - 3, centerY - 4, centerX + 4, centerY + 5, 0xff000000);
+		fill(matrices, centerX - 4, centerY - 3, centerX + 5, centerY + 4, 0xff000000);
+		fill(matrices, centerX - 5, centerY - 1, centerX + 6, centerY + 2, 0xff000000);
 
 		// Fill
-		fill(matrix, centerX - 1, centerY - 4, centerX + 2, centerY + 5, colorInner);
-		fill(matrix, centerX - 3, centerY - 3, centerX + 4, centerY + 4, colorInner);
-		fill(matrix, centerX - 4, centerY - 1, centerX + 5, centerY + 2, colorInner);
+		fill(matrices, centerX - 1, centerY - 4, centerX + 2, centerY + 5, colorInner);
+		fill(matrices, centerX - 3, centerY - 3, centerX + 4, centerY + 4, colorInner);
+		fill(matrices, centerX - 4, centerY - 1, centerX + 5, centerY + 2, colorInner);
 
 		// Light overlay
-		fill(matrix, centerX - 1, centerY - 3, centerX + 1, centerY - 2, 0x80ffffff);
-		fill(matrix, centerX - 2, centerY - 2, centerX - 1, centerY - 1, 0x80ffffff);
+		fill(matrices, centerX - 1, centerY - 3, centerX + 1, centerY - 2, 0x80ffffff);
+		fill(matrices, centerX - 2, centerY - 2, centerX - 1, centerY - 1, 0x80ffffff);
 		//fill(matrix, centerX - 3, centerY - 1, centerX - 2, centerY, 0x80ffffff);
 	}
 }

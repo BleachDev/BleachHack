@@ -18,7 +18,7 @@ public class EventEntityRender extends Event {
 	public static class Single extends EventEntityRender {
 
 		protected Entity entity;
-		protected MatrixStack matrix;
+		protected MatrixStack matrices;
 		protected VertexConsumerProvider vertex;
 
 		public Entity getEntity() {
@@ -26,7 +26,7 @@ public class EventEntityRender extends Event {
 		}
 
 		public MatrixStack getMatrix() {
-			return matrix;
+			return matrices;
 		}
 
 		public VertexConsumerProvider getVertex() {
@@ -35,14 +35,14 @@ public class EventEntityRender extends Event {
 
 		public static class Pre extends Single {
 
-			public Pre(Entity entity, MatrixStack matrix, VertexConsumerProvider vertex) {
+			public Pre(Entity entity, MatrixStack matrices, VertexConsumerProvider vertex) {
 				this.entity = entity;
-				this.matrix = matrix;
+				this.matrices = matrices;
 				this.vertex = vertex;
 			}
 
-			public void setMatrix(MatrixStack matrix) {
-				this.matrix = matrix;
+			public void setMatrix(MatrixStack matrices) {
+				this.matrices = matrices;
 			}
 
 			public void setVertex(VertexConsumerProvider vertex) {
@@ -55,22 +55,24 @@ public class EventEntityRender extends Event {
 		}
 
 		public static class Post extends Single {
-			public Post(Entity entity, MatrixStack matrix, VertexConsumerProvider vertex) {
+
+			public Post(Entity entity, MatrixStack matrices, VertexConsumerProvider vertex) {
 				this.entity = entity;
-				this.matrix = matrix;
+				this.matrices = matrices;
 				this.vertex = vertex;
 			}
 		}
 
 		public static class Label extends Single {
-			public Label(Entity entity, MatrixStack matrix, VertexConsumerProvider vertex) {
+
+			public Label(Entity entity, MatrixStack matrices, VertexConsumerProvider vertex) {
 				this.entity = entity;
-				this.matrix = matrix;
+				this.matrices = matrices;
 				this.vertex = vertex;
 			}
 
-			public void setMatrix(MatrixStack matrix) {
-				this.matrix = matrix;
+			public void setMatrix(MatrixStack matrices) {
+				this.matrices = matrices;
 			}
 
 			public void setVertex(VertexConsumerProvider vertex) {

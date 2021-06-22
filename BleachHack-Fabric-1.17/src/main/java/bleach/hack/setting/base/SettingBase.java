@@ -95,7 +95,7 @@ public abstract class SettingBase {
 		return Triple.of(x + len + 2, y, description);
 	}
 
-	public abstract void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len);
+	public abstract void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len);
 
 	public abstract int getHeight(int len);
 

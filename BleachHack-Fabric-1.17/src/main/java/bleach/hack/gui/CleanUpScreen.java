@@ -89,15 +89,15 @@ public class CleanUpScreen extends Screen {
 
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		renderBackground(matrix);
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		renderBackground(matrices);
 		noHostButton.setMessage(new LiteralText((cleanNoHost ? "\u00a7a" : "\u00a7c") + "Unknown Host"));
 		versionButton.setMessage(new LiteralText((cleanVersion ? "\u00a7a" : "\u00a7c") + "Wrong Version"));
 		noPingButton.setMessage(new LiteralText((cleanNoPing ? "\u00a7a" : "\u00a7c") + "Failed Ping"));
 		allButton.setMessage(new LiteralText((cleanAll ? "\u00a7a" : "\u00a7c") + "Clear All"));
-		drawCenteredText(matrix, textRenderer, result, width / 2, height / 3 + 58, -1);
+		drawCenteredText(matrices, textRenderer, result, width / 2, height / 3 + 58, -1);
 
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 	}
 
 	public void onClose() {

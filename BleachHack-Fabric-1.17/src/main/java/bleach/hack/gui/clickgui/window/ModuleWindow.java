@@ -49,14 +49,14 @@ public class ModuleWindow extends ClickGuiWindow {
 		y2 = getHeight();
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		tooltip = null;
 		int x = x1 + 1;
 		int y = y1 + 13;
 		x2 = x + len + 1;
 		y2 = hiding ? y1 + 13 : y1 + 13 + getHeight();
 
-		super.render(matrix, mouseX, mouseY);
+		super.render(matrices, mouseX, mouseY);
 
 		if (hiding) return;
 
@@ -65,15 +65,15 @@ public class ModuleWindow extends ClickGuiWindow {
 		int curY = 0;
 		for (Entry<Module, Boolean> m : mods.entrySet()) {
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
-				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x70303070);
+				DrawableHelper.fill(matrices, x, y + curY, x + len, y + 12 + curY, 0x70303070);
 			}
 
 			// If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
-				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x50ff0000);
+				DrawableHelper.fill(matrices, x, y + curY, x + len, y + 12 + curY, 0x50ff0000);
 			}
 
-			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
+			textRend.drawWithShadow(matrices, textRend.trimToWidth(m.getKey().getName(), len),
 					x + 2, y + 2 + curY, m.getKey().isEnabled() ? 0x70efe0 : 0xc0c0c0);
 
 			// Set which module settings show on
@@ -93,13 +93,13 @@ public class ModuleWindow extends ClickGuiWindow {
 			// draw settings
 			if (m.getValue()) {
 				for (SettingBase s : m.getKey().getSettings()) {
-					s.render(this, matrix, x + 1, y + curY, len - 1);
+					s.render(this, matrices, x + 1, y + curY, len - 1);
 
 					if (!s.getDesc().isEmpty() && mouseOver(x + 2, y + curY, x + len, y + s.getHeight(len) + curY)) {
 						tooltip = s.getGuiDesc(this, x + 1, y + curY, len - 1);
 					}
 
-					DrawableHelper.fill(matrix, x + 1, y + curY, x + 2, y + curY + s.getHeight(len), 0xff8070b0);
+					DrawableHelper.fill(matrices, x + 1, y + curY, x + 2, y + curY + s.getHeight(len), 0xff8070b0);
 
 					curY += s.getHeight(len);
 				}

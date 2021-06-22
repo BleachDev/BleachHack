@@ -98,8 +98,8 @@ public class AutoReconnect extends Module {
 					}));
 		}
 
-		public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-			super.render(matrix, mouseX, mouseY, delta);
+		public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+			super.render(matrices, mouseX, mouseY, delta);
 
 			reconnectButton.setMessage(new LiteralText(getSetting(0).asToggle().state ? "\u00a7aAutoReconnect ["
 					+ (reconnectTime + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000 - System.currentTimeMillis())

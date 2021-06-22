@@ -67,7 +67,7 @@ public class RenderUtils {
 	public static void drawBoxFill(Box box, QuadColor color, Direction... excludeDirs) {
 		setup();
 
-		MatrixStack matrix = matrixFrom(box.minX, box.minY, box.minZ);
+		MatrixStack matrices = matrixFrom(box.minX, box.minY, box.minZ);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -76,7 +76,7 @@ public class RenderUtils {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
 		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		Vertexer.vertexBoxQuads(matrix, buffer, Boxes.moveToZero(box), color, excludeDirs);
+		Vertexer.vertexBoxQuads(matrices, buffer, Boxes.moveToZero(box), color, excludeDirs);
 		tessellator.draw();
 
 		cleanup();
@@ -91,7 +91,7 @@ public class RenderUtils {
 	public static void drawBoxOutline(Box box, QuadColor color, float lineWidth, Direction... excludeDirs) {
 		setup();
 
-		MatrixStack matrix = matrixFrom(box.minX, box.minY, box.minZ);
+		MatrixStack matrices = matrixFrom(box.minX, box.minY, box.minZ);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -102,7 +102,7 @@ public class RenderUtils {
 		RenderSystem.lineWidth(lineWidth);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexBoxLines(matrix, buffer, Boxes.moveToZero(box), color, excludeDirs);
+		Vertexer.vertexBoxLines(matrices, buffer, Boxes.moveToZero(box), color, excludeDirs);
 		tessellator.draw();
 
 		RenderSystem.enableCull();
@@ -115,7 +115,7 @@ public class RenderUtils {
 	public static void drawQuadFill(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, int cullMode, QuadColor color) {
 		setup();
 
-		MatrixStack matrix = matrixFrom(x1, y1, z1);
+		MatrixStack matrices = matrixFrom(x1, y1, z1);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -124,7 +124,7 @@ public class RenderUtils {
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
 		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		Vertexer.vertexQuad(matrix, buffer,
+		Vertexer.vertexQuad(matrices, buffer,
 				0f, 0f, 0f,
 				(float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1),
 				(float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1),
@@ -138,7 +138,7 @@ public class RenderUtils {
 	public static void drawQuadOutline(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, float lineWidth, QuadColor color) {
 		setup();
 
-		MatrixStack matrix = matrixFrom(x1, y1, z1);
+		MatrixStack matrices = matrixFrom(x1, y1, z1);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -151,10 +151,10 @@ public class RenderUtils {
 		RenderSystem.lineWidth(lineWidth);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexLine(matrix, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), LineColor.gradient(colors[0], colors[1]));
-		Vertexer.vertexLine(matrix, buffer, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), (float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1), LineColor.gradient(colors[1], colors[2]));
-		Vertexer.vertexLine(matrix, buffer, (float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1), (float) (x4 - x1), (float) (y4 - y1), (float) (z4 - z1), LineColor.gradient(colors[2], colors[3]));
-		Vertexer.vertexLine(matrix, buffer, (float) (x4 - x1), (float) (y4 - y1), (float) (z4 - z1), 0f, 0f, 0f, LineColor.gradient(colors[3], colors[0]));
+		Vertexer.vertexLine(matrices, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), LineColor.gradient(colors[0], colors[1]));
+		Vertexer.vertexLine(matrices, buffer, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), (float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1), LineColor.gradient(colors[1], colors[2]));
+		Vertexer.vertexLine(matrices, buffer, (float) (x3 - x1), (float) (y3 - y1), (float) (z3 - z1), (float) (x4 - x1), (float) (y4 - y1), (float) (z4 - z1), LineColor.gradient(colors[2], colors[3]));
+		Vertexer.vertexLine(matrices, buffer, (float) (x4 - x1), (float) (y4 - y1), (float) (z4 - z1), 0f, 0f, 0f, LineColor.gradient(colors[3], colors[0]));
 		tessellator.draw();
 
 		RenderSystem.enableCull();
@@ -166,7 +166,7 @@ public class RenderUtils {
 	public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, LineColor color, float width) {
 		setup();
 
-		MatrixStack matrix = matrixFrom(x1, y1, z1);
+		MatrixStack matrices = matrixFrom(x1, y1, z1);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -178,7 +178,7 @@ public class RenderUtils {
 		RenderSystem.lineWidth(width);
 
 		buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-		Vertexer.vertexLine(matrix, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), color);
+		Vertexer.vertexLine(matrices, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), color);
 		tessellator.draw();
 
 		RenderSystem.enableCull();
@@ -189,15 +189,15 @@ public class RenderUtils {
 	// -------------------- Utils --------------------
 
 	public static MatrixStack matrixFrom(double x, double y, double z) {
-		MatrixStack matrix = new MatrixStack();
+		MatrixStack matrices = new MatrixStack();
 
 		Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
-		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
 
-		matrix.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
+		matrices.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
-		return matrix;
+		return matrices;
 	}
 
 	public static Vec3d getInterpolationOffset(Entity e) {
@@ -229,7 +229,7 @@ public class RenderUtils {
 		public static final int CULL_FRONT = 1;
 		public static final int CULL_NONE = 2;
 
-		public static void vertexBoxQuads(MatrixStack matrix, VertexConsumer vertexConsumer, Box box, QuadColor quadColor, Direction... excludeDirs) {
+		public static void vertexBoxQuads(MatrixStack matrices, VertexConsumer vertexConsumer, Box box, QuadColor quadColor, Direction... excludeDirs) {
 			float x1 = (float) box.minX;
 			float y1 = (float) box.minY;
 			float z1 = (float) box.minZ;
@@ -240,49 +240,49 @@ public class RenderUtils {
 			int cullMode = excludeDirs.length == 0 ? CULL_BACK : CULL_NONE;
 
 			if (!ArrayUtils.contains(excludeDirs, Direction.DOWN)) {
-				vertexQuad(matrix, vertexConsumer, x1, y1, z1, x2, y1, z1, x2, y1, z2, x1, y1, z2, cullMode, quadColor);
+				vertexQuad(matrices, vertexConsumer, x1, y1, z1, x2, y1, z1, x2, y1, z2, x1, y1, z2, cullMode, quadColor);
 			}
 
 			if (!ArrayUtils.contains(excludeDirs, Direction.WEST)) {
-				vertexQuad(matrix, vertexConsumer, x1, y1, z2, x1, y2, z2, x1, y2, z1, x1, y1, z1, cullMode, quadColor);
+				vertexQuad(matrices, vertexConsumer, x1, y1, z2, x1, y2, z2, x1, y2, z1, x1, y1, z1, cullMode, quadColor);
 			}
 
 			if (!ArrayUtils.contains(excludeDirs, Direction.EAST)) {
-				vertexQuad(matrix, vertexConsumer, x2, y1, z1, x2, y2, z1, x2, y2, z2, x2, y1, z2, cullMode, quadColor);
+				vertexQuad(matrices, vertexConsumer, x2, y1, z1, x2, y2, z1, x2, y2, z2, x2, y1, z2, cullMode, quadColor);
 			}
 
 			if (!ArrayUtils.contains(excludeDirs, Direction.NORTH)) {
-				vertexQuad(matrix, vertexConsumer, x1, y1, z1, x1, y2, z1, x2, y2, z1, x2, y1, z1, cullMode, quadColor);
+				vertexQuad(matrices, vertexConsumer, x1, y1, z1, x1, y2, z1, x2, y2, z1, x2, y1, z1, cullMode, quadColor);
 			}
 
 			if (!ArrayUtils.contains(excludeDirs, Direction.SOUTH)) {
-				vertexQuad(matrix, vertexConsumer, x2, y1, z2, x2, y2, z2, x1, y2, z2, x1, y1, z2, cullMode, quadColor);
+				vertexQuad(matrices, vertexConsumer, x2, y1, z2, x2, y2, z2, x1, y2, z2, x1, y1, z2, cullMode, quadColor);
 			}
 
 			if (!ArrayUtils.contains(excludeDirs, Direction.UP)) {
-				vertexQuad(matrix, vertexConsumer, x1, y2, z2, x2, y2, z2, x2, y2, z1, x1, y2, z1, cullMode, quadColor);
+				vertexQuad(matrices, vertexConsumer, x1, y2, z2, x2, y2, z2, x2, y2, z1, x1, y2, z1, cullMode, quadColor);
 			}
 		}
 
-		public static void vertexQuad(MatrixStack matrix, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, int cullMode, QuadColor quadColor) {
+		public static void vertexQuad(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, int cullMode, QuadColor quadColor) {
 			int[] color = quadColor.getAllColors();
 
 			if (cullMode != CULL_FRONT) {
-				vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z1).color(color[0], color[1], color[2], color[3]).next();
-				vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z2).color(color[4], color[5], color[6], color[7]).next();
-				vertexConsumer.vertex(matrix.peek().getModel(), x3, y3, z3).color(color[8], color[9], color[10], color[11]).next();
-				vertexConsumer.vertex(matrix.peek().getModel(), x4, y4, z4).color(color[12], color[13], color[14], color[15]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x1, y1, z1).color(color[0], color[1], color[2], color[3]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x2, y2, z2).color(color[4], color[5], color[6], color[7]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x3, y3, z3).color(color[8], color[9], color[10], color[11]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x4, y4, z4).color(color[12], color[13], color[14], color[15]).next();
 			}
 
 			if (cullMode != CULL_BACK) {
-				vertexConsumer.vertex(matrix.peek().getModel(), x4, y4, z4).color(color[0], color[1], color[2], color[3]).next();
-				vertexConsumer.vertex(matrix.peek().getModel(), x3, y3, z3).color(color[4], color[5], color[6], color[7]).next();
-				vertexConsumer.vertex(matrix.peek().getModel(), x2, y2, z2).color(color[8], color[9], color[10], color[11]).next();
-				vertexConsumer.vertex(matrix.peek().getModel(), x1, y1, z1).color(color[12], color[13], color[14], color[15]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x4, y4, z4).color(color[0], color[1], color[2], color[3]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x3, y3, z3).color(color[4], color[5], color[6], color[7]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x2, y2, z2).color(color[8], color[9], color[10], color[11]).next();
+				vertexConsumer.vertex(matrices.peek().getModel(), x1, y1, z1).color(color[12], color[13], color[14], color[15]).next();
 			}
 		}
 
-		public static void vertexBoxLines(MatrixStack matrix, VertexConsumer vertexConsumer, Box box, QuadColor quadColor, Direction... excludeDirs) {
+		public static void vertexBoxLines(MatrixStack matrices, VertexConsumer vertexConsumer, Box box, QuadColor quadColor, Direction... excludeDirs) {
 			float x1 = (float) box.minX;
 			float y1 = (float) box.minY;
 			float z1 = (float) box.minZ;
@@ -300,51 +300,51 @@ public class RenderUtils {
 			int[] color = quadColor.getAllColors();
 
 			if (!exDown) {
-				vertexLine(matrix, vertexConsumer, x1, y1, z1, x2, y1, z1, LineColor.single(color[0], color[1], color[2], color[3]));
-				vertexLine(matrix, vertexConsumer, x2, y1, z1, x2, y1, z2, LineColor.single(color[4], color[5], color[6], color[7]));
-				vertexLine(matrix, vertexConsumer, x2, y1, z2, x1, y1, z2, LineColor.single(color[8], color[9], color[10], color[11]));
-				vertexLine(matrix, vertexConsumer, x1, y1, z2, x1, y1, z1, LineColor.single(color[12], color[13], color[14], color[15]));
+				vertexLine(matrices, vertexConsumer, x1, y1, z1, x2, y1, z1, LineColor.single(color[0], color[1], color[2], color[3]));
+				vertexLine(matrices, vertexConsumer, x2, y1, z1, x2, y1, z2, LineColor.single(color[4], color[5], color[6], color[7]));
+				vertexLine(matrices, vertexConsumer, x2, y1, z2, x1, y1, z2, LineColor.single(color[8], color[9], color[10], color[11]));
+				vertexLine(matrices, vertexConsumer, x1, y1, z2, x1, y1, z1, LineColor.single(color[12], color[13], color[14], color[15]));
 			}
 
 			if (!exWest) {
-				if (exDown) vertexLine(matrix, vertexConsumer, x1, y1, z1, x1, y1, z2, LineColor.single(color[0], color[1], color[2], color[3]));
-				vertexLine(matrix, vertexConsumer, x1, y1, z2, x1, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
-				vertexLine(matrix, vertexConsumer, x1, y1, z1, x1, y2, z1, LineColor.single(color[8], color[9], color[10], color[11]));
-				if (exUp) vertexLine(matrix, vertexConsumer, x1, y2, z1, x1, y2, z2, LineColor.single(color[12], color[13], color[14], color[15]));
+				if (exDown) vertexLine(matrices, vertexConsumer, x1, y1, z1, x1, y1, z2, LineColor.single(color[0], color[1], color[2], color[3]));
+				vertexLine(matrices, vertexConsumer, x1, y1, z2, x1, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
+				vertexLine(matrices, vertexConsumer, x1, y1, z1, x1, y2, z1, LineColor.single(color[8], color[9], color[10], color[11]));
+				if (exUp) vertexLine(matrices, vertexConsumer, x1, y2, z1, x1, y2, z2, LineColor.single(color[12], color[13], color[14], color[15]));
 			}
 
 			if (!exEast) {
-				if (exDown) vertexLine(matrix, vertexConsumer, x2, y1, z1, x2, y1, z2, LineColor.single(color[0], color[1], color[2], color[3]));
-				vertexLine(matrix, vertexConsumer, x2, y1, z2, x2, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
-				vertexLine(matrix, vertexConsumer, x2, y1, z1, x2, y2, z1, LineColor.single(color[8], color[9], color[10], color[11]));
-				if (exUp) vertexLine(matrix, vertexConsumer, x2, y2, z1, x2, y2, z2, LineColor.single(color[12], color[13], color[14], color[15]));
+				if (exDown) vertexLine(matrices, vertexConsumer, x2, y1, z1, x2, y1, z2, LineColor.single(color[0], color[1], color[2], color[3]));
+				vertexLine(matrices, vertexConsumer, x2, y1, z2, x2, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
+				vertexLine(matrices, vertexConsumer, x2, y1, z1, x2, y2, z1, LineColor.single(color[8], color[9], color[10], color[11]));
+				if (exUp) vertexLine(matrices, vertexConsumer, x2, y2, z1, x2, y2, z2, LineColor.single(color[12], color[13], color[14], color[15]));
 			}
 
 			if (!exNorth) {
-				if (exDown) vertexLine(matrix, vertexConsumer, x1, y1, z1, x2, y1, z1, LineColor.single(color[0], color[1], color[2], color[3]));
-				if (exEast) vertexLine(matrix, vertexConsumer, x2, y1, z1, x2, y2, z1, LineColor.single(color[4], color[5], color[6], color[7]));
-				if (exWest) vertexLine(matrix, vertexConsumer, x1, y1, z1, x1, y2, z1, LineColor.single(color[8], color[9], color[10], color[11]));
-				if (exUp) vertexLine(matrix, vertexConsumer, x1, y2, z1, x2, y2, z1, LineColor.single(color[12], color[13], color[14], color[15]));
+				if (exDown) vertexLine(matrices, vertexConsumer, x1, y1, z1, x2, y1, z1, LineColor.single(color[0], color[1], color[2], color[3]));
+				if (exEast) vertexLine(matrices, vertexConsumer, x2, y1, z1, x2, y2, z1, LineColor.single(color[4], color[5], color[6], color[7]));
+				if (exWest) vertexLine(matrices, vertexConsumer, x1, y1, z1, x1, y2, z1, LineColor.single(color[8], color[9], color[10], color[11]));
+				if (exUp) vertexLine(matrices, vertexConsumer, x1, y2, z1, x2, y2, z1, LineColor.single(color[12], color[13], color[14], color[15]));
 			}
 
 			if (!exSouth) {
-				if (exDown) vertexLine(matrix, vertexConsumer, x1, y1, z2, x2, y1, z2, LineColor.single(color[0], color[1], color[2], color[3]));
-				if (exEast) vertexLine(matrix, vertexConsumer, x2, y1, z2, x2, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
-				if (exWest) vertexLine(matrix, vertexConsumer, x1, y1, z2, x1, y2, z2, LineColor.single(color[8], color[9], color[10], color[11]));
-				if (exUp) vertexLine(matrix, vertexConsumer, x1, y2, z2, x2, y2, z2, LineColor.single(color[12], color[13], color[14], color[15]));
+				if (exDown) vertexLine(matrices, vertexConsumer, x1, y1, z2, x2, y1, z2, LineColor.single(color[0], color[1], color[2], color[3]));
+				if (exEast) vertexLine(matrices, vertexConsumer, x2, y1, z2, x2, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
+				if (exWest) vertexLine(matrices, vertexConsumer, x1, y1, z2, x1, y2, z2, LineColor.single(color[8], color[9], color[10], color[11]));
+				if (exUp) vertexLine(matrices, vertexConsumer, x1, y2, z2, x2, y2, z2, LineColor.single(color[12], color[13], color[14], color[15]));
 			}
 
 			if (!exUp) {
-				vertexLine(matrix, vertexConsumer, x1, y2, z1, x2, y2, z1, LineColor.single(color[0], color[1], color[2], color[3]));
-				vertexLine(matrix, vertexConsumer, x2, y2, z1, x2, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
-				vertexLine(matrix, vertexConsumer, x2, y2, z2, x1, y2, z2, LineColor.single(color[8], color[9], color[10], color[11]));
-				vertexLine(matrix, vertexConsumer, x1, y2, z2, x1, y2, z1, LineColor.single(color[12], color[13], color[14], color[15]));
+				vertexLine(matrices, vertexConsumer, x1, y2, z1, x2, y2, z1, LineColor.single(color[0], color[1], color[2], color[3]));
+				vertexLine(matrices, vertexConsumer, x2, y2, z1, x2, y2, z2, LineColor.single(color[4], color[5], color[6], color[7]));
+				vertexLine(matrices, vertexConsumer, x2, y2, z2, x1, y2, z2, LineColor.single(color[8], color[9], color[10], color[11]));
+				vertexLine(matrices, vertexConsumer, x1, y2, z2, x1, y2, z1, LineColor.single(color[12], color[13], color[14], color[15]));
 			}
 		}
 
-		public static void vertexLine(MatrixStack matrix, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, LineColor lineColor) {
-			Matrix4f model = matrix.peek().getModel();
-			Matrix3f normal = matrix.peek().getNormal();
+		public static void vertexLine(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, LineColor lineColor) {
+			Matrix4f model = matrices.peek().getModel();
+			Matrix3f normal = matrices.peek().getNormal();
 
 			Vec3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
 

@@ -37,8 +37,8 @@ public abstract class ClickGuiScreen extends WindowScreen {
 		return false;
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrix);
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
 
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
@@ -46,10 +46,10 @@ public abstract class ClickGuiScreen extends WindowScreen {
 			}
 		}
 
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 
-		matrix.push();
-		matrix.translate(0, 0, 250);
+		matrices.push();
+		matrices.translate(0, 0, 250);
 
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
@@ -74,11 +74,11 @@ public abstract class ClickGuiScreen extends WindowScreen {
 
 						int start = tooltipY - lines.size() * 10;
 						for (int l = 0; l < lines.size(); l++) {
-							fill(matrix, tooltip.getLeft(), start + (l * 10) - 1,
+							fill(matrices, tooltip.getLeft(), start + (l * 10) - 1,
 									tooltip.getLeft() + textRenderer.getWidth(lines.get(l)) + 3,
 									start + (l * 10) + 9, 0xff000000);
 
-							textRenderer.drawWithShadow(matrix, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
+							textRenderer.drawWithShadow(matrices, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
 						}
 
 						tooltipY -= lines.size() * 10;
@@ -87,7 +87,7 @@ public abstract class ClickGuiScreen extends WindowScreen {
 			}
 		}
 
-		matrix.pop();
+		matrices.pop();
 
 		lmDown = false;
 		rmDown = false;

@@ -80,7 +80,7 @@ public abstract class WindowScreen extends Screen {
 		super.init();
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		int sel = getSelectedWindow();
 
 		if (sel == -1) {
@@ -97,18 +97,18 @@ public abstract class WindowScreen extends Screen {
 		for (int w: getWindowsBackToFront()) {
 			if (!getWindow(w).closed) {
 				close = false;
-				onRenderWindow(matrix, w, mouseX, mouseY);
+				onRenderWindow(matrices, w, mouseX, mouseY);
 			}
 		}
 
 		if (close) this.onClose();
 
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 	}
 
-	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
+	public void onRenderWindow(MatrixStack matrices, int window, int mouseX, int mouseY) {
 		if (!windows.get(window).closed) {
-			windows.get(window).render(matrix, mouseX, mouseY);
+			windows.get(window).render(matrices, mouseX, mouseY);
 		}
 	}
 

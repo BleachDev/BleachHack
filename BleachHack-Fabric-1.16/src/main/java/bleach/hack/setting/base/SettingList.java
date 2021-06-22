@@ -61,14 +61,14 @@ public abstract class SettingList<E> extends SettingBase {
 		return windowText;
 	}
 
-	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
+	public void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len) {
 		if (window.mouseOver(x, y, x + len, y + 12)) {
-			DrawableHelper.fill(matrix, x + 1, y, x + len, y + 12, 0x70303070);
+			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, text, x + 3, y + 2, 0xcfe0cf);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x + 3, y + 2, 0xcfe0cf);
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, "...", x + len - 7, y + 2, 0xcfd0cf);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "...", x + len - 7, y + 2, 0xcfd0cf);
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			window.mouseReleased(window.mouseX, window.mouseY, 1);
@@ -86,17 +86,17 @@ public abstract class SettingList<E> extends SettingBase {
 		return items;
 	}
 
-	public void renderItem(MinecraftClient mc, MatrixStack matrix, E item, int x, int y, int w, int h) {
-		matrix.push();
+	public void renderItem(MinecraftClient mc, MatrixStack matrices, E item, int x, int y, int w, int h) {
+		matrices.push();
 
 		float scale = (h - 2) / 10f;
 		float offset = 1f / scale;
 
-		matrix.scale(scale, scale, 1f);
+		matrices.scale(scale, scale, 1f);
 
-		mc.textRenderer.drawWithShadow(matrix, "?", (x + 5) * offset, (y + 4) * offset, -1);
+		mc.textRenderer.drawWithShadow(matrices, "?", (x + 5) * offset, (y + 4) * offset, -1);
 
-		matrix.pop();
+		matrices.pop();
 	}
 
 	public abstract E getItemFromString(String string);
@@ -199,13 +199,13 @@ public abstract class SettingList<E> extends SettingBase {
 			scrollbar = getWindow(0).addWidget(new WindowScrollbarWidget(x2 - 11, 12, 0, y2 - 39, scrollbar == null ? 0 : scrollbar.getPageOffset()));
 		}
 
-		public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-			renderBackground(matrix);
-			super.render(matrix, mouseX, mouseY, delta);
+		public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+			renderBackground(matrices);
+			super.render(matrices, mouseX, mouseY, delta);
 		}
 
-		public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
-			super.onRenderWindow(matrix, window, mouseX, mouseY);
+		public void onRenderWindow(MatrixStack matrices, int window, int mouseX, int mouseY) {
+			super.onRenderWindow(matrices, window, mouseX, mouseY);
 
 			toAddItem = null;
 			toDeleteItem = null;
@@ -225,7 +225,7 @@ public abstract class SettingList<E> extends SettingBase {
 
 				for (E e: items) {
 					if (entries >= offset / 21 && renderEntries < maxEntries) {
-						drawEntry(matrix, e, x1 + 6, y1 + 15 + entries * 21 - offset, x2 - x1 - 19, 20, mouseX, mouseY);
+						drawEntry(matrices, e, x1 + 6, y1 + 15 + entries * 21 - offset, x2 - x1 - 19, 20, mouseX, mouseY);
 						renderEntries++;
 					}
 
@@ -233,7 +233,7 @@ public abstract class SettingList<E> extends SettingBase {
 				}
 
 				//Window.horizontalGradient(matrix, x1 + 1, y2 - 25, x2 - 1, y2 - 1, 0x70606090, 0x00606090);
-				Window.horizontalGradient(matrix, x1 + 1, y2 - 27, x2 - 1, y2 - 26, 0xff606090, 0x50606090);
+				Window.horizontalGradient(matrices, x1 + 1, y2 - 27, x2 - 1, y2 - 26, 0xff606090, 0x50606090);
 
 				if (inputField.textField.isFocused()) {
 					Set<E> toDraw = new LinkedHashSet<>();
@@ -252,45 +252,45 @@ public abstract class SettingList<E> extends SettingBase {
 					RenderSystem.pushMatrix();
 					RenderSystem.translatef(0, 0, 150);
 
-					matrix.push();
-					matrix.translate(0, 0, 150);
+					matrices.push();
+					matrices.translate(0, 0, 150);
 
 					for (E e: toDraw) {
-						drawSearchEntry(matrix, e, x1 + inputField.x1, curY, longest + 23, 16, mouseX, mouseY);
+						drawSearchEntry(matrices, e, x1 + inputField.x1, curY, longest + 23, 16, mouseX, mouseY);
 						curY += 17;
 					}
 
-					matrix.pop();
+					matrices.pop();
 					RenderSystem.popMatrix();
 				}
 			}
 		}
 
-		private void drawEntry(MatrixStack matrix, E item, int x, int y, int width, int height, int mouseX, int mouseY) {
+		private void drawEntry(MatrixStack matrices, E item, int x, int y, int width, int height, int mouseX, int mouseY) {
 			boolean mouseOverDelete = mouseX >= x + width - 14 && mouseX <= x + width - 1 && mouseY >= y + 2 && mouseY <= y + height - 2;
-			Window.fill(matrix, x + width - 14, y + 2, x + width - 1, y + height - 2, mouseOverDelete ? 0x4fb070f0 : 0x60606090);
+			Window.fill(matrices, x + width - 14, y + 2, x + width - 1, y + height - 2, mouseOverDelete ? 0x4fb070f0 : 0x60606090);
 
 			if (mouseOverDelete) {
 				toDeleteItem = item;
 			}
 
-			renderItem(client, matrix, item, x, y, height, height);
+			renderItem(client, matrices, item, x, y, height, height);
 
-			drawStringWithShadow(matrix, textRenderer, getStringFromItem(item), x + height + 4, y + 4, -1);
-			drawStringWithShadow(matrix, textRenderer, "\u00a7cx", x + width - 10, y + 5, -1);
+			drawStringWithShadow(matrices, textRenderer, getStringFromItem(item), x + height + 4, y + 4, -1);
+			drawStringWithShadow(matrices, textRenderer, "\u00a7cx", x + width - 10, y + 5, -1);
 		}
 
-		private void drawSearchEntry(MatrixStack matrix, E item, int x, int y, int width, int height, int mouseX, int mouseY) {
+		private void drawSearchEntry(MatrixStack matrices, E item, int x, int y, int width, int height, int mouseX, int mouseY) {
 			boolean mouseOver = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
-			DrawableHelper.fill(matrix, x, y - 1, x + width, y + height, mouseOver ? 0xdf8070d0 : 0xb0606090);
+			DrawableHelper.fill(matrices, x, y - 1, x + width, y + height, mouseOver ? 0xdf8070d0 : 0xb0606090);
 
 			if (mouseOver) {
 				toAddItem = item;
 			}
 
-			renderItem(client, matrix, item, x, y, height, height);
+			renderItem(client, matrices, item, x, y, height, height);
 
-			drawStringWithShadow(matrix, textRenderer, getStringFromItem(item), x + height + 4, y + 4, -1);
+			drawStringWithShadow(matrices, textRenderer, getStringFromItem(item), x + height + 4, y + 4, -1);
 		}
 
 		public void onClose() {

@@ -63,11 +63,11 @@ public class PlaceOperation extends Operation {
 	@Override
 	public void render() {
 		if (getItem() instanceof BlockItem) {
-			MatrixStack matrix = WorldRenderUtils.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
+			MatrixStack matrices = WorldRenderUtils.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
 
 			BlockState state = ((BlockItem) getItem()).getBlock().getDefaultState();
 
-			mc.getBlockRenderManager().renderBlock(state, pos, mc.world, matrix,
+			mc.getBlockRenderManager().renderBlock(state, pos, mc.world, matrices,
 					mc.getBufferBuilders().getEntityVertexConsumers().getBuffer(RenderLayers.getMovingBlockLayer(state)),
 					false, new Random(0));
 

@@ -59,15 +59,15 @@ public class SettingColor extends SettingBase {
 		return text;
 	}
 
-	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
+	public void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len) {
 		int sx = x + 3,
 				sy = y + 2,
 				ex = x + len - 18,
 				ey = y + getHeight(len) - 2;
 
-		Window.fill(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
+		Window.fill(matrices, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
 
-		DrawableHelper.fill(matrix, sx, sy, ex, ey, -1);
+		DrawableHelper.fill(matrices, sx, sy, ex, ey, -1);
 		int satColor = MathHelper.hsvToRgb(hue, 1f, 1f);
 		int red = satColor >> 16 & 255;
 		int green = satColor >> 8 & 255;
@@ -106,23 +106,23 @@ public class SettingColor extends SettingBase {
 		int briY = (int) (ey - (ey - sy) * bri);
 		int satX = (int) (sx + (ex - sx) * sat);
 
-		DrawableHelper.fill(matrix, satX - 2, briY, satX, briY + 1, 0xffd0d0d0);
-		DrawableHelper.fill(matrix, satX + 1, briY, satX + 3, briY + 1, 0xffd0d0d0);
-		DrawableHelper.fill(matrix, satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
-		DrawableHelper.fill(matrix, satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
+		DrawableHelper.fill(matrices, satX - 2, briY, satX, briY + 1, 0xffd0d0d0);
+		DrawableHelper.fill(matrices, satX + 1, briY, satX + 3, briY + 1, 0xffd0d0d0);
+		DrawableHelper.fill(matrices, satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
+		DrawableHelper.fill(matrices, satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
 
-		matrix.push();
-		matrix.scale(0.75f, 0.75f, 1f);
-		MinecraftClient.getInstance().textRenderer.draw(matrix, text, (int) ((sx + 1) * 1 / 0.75), (int) ((sy + 1) * 1 / 0.75), 0x000000);
-		matrix.pop();
+		matrices.push();
+		matrices.scale(0.75f, 0.75f, 1f);
+		MinecraftClient.getInstance().textRenderer.draw(matrices, text, (int) ((sx + 1) * 1 / 0.75), (int) ((sy + 1) * 1 / 0.75), 0x000000);
+		matrices.pop();
 
 		sx = ex + 5;
 		ex = ex + 12;
-		Window.fill(matrix, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
+		Window.fill(matrices, sx - 1, sy - 1, ex + 1, ey + 1, 0xff8070b0, 0xff6060b0, 0x00000000);
 
 		for (int i = sy; i < ey; i++) {
 			float curHue = 1f / ((float) (ey - sy) / (i - sy));
-			DrawableHelper.fill(matrix, sx, i, ex, i + 1, 0xff000000 | MathHelper.hsvToRgb(curHue, 1f, 1f));
+			DrawableHelper.fill(matrices, sx, i, ex, i + 1, 0xff000000 | MathHelper.hsvToRgb(curHue, 1f, 1f));
 		}
 
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
@@ -131,10 +131,10 @@ public class SettingColor extends SettingBase {
 		}
 
 		int hueY = (int) (sy + (ey - sy) * hue);
-		DrawableHelper.fill(matrix, sx, hueY - 1, sx + 1, hueY + 2, 0xffa0a0a0);
-		DrawableHelper.fill(matrix, ex - 1, hueY - 1, ex, hueY + 2, 0xffa0a0a0);
-		DrawableHelper.fill(matrix, sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
-		DrawableHelper.fill(matrix, ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
+		DrawableHelper.fill(matrices, sx, hueY - 1, sx + 1, hueY + 2, 0xffa0a0a0);
+		DrawableHelper.fill(matrices, ex - 1, hueY - 1, ex, hueY + 2, 0xffa0a0a0);
+		DrawableHelper.fill(matrices, sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
+		DrawableHelper.fill(matrices, ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
 	}
 
 	public SettingColor withDesc(String desc) {

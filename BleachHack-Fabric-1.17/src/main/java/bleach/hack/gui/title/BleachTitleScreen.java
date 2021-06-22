@@ -159,10 +159,10 @@ public class BleachTitleScreen extends WindowScreen {
 				height / 2 + 70, "Update", new ItemStack(Items.MAGENTA_GLAZED_TERRACOTTA),
 				!(version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION)) {
 
-			protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
-				super.drawBar(matrix, mouseX, mouseY, textRend);
+			protected void drawBar(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
+				super.drawBar(matrices, mouseX, mouseY, textRend);
 
-				Window.verticalGradient(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0xff606090, 0x00606090);
+				Window.verticalGradient(matrices, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0xff606090, 0x00606090);
 			}
 		});
 
@@ -227,20 +227,20 @@ public class BleachTitleScreen extends WindowScreen {
 		getWindow(1).addWidget(new WindowTextWidget("\u00a7c\u00a7o" + updaterText, true, WindowTextWidget.TextAlign.MIDDLE, 100, 58, 0xffffff));
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrix);
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
 
 		int copyWidth = this.textRenderer.getWidth("Copyright Mojang AB. Do not distribute!") + 2;
-		textRenderer.drawWithShadow(matrix, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
-		textRenderer.drawWithShadow(matrix, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
+		textRenderer.drawWithShadow(matrices, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
+		textRenderer.drawWithShadow(matrices, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
 				4, height - 30, -1);
-		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
-		textRenderer.drawWithShadow(matrix, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
+		textRenderer.drawWithShadow(matrices, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
+		textRenderer.drawWithShadow(matrices, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
 
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 
 		particleMang.addParticle(mouseX, mouseY);
-		particleMang.renderParticles(matrix);
+		particleMang.renderParticles(matrices);
 
 	}
 }

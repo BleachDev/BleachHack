@@ -94,7 +94,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 		client.openScreen(parent);
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		BleachFileHelper.SCHEDULE_SAVE_UI = true;
 
 		uiWindows.forEach((id, window) -> {
@@ -104,7 +104,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 			window.y2 = getBottom(id);
 		});
 
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 	}
 
 	protected int getLeft(String id, String... passIds) {

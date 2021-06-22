@@ -153,19 +153,19 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrix);
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
 
-		textRenderer.drawWithShadow(matrix, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
+		textRenderer.drawWithShadow(matrices, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
 				4, height - 30, -1);
-		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
-		textRenderer.drawWithShadow(matrix, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
+		textRenderer.drawWithShadow(matrices, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
+		textRenderer.drawWithShadow(matrices, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
 
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 	}
 
-	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
-		super.onRenderWindow(matrix, window, mouseX, mouseY);
+	public void onRenderWindow(MatrixStack matrices, int window, int mouseX, int mouseY) {
+		super.onRenderWindow(matrices, window, mouseX, mouseY);
 
 		if (window == 1) {
 			int x = getWindow(1).x1,
@@ -176,7 +176,7 @@ public class AccountManagerScreen extends WindowScreen {
 			int c = 0;
 			for (Account a: accounts.getAccounts()) {
 				int length = 250;
-				drawEntry(matrix, a,
+				drawEntry(matrices, a,
 						x + w / 2 - length / 2,
 						y + accStart + c,
 						length,
@@ -189,19 +189,19 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 	}
 
-	private void drawEntry(MatrixStack matrix, Account acc, int x, int y, int width, int height, int mouseX, int mouseY, int color, int hoverColor) {
-		Window.fill(matrix, x, y, x + width, y + height,
+	private void drawEntry(MatrixStack matrices, Account acc, int x, int y, int width, int height, int mouseX, int mouseY, int color, int hoverColor) {
+		Window.fill(matrices, x, y, x + width, y + height,
 				mouseX >= x && mouseY >= y && mouseX <= x + width && mouseY <= y + height ? hoverColor : color);
 
-		drawStringWithShadow(matrix, textRenderer, "\u00a7cx", x + width + 2, y + 2, -1);
+		drawStringWithShadow(matrices, textRenderer, "\u00a7cx", x + width + 2, y + 2, -1);
 
 		if (acc.bindSkin()) {
 			double pixelSize = (height - 6) / 8d;
-			DrawableHelper.fill(matrix,
+			DrawableHelper.fill(matrices,
 					x + 2, y + 2,
 					x + height - 2, y + height - 2,
 					0x60d86ceb);
-			DrawableHelper.drawTexture(matrix,
+			DrawableHelper.drawTexture(matrices,
 					x + 3, y + 3,
 					(int) (pixelSize * 8), (int) (pixelSize * 8),
 					(int) (pixelSize * 8), (int) (pixelSize * 8),
@@ -211,11 +211,11 @@ public class AccountManagerScreen extends WindowScreen {
 		boolean extendText = acc.bindCape();
 		if (extendText) {
 			double pixelSize = ((height - 6) / 10d) * 0.625;
-			DrawableHelper.fill(matrix,
+			DrawableHelper.fill(matrices,
 					x + height - 1, y + 2,
 					(int) (x + height + pixelSize * 10 + 1), y + height - 2,
 					0x60d86ceb);
-			DrawableHelper.drawTexture(matrix,
+			DrawableHelper.drawTexture(matrices,
 					x + height, y + 3,
 					(int) Math.ceil(pixelSize), (int) Math.ceil(pixelSize),
 					(int) (pixelSize * 10), (int) (pixelSize * 16),
@@ -223,9 +223,9 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 
 		double pixelSize = ((height - 6) / 10d) * 0.625;
-		drawStringWithShadow(matrix, textRenderer, "\u00a77Name: " + (acc.username == null ? "\u00a78Unknown" : acc.username),
+		drawStringWithShadow(matrices, textRenderer, "\u00a77Name: " + (acc.username == null ? "\u00a78Unknown" : acc.username),
 				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + 4, -1);
-		drawStringWithShadow(matrix, textRenderer,
+		drawStringWithShadow(matrices, textRenderer,
 				(acc.pass == null ? "\u00aeCracked" : acc.username == null ? "\u00a78Unchecked" : "\u00a7aWorking"),
 				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + height - 11, -1);
 	}

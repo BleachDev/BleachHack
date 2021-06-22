@@ -25,8 +25,8 @@ public class WindowCheckboxWidget extends WindowWidget {
 	}
 
 	@Override
-	public void render(MatrixStack matrix, int windowX, int windowY, int mouseX, int mouseY) {
-		super.render(matrix, windowX, windowY, mouseX, mouseY);
+	public void render(MatrixStack matrices, int windowX, int windowY, int mouseX, int mouseY) {
+		super.render(matrices, windowX, windowY, mouseX, mouseY);
 
 		TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
@@ -34,14 +34,14 @@ public class WindowCheckboxWidget extends WindowWidget {
 		int y = windowY + y1;
 		int color = mouseX >= x && mouseX <= x + 10 && mouseY >= y && mouseY <= y + 10 ? 0x906060ff : 0x9040409f;
 
-		Window.fill(matrix, x, y, x + 11, y + 11, color);
+		Window.fill(matrices, x, y, x + 11, y + 11, color);
 
 		if (checked) {
-			textRenderer.draw(matrix, "\u2714", x + 2, y + 2, 0xffeeff);
+			textRenderer.draw(matrices, "\u2714", x + 2, y + 2, 0xffeeff);
 			//fill(matrix, x + 3, y + 3, x + 7, y + 7, 0xffffffff);
 		}
 
-		textRenderer.drawWithShadow(matrix, text, x + 15, y + 2, 0xc0c0c0);
+		textRenderer.drawWithShadow(matrices, text, x + 15, y + 2, 0xc0c0c0);
 	}
 
 	@Override

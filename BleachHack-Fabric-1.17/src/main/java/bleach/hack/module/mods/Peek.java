@@ -158,7 +158,7 @@ public class Peek extends Module {
 		}
 	}
 
-	public void drawBookToolTip(MatrixStack matrix, Slot slot, int mouseX, int mouseY) {
+	public void drawBookToolTip(MatrixStack matrices, Slot slot, int mouseX, int mouseY) {
 		if (slot.getStack().getItem() != Items.WRITABLE_BOOK && slot.getStack().getItem() != Items.WRITTEN_BOOK)
 			return;
 
@@ -186,7 +186,7 @@ public class Peek extends Module {
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, BookScreen.BOOK_TEXTURE);
 		DrawableHelper.drawTexture(
-				matrix,
+				matrices,
 				mouseX, mouseY - 143, 0,
 				0, 0,
 				134, 134,
@@ -195,11 +195,11 @@ public class Peek extends Module {
 		Text pageIndexText = new TranslatableText("book.pageIndicator", new Object[] {pageCount + 1, pages.size() });
 		int pageIndexLength = mc.textRenderer.getWidth(pageIndexText);
 
-		matrix.push();
-		matrix.scale(0.7f, 0.7f, 1f);
+		matrices.push();
+		matrices.scale(0.7f, 0.7f, 1f);
 
 		mc.textRenderer.draw(
-				matrix,
+				matrices,
 				pageIndexText,
 				(mouseX + 123 - pageIndexLength) * 1.43f,
 				(mouseY - 133) * 1.43f,
@@ -209,7 +209,7 @@ public class Peek extends Module {
 		int count = 0;
 		for (String s : pages.get(pageCount)) {
 			mc.textRenderer.draw(
-					matrix,
+					matrices,
 					s,
 					(mouseX + 24) * 1.43f,
 					(mouseY - 123 + count * 7) * 1.43f,
@@ -218,11 +218,11 @@ public class Peek extends Module {
 			count++;
 		}
 
-		matrix.pop();
+		matrices.pop();
 
 	}
 
-	public void drawMapToolTip(MatrixStack matrix, Slot slot, int mouseX, int mouseY) {
+	public void drawMapToolTip(MatrixStack matrices, Slot slot, int mouseX, int mouseY) {
 		if (slot.getStack().getItem() != Items.FILLED_MAP) {
 			return;
 		}
@@ -236,25 +236,25 @@ public class Peek extends Module {
 
 		float scale = getSetting(2).asToggle().getChild(0).asSlider().getValueFloat() / 1.25f;
 
-		matrix.push();
-		matrix.translate(mouseX + 14, mouseY - 18 - 135 * scale, 0);
-		matrix.scale(scale, scale, 1f);
+		matrices.push();
+		matrices.translate(mouseX + 14, mouseY - 18 - 135 * scale, 0);
+		matrices.scale(scale, scale, 1f);
 
 		VertexConsumer vertexConsumer = mc.getBufferBuilders().getEntityVertexConsumers().getBuffer(MAP_BACKGROUND_CHECKERBOARD);
-		Matrix4f matrix4f = matrix.peek().getModel();
+		Matrix4f matrix4f = matrices.peek().getModel();
 		vertexConsumer.vertex(matrix4f, -7f, 135f, -10f).color(255, 255, 255, 255).texture(0f, 1f).light(0xf000f0).next();
 		vertexConsumer.vertex(matrix4f, 135f, 135f, -10f).color(255, 255, 255, 255).texture(1f, 1f).light(0xf000f0).next();
 		vertexConsumer.vertex(matrix4f, 135f, -7f, -10f).color(255, 255, 255, 255).texture(1f, 0f).light(0xf000f0).next();
 		vertexConsumer.vertex(matrix4f, -7f, -7f, -10f).color(255, 255, 255, 255).texture(0f, 0f).light(0xf000f0).next();
 		mc.getBufferBuilders().getEntityVertexConsumers().draw(MAP_BACKGROUND_CHECKERBOARD);
 
-		mc.gameRenderer.getMapRenderer().draw(matrix, mc.getBufferBuilders().getEntityVertexConsumers(), id, mapState, false, 0xf000f0);
+		mc.gameRenderer.getMapRenderer().draw(matrices, mc.getBufferBuilders().getEntityVertexConsumers(), id, mapState, false, 0xf000f0);
 
-		matrix.pop();
+		matrices.pop();
 
 	}
 
-	private void renderTooltipBox(MatrixStack matrix, int x1, int y1, int x2, int y2, boolean wrap) {
+	private void renderTooltipBox(MatrixStack matrices, int x1, int y1, int x2, int y2, boolean wrap) {
 		int xStart = x1 + 12;
 		int yStart = y1 - 12;
 		if (wrap) {
@@ -268,7 +268,7 @@ public class Peek extends Module {
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 
-		Matrix4f matrix4f = matrix.peek().getModel();
+		Matrix4f matrix4f = matrices.peek().getModel();
 		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 4, xStart + y2 + 3, yStart - 3, -267386864, -267386864);
 		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart + x2 + 3, xStart + y2 + 3, yStart + x2 + 4, -267386864, -267386864);
 		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 3, xStart + y2 + 3, yStart + x2 + 3, -267386864, -267386864);
@@ -289,7 +289,7 @@ public class Peek extends Module {
 		RenderSystem.enableTexture();
 	}
 
-	private void fillGradient(Matrix4f matrix, BufferBuilder bufferBuilder, int xStart, int yStart, int xEnd, int yEnd, int colorStart, int colorEnd) {
+	private void fillGradient(Matrix4f matrices, BufferBuilder bufferBuilder, int xStart, int yStart, int xEnd, int yEnd, int colorStart, int colorEnd) {
 		float f = (float)(colorStart >> 24 & 255) / 255.0F;
 		float g = (float)(colorStart >> 16 & 255) / 255.0F;
 		float h = (float)(colorStart >> 8 & 255) / 255.0F;
@@ -298,9 +298,9 @@ public class Peek extends Module {
 		float k = (float)(colorEnd >> 16 & 255) / 255.0F;
 		float l = (float)(colorEnd >> 8 & 255) / 255.0F;
 		float m = (float)(colorEnd & 255) / 255.0F;
-		bufferBuilder.vertex(matrix, (float) xEnd, (float) yStart, 0f).color(g, h, i, f).next();
-		bufferBuilder.vertex(matrix, (float) xStart, (float) yStart, 0f).color(g, h, i, f).next();
-		bufferBuilder.vertex(matrix, (float) xStart, (float) yEnd, 0f).color(k, l, m, j).next();
-		bufferBuilder.vertex(matrix, (float) xEnd, (float) yEnd, 0f).color(k, l, m, j).next();
+		bufferBuilder.vertex(matrices, (float) xEnd, (float) yStart, 0f).color(g, h, i, f).next();
+		bufferBuilder.vertex(matrices, (float) xStart, (float) yStart, 0f).color(g, h, i, f).next();
+		bufferBuilder.vertex(matrices, (float) xStart, (float) yEnd, 0f).color(k, l, m, j).next();
+		bufferBuilder.vertex(matrices, (float) xEnd, (float) yEnd, 0f).color(k, l, m, j).next();
 	}
 }

@@ -66,15 +66,15 @@ public abstract class MixinHandledScreen extends Screen {
 	}
 
 	@Inject(method = "render", at = @At("RETURN"))
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		int rightside = (width + backgroundWidth) / 2 + 2;
 		int topside = (height - backgroundHeight) / 2;
 		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
-			textRenderer.drawWithShadow(matrix, "IS Dupe: \u00a79[?]", rightside, topside + 2, -1);
+			textRenderer.drawWithShadow(matrices, "IS Dupe: \u00a79[?]", rightside, topside + 2, -1);
 
 			if (mouseX >= rightside + textRenderer.getWidth("IS Dupe: ") && mouseX <= rightside + textRenderer.getWidth("IS Dupe: ") + 15
 					&& mouseY >= topside + 1 && mouseY <= topside + 11) {
-				renderTooltip(matrix, Arrays.asList(
+				renderTooltip(matrices, Arrays.asList(
 						new LiteralText("\u00a79IllegalStack dupe/Old endcrystal.me dupe"),
 						new LiteralText("\u00a79Only works on servers running IllegalStack <= 2.1.0")),
 						mouseX, mouseY);

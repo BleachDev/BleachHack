@@ -42,7 +42,7 @@ public class MixinBlockRenderManager {
 	@Unique private static final Field colorFixedField = FabricReflect.getField(FixedColorVertexConsumer.class, "field_20889", "colorFixed");
 
 	@Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true)
-	private void renderBlock_head(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrix, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) {
+	private void renderBlock_head(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) {
 		Xray xray = (Xray) ModuleManager.getModule("Xray");
 
 		if (xray.isEnabled() && !xray.isVisible(state.getBlock())) {
@@ -63,7 +63,7 @@ public class MixinBlockRenderManager {
 	}
 
 	@Inject(method = "renderBlock", at = @At("RETURN"))
-	private void renderBlock_return(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrix, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) throws Exception {
+	private void renderBlock_return(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) throws Exception {
 		colorFixedField.setBoolean(vertexConsumer, false);
 	}
 

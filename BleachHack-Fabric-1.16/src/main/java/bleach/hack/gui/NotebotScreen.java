@@ -85,13 +85,13 @@ public class NotebotScreen extends WindowScreen {
 		}));
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		renderBackground(matrix);
-		super.render(matrix, mouseX, mouseY, delta);
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		renderBackground(matrices);
+		super.render(matrices, mouseX, mouseY, delta);
 	}
 
-	public void onRenderWindow(MatrixStack matrix, int window, int mouseX, int mouseY) {
-		super.onRenderWindow(matrix, window, mouseX, mouseY);
+	public void onRenderWindow(MatrixStack matrices, int window, int mouseX, int mouseY) {
+		super.onRenderWindow(matrices, window, mouseX, mouseY);
 
 		if (window == 0) {
 			int x = getWindow(0).x1,
@@ -103,10 +103,10 @@ public class NotebotScreen extends WindowScreen {
 			for (int i = y + 20; i < y + h - 27; i += 10)
 				pageEntries++;
 
-			drawCenteredText(matrix, textRenderer, "Page " + (page + 1), x + 55, y + 5, 0xc0c0ff);
+			drawCenteredText(matrices, textRenderer, "Page " + (page + 1), x + 55, y + 5, 0xc0c0ff);
 
-			fillButton(matrix, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mouseX, mouseY);
-			drawCenteredText(matrix, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
+			fillButton(matrices, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mouseX, mouseY);
+			drawCenteredText(matrices, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 
 			int c = 0, c1 = -1;
 			for (String s : files) {
@@ -116,26 +116,26 @@ public class NotebotScreen extends WindowScreen {
 				if (c1 > (page + 1) * pageEntries)
 					break;
 
-				fillButton(matrix, x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10,
+				fillButton(matrices, x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10,
 						Notebot.filePath.equals(s) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, mouseX, mouseY);
 				if (cutText(s, 105).equals(s)) {
-					drawCenteredText(matrix, textRenderer, s, x + 55, y + 16 + c * 10, -1);
+					drawCenteredText(matrices, textRenderer, s, x + 55, y + 16 + c * 10, -1);
 				} else {
-					drawStringWithShadow(matrix, textRenderer, cutText(s, 105), x + 5, y + 16 + c * 10, -1);
+					drawStringWithShadow(matrices, textRenderer, cutText(s, 105), x + 5, y + 16 + c * 10, -1);
 				}
 
 				c++;
 			}
 
 			if (entry != null) {
-				drawCenteredText(matrix, textRenderer, entry.fileName, x + w - w / 4, y + 10, 0xa030a0);
-				drawCenteredText(matrix, textRenderer, entry.length / 20 + "s", x + w - w / 4, y + 20, 0xc000c0);
-				drawCenteredText(matrix, textRenderer, "Notes: ", x + w - w / 4, y + 38, 0x80f080);
+				drawCenteredText(matrices, textRenderer, entry.fileName, x + w - w / 4, y + 10, 0xa030a0);
+				drawCenteredText(matrices, textRenderer, entry.length / 20 + "s", x + w - w / 4, y + 20, 0xc000c0);
+				drawCenteredText(matrices, textRenderer, "Notes: ", x + w - w / 4, y + 38, 0x80f080);
 
 				int c2 = 0;
 				for (Entry<Instrument, Integer> e : entry.notes.entrySet()) {
 					itemRenderer.zOffset = 500 - c2 * 20;
-					drawCenteredText(matrix, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(),
+					drawCenteredText(matrices, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(),
 							x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
 
 					DiffuseLighting.enableGuiDepthLighting();
@@ -176,16 +176,16 @@ public class NotebotScreen extends WindowScreen {
 					DiffuseLighting.disableGuiDepthLighting();
 				}
 
-				fillButton(matrix, x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, mouseX, mouseY);
-				fillButton(matrix, x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mouseX, mouseY);
-				fillButton(matrix, x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mouseX, mouseY);
+				fillButton(matrices, x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, mouseX, mouseY);
+				fillButton(matrices, x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mouseX, mouseY);
+				fillButton(matrices, x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mouseX, mouseY);
 
 				int pixels = (int) Math.round(MathHelper.clamp((w / 4d) * ((double) entry.playTick / (double) entry.length), 0, w / 4d));
-				fill(matrix, x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
+				fill(matrices, x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
 
-				drawCenteredText(matrix, textRenderer, "Delete", (int) (x + w - w / 2.8), y + h - 14, 0xff0000);
-				drawCenteredText(matrix, textRenderer, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
-				drawCenteredText(matrix, textRenderer, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x6060ff);
+				drawCenteredText(matrices, textRenderer, "Delete", (int) (x + w - w / 2.8), y + h - 14, 0xff0000);
+				drawCenteredText(matrices, textRenderer, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
+				drawCenteredText(matrices, textRenderer, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x6060ff);
 			}
 		}
 	}
@@ -251,8 +251,8 @@ public class NotebotScreen extends WindowScreen {
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	private void fillButton(MatrixStack matrix, int x1, int y1, int x2, int y2, int color, int colorHover, int mouseX, int mouseY) {
-		fill(matrix, x1, y1, x2, y2, (mouseX > x1 && mouseX < x2 && mouseY > y1 && mouseY < y2 ? colorHover : color));
+	private void fillButton(MatrixStack matrices, int x1, int y1, int x2, int y2, int color, int colorHover, int mouseX, int mouseY) {
+		fill(matrices, x1, y1, x2, y2, (mouseX > x1 && mouseX < x2 && mouseY > y1 && mouseY < y2 ? colorHover : color));
 	}
 
 	private String cutText(String text, int leng) {

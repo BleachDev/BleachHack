@@ -27,7 +27,7 @@ public abstract class WindowWidget {
 		this.y2 = y2;
 	}
 
-	public void render(MatrixStack matrix, int windowX, int windowY, int mouseX, int mouseY) {
+	public void render(MatrixStack matrices, int windowX, int windowY, int mouseX, int mouseY) {
 		if (renderEvent != null) {
 			renderEvent.accept(this);
 		}

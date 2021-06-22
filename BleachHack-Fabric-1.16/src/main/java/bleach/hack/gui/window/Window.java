@@ -70,7 +70,7 @@ public class Window {
 		return widget;
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		TextRenderer textRend = MinecraftClient.getInstance().textRenderer;
 
 		if (dragging) {
@@ -80,10 +80,10 @@ public class Window {
 			y1 = Math.max(0, mouseY - dragOffY);
 		}
 
-		drawBar(matrix, mouseX, mouseY, textRend);
+		drawBar(matrices, mouseX, mouseY, textRend);
 
 		for (WindowWidget w : widgets) {
-			w.render(matrix, x1, y1, mouseX, mouseY);
+			w.render(matrices, x1, y1, mouseX, mouseY);
 		}
 
 		boolean blockItem = icon != null && icon.getItem() instanceof BlockItem;
@@ -102,30 +102,30 @@ public class Window {
 		}
 
 		/* window title */
-		textRend.drawWithShadow(matrix, title,
+		textRend.drawWithShadow(matrices, title,
 				x1 + (icon == null || icon.getItem() == Items.AIR ? 4 : (blockItem ? 15 : 14)), y1 + 3, -1);
 	}
 
-	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
+	protected void drawBar(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
-		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
-		horizontalGradient(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
-		horizontalGradient(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
+		DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
+		horizontalGradient(matrices, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
+		DrawableHelper.fill(matrices, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
+		horizontalGradient(matrices, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0, 0xff8070b0);
 
-		DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0x90606090);
+		DrawableHelper.fill(matrices, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0x90606090);
 
 		/* title bar */
-		horizontalGradient(matrix, x1 + 1, y1 + 1, x2 - 1, y1 + 12, (selected ? 0xff6060b0 : 0xff606060), (selected ? 0xff8070b0 : 0xffa0a0a0));
+		horizontalGradient(matrices, x1 + 1, y1 + 1, x2 - 1, y1 + 12, (selected ? 0xff6060b0 : 0xff606060), (selected ? 0xff8070b0 : 0xffa0a0a0));
 
 		/* buttons */
 		//fillGrey(matrix, x2 - 12, y1 + 3, x2 - 4, y1 + 11);
-		textRend.draw(matrix, "x", x2 - 10, y1 + 3, 0);
-		textRend.draw(matrix, "x", x2 - 11, y1 + 2, -1);
+		textRend.draw(matrices, "x", x2 - 10, y1 + 3, 0);
+		textRend.draw(matrices, "x", x2 - 11, y1 + 2, -1);
 
 		//fillGrey(matrix, x2 - 22, y1 + 3, x2 - 14, y1 + 11);
-		textRend.draw(matrix, "_", x2 - 21, y1 + 2, 0);
-		textRend.draw(matrix, "_", x2 - 22, y1 + 1, -1);
+		textRend.draw(matrices, "_", x2 - 21, y1 + 2, 0);
+		textRend.draw(matrices, "_", x2 - 22, y1 + 1, -1);
 	}
 
 	public boolean shouldClose(int mouseX, int mouseY) {
@@ -178,23 +178,23 @@ public class Window {
 		}
 	}
 
-	public static void fill(MatrixStack matrix, int x1, int y1, int x2, int y2) {
-		fill(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, 0x00000000);
+	public static void fill(MatrixStack matrices, int x1, int y1, int x2, int y2) {
+		fill(matrices, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, 0x00000000);
 	}
 
-	public static void fill(MatrixStack matrix, int x1, int y1, int x2, int y2, int fill) {
-		fill(matrix, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, fill);
+	public static void fill(MatrixStack matrices, int x1, int y1, int x2, int y2, int fill) {
+		fill(matrices, x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, fill);
 	}
 
-	public static void fill(MatrixStack matrix, int x1, int y1, int x2, int y2, int colTop, int colBot, int colFill) {
-		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, colTop);
-		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, colTop);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, colBot);
-		DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, colBot);
-		DrawableHelper.fill(matrix, x1 + 1, y1 + 1, x2 - 1, y2 - 1, colFill);
+	public static void fill(MatrixStack matrices, int x1, int y1, int x2, int y2, int colTop, int colBot, int colFill) {
+		DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1, colTop);
+		DrawableHelper.fill(matrices, x1 + 1, y1, x2 - 1, y1 + 1, colTop);
+		DrawableHelper.fill(matrices, x2 - 1, y1 + 1, x2, y2 - 1, colBot);
+		DrawableHelper.fill(matrices, x1 + 1, y2 - 1, x2 - 1, y2, colBot);
+		DrawableHelper.fill(matrices, x1 + 1, y1 + 1, x2 - 1, y2 - 1, colFill);
 	}
 
-	public static void horizontalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
+	public static void horizontalGradient(MatrixStack matrices, int x1, int y1, int x2, int y2, int color1, int color2) {
 		float alpha1 = (color1 >> 24 & 255) / 255.0F;
 		float red1   = (color1 >> 16 & 255) / 255.0F;
 		float green1 = (color1 >> 8 & 255) / 255.0F;
@@ -222,7 +222,7 @@ public class Window {
 		RenderSystem.enableTexture();
 	}
 
-	public static void verticalGradient(MatrixStack matrix, int x1, int y1, int x2, int y2, int color1, int color2) {
+	public static void verticalGradient(MatrixStack matrices, int x1, int y1, int x2, int y2, int color1, int color2) {
 		float alpha1 = (color1 >> 24 & 255) / 255.0F;
 		float red1   = (color1 >> 16 & 255) / 255.0F;
 		float green1 = (color1 >> 8 & 255) / 255.0F;

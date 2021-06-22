@@ -71,12 +71,12 @@ public class ServerScraperScreen extends Screen {
 		ipField.changeFocus(true);
 	}
 
-	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-		renderBackground(matrix);
-		drawCenteredText(matrix, textRenderer, "\u00a77IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
-		drawCenteredText(matrix, textRenderer, "\u00a77" + checked + " / 1792 [\u00a7a" + working + "\u00a77]", this.width / 2, this.height / 4 + 58, -1);
-		drawCenteredText(matrix, textRenderer, result, this.width / 2, this.height / 4 + 70, -1);
-		ipField.render(matrix, mouseX, mouseY, delta);
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		renderBackground(matrices);
+		drawCenteredText(matrices, textRenderer, "\u00a77IP:", this.width / 2 - 91, this.height / 4 + 18, -1);
+		drawCenteredText(matrices, textRenderer, "\u00a77" + checked + " / 1792 [\u00a7a" + working + "\u00a77]", this.width / 2, this.height / 4 + 58, -1);
+		drawCenteredText(matrices, textRenderer, result, this.width / 2, this.height / 4 + 70, -1);
+		ipField.render(matrices, mouseX, mouseY, delta);
 
 		if (abort) {
 			result = "\u00a77Aborting.. [" + pingers.size() + "] Left";
@@ -84,7 +84,7 @@ public class ServerScraperScreen extends Screen {
 				client.openScreen(new MultiplayerScreen(new TitleScreen()));
 		}
 
-		super.render(matrix, mouseX, mouseY, delta);
+		super.render(matrices, mouseX, mouseY, delta);
 	}
 
 	public void onClose() {

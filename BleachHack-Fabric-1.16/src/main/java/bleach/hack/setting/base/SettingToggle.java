@@ -48,11 +48,11 @@ public class SettingToggle extends SettingBase {
 		return text;
 	}
 
-	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
+	public void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len) {
 		String color2 = state ? "\u00a7a" : "\u00a7c";
 
 		if (window.mouseOver(x, y, x + len, y + 12)) {
-			DrawableHelper.fill(matrix, x + 1, y, x + len, y + 12, 0x70303070);
+			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 
 		if (!children.isEmpty()) {
@@ -62,33 +62,33 @@ public class SettingToggle extends SettingBase {
 			}
 
 			if (expanded) {
-				DrawableHelper.fill(matrix, x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0xff8070b0);
+				DrawableHelper.fill(matrices, x + 2, y + 12, x + 3, y + getHeight(len) - 1, 0xff8070b0);
 
 				int h = y + 12;
 				for (SettingBase s : children) {
-					s.render(window, matrix, x + 2, h, len - 2);
+					s.render(window, matrices, x + 2, h, len - 2);
 
 					h += s.getHeight(len - 3);
 				}
 			}
 
 			if (expanded) {
-				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
+				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
 						color2 + "\u2228",
 						x + len - 8, y + 3, -1);
 			} else {
-				matrix.push();
+				matrices.push();
 
-				matrix.scale(0.75f, 0.75f, 1f);
-				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
+				matrices.scale(0.75f, 0.75f, 1f);
+				MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
 						color2 + "\u00a7l>",
 						(int) ((x + len - 7) * 1 / 0.75), (int) ((y + 4) * 1 / 0.75), -1);
 
-				matrix.pop();
+				matrices.pop();
 			}
 		}
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix, color2 + text, x + 3, y + 2, 0xffffff);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, color2 + text, x + 3, y + 2, 0xffffff);
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			state = !state;

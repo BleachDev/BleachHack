@@ -38,17 +38,17 @@ public class WorldRenderUtils {
 
 	/** Draws text in the world. **/
 	public static void drawText(Text text, double x, double y, double z, double offX, double offY, double scale, boolean fill) {
-		MatrixStack matrix = matrixFrom(x, y, z);
+		MatrixStack matrices = matrixFrom(x, y, z);
 
 		Camera camera = mc.gameRenderer.getCamera();
-		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		matrix.translate(offX, offY, 0);
-		matrix.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
+		matrices.translate(offX, offY, 0);
+		matrices.scale(-0.025f * (float) scale, -0.025f * (float) scale, 1);
 
 		int halfWidth = mc.textRenderer.getWidth(text) / 2;
 
@@ -56,17 +56,17 @@ public class WorldRenderUtils {
 
 		if (fill) {
 			int opacity = (int) (MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F) * 255.0F) << 24;
-			mc.textRenderer.draw(text, -halfWidth, 0f, 553648127, false, matrix.peek().getModel(), immediate, true, opacity, 0xf000f0);
+			mc.textRenderer.draw(text, -halfWidth, 0f, 553648127, false, matrices.peek().getModel(), immediate, true, opacity, 0xf000f0);
 			immediate.draw();
 		} else {
-			matrix.push();
-			matrix.translate(1, 1, 0);
-			mc.textRenderer.draw(text.copy(), -halfWidth, 0f, 0x202020, false, matrix.peek().getModel(), immediate, true, 0, 0xf000f0);
+			matrices.push();
+			matrices.translate(1, 1, 0);
+			mc.textRenderer.draw(text.copy(), -halfWidth, 0f, 0x202020, false, matrices.peek().getModel(), immediate, true, 0, 0xf000f0);
 			immediate.draw();
-			matrix.pop();
+			matrices.pop();
 		}
 
-		mc.textRenderer.draw(text, -halfWidth, 0f, -1, false, matrix.peek().getModel(), immediate, true, 0, 0xf000f0);
+		mc.textRenderer.draw(text, -halfWidth, 0f, -1, false, matrices.peek().getModel(), immediate, true, 0, 0xf000f0);
 		immediate.draw();
 
 		RenderSystem.disableBlend();
@@ -78,16 +78,16 @@ public class WorldRenderUtils {
 			return;
 		}
 
-		MatrixStack matrix = matrixFrom(x, y, z);
+		MatrixStack matrices = matrixFrom(x, y, z);
 
 		Camera camera = mc.gameRenderer.getCamera();
-		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
-		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-camera.getYaw()));
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 
-		matrix.translate(offX, offY, 0);
-		matrix.scale((float) scale, (float) scale, 0.001f);
+		matrices.translate(offX, offY, 0);
+		matrices.scale((float) scale, (float) scale, 0.001f);
 
-		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f));
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f));
 
 		//mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
@@ -100,7 +100,7 @@ public class WorldRenderUtils {
 		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
 		mc.getItemRenderer().renderItem(item, ModelTransformation.Mode.GUI, 0xF000F0,
-				OverlayTexture.DEFAULT_UV, matrix, mc.getBufferBuilders().getEntityVertexConsumers(), 0);
+				OverlayTexture.DEFAULT_UV, matrices, mc.getBufferBuilders().getEntityVertexConsumers(), 0);
 
 		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
@@ -109,15 +109,15 @@ public class WorldRenderUtils {
 	}
 
 	public static MatrixStack matrixFrom(double x, double y, double z) {
-		MatrixStack matrix = new MatrixStack();
+		MatrixStack matrices = new MatrixStack();
 
 		Camera camera = mc.gameRenderer.getCamera();
-		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
 
-		matrix.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
+		matrices.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
-		return matrix;
+		return matrices;
 	}
 
 	public static Vec3f[] getCurrentLight() {

@@ -75,17 +75,17 @@ public class SettingSlider extends SettingBase {
 		return text;
 	}
 
-	public void render(ModuleWindow window, MatrixStack matrix, int x, int y, int len) {
+	public void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len) {
 		boolean mo = window.mouseOver(x, y, x + len, y + 12);
 		if (mo) {
-			DrawableHelper.fill(matrix, x + 1, y, x + len, y + 12, 0x70303070);
+			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 		
 		int pixels = (int) Math.round(MathHelper.clamp(len * ((getValue() - min) / (max - min)), 0, len));
-		Window.horizontalGradient(matrix, x + 1, y, x + pixels, y + 12,
+		Window.horizontalGradient(matrices, x + 1, y, x + pixels, y + 12,
 				mo ? 0xf03078b0 : 0xf03080a0, mo ? 0xf02068c0 : 0xf02070b0);
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrix,
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices,
 				text + ": " + (decimals == 0 ? Integer.toString((int) getValue()) : getValue()),
 				x + 3, y + 2, 0xcfe0cf);
 

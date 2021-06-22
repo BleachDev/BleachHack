@@ -22,7 +22,7 @@ public class ParticleManager {
 		particles.add(new Particle(x, y));
 	}
 
-	public void renderParticles(MatrixStack matrix) {
+	public void renderParticles(MatrixStack matrices) {
 		List<Particle> tempParts = new ArrayList<>();
 
 		for (Particle p : particles) {
@@ -35,7 +35,7 @@ public class ParticleManager {
 
 		for (Particle p : particles) {
 			for (int[] p1 : p.getParticles()) {
-				DrawableHelper.fill(matrix, p1[0], p1[1], p1[0] + 1, p1[1] + 1, 0xffffc0e0);
+				DrawableHelper.fill(matrices, p1[0], p1[1], p1[0] + 1, p1[1] + 1, 0xffffc0e0);
 			}
 		}
 	}

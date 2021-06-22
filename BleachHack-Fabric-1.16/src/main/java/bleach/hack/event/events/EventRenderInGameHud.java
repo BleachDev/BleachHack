@@ -13,14 +13,14 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class EventRenderInGameHud extends Event {
 
-	private MatrixStack matrix;
+	private MatrixStack matrices;
 
-	public EventRenderInGameHud(MatrixStack matrix) {
-		this.matrix = matrix;
+	public EventRenderInGameHud(MatrixStack matrices) {
+		this.matrices = matrices;
 	}
 
 	public MatrixStack getMatrix() {
-		return matrix;
+		return matrices;
 	}
 
 }
