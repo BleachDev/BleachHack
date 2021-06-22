@@ -8,19 +8,20 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.Random;
-
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.setting.base.SettingMode;
 import bleach.hack.module.Module;
 import bleach.hack.util.PlayerInteractEntityC2SUtils;
 import bleach.hack.util.PlayerInteractEntityC2SUtils.InteractType;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.particle.ParticleTypes;
 
 /**
  * @author sl, Bleach
@@ -28,39 +29,52 @@ import net.minecraft.particle.ParticleTypes;
 public class Criticals extends Module {
 
 	public Criticals() {
-		super("Criticals", KEY_UNBOUND, ModuleCategory.COMBAT, "Attempts to force Critical hits on entities you hit.");
+		super("Criticals", KEY_UNBOUND, ModuleCategory.COMBAT, "Attempts to force Critical hits on entities you hit.",
+				new SettingMode("Mode", "MiniJump", "FullJump").withDesc("Criticals mode, MiniJump does the smallest posible jump, FullJump simulates a full jump"));
 	}
 
 	@Subscribe
 	public void sendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket) {
 			PlayerInteractEntityC2SPacket packet = (PlayerInteractEntityC2SPacket) event.getPacket();
-			if (PlayerInteractEntityC2SUtils.getInteractType(packet) == InteractType.INTERACT_AT) {
-				this.doCritical();
-
-				/* Lets fake some extra paricles why not */
-				Entity e = PlayerInteractEntityC2SUtils.getEntity(packet);
-
-				if (e != null) {
-					Random r = new Random();
-					for (int i = 0; i < 10; i++) {
-						mc.particleManager.addParticle(ParticleTypes.CRIT, e.getX(), e.getY() + e.getHeight() / 2, e.getZ(),
-								r.nextDouble() - 0.5, r.nextDouble() - 0.5, r.nextDouble() - 0.5);
-					}
-				}
+			if (PlayerInteractEntityC2SUtils.getInteractType(packet) == InteractType.ATTACK
+					&& PlayerInteractEntityC2SUtils.getEntity(packet) instanceof LivingEntity) {
+				sendCritPackets();
 			}
 		}
 	}
 
-	private void doCritical() {
-		if (!mc.player.isOnGround() || mc.player.isInLava() || mc.player.isTouchingWater()) {
+	private void sendCritPackets() {
+		if (mc.player.isClimbing() || mc.player.isTouchingWater()
+				|| mc.player.hasStatusEffect(StatusEffects.BLINDNESS) || mc.player.hasVehicle()) {
 			return;
 		}
 
-		double posX = mc.player.getX();
-		double posY = mc.player.getY();
-		double posZ = mc.player.getZ();
-		mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(posX, posY + 0.0625, posZ, true));
-		mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(posX, posY, posZ, false));
+		boolean sprinting = mc.player.isSprinting();
+		if (sprinting) {
+			mc.player.setSprinting(false);
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
+		}
+
+		if (mc.player.isOnGround()) {
+			double x = mc.player.getX();
+			double y = mc.player.getY();
+			double z = mc.player.getZ();
+			if (getSetting(0).asMode().mode == 0) {
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y + 0.0633, z, false));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, false));
+			} else {
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y + 0.42, z, false));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y + 0.65, z, false));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y + 0.72, z, false));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y + 0.53, z, false));
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y + 0.32, z, false));
+			}
+		}
+
+		if (sprinting) {
+			mc.player.setSprinting(true);
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
+		}
 	}
 }
