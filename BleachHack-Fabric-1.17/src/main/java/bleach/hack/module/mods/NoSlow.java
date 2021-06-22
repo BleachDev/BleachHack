@@ -171,7 +171,7 @@ public class NoSlow extends Module {
 			mc.player.setYaw(mc.player.getYaw() + yaw);
 
 			if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(0).asToggle().state) {
-				mc.player.setPitch(mc.player.getPitch() + MathHelper.clamp(mc.player.getPitch() + pitch, -90f, 90f));
+				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() + pitch, -90f, 90f));
 			} else {
 				mc.player.setPitch(mc.player.getPitch() + pitch);
 			}
