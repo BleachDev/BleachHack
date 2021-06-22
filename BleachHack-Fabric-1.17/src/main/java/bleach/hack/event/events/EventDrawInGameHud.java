@@ -9,25 +9,17 @@
 package bleach.hack.event.events;
 
 import bleach.hack.event.Event;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class EventDrawContainer extends Event {
+public class EventDrawInGameHud extends Event {
 
-	private HandledScreen<?> screen;
-	public int mouseX;
-	public int mouseY;
-	public MatrixStack matrix;
+	private MatrixStack matrix;
 
-	public EventDrawContainer(HandledScreen<?> screen, int mouseX, int mouseY, MatrixStack matrix) {
-		this.screen = screen;
-		this.mouseX = mouseX;
-		this.mouseY = mouseY;
+	public EventDrawInGameHud(MatrixStack matrix) {
 		this.matrix = matrix;
 	}
 
-	public Screen getScreen() {
-		return screen;
+	public MatrixStack getMatrix() {
+		return matrix;
 	}
 }

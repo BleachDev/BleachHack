@@ -72,13 +72,13 @@ public class AntiVoid extends Module {
 
 	@Subscribe
 	public void onClientMove(EventClientMove event) {
-		if (getSetting(1).asToggle().state && mc.player.getY() >= mc.world.getBottomY() && mc.player.getY() - event.vec3d.y < mc.world.getBottomY()) {
+		if (getSetting(1).asToggle().state && mc.player.getY() >= mc.world.getBottomY() && mc.player.getY() - event.getVec().y < mc.world.getBottomY()) {
 			event.setCancelled(true);
 			return;
 		}
 		
-		if (getSetting(0).asMode().mode == 1 && mc.player.getY() < mc.world.getBottomY() && event.vec3d.y < 0) {
-			event.vec3d = new Vec3d(event.vec3d.x, 0, event.vec3d.z);
+		if (getSetting(0).asMode().mode == 1 && mc.player.getY() < mc.world.getBottomY() && event.getVec().y < 0) {
+			event.setVec(new Vec3d(event.getVec().x, 0, event.getVec().z));
 			mc.player.addVelocity(0, -mc.player.getVelocity().y, 0);
 		}
 	}

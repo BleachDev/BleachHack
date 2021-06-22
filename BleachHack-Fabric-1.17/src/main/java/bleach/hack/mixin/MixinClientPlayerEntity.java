@@ -69,10 +69,10 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) {
 			info.cancel();
-		} else if (!type.equals(event.type) || !movement.equals(event.vec3d)) {
+		} else if (!type.equals(event.getType()) || !movement.equals(event.getVec())) {
 			double double_1 = this.getX();
 			double double_2 = this.getZ();
-			super.move(event.type, event.vec3d);
+			super.move(event.getType(), event.getVec());
 			this.autoJump((float) (this.getX() - double_1), (float) (this.getZ() - double_2));
 			info.cancel();
 		}

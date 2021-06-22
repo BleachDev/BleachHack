@@ -43,14 +43,14 @@ public class MixinScreen {
 			return;
 		}
 
-		EventDrawTooltip event = new EventDrawTooltip(matrices, lines, x, y, lastMX, lastMY);
+		EventDrawTooltip event = new EventDrawTooltip((Screen) (Object) this, matrices, lines, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
 			callback.cancel();
-		} else if (!event.text.equals(lines) || event.x != x || event.y != y) {
+		} else if (!event.getText().equals(lines) || event.getX() != x || event.getY() != y) {
 			skipTooltip = true;
-			event.screen.renderOrderedTooltip(matrices, event.text, event.x, event.y);
+			((Screen) (Object) this).renderOrderedTooltip(matrices, event.getText(), event.getX(), event.getY());
 			callback.cancel();
 		}
 	}

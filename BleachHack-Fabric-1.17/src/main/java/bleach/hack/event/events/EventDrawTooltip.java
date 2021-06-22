@@ -17,22 +17,66 @@ import net.minecraft.text.Text;
 
 public class EventDrawTooltip extends Event {
 
-	public Screen screen;
-	public MatrixStack matrix;
-	public List<Text> text;
-	public int x;
-	public int y;
-	public int mouseX;
-	public int mouseY;
+	private Screen screen;
+	private MatrixStack matrix;
+	private List<Text> text;
+	private int x;
+	private int y;
+	private int mouseX;
+	private int mouseY;
 
 	public EventDrawTooltip(Screen screen, MatrixStack matrix, List<Text> text, int x, int y, int mouseX, int mouseY) {
-		this.screen = screen;
 		this.matrix = matrix;
+		this.screen = screen;
 		this.text = text;
 		this.x = x;
 		this.y = y;
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 	}
+	
+	public Screen getScreen() {
+		return screen;
+	}
 
+	public MatrixStack getMatrix() {
+		return matrix;
+	}
+
+	public void setMatrix(MatrixStack matrix) {
+		this.matrix = matrix;
+	}
+
+	public List<Text> getText() {
+		return text;
+	}
+
+	public void setText(List<Text> text) {
+		this.text = text;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getMouseX() {
+		return mouseX;
+	}
+
+	public int getMouseY() {
+		return mouseY;
+	}
+	
 }

@@ -50,7 +50,7 @@ public class MixinScreen {
 
 		if (event.isCancelled()) {
 			callback.cancel();
-		} else if (!event.text.equals(lines) || event.x != x || event.y != y) {
+		} else if (!event.getText().equals(lines) || event.getX() != x || event.getY() != y) {
 			skipTooltip = true;
 			((Screen) (Object) this).renderTooltip(matrices, lines, data, x, y);
 			callback.cancel();

@@ -16,8 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventDrawContainer;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.MountBypass;
 import net.minecraft.client.gui.screen.Screen;
@@ -69,11 +67,6 @@ public abstract class MixinHandledScreen extends Screen {
 
 	@Inject(method = "render", at = @At("RETURN"))
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
-		EventDrawContainer event = new EventDrawContainer((HandledScreen<?>) (Object) this, mouseX, mouseY, matrix);
-		BleachHack.eventBus.post(event);
-		if (event.isCancelled())
-			info.cancel();
-
 		int rightside = (width + backgroundWidth) / 2 + 2;
 		int topside = (height - backgroundHeight) / 2;
 		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {

@@ -32,7 +32,7 @@
     "MixinFluidRenderer",
     "MixinGameRenderer",
     "MixinHandledScreen",
-    "MixinIngameHud",
+    "MixinInGameHud",
     "MixinInGameOverlayRenderer",
     "MixinKeyboard",
     "MixinLlamaPigStriderEntity",

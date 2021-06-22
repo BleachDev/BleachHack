@@ -33,7 +33,7 @@
     "MixinFluidRenderer",
     "MixinGameRenderer",
     "MixinHandledScreen",
-    "MixinIngameHud",
+    "MixinInGameHud",
     "MixinInGameOverlayRenderer",
     "MixinKeyboard",
     "MixinLivingEntity",

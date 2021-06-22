@@ -17,6 +17,7 @@ import net.minecraft.util.math.Direction;
 public class EventInteract extends Event {
 
 	public static class InteractItem extends EventInteract {
+
 		protected Hand hand;
 
 		public Hand getHand() {
@@ -29,6 +30,7 @@ public class EventInteract extends Event {
 	}
 
 	public static class InteractBlock extends EventInteract {
+
 		protected Hand hand;
 		protected BlockHitResult hitResult;
 
@@ -47,6 +49,7 @@ public class EventInteract extends Event {
 	}
 
 	public static class AttackBlock extends EventInteract {
+
 		protected BlockPos pos;
 		protected Direction direction;
 
@@ -65,6 +68,7 @@ public class EventInteract extends Event {
 	}
 
 	public static class BreakBlock extends EventInteract {
+
 		protected BlockPos pos;
 
 		public BlockPos getPos() {

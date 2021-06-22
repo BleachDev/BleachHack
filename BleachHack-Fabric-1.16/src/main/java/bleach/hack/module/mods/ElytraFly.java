@@ -46,12 +46,12 @@ public class ElytraFly extends Module {
 		/* Cancel the retarded auto elytra movement */
 		if (getSetting(0).asMode().mode == 2 && mc.player.isFallFlying()) {
 			if (!mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
-				event.vec3d = new Vec3d(event.vec3d.x, 0, event.vec3d.z);
+				event.setVec(new Vec3d(event.getVec().x, 0, event.getVec().z));
 			}
 
 			if (!mc.options.keyBack.isPressed() && !mc.options.keyLeft.isPressed()
 					&& !mc.options.keyRight.isPressed() && !mc.options.keyForward.isPressed()) {
-				event.vec3d = new Vec3d(0, event.vec3d.y, 0);
+				event.setVec(new Vec3d(0, event.getVec().y, 0));
 			}
 		}
 	}

@@ -72,11 +72,11 @@ public class Peek extends Module {
 
 	@Subscribe
 	public void drawScreen(EventDrawTooltip event) {
-		if (!(event.screen instanceof HandledScreen)) {
+		if (!(event.getScreen() instanceof HandledScreen)) {
 			return;
 		}
 
-		Slot slot = (Slot) FabricReflect.getFieldValue(event.screen, "field_2787", "focusedSlot");
+		Slot slot = (Slot) FabricReflect.getFieldValue(event.getScreen(), "field_2787", "focusedSlot");
 		if (slot == null)
 			return;
 
@@ -87,17 +87,17 @@ public class Peek extends Module {
 
 		slotPos = new int[] { slot.x, slot.y };
 
-		event.matrix.push();
-		event.matrix.translate(0, 0, 400);
+		event.getMatrix().push();
+		event.getMatrix().translate(0, 0, 400);
 
 		if (getSetting(0).asToggle().state)
-			drawShulkerToolTip(event, slot, event.mouseX, event.mouseY);
+			drawShulkerToolTip(event, slot, event.getMouseX(), event.getMouseY());
 		if (getSetting(1).asToggle().state)
-			drawBookToolTip(event.matrix, slot, event.mouseX, event.mouseY);
+			drawBookToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
 		if (getSetting(2).asToggle().state)
-			drawMapToolTip(event.matrix, slot, event.mouseX, event.mouseY);
+			drawMapToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
 
-		event.matrix.pop();
+		event.getMatrix().pop();
 	}
 
 	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mouseX, int mouseY) {
@@ -125,19 +125,19 @@ public class Peek extends Module {
 		if (getSetting(0).asToggle().getChild(0).asMode().mode == 2) {
 			event.setCancelled(true);
 		} else if (getSetting(0).asToggle().getChild(0).asMode().mode == 1) {
-			event.text = Arrays.asList(slot.getStack().getName());
+			event.setText(Arrays.asList(slot.getStack().getName()));
 		}
 
 		int realY = getSetting(0).asToggle().getChild(0).asMode().mode == 2 ? mouseY + 24 : mouseY;
 
 		if (block instanceof AbstractFurnaceBlock) {
-			renderTooltipBox(event.matrix, mouseX, realY - 21, 13, 47, true);
+			renderTooltipBox(event.getMatrix(), mouseX, realY - 21, 13, 47, true);
 		} else if (block instanceof HopperBlock) {
-			renderTooltipBox(event.matrix, mouseX, realY - 21, 13, 82, true);
+			renderTooltipBox(event.getMatrix(), mouseX, realY - 21, 13, 82, true);
 		} else if (block instanceof DispenserBlock) {
-			renderTooltipBox(event.matrix, mouseX, realY - 21, 13, 150, true);
+			renderTooltipBox(event.getMatrix(), mouseX, realY - 21, 13, 150, true);
 		} else {
-			renderTooltipBox(event.matrix, mouseX, realY - 55, 47, 150, true);
+			renderTooltipBox(event.getMatrix(), mouseX, realY - 55, 47, 150, true);
 		}
 
 		int count = block instanceof HopperBlock || block instanceof DispenserBlock || block instanceof AbstractFurnaceBlock ? 18 : 0;

@@ -122,12 +122,12 @@ public class AutoParkour extends Module {
 
 			float targetYaw = (float) Math.toDegrees(Math.atan2(targetDiffZ, targetDiffX)) - 90F;
 
-			double currentDiffX = (mc.player.getX() + event.vec3d.x) - mc.player.getX();
-			double currentDiffZ = (mc.player.getZ() + event.vec3d.z) - mc.player.getZ();
+			double currentDiffX = (mc.player.getX() + event.getVec().x) - mc.player.getX();
+			double currentDiffZ = (mc.player.getZ() + event.getVec().z) - mc.player.getZ();
 
 			float currentYaw = (float) Math.toDegrees(Math.atan2(currentDiffZ, currentDiffX)) - 90F;
 
-			event.vec3d = event.vec3d.rotateY(-(float) Math.toRadians(targetYaw - currentYaw));
+			event.setVec(event.getVec().rotateY(-(float) Math.toRadians(targetYaw - currentYaw)));
 		}
 	}
 }

@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventDrawOverlay;
+import bleach.hack.event.events.EventDrawInGameHud;
 import bleach.hack.event.events.EventRenderOverlay;
 import bleach.hack.gui.EntityMenuScreen;
 import net.minecraft.client.MinecraftClient;
@@ -25,14 +25,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 @Mixin(InGameHud.class)
-public class MixinIngameHud {
+public class MixinInGameHud {
 	@Unique private boolean bypassRenderOverlay = false;
 	
 	@Shadow private void renderOverlay(Identifier texture, float opacity) {}
 
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true)
 	public void render(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
-		EventDrawOverlay event = new EventDrawOverlay(matrixStack);
+		EventDrawInGameHud event = new EventDrawInGameHud(matrixStack);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {

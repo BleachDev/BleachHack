@@ -14,11 +14,29 @@ import net.minecraft.util.math.Vec3d;
 
 public class EventClientMove extends Event {
 
-	public MovementType type;
-	public Vec3d vec3d;
+	private MovementType type;
+	private Vec3d vec;
 
-	public EventClientMove(MovementType type, Vec3d vec3d) {
+	public EventClientMove(MovementType type, Vec3d vec) {
 		this.type = type;
-		this.vec3d = vec3d;
+		this.vec = vec;
 	}
+
+	public MovementType getType() {
+		return type;
+	}
+
+	public void setType(MovementType type) {
+		this.type = type;
+	}
+
+	public Vec3d getVec() {
+		return vec;
+	}
+
+	public void setVec(Vec3d vec) {
+		this.vec = vec;
+	}
+
+
 }

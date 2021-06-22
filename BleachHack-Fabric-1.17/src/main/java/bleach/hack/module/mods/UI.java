@@ -31,7 +31,7 @@ import com.google.common.eventbus.Subscribe;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventDrawOverlay;
+import bleach.hack.event.events.EventDrawInGameHud;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.UIClickGuiScreen;
 import bleach.hack.module.ModuleCategory;
@@ -121,7 +121,7 @@ public class UI extends Module {
 	}
 
 	@Subscribe
-	public void onDrawOverlay(EventDrawOverlay event) {
+	public void onDrawOverlay(EventDrawInGameHud event) {
 		if (mc.currentScreen instanceof UIClickGuiScreen) {
 			return;
 		}
@@ -131,7 +131,7 @@ public class UI extends Module {
 
 		uiScreen.uiWindows.values().forEach(window -> {
 			if (!window.shouldClose(this)) {
-				window.renderUI(event.matrix);
+				window.renderUI(event.getMatrix());
 			}
 		});
 	}

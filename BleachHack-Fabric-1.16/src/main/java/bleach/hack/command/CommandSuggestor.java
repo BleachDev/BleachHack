@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventDrawOverlay;
+import bleach.hack.event.events.EventInGameHud;
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.mixin.AccessorChatScreen;
@@ -45,7 +45,7 @@ public class CommandSuggestor {
 	}
 
 	@Subscribe
-	public void onDrawOverlay(EventDrawOverlay event) {
+	public void onDrawOverlay(EventInGameHud event) {
 		Screen screen = MinecraftClient.getInstance().currentScreen;
 
 		if (screen instanceof ChatScreen) {
@@ -76,7 +76,8 @@ public class CommandSuggestor {
 			}
 
 			if (!suggestions.isEmpty()) {
-				event.matrix.translate(0, 0, 200);
+				event.getMatrix().push();
+				event.getMatrix().translate(0, 0, 200);
 
 				int length = suggestions.stream()
 						.map(s -> MinecraftClient.getInstance().textRenderer.getWidth(s))
@@ -89,14 +90,14 @@ public class CommandSuggestor {
 				for (int i = scroll; i < suggestions.size() && i < scroll + 10; i++) {
 					String suggestion = suggestions.get(i);
 
-					DrawableHelper.fill(event.matrix, startX, startY, startX + length + 2, startY + 12, 0xd0000000);
+					DrawableHelper.fill(event.getMatrix(), startX, startY, startX + length + 2, startY + 12, 0xd0000000);
 					MinecraftClient.getInstance().textRenderer.drawWithShadow(
-							event.matrix, suggestion, startX + 1, startY + 2, i == selected ? 0xffff00: 0xb0b0b0);
+							event.getMatrix(), suggestion, startX + 1, startY + 2, i == selected ? 0xffff00: 0xb0b0b0);
 
 					startY += 12;
 				}
 
-				event.matrix.translate(0, 0, -200);
+				event.getMatrix().pop();
 			}
 		}
 	}
