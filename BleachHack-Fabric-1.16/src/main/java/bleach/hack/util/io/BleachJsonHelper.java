@@ -88,7 +88,7 @@ public class BleachJsonHelper {
 
 		try {
 			return new JsonParser().parse(merged).getAsJsonObject();
-		} catch (JsonParseException e) {
+		} catch (JsonParseException | IllegalStateException e) {
 			BleachHack.logger.error("Json error Trying to read " + Arrays.asList(path) + "! DELETING ENTIRE FILE!");
 			e.printStackTrace();
 
