@@ -45,6 +45,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.EntityUtils;
 import net.minecraft.client.network.PlayerListEntry;
@@ -161,7 +162,7 @@ public class Nametags extends Module {
 	@Subscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		for (Entity entity: mc.world.getEntities()) {
-			Vec3d rPos = getRenderPos(entity);
+			Vec3d rPos = entity.getPos().subtract(RenderUtils.getInterpolationOffset(entity)).add(0, entity.getHeight(), 0);
 			List<String> lines = new ArrayList<>();
 			double scale = 0;
 
@@ -323,13 +324,6 @@ public class Nametags extends Module {
 					x, y, z, (offX + 0.01) * scale, (offY + 0.75 - c * 0.34) * scale, scale * 1.4, false);
 			c--;
 		}
-	}
-
-	private Vec3d getRenderPos(Entity e) {
-		return new Vec3d(
-				e.lastRenderX + (e.getX() - e.lastRenderX) * mc.getTickDelta(),
-				(e.lastRenderY + (e.getY() - e.lastRenderY) * mc.getTickDelta()) + e.getHeight(),
-				e.lastRenderZ + (e.getZ() - e.lastRenderZ) * mc.getTickDelta());
 	}
 
 	private String getHealthText(LivingEntity e) {
