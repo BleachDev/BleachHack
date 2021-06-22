@@ -17,6 +17,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.command.Command;
+import bleach.hack.event.events.EventDrawCrosshair;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.EntityMenuScreen;
 import bleach.hack.module.ModuleCategory;
@@ -33,18 +34,18 @@ import net.minecraft.entity.player.PlayerEntity;
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
  */
 public class EntityMenu extends Module {
-	
+
 	// fuck maps
 	public MutablePairList<String, String> interactions = new MutablePairList<>();
 
 	private boolean buttonHeld;
-	
+
 	public EntityMenu() {
 		super("EntityMenu", KEY_UNBOUND, ModuleCategory.MISC, "An interaction screen when looking at an entity and pressing the middle mouse button. Customizable via the " + Command.PREFIX + "entitymenu command",
 				new SettingToggle("PlayersOnly", false).withDesc("Only opens the menu when clicking on players"));
-	
+
 		JsonElement je = BleachFileHelper.readMiscSetting("entityMenu");
-		
+
 		if (je != null && je.isJsonObject()) {
 			for (Entry<String, JsonElement> entry: je.getAsJsonObject().entrySet()) {
 				if (entry.getValue().isJsonPrimitive()) {
@@ -53,14 +54,14 @@ public class EntityMenu extends Module {
 			}
 		}
 	}
-	
+
 	@Subscribe
 	public void onTick(EventTick event) {
 		if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_PRESS && !buttonHeld) {
 			buttonHeld = true;
-			
+
 			Optional<Entity> lookingAt = DebugRenderer.getTargetedEntity(mc.player, 20);
-			
+
 			if (lookingAt.isPresent()) {
 				Entity e = lookingAt.get();
 
@@ -70,6 +71,13 @@ public class EntityMenu extends Module {
 			}
 		} else if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_RELEASE) {
 			buttonHeld = false;
+		}
+	}
+
+	@Subscribe
+	public void onRenderCrosshair(EventDrawCrosshair event) {
+		if (mc.currentScreen instanceof EntityMenuScreen) {
+			event.setCancelled(true);
 		}
 	}
 }

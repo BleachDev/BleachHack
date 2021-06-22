@@ -8,7 +8,6 @@
  */
 package bleach.hack.gui;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -289,7 +288,12 @@ public class EntityMenuEditScreen extends WindowScreen {
 		}
 
 		if (addEntry) {
-			interactions.add(RandomStringUtils.randomAlphabetic(6), "bruh");
+			String name = "New Interaction";
+			for (int toAdd = 1; interactions.containsKey(name); toAdd++) {
+				name = "New Interaction (" + toAdd + ")";
+			}
+
+			interactions.add(name, "Hi %name%");
 			addEntry = false;
 		}
 

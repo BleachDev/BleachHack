@@ -17,6 +17,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.command.Command;
+import bleach.hack.event.events.EventDrawCrosshair;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.EntityMenuScreen;
 import bleach.hack.module.ModuleCategory;
@@ -70,6 +71,13 @@ public class EntityMenu extends Module {
 			}
 		} else if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_RELEASE) {
 			buttonHeld = false;
+		}
+	}
+	
+	@Subscribe
+	public void onRenderCrosshair(EventDrawCrosshair event) {
+		if (mc.currentScreen instanceof EntityMenuScreen) {
+			event.setCancelled(true);
 		}
 	}
 }
