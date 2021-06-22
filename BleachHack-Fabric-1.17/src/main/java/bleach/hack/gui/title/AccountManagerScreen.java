@@ -71,7 +71,7 @@ public class AccountManagerScreen extends WindowScreen {
 	public WindowTextFieldWidget passField;
 	public WindowCheckboxWidget checkBox;
 
-	public String loginResult = "";
+	public WindowTextWidget loginResult;
 
 	public AccountManagerScreen() {
 		super(new LiteralText("Account Manager"));
@@ -93,8 +93,6 @@ public class AccountManagerScreen extends WindowScreen {
 		int w = width - width / 4;
 		int h = height - height / 4;
 
-		checkBox = getWindow(0).addWidget(new WindowCheckboxWidget(w / 2 - 99, h / 4 + 53, "Save Login", false));
-
 		userField = getWindow(0).addWidget(new WindowTextFieldWidget(w / 2 - 98, h / 4, 196, 18, userField != null ? userField.textField.getText() : ""));
 		userField.textField.setMaxLength(32767);
 
@@ -104,9 +102,10 @@ public class AccountManagerScreen extends WindowScreen {
 		getWindow(0).addWidget(new WindowTextWidget("Email:", true, WindowTextWidget.TextAlign.RIGHT, w / 2 - 102, h / 4 + 5, 0xc0c0c0));
 		getWindow(0).addWidget(new WindowTextWidget("Pass:", true, WindowTextWidget.TextAlign.RIGHT, w / 2 - 102, h / 4 + 35, 0xc0c0c0));
 
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", () -> {
-			onClose();
-		}));
+		checkBox = getWindow(0).addWidget(new WindowCheckboxWidget(w / 2 - 99, h / 4 + 53, "Save Login", false));
+		loginResult = getWindow(0).addWidget(new WindowTextWidget(loginResult != null ? loginResult.getText() : LiteralText.EMPTY, true, WindowTextWidget.TextAlign.LEFT, w / 2 - 23, h / 4 + 55, 0xc0c0c0));
+
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", this::onClose));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 62, w / 2 - 2, h / 3 + 82, "Accounts", () -> {
 			getWindow(1).closed = false;
@@ -115,7 +114,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
 			Pair<String, Session> login = LoginManager.login(userField.textField.getText(), passField.textField.getText());
-			loginResult = login.getLeft();
+			loginResult.setText(new LiteralText("|  " + login.getLeft()));
 
 			try {
 				String email = userField.textField.getText();
