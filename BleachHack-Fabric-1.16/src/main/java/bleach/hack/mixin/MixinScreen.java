@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventDrawTooltip;
+import bleach.hack.event.events.EventRenderTooltip;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
@@ -43,7 +43,7 @@ public class MixinScreen {
 			return;
 		}
 
-		EventDrawTooltip event = new EventDrawTooltip((Screen) (Object) this, matrices, lines, x, y, lastMX, lastMY);
+		EventRenderTooltip event = new EventRenderTooltip((Screen) (Object) this, matrices, lines, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {

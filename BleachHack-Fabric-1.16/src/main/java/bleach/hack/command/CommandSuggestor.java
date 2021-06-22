@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventInGameHud;
+import bleach.hack.event.events.EventRenderInGameHud;
 import bleach.hack.event.events.EventKeyPress;
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.mixin.AccessorChatScreen;
@@ -45,7 +45,7 @@ public class CommandSuggestor {
 	}
 
 	@Subscribe
-	public void onDrawOverlay(EventInGameHud event) {
+	public void onDrawOverlay(EventRenderInGameHud event) {
 		Screen screen = MinecraftClient.getInstance().currentScreen;
 
 		if (screen instanceof ChatScreen) {

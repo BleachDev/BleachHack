@@ -8,7 +8,7 @@
  */
 package bleach.hack.util.shader;
 
-import bleach.hack.mixinterface.IMixinWorldRenderer;
+import bleach.hack.mixin.AccessorWorldRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderEffect;
 
@@ -19,8 +19,8 @@ public class OutlineShaderManager {
 			getCurrentShader().close();
 		}
 
-		((IMixinWorldRenderer) MinecraftClient.getInstance().worldRenderer).setOutlineShader(shader);
-		((IMixinWorldRenderer) MinecraftClient.getInstance().worldRenderer).setOutlineFramebuffer(shader.getSecondaryTarget("final"));
+		((AccessorWorldRenderer) MinecraftClient.getInstance().worldRenderer).setEntityOutlineShader(shader);
+		((AccessorWorldRenderer) MinecraftClient.getInstance().worldRenderer).setEntityOutlinesFramebuffer(shader.getSecondaryTarget("final"));
 	}
 	
 	public static void loadDefaultShader() {
@@ -28,6 +28,6 @@ public class OutlineShaderManager {
 	}
 	
 	public static ShaderEffect getCurrentShader() {
-		return ((IMixinWorldRenderer) MinecraftClient.getInstance().worldRenderer).getOutlineShader();
+		return ((AccessorWorldRenderer) MinecraftClient.getInstance().worldRenderer).getEntityOutlineShader();
 	}
 }

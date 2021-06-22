@@ -14,7 +14,7 @@ import java.util.List;
 import com.google.common.eventbus.Subscribe;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import bleach.hack.event.events.EventDrawTooltip;
+import bleach.hack.event.events.EventRenderTooltip;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
@@ -71,7 +71,7 @@ public class Peek extends Module {
 	}
 
 	@Subscribe
-	public void drawScreen(EventDrawTooltip event) {
+	public void drawScreen(EventRenderTooltip event) {
 		if (!(event.getScreen() instanceof HandledScreen)) {
 			return;
 		}
@@ -100,7 +100,7 @@ public class Peek extends Module {
 		event.getMatrix().pop();
 	}
 
-	public void drawShulkerToolTip(EventDrawTooltip event, Slot slot, int mouseX, int mouseY) {
+	public void drawShulkerToolTip(EventRenderTooltip event, Slot slot, int mouseX, int mouseY) {
 		if (!(slot.getStack().getItem() instanceof BlockItem)) {
 			return;
 		}

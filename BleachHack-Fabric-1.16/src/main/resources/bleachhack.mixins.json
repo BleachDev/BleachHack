@@ -8,6 +8,7 @@
     "AccessorChatScreen",
     "AccessorHeldItemRenderer",
     "AccessorMinecraftClient",
+    "AccessorWorldRenderer",
     "MixinBackgroundRenderer",
     "MixinAbstractBlock",
     "MixinAbstractBlockState",

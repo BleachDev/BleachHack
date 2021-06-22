@@ -6,16 +6,20 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.mixinterface;
+package bleach.hack.event.events;
 
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.ShaderEffect;
+import bleach.hack.event.Event;
+import net.minecraft.client.util.math.MatrixStack;
 
-public interface IMixinWorldRenderer {
+public class EventRenderInGameHud extends Event {
 
-	public Framebuffer getOutlineFramebuffer();
-	public void setOutlineFramebuffer(Framebuffer framebuffer);
+	private MatrixStack matrix;
 
-	public ShaderEffect getOutlineShader();
-	public void setOutlineShader(ShaderEffect shader);
+	public EventRenderInGameHud(MatrixStack matrix) {
+		this.matrix = matrix;
+	}
+
+	public MatrixStack getMatrix() {
+		return matrix;
+	}
 }

@@ -9,6 +9,7 @@
     "AccessorHeldItemRenderer",
     "AccessorMinecraftClient",
     "AccessorScreen",
+    "AccessorWorldRenderer",
     "MixinBackgroundRenderer",
     "MixinAbstractBlock",
     "MixinAbstractBlockState",

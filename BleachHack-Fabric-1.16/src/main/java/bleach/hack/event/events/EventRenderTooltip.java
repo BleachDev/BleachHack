@@ -15,7 +15,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 
-public class EventDrawTooltip extends Event {
+public class EventRenderTooltip extends Event {
 
 	private Screen screen;
 	private MatrixStack matrix;
@@ -25,7 +25,7 @@ public class EventDrawTooltip extends Event {
 	private int mouseX;
 	private int mouseY;
 
-	public EventDrawTooltip(Screen screen, MatrixStack matrix, List<? extends OrderedText> text, int x, int y, int mouseX, int mouseY) {
+	public EventRenderTooltip(Screen screen, MatrixStack matrix, List<? extends OrderedText> text, int x, int y, int mouseX, int mouseY) {
 		this.matrix = matrix;
 		this.screen = screen;
 		this.text = text;

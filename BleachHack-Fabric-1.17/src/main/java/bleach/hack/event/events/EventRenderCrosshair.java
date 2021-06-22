@@ -11,11 +11,11 @@ package bleach.hack.event.events;
 import bleach.hack.event.Event;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class EventDrawCrosshair extends Event {
+public class EventRenderCrosshair extends Event {
 
 	private MatrixStack matrices;
 
-	public EventDrawCrosshair(MatrixStack matrices) {
+	public EventRenderCrosshair(MatrixStack matrices) {
 		this.setMatrices(matrices);
 	}
 

@@ -17,7 +17,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.command.Command;
-import bleach.hack.event.events.EventDrawCrosshair;
+import bleach.hack.event.events.EventRenderCrosshair;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.gui.EntityMenuScreen;
 import bleach.hack.module.ModuleCategory;
@@ -75,7 +75,7 @@ public class EntityMenu extends Module {
 	}
 
 	@Subscribe
-	public void onRenderCrosshair(EventDrawCrosshair event) {
+	public void onRenderCrosshair(EventRenderCrosshair event) {
 		if (mc.currentScreen instanceof EntityMenuScreen) {
 			event.setCancelled(true);
 		}

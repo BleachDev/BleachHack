@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
-import bleach.hack.event.events.EventDrawCrosshair;
-import bleach.hack.event.events.EventDrawInGameHud;
+import bleach.hack.event.events.EventRenderCrosshair;
+import bleach.hack.event.events.EventRenderInGameHud;
 import bleach.hack.event.events.EventRenderOverlay;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
@@ -34,7 +34,7 @@ public class MixinInGameHud {
 
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true)
 	public void render(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
-		EventDrawInGameHud event = new EventDrawInGameHud(matrixStack);
+		EventRenderInGameHud event = new EventRenderInGameHud(matrixStack);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
@@ -62,7 +62,7 @@ public class MixinInGameHud {
 	@Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
 	private void renderCrosshair(MatrixStack matrices, CallbackInfo callback) {
 		if (!bypassRenderCrosshair) {
-			EventDrawCrosshair event = new EventDrawCrosshair(matrices);
+			EventRenderCrosshair event = new EventRenderCrosshair(matrices);
 			BleachHack.eventBus.post(event);
 
 			if (!event.isCancelled()) {

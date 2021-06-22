@@ -11,11 +11,11 @@ package bleach.hack.event.events;
 import bleach.hack.event.Event;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class EventInGameHud extends Event {
+public class EventRenderInGameHud extends Event {
 
 	private MatrixStack matrix;
 
-	public EventInGameHud(MatrixStack matrix) {
+	public EventRenderInGameHud(MatrixStack matrix) {
 		this.matrix = matrix;
 	}
 
