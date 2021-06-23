@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventOpenScreen;
@@ -91,14 +91,14 @@ public class Freecam extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void sendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof ClientCommandC2SPacket || event.getPacket() instanceof PlayerMoveC2SPacket) {
 			event.setCancelled(true);
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (getSetting(1).asToggle().state && riding instanceof HorseBaseEntity) {
 			if (event.getScreen() instanceof InventoryScreen) {
@@ -108,12 +108,12 @@ public class Freecam extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
 		mc.player.noClip = true;
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		mc.player.setOnGround(false);
 		mc.player.getAbilities().setFlySpeed((float) (getSetting(0).asSlider().getValue() / 5));

@@ -26,7 +26,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
@@ -66,7 +66,7 @@ public class LiquidFiller extends Module {
 		return true;
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		int cap = 0;
 		int ceilRange = (int) Math.ceil(getSetting(1).asSlider().getValue());
@@ -92,7 +92,7 @@ public class LiquidFiller extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		if (getSetting(7).asToggle().state) {
 			int opacity = (int) (getSetting(7).asToggle().getChild(0).asSlider().getValue() * 255);

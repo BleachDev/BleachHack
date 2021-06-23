@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -43,7 +43,7 @@ public class AutoArmor extends Module {
 						new SettingSlider("Delay", 0, 20, 1, 0).withDesc("How many ticks between putting on armor pieces")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (!BleachQueue.isEmpty("autoarmor_equip"))
 			return;

@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventBlockBreakCooldown;
 import bleach.hack.event.events.EventTick;
@@ -38,14 +38,14 @@ public class SpeedMine extends Module {
 		mc.player.removeStatusEffect(StatusEffects.HASTE);
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (this.getSetting(0).asMode().mode == 0) {
 			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1, getSetting(1).asSlider().getValueInt() - 1));
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onBlockBreakCooldown(EventBlockBreakCooldown event) {
 		event.setCooldown(getSetting(2).asSlider().getValueInt());
 	}

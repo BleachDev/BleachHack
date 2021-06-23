@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
@@ -43,7 +43,7 @@ public class Spammer extends Module {
 		lineCount = 0;
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		tickCount++;
 

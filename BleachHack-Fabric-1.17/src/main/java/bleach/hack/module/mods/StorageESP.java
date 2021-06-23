@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonSyntaxException;
 
 import bleach.hack.event.events.EventBlockEntityRender;
@@ -105,7 +105,7 @@ public class StorageESP extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		blockEntities.clear();
 		entities.clear();
@@ -128,7 +128,7 @@ public class StorageESP extends Module {
 
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		if (getSetting(0).asMode().mode >= 1) {
 			for (Entry<BlockEntity, float[]> e: blockEntities.entrySet()) {
@@ -182,7 +182,7 @@ public class StorageESP extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onBlockEntityRenderPre(EventBlockEntityRender.PreAll event) throws JsonSyntaxException, IOException {
 		if (getSetting(0).asMode().mode == 0) {
 			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
@@ -210,7 +210,7 @@ public class StorageESP extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onBlockEntityRender(EventBlockEntityRender.PreAll event) {
 		if (getSetting(0).asMode().mode == 0) {
 			for (Entry<BlockEntity, float[]> be: blockEntities.entrySet()) {
@@ -244,7 +244,7 @@ public class StorageESP extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
 		if (getSetting(0).asMode().mode == 0) {
 			float[] color = entities.get(event.getEntity());

@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -26,7 +26,7 @@ public class ElytraReplace extends Module {
 		super("ElytraReplace", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically replaces broken elytra and continues flying");
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (mc.player.playerScreenHandler != mc.player.currentScreenHandler)
 			return;

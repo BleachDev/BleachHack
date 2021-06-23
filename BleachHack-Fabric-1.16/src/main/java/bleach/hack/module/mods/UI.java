@@ -27,7 +27,7 @@ import java.util.zip.DeflaterOutputStream;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
@@ -120,7 +120,7 @@ public class UI extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onDrawOverlay(EventRenderInGameHud event) {
 		if (mc.currentScreen instanceof UIClickGuiScreen) {
 			return;
@@ -455,7 +455,7 @@ public class UI extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void readPacket(EventReadPacket event) {
 		lastPacket = System.currentTimeMillis();
 

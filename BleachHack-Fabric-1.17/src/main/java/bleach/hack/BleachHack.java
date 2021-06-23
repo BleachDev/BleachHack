@@ -8,11 +8,11 @@
  */
 package bleach.hack;
 
-import com.google.common.eventbus.EventBus;
 import com.google.gson.JsonElement;
 
 import bleach.hack.command.CommandManager;
 import bleach.hack.command.CommandSuggestor;
+import bleach.hack.eventbus.BleachEventBus;
 import bleach.hack.gui.title.BleachTitleScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -20,12 +20,6 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.util.Util;
-
-import java.lang.reflect.Method;
-
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,21 +27,12 @@ import org.apache.logging.log4j.Logger;
 public class BleachHack implements ModInitializer {
 
 	private static BleachHack instance = null;
-	public static Logger logger;
+	public static Logger logger = LogManager.getFormatterLogger("BleachHack");
 
 	public static final String VERSION = "1.0.1";
 	public static final int INTVERSION = 32;
 
-	// TODO: custom eventbus
-	public static final EventBus eventBus = Util.make(new EventBus("bleachhack"), bus -> {
-		try {
-			Method m = ClassUtils.getClass("com.google.common.eventbus.Dispatcher").getDeclaredMethod("immediate");
-			m.setAccessible(true);
-			FieldUtils.writeDeclaredField(bus, "dispatcher", m.invoke(null), true);
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
-		}
-	});
+	public static final BleachEventBus eventBus = new BleachEventBus(logger);
 
 	public static FriendManager friendMang;
 
@@ -72,7 +57,6 @@ public class BleachHack implements ModInitializer {
 		}
 
 		instance = this;
-		logger = LogManager.getFormatterLogger("BleachHack");
 
 		//TODO base-rewrite
 		//this.eventBus = new EventBus();

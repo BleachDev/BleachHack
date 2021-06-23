@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.module.ModuleCategory;
@@ -75,7 +75,7 @@ public class DiscordRPCMod extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (silent != getSetting(3).asToggle().state) {
 			onDisable();

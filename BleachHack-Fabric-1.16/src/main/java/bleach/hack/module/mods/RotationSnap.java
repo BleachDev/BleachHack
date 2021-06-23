@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -36,7 +36,7 @@ public class RotationSnap extends Module {
 				new SettingToggle("Arrow Move", false).withDesc("Allows you to move between angles by using your arrow keys"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		/* yes looks like a good way to do it to me */
 		if (getSetting(2).asToggle().state && mc.currentScreen == null) {

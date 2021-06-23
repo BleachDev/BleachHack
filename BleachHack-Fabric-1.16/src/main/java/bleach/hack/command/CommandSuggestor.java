@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventRenderInGameHud;
@@ -36,15 +36,15 @@ public class CommandSuggestor {
 	}
 
 	public static void start() {
-		BleachHack.eventBus.register(getInstance());
+		BleachHack.eventBus.subscribe(getInstance());
 	}
 
 	public static void stop() {
 		getInstance().reset();
-		BleachHack.eventBus.unregister(getInstance());
+		BleachHack.eventBus.unsubscribe(getInstance());
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onDrawOverlay(EventRenderInGameHud event) {
 		Screen screen = MinecraftClient.getInstance().currentScreen;
 
@@ -102,7 +102,7 @@ public class CommandSuggestor {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onKeyPressGlobal(EventKeyPress.Global event) {
 		if (event.getAction() != 0 && !suggestions.isEmpty() && !curText.isEmpty()) {
 			if (event.getKey() == GLFW.GLFW_KEY_DOWN || event.getKey() == GLFW.GLFW_KEY_TAB) {
@@ -125,7 +125,7 @@ public class CommandSuggestor {
 		}
 	}
 	
-	@Subscribe
+	@BleachSubscribe
 	public void onKeyPressChat(EventKeyPress.InChat event) {
 		TextFieldWidget field = ((AccessorChatScreen) MinecraftClient.getInstance().currentScreen).getChatField();
 		if (field.getText().startsWith(Command.PREFIX)
@@ -142,7 +142,7 @@ public class CommandSuggestor {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (MinecraftClient.getInstance().currentScreen instanceof ChatScreen) {
 			reset();

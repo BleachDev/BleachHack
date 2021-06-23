@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.module.ModuleCategory;
@@ -26,7 +26,7 @@ public class AutoRespawn extends Module {
 						new SettingSlider("Delay", 1, 15, 5, 0).withDesc("How many ticks to delay")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (event.getScreen() instanceof DeathScreen) {
 			if (getSetting(0).asToggle().state) {

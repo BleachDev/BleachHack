@@ -8,12 +8,9 @@
  */
 package bleach.hack.module;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.google.common.eventbus.Subscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.setting.base.SettingBase;
@@ -30,8 +27,9 @@ public class Module {
 	private int key;
 	private int defaultKey;
 	
-	private boolean enabled = false;
+	private boolean enabled;
 	private final boolean defaultEnabled;
+	private boolean subscribed;
 	
 	private ModuleCategory category;
 	private String desc;
@@ -69,26 +67,14 @@ public class Module {
 	public void onEnable() {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 
-		for (Method method : getClass().getMethods()) {
-			if (method.isAnnotationPresent(Subscribe.class)) {
-				BleachHack.eventBus.register(this);
-				break;
-			}
-		}
+		subscribed = BleachHack.eventBus.subscribe(this);
 	}
 
 	public void onDisable() {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 
-		try {
-			for (Method method : getClass().getMethods()) {
-				if (method.isAnnotationPresent(Subscribe.class)) {
-					BleachHack.eventBus.unregister(this);
-					break;
-				}
-			}
-		} catch (Exception this_didnt_get_registered_hmm_weird) {
-			this_didnt_get_registered_hmm_weird.printStackTrace();
+		if (subscribed) {
+			BleachHack.eventBus.unsubscribe(this);
 		}
 	}
 

@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventReadPacket;
@@ -41,7 +41,7 @@ public class ElytraFly extends Module {
 				new SettingSlider("Packets", 1, 10, 2, 0).withDesc("How many packets to send in packet mode"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
 		/* Cancel the retarded auto elytra movement */
 		if (getSetting(0).asMode().mode == 2 && mc.player.isFallFlying()) {
@@ -56,7 +56,7 @@ public class ElytraFly extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		Vec3d vec3d = new Vec3d(0, 0, getSetting(3).asSlider().getValue())
 				.rotateY(-(float) Math.toRadians(mc.player.getYaw()));
@@ -134,7 +134,7 @@ public class ElytraFly extends Module {
 
 	// Packet moment
 
-	@Subscribe
+	@BleachSubscribe
 	public void onMovement(EventSendMovementPackets event) {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
 			mc.player.setVelocity(Vec3d.ZERO);
@@ -142,14 +142,14 @@ public class ElytraFly extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onMovement(EventClientMove event) {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
 			event.setCancelled(true);
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onReadPacket(EventReadPacket event) {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly() && event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
@@ -159,7 +159,7 @@ public class ElytraFly extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
 			if (event.getPacket() instanceof PlayerMoveC2SPacket.LookAndOnGround) {

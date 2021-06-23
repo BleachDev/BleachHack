@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -58,7 +58,7 @@ public class Fullbright extends Module {
 		BleachQueue.cancelQueue("fullbright");
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asMode().mode == 0) {
 			if (mc.options.gamma < getSetting(1).asSlider().getValue()) {

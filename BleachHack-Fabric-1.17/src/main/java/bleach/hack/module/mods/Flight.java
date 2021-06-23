@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
@@ -42,7 +42,7 @@ public class Flight extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		float speed = getSetting(1).asSlider().getValueFloat();
 
@@ -103,7 +103,7 @@ public class Flight extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (getSetting(0).asMode().mode == 2 && event.getPacket() instanceof PlayerMoveC2SPacket) {
 			if (!flyTick) {

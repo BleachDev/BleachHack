@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventTick;
@@ -54,7 +54,7 @@ public class AutoParkour extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (smartPos != null) {
 			if (mc.player.getY() - 0.5 < smartPos.getY() && mc.player.getVelocity().y < 0) {
@@ -97,7 +97,7 @@ public class AutoParkour extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRender(EventWorldRender event) {
 		if (smartPos != null && getSetting(1).asToggle().getChild(1).asToggle().state) {
 			float[] rgb = getSetting(1).asToggle().getChild(1).asToggle().getChild(0).asColor().getRGBFloat();
@@ -105,7 +105,7 @@ public class AutoParkour extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
 		if (smartPos != null && getSetting(1).asToggle().state) {
 			if (!getSetting(1).asToggle().getChild(0).asToggle().state

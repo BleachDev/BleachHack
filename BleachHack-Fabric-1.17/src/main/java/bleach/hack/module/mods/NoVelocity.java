@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventPlayerPushed;
 import bleach.hack.event.events.EventReadPacket;
@@ -38,14 +38,14 @@ public class NoVelocity extends Module {
 				new SettingToggle("Fluids", true).withDesc("Reduces how much you get pushed from fluids"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onPlayerPushed(EventPlayerPushed event) {
 		if (getSetting(2).asToggle().state) {
 			event.setPush(event.getPush().multiply(getSetting(2).asToggle().getChild(0).asSlider().getValue() / 100d));
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void readPacket(EventReadPacket event) {
 		if (mc.player == null)
 			return;

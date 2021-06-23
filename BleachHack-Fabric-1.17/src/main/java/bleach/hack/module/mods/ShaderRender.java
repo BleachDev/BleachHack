@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonSyntaxException;
 
 import bleach.hack.event.events.EventRenderShader;
@@ -49,7 +49,7 @@ public class ShaderRender extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRender(EventRenderShader event) {
 		if (lastShader == null || lastWidth != mc.getWindow().getFramebufferWidth() || lastHeight != mc.getWindow().getFramebufferHeight()
 				|| !shaders.get(getSetting(0).asMode().mode).equals(lastId)) {

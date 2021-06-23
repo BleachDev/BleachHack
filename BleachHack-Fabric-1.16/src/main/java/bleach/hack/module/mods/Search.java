@@ -23,7 +23,7 @@ import java.util.concurrent.Future;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
@@ -99,7 +99,7 @@ public class Search extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		Set<Block> blockList = getSetting(4).asList(Block.class).getItems();
 
@@ -157,7 +157,7 @@ public class Search extends Module {
 		
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onReadPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket
 				|| event.getPacket() instanceof GameJoinS2CPacket
@@ -188,7 +188,7 @@ public class Search extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		int mode = getSetting(0).asMode().mode;
 

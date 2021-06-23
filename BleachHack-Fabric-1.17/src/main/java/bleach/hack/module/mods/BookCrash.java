@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventTick;
@@ -50,7 +50,7 @@ public class BookCrash extends Module {
 				new SettingToggle("Auto-Off", true).withDesc("Automatically turns the modules off when you disconnect"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		delay = (delay >= getSetting(2).asSlider().getValue() ? 0 : delay + 1);
 		if (delay > 0)
@@ -116,7 +116,7 @@ public class BookCrash extends Module {
 		return new String(new char[count]).replace("\0", with);
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	private void EventDisconnect(EventReadPacket event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state)
 			setEnabled(false);

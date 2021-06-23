@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.event.events.EventBlockEntityRender;
@@ -83,7 +83,7 @@ public class NoRender extends Module {
 		return getSetting(1).asToggle().getChild(worldChild).asToggle();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRenderOverlay(EventRenderOverlay event) {
 		if (event.getTexture().getPath().equals("textures/misc/pumpkinblur.png") && shouldRemoveOverlay(4)) {
 			event.setCancelled(true);
@@ -92,7 +92,7 @@ public class NoRender extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
 		if (shouldRemoveWorld(6) && event.getEntity() instanceof ArmorStandEntity) {
 			event.setCancelled(true);
@@ -105,7 +105,7 @@ public class NoRender extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void signRender(EventBlockEntityRender.Single.Pre event) {
 		if (event.getBlockEntity() instanceof SignBlockEntity && shouldRemoveWorld(0)) {
 			SettingToggle signSettings = getWorldChild(0);
@@ -129,7 +129,7 @@ public class NoRender extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onParticle(EventParticle.Normal event) {
 		if (shouldRemoveWorld(2) && event.getParticle() instanceof ElderGuardianAppearanceParticle) {
 			event.setCancelled(true);
@@ -142,14 +142,14 @@ public class NoRender extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onParticleEmitter(EventParticle.Emitter event) {
 		if (shouldRemoveWorld(1) && getWorldChild(1).getChild(0).asToggle().state && event.getEffect().getType() == ParticleTypes.TOTEM_OF_UNDYING) {
 			event.setCancelled(true);
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
 		if (shouldRemoveOverlay(1) && getWorldChild(1).getChild(1).asToggle().state && event.instance.getId().getPath().equals("item.totem.use")) {
 			event.setCancelled(true);

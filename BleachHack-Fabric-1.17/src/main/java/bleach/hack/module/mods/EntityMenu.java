@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.command.Command;
@@ -55,7 +55,7 @@ public class EntityMenu extends Module {
 		}
 	}
 	
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_PRESS && !buttonHeld) {
 			buttonHeld = true;
@@ -74,7 +74,7 @@ public class EntityMenu extends Module {
 		}
 	}
 	
-	@Subscribe
+	@BleachSubscribe
 	public void onRenderCrosshair(EventRenderCrosshair event) {
 		if (mc.currentScreen instanceof EntityMenuScreen) {
 			event.setCancelled(true);

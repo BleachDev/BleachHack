@@ -11,7 +11,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.BleachQueue;
 import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.PlayerCopyEntity;
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import net.minecraft.client.gui.screen.DisconnectedScreen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -69,7 +69,7 @@ public class LogoutSpot extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onReadPacket(EventReadPacket event) {
 		if (!(event.getPacket() instanceof PlayerListS2CPacket) || mc.world == null) {
 			return;
@@ -102,7 +102,7 @@ public class LogoutSpot extends Module {
 	}
 
 	// Removes the fake players based on settings
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(0).asToggle().state) {
 			players.keySet().removeIf(player -> {
@@ -131,7 +131,7 @@ public class LogoutSpot extends Module {
 		players.values().forEach(e -> e.getLeft().setGhost(getSetting(2).asToggle().state));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onPostEntityRender(EventEntityRender.PostAll event) {
 		for (Pair<PlayerCopyEntity, Long> playerPair: players.values()) {
 			if (getSetting(1).asToggle().state) {
@@ -167,7 +167,7 @@ public class LogoutSpot extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(2).asToggle().state
 				&& event.getScreen() instanceof DisconnectedScreen) {

@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -42,7 +42,7 @@ public class Step extends Module {
 		mc.player.stepHeight = 0.5F;
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		mc.player.stepHeight = getSetting(0).asMode().mode == 1 ? getSetting(1).asSlider().getValueFloat() : 0.5f;
 		

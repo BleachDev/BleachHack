@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
@@ -84,7 +84,7 @@ public class AutoIStackDupe extends Module {
 		slotsToThrow.clear();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (((MountBypass) ModuleManager.getModule("MountBypass")).dontCancel)
 			return;
@@ -96,7 +96,7 @@ public class AutoIStackDupe extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_ESCAPE)) {
 			setEnabled(false);

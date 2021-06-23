@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleCategory;
@@ -26,7 +26,7 @@ public class AntiHunger extends Module {
 				new SettingToggle("Relaxed", false).withDesc("Only activates every other ticks, might fix getting fly kicked"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {
 			if (mc.player.getVelocity().y != 0 && !mc.options.keyJump.isPressed() && (!bool || !getSetting(0).asToggle().state)) {

@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventInteract;
 import bleach.hack.event.events.EventTick;
@@ -160,7 +160,7 @@ public class AutoBuild extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (!active) {
 			ray = (BlockHitResult) mc.player.raycast(40, mc.getTickDelta(), false);
@@ -188,7 +188,7 @@ public class AutoBuild extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		if (current != null) {
 			//RenderUtils.drawOutlineBox(current.getBox(), 1f, 1f, 0f, 0.5f);
@@ -207,7 +207,7 @@ public class AutoBuild extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onInteract(EventInteract.InteractBlock event) {
 		if (ray != null && !active) {
 			event.setCancelled(true);

@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventEntityControl;
 import bleach.hack.event.events.EventReadPacket;
@@ -52,7 +52,7 @@ public class EntityControl extends Module {
 						new SettingToggle("Player", true).withDesc("Also locks roation for player packets")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (mc.player.getVehicle() == null)
 			return;
@@ -129,7 +129,7 @@ public class EntityControl extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (getSetting(6).asToggle().state) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
@@ -149,7 +149,7 @@ public class EntityControl extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onReadPacket(EventReadPacket event) {
 		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state
 				&& mc.player != null && mc.player.hasVehicle()) {
@@ -159,7 +159,7 @@ public class EntityControl extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onEntityControl(EventEntityControl event) {
 		if (mc.player.getVehicle() instanceof ItemSteerable && mc.player.forwardSpeed == 0 && mc.player.sidewaysSpeed == 0) {
 			return;

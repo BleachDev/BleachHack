@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
@@ -47,7 +47,7 @@ public class AirPlace extends Module {
 				new SettingMode("Mode", "Multi", "Single").withDesc("Whether to place a block once per click or multiple blocks if the button is held down"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		boolean isKeyUsePressed = mc.options.keyUse.isPressed();
 
@@ -69,7 +69,7 @@ public class AirPlace extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRender(EventWorldRender event) {
 		if (!(mc.crosshairTarget instanceof BlockHitResult) || !getSetting(0).asToggle().state) {
 			return;
@@ -97,7 +97,7 @@ public class AirPlace extends Module {
 	}
 
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerInteractBlockC2SPacket) {
 			event.setCancelled(true);

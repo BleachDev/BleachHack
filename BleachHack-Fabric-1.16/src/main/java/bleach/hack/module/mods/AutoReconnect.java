@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.event.events.EventReadPacket;
@@ -41,7 +41,7 @@ public class AutoReconnect extends Module {
 						new SettingSlider("Time", 0.2, 10, 5, 2).withDesc("How long to wait before reconnecting")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (event.getScreen() instanceof DisconnectedScreen
 				&& !(event.getScreen() instanceof NewDisconnectScreen)) {
@@ -50,7 +50,7 @@ public class AutoReconnect extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void readPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket) {
 			try {
@@ -60,7 +60,7 @@ public class AutoReconnect extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void sendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof HandshakeC2SPacket) {
 			server = new ServerInfo("Server",

@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import java.util.Comparator;
 import com.google.common.collect.Streams;
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -46,7 +46,7 @@ public class BowBot extends Module {
 						new SettingToggle("Raycast", true).withDesc("Doesn't aim at entites that you can't see")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (!(mc.player.getMainHandStack().getItem() instanceof RangedWeaponItem) || !mc.player.isUsingItem())
 			return;

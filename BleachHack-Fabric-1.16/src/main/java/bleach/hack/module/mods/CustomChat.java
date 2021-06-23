@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.BleachHack;
@@ -85,7 +85,7 @@ public class CustomChat extends Module {
 		if (sfx != null) suffix = sfx.getAsString();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onPacketSend(EventSendPacket event) {
 		if (event.getPacket() instanceof ChatMessageC2SPacket) {
 			String text = ((ChatMessageC2SPacket) event.getPacket()).getChatMessage();
@@ -111,7 +111,7 @@ public class CustomChat extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onPacketRead(EventReadPacket event) {
 		if (getSetting(4).asMode().mode != 0 && event.getPacket() instanceof GameMessageS2CPacket) {
 

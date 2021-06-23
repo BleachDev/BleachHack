@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -29,7 +29,7 @@ public class Ghosthand extends Module {
 		super("Ghosthand", KEY_UNBOUND, ModuleCategory.PLAYER, "Opens Containers Through Walls");
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (!mc.options.keyUse.isPressed() || mc.player.isSneaking())
 			return;

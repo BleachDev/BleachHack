@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
@@ -62,7 +62,7 @@ public class Killaura extends Module {
 				new SettingSlider("CPS", 0, 20, 8, 0).withDesc("Attack CPS"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (!mc.player.isAlive()) {
 			return;

@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventBiomeColor;
 import bleach.hack.event.events.EventReadPacket;
@@ -72,7 +72,7 @@ public class Ambience extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asToggle().state) {
 			if (!weatherManager.isActive()) {
@@ -97,7 +97,7 @@ public class Ambience extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void readPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof GameStateChangeS2CPacket && getSetting(0).asToggle().state) {
 			GameStateChangeS2CPacket packet = (GameStateChangeS2CPacket) event.getPacket();
@@ -121,7 +121,7 @@ public class Ambience extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onBiomeColor(EventBiomeColor event) {
 		int type = event instanceof EventBiomeColor.Water ? 2 : 1;
 
@@ -129,14 +129,14 @@ public class Ambience extends Module {
 				? getCurrentDimSetting().getChild(type).asToggle().getChild(0).asColor().getRGB() : null);
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSkyColor(EventSkyRender.Color event) {
 		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(0).asToggle().state) {
 			event.setColor(getCurrentDimSetting().getChild(0).asToggle().getChild(1).asColor().getRGBFloat());
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSkyProperties(EventSkyRender.Properties event) {
 		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(0).asToggle().state
 				&& getCurrentDimSetting().getChild(0).asToggle().getChild(0).asToggle().state) {

@@ -15,7 +15,7 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventBlockBreakCooldown;
 import bleach.hack.event.events.EventParticle;
@@ -80,7 +80,7 @@ public class Nuker extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		renderBlocks.clear();
 
@@ -159,7 +159,7 @@ public class Nuker extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		if (getSetting(11).asToggle().state) {
 			float[] color = getSetting(11).asToggle().getChild(1).asColor().getRGBFloat();
@@ -212,14 +212,14 @@ public class Nuker extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onParticle(EventParticle.Normal event) {
 		if (event.getParticle() instanceof BlockDustParticle && getSetting(10).asToggle().state) {
 			event.setCancelled(true);
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onBlockBreakCooldown(EventBlockBreakCooldown event) {
 		event.setCooldown(getSetting(2).asSlider().getValueInt());
 	}

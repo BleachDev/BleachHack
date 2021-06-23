@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import java.io.IOException;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonSyntaxException;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventEntityRender;
@@ -78,7 +78,7 @@ public class ESP extends Module {
 						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onEntityRenderPre(EventEntityRender.PreAll event) {
 		if (getSetting(0).asMode().mode <= 1) {
 			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
@@ -106,7 +106,7 @@ public class ESP extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRenderPost(EventWorldRender.Post event) {
 		if (!getSetting(4).asToggle().state) {
 			for (Entity e: mc.world.getEntities()) {
@@ -129,7 +129,7 @@ public class ESP extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
 		float[] color = getColorForEntity(event.getEntity());
 

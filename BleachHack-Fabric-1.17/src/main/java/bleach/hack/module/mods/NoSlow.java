@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventSendPacket;
@@ -61,7 +61,7 @@ public class NoSlow extends Module {
 								new SettingToggle("Anti-Spinbot", true).withDesc("Adds a random amount of rotation when spinning to prevent spinbot detects"))));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
 		if (!isEnabled())
 			return;
@@ -108,7 +108,7 @@ public class NoSlow extends Module {
 		// Items handled in MixinPlayerEntity:sendMovementPackets_isUsingItem
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		/* Inventory */
 		if (getSetting(6).asToggle().state && shouldInvMove(mc.currentScreen)) {
@@ -129,7 +129,7 @@ public class NoSlow extends Module {
 	}
 
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		/* Inventory */
 		if (getSetting(6).asToggle().state
@@ -178,7 +178,7 @@ public class NoSlow extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof ClickSlotC2SPacket && getSetting(6).asToggle().asToggle().getChild(1).asToggle().state) {
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));

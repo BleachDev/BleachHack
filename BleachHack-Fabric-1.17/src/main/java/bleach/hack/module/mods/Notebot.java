@@ -20,7 +20,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
@@ -116,7 +116,7 @@ public class Notebot extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
@@ -127,7 +127,7 @@ public class Notebot extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		/* Tune Noteblocks */
 		if (getSetting(0).asToggle().state) {

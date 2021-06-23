@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventWorldRender;
@@ -51,7 +51,7 @@ public class Tracers extends Module {
 				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		float width = getSetting(6).asSlider().getValueFloat();
 		float opacity = getSetting(7).asSlider().getValueFloat();

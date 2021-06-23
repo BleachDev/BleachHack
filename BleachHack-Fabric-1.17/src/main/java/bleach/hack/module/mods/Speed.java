@@ -10,7 +10,7 @@ package bleach.hack.module.mods;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -33,7 +33,7 @@ public class Speed extends Module {
 				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop speed"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		//System.out.println(mc.player.forwardSpeed + " | " + mc.player.sidewaysSpeed);
 		if (mc.options.keySneak.isPressed())

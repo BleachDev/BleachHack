@@ -30,7 +30,7 @@ import java.util.concurrent.Future;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.google.common.io.Resources;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -129,7 +129,7 @@ public class Nametags extends Module {
 		uuidExecutor = Executors.newFixedThreadPool(4);
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		// collect revenue from all the future copies
 		for (Entry<UUID, Future<String>> f: new HashMap<>(uuidFutures).entrySet()) {
@@ -151,7 +151,7 @@ public class Nametags extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onLivingLabelRender(EventEntityRender.Single.Label event) {
 		if ((EntityUtils.isAnimal(event.getEntity()) && getSetting(3).asToggle().state)
 				|| (event.getEntity() instanceof Monster && getSetting(4).asToggle().state)
@@ -160,7 +160,7 @@ public class Nametags extends Module {
 			event.setCancelled(true);
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		for (Entity entity: mc.world.getEntities()) {
 			Vec3d rPos = entity.getPos().subtract(RenderUtils.getInterpolationOffset(entity)).add(0, entity.getHeight(), 0);

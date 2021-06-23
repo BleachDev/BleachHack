@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Streams;
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
@@ -87,7 +87,7 @@ public class CrystalAura extends Module {
 				new SettingSlider("Range", 0, 6, 4.5, 2).withDesc("Range to place and attack crystals"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		breakCooldown = Math.max(0, breakCooldown - 1);
 		placeCooldown = Math.max(0, placeCooldown - 1);
@@ -263,7 +263,7 @@ public class CrystalAura extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRenderWorld(EventWorldRender.Post event) {
 		if (this.render != null) {
 			float[] col = getSetting(4).asToggle().getChild(8).asColor().getRGBFloat();

@@ -11,7 +11,7 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.event.events.EventRenderTooltip;
@@ -70,7 +70,7 @@ public class Peek extends Module {
 						new SettingSlider("Map Size", 0.25, 1.5, 0.85, 2).withDesc("How big to make the map")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void drawScreen(EventRenderTooltip event) {
 		if (!(event.getScreen() instanceof HandledScreen)) {
 			return;

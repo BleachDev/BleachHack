@@ -13,7 +13,7 @@ import java.util.Set;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Sets;
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -39,7 +39,7 @@ public class FastUse extends Module {
 						new SettingToggle("XP Only", false).withDesc("Only use XP bottles")));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (getSetting(2).asToggle().state) {
 			if (!(THROWABLE.contains(mc.player.getMainHandStack().getItem())

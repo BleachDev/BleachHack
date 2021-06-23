@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventSendPacket;
@@ -30,7 +30,7 @@ public class AntiVoid extends Module {
 				new SettingToggle("AntiTP", true).withDesc("Prevents you from accidentally tping in to the void (i.e., using PacketFly)"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (mc.player.getY() < mc.world.getBottomY()) {
 			switch (getSetting(0).asMode().mode) {
@@ -53,7 +53,7 @@ public class AntiVoid extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {
 			PlayerMoveC2SPacket packet = (PlayerMoveC2SPacket) event.getPacket();
@@ -70,7 +70,7 @@ public class AntiVoid extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
 		if (getSetting(1).asToggle().state && mc.player.getY() >= mc.world.getBottomY() && mc.player.getY() - event.getVec().y < mc.world.getBottomY()) {
 			event.setCancelled(true);

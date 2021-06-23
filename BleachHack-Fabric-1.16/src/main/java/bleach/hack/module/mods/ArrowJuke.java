@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
@@ -38,7 +38,7 @@ public class ArrowJuke extends Module {
 				new SettingToggle("Up", false).withDesc("Allows you to move up when dodging the arrow"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick envent) {
 		for (Entity e : mc.world.getEntities()) {
 			if (e.age > 75 || !(e instanceof ArrowEntity) || ((ArrowEntity) e).getOwner() == mc.player)

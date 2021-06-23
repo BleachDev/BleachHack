@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
@@ -28,7 +28,7 @@ public class Nofall extends Module {
 				new SettingMode("Mode", "Simple", "Packet", "ec.me").withDesc("What nofall mode to use"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (mc.player.fallDistance > 2.5f && getSetting(0).asMode().mode == 0) {
 			if (mc.player.isFallFlying())
@@ -46,7 +46,7 @@ public class Nofall extends Module {
 		}
 	}
 	
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket && getSetting(0).asMode().mode == 2) {
 			if (mc.player.fallDistance > 2.5f && !altBool) {

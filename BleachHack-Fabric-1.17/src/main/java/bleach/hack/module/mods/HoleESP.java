@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
@@ -66,7 +66,7 @@ public class HoleESP extends Module {
 		super.onDisable();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (mc.player.age % 14 == 0) {
 			holes.clear();
@@ -115,7 +115,7 @@ public class HoleESP extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		if (getSetting(1).asToggle().state) {
 			int bottomMode = getSetting(1).asToggle().getChild(0).asMode().mode;

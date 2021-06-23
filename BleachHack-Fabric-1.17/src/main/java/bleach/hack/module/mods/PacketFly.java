@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendMovementPackets;
 import bleach.hack.event.events.EventSendPacket;
@@ -51,18 +51,18 @@ public class PacketFly extends Module {
 		posZ = mc.player.getZ();
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onMovement(EventSendMovementPackets event) {
 		mc.player.setVelocity(Vec3d.ZERO);
 		event.setCancelled(true);
 	}
 	
-	@Subscribe
+	@BleachSubscribe
 	public void onMovement(EventClientMove event) {
 		event.setCancelled(true);
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onReadPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
@@ -77,7 +77,7 @@ public class PacketFly extends Module {
 		
 	}
 	
-	@Subscribe
+	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket.LookAndOnGround) {
 			event.setCancelled(true);
@@ -92,7 +92,7 @@ public class PacketFly extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		double hspeed = getSetting(1).asSlider().getValue();
 		double vspeed = getSetting(2).asSlider().getValue();

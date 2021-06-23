@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
@@ -39,7 +39,7 @@ public class AutoTool extends Module {
 				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damagable item if possible"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onPacketSend(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerActionC2SPacket) {
 			PlayerActionC2SPacket p = (PlayerActionC2SPacket) event.getPacket();
@@ -81,7 +81,7 @@ public class AutoTool extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (queueSlot != -1) {
 			mc.player.getInventory().selectedSlot = queueSlot;

@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Triple;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
@@ -60,7 +60,7 @@ public class Trajectories extends Module {
 				new SettingSlider("Opacity", 0, 1, 0.4, 2).withDesc("Opacity of the trajectories"));
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onTick(EventTick event) {
 		poses.clear();
 
@@ -106,7 +106,7 @@ public class Trajectories extends Module {
 		}
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		float[] col = getSetting(6).asColor().getRGBFloat();
 

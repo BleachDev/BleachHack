@@ -8,7 +8,7 @@
  */
 package bleach.hack.module.mods;
 
-import com.google.common.eventbus.Subscribe;
+import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.Module;
@@ -25,7 +25,7 @@ public class MountBypass extends Module {
 		super("MountBypass", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Bypasses illegalstack on non bungeecord servers");
 	}
 
-	@Subscribe
+	@BleachSubscribe
 	public void onPacket(EventSendPacket event) {
 		if (dontCancel)
 			return;
