@@ -22,7 +22,6 @@ import java.util.zip.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import bleach.hack.BleachHack;
 import bleach.hack.util.io.BleachFileMang;
 import bleach.hack.util.io.BleachGithubReader;
 import net.minecraft.block.enums.Instrument;
@@ -77,7 +76,7 @@ public class NotebotUtils {
 				if (split[0].equals(tick + ""))
 					notes.put(Instrument.values()[Integer.parseInt(split[2])], Integer.parseInt(split[1]));
 			} catch (Exception e) {
-				BleachHack.logger.error("oops");
+				BleachLogger.logger.error("oops");
 			}
 		}
 

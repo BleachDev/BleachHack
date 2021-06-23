@@ -2,7 +2,7 @@ package bleach.hack.gui.window.widget;
 
 import java.lang.reflect.Field;
 
-import bleach.hack.BleachHack;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -29,7 +29,7 @@ public class WindowPassTextFieldWidget extends WindowTextFieldWidget {
 			super.render(matrices, windowX, windowY, mouseX, mouseY);
 			TEXT_FIELD.set(textField, realText);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			BleachHack.logger.error("Error reflecting TextFieldWidget text field");
+			BleachLogger.logger.error("Error reflecting TextFieldWidget text field");
 		}
 	}
 }

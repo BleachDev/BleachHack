@@ -20,6 +20,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.rpc.DiscordEventHandlers;
 import bleach.hack.util.rpc.DiscordRPCManager;
@@ -60,10 +61,10 @@ public class DiscordRPCMod extends Module {
 
 		tick = 0;
 
-		BleachHack.logger.info("Initing Discord RPC...");
+		BleachLogger.logger.info("Initing Discord RPC...");
 		DiscordRPCManager.initialize(silent ? "727434331089272903" : "740928841433743370",
 				new DiscordEventHandlers.Builder()
-				.withReadyEventHandler(user -> BleachHack.logger.info(user.username + "#" + user.discriminator + " is big gay"))
+				.withReadyEventHandler(user -> BleachLogger.logger.info(user.username + "#" + user.discriminator + " is big gay"))
 				.build());
 
 		super.onEnable();

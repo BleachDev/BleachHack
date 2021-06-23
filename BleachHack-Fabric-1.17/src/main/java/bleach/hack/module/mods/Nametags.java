@@ -45,6 +45,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.EntityUtils;
@@ -412,12 +413,12 @@ public class Nametags extends Module {
 				try {
 					String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
 					String response = Resources.toString(new URL(url), StandardCharsets.UTF_8);
-					BleachHack.logger.info("bruh uuid time: " + url);
+					BleachLogger.logger.info("bruh uuid time: " + url);
 
 					JsonElement json = new JsonParser().parse(response);
 
 					if (!json.isJsonArray()) {
-						BleachHack.logger.error("[Nametags] Invalid Owner UUID: " + uuid.toString());
+						BleachLogger.logger.error("[Nametags] Invalid Owner UUID: " + uuid.toString());
 						return "\u00a7c[Invalid]";
 					}
 
@@ -425,7 +426,7 @@ public class Nametags extends Module {
 
 					return ja.get(ja.size() - 1).getAsJsonObject().get("name").getAsString();
 				} catch (IOException e) {
-					BleachHack.logger.error("[Nametags] Error Getting Owner UUID: " + uuid.toString());
+					BleachLogger.logger.error("[Nametags] Error Getting Owner UUID: " + uuid.toString());
 					return "\u00a7c[Error]";
 				}
 			}

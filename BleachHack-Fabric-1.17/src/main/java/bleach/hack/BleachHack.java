@@ -16,23 +16,21 @@ import bleach.hack.eventbus.BleachEventBus;
 import bleach.hack.gui.title.BleachTitleScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FriendManager;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class BleachHack implements ModInitializer {
 
 	private static BleachHack instance = null;
-	public static Logger logger = LogManager.getFormatterLogger("BleachHack");
 
 	public static final String VERSION = "1.0.1";
 	public static final int INTVERSION = 32;
 
-	public static final BleachEventBus eventBus = new BleachEventBus(logger);
+	public static BleachEventBus eventBus;
 
 	public static FriendManager friendMang;
 
@@ -57,6 +55,7 @@ public class BleachHack implements ModInitializer {
 		}
 
 		instance = this;
+		eventBus = new BleachEventBus(BleachLogger.logger);
 
 		//TODO base-rewrite
 		//this.eventBus = new EventBus();
@@ -79,6 +78,6 @@ public class BleachHack implements ModInitializer {
 			BleachTitleScreen.customTitleScreen = false;
 		}
 
-		logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
+		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 }

@@ -28,6 +28,7 @@ import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.UI;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachGithubReader;
 import net.fabricmc.loader.ModContainer;
@@ -192,7 +193,7 @@ public class BleachTitleScreen extends WindowScreen {
 
 						File installerFile = new File(System.getProperty("java.io.tmpdir"), name);
 
-						BleachHack.logger.info(
+						BleachLogger.logger.info(
 								"\n> Installer path: " + installerFile
 								+ "\n> Installer URL: " + link
 								+ "\n> Installer file name: " + name

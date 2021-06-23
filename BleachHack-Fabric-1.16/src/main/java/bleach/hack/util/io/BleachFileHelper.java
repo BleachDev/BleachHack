@@ -183,7 +183,7 @@ public class BleachFileHelper {
 							((ClickGuiWindow) w).hiding = jw.get("hidden").getAsBoolean();
 						}
 					} catch (Exception ex) {
-						BleachHack.logger.error("Error trying to load clickgui window: " + e.getKey() + " with data: " + e.getValue());
+						BleachLogger.logger.error("Error trying to load clickgui window: " + e.getKey() + " with data: " + e.getValue());
 					}
 				}
 			}

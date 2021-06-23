@@ -17,7 +17,6 @@ import com.google.common.io.Resources;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
@@ -66,7 +65,7 @@ public class CmdSkull extends Command {
 			NbtCompound tag = StringNbtReader.parse(
 					"{SkullOwner:{Id:" + id + ",Properties:{textures:[{Value:\"" + encodeUrl(args[1]) + "\"}]}}}");
 			item.setTag(tag);
-			BleachHack.logger.info(tag);
+			BleachLogger.logger.info(tag);
 		}
 
 		mc.player.inventory.addPickBlock(item);

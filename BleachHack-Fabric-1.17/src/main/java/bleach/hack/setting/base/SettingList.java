@@ -18,13 +18,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowScrollbarWidget;
 import bleach.hack.gui.window.widget.WindowTextFieldWidget;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -123,7 +123,7 @@ public abstract class SettingList<E> extends SettingBase {
 					itemPool.remove(item);
 					items.add(item);
 				} else {
-					BleachHack.logger.error("Error Importing item: " + je.toString());
+					BleachLogger.logger.error("Error Importing item: " + je.toString());
 				}
 			}
 		}

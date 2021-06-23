@@ -30,13 +30,13 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import bleach.hack.BleachHack;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowCheckboxWidget;
 import bleach.hack.gui.window.widget.WindowPassTextFieldWidget;
 import bleach.hack.gui.window.widget.WindowTextFieldWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginManager;
 import bleach.hack.util.io.BleachFileMang;
@@ -147,7 +147,7 @@ public class AccountManagerScreen extends WindowScreen {
 						accountQueue.add(new Account(split[0], crypter.decrypt(split[3]), split[1], split[2]));
 					}
 				} catch (Exception e) {
-					BleachHack.logger.info("Error decrypting accout: " + split[0]);
+					BleachLogger.logger.info("Error decrypting accout: " + split[0]);
 				}
 			}
 		}

@@ -9,8 +9,9 @@
 package bleach.hack.util;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import bleach.hack.BleachHack;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
@@ -19,13 +20,15 @@ import net.minecraft.util.Formatting;
 
 public class BleachLogger {
 
+	public static final Logger logger = LogManager.getFormatterLogger("BleachHack");
+
 	public static void infoMessage(MutableText t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.DARK_AQUA) + "\u00a73\u00a7lINFO: \u00a73")
 					.append(t.formatted(Formatting.DARK_AQUA)));
 		} catch (Exception e) {
-			BleachHack.logger.log(Level.INFO, t.asString());
+			logger.log(Level.INFO, t.asString());
 		}
 	}
 
@@ -39,7 +42,7 @@ public class BleachLogger {
 			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e")
 					.append(t.formatted(Formatting.YELLOW)));
 		} catch (Exception e) {
-			BleachHack.logger.log(Level.WARN, t.asString());
+			logger.log(Level.WARN, t.asString());
 		}
 	}
 
@@ -53,7 +56,7 @@ public class BleachLogger {
 			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c")
 					.append(t.formatted(Formatting.RED)));
 		} catch (Exception e) {
-			BleachHack.logger.log(Level.ERROR, t.asString());
+			logger.log(Level.ERROR, t.asString());
 		}
 	}
 
@@ -65,7 +68,7 @@ public class BleachLogger {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(s));
 		} catch (Exception e) {
-			BleachHack.logger.log(Level.INFO, s);
+			logger.log(Level.INFO, s);
 		}
 	}
 
@@ -73,7 +76,7 @@ public class BleachLogger {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
 		} catch (Exception e) {
-			BleachHack.logger.log(Level.INFO, text.getString());
+			logger.log(Level.INFO, text.getString());
 		}
 	}
 

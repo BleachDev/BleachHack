@@ -18,7 +18,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
-import bleach.hack.BleachHack;
+import bleach.hack.util.BleachLogger;
 
 public class BleachJsonHelper {
 
@@ -89,7 +89,7 @@ public class BleachJsonHelper {
 		try {
 			return new JsonParser().parse(merged).getAsJsonObject();
 		} catch (JsonParseException | IllegalStateException e) {
-			BleachHack.logger.error("Json error Trying to read " + Arrays.asList(path) + "! DELETING ENTIRE FILE!");
+			BleachLogger.logger.error("Json error Trying to read " + Arrays.asList(path) + "! DELETING ENTIRE FILE!");
 			e.printStackTrace();
 
 			BleachFileMang.deleteFile(path);

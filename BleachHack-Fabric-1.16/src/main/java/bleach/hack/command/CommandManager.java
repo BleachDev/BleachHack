@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 
-import bleach.hack.BleachHack;
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
@@ -62,14 +61,14 @@ public class CommandManager {
 
 						loadCommand(command);
 					} catch (Exception exception) {
-						BleachHack.logger.error("Failed to load command %s: could not instantiate.", commandClass);
+						BleachLogger.logger.error("Failed to load command %s: could not instantiate.", commandClass);
 						exception.printStackTrace();
 					}
 				} else {
-					BleachHack.logger.error("Failed to load command %s: not a descendant of Command.", commandClass);
+					BleachLogger.logger.error("Failed to load command %s: not a descendant of Command.", commandClass);
 				}
 			} catch (Exception exception) {
-				BleachHack.logger.error("Failed to load command %s.", commandString);
+				BleachLogger.logger.error("Failed to load command %s.", commandString);
 				exception.printStackTrace();
 			}
 		}
@@ -77,14 +76,14 @@ public class CommandManager {
 
 	public static void loadCommand(Command command) {
 		if (commands.containsValue(command)) {
-			BleachHack.logger.error("Failed to load module %s: a module with this name is already loaded.", command.getAliases()[0]);
+			BleachLogger.logger.error("Failed to load module %s: a module with this name is already loaded.", command.getAliases()[0]);
 		} else {
 			commands.put(command.getAliases()[0], command);
 
 			try {
 				suggestionProvider.addSuggestion(command.getSyntax());
 			} catch (Exception e) {
-				BleachHack.logger.error(String.format("Error trying to load suggestsions for $%s (Syntax: %s)", command.getAliases()[0], command.getSyntax()) , e);
+				BleachLogger.logger.error(String.format("Error trying to load suggestsions for $%s (Syntax: %s)", command.getAliases()[0], command.getSyntax()) , e);
 				suggestionProvider.addSuggestion(command.getAliases()[0]);
 			}
 		}
@@ -100,7 +99,7 @@ public class CommandManager {
 
 	public static void callCommand(String input) {
 		String[] split = input.split(" ");
-		BleachHack.logger.info("Running command: " + Arrays.toString(split));
+		BleachLogger.logger.info("Running command: " + Arrays.toString(split));
 
 		for (Command c : getCommands()) {
 			if (c.hasAlias(split[0])) {
