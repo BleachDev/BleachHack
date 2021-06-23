@@ -74,7 +74,7 @@ public class BleachSubscriber {
 
 	@Override
 	public final int hashCode() {
-		return (31 + signature.hashCode()) * 31 + System.identityHashCode(signature);
+		return signature.hashCode();
 	}
 
 	@Override
