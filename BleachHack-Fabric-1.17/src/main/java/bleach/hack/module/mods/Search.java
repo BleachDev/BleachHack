@@ -181,7 +181,9 @@ public class Search extends Module {
 		} else if (event.getPacket() instanceof ChunkDataS2CPacket) {
 			ChunkDataS2CPacket packet = (ChunkDataS2CPacket) event.getPacket();
 
-			queuedChunks.add(new ChunkPos(packet.getX(), packet.getZ()));
+			ChunkPos cp = new ChunkPos(packet.getX(), packet.getZ());
+			queuedChunks.add(cp);
+			queuedUnloads.remove(cp);
 		} else if (event.getPacket() instanceof UnloadChunkS2CPacket) {
 			UnloadChunkS2CPacket packet = (UnloadChunkS2CPacket) event.getPacket();
 
