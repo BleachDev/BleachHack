@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.entity.projectile.ShulkerBulletEntity;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
@@ -51,6 +53,7 @@ public class Killaura extends Module {
 				new SettingToggle("Players", true).withDesc("Attack players"),
 				new SettingToggle("Mobs", true).withDesc("Attack mobs"),
 				new SettingToggle("Animals", false).withDesc("Attack animals"),
+				new SettingToggle("Trajectories", false).withDesc("Attack Shulker Bullets & Fireballs"),
 				new SettingToggle("Armor Stands", false).withDesc("Attack armor stands"),
 				new SettingToggle("Triggerbot", false).withDesc("Only attacks the entity you are looking at"),
 				new SettingToggle("MultiAura", false).withDesc("Atacks multiple entities at once").withChildren(
@@ -69,18 +72,18 @@ public class Killaura extends Module {
 		}
 
 		delay++;
-		int reqDelay = (int) Math.round(20 / getSetting(11).asSlider().getValue());
+		int reqDelay = (int) Math.round(20 / getSetting(12).asSlider().getValue());
 
-		boolean cooldownDone = getSetting(9).asToggle().state
+		boolean cooldownDone = getSetting(10).asToggle().state
 				? mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f
 				: (delay > reqDelay || reqDelay == 0);
 
 		if (cooldownDone) {
 			for (Entity e: getEntities()) {
-				boolean shouldRotate = getSetting(7).asRotate().state && DebugRenderer.getTargetedEntity(mc.player, 7).orElse(null) != e;
+				boolean shouldRotate = getSetting(8).asRotate().state && DebugRenderer.getTargetedEntity(mc.player, 7).orElse(null) != e;
 
 				if (shouldRotate) {
-					WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(7).asRotate());
+					WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(8).asRotate());
 				}
 
 				boolean wasSprinting = mc.player.isSprinting();
@@ -102,7 +105,7 @@ public class Killaura extends Module {
 	private List<Entity> getEntities() {
 		Stream<Entity> targets;
 
-		if (getSetting(5).asToggle().state) {
+		if (getSetting(6).asToggle().state) {
 			Optional<Entity> entity = DebugRenderer.getTargetedEntity(mc.player, 7);
 
 			if (!entity.isPresent()) {
@@ -137,17 +140,18 @@ public class Killaura extends Module {
 
 		return targets
 				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
-						&& e.isAlive() 
+						&& e.isAlive()
 						&& e != mc.player.getVehicle()
 						&& !e.getEntityName().equals(mc.getSession().getUsername())
-						&& mc.player.distanceTo(e) <= getSetting(10).asSlider().getValue()
-						&& (mc.player.canSee(e) || getSetting(8).asToggle().state))
+						&& mc.player.distanceTo(e) <= getSetting(11).asSlider().getValue()
+						&& (mc.player.canSee(e) || getSetting(9).asToggle().state))
 				.filter(e -> (e instanceof PlayerEntity && getSetting(1).asToggle().state)
 						|| (e instanceof Monster && getSetting(2).asToggle().state)
 						|| (EntityUtils.isAnimal(e) && getSetting(3).asToggle().state)
-						|| (e instanceof ArmorStandEntity && getSetting(4).asToggle().state))
+						|| ((e instanceof ShulkerBulletEntity || e instanceof FireballEntity)&& getSetting(4).asToggle().state)
+						|| (e instanceof ArmorStandEntity && getSetting(5).asToggle().state))
 				.sorted(comparator)
-				.limit(getSetting(6).asToggle().state ? getSetting(6).asToggle().getChild(0).asSlider().getValueLong() : 1L)
+				.limit(getSetting(7).asToggle().state ? getSetting(7).asToggle().getChild(0).asSlider().getValueLong() : 1L)
 				.collect(Collectors.toList());
 	}
 }
