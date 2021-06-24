@@ -16,6 +16,7 @@
     "MixinBeaconScreen",
     "MixinBiomeColors",
     "MixinBlock",
+    "MixinFluidBlock",
     "MixinBlockEntityRenderDispatcher",
     "MixinBlockRenderManager",
     "MixinBossBarHud",
