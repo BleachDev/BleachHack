@@ -25,4 +25,7 @@ public class BleachEventBus {
 		subscriberRegistry.post(event, logger);
 	}
 
+	public long getEventsPosted() {
+		return subscriberRegistry.getEventsPosted();
+	}
 }

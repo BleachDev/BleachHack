@@ -1,8 +1,8 @@
 package bleach.hack.eventbus;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
@@ -14,6 +14,7 @@ public class BleachSubscriberRegistry {
 
 	private Multimap<Class<?>, BleachSubscriber> subscribers = HashMultimap.create();
 	private final String id;
+	private AtomicLong eventsPosted = new AtomicLong();
 
 	public BleachSubscriberRegistry(String id) {
 		this.id = id;
@@ -30,7 +31,7 @@ public class BleachSubscriberRegistry {
 				}
 			}
 		}
-		
+
 		return added;
 	}
 
@@ -47,8 +48,9 @@ public class BleachSubscriberRegistry {
 			.forEach(s -> {
 				try {
 					s.callSubscriber(event);
+					eventsPosted.incrementAndGet();
 				} catch (Throwable t) {
-					logger.log(Level.ERROR, "Exception thrown by subscriber method " + s.getSignature() + " when dispatching event: " + s.getEventClass(), t);
+					logger.error("Exception thrown by subscriber method " + s.getSignature() + " when dispatching event: " + s.getEventClass().getName(), t);
 				}
 			});
 		}
@@ -56,5 +58,9 @@ public class BleachSubscriberRegistry {
 
 	public String getId() {
 		return id;
+	}
+
+	public long getEventsPosted() {
+		return eventsPosted.get();
 	}
 }

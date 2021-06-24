@@ -42,7 +42,7 @@ public class BleachSubscriber {
 					MethodType.methodType(void.class, eventClass));
 
 			subscriberCaller = (Consumer<Object>) callsite.getTarget().invoke(target);
-			signature = method.toGenericString();
+			signature = target.getClass().getName() + "." + method.getName() + "(" + method.getParameters()[0].getType().getName() + ")";
 			this.eventClass = eventClass;
 		} catch (Throwable t) {
 			// Yea, we got a problem
