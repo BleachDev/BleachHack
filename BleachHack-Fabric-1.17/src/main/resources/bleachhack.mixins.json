@@ -6,6 +6,7 @@
   ],
   "client": [
     "AccessorChatScreen",
+    "AccessorFrustum",
     "AccessorHeldItemRenderer",
     "AccessorMinecraftClient",
     "AccessorScreen",

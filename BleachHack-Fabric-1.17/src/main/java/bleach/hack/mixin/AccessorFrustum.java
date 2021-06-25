@@ -11,29 +11,33 @@ package bleach.hack.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.util.math.Vector4f;
 
-@Mixin(WorldRenderer.class)
-public interface AccessorWorldRenderer {
-
-	@Accessor
-	public abstract Framebuffer getEntityOutlinesFramebuffer();
+@Mixin(Frustum.class)
+public interface AccessorFrustum {
 	
 	@Accessor
-	public abstract void setEntityOutlinesFramebuffer(Framebuffer framebuffer);
+	public abstract Vector4f[] getHomogeneousCoordinates();
 	
 	@Accessor
-	public abstract ShaderEffect getEntityOutlineShader();
+	public abstract void setHomogeneousCoordinates(Vector4f[] vector4f);
 	
 	@Accessor
-	public abstract void setEntityOutlineShader(ShaderEffect shaderEffect);
+	public abstract double getX();
 	
 	@Accessor
-	public abstract Frustum getFrustum();
+	public abstract void setX(double x);
 	
 	@Accessor
-	public abstract void setFrustum(Frustum frustum);
+	public abstract double getY();
+	
+	@Accessor
+	public abstract void setY(double y);
+	
+	@Accessor
+	public abstract double getZ();
+	
+	@Accessor
+	public abstract void setZ(double z);
 }
