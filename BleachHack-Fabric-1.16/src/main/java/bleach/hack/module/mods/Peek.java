@@ -39,6 +39,7 @@ import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
@@ -235,17 +236,18 @@ public class Peek extends Module {
 
 		matrices.push();
 		matrices.translate(mouseX + 14, mouseY - 18 - 135 * scale, 0);
-		matrices.scale(scale, scale, 1f);
+		matrices.scale(scale, scale, 0.0078125f);
 
-		VertexConsumer vertexConsumer = mc.getBufferBuilders().getEntityVertexConsumers().getBuffer(MAP_BACKGROUND_CHECKERBOARD);
+		VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+		VertexConsumer backgroundVertexer = immediate.getBuffer(MAP_BACKGROUND_CHECKERBOARD);
 		Matrix4f matrix4f = matrices.peek().getModel();
-		vertexConsumer.vertex(matrix4f, -7f, 135f, -10f).color(255, 255, 255, 255).texture(0f, 1f).light(0xf000f0).next();
-		vertexConsumer.vertex(matrix4f, 135f, 135f, -10f).color(255, 255, 255, 255).texture(1f, 1f).light(0xf000f0).next();
-		vertexConsumer.vertex(matrix4f, 135f, -7f, -10f).color(255, 255, 255, 255).texture(1f, 0f).light(0xf000f0).next();
-		vertexConsumer.vertex(matrix4f, -7f, -7f, -10f).color(255, 255, 255, 255).texture(0f, 0f).light(0xf000f0).next();
-		mc.getBufferBuilders().getEntityVertexConsumers().draw(MAP_BACKGROUND_CHECKERBOARD);
+		backgroundVertexer.vertex(matrix4f, -7f, 135f, -10f).color(255, 255, 255, 255).texture(0f, 1f).light(0xf000f0).next();
+		backgroundVertexer.vertex(matrix4f, 135f, 135f, -10f).color(255, 255, 255, 255).texture(1f, 1f).light(0xf000f0).next();
+		backgroundVertexer.vertex(matrix4f, 135f, -7f, -10f).color(255, 255, 255, 255).texture(1f, 0f).light(0xf000f0).next();
+		backgroundVertexer.vertex(matrix4f, -7f, -7f, -10f).color(255, 255, 255, 255).texture(0f, 0f).light(0xf000f0).next();
 
-		mc.gameRenderer.getMapRenderer().draw(matrices, mc.getBufferBuilders().getEntityVertexConsumers(), mapState, false, 0xf000f0);
+		mc.gameRenderer.getMapRenderer().draw(matrices, immediate, mapState, false, 0xf000f0);
+		immediate.draw();
 
 		matrices.pop();
 
