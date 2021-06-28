@@ -13,34 +13,61 @@ import org.apache.commons.lang3.math.NumberUtils;
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
+import bleach.hack.util.BleachLogger;
+import bleach.hack.util.world.WorldUtils;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 
 public class CmdClip extends Command {
 
 	public CmdClip() {
-		super("clip", "Teleports you a certain amount of blocks horizontally/vertically.", "clip <x distance> <y distance> <z distance>", CommandCategory.MISC);
+		super("clip", "Teleports you a certain amount of blocks horizontally/vertically.", "clip up | clip down | clip <x distance> <y distance> <z distance>", CommandCategory.MISC);
 	}
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		if (args.length != 3) {
+		if (args.length == 0) {
 			throw new CmdSyntaxException();
 		}
 
-		if (!NumberUtils.isCreatable(args[0])) {
-			throw new CmdSyntaxException("Invalid x distance \"" + args[0] + "\"");
-		}
+		if (args[0].equalsIgnoreCase("up") || args[0].equalsIgnoreCase("down")) {
+			int moveStep = args[0].equalsIgnoreCase("up") ? 1 : -1;
 
-		if (!NumberUtils.isCreatable(args[1])) {
-			throw new CmdSyntaxException("Invalid y distance \"" + args[1] + "\"");
-		}
+			Box box = mc.player.getBoundingBox();
+			if (mc.player.hasVehicle()) {
+				box = box.union(mc.player.getVehicle().getBoundingBox());
+			}
 
-		if (!NumberUtils.isCreatable(args[2])) {
-			throw new CmdSyntaxException("Invalid z distance \"" + args[2] + "\"");
-		}
+			for (int y = MathHelper.floor(box.minY) + moveStep; !mc.world.isOutOfHeightLimit(y - 1); y += moveStep) {
+				if (WorldUtils.doesBoxCollide(new Box(box.minX, y - 1, box.minZ, box.maxX, y - 0.01, box.maxZ))
+						&& !WorldUtils.doesBoxCollide(box.offset(0, -box.minY + y, 0))) {
+					move(0, y - box.minY, 0);
+					return;
+				}
+			}
 
-		move(NumberUtils.createNumber(args[0]).doubleValue(),
-				NumberUtils.createNumber(args[1]).doubleValue(),
-				NumberUtils.createNumber(args[2]).doubleValue());
+			BleachLogger.errorMessage("No empty spaces to clip you to!");
+		} else {
+			if (args.length != 3) {
+				throw new CmdSyntaxException();
+			}
+
+			if (!NumberUtils.isCreatable(args[0])) {
+				throw new CmdSyntaxException("Invalid x distance \"" + args[0] + "\"");
+			}
+
+			if (!NumberUtils.isCreatable(args[1])) {
+				throw new CmdSyntaxException("Invalid y distance \"" + args[1] + "\"");
+			}
+
+			if (!NumberUtils.isCreatable(args[2])) {
+				throw new CmdSyntaxException("Invalid z distance \"" + args[2] + "\"");
+			}
+
+			move(NumberUtils.createNumber(args[0]).doubleValue(),
+					NumberUtils.createNumber(args[1]).doubleValue(),
+					NumberUtils.createNumber(args[2]).doubleValue());
+		}
 	}
 
 	private void move(double xOffset, double yOffset, double zOffset) {
