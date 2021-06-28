@@ -39,6 +39,9 @@ public class DiscordRPCManager {
 				libName = "discord-rpc-darwin.dylib";
 			} else if (SystemUtils.IS_OS_WINDOWS) {
 				libName = "discord-rpc-win-" + (System.getProperty("sun.arch.data.model").equals("64") ? "x64" : "x86") + ".dll";
+			} else if ("The Android Project".equals(System.getProperty("java.specification.vendor"))) {
+				BleachLogger.logger.warn("Appears to be running on android, skipping loading rpc library!");
+				return new EmptyDiscordLib();
 			} else {
 				libName = "linux";
 			}
