@@ -23,7 +23,6 @@ import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemSteerable;
 import net.minecraft.entity.passive.LlamaEntity;
-import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
@@ -89,16 +88,10 @@ public class EntityControl extends Module {
 
 				strafe = 0.0D;
 			}
+
 			e.setVelocity(forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F)),
 					e.getVelocity().y,
 					forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F)));
-
-			if (e instanceof MinecartEntity) {
-				MinecartEntity em = (MinecartEntity) e;
-				em.setVelocity(forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F)),
-						em.getVelocity().y,
-						forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F)));
-			}
 		}
 
 		if (getSetting(1).asToggle().state) {
