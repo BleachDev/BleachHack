@@ -58,7 +58,7 @@ public class ArrowJuke extends Module {
 				currentVel = currentVel.multiply(0.99, 0.94, 0.99);
 				futureBoxes.add(currentBox);
 
-				if (!mc.world.getOtherEntities(null, currentBox).isEmpty() || !WorldUtils.isBoxEmpty(currentBox)) {
+				if (!mc.world.getOtherEntities(null, currentBox).isEmpty() || WorldUtils.doesBoxCollide(currentBox)) {
 					break;
 				}
 			}
@@ -68,7 +68,7 @@ public class ArrowJuke extends Module {
 					for (Vec3d vel : getMoveVecs(e.getVelocity())) {
 						Box newBox = mc.player.getBoundingBox().offset(vel);
 
-						if (WorldUtils.isBoxEmpty(newBox) && futureBoxes.stream().noneMatch(playerBox.offset(vel)::intersects)) {
+						if (!WorldUtils.doesBoxCollide(newBox) && futureBoxes.stream().noneMatch(playerBox.offset(vel)::intersects)) {
 							if (mode == 0 && vel.y == 0) {
 								mc.player.setVelocity(vel);
 							} else {

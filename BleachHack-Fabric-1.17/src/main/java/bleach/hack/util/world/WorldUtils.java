@@ -126,18 +126,18 @@ public class WorldUtils {
 		return false;
 	}
 
-	public static boolean isBoxEmpty(Box box) {
+	public static boolean doesBoxCollide(Box box) {
 		for (int x = (int) Math.floor(box.minX); x < Math.ceil(box.maxX); x++) {
 			for (int y = (int) Math.floor(box.minY); y < Math.ceil(box.maxY); y++) {
 				for (int z = (int) Math.floor(box.minZ); z < Math.ceil(box.maxZ); z++) {
-					if (!mc.world.getBlockState(new BlockPos(x, y, z)).getMaterial().isReplaceable()) {
-						return false;
+					if (mc.world.getBlockState(new BlockPos(x, y, z)).getCollisionShape(mc.world, new BlockPos(x, y, z)).getBoundingBoxes().stream().anyMatch(box::intersects)) {
+						return true;
 					}
 				}
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	public static boolean placeBlock(BlockPos pos, int slot, SettingRotate sr, boolean forceLegit, boolean airPlace, boolean swingHand) {

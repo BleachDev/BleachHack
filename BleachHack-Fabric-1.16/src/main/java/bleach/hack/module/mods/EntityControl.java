@@ -111,9 +111,9 @@ public class EntityControl extends Module {
 
 		if (getSetting(4).asToggle().state) {
 			Vec3d vel = e.getVelocity().multiply(2);
-			if (!WorldUtils.isBoxEmpty(e.getBoundingBox().offset(vel.x, 0, vel.z))) {
+			if (WorldUtils.doesBoxCollide(e.getBoundingBox().offset(vel.x, 0, vel.z))) {
 				for (int i = 2; i < 10; i++) {
-					if (WorldUtils.isBoxEmpty(e.getBoundingBox().offset(vel.x / i, 0, vel.z / i))) {
+					if (!WorldUtils.doesBoxCollide(e.getBoundingBox().offset(vel.x / i, 0, vel.z / i))) {
 						e.setVelocity(vel.x / i / 2, vel.y, vel.z / i / 2);
 						break;
 					}
