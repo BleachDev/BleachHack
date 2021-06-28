@@ -53,6 +53,7 @@ public class Avoid extends Module {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
 				VehicleMoveC2SPacket packet = (VehicleMoveC2SPacket) event.getPacket();
 				if (!mc.world.getChunkManager().isChunkLoaded((int) packet.getX() >> 4, (int) packet.getZ() >> 4)) {
+					mc.player.getVehicle().updatePosition(mc.player.getVehicle().prevX, mc.player.getVehicle().prevY, mc.player.getVehicle().prevZ);
 					event.setCancelled(true);
 				}
 			} else if (event.getPacket() instanceof PlayerMoveC2SPacket) {
