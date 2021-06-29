@@ -27,6 +27,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -137,7 +138,7 @@ public class EntityControl extends Module {
 
 		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state
 				&& mc.player != null && mc.player.getVehicle() != null && event.getPacket() instanceof VehicleMoveC2SPacket) {
-			//mc.interactionManager.interactEntity(mc.player, mc.player.getVehicle(), Hand.MAIN_HAND);
+			mc.interactionManager.interactEntity(mc.player, mc.player.getVehicle(), Hand.MAIN_HAND);
 		}
 	}
 
