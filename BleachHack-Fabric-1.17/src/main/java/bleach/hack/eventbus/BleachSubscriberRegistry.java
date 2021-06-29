@@ -1,18 +1,22 @@
 package bleach.hack.eventbus;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.logging.log4j.Logger;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 import bleach.hack.event.Event;
 
 public class BleachSubscriberRegistry {
 
-	private Multimap<Class<?>, BleachSubscriber> subscribers = HashMultimap.create();
+	// <Event Class, Subscribers>
+	private Map<Class<?>, List<BleachSubscriber>> subscribers = new ConcurrentHashMap<>();
 	private final String id;
 	private AtomicLong eventsPosted = new AtomicLong();
 
@@ -22,13 +26,11 @@ public class BleachSubscriberRegistry {
 
 	public boolean subscribe(Object object) {
 		boolean added = false;
-		synchronized (subscribers) {
-			for (Method m: object.getClass().getDeclaredMethods()) {
-				//if (m.isAnnotationPresent(Subscribe.class)) {
-				if (m.isAnnotationPresent(BleachSubscribe.class)) {
-					subscribers.put(object.getClass(), new BleachSubscriber(object, m));
-					added = true;
-				}
+		for (Method m: object.getClass().getDeclaredMethods()) {
+			//if (m.isAnnotationPresent(Subscribe.class)) {
+			if (m.isAnnotationPresent(BleachSubscribe.class) && m.getParameters().length != 0) {
+				subscribers.computeIfAbsent(m.getParameters()[0].getType(), k -> new CopyOnWriteArrayList<>()).add(new BleachSubscriber(object, m));
+				added = true;
 			}
 		}
 
@@ -36,23 +38,31 @@ public class BleachSubscriberRegistry {
 	}
 
 	public boolean unsubscribe(Object object) {
-		synchronized (subscribers) {
-			return !subscribers.removeAll(object.getClass()).isEmpty();
+		boolean removed = false;
+		Iterator<Entry<Class<?>, List<BleachSubscriber>>> iterator = subscribers.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<Class<?>, List<BleachSubscriber>> entry = iterator.next();
+			if (entry.getValue().removeIf(s -> object.getClass().equals(s.getTargetClass()))) {
+				removed = true;
+				if (entry.getValue().isEmpty()) {
+					iterator.remove();
+				}
+			}
 		}
+
+		return removed;
 	}
 
 	public void post(Event event, Logger logger) {
-		synchronized (subscribers) {
-			subscribers.values().stream()
-			.filter(s -> s.getEventClass().isAssignableFrom(event.getClass()))
-			.forEach(s -> {
+		if (subscribers.containsKey(event.getClass())) {
+			for (BleachSubscriber s: subscribers.get(event.getClass())) {
 				try {
-					s.callSubscriber(event);
 					eventsPosted.incrementAndGet();
+					s.callSubscriber(event);
 				} catch (Throwable t) {
 					logger.error("Exception thrown by subscriber method " + s.getSignature() + " when dispatching event: " + s.getEventClass().getName(), t);
 				}
-			});
+			}
 		}
 	}
 

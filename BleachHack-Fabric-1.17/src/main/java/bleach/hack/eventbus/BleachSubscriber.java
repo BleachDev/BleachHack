@@ -20,6 +20,7 @@ public class BleachSubscriber {
 	private final Consumer<Object> subscriberCaller;
 	private Executor executor = MoreExecutors.directExecutor();
 	private final Class<? extends Event> eventClass;
+	private final Class<?> targetClass;
 	private final String signature;
 
 	public BleachSubscriber(Object target, String methodName, Class<? extends Event> eventClass) {
@@ -42,8 +43,10 @@ public class BleachSubscriber {
 					MethodType.methodType(void.class, eventClass));
 
 			subscriberCaller = (Consumer<Object>) callsite.getTarget().invoke(target);
-			signature = target.getClass().getName() + "." + method.getName() + "(" + method.getParameters()[0].getType().getName() + ")";
+
 			this.eventClass = eventClass;
+			this.targetClass = target.getClass();
+			signature = target.getClass().getName() + "." + method.getName() + "(" + method.getParameters()[0].getType().getName() + ")";
 		} catch (Throwable t) {
 			// Yea, we got a problem
 			throw new RuntimeException(t);
@@ -66,6 +69,10 @@ public class BleachSubscriber {
 
 	public Class<? extends Event> getEventClass() {
 		return eventClass;
+	}
+	
+	public Class<?> getTargetClass() {
+		return targetClass;
 	}
 
 	public String getSignature() {
