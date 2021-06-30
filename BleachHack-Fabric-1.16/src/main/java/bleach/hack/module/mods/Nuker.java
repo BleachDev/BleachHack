@@ -95,7 +95,7 @@ public class Nuker extends Module {
 					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + mc.player.getEyeHeight(mc.player.getPose()), z));
 
 					double distTo = getSetting(3).asMode().mode == 0
-							? MathHelper.absMax(MathHelper.absMax(mc.player.getX() - (pos.getX() + 0.5), mc.player.getY() - (pos.getY() + 0.5)), mc.player.getZ() - (pos.getZ() + 0.5))
+							? MathHelper.absMax(MathHelper.absMax(mc.player.getX() - (pos.getX() + 0.5), mc.player.getEyeY() - (pos.getY() + 0.5)), mc.player.getZ() - (pos.getZ() + 0.5))
 							//? Math.min(Math.min(Math.abs(mc.player.getX() - (pos.getX() + 0.5)), Math.abs(mc.player.getY() - (pos.getY() + 0.5))), Math.abs(mc.player.getZ() - (pos.getZ() + 0.5)))
 									: mc.player.getPos().distanceTo(Vec3d.ofCenter(pos));
 

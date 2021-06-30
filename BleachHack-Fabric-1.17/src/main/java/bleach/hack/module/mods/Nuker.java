@@ -92,10 +92,10 @@ public class Nuker extends Module {
 		for (int x = MathHelper.ceil(range); x >= MathHelper.floor(-range); x--) {
 			for (int y = MathHelper.ceil(range); y >= (getSetting(8).asToggle().state ? -mc.player.getEyeHeight(mc.player.getPose()) + 0.2 : MathHelper.floor(-range)); y--) {
 				for (int z = MathHelper.ceil(range); z >= MathHelper.floor(-range); z--) {
-					BlockPos pos = new BlockPos(mc.player.getPos().add(x, y + mc.player.getEyeHeight(mc.player.getPose()), z));
+					BlockPos pos = new BlockPos(mc.player.getEyePos());
 
 					double distTo = getSetting(3).asMode().mode == 0
-							? MathHelper.absMax(MathHelper.absMax(mc.player.getX() - (pos.getX() + 0.5), mc.player.getY() - (pos.getY() + 0.5)), mc.player.getZ() - (pos.getZ() + 0.5))
+							? MathHelper.absMax(MathHelper.absMax(mc.player.getX() - (pos.getX() + 0.5), mc.player.getEyeY() - (pos.getY() + 0.5)), mc.player.getZ() - (pos.getZ() + 0.5))
 							//? Math.min(Math.min(Math.abs(mc.player.getX() - (pos.getX() + 0.5)), Math.abs(mc.player.getY() - (pos.getY() + 0.5))), Math.abs(mc.player.getZ() - (pos.getZ() + 0.5)))
 									: mc.player.getPos().distanceTo(Vec3d.ofCenter(pos));
 
@@ -243,8 +243,7 @@ public class Nuker extends Module {
 		// so it doesn't mine itself down without clearing everything above first
 		Comparator<BlockPos> keepBlockUnderComparator = Comparator.comparing(new BlockPos(mc.player.getPos().add(0, -0.8, 0))::equals);
 
-		Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
-		Comparator<BlockPos> distComparator = Comparator.comparing(b -> eyePos.distanceTo(Vec3d.ofCenter(b)));
+		Comparator<BlockPos> distComparator = Comparator.comparing(b -> mc.player.getEyePos().distanceTo(Vec3d.ofCenter(b)));
 		Comparator<BlockPos> hardnessComparator = Comparator.comparing(b -> mc.world.getBlockState(b).getHardness(mc.world, b));
 
 		switch (getSetting(5).asMode().mode) {
