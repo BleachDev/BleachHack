@@ -36,7 +36,8 @@ public class Surround extends Module {
 	private static final Set<Block> SURROUND_BLOCKS = Sets.newHashSet(
 			Blocks.OBSIDIAN, Blocks.ENDER_CHEST, Blocks.ENCHANTING_TABLE,
 			Blocks.ANVIL, Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL,
-			Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS);
+			Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS,
+			Blocks.RESPAWN_ANCHOR);
 
 	public Surround() {
 		super("Surround", KEY_UNBOUND, ModuleCategory.COMBAT, "Surrounds yourself with obsidian",
@@ -44,8 +45,8 @@ public class Surround extends Module {
 				new SettingMode("Support", "Place", "AirPlace", "Skip").withDesc("What to do when theres no blocks to place surround blocks on"),
 				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
 				new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block"),
-				new SettingToggle("Keep on", true).withDesc("Keeps the module on after placing the obsidian"),
-				new SettingToggle("Jump disable", true).withDesc("Disables the module if you jump"),
+				new SettingToggle("KeepOn", true).withDesc("Keeps the module on after placing the obsidian"),
+				new SettingToggle("JumpDisable", true).withDesc("Disables the module if you jump"),
 				new SettingRotate(false).withDesc("Rotates when placing"),
 				SettingLists.newBlockList("Blocks", "Surround Blocks", SURROUND_BLOCKS::contains, Blocks.OBSIDIAN).withDesc("What blocks to surround with"));
 	}

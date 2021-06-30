@@ -36,7 +36,8 @@ public class Surround extends Module {
 	private static final Set<Block> SURROUND_BLOCKS = Sets.newHashSet(
 			Blocks.OBSIDIAN, Blocks.ENDER_CHEST, Blocks.ENCHANTING_TABLE,
 			Blocks.ANVIL, Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL,
-			Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS);
+			Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS,
+			Blocks.RESPAWN_ANCHOR);
 
 	public Surround() {
 		super("Surround", KEY_UNBOUND, ModuleCategory.COMBAT, "Surrounds yourself with obsidian",
