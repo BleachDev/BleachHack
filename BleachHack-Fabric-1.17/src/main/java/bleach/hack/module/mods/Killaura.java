@@ -124,7 +124,7 @@ public class Killaura extends Module {
 				Vec3d center = e.getBoundingBox().getCenter();
 
 				double diffX = center.x - mc.player.getX();
-				double diffY = center.y - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
+				double diffY = center.y - mc.player.getEyeY();
 				double diffZ = center.z - mc.player.getZ();
 
 				double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);

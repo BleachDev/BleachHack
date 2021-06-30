@@ -23,7 +23,7 @@ public class RemoveOperation extends Operation {
 
 	@Override
 	public boolean canExecute() {
-		if (mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(Vec3d.ofCenter(pos)) < 4.5) {
+		if (mc.player.getEyePos().distanceTo(Vec3d.ofCenter(pos)) < 4.5) {
 			for (Direction d: Direction.values()) {
 				if (!mc.world.getBlockState(pos.offset(d)).isSideSolidFullSquare(mc.world, pos.offset(d), d.getOpposite())) {
 					return true;

@@ -84,7 +84,7 @@ public class BowBot extends Module {
 
 			// set position to aim at
 			Vec3d newTargetVec = target.getPos().add(target.getVelocity());
-			double d = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(target.getBoundingBox().offset(target.getVelocity()).getCenter());
+			double d = mc.player.getEyePos().distanceTo(target.getBoundingBox().offset(target.getVelocity()).getCenter());
 			double x = newTargetVec.x + (newTargetVec.x - target.getX()) * d - mc.player.getX();
 			double y = newTargetVec.y + (newTargetVec.y - target.getY()) * d + target.getHeight() * 0.5 - mc.player.getY() - mc.player.getEyeHeight(mc.player.getPose());
 			double z = newTargetVec.z + (newTargetVec.z - target.getZ()) * d - mc.player.getZ();

@@ -154,10 +154,8 @@ public class Dispenser32k extends Module {
 
 						pos = mc.player.getBlockPos().add(x, y, z);
 
-						if (mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
-								mc.player.getPos().add(x - rot[0] / 2, y + 0.5, z + rot[1] / 2)) > 4.5
-								|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
-										mc.player.getPos().add(x + 0.5, y + 2.5, z + 0.5)) > 4.5
+						if (mc.player.getEyePos().distanceTo(mc.player.getPos().add(x - rot[0] / 2, y + 0.5, z + rot[1] / 2)) > 4.5
+								|| mc.player.getEyePos().distanceTo(mc.player.getPos().add(x + 0.5, y + 2.5, z + 0.5)) > 4.5
 								|| !(WorldUtils.canPlaceBlock(pos) /* || canPlaceBlock(pos.add(rot[0], 0, rot[1])) */)
 								|| !WorldUtils.isBlockEmpty(pos)
 								|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 0, rot[1]))

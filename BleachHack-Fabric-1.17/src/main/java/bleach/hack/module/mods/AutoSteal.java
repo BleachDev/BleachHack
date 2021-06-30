@@ -138,8 +138,7 @@ public class AutoSteal extends Module {
 			for (BlockEntity be: WorldUtils.getBlockEntities()) {
 				if (!opened.containsKey(be.getPos())
 						&& be instanceof ChestBlockEntity
-						&& mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0)
-						.distanceTo(Vec3d.ofCenter(be.getPos())) <= getSetting(3).asToggle().getChild(0).asSlider().getValue() + 0.25) {
+						&& mc.player.getEyePos().distanceTo(Vec3d.ofCenter(be.getPos())) <= getSetting(3).asToggle().getChild(0).asSlider().getValue() + 0.25) {
 
 					Vec3d lookVec = Vec3d.ofCenter(be.getPos()).add(0, 0.5, 0);
 					if (getSetting(3).asToggle().getChild(2).asRotate().state) {

@@ -35,7 +35,7 @@ public class PlaceDirOperation extends PlaceOperation {
 
 		if (slot != -1 && WorldUtils.canPlaceBlock(pos)) {
 			if (!faced) {
-				Vec3d lookPos = mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).add(dir.getOffsetX(), dir.getOffsetY(), dir.getOffsetZ());
+				Vec3d lookPos = mc.player.getEyePos().add(dir.getOffsetX(), dir.getOffsetY(), dir.getOffsetZ());
 				WorldUtils.facePosPacket(lookPos.getX(), lookPos.getY(), lookPos.getZ());
 
 				faced = true;

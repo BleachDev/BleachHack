@@ -215,7 +215,7 @@ public class WorldUtils {
 	}
 
 	public static Vec3d getLegitLookPos(Box box, Direction dir, boolean raycast, int res, double extrude) {
-		Vec3d eyePos = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
+		Vec3d eyePos = mc.player.getEyePos();
 		Vec3d blockPos = new Vec3d(box.minX, box.minY, box.minZ).add(
 				(dir == Direction.WEST ? -extrude : dir.getOffsetX() * box.getXLength() + extrude),
 				(dir == Direction.DOWN ? -extrude : dir.getOffsetY() * box.getYLength() + extrude),

@@ -143,7 +143,7 @@ public class CrystalAura extends Module {
 				}
 
 				if (getSetting(6).asRotate().state) {
-					Vec3d eyeVec = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
+					Vec3d eyeVec = mc.player.getEyePos();
 					Vec3d v = new Vec3d(c.getX(), c.getY() + 0.5, c.getZ());
 					for (Direction d: Direction.values()) {
 						Vec3d vd = WorldUtils.getLegitLookPos(c.getBoundingBox(), d, true, 5, -0.001);
@@ -221,7 +221,7 @@ public class CrystalAura extends Module {
 			for (Entry<BlockPos, Float> e: placeBlocks.entrySet()) {
 				BlockPos block = e.getKey();
 
-				Vec3d eyeVec = new Vec3d(mc.player.getX(), mc.player.getEyeY(), mc.player.getZ());
+				Vec3d eyeVec = mc.player.getEyePos();
 
 				Vec3d vec = new Vec3d(block.getX(), block.getY() + 0.5, block.getZ());
 				Direction dir = Direction.UP;
