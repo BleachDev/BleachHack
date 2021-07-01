@@ -92,7 +92,7 @@ public class Nuker extends Module {
 		for (int x = MathHelper.ceil(range); x >= MathHelper.floor(-range); x--) {
 			for (int y = MathHelper.ceil(range); y >= (getSetting(8).asToggle().state ? -mc.player.getEyeHeight(mc.player.getPose()) + 0.2 : MathHelper.floor(-range)); y--) {
 				for (int z = MathHelper.ceil(range); z >= MathHelper.floor(-range); z--) {
-					BlockPos pos = new BlockPos(mc.player.getEyePos());
+					BlockPos pos = new BlockPos(mc.player.getEyePos().add(x, y, z));
 
 					double distTo = getSetting(3).asMode().mode == 0
 							? MathHelper.absMax(MathHelper.absMax(mc.player.getX() - (pos.getX() + 0.5), mc.player.getEyeY() - (pos.getY() + 0.5)), mc.player.getZ() - (pos.getZ() + 0.5))

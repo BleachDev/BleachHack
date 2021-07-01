@@ -78,7 +78,7 @@ public class AutoParkour extends Module {
 					Vec3d lookVec = mc.player.getPos().add(new Vec3d(0, 0, 3.25).rotateY(-(float) Math.toRadians(mc.player.yaw)));
 
 					BlockPos nearestPos = BlockPos.streamOutwards(mc.player.getBlockPos().down(), 4, 1, 4)
-							.map(pos -> pos.toImmutable())
+							.map(BlockPos::toImmutable)
 							.filter(pos -> (mc.world.isTopSolid(pos, mc.player) && !mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 3, 1))).findAny().isPresent())
 									|| mc.world.getBlockState(pos).getBlock() instanceof LadderBlock
 									|| mc.world.getBlockState(pos.up()).getBlock() instanceof LadderBlock)
