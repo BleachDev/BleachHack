@@ -38,11 +38,15 @@ import net.minecraft.block.SoulSandBlock;
 import net.minecraft.block.StemBlock;
 import net.minecraft.block.SugarCaneBlock;
 import net.minecraft.block.SweetBerryBushBlock;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -56,7 +60,8 @@ public class AutoFarm extends Module {
 	public AutoFarm() {
 		super("AutoFarm", KEY_UNBOUND, ModuleCategory.PLAYER, "Wurst exclusive",
 				new SettingSlider("Range", 1, 6, 4.5, 1).withDesc("Farming reach"),
-				new SettingToggle("Till", true).withDesc("Tills dirt around you"),
+				new SettingToggle("Till", true).withDesc("Tills dirt around you").withChildren(
+						new SettingToggle("WateredOnly", false).withDesc("Only tills watered dirt")),
 				new SettingToggle("Harvest", true).withDesc("Harvests grown crop").withChildren(
 						new SettingToggle("Crops", true).withDesc("Harvests wheat, carrots, potato & beetroot"),
 						new SettingToggle("StemCrops", true).withDesc("Harvests melons/pumpkins"),
@@ -92,6 +97,7 @@ public class AutoFarm extends Module {
 
 		double range = getSetting(0).asSlider().getValue();
 		int ceilRange = MathHelper.ceil(range);
+		SettingToggle tillSetting = getSetting(1).asToggle();
 		SettingToggle harvestSetting = getSetting(2).asToggle();
 		SettingToggle plantSetting = getSetting(3).asToggle();
 		SettingToggle bonemealSetting = getSetting(4).asToggle();
@@ -128,6 +134,20 @@ public class AutoFarm extends Module {
 
 			BlockState state = mc.world.getBlockState(pos);
 			Block block = state.getBlock();
+			if (tillSetting.state && canTill(block) && mc.world.isAir(pos.up())) {
+				if (!tillSetting.getChild(0).asToggle().state
+						|| BlockPos.stream(pos.getX() - 4, pos.getY(), pos.getZ() - 4, pos.getX() + 4, pos.getY(), pos.getZ() + 4).anyMatch(
+								b -> mc.world.getFluidState(b).isIn(FluidTags.WATER))) {
+					Hand hand = InventoryUtils.selectSlot(true, i -> mc.player.getInventory().getStack(i).getItem() instanceof HoeItem);
+					
+					if (hand != null) {
+						mc.interactionManager.interactBlock(mc.player, mc.world, hand,
+								new BlockHitResult(Vec3d.ofCenter(pos, 1), Direction.UP, pos, false));
+						return;
+					}
+				}
+			}
+
 			if (harvestSetting.state) {
 				if ((harvestSetting.getChild(0).asToggle().state && block instanceof CropBlock && ((CropBlock) block).isMature(state))
 						|| (harvestSetting.getChild(1).asToggle().state && block instanceof GourdBlock)
@@ -141,12 +161,12 @@ public class AutoFarm extends Module {
 				}
 			}
 
-			if (plantSetting.state) {
+			if (plantSetting.state && mc.world.getOtherEntities(null, new Box(pos.up()), EntityPredicates.VALID_LIVING_ENTITY).isEmpty()) {
 				if (block instanceof FarmlandBlock && mc.world.isAir(pos.up())) {
 					int slot = InventoryUtils.getSlot(true, i -> {
 						Item item = mc.player.getInventory().getStack(i).getItem();
 
-						if (plantSetting.getChild(0).asToggle().state && (item == Items.WHEAT_SEEDS || item == Items.CARROT || item == Items.POTATO || item == Items.BEETROOT)) {
+						if (plantSetting.getChild(0).asToggle().state && (item == Items.WHEAT_SEEDS || item == Items.CARROT || item == Items.POTATO || item == Items.BEETROOT_SEEDS)) {
 							return true;
 						}
 
@@ -215,5 +235,10 @@ public class AutoFarm extends Module {
 	private boolean canPlaceSapling(BlockPos pos) {
 		return BlockPos.stream(pos.getX() - 1, pos.getY() + 1, pos.getZ() - 1, pos.getX() + 1, pos.getY() + 5, pos.getZ() + 1)
 				.allMatch(b -> TreeFeature.canTreeReplace(mc.world, b));
+	}
+	
+	private boolean canTill(Block block) {
+		return block == Blocks.DIRT || block == Blocks.GRASS_BLOCK || block == Blocks.COARSE_DIRT
+				|| block == Blocks.ROOTED_DIRT || block == Blocks.DIRT_PATH;
 	}
 }
