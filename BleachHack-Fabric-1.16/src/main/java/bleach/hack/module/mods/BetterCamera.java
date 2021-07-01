@@ -22,5 +22,5 @@ public class BetterCamera extends Module {
 						new SettingSlider("Distance", 0.5, 15, 4, 1).withDesc("The desired camera distance")));
 	}
 
-	// Login handled in MixinCamera::clipToSpace
+	// Logic handled in MixinCamera::clipToSpace
 }
