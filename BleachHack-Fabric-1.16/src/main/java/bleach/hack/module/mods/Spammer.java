@@ -32,7 +32,7 @@ public class Spammer extends Module {
 	public Spammer() {
 		super("Spammer", KEY_UNBOUND, ModuleCategory.MISC, "Spams chat with messages you set (edit with " + Command.PREFIX + "spammer)",
 				new SettingMode("Read", "Random", "Order").withDesc("How to read the spammer file"),
-				new SettingSlider("Delay", 1, 120, 20, 0).withDesc("Delay between messages"));
+				new SettingSlider("Delay", 1, 120, 20, 0).withDesc("Delay between messages (in seconds)"));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class Spammer extends Module {
 		if (lines.isEmpty())
 			return;
 
-		if (tickCount % (int) (getSetting(1).asSlider().getValue() * 20) == 0) {
+		if (tickCount % (getSetting(1).asSlider().getValueInt() * 20) == 0) {
 			if (getSetting(0).asMode().mode == 0) {
 				mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())));
 			} else if (getSetting(0).asMode().mode == 1) {
