@@ -58,7 +58,7 @@ public class CrystalAura extends Module {
 	private BlockPos render = null;
 	private int breakCooldown = 0;
 	private int placeCooldown = 0;
-	private HashMap<BlockPos, Integer> blackList = new HashMap<>();
+	private HashMap<BlockPos, Integer> blacklist = new HashMap<>();
 
 	public CrystalAura() {
 		super("CrystalAura", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically attacks crystals for you.",
@@ -77,8 +77,8 @@ public class CrystalAura extends Module {
 						new SettingToggle("1.12 Place", false).withDesc("Only places on blocks with 2 air blocks above instead of 1 because of an extra check in 1.12"),
 						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
 						new SettingToggle("Force Legit", false).withDesc("Only places a crystal if you can see it"),
-						new SettingSlider("MinDamg", 1, 20, 2, 0).withDesc("Minimun damage to the target to place crystals"),
-						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimun damage ratio to place a crystal at (Target dmg/Player dmg)"),
+						new SettingSlider("MinDmg", 1, 20, 2, 0).withDesc("Minimum damage to the target to place crystals"),
+						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimum damage ratio to place a crystal at (Target dmg/Player dmg)"),
 						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to place per tick"),
 						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before placing the next batch of crystals"),
 						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
@@ -92,11 +92,11 @@ public class CrystalAura extends Module {
 		breakCooldown = Math.max(0, breakCooldown - 1);
 		placeCooldown = Math.max(0, placeCooldown - 1);
 
-		for (Entry<BlockPos, Integer> e: new HashMap<>(blackList).entrySet()) {
+		for (Entry<BlockPos, Integer> e: new HashMap<>(blacklist).entrySet()) {
 			if (e.getValue() > 0) {
-				blackList.replace(e.getKey(), e.getValue() - 1);
+				blacklist.replace(e.getKey(), e.getValue() - 1);
 			} else {
-				blackList.remove(e.getKey());
+				blacklist.remove(e.getKey());
 			}
 		}
 
@@ -119,7 +119,7 @@ public class CrystalAura extends Module {
 		List<EndCrystalEntity> nearestCrystals = Streams.stream(mc.world.getEntities())
 				.filter(e -> (e instanceof EndCrystalEntity))
 				.map(e -> {
-					blackList.remove(e.getBlockPos().down());
+					blacklist.remove(e.getBlockPos().down());
 					return (EndCrystalEntity) e;
 				})
 				.sorted(Comparator.comparing(c -> mc.player.distanceTo(c)))
@@ -280,7 +280,7 @@ public class CrystalAura extends Module {
 				for (int z = -range; z <= range; z++) {
 					BlockPos basePos = mc.player.getBlockPos().add(x, y, z);
 
-					if (!canPlace(basePos) || (blackList.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().state))
+					if (!canPlace(basePos) || (blacklist.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().state))
 						continue;
 
 					if (getSetting(4).asToggle().getChild(3).asToggle().state) {
