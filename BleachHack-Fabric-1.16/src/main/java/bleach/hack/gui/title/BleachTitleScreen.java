@@ -22,10 +22,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
-import bleach.hack.gui.title.particle.ParticleManager;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
+import bleach.hack.gui.title.effect.ParticleManager;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.UI;
 import bleach.hack.util.BleachLogger;
@@ -84,8 +84,8 @@ public class BleachTitleScreen extends WindowScreen {
 		clearWindows();
 		addWindow(new Window(width / 8,
 				height / 8,
-				width / 8 + (width - width / 4),
-				height / 8 + (height - height / 4), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)));
+				width - width / 8,
+				height - height / 8, "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)));
 
 		int w = getWindow(0).x2 - getWindow(0).x1;
 		int h = getWindow(0).y2 - getWindow(0).y1;

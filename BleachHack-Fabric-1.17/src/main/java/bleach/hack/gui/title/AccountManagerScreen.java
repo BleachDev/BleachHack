@@ -83,12 +83,12 @@ public class AccountManagerScreen extends WindowScreen {
 		clearWindows();
 		addWindow(new Window(width / 8,
 				height / 8,
-				width / 8 + (width - width / 4),
-				height / 8 + (height - height / 4), "Login Manager", new ItemStack(Items.PAPER), false));
+				width - width / 8,
+				height - height / 8, "Login Manager", new ItemStack(Items.PAPER), false));
 		addWindow(new Window(width / 8 + 15,
 				height / 8 + 15,
-				width / 8 + 15 + (width - width / 3),
-				height / 8 + 15 + (height - height / 3), "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
+				width - width / 8 - 15,
+				height - height / 8 - 15, "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
 
 		int w = width - width / 4;
 		int h = height - height / 4;
@@ -168,9 +168,9 @@ public class AccountManagerScreen extends WindowScreen {
 		super.onRenderWindow(matrices, window, mouseX, mouseY);
 
 		if (window == 1) {
-			int x = getWindow(1).x1,
-					y = getWindow(1).y1,
-					w = width - width / 3;
+			int x = getWindow(1).x1;
+			int y = getWindow(1).y1;
+			int w = getWindow(1).x2 - x;
 			//h = height - height / 3;
 
 			int c = 0;
@@ -232,9 +232,9 @@ public class AccountManagerScreen extends WindowScreen {
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (!getWindow(1).closed && getWindow(1).selected) {
-			int x = getWindow(1).x1,
-					y = getWindow(1).y1,
-					w = width - width / 3;
+			int x = getWindow(1).x1;
+			int y = getWindow(1).y1;
+			int w = getWindow(1).x2 - x;
 
 			int c = 0;
 			for (Account a: new ArrayList<>(accounts.getAccounts())) {
