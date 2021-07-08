@@ -18,9 +18,7 @@ import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
@@ -29,7 +27,7 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-public abstract class WindowScreen extends Screen implements Selectable {
+public abstract class WindowScreen extends Screen {
 
 	private List<Window> windows = new ArrayList<>();
 
@@ -213,12 +211,4 @@ public abstract class WindowScreen extends Screen implements Selectable {
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
 	}
-
-	@Override
-	public SelectionType getType() {
-		return Selectable.SelectionType.FOCUSED;
-	}
-
-	@Override
-	public void appendNarrations(NarrationMessageBuilder builder) {}
 }

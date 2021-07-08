@@ -8,12 +8,15 @@
  */
 package bleach.hack.gui.window;
 
+import java.util.List;
+
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
@@ -37,6 +40,7 @@ public class WindowManagerScreen extends Screen {
 		selectWindow(selected);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void selectWindow(int s) {
 		selected = s;
 		for (Triple<WindowScreen, String, ItemStack> t: windows) {
@@ -44,7 +48,8 @@ public class WindowManagerScreen extends Screen {
 		}
 
 		getSelectedScreen().init(client, width, height - 14);
-		addDrawableChild(getSelectedScreen());
+		addDrawable(getSelectedScreen());
+		((List<Element>) children()).add(getSelectedScreen());
 	}
 
 	public WindowScreen getSelectedScreen() {
@@ -110,5 +115,10 @@ public class WindowManagerScreen extends Screen {
 
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
-
+	
+	// Children doesn't tick brue
+	@Override
+	public void tick() {
+		getSelectedScreen().tick();
+	}
 }
