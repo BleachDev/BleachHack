@@ -108,10 +108,12 @@ public class BleachCreditsScreen extends WindowScreen {
 	}
 
 	private Text getBoosterText(ImmutablePair<Boolean, String> pair) {
+		TextColor color = TextColor.fromRgb(pair.getLeft() ? 0x1abc9c : 0xf579ff);
 		String[] split = pair.getRight().split("#");
 		return new LiteralText(split[0]).styled(s -> s
-				.withColor(TextColor.fromRgb(pair.getLeft() ? 0x1abc9c : 0xf579ff))
-				.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(pair.getRight()))));
+				.withColor(color)
+				.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, 
+						new LiteralText(pair.getRight()).styled(s1 -> s1.withColor(color)))));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
