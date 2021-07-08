@@ -2,6 +2,7 @@ package bleach.hack.gui.window.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import bleach.hack.mixin.AccessorScreen;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
@@ -33,11 +34,11 @@ public class WindowTextWidget extends WindowWidget {
 	public WindowTextWidget(Text text, boolean shadow, TextAlign align, int x, int y, int color) {
 		this(text, shadow, align, 1f, x, y, color);
 	}
-	
+
 	public WindowTextWidget(String text, boolean shadow, TextAlign align, float scale, int x, int y, int color) {
 		this(new LiteralText(text), shadow, align, scale, x, y, color);
 	}
-	
+
 	public WindowTextWidget(Text text, boolean shadow, TextAlign align, float scale, int x, int y, int color) {
 		this(text, shadow, align, scale, 0f, x, y, color);
 	}
@@ -67,6 +68,12 @@ public class WindowTextWidget extends WindowWidget {
 		VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
 		mc.textRenderer.draw(text, 0, 0, color, shadow, matrices.peek().getModel(), immediate, false, 0, 0xf000f0);
 		immediate.draw();
+
+		if (text.getStyle() != null && mc.currentScreen != null
+				&& mouseX >= windowX + x1 - offset && mouseX <= windowX + x2 - offset && mouseY >= windowY + y1 && mouseY <= windowY + y2) {
+			((AccessorScreen) mc.currentScreen).callRenderTextHoverEffect(
+					matrices, text.getStyle(), mouseX - (windowX + x1 - (int) offset), mouseY - (windowY + y1));
+		}
 
 		matrices.pop();
 	}

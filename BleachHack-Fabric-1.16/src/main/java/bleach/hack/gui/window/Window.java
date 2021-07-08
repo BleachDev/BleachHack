@@ -83,7 +83,9 @@ public class Window {
 		drawBar(matrices, mouseX, mouseY, textRend);
 
 		for (WindowWidget w : widgets) {
-			w.render(matrices, x1, y1, mouseX, mouseY);
+			if (w.visible) {
+				w.render(matrices, x1, y1, mouseX, mouseY);
+			}
 		}
 
 		boolean blockItem = icon != null && icon.getItem() instanceof BlockItem;
