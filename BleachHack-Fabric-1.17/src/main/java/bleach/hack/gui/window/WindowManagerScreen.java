@@ -9,7 +9,6 @@
 package bleach.hack.gui.window;
 
 import java.util.List;
-
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.mojang.blaze3d.systems.RenderSystem;
