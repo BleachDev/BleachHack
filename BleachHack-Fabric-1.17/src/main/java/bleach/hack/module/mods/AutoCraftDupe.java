@@ -18,12 +18,12 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 
-public class AutoInvDupe extends Module {
+public class AutoCraftDupe extends Module {
 
 	private int syncedCount = -1;
 
-	public AutoInvDupe() {
-		super("AutoInvDupe", KEY_UNBOUND, ModuleCategory.EXPLOITS, "kpopbob fan");
+	public AutoCraftDupe() {
+		super("AutoCraftDupe", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Atomatically does the 1.17 crafting dupe when putting a item in your crafting slots (PATCHED ON 1.17.1+ SERVERS)");
 	}
 
 	@Override
