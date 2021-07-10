@@ -204,9 +204,9 @@ public class CmdGive extends Command {
 				ct.put("EntityTag", StringNbtReader.parse("{Time:1,id:\"minecraft:falling_block\",BlockState:{Name:\"minecraft:chest\"}}"));
 				((NbtCompound) ct.get("EntityTag")).put("TileEntityData", tag.get("BlockEntityTag"));
 
-				item.setTag(ct);
+				item.setNbt(ct);
 			} else {
-				item.setTag(tag);
+				item.setNbt(tag);
 			}
 
 			mc.player.getInventory().insertStack(item);
@@ -225,7 +225,7 @@ public class CmdGive extends Command {
 			item.setDamage(NumberUtils.createNumber(args[2]).intValue());
 		if (args.length >= 4)
 			try {
-				item.setTag(StringNbtReader.parse(args[3]));
+				item.setNbt(StringNbtReader.parse(args[3]));
 			} catch (CommandSyntaxException e) {
 			}
 

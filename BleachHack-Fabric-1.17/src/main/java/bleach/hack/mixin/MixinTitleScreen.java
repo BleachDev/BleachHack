@@ -42,7 +42,7 @@ public class MixinTitleScreen extends Screen {
 	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
 		if (BleachTitleScreen.customTitleScreen) {
-			MinecraftClient.getInstance().openScreen(
+			MinecraftClient.getInstance().setScreen(
 					new WindowManagerScreen(
 							Triple.of(new BleachTitleScreen(), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)),
 							Triple.of(new AccountManagerScreen(), "Account Mang", new ItemStack(Items.PAPER)),
@@ -61,7 +61,7 @@ public class MixinTitleScreen extends Screen {
 			addDrawableChild(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
 				BleachTitleScreen.customTitleScreen = !BleachTitleScreen.customTitleScreen;
 				BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(true));
-				client.openScreen(new TitleScreen(false));
+				client.setScreen(new TitleScreen(false));
 			}));
 		}
 	}

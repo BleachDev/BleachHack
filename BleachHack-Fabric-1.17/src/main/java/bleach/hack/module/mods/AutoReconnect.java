@@ -46,7 +46,7 @@ public class AutoReconnect extends Module {
 	public void onOpenScreen(EventOpenScreen event) {
 		if (event.getScreen() instanceof DisconnectedScreen
 				&& !(event.getScreen() instanceof NewDisconnectScreen)) {
-			mc.openScreen(new NewDisconnectScreen((DisconnectedScreen) event.getScreen()));
+			mc.setScreen(new NewDisconnectScreen((DisconnectedScreen) event.getScreen()));
 			event.setCancelled(true);
 		}
 	}

@@ -91,7 +91,7 @@ public class EntityMenuScreen extends Screen {
 					.replaceAll("%z%", coordFormat.format(entity.getZ()));
 
 			if (message.startsWith(">suggest ")) {
-				client.openScreen(new ChatScreen(message.substring(9)));
+				client.setScreen(new ChatScreen(message.substring(9)));
 			} else if (message.startsWith(">url ")) {
 				try {
 					Util.getOperatingSystem().open(new URI(message.substring(5)));
@@ -99,13 +99,13 @@ public class EntityMenuScreen extends Screen {
 					BleachLogger.errorMessage("Invalid url \"" + message.substring(5) + "\"");
 				}
 
-				client.openScreen((Screen) null);
+				client.setScreen((Screen) null);
 			} else {
 				client.player.sendChatMessage(message);
-				client.openScreen((Screen) null);
+				client.setScreen((Screen) null);
 			}
 		} else {
-			client.openScreen((Screen) null);
+			client.setScreen((Screen) null);
 		}
 	}
 

@@ -220,7 +220,7 @@ public class NotebotScreen extends WindowScreen {
 				 * code */
 				if (mouseX > x + w - w / 2 + 10 && mouseX < x + w - w / 4 && mouseY > y + h - 15 && mouseY < y + h - 5) {
 					BleachFileMang.deleteFile("notebot", entry.fileName);
-					client.openScreen(this);
+					client.setScreen(this);
 				}
 				if (mouseX > x + w - w / 4 + 5 && mouseX < x + w - 5 && mouseY > y + h - 15 && mouseY < y + h - 5) {
 					Notebot.filePath = entry.fileName;

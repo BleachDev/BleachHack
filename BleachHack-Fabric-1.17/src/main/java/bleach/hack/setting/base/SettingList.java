@@ -74,7 +74,7 @@ public abstract class SettingList<E> extends SettingBase {
 			window.mouseReleased(window.mouseX, window.mouseY, 1);
 			MinecraftClient.getInstance().currentScreen.mouseReleased(window.mouseX, window.mouseY, 0);
 			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
-			MinecraftClient.getInstance().openScreen(new ListWidowScreen(MinecraftClient.getInstance().currentScreen));
+			MinecraftClient.getInstance().setScreen(new ListWidowScreen(MinecraftClient.getInstance().currentScreen));
 		}
 	}
 
@@ -295,7 +295,7 @@ public abstract class SettingList<E> extends SettingBase {
 		}
 
 		public void onClose() {
-			this.client.openScreen(parent);
+			this.client.setScreen(parent);
 		}
 
 		@Override

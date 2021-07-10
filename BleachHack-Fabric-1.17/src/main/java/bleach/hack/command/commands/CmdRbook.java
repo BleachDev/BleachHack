@@ -8,6 +8,10 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -16,8 +20,6 @@ import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.c2s.play.BookUpdateC2SPacket;
 
 public class CmdRbook extends Command {
@@ -41,13 +43,12 @@ public class CmdRbook extends Command {
 		int endChar = args.length >= 3 && NumberUtils.isCreatable(args[2]) ? NumberUtils.createNumber(args[2]).intValue() : 0x10FFFF;
 		int pageChars = args.length >= 4 && NumberUtils.isCreatable(args[3]) ? NumberUtils.createNumber(args[3]).intValue() : 210;
 
-		NbtList textSplit = new NbtList();
+		List<String> textSplit = new ArrayList<>();
 
 		for (int t = 0; t < pages; t++)
-			textSplit.add(NbtString.of(RandomStringUtils.random(pageChars, startChar, endChar, false, false)));
+			textSplit.add(RandomStringUtils.random(pageChars, startChar, endChar, false, false));
 
-		item.getOrCreateTag().put("pages", textSplit);
-		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(item, false, mc.player.getInventory().selectedSlot));
+		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(mc.player.getInventory().selectedSlot, textSplit, Optional.empty()));
 
 		BleachLogger.infoMessage("Written book (" + pages + " pages, " + pageChars + " chars/page)");
 	}

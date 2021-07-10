@@ -33,7 +33,7 @@ public class DeathExplorer extends Module {
 	public void onDisable() {
 		if (dead) {
 			mc.player.setHealth(0f);
-			mc.openScreen(new DeathScreen(null, mc.world.getLevelProperties().isHardcore()));
+			mc.setScreen(new DeathScreen(null, mc.world.getLevelProperties().isHardcore()));
 		}
 
 		dead = false;
@@ -45,7 +45,7 @@ public class DeathExplorer extends Module {
 		if (mc.player.isDead()) {
 			dead = true;
 			mc.player.setHealth(20f);
-			mc.openScreen(null);
+			mc.setScreen(null);
 		}
 	}
 

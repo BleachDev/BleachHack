@@ -181,13 +181,13 @@ public class CmdEnchant extends Command {
 			throw new CmdSyntaxException("Invalid enchantment!");
 		}
 
-		if (item.getTag() == null)
-			item.setTag(new NbtCompound());
-		if (!item.getTag().contains("Enchantments", 9)) {
-			item.getTag().put("Enchantments", new NbtList());
+		if (item.getNbt() == null)
+			item.setNbt(new NbtCompound());
+		if (!item.getNbt().contains("Enchantments", 9)) {
+			item.getNbt().put("Enchantments", new NbtList());
 		}
 
-		NbtList listnbt = item.getTag().getList("Enchantments", 10);
+		NbtList listnbt = item.getNbt().getList("Enchantments", 10);
 		NbtCompound compoundnbt = new NbtCompound();
 		compoundnbt.putString("id", String.valueOf(Registry.ENCHANTMENT.getId(e)));
 		compoundnbt.putInt("lvl", level);

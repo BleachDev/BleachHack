@@ -129,7 +129,7 @@ public class AutoSteal extends Module {
 				}
 
 				if (getSetting(0).asMode().mode >= 1 || getSetting(3).asToggle().state) {
-					mc.openScreen(null);
+					mc.setScreen(null);
 					mc.player.networkHandler.sendPacket(new CloseHandledScreenC2SPacket(currentSyncId));
 					return;
 				}

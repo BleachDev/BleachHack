@@ -21,8 +21,8 @@ import net.minecraft.client.gui.screen.Screen;
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
 
-	@Inject(method = "openScreen", at = @At("HEAD"), cancellable = true)
-	public void openScreen(Screen screen, CallbackInfo info) {
+	@Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+	public void setScreen(Screen screen, CallbackInfo info) {
 		EventOpenScreen event = new EventOpenScreen(screen);
 		BleachHack.eventBus.post(event);
 

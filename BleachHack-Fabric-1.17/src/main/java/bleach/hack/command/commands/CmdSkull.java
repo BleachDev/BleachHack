@@ -54,7 +54,7 @@ public class CmdSkull extends Command {
 						Resources.toString(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + json.get("id").getAsString()), StandardCharsets.UTF_8))
 						.getAsJsonObject();
 
-				item.setTag(StringNbtReader.parse("{SkullOwner:{Id:" + id + ",Properties:{textures:[{Value:\""
+				item.setNbt(StringNbtReader.parse("{SkullOwner:{Id:" + id + ",Properties:{textures:[{Value:\""
 						+ json2.get("properties").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString()
 						+ "\"}]}}}"));
 			} catch (Exception e) {
@@ -64,7 +64,7 @@ public class CmdSkull extends Command {
 		} else if (args[0].equalsIgnoreCase("img")) {
 			NbtCompound tag = StringNbtReader.parse(
 					"{SkullOwner:{Id:" + id + ",Properties:{textures:[{Value:\"" + encodeUrl(args[1]) + "\"}]}}}");
-			item.setTag(tag);
+			item.setNbt(tag);
 			BleachLogger.logger.info(tag);
 		}
 

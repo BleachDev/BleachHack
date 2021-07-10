@@ -19,6 +19,7 @@ import net.minecraft.client.gui.screen.ingame.BeaconScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.BeaconScreenHandler;
 import net.minecraft.text.LiteralText;
@@ -38,8 +39,8 @@ public abstract class MixinBeaconScreen extends HandledScreen<BeaconScreenHandle
 		addDrawableChild(new ButtonWidget((width - backgroundWidth) / 2 + 2, (height - backgroundHeight) / 2 - 15, 46, 14, new LiteralText("Unlock"), button -> unlocked = true));
 	}
 
-	@Inject(method = "tick", at = @At("RETURN"))
-	public void tick(CallbackInfo ci) {
+	@Inject(method = "render", at = @At("HEAD"))
+	public void tick(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 		if (unlocked) {
 			for (Drawable b: ((AccessorScreen) this).getDrawables()) {
 				if (b instanceof ClickableWidget) {

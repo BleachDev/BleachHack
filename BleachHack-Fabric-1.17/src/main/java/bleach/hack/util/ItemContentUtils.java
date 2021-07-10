@@ -23,7 +23,7 @@ public class ItemContentUtils {
 
 	public static List<ItemStack> getItemsInContainer(ItemStack item) {
 		List<ItemStack> items = new ArrayList<>(Collections.nCopies(27, new ItemStack(Items.AIR)));
-		NbtCompound nbt = item.getTag();
+		NbtCompound nbt = item.getNbt();
 
 		if (nbt != null && nbt.contains("BlockEntityTag")) {
 			NbtCompound nbt2 = nbt.getCompound("BlockEntityTag");
@@ -40,7 +40,7 @@ public class ItemContentUtils {
 
 	public static List<List<String>> getTextInBook(ItemStack item) {
 		List<String> pages = new ArrayList<>();
-		NbtCompound nbt = item.getTag();
+		NbtCompound nbt = item.getNbt();
 
 		if (nbt != null && nbt.contains("pages")) {
 			NbtList nbt2 = nbt.getList("pages", 8);

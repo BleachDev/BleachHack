@@ -40,7 +40,7 @@ public class CmdNotebot extends Command {
 			BleachFileMang.appendFile(s, "notebot", "notebot" + i + ".txt");
 			BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
 		} else {
-			BleachQueue.add(() -> mc.openScreen(new NotebotScreen()));
+			BleachQueue.add(() -> mc.setScreen(new NotebotScreen()));
 		}
 	}
 

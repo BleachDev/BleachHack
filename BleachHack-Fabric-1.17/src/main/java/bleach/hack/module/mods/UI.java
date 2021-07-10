@@ -101,7 +101,7 @@ public class UI extends Module {
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")), // 3-0
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding").withChildren(
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing")), // 4
-				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().openScreen(uiScreen)));
+				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(uiScreen)));
 
 		uiScreen = new UIClickGuiScreen(ClickGui.clickGui, this);
 	}

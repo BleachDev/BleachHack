@@ -51,7 +51,7 @@ public class ProtocolScreen extends Screen {
 			}
 		}));
 		addDrawableChild(new ButtonWidget(width / 2 + 2, height / 2 + 50, 98, 20, new LiteralText("Done"), button -> {
-			client.openScreen(serverScreen);
+			client.setScreen(serverScreen);
 		}));
 
 		nameField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, LiteralText.EMPTY);
@@ -80,7 +80,7 @@ public class ProtocolScreen extends Screen {
 	}
 
 	public void onClose() {
-		client.openScreen(serverScreen);
+		client.setScreen(serverScreen);
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {

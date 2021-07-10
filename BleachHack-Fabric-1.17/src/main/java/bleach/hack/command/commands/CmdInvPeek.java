@@ -38,7 +38,7 @@ public class CmdInvPeek extends Command {
 				BleachQueue.add(() -> {
 					BleachLogger.infoMessage("Opened inventory for " + e.getDisplayName().getString());
 
-					mc.openScreen(new InventoryScreen(e) {
+					mc.setScreen(new InventoryScreen(e) {
 						public boolean mouseClicked(double mouseX, double mouseY, int button) {
 							return false;
 						}

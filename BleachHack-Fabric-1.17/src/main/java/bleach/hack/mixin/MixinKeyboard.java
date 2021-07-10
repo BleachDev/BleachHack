@@ -38,7 +38,7 @@ public class MixinKeyboard {
 		// TODO: bh setting 
 		/*if (InputUtil.getKeycodeName(InputUtil.fromKeyCode(key, scanCode).getKeyCode()) != null &&
 			InputUtil.getKeycodeName(InputUtil.fromKeyCode(key, canCode).getKeyCode()).equals(CommandManager.prefix)) {
-			MinecraftClient.getInstance().openScreen(new ChatScreen(CommandManager.prefix));
+			MinecraftClient.getInstance().setScreen(new ChatScreen(CommandManager.prefix));
 		}*/
 
 		ModuleManager.handleKeyPress(key);

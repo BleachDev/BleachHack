@@ -243,7 +243,7 @@ public class Dispenser32k extends Module {
 		}
 
 		if (dispenserTicks == 1) {
-			mc.openScreen(null);
+			mc.setScreen(null);
 			WorldUtils.placeBlock(pos.add(0, 2, 0), redstone, getSetting(0).asRotate(), false, false, true);
 		}
 

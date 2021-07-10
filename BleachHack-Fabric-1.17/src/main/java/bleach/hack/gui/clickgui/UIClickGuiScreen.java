@@ -91,7 +91,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 	}
 
 	public void onClose() {
-		client.openScreen(parent);
+		client.setScreen(parent);
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

@@ -66,7 +66,7 @@ public class EntityMenu extends Module {
 				Entity e = lookingAt.get();
 
 				if (e instanceof LivingEntity && (e instanceof PlayerEntity || !getSetting(0).asToggle().state)) {
-					mc.openScreen(new EntityMenuScreen((LivingEntity) e));
+					mc.setScreen(new EntityMenuScreen((LivingEntity) e));
 				}
 			}
 		} else if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_RELEASE) {

@@ -92,25 +92,25 @@ public class BleachTitleScreen extends WindowScreen {
 		int maxY = MathHelper.clamp(h / 4 + 119, 0, h - 22);
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
-			client.openScreen(new SelectWorldScreen(client.currentScreen));
+			client.setScreen(new SelectWorldScreen(client.currentScreen));
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
-			client.openScreen(new MultiplayerScreen(client.currentScreen));
+			client.setScreen(new MultiplayerScreen(client.currentScreen));
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 86, w / 2 + 100, h / 4 + 106, I18n.translate("menu.online"), () -> {
-			client.openScreen(new RealmsMainScreen(this));
+			client.setScreen(new RealmsMainScreen(this));
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
 			customTitleScreen = !customTitleScreen;
 			BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(false));
-			client.openScreen(new TitleScreen(false));
+			client.setScreen(new TitleScreen(false));
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
-			client.openScreen(new OptionsScreen(client.currentScreen, client.options));
+			client.setScreen(new OptionsScreen(client.currentScreen, client.options));
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {

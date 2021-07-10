@@ -84,7 +84,7 @@ public class CleanUpScreen extends Screen {
 			result = "\u00a7aFinished";
 		}));
 		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 3 + 104, 200, 20, new LiteralText("Done"), button -> {
-			client.openScreen(new MultiplayerScreen(new TitleScreen(false)));
+			client.setScreen(new MultiplayerScreen(new TitleScreen(false)));
 		}));
 
 	}
@@ -101,6 +101,6 @@ public class CleanUpScreen extends Screen {
 	}
 
 	public void onClose() {
-		client.openScreen(new MultiplayerScreen(new TitleScreen(false)));
+		client.setScreen(new MultiplayerScreen(new TitleScreen(false)));
 	}
 }

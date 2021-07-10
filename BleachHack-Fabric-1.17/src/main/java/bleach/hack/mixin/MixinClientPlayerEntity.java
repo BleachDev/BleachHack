@@ -99,12 +99,12 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		}
 	}
 
-	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0),
+	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0),
 			require = 0 /* TODO: inertia */)
-	private void updateNausea_openScreen(MinecraftClient client, Screen screen) {
+	private void updateNausea_setScreen(MinecraftClient client, Screen screen) {
 		if (!ModuleManager.getModule("BetterPortal").isEnabled()
 				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().state) {
-			client.openScreen(screen);
+			client.setScreen(screen);
 		}
 	}
 

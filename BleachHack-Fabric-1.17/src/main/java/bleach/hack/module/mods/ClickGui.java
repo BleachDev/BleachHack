@@ -31,13 +31,13 @@ public class ClickGui extends Module {
 	public void onEnable() {
 		super.onEnable();
 
-		mc.openScreen(clickGui);
+		mc.setScreen(clickGui);
 	}
 
 	@Override
 	public void onDisable() {
 		if (mc.currentScreen instanceof ModuleClickGuiScreen) {
-			mc.openScreen(null);
+			mc.setScreen(null);
 		}
 
 		super.onDisable();

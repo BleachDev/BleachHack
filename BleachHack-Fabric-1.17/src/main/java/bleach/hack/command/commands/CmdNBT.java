@@ -39,7 +39,7 @@ public class CmdNBT extends Command {
 		ItemStack item = mc.player.getInventory().getMainHandStack();
 
 		if (args[0].equalsIgnoreCase("get")) {
-			NbtCompound tag = item.getTag();
+			NbtCompound tag = item.getNbt();
 
 			if (tag == null) {
 				BleachLogger.infoMessage("\u00a7c\u00a7lNo NBT on this item!");
@@ -57,21 +57,21 @@ public class CmdNBT extends Command {
 
 			BleachLogger.infoMessage(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + stringTag));
 		} else if (args[0].equalsIgnoreCase("copy")) {
-			mc.keyboard.setClipboard(item.getTag() + "");
-			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + (item.getTag() + "\n") + "\u00a76to clipboard.");
+			mc.keyboard.setClipboard(item.getNbt() + "");
+			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + item.getNbt() + "\n\u00a76to clipboard.");
 		} else if (args[0].equalsIgnoreCase("set")) {
 			try {
 				if (args.length < 2) {
 					throw new CmdSyntaxException();
 				}
 
-				item.setTag(StringNbtReader.parse(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), ' ')));
-				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getTag().toString()));
+				item.setNbt(StringNbtReader.parse(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), ' ')));
+				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getNbt().toString()));
 			} catch (Exception e) {
 				throw new CmdSyntaxException();
 			}
 		} else if (args[0].equalsIgnoreCase("wipe")) {
-			item.setTag(new NbtCompound());
+			item.setNbt(new NbtCompound());
 		}
 
 	}
