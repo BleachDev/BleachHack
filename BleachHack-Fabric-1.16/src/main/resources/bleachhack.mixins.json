@@ -34,7 +34,6 @@
     "MixinFlowableFluid",
     "MixinFluidRenderer",
     "MixinGameRenderer",
-    "MixinHandledScreen",
     "MixinInGameHud",
     "MixinInGameOverlayRenderer",
     "MixinKeyboard",
