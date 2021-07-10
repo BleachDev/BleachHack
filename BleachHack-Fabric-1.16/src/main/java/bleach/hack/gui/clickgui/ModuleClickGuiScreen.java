@@ -14,6 +14,7 @@ import java.util.Set;
 
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
+import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.ModuleCategory;
@@ -48,27 +49,32 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 	public void initWindows() {
 		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
 
-		int startX = 10;
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.PLAYER),
-				startX, 35, len, "Player", new ItemStack(Items.ARMOR_STAND)));
+				30, 50, len, "Player", new ItemStack(Items.ARMOR_STAND)));
 
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.RENDER),
-				startX + len + 5, 35, len, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
+				30, 66, len, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
 
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.COMBAT),
-				startX + len * 2 + 10, 35, len, "Combat", new ItemStack(Items.TOTEM_OF_UNDYING)));
+				30, 82, len, "Combat", new ItemStack(Items.TOTEM_OF_UNDYING)));
 
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.MOVEMENT),
-				startX + len * 3 + 15, 35, len, "Movement", new ItemStack(Items.POTION)));
+				30, 98, len, "Movement", new ItemStack(Items.POTION)));
 
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.EXPLOITS),
-				startX + len * 4 + 20, 35, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
+				30, 114, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
 
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.MISC),
-				startX + len * 5 + 25, 35, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
+				30, 130, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
 
 		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.WORLD),
-				startX + len * 6 + 30, 35, len, "World", new ItemStack(Items.GRASS_BLOCK)));
+				30, 146, len, "World", new ItemStack(Items.GRASS_BLOCK)));
+
+		for (Window w: getWindows()) {
+			if (w instanceof ClickGuiWindow) {
+				((ClickGuiWindow) w).hiding = true;
+			}
+		}
 	}
 
 	public void onClose() {

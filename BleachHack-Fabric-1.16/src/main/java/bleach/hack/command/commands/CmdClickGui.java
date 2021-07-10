@@ -33,18 +33,7 @@ public class CmdClickGui extends Command {
 		}
 
 		if (args[0].equalsIgnoreCase("reset")) {
-			if (args.length == 1 || args[1].equalsIgnoreCase("open")) {
-				int x = 10;
-
-				for (Window m : ClickGui.clickGui.getWindows()) {
-					if (m instanceof ClickGuiWindow) {
-						((ClickGuiWindow) m).hiding = false;
-						m.x1 = x;
-						m.y1 = 35;
-						x += (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue() + 5;
-					}
-				}
-			} else if (args[1].equalsIgnoreCase("closed")) {
+			if (args.length == 1 || args[1].equalsIgnoreCase("closed")) {
 				int y = 50;
 
 				for (Window m : ClickGui.clickGui.getWindows()) {
@@ -53,6 +42,17 @@ public class CmdClickGui extends Command {
 						m.x1 = 30;
 						m.y1 = y;
 						y += 16;
+					}
+				}
+			} else if (args[1].equalsIgnoreCase("open")) {
+				int x = 10;
+
+				for (Window m : ClickGui.clickGui.getWindows()) {
+					if (m instanceof ClickGuiWindow) {
+						((ClickGuiWindow) m).hiding = false;
+						m.x1 = x;
+						m.y1 = 35;
+						x += (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue() + 5;
 					}
 				}
 			} else {
