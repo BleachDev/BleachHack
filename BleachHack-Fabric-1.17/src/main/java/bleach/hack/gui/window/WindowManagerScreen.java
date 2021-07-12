@@ -114,10 +114,30 @@ public class WindowManagerScreen extends Screen {
 
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
-	
-	// Children doesn't tick brue
+
+	// Children don't tick brue
 	@Override
 	public void tick() {
 		getSelectedScreen().tick();
+		super.tick();
+	}
+
+	// Children also don't take keyboard input brueh
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		getSelectedScreen().keyPressed(keyCode, scanCode, modifiers);
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+		getSelectedScreen().keyReleased(keyCode, scanCode, modifiers);
+		return super.keyReleased(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		getSelectedScreen().charTyped(chr, modifiers);
+		return super.charTyped(chr, modifiers);
 	}
 }
