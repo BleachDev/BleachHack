@@ -17,9 +17,10 @@ import bleach.hack.module.Module;
 public class AutoWalk extends Module {
 
 	public AutoWalk() {
-		super("AutoWalk", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Automatically walks/flies forward");
+		super("AutoWalk", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Automatically holds your walk key down.");
 	}
 
+	@Override
 	public void onDisable() {
 		mc.options.keyForward.setPressed(false);
 		super.onDisable();

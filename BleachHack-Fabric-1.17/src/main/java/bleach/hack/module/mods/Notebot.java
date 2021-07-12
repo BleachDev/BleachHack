@@ -57,12 +57,12 @@ public class Notebot extends Module {
 	public static String filePath = "";
 
 	public Notebot() {
-		super("Notebot", KEY_UNBOUND, ModuleCategory.MISC, "Plays those noteblocks nicely",
-				new SettingToggle("Tune", true).withDesc("Tune the noteblocks before and while playing").withChildren(
-						new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All").withDesc("How to tune the noteblocks")),
-				new SettingToggle("Loop", false).withDesc("Loop the song you are playing"),
-				new SettingToggle("NoInstruments", false).withDesc("Ignores intruments"),
-				new SettingToggle("AutoPlay", false).withDesc("Auto plays a random song after one is fininshed"));
+		super("Notebot", KEY_UNBOUND, ModuleCategory.MISC, "Plays those noteblocks nicely.",
+				new SettingToggle("Tune", true).withDesc("Tunes the noteblocks before and while playing.").withChildren(
+						new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All").withDesc("How to tune the noteblocks.")),
+				new SettingToggle("Loop", false).withDesc("Loop the song you're playing."),
+				new SettingToggle("NoInstruments", false).withDesc("Ignores intruments."),
+				new SettingToggle("AutoPlay", false).withDesc("Auto plays a random song after one is fininshed."));
 	}
 
 	@Override

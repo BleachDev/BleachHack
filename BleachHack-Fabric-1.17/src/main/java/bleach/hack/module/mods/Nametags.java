@@ -82,30 +82,30 @@ public class Nametags extends Module {
 
 	public Nametags() {
 		super("Nametags", KEY_UNBOUND, ModuleCategory.RENDER, "Shows bigger/cooler nametags above entities.",
-				new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor"),
-				new SettingMode("Health", "Number", "NumberOf", "Bar", "Percent").withDesc("How to show health"),
-				new SettingToggle("Players", true).withDesc("Show player nametags").withChildren(
-						new SettingSlider("Size", 0.5, 5, 2, 1).withDesc("Size of the nametags"),
-						new SettingToggle("Name", true).withDesc("Shows the name of the player"),
-						new SettingToggle("Health", true).withDesc("Shows the health of the player"),
-						new SettingToggle("Ping", true).withDesc("Shows the ping of the player"),
-						new SettingToggle("Gamemode", false).withDesc("Shows the gamemode of the player")),
-				new SettingToggle("Animals", true).withDesc("Show animal nametags").withChildren(
-						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags"),
-						new SettingToggle("Name", true).withDesc("Shows the name of the animal"),
-						new SettingToggle("Health", true).withDesc("Shows the health of the animal"),
-						new SettingToggle("Tamed", false).withDesc("Shows if the animal is tamed").withChildren(
-								new SettingMode("If Not", "Show", "Hide").withDesc("What to show if the animal isn't tame")),
-						new SettingToggle("Owner", true).withDesc("Hows the owner of the pet if its tameable"),
-						new SettingToggle("HorseStats", false).withDesc("Shows the entities stats if its a horse")),
-				new SettingToggle("Mobs", false).withDesc("Show mob nametags").withChildren(
-						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags"),
-						new SettingToggle("Name", true).withDesc("Shows the name of the mob"),
-						new SettingToggle("Health", true).withDesc("Shows the health of the mob")),
-				new SettingToggle("Items", true).withDesc("Shows nametags for items").withChildren(
-						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags"),
-						new SettingToggle("Custom Name", true).withDesc("Shows the items custom name if it has it"),
-						new SettingToggle("Item Count", true).withDesc("Shows how many items are in the stack")));
+				new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor."),
+				new SettingMode("Health", "Number", "NumberOf", "Bar", "Percent").withDesc("How to show health."),
+				new SettingToggle("Players", true).withDesc("Shows nametags over player.").withChildren(
+						new SettingSlider("Size", 0.5, 5, 2, 1).withDesc("The size of the nametags."),
+						new SettingToggle("Name", true).withDesc("Shows the name of the player."),
+						new SettingToggle("Health", true).withDesc("Shows the health of the player."),
+						new SettingToggle("Ping", true).withDesc("Shows the ping of the player."),
+						new SettingToggle("Gamemode", false).withDesc("Shows the gamemode of the player.")),
+				new SettingToggle("Animals", true).withDesc("Shows nametags over animals.").withChildren(
+						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("The size of the nametags."),
+						new SettingToggle("Name", true).withDesc("Shows the name of the animal."),
+						new SettingToggle("Health", true).withDesc("Shows the health of the animal."),
+						new SettingToggle("Tamed", false).withDesc("Shows if the animal is tamed.").withChildren(
+								new SettingMode("If Not", "Show", "Hide").withDesc("What to show if the animal isn't tamed.")),
+						new SettingToggle("Owner", true).withDesc("Shows the owner of the pet if its tamed."),
+						new SettingToggle("HorseStats", false).withDesc("Shows the entities stats if its a horse.")),
+				new SettingToggle("Mobs", false).withDesc("Shows nametags over mobs.").withChildren(
+						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("The size of the nametags."),
+						new SettingToggle("Name", true).withDesc("Shows the name of the mob."),
+						new SettingToggle("Health", true).withDesc("Shows the health of the mob.")),
+				new SettingToggle("Items", true).withDesc("Shows nametags for items.").withChildren(
+						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("Size of the nametags."),
+						new SettingToggle("CustomName", true).withDesc("Shows the items custom name if it has it."),
+						new SettingToggle("ItemCount", true).withDesc("Shows how many items are in the stack.")));
 	}
 
 	public void onDisable() {

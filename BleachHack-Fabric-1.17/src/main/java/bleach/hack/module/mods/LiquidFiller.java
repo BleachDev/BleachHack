@@ -35,20 +35,20 @@ import bleach.hack.module.Module;
 public class LiquidFiller extends Module {
 
 	public LiquidFiller() {
-		super("LiquidFiller", KEY_UNBOUND, ModuleCategory.WORLD, "Places blocks in liquids",
-				new SettingMode("Liquid", "Lava", "Water", "Both").withDesc("What liquids to fill"),
-				new SettingSlider("Range", 1, 6, 4.5, 1).withDesc("How far to fill liquids"),
-				new SettingSlider("BPT", 1, 6, 1, 0).withDesc("How many blocks to place per tick"),
-				new SettingToggle("AirPlace", true).withDesc("Places blocks in the air"),
-				new SettingToggle("LegitPlace", false).withDesc("Only places on sides of blocks you can see"),
-				new SettingToggle("Filter", false).withDesc("Filters certain blocks from being placed").withChildren(
-						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
-						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks")),
-				new SettingRotate(false).withDesc("Rotates when placing blocks"),
-				new SettingToggle("Highlight", true).withDesc("Highlights liquids to fill").withChildren(
+		super("LiquidFiller", KEY_UNBOUND, ModuleCategory.WORLD, "Fills in liquids by placing blocks in them.",
+				new SettingMode("Liquid", "Lava", "Water", "Both").withDesc("What liquids to fill."),
+				new SettingSlider("Range", 1, 6, 4.5, 1).withDesc("How far to fill liquids."),
+				new SettingSlider("BPT", 1, 6, 1, 0).withDesc("How many blocks to place per tick."),
+				new SettingToggle("AirPlace", true).withDesc("Places blocks in the air."),
+				new SettingToggle("LegitPlace", false).withDesc("Only places on sides of blocks you can see."),
+				new SettingToggle("Filter", false).withDesc("Filters certain blocks from being placed.").withChildren(
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
+						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks.")),
+				new SettingRotate(false).withDesc("Rotates when placing blocks."),
+				new SettingToggle("Highlight", true).withDesc("Highlights liquids to fill.").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2),
-						new SettingColor("Water Color", 0f, 0.5f, 1f, false).withDesc("Color of water"),
-						new SettingColor("Lava Color", 1f, 0.75f, 0f, false).withDesc("Color of lava")));
+						new SettingColor("Water Color", 0f, 0.5f, 1f, false).withDesc("Color of water."),
+						new SettingColor("Lava Color", 1f, 0.75f, 0f, false).withDesc("Color of lava.")));
 	}
 
 	private boolean shouldUseItem(Item item) {

@@ -27,7 +27,7 @@ import net.minecraft.util.math.Vec3d;
 public class Ghosthand extends Module {
 
 	public Ghosthand() {
-		super("Ghosthand", KEY_UNBOUND, ModuleCategory.PLAYER, "Opens Containers Through Walls");
+		super("Ghosthand", KEY_UNBOUND, ModuleCategory.PLAYER, "Opens containers through walls.");
 	}
 
 	@BleachSubscribe

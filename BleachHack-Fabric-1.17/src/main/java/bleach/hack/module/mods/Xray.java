@@ -26,11 +26,11 @@ public class Xray extends Module {
 	private double gamma;
 
 	public Xray() {
-		super("Xray", GLFW.GLFW_KEY_X, ModuleCategory.RENDER, "Baritone is for zoomers",
-				new SettingToggle("Fluids", false).withDesc("Show fluids"),
-				new SettingToggle("Opacity", true).withDesc("Toggles an adjustable alpha level for non-xray blocks").withChildren(
-						new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value"),
-						new SettingToggle("HideSurface", false).withDesc("Hides the surface of the world to make it easier to see blocks")),
+		super("Xray", GLFW.GLFW_KEY_X, ModuleCategory.RENDER, "Baritone is for zoomers.",
+				new SettingToggle("Fluids", false).withDesc("Show fluids."),
+				new SettingToggle("Opacity", true).withDesc("Toggles an adjustable alpha level for non-xray blocks.").withChildren(
+						new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value."),
+						new SettingToggle("HideSurface", false).withDesc("Hides the surface of the world to make it easier to see blocks.")),
 				SettingLists.newBlockList("Edit Blocks", "Edit Xray Blocks",
 						Blocks.COPPER_ORE,
 						Blocks.IRON_ORE,
@@ -47,7 +47,7 @@ public class Xray extends Module {
 						Blocks.DIAMOND_BLOCK,
 						Blocks.EMERALD_BLOCK,
 						Blocks.NETHER_GOLD_ORE,
-						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks"));
+						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks."));
 	}
 
 	public boolean isVisible(Block block) {

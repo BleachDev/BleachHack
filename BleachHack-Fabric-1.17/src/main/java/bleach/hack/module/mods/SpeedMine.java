@@ -23,13 +23,13 @@ import net.minecraft.entity.effect.StatusEffects;
 public class SpeedMine extends Module {
 
 	public SpeedMine() {
-		super("SpeedMine", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Allows you to mine at sanic speeds",
-				new SettingMode("Mode", "Haste", "OG").withDesc("SpeedMine Mode"),
-				new SettingSlider("HasteLvl", 1, 3, 1, 0).withDesc("Haste Level"),
-				new SettingSlider("Cooldown", 0, 4, 1, 0).withDesc("Cooldown between mining blocks (in ticks)"),
-				new SettingSlider("Multiplier", 1, 3, 1.3, 1).withDesc("OG Mode multiplier"),
-				new SettingToggle("AntiFatigue", true).withDesc("Removes the fatigue effect"),
-				new SettingToggle("AntiOffGround", true).withDesc("Removing mining slowness from being offground"));
+		super("SpeedMine", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Allows you to break blocks faster.",
+				new SettingMode("Mode", "Haste", "OG").withDesc("SpeedMine Mode."),
+				new SettingSlider("HasteLvl", 1, 3, 1, 0).withDesc("Haste Level."),
+				new SettingSlider("Cooldown", 0, 4, 1, 0).withDesc("Cooldown between mining blocks (in ticks)."),
+				new SettingSlider("Multiplier", 1, 3, 1.3, 1).withDesc("OG Mode multiplier."),
+				new SettingToggle("AntiFatigue", true).withDesc("Removes the fatigue effect."),
+				new SettingToggle("AntiOffGround", true).withDesc("Removing mining slowness from being offground."));
 	}
 
 	@Override

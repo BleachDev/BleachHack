@@ -24,8 +24,8 @@ import net.minecraft.util.shape.VoxelShapes;
 public class Jesus extends Module {
 
 	public Jesus() {
-		super("Jesus", GLFW.GLFW_KEY_J, ModuleCategory.PLAYER, "Allows you to walk on water",
-				new SettingMode("Mode", "Vibrate", "Solid"));
+		super("Jesus", GLFW.GLFW_KEY_J, ModuleCategory.PLAYER, "Allows you to walk on water.",
+				new SettingMode("Mode", "Vibrate", "Solid").withDesc("The jesus mode."));
 	}
 
 	@BleachSubscribe

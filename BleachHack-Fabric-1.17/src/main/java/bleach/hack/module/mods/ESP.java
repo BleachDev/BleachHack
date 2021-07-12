@@ -49,33 +49,33 @@ public class ESP extends Module {
 
 	public ESP() {
 		super("ESP", KEY_UNBOUND, ModuleCategory.RENDER, "Allows you to see entities though walls.",
-				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill"),
-				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline"),
-				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
-				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
-				new SettingToggle("DrawBehind", false).withDesc("Draws the box/fill behind the entity (definitely not a bug turned into a feature)"),
+				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill").withDesc("The ESP mode."),
+				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline in shader mode."),
+				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines."),
+				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill."),
+				new SettingToggle("DrawBehind", false).withDesc("Draws the box/fill behind the entity (definitely not a bug turned into a feature)."),
 
-				new SettingToggle("Players", true).withDesc("Show Players").withChildren(
-						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Outline color for players"),
-						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Outline color for friends")),
+				new SettingToggle("Players", true).withDesc("Highlights Players.").withChildren(
+						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Outline color for players."),
+						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Outline color for friends.")),
 
-				new SettingToggle("Mobs", false).withDesc("Show Mobs").withChildren(
-						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Outline color for mobs")),
+				new SettingToggle("Mobs", false).withDesc("Highlights Mobs.").withChildren(
+						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Outline color for mobs.")),
 
-				new SettingToggle("Animals", false).withDesc("Show Animals").withChildren(
-						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals")),
+				new SettingToggle("Animals", false).withDesc("Highlights Animals").withChildren(
+						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals.")),
 
-				new SettingToggle("Items", true).withDesc("Show Items").withChildren(
-						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items")),
+				new SettingToggle("Items", true).withDesc("Highlights Items.").withChildren(
+						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items.")),
 
-				new SettingToggle("Crystals", true).withDesc("Show End Crystals").withChildren(
-						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals")),
+				new SettingToggle("Crystals", true).withDesc("Highlights End Crystals.").withChildren(
+						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals.")),
 
-				new SettingToggle("Vehicles", false).withDesc("Show Vehicles").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats)")),
+				new SettingToggle("Vehicles", false).withDesc("Highlights Vehicles.").withChildren(
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats).")),
 
-				new SettingToggle("Donkeys", false).withDesc("Show Donkeys and Llamas for duping").withChildren(
-						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys")));
+				new SettingToggle("Donkeys", false).withDesc("Highlights Donkeys and Llamas for duping.").withChildren(
+						new SettingColor("Color", 0f, 0f, 1f, false).withDesc("Outline color for donkeys.")));
 	}
 
 	@BleachSubscribe

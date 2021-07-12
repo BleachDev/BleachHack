@@ -6,7 +6,7 @@ import bleach.hack.module.ModuleCategory;
 public class AntiChunkBan extends Module {
 
 	public AntiChunkBan() {
-		super("AntiChunkBan", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Bypasses chunks bans (and bookbans)");
+		super("AntiChunkBan", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Bypasses chunks bans (and bookbans).");
 	}
 
 }

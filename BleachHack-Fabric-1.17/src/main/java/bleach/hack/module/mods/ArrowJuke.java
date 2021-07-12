@@ -31,11 +31,11 @@ import net.minecraft.util.math.Vec3d;
 public class ArrowJuke extends Module {
 
 	public ArrowJuke() {
-		super("ArrowJuke", KEY_UNBOUND, ModuleCategory.COMBAT, "Tries to dodge arrows coming at you",
-				new SettingMode("Move", "Client", "Packet").withDesc("How to move to avoid the arrow"),
-				new SettingSlider("Speed", 0.01, 2, 1, 2).withDesc("Move speed"),
-				new SettingSlider("Lookahead", 1, 500, 250, 0).withDesc("How many steps in the future to look ahead"),
-				new SettingToggle("Up", false).withDesc("Allows you to move up when dodging the arrow"));
+		super("ArrowJuke", KEY_UNBOUND, ModuleCategory.COMBAT, "Tries to dodge arrows coming at you.",
+				new SettingMode("Move", "Client", "Packet").withDesc("How to move to avoid the arrow."),
+				new SettingSlider("Speed", 0.01, 2, 1, 2).withDesc("The move speed."),
+				new SettingSlider("Lookahead", 1, 500, 250, 0).withDesc("How many steps in the future to look ahead."),
+				new SettingToggle("Up", false).withDesc("Allows you to move up when dodging the arrow."));
 	}
 
 	@BleachSubscribe

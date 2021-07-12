@@ -30,9 +30,9 @@ public class AutoSign extends Module {
 	public String[] text = new String[] {};
 
 	public AutoSign() {
-		super("AutoSign", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically writes on signs",
-				new SettingToggle("Random", false).withDesc("Writes random unicode in the sign").withChildren(
-						new SettingSlider("Length", 1, 1000, 500, 0).withDesc("How many characters to write per line")));
+		super("AutoSign", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically writes on signs.",
+				new SettingToggle("Random", false).withDesc("Writes random unicode in the sign.").withChildren(
+						new SettingSlider("Length", 1, 1000, 500, 0).withDesc("How many characters to write per line.")));
 	}
 
 	public void onDisable() {

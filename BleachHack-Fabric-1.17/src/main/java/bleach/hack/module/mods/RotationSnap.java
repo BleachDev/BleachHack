@@ -28,12 +28,12 @@ public class RotationSnap extends Module {
 	private boolean dDown = false;
 
 	public RotationSnap() {
-		super("RotationSnap", KEY_UNBOUND, ModuleCategory.PLAYER, "Snaps your rotations to angles",
-				new SettingToggle("Yaw", true).withDesc("Fixes your yaw").withChildren(
-						new SettingMode("Interval", "45", "30", "15", "90").withDesc("What angles to snap to")),
-				new SettingToggle("Pitch", false).withDesc("Fixes your pitch").withChildren(
-						new SettingMode("Interval", "45", "30", "15", "90").withDesc("What angles to snap to")),
-				new SettingToggle("Arrow Move", false).withDesc("Allows you to move between angles by using your arrow keys"));
+		super("RotationSnap", KEY_UNBOUND, ModuleCategory.PLAYER, "Snaps your rotations to angles.",
+				new SettingToggle("Yaw", true).withDesc("Fixes your yaw.").withChildren(
+						new SettingMode("Interval", "45", "30", "15", "90").withDesc("What angles to snap to.")),
+				new SettingToggle("Pitch", false).withDesc("Fixes your pitch.").withChildren(
+						new SettingMode("Interval", "45", "30", "15", "90").withDesc("What angles to snap to.")),
+				new SettingToggle("Arrow Move", false).withDesc("Allows you to move between angles by using your arrow keys."));
 	}
 
 	@BleachSubscribe

@@ -19,9 +19,9 @@ import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 public class NoSwing extends Module {
 
 	public NoSwing() {
-		super("NoSwing", KEY_UNBOUND, ModuleCategory.MISC, "Makes you not swing your hand",
-				new SettingToggle("Client", true).withDesc("Makes you not swing your hand clientside"),
-				new SettingToggle("Server", true).withDesc("Makes you not send hand swing packets"));
+		super("NoSwing", KEY_UNBOUND, ModuleCategory.MISC, "Makes you not swing your hand.",
+				new SettingToggle("Client", true).withDesc("Makes you not swing your hand clientside."),
+				new SettingToggle("Server", true).withDesc("Makes you not send hand swing packets."));
 	}
 
 	@BleachSubscribe

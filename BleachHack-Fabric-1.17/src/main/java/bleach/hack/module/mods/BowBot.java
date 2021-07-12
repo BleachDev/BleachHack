@@ -36,14 +36,14 @@ import net.minecraft.util.math.Vec3d;
 public class BowBot extends Module {
 
 	public BowBot() {
-		super("BowBot", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically aims and shoots at entities",
-				new SettingToggle("Shoot", true).withDesc("Automatically shoots arrows").withChildren(
-						new SettingSlider("Charge", 0.1, 1, 0.5, 2).withDesc("How much to charge the bow before shooting")),
-				new SettingToggle("Aim", false).withDesc("Automatically aims").withChildren(
-						new SettingToggle("Players", true).withDesc("Aims at players"),
-						new SettingToggle("Mobs", false).withDesc("Aims at mobs"),
-						new SettingToggle("Animals", false).withDesc("Aims at animals"),
-						new SettingToggle("Raycast", true).withDesc("Doesn't aim at entites that you can't see")));
+		super("BowBot", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically aims and shoots at entities.",
+				new SettingToggle("Shoot", true).withDesc("Automatically shoots arrows.").withChildren(
+						new SettingSlider("Charge", 0.1, 1, 0.5, 2).withDesc("How much to charge the bow before shooting.")),
+				new SettingToggle("Aim", false).withDesc("Automatically aims.").withChildren(
+						new SettingToggle("Players", true).withDesc("Aims at players."),
+						new SettingToggle("Mobs", false).withDesc("Aims at mobs."),
+						new SettingToggle("Animals", false).withDesc("Aims at animals."),
+						new SettingToggle("Raycast", true).withDesc("Doesn't aim at entites you can't see.")));
 	}
 
 	@BleachSubscribe

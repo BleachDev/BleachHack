@@ -15,8 +15,8 @@ import bleach.hack.setting.base.SettingSlider;
 public class Timer extends Module {
 
 	public Timer() {
-		super("Timer", KEY_UNBOUND, ModuleCategory.WORLD, "more speeds",
-				new SettingSlider("Speed", 0.01, 20, 1, 2).withDesc("How fast to set timer"));
+		super("Timer", KEY_UNBOUND, ModuleCategory.WORLD, "Speeds up the world clientside.",
+				new SettingSlider("Speed", 0.01, 20, 1, 2).withDesc("How fast to tick the world."));
 	}
 
 	// See MixinRenderTickCounter for code

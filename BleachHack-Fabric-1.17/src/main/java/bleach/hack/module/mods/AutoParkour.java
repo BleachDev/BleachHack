@@ -39,12 +39,12 @@ public class AutoParkour extends Module {
 	private BlockPos smartPos = null;
 
 	public AutoParkour() {
-		super("AutoParkour", KEY_UNBOUND, ModuleCategory.MOVEMENT, "You jump when you reach the edge of a block (Use this if you suck at parkouring)",
-				new SettingToggle("AutoSprint", true).withDesc("Automatically makes you sprint when jumping"),
-				new SettingToggle("Smart", true).withDesc("Tries to figure out what block you're jumping to then auto jumps to that block").withChildren(
-						new SettingToggle("Snap", false).withDesc("Snaps you to the target block to prevent you from overshooting it"),
-						new SettingToggle("Highlight", false).withDesc("Highlights the target block you're jumping to").withChildren(
-								new SettingColor("Color", 0.85f, 0.44f, 0.57f, false).withDesc("The highlight color"))));
+		super("AutoParkour", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Makes you jump when you reach the edge of a block (Use this if you suck at parkouring).",
+				new SettingToggle("AutoSprint", true).withDesc("Automatically makes you sprint when jumping."),
+				new SettingToggle("Smart", true).withDesc("Tries to figure out what block you're jumping to then jumps to that block.").withChildren(
+						new SettingToggle("Snap", false).withDesc("Snaps you to the target block to prevent you from overshooting it."),
+						new SettingToggle("Highlight", false).withDesc("Highlights the target block you're jumping to.").withChildren(
+								new SettingColor("Color", 0.85f, 0.44f, 0.57f, false).withDesc("The color of the highlight."))));
 	}
 
 	@Override

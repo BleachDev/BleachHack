@@ -31,20 +31,20 @@ public class LogoutSpot extends Module {
 	private final HashMap<UUID, Pair<PlayerCopyEntity, Long>> players = new HashMap<>();
 
 	public LogoutSpot() {
-		super("LogoutSpot", KEY_UNBOUND, ModuleCategory.RENDER, "Shows where a player logged out",
-				new SettingToggle("Remove", true).withDesc("Removes logout spots").withChildren( // 1
-						new SettingToggle("Distance", false).withDesc("Remove logout spots based on distance").withChildren( // 0-0
-								new SettingSlider("Radius", 1, 1000, 200, 0).withDesc("Radius in which logout spots get shown")), // 0-0-0
-						new SettingToggle("Time", false).withDesc("Remove logout spots based on time since logout").withChildren( // 0-1
-								new SettingSlider("Duration", 1, 1800, 120, 0).withDesc("Duration after which a logged out players gets removed (in seconds)")), // 0-1-0
-						new SettingToggle("Disconnect", true).withDesc("Removes all logout spots when disconnecting"), // 0-2
-						new SettingToggle("Disable", true).withDesc("Removes all logout spots when disabling LogoutSpot")), // 0-3
-				new SettingToggle("Text", true).withDesc("Adds text next to players").withChildren( // 1
-						new SettingToggle("Name", true).withDesc("Shows the name of the logged player"), // 1-0
-						new SettingToggle("Coords", false).withDesc("Shows the coords of the logged player"), // 1-1
-						new SettingToggle("Health", true).withDesc("Shows the health of the logged player"), // 1-2
-						new SettingToggle("Time", true).withDesc("Shows the time ago the player logged")), // 1-3
-				new SettingToggle("Ghost", true).withDesc("Makes the logout spot players transparent")); // 2
+		super("LogoutSpot", KEY_UNBOUND, ModuleCategory.RENDER, "Shows where players logged out.",
+				new SettingToggle("Remove", true).withDesc("Removes logout spots.").withChildren( // 1
+						new SettingToggle("Distance", false).withDesc("Remove logout spots based on distance.").withChildren( // 0-0
+								new SettingSlider("Radius", 1, 1000, 200, 0).withDesc("Radius in which logout spots get shown.")), // 0-0-0
+						new SettingToggle("Time", false).withDesc("Remove logout spots based on time since logout.").withChildren( // 0-1
+								new SettingSlider("Duration", 1, 1800, 120, 0).withDesc("Duration after which a logged out players gets removed (in seconds).")), // 0-1-0
+						new SettingToggle("Disconnect", true).withDesc("Removes all logout spots when disconnecting."), // 0-2
+						new SettingToggle("Disable", true).withDesc("Removes all logout spots when disabling LogoutSpot.")), // 0-3
+				new SettingToggle("Text", true).withDesc("Adds text next to player.s").withChildren( // 1
+						new SettingToggle("Name", true).withDesc("Shows the name of the logged player."), // 1-0
+						new SettingToggle("Coords", false).withDesc("Shows the coords of the logged player."), // 1-1
+						new SettingToggle("Health", true).withDesc("Shows the health of the logged player."), // 1-2
+						new SettingToggle("Time", true).withDesc("Shows the time ago the player logged.")), // 1-3
+				new SettingToggle("Ghost", true).withDesc("Makes the logout spot players transparent.")); // 2
 	}
 
 	@Override

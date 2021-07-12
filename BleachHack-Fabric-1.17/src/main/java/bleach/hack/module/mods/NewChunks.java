@@ -39,14 +39,14 @@ public class NewChunks extends Module {
 	private Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
 
 	public NewChunks() {
-		super("NewChunks", KEY_UNBOUND, ModuleCategory.WORLD, "Detects completely new chunks using certain traits of them",
-				new SettingToggle("Remove", true).withDesc("Removes the cached chunks when disabling the module"),
-				new SettingToggle("Fill", true).withDesc("Fills in the newchunks").withChildren(
-						new SettingSlider("Opacity", 0.01, 1, 0.3, 2).withDesc("The opacity of the fill")),
-				new SettingToggle("NewChunks", true).withDesc("Shows all the chunks that are (most likely) completely new").withChildren(
-						new SettingColor("Color", 0.8f, 0.6f, 0.85f, false)),
-				new SettingToggle("OldChunks", false).withDesc("Shows all the chunks that have (most likely) been loaded before").withChildren(
-						new SettingColor("Color", 0.9f, 0.2f, 0.2f, false)));
+		super("NewChunks", KEY_UNBOUND, ModuleCategory.WORLD, "Detects completely new chunks using certain traits of them.",
+				new SettingToggle("Remove", true).withDesc("Removes the cached chunks when disabling the module."),
+				new SettingToggle("Fill", true).withDesc("Fills in the newchunks.").withChildren(
+						new SettingSlider("Opacity", 0.01, 1, 0.3, 2).withDesc("The opacity of the fill.")),
+				new SettingToggle("NewChunks", true).withDesc("Shows all the chunks that are (most likely) completely new.").withChildren(
+						new SettingColor("Color", 0.8f, 0.6f, 0.85f, false).withDesc("The color of NewChunks.")),
+				new SettingToggle("OldChunks", false).withDesc("Shows all the chunks that have (most likely) been loaded before.").withChildren(
+						new SettingColor("Color", 0.9f, 0.2f, 0.2f, false).withDesc("The color of OldChunks.")));
 	}
 
 	@Override

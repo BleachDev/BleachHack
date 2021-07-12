@@ -25,8 +25,8 @@ public class DeathExplorer extends Module {
 	private boolean dead;
 
 	public DeathExplorer() {
-		super("DeathExplorer", KEY_UNBOUND, ModuleCategory.PLAYER, "Allows you to explore the world after you've died",
-				new SettingToggle("Text", true).withDesc("Shows text onscreen that you're dead"));
+		super("DeathExplorer", KEY_UNBOUND, ModuleCategory.PLAYER, "Allows you to explore the world after you've died.",
+				new SettingToggle("Text", true).withDesc("Shows text onscreen that you're dead."));
 	}
 
 	@Override

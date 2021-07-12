@@ -51,26 +51,26 @@ public class Nuker extends Module {
 	private Set<BlockPos> renderBlocks = new HashSet<>();
 
 	public Nuker() {
-		super("Nuker", KEY_UNBOUND, ModuleCategory.WORLD, "Breaks blocks around you",
-				new SettingMode("Mode", "Normal", "SurvMulti", "Multi", "Instant").withDesc("Mining mode"),
-				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if Multi/SurvMulti mode is on"),
-				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks (in ticks)"),
-				new SettingMode("Shape", "Cube", "Sphere").withDesc("What shape to mine in"),
-				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range"),
-				new SettingMode("Sort", "Closest", "Furthest", "Softest", "Hardest", "None").withDesc("Which order to mine blocks in"),
-				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
-						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
-						SettingLists.newBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks")),
-				new SettingToggle("Raycast", true).withDesc("Only mines blocks you can see"),
-				new SettingToggle("Flatten", false).withDesc("Flatten the area around you"),
-				new SettingRotate(false).withDesc("Rotate to blocks that you are mining"),
-				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
-				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are currently mining").withChildren(
-						new SettingMode("Mode", "Opacity", "Expand").withDesc("How to show the mining progress"),
-						new SettingColor("Color", 1f, 0.5f, 0.5f, false).withDesc("The color of the highlight")),
-				new SettingToggle("RangeHighlight", false).withDesc("Highlights the range you can mine").withChildren(
-						new SettingSlider("Width", 0.1, 10, 3, 1).withDesc("The width of the lines"),
-						new SettingColor("Color", 1f, 0f, 0f, false).withDesc("The color of the highlight")));
+		super("Nuker", KEY_UNBOUND, ModuleCategory.WORLD, "Breaks blocks around you.",
+				new SettingMode("Mode", "Normal", "SurvMulti", "Multi", "Instant").withDesc("Mining mode."),
+				new SettingSlider("Multi", 1, 10, 2, 0).withDesc("How many blocks to mine at once if Multi/SurvMulti mode is selected."),
+				new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks (in ticks)."),
+				new SettingMode("Shape", "Cube", "Sphere").withDesc("What shape to mine in."),
+				new SettingSlider("Range", 1, 6, 4.2, 1).withDesc("Mining range."),
+				new SettingMode("Sort", "Closest", "Furthest", "Softest", "Hardest", "None").withDesc("Which order to mine blocks in."),
+				new SettingToggle("Filter", false).withDesc("Filters certain blocks.").withChildren(
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
+						SettingLists.newBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks.")),
+				new SettingToggle("Raycast", true).withDesc("Only mines blocks you can see."),
+				new SettingToggle("Flatten", false).withDesc("Flatten the area around you."),
+				new SettingRotate(false).withDesc("Rotate to blocks that you're mining."),
+				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles."),
+				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you're currently mining.").withChildren(
+						new SettingMode("Mode", "Opacity", "Expand").withDesc("How to show the mining progress."),
+						new SettingColor("Color", 1f, 0.5f, 0.5f, false).withDesc("The color of the highlight.")),
+				new SettingToggle("RangeHighlight", false).withDesc("Highlights the range you can mine.").withChildren(
+						new SettingSlider("Width", 0.1, 10, 3, 1).withDesc("The width of the lines."),
+						new SettingColor("Color", 1f, 0f, 0f, false).withDesc("The color of the highlight.")));
 	}
 
 	@Override

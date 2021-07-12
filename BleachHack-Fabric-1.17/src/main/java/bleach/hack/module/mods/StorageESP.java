@@ -79,23 +79,23 @@ public class StorageESP extends Module {
 
 	public StorageESP() {
 		super("StorageESP", KEY_UNBOUND, ModuleCategory.RENDER, "Draws a box around storage containers.",
-				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill"),
-				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline"),
-				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
-				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
+				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill").withDesc("The ESP mode."),
+				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline."),
+				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines."),
+				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill."),
 
-				new SettingToggle("Chests", true).withDesc("Highlights chests"),
-				new SettingToggle("EnderChests", true).withDesc("Highlights enderchests"),
-				new SettingToggle("Furnaces", true).withDesc("Highlights furnaces"),
-				new SettingToggle("Dispensers", true).withDesc("Highlights dispensers"),
-				new SettingToggle("Hoppers", true).withDesc("Highlights hoppers"),
-				new SettingToggle("Shulkers", true).withDesc("Highlights shulkers"),
-				new SettingToggle("BrewingStands", true).withDesc("Highlights brewing stands"),
-				new SettingToggle("ChestCarts", true).withDesc("Highlights chests in minecarts"),
-				new SettingToggle("FurnaceCarts", true).withDesc("Highlights furnaces in minecarts"),
-				new SettingToggle("HopperCarts", true).withDesc("Highlights hoppers in minecarts"),
-				new SettingToggle("ItemFrames", true).withDesc("Highlights item frames"),
-				new SettingToggle("ArmorStands", true).withDesc("Highlights armor stands"));
+				new SettingToggle("Chests", true).withDesc("Highlights chests."),
+				new SettingToggle("EnderChests", true).withDesc("Highlights enderchests."),
+				new SettingToggle("Furnaces", true).withDesc("Highlights furnaces."),
+				new SettingToggle("Dispensers", true).withDesc("Highlights dispensers."),
+				new SettingToggle("Hoppers", true).withDesc("Highlights hoppers."),
+				new SettingToggle("Shulkers", true).withDesc("Highlights shulkers."),
+				new SettingToggle("BrewingStands", true).withDesc("Highlights brewing stands."),
+				new SettingToggle("ChestCarts", true).withDesc("Highlights chests in minecarts."),
+				new SettingToggle("FurnaceCarts", true).withDesc("Highlights furnaces in minecarts."),
+				new SettingToggle("HopperCarts", true).withDesc("Highlights hoppers in minecarts."),
+				new SettingToggle("ItemFrames", true).withDesc("Highlights item frames."),
+				new SettingToggle("ArmorStands", true).withDesc("Highlights armor stands."));
 	}
 
 	public void onDisable() {

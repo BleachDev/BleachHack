@@ -39,24 +39,24 @@ public class HoleESP extends Module {
 	private Map<BlockPos, float[]> holes = new HashMap<>();
 
 	public HoleESP() {
-		super("HoleESP", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights save and not so save holes. Used for CrystalPvP",
-				new SettingSlider("Radius", 1, 20, 10, 0).withDesc("Radius in which holes are getting searched"),
-				new SettingToggle("RenderBottom", true).withDesc("Render the bottom of this hole").withChildren(
-						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
-						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
-						new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill")),
-				new SettingToggle("RenderSides", true).withDesc("Render the sides of this hole").withChildren(
-						new SettingMode("Render", "GlowUp", "GlowDown", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
-						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
+		super("HoleESP", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights safe and not so safe holes. Used for Crystalpvp.",
+				new SettingSlider("Radius", 1, 20, 10, 0).withDesc("Radius in which holes are getting searched."),
+				new SettingToggle("RenderBottom", true).withDesc("Render the bottom of holes.").withChildren(
+						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method."),
+						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines."),
+						new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill.")),
+				new SettingToggle("RenderSides", true).withDesc("Render the sides of holes.").withChildren(
+						new SettingMode("Render", "GlowUp", "GlowDown", "Box+Fill", "Box", "Fill").withDesc("The rendering method."),
+						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines."),
 						new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill/glow"),
-						new SettingSlider("Height", 0.1, 8, 1, 1).withDesc("The height to render the sides")),
-				new SettingToggle("Bedrock", true).withDesc("Shows holes with full bedrock").withChildren(
-						new SettingColor("Color", 0f, 1f, 0f, false).withDesc("Color for bedrock holes")),
-				new SettingToggle("Mixed", true).withDesc("Shows holes with a mix of obsidian and bedrock").withChildren(
-						new SettingColor("Mixed", 1f, 1f, 0f, false).withDesc("Color for mixed holes")),
-				new SettingToggle("Obsidian", true).withDesc("Shows holes with a mix of obsidian and bedrock").withChildren(
-						new SettingColor("Obsidian", 1f, 0f, 0f, false).withDesc("Color for obsidian holes")),
-				new SettingToggle("HideWhenIn", true).withDesc("Hides the hole you're currently in to prevent blocking out screen"));
+						new SettingSlider("Height", 0.1, 8, 1, 1).withDesc("The height to render the sides.")),
+				new SettingToggle("Bedrock", true).withDesc("Shows holes with full bedrock.").withChildren(
+						new SettingColor("Color", 0f, 1f, 0f, false).withDesc("Color for bedrock holes.")),
+				new SettingToggle("Mixed", true).withDesc("Shows holes with a mix of obsidian and bedrock.").withChildren(
+						new SettingColor("Mixed", 1f, 1f, 0f, false).withDesc("Color for mixed holes.")),
+				new SettingToggle("Obsidian", true).withDesc("Shows holes with a mix of obsidian and bedrock.").withChildren(
+						new SettingColor("Obsidian", 1f, 0f, 0f, false).withDesc("Color for obsidian holes.")),
+				new SettingToggle("HideWhenIn", true).withDesc("Hides the hole you're currently in to prevent blocking out your screen."));
 	}
 
 	@Override

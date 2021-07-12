@@ -63,13 +63,13 @@ public class Dispenser32k extends Module {
 	private int timer = 0;
 
 	public Dispenser32k() {
-		super("Dispenser32k", KEY_UNBOUND, ModuleCategory.COMBAT, "ching chong auto32k no skid 2020",
+		super("Dispenser32k", KEY_UNBOUND, ModuleCategory.COMBAT, "ching chong auto32k no skid 2020.",
 				new SettingRotate(true),
-				new SettingToggle("Killaura", true).withDesc("Automatically attacks"),
-				new SettingSlider("CPS", 0, 20, 20, 0).withDesc("Attack Speed"),
-				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay").withDesc("How to interperet CPS"),
-				new SettingToggle("Timeout", false).withDesc("Stops attacks after a few ticks"),
-				new SettingMode("Place", "Auto", "Looking").withDesc("Where to place the dispenser"));
+				new SettingToggle("Killaura", true).withDesc("Automatically attacks."),
+				new SettingSlider("CPS", 0, 20, 20, 0).withDesc("Attack Speed."),
+				new SettingMode("CPS", "Clicks/Sec", "Clicks/Tick", "Tick Delay").withDesc("How to interperet CPS."),
+				new SettingToggle("Timeout", false).withDesc("Stops attacks after a few ticks."),
+				new SettingMode("Place", "Auto", "Looking").withDesc("Where to place the dispenser."));
 	}
 
 	public void onEnable() {

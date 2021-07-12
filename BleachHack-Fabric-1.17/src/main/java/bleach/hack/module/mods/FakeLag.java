@@ -28,11 +28,11 @@ public class FakeLag extends Module {
 	public long startTime = 0;
 
 	public FakeLag() {
-		super("FakeLag", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Stores up movement packets",
-				new SettingMode("Mode", "Always", "Pulse").withDesc("Lag mode"),
-				new SettingToggle("Limit", false).withDesc("Disable lag after x seconds").withChildren(
-						new SettingSlider("Limit", 0, 15, 5, 1).withDesc("How muny seconds before disabling")),
-				new SettingSlider("Pulse", 0, 5, 1, 1).withDesc("Pulse interval"));
+		super("FakeLag", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Stores up movement packets and makes the server think you're lagging.",
+				new SettingMode("Mode", "Always", "Pulse").withDesc("Lag mode."),
+				new SettingToggle("Limit", false).withDesc("Disable FakeLag after x seconds.").withChildren(
+						new SettingSlider("Limit", 0, 15, 5, 1).withDesc("How many seconds before disabling.")),
+				new SettingSlider("Pulse", 0, 5, 1, 1).withDesc("Pulse interval."));
 	}
 
 	@Override

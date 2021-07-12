@@ -34,21 +34,21 @@ import net.minecraft.util.math.Vec3d;
 public class EntityControl extends Module {
 
 	public EntityControl() {
-		super("EntityControl", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Manipulate Entities.",
-				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entities").withChildren(
-						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("Entity speed")),
-				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entities").withChildren(
-						new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed"),
-						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed"),
+		super("EntityControl", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Manipulates Entities.",
+				new SettingToggle("EntitySpeed", true).withDesc("Lets you control the speed of riding entities.").withChildren(
+						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("The speed of the entity.")),
+				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entities.").withChildren(
+						new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed."),
+						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed."),
 						new SettingToggle("EcmeBypass", false).withDesc("Prevents you from getting kicked off when flying on ec.me")),
-				new SettingToggle("HorseJump", true).withDesc("Always makes your horse do the highest jump it can"),
-				new SettingToggle("GroundSnap", false).withDesc("Snaps the entity to the ground when going down blocks"),
-				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding when going up blocks"),
-				new SettingToggle("NoAI", true).withDesc("Disables the entities AI"),
-				new SettingToggle("RotationLock", false).withDesc("Locks the rotation of the vehicle to a certain angle serverside").withChildren(
-						new SettingSlider("Yaw", -180, 180, 0, 0).withDesc("Yaw of the vehicle"),
-						new SettingSlider("Pitch", -90, 90, 0, 0).withDesc("Pitch of the vehicle"),
-						new SettingToggle("Player", true).withDesc("Also locks roation for player packets")));
+				new SettingToggle("HorseJump", true).withDesc("Makes your horse always do the highest jump it can."),
+				new SettingToggle("GroundSnap", false).withDesc("Snaps the entity to the ground when going down blocks."),
+				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding when going up blocks."),
+				new SettingToggle("NoAI", true).withDesc("Disables the entities AI."),
+				new SettingToggle("RotationLock", false).withDesc("Locks the rotation of the vehicle to a certain angle serverside.").withChildren(
+						new SettingSlider("Yaw", -180, 180, 0, 0).withDesc("Yaw of the vehicle."),
+						new SettingSlider("Pitch", -90, 90, 0, 0).withDesc("Pitch of the vehicle."),
+						new SettingToggle("Player", true).withDesc("Also locks roation for player packets.")));
 	}
 
 	@BleachSubscribe

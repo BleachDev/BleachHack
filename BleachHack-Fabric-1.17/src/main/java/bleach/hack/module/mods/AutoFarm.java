@@ -58,30 +58,30 @@ public class AutoFarm extends Module {
 	private Map<BlockPos, Integer> mossMap = new HashMap<>();
 
 	public AutoFarm() {
-		super("AutoFarm", KEY_UNBOUND, ModuleCategory.PLAYER, "Wurst exclusive",
-				new SettingSlider("Range", 1, 6, 4.5, 1).withDesc("Farming reach"),
-				new SettingToggle("Till", true).withDesc("Tills dirt around you").withChildren(
-						new SettingToggle("WateredOnly", false).withDesc("Only tills watered dirt")),
-				new SettingToggle("Harvest", true).withDesc("Harvests grown crop").withChildren(
-						new SettingToggle("Crops", true).withDesc("Harvests wheat, carrots, potato & beetroot"),
-						new SettingToggle("StemCrops", true).withDesc("Harvests melons/pumpkins"),
-						new SettingToggle("NetherWart", true).withDesc("Harvests nether wart"),
-						new SettingToggle("Cocoa", true).withDesc("Harvests cocoa beans"),
-						new SettingToggle("Berries", false).withDesc("Harvests sweet berries"),
-						new SettingToggle("SugarCane", false).withDesc("Harvests sugar canes"),
-						new SettingToggle("Cactus", false).withDesc("Harvests cactuses")),
-				new SettingToggle("Plant", true).withDesc("Plants crop around you").withChildren(
-						new SettingToggle("Crops", true).withDesc("Plants wheat, carrots, potato & beetroot"),
-						new SettingToggle("StemCrops", true).withDesc("Plants melon/pumpkin stems"),
-						new SettingToggle("NetherWart", true).withDesc("Plants nether wart")),
-				new SettingToggle("Bonemeal", true).withDesc("Bonemeals ungrown crop").withChildren(
-						new SettingToggle("Crops", true).withDesc("Bonemeals crops"),
-						new SettingToggle("StemCrops", true).withDesc("Bonemeals melon/pumpkin stems"),
-						new SettingToggle("Cocoa", true).withDesc("Bonemeals cocoa beans"),
-						new SettingToggle("Berries", false).withDesc("Bonemeals sweet berries"),
-						new SettingToggle("Mushrooms", false).withDesc("Bonemeals mushrooms"),
-						new SettingToggle("Saplings", false).withDesc("Bonemeals saplings"),
-						new SettingToggle("Moss", false).withDesc("Bonemeals moss")));
+		super("AutoFarm", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically does farming activies for you.",
+				new SettingSlider("Range", 1, 6, 4.5, 1).withDesc("Farming reach."),
+				new SettingToggle("Till", true).withDesc("Tills dirt around you.").withChildren(
+						new SettingToggle("WateredOnly", false).withDesc("Only tills watered dirt.")),
+				new SettingToggle("Harvest", true).withDesc("Harvests grown crops.").withChildren(
+						new SettingToggle("Crops", true).withDesc("Harvests wheat, carrots, potato & beetroot."),
+						new SettingToggle("StemCrops", true).withDesc("Harvests melons/pumpkins."),
+						new SettingToggle("NetherWart", true).withDesc("Harvests nether wart."),
+						new SettingToggle("Cocoa", true).withDesc("Harvests cocoa beans."),
+						new SettingToggle("Berries", false).withDesc("Harvests sweet berries."),
+						new SettingToggle("SugarCane", false).withDesc("Harvests sugar canes."),
+						new SettingToggle("Cactus", false).withDesc("Harvests cactuses.")),
+				new SettingToggle("Plant", true).withDesc("Plants crops around you.").withChildren(
+						new SettingToggle("Crops", true).withDesc("Plants wheat, carrots, potato & beetroot."),
+						new SettingToggle("StemCrops", true).withDesc("Plants melon/pumpkin stems."),
+						new SettingToggle("NetherWart", true).withDesc("Plants nether wart.")),
+				new SettingToggle("Bonemeal", true).withDesc("Bonemeals ungrown crop.").withChildren(
+						new SettingToggle("Crops", true).withDesc("Bonemeals wheat, carrots, potato & beetroot."),
+						new SettingToggle("StemCrops", true).withDesc("Bonemeals melon/pumpkin stems."),
+						new SettingToggle("Cocoa", true).withDesc("Bonemeals cocoa beans."),
+						new SettingToggle("Berries", false).withDesc("Bonemeals sweet berries."),
+						new SettingToggle("Mushrooms", false).withDesc("Bonemeals mushrooms."),
+						new SettingToggle("Saplings", false).withDesc("Bonemeals saplings."),
+						new SettingToggle("Moss", false).withDesc("Bonemeals moss.")));
 	}
 	
 	@Override

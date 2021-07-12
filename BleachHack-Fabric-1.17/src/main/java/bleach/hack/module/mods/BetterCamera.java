@@ -16,10 +16,10 @@ import bleach.hack.setting.base.SettingToggle;
 public class BetterCamera extends Module {
 
 	public BetterCamera() {
-		super("BetterCamera", KEY_UNBOUND, ModuleCategory.RENDER, "Improves the 3rd person camera",
-				new SettingToggle("CameraClip", true).withDesc("Makes the camera clip into walls"),
-				new SettingToggle("Distance", true).withDesc("Sets a custom camera distance").withChildren(
-						new SettingSlider("Distance", 0.5, 15, 4, 1).withDesc("The desired camera distance")));
+		super("BetterCamera", KEY_UNBOUND, ModuleCategory.RENDER, "Improves the 3rd person camera.",
+				new SettingToggle("CameraClip", true).withDesc("Makes the camera clip into walls."),
+				new SettingToggle("Distance", true).withDesc("Sets a custom camera distance.").withChildren(
+						new SettingSlider("Distance", 0.5, 15, 4, 1).withDesc("The desired camera distance.")));
 	}
 
 	// Logic handled in MixinCamera::clipToSpace

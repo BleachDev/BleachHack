@@ -77,31 +77,31 @@ public class UI extends Module {
 
 	public UI() {
 		super("UI", KEY_UNBOUND, ModuleCategory.RENDER, true, "Shows stuff onscreen.",
-				new SettingToggle("Modulelist", true).withDesc("Shows the module list").withChildren( // 0
-						new SettingToggle("Inner Line", true).withDesc("Adds an extra line to the front of the module list"), // 0-0
-						new SettingToggle("Outer Line", false).withDesc("Adds an outer line to the module list"), // 0-1
-						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list"), // 0-2
-						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list").withChildren( // 0-3
-								new SettingMode("Mode", "New", "Old").withDesc("The watermark type")), // 0-3-0
-						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("Rainbow Hue"), // 0-4
-						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("Rainbow Saturation"), // 0-5
-						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("Rainbow Speed")), // 0-6
-				new SettingToggle("Info", true).withDesc("Shows info/stats in a corner of the screen").withChildren( // 1
-						new SettingToggle("FPS", true).withDesc("Shows your FPS"), // 1-0
-						new SettingToggle("Ping", true).withDesc("Shows your ping"), // 1-1
-						new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 1-2
-						new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 1-3
-						new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 1-4
-						new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 1-5
-								new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"), // 1-5-0
-								new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 1-5-1
-						new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in")), // 1-6
-				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), //2
-				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 3
-						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")), // 3-0
-				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding").withChildren(
-						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing")), // 4
-				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(uiScreen)));
+				new SettingToggle("Modulelist", true).withDesc("Shows the module list.").withChildren( // 0
+						new SettingToggle("InnerLine", true).withDesc("Adds an extra line to the front of the module list."), // 0-0
+						new SettingToggle("OuterLine", false).withDesc("Adds an outer line to the module list."), // 0-1
+						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list."), // 0-2
+						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list.").withChildren( // 0-3
+								new SettingMode("Mode", "New", "Old").withDesc("The watermark type.")), // 0-3-0
+						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("The hue of the rainbow."), // 0-4
+						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("The saturation of the rainbow."), // 0-5
+						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("The speed of the rainbow.")), // 0-6
+				new SettingToggle("Info", true).withDesc("Shows info/stats.").withChildren( // 1
+						new SettingToggle("FPS", true).withDesc("Shows your FPS."), // 1-0
+						new SettingToggle("Ping", true).withDesc("Shows your ping."), // 1-1
+						new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords."), // 1-2
+						new SettingToggle("TPS", true).withDesc("Shows the estimated server tps."), // 1-3
+						new SettingToggle("Server", false).withDesc("Shows the current server you are on."), // 1-4
+						new SettingToggle("TimeStamp", false).withDesc("Shows the current time.").withChildren( // 1-5
+								new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."), // 1-5-0
+								new SettingToggle("Year", false).withDesc("Shows the current year in the time.")), // 1-5-1
+						new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in.")), // 1-6
+				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance."), //2
+				new SettingToggle("Armor", true).withDesc("Shows your current armor.").withChildren( // 3
+						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability.")), // 3-0
+				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(
+						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")), // 4
+				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(uiScreen)).withDesc("Edit the position of the UI."));
 
 		uiScreen = new UIClickGuiScreen(ClickGui.clickGui, this);
 	}

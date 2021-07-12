@@ -48,21 +48,21 @@ public class Killaura extends Module {
 	private int delay = 0;
 
 	public Killaura() {
-		super("Killaura", GLFW.GLFW_KEY_K, ModuleCategory.COMBAT, "Automatically attacks entities",
-				new SettingMode("Sort", "Angle", "Distance").withDesc("How to sort targets"),
-				new SettingToggle("Players", true).withDesc("Attack players"),
-				new SettingToggle("Mobs", true).withDesc("Attack mobs"),
-				new SettingToggle("Animals", false).withDesc("Attack animals"),
-				new SettingToggle("Armor Stands", false).withDesc("Attack Armor Stands"),
-				new SettingToggle("Projectiles", false).withDesc("Attack Shulker Bullets & Fireballs"),
-				new SettingToggle("Triggerbot", false).withDesc("Only attacks the entity you are looking at"),
-				new SettingToggle("MultiAura", false).withDesc("Atacks multiple entities at once").withChildren(
-						new SettingSlider("Targets", 1, 20, 3, 0).withDesc("How many targets to attack at once")),
-				new SettingRotate(true),
-				new SettingToggle("Thru Walls", false).withDesc("Attack through walls"),
-				new SettingToggle("1.9 Delay", false).withDesc("Uses the 1.9+ delay between hits"),
-				new SettingSlider("Range", 0, 6, 4.25, 2).withDesc("Attack range"),
-				new SettingSlider("CPS", 0, 20, 8, 0).withDesc("Attack CPS if 1.9 delay is disabled"));
+		super("Killaura", GLFW.GLFW_KEY_K, ModuleCategory.COMBAT, "Automatically attacks entities.",
+				new SettingMode("Sort", "Angle", "Distance").withDesc("How to sort targets."),
+				new SettingToggle("Players", true).withDesc("Attacks Players."),
+				new SettingToggle("Mobs", true).withDesc("Attacks Mobs."),
+				new SettingToggle("Animals", false).withDesc("Attacks Animals."),
+				new SettingToggle("ArmorStands", false).withDesc("Attacks Armor Stands."),
+				new SettingToggle("Projectiles", false).withDesc("Attacks Shulker Bullets & Fireballs."),
+				new SettingToggle("Triggerbot", false).withDesc("Only attacks the entity you're looking at."),
+				new SettingToggle("MultiAura", false).withDesc("Atacks multiple entities at once.").withChildren(
+						new SettingSlider("Targets", 1, 20, 3, 0).withDesc("How many targets to attack at once.")),
+				new SettingRotate(true).withDesc("Rotates when attackign entities."),
+				new SettingToggle("Thru Walls", false).withDesc("Attacks through walls."),
+				new SettingToggle("1.9 Delay", false).withDesc("Uses the 1.9+ delay between hits."),
+				new SettingSlider("Range", 0, 6, 4.25, 2).withDesc("Attack range."),
+				new SettingSlider("CPS", 0, 20, 8, 0).withDesc("Attack CPS if 1.9 delay is disabled."));
 	}
 
 	@BleachSubscribe

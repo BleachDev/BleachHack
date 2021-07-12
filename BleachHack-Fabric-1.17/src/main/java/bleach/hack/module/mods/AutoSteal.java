@@ -66,17 +66,17 @@ public class AutoSteal extends Module {
 	private int lastOpen = 0;
 
 	public AutoSteal() {
-		super("AutoSteal", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically steals items from chests",
-				new SettingMode("Gui", "Normal", "Project", "NoGui" /* Novoline cheststealer*/).withDesc("How to display the chest gui when stealing"),
-				new SettingSlider("Delay", 0, 20, 2, 0).withDesc("Delay between taking items (in ticks)"),
-				new SettingSlider("RandDelay", 0, 8, 2, 0).withDesc("Extra random delay between taking items (in ticks)"),
+		super("AutoSteal", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically steals items from chests.",
+				new SettingMode("Gui", "Normal", "Project", "NoGui" /* Novoline cheststealer*/).withDesc("How to display the chest gui when stealing."),
+				new SettingSlider("Delay", 0, 20, 2, 0).withDesc("Delay between taking items (in ticks)."),
+				new SettingSlider("RandDelay", 0, 8, 2, 0).withDesc("Extra random delay between taking items (in ticks)."),
 				new SettingToggle("Automatic", true).withDesc("Automatically opens chest when you are near them").withChildren(
-						new SettingSlider("Range", 0.5, 6, 4.5, 2).withDesc("Range to open chests"),
-						new SettingSlider("Cooldown", 1, 90, 30, 0).withDesc("How long to wait before reopening the same chest (in seconds)"),
-						new SettingRotate(false).withDesc("Rotates to chests when opening them")),
-				new SettingToggle("Filter", false).withDesc("Filters certain items").withChildren(
-						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
-						SettingLists.newItemList("Edit Items", "Edit Filtered Items").withDesc("Edit the filtered items")));
+						new SettingSlider("Range", 0.5, 6, 4.5, 2).withDesc("Range to open chests."),
+						new SettingSlider("Cooldown", 1, 90, 30, 0).withDesc("How long to wait before reopening the same chest (in seconds)."),
+						new SettingRotate(false).withDesc("Rotates to chests when opening them.")),
+				new SettingToggle("Filter", false).withDesc("Filters certain items.").withChildren(
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
+						SettingLists.newItemList("Edit Items", "Edit Filtered Items").withDesc("Edit the filtered items.")));
 	}
 
 	public boolean isBlacklisted(Item item) {

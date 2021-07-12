@@ -29,10 +29,10 @@ public class Flight extends Module {
 	private boolean flyTick = false;
 
 	public Flight() {
-		super("Flight", GLFW.GLFW_KEY_G, ModuleCategory.MOVEMENT, "Allows you to fly",
-				new SettingMode("Mode", "Static", "Jetpack", "ec.me").withDesc("Flight mode"),
-				new SettingSlider("Speed", 0, 5, 1, 1).withDesc("Flight speed"),
-				new SettingMode("AntiKick", "Off", "Fall", "Bob", "Packet").withDesc("How to bypass \"you have been kicked for flying\" kicks"));
+		super("Flight", GLFW.GLFW_KEY_G, ModuleCategory.MOVEMENT, "Allows you to fly.",
+				new SettingMode("Mode", "Static", "Jetpack", "ec.me").withDesc("Flight mode."),
+				new SettingSlider("Speed", 0, 5, 1, 1).withDesc("Flight speed."),
+				new SettingMode("AntiKick", "Off", "Fall", "Bob", "Packet").withDesc("How to bypass \"you have been kicked for flying\" kicks."));
 	}
 
 	@Override

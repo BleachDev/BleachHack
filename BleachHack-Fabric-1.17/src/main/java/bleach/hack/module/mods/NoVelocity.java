@@ -27,15 +27,15 @@ public class NoVelocity extends Module {
 
 	public NoVelocity() {
 		super("NoVelocity", KEY_UNBOUND, ModuleCategory.PLAYER, "If you take some damage, you don't move.",
-				new SettingToggle("Knockback", true).withDesc("Reduces knockback from other entities").withChildren(
-						new SettingSlider("VelXZ", 0, 100, 0, 1).withDesc("How much horizontal velocity"),
-						new SettingSlider("VelY", 0, 100, 0, 1).withDesc("How much vertical velocity")),
-				new SettingToggle("Explosions", true).withDesc("Reduces explosion velocity").withChildren(
-						new SettingSlider("VelXZ", 0, 100, 0, 1).withDesc("How much horizontal velocity"),
-						new SettingSlider("VelY", 0, 100, 0, 1).withDesc("How much vertical velocity")),
-				new SettingToggle("Pushing", true).withDesc("Reduces how much you get pushed by entities").withChildren(
-						new SettingSlider("Amount", 0, 100, 0, 1).withDesc("How much to reduce pushing")),
-				new SettingToggle("Fluids", true).withDesc("Reduces how much you get pushed from fluids"));
+				new SettingToggle("Knockback", true).withDesc("Reduces knockback from other entities.").withChildren(
+						new SettingSlider("VelXZ", 0, 100, 0, 1).withDesc("How much horizontal velocity to keep."),
+						new SettingSlider("VelY", 0, 100, 0, 1).withDesc("How much vertical velocity  to keep.")),
+				new SettingToggle("Explosions", true).withDesc("Reduces explosion velocity.").withChildren(
+						new SettingSlider("VelXZ", 0, 100, 0, 1).withDesc("How much horizontal velocity to keep."),
+						new SettingSlider("VelY", 0, 100, 0, 1).withDesc("How much vertical velocity to keep.")),
+				new SettingToggle("Pushing", true).withDesc("Reduces how much you get pushed by entitie.s").withChildren(
+						new SettingSlider("Amount", 0, 100, 0, 1).withDesc("How much pushing to keep.")),
+				new SettingToggle("Fluids", true).withDesc("Reduces how much you get pushed from fluids."));
 	}
 
 	@BleachSubscribe

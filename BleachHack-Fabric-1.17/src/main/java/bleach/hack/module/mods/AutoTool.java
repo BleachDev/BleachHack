@@ -33,10 +33,10 @@ public class AutoTool extends Module {
 	private int queueSlot = -1;
 
 	public AutoTool() {
-		super("AutoTool", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically uses best tool",
-				new SettingToggle("Anti Break", false).withDesc("Doesn't use tool if its about to break"),
-				new SettingToggle("Switch Back", true).withDesc("Switches back to your previous item when done breaking"),
-				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damagable item if possible"));
+		super("AutoTool", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically uses best tool when breaking blocks.",
+				new SettingToggle("AntiBreak", false).withDesc("Doesn't use the tool if its about to break."),
+				new SettingToggle("SwitchBack", true).withDesc("Switches back to your previous item when done breaking."),
+				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damagable item when possible."));
 	}
 
 	@BleachSubscribe

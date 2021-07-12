@@ -37,9 +37,9 @@ public class AutoReconnect extends Module {
 	public ServerInfo server;
 
 	public AutoReconnect() {
-		super("AutoReconnect", KEY_UNBOUND, ModuleCategory.MISC, "Shows reconnect options when disconnecting from a server",
-				new SettingToggle("Auto", true).withDesc("Automatically reconnects").withChildren(
-						new SettingSlider("Time", 0.2, 10, 5, 2).withDesc("How long to wait before reconnecting")));
+		super("AutoReconnect", KEY_UNBOUND, ModuleCategory.MISC, "Shows reconnect options when disconnecting from a server.",
+				new SettingToggle("Auto", true).withDesc("Automatically reconnects.").withChildren(
+						new SettingSlider("Delay", 0.2, 10, 5, 2).withDesc("How long to wait before reconnecting (in seconds).")));
 	}
 
 	@BleachSubscribe

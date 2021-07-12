@@ -23,12 +23,12 @@ import net.minecraft.client.particle.PortalParticle;
 public class BetterPortal extends Module {
 
 	public BetterPortal() {
-		super("BetterPortal", KEY_UNBOUND, ModuleCategory.MISC, "Removes some of the effects of going through a nether portal",
-				new SettingToggle("Gui", true).withDesc("Allows you to open guis in a nether portal"),
-				new SettingToggle("Overlay", true).withDesc("Removes the portal overlay"),
-				new SettingToggle("Particles", false).withDesc("Removes the portal particles that fly out of the portal"),
-				new SettingToggle("Sound", false).withDesc("Disables the portal sound when going through a nether portal").withChildren(
-						new SettingToggle("Ambience", true).withDesc("Disables the portal ambience sound that plays when you get close to a portal")));
+		super("BetterPortal", KEY_UNBOUND, ModuleCategory.MISC, "Removes some of the effects of nether portals.",
+				new SettingToggle("Gui", true).withDesc("Allows you to open guis when in a nether portal."),
+				new SettingToggle("Overlay", true).withDesc("Removes the portal overlay."),
+				new SettingToggle("Particles", false).withDesc("Removes the portal particles that fly out of the portal."),
+				new SettingToggle("Sound", false).withDesc("Removes the portal sound when going through a nether portal.").withChildren(
+						new SettingToggle("Ambience", true).withDesc("Disables the portal ambience sound that plays when you get close to a portal.")));
 	}
 
 	@BleachSubscribe

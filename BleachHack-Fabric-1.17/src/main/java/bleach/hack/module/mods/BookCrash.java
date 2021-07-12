@@ -42,12 +42,12 @@ public class BookCrash extends Module {
 
 	public BookCrash() {
 		super("BookCrash", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Abuses book and quill/sign packets to remotely kick people.",
-				new SettingMode("Mode", "Jessica", "Raion", "Sign").withDesc("What method to use"),
-				new SettingSlider("Uses", 1, 20, 5, 0).withDesc("How many uses per tick"),
-				new SettingSlider("Delay", 0, 5, 0, 0).withDesc("How many ticks to wait between uses"),
-				new SettingMode("Fill", "Ascii", "0xFFFF", "Random", "Old").withDesc("How to fill the book"),
-				new SettingSlider("Pages", 1, 100, 50, 0).withDesc("How many pages to fill"),
-				new SettingToggle("Auto-Off", true).withDesc("Automatically turns the modules off when you disconnect"));
+				new SettingMode("Mode", "Jessica", "Raion", "Sign").withDesc("What method to use."),
+				new SettingSlider("Uses", 1, 20, 5, 0).withDesc("How many uses per tick."),
+				new SettingSlider("Delay", 0, 5, 0, 0).withDesc("How many ticks to wait between uses."),
+				new SettingMode("Fill", "Ascii", "0xFFFF", "Random", "Old").withDesc("How to fill the book."),
+				new SettingSlider("Pages", 1, 100, 50, 0).withDesc("How many pages to fill."),
+				new SettingToggle("Auto-Off", true).withDesc("Automatically turns the modules off when you disconnect."));
 	}
 
 	@BleachSubscribe

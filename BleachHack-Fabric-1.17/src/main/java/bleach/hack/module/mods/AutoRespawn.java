@@ -21,9 +21,9 @@ import net.minecraft.client.gui.screen.DeathScreen;
 public class AutoRespawn extends Module {
 
 	public AutoRespawn() {
-		super("AutoRespawn", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically respawn when you die",
-				new SettingToggle("Delay", false).withDesc("Adds a delay before respawing").withChildren(
-						new SettingSlider("Delay", 1, 15, 5, 0).withDesc("How many ticks to delay")));
+		super("AutoRespawn", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically respawn when you die.",
+				new SettingToggle("Delay", false).withDesc("Adds a delay before respawing.").withChildren(
+						new SettingSlider("Delay", 1, 15, 5, 0).withDesc("How many ticks to delay.")));
 	}
 
 	@BleachSubscribe

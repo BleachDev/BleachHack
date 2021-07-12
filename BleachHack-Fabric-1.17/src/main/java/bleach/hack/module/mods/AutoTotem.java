@@ -30,9 +30,9 @@ public class AutoTotem extends Module {
 
 	public AutoTotem() {
 		super("AutoTotem", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically equips totems.",
-				new SettingToggle("Override", false).withDesc("Equips a totem even if theres another item in the offhand"),
-				new SettingSlider("Delay", 0, 10, 0, 0).withDesc("Minimum delay between equipping totems (in ticks)"),
-				new SettingSlider("PopDelay", 0, 10, 0, 0).withDesc("How long to wait after popping to equip a new totem (in ticks)"));
+				new SettingToggle("Override", false).withDesc("Equips a totem even if theres another item in the offhand."),
+				new SettingSlider("Delay", 0, 10, 0, 0).withDesc("Minimum delay between equipping totems (in ticks)."),
+				new SettingSlider("PopDelay", 0, 10, 0, 0).withDesc("How long to wait after popping to equip a new totem (in ticks)."));
 	}
 
 	@BleachSubscribe

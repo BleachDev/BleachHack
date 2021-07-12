@@ -25,7 +25,7 @@ public class Nofall extends Module {
 
 	public Nofall() {
 		super("Nofall", KEY_UNBOUND, ModuleCategory.PLAYER, "Prevents you from taking fall damage.",
-				new SettingMode("Mode", "Simple", "Packet", "ec.me").withDesc("What nofall mode to use"));
+				new SettingMode("Mode", "Simple", "Packet", "ec.me").withDesc("What Nofall mode to use."));
 	}
 
 	@BleachSubscribe

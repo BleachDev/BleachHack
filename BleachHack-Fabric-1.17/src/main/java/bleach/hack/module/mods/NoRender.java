@@ -11,6 +11,7 @@ package bleach.hack.module.mods;
 import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonElement;
 
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventBlockEntityRender;
 import bleach.hack.event.events.EventEntityRender;
 import bleach.hack.event.events.EventParticle;
@@ -37,30 +38,30 @@ public class NoRender extends Module {
 	public Text[] signText = new Text[] { LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY };
 
 	public NoRender() {
-		super("NoRender", KEY_UNBOUND, ModuleCategory.RENDER, "Blocks certain elements from rendering",
-				new SettingToggle("Overlays", true).withDesc("Removes certain overlays").withChildren( // 0
-						new SettingToggle("Blindness", true).withDesc("Removes the blindness effect"), // 0-0
-						new SettingToggle("Fire", true).withDesc("Removes the fire overlay"), // 0-1
-						new SettingToggle("Hurtcam", true).withDesc("Removes shaking when you get hurt"), // 0-2
-						new SettingToggle("Liquid", true).withDesc("Removes the underwater overlay when you are in water"), // 0-3
-						new SettingToggle("Pumpkin", true).withDesc("Removes the pumpkin overlay"), // 0-4
-						new SettingToggle("Wobble", true).withDesc("Removes the nausea effect"), // 0-5
-						new SettingToggle("BossBar", false).withDesc("Removes bossbars"), // 0-6
-						new SettingToggle("Frostbite", true).withDesc("Removes the frostbite overlay when you walk in powdered snow")), // 0-7
-				new SettingToggle("World", true).withDesc("Removes certain things in the world").withChildren( // 1
-						new SettingToggle("Signs", false).withDesc("Doesn't render signs").withChildren( // 1-0
-								new SettingMode("Mode", "Unrender", "Blank", "Custom").withDesc("How to render signs, use the \"customsign\" command to set sign text")),
-						new SettingToggle("Totem", false).withDesc("Removes the totem animation").withChildren( // 1-1
-								new SettingToggle("Particles", true).withDesc("Removes the yellow-green particles when a totem is used"),
-								new SettingToggle("Sound", false).withDesc("Removes the totem sound when a totem is used")),
-						new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse"), // 1-2
-						new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)"), // 1-3
-						new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag"), // 1-4
-						new SettingToggle("Explosions", false).withDesc("Removes explosion particles").withChildren( // 1-5
-								new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
-						new SettingToggle("Armor Stands", false).withDesc("Disables rendering of armor stands"), // 1-6
-						new SettingToggle("Falling Blocks", false).withDesc("Disables rendering of falling blocks"), // 1-7
-						new SettingToggle("Campfire", false).withDesc("Disables rendering of campfire smoke particles"))); // 1-8
+		super("NoRender", KEY_UNBOUND, ModuleCategory.RENDER, "Blocks certain elements from renderin.g",
+				new SettingToggle("Overlays", true).withDesc("Removes certain overlays.").withChildren( // 0
+						new SettingToggle("Blindness", true).withDesc("Removes the blindness effect."), // 0-0
+						new SettingToggle("Fire", true).withDesc("Removes the fire overlay."), // 0-1
+						new SettingToggle("Hurtcam", true).withDesc("Removes shaking when you get hurt."), // 0-2
+						new SettingToggle("Liquid", true).withDesc("Removes the underwater overlay when you're in water."), // 0-3
+						new SettingToggle("Pumpkin", true).withDesc("Removes the pumpkin overlay."), // 0-4
+						new SettingToggle("Wobble", true).withDesc("Removes the nausea effect."), // 0-5
+						new SettingToggle("BossBar", false).withDesc("Removes bossbars."), // 0-6
+						new SettingToggle("Frostbite", true).withDesc("Removes the frostbite overlay when you walk in powdered snow.")), // 0-7
+				new SettingToggle("World", true).withDesc("Removes certain things in the world.").withChildren( // 1
+						new SettingToggle("Signs", false).withDesc("Doesn't render signs.").withChildren( // 1-0
+								new SettingMode("Mode", "Unrender", "Blank", "Custom").withDesc("How to render signs, use the " + Command.PREFIX + "customsign command to set sign text.")),
+						new SettingToggle("Totem", false).withDesc("Removes the totem animation.").withChildren( // 1-1
+								new SettingToggle("Particles", true).withDesc("Removes the yellow-green particles when a totem is used."),
+								new SettingToggle("Sound", false).withDesc("Removes the totem sound when a totem is used.")),
+						new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse."), // 1-2
+						new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)."), // 1-3
+						new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag."), // 1-4
+						new SettingToggle("Explosions", false).withDesc("Removes explosion particles.").withChildren( // 1-5
+								new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep.")),
+						new SettingToggle("Armor Stands", false).withDesc("Disables rendering of armor stands."), // 1-6
+						new SettingToggle("Falling Blocks", false).withDesc("Disables rendering of falling blocks."), // 1-7
+						new SettingToggle("Campfire", false).withDesc("Disables rendering of campfire smoke particles."))); // 1-8
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 

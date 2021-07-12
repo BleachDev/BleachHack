@@ -17,6 +17,7 @@ import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.BleachHack;
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleCategory;
@@ -70,13 +71,13 @@ public class CustomChat extends Module {
 	public String suffix = " \u25ba \u0432\u029f\u0454\u03b1c\u043d\u043d\u03b1c\u043a";
 
 	public CustomChat() {
-		super("CustomChat", KEY_UNBOUND, ModuleCategory.MISC, "Customizes your chat messages, use the \"customchat\" command to edit the stuff",
-				new SettingToggle("CustomFont", true).withDesc("Adds a custom font in your messages"),
+		super("CustomChat", KEY_UNBOUND, ModuleCategory.MISC, "Customizes your chat messages, use the " + Command.PREFIX + "customchat command to edit the stuff.",
+				new SettingToggle("CustomFont", true).withDesc("Uses a custom font in your messages."),
 				new SettingMode("Font", "\uff41\uff42\uff43\uff44\uff45", "\u1D00\u0299\u1d04\u1d05\u1d07",
-						"\u24d0\u24d1\u24d2\u24d3\u24d4", "\u039bb\u1455d\u03A3", "\u03b1\u0432c\u2202\u0454").withDesc("Custom font to use"),
-				new SettingToggle("Prefix", false).withDesc("Message prepended to the message, set with \"customchat prefix [message]\""),
-				new SettingToggle("Suffix", false).withDesc("Message appended to the message, set with \"customchat suffix [message]\""),
-				new SettingMode("KillText", "None", "Ez", "GG").withDesc("Send a chat message when you kill someone"));
+						"\u24d0\u24d1\u24d2\u24d3\u24d4", "\u039bb\u1455d\u03A3", "\u03b1\u0432c\u2202\u0454").withDesc("The custom font to use."),
+				new SettingToggle("Prefix", false).withDesc("Message prepended to the message, set with " + Command.PREFIX + "customchat prefix <message>"),
+				new SettingToggle("Suffix", false).withDesc("Message appended to the message, set with " + Command.PREFIX + "customchat suffix <message>"),
+				new SettingMode("KillText", "None", "Ez", "GG").withDesc("Send a chat message when you kill someone."));
 		
 		JsonElement pfx = BleachFileHelper.readMiscSetting("customChatPrefix");
 		if (pfx != null) prefix = pfx.getAsString();

@@ -31,15 +31,15 @@ public class Trail extends Module {
 	private Vec3d lastVec = null;
 
 	public Trail() {
-		super("Trail", KEY_UNBOUND, ModuleCategory.RENDER, "Shows a trail where you go",
-				new SettingToggle("Trail", true).withDesc("Enable trailing"),
-				new SettingToggle("KeepTrail", false).withDesc("Keep the trail after turning the module off"),
-				new SettingColor("Color", 0.8f, 0.2f, 0.2f, false).withDesc("Main trail color"),
-				new SettingToggle("BlendColor", true).withDesc("Blends the main color with a second color").withChildren(
-						new SettingColor("Second Color", 0.2f, 0.8f, 0.2f, false).withDesc("The second color")),
+		super("Trail", KEY_UNBOUND, ModuleCategory.RENDER, "Shows a trail behind you.",
+				new SettingToggle("Trail", true).withDesc("Enable trailing."),
+				new SettingToggle("KeepTrail", false).withDesc("Keep the trail after turning the module off."),
+				new SettingColor("Color", 0.8f, 0.2f, 0.2f, false).withDesc("Main trail color."),
+				new SettingToggle("BlendColor", true).withDesc("Blends the main color with a second color.").withChildren(
+						new SettingColor("Second Color", 0.2f, 0.8f, 0.2f, false).withDesc("The second color.")),
 
-				new SettingSlider("Width", 0.1, 10, 3, 1).withDesc("Thickness of the trail"),
-				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the trail"));
+				new SettingSlider("Width", 0.1, 10, 3, 1).withDesc("Thickness of the trail."),
+				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the trail."));
 	}
 
 	@Override

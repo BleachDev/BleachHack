@@ -146,9 +146,9 @@ public class AutoBuild extends Module {
 	private boolean active = false;
 
 	public AutoBuild() {
-		super("AutoBuild", KEY_UNBOUND, ModuleCategory.WORLD, "Auto builds stuff",
+		super("AutoBuild", KEY_UNBOUND, ModuleCategory.WORLD, "Auto builds structures.",
 				new SettingMode("Build", "Wither", "WitherH", "IronGolem", "SnowGolem", "NomadHut", "Bomber-Mid", "Bomber-End").withDesc("What to build"),
-				new SettingToggle("Repeat", false).withDesc("Lets you build multiple things without having to re-enable the module"));
+				new SettingToggle("Repeat", false).withDesc("Lets you build multiple things without having to re-enable the module."));
 	}
 
 	@Override

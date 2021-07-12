@@ -61,30 +61,30 @@ public class CrystalAura extends Module {
 	private HashMap<BlockPos, Integer> blacklist = new HashMap<>();
 
 	public CrystalAura() {
-		super("CrystalAura", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically attacks crystals for you.",
-				new SettingToggle("Players", true).withDesc("Target players"),
-				new SettingToggle("Mobs", false).withDesc("Target mobs"),
-				new SettingToggle("Animals", false).withDesc("Target animals"),
-				new SettingToggle("Explode", true).withDesc("Hit/explode crystals").withChildren(
-						new SettingToggle("AntiWeakness", true).withDesc("Hit with sword when you have weakness"),
-						new SettingToggle("AntiSuicide", true).withDesc("Prevents you from killing yourself with a crystal"),
-						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to hit per tick"),
-						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before exploding the next batch of crystals"),
-						new SettingSlider("MinHealth", 0, 20, 2, 0).withDesc("Wont explode the crystal if it makes you got below the specified health")),
-				new SettingToggle("Place", true).withDesc("Place crystals").withChildren(
-						new SettingToggle("AutoSwitch", true).withDesc("Automatically switches to crystal when in combat").withChildren(
-								new SettingToggle("SwitchBack", true).withDesc("Switches back to your previous item")),
-						new SettingToggle("1.12 Place", false).withDesc("Only places on blocks with 2 air blocks above instead of 1 because of an extra check in 1.12"),
-						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets"),
-						new SettingToggle("Force Legit", false).withDesc("Only places a crystal if you can see it"),
-						new SettingSlider("MinDamg", 1, 20, 2, 0).withDesc("Minimum damage to the target to place crystals"),
-						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimum damage ratio to place a crystal at (Target dmg/Player dmg)"),
-						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to place per tick"),
-						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before placing the next batch of crystals"),
-						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false)),
-				new SettingToggle("SameTick", false).withDesc("Enables exploding and placing crystals at the same tick"),
-				new SettingRotate(false).withDesc("Rotates to crystals"),
-				new SettingSlider("Range", 0, 6, 4.5, 2).withDesc("Range to place and attack crystals"));
+		super("CrystalAura", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically does crystalpvp for you.",
+				new SettingToggle("Players", true).withDesc("Targets players."),
+				new SettingToggle("Mobs", false).withDesc("Targets mobs."),
+				new SettingToggle("Animals", false).withDesc("Targets animals."),
+				new SettingToggle("Explode", true).withDesc("Hits/explodes crystals.").withChildren(
+						new SettingToggle("AntiWeakness", true).withDesc("Hits crystals with your strongest weapon when you have weakness."),
+						new SettingToggle("AntiSuicide", true).withDesc("Prevents you from killing yourself with a crystal."),
+						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to hit per tick."),
+						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before exploding the next batch of crystals."),
+						new SettingSlider("MinHealth", 0, 20, 2, 0).withDesc("Wont explode the crystal if it makes you got below the specified health.")),
+				new SettingToggle("Place", true).withDesc("Places crystals.").withChildren(
+						new SettingToggle("AutoSwitch", true).withDesc("Automatically switches to crystal when in combat.").withChildren(
+								new SettingToggle("SwitchBack", true).withDesc("Switches back to your previous item.")),
+						new SettingToggle("1.12 Place", false).withDesc("Only places on blocks with 2 air blocks above instead of 1 because of an extra check in pre 1.13."),
+						new SettingToggle("Blacklist", true).withDesc("Blacklists a crystal when it can't place so it doesn't spam packets."),
+						new SettingToggle("Raycast", false).withDesc("Only places a crystal if you can see it."),
+						new SettingSlider("MinDmg", 1, 20, 2, 0).withDesc("Minimum damage to the target to place crystals."),
+						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimum damage ratio to place a crystal at (Target dmg/Player dmg)."),
+						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to place per tick."),
+						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before placing the next batch of crystals."),
+						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false).withDesc("The color of the block you're placing crystals on.")),
+				new SettingToggle("SameTick", false).withDesc("Enables exploding and placing crystals at the same tick."),
+				new SettingRotate(false).withDesc("Rotates to crystals."),
+				new SettingSlider("Range", 0, 6, 4.5, 2).withDesc("Range to place and attack crystals."));
 	}
 
 	@BleachSubscribe

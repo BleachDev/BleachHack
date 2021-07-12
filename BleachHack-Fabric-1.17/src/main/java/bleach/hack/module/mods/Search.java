@@ -77,19 +77,19 @@ public class Search extends Module {
 	private int oldViewDistance = -1;
 
 	public Search() {
-		super("Search", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights specified Blocks",
-				new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
-				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
-				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
-				new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks").withChildren(
-						new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers"),
-						new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers")),
+		super("Search", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights certain blocks.",
+				new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method."),
+				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines."),
+				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill."),
+				new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks.").withChildren(
+						new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers."),
+						new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers.")),
 				SettingLists.newBlockList("Edit Blocks", "Edit Search Blocks",
 						Blocks.DIAMOND_ORE,
 						Blocks.EMERALD_ORE,
 						Blocks.DIAMOND_BLOCK,
 						Blocks.EMERALD_BLOCK,
-						Blocks.ANCIENT_DEBRIS).withDesc("Edit the Search blocks"));
+						Blocks.ANCIENT_DEBRIS).withDesc("Edit the Search blocks."));
 	}
 
 	@Override

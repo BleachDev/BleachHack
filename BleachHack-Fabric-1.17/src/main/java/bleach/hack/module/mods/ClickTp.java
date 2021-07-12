@@ -37,12 +37,12 @@ public class ClickTp extends Module {
 	private boolean antiSpamClick = false;
 
 	public ClickTp() {
-		super("ClickTp", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Allows you to teleport by clicking",
-				new SettingToggle("In Air", true).withDesc("Teleports even if you are pointing in the air"),
-				new SettingToggle("Liquids", false).withDesc("Interacts with liquids"),
-				new SettingToggle("Y First", false).withDesc("Sets you to the correct Y level first, then to your XZ coords, might fix going through walls"),
-				new SettingToggle("Always Up", false).withDesc("Always teleports you to the top of blocks instead of sides"),
-				new SettingColor("Highlight", 1f, 0.2f, 0.8f, false));
+		super("ClickTp", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Allows you to teleport by clicking.",
+				new SettingToggle("InAir", true).withDesc("Teleports even if you are pointing in the air."),
+				new SettingToggle("Liquids", false).withDesc("Interacts with liquids."),
+				new SettingToggle("YFirst", false).withDesc("Sets you to the correct Y level first, then to your XZ coords, might fix going through walls."),
+				new SettingToggle("AlwaysUp", false).withDesc("Always teleports you to the top of blocks instead of sides."),
+				new SettingColor("Highlight", 1f, 0.2f, 0.8f, false).withDesc("The color of the target block."));
 	}
 
 	public void onDisable() {

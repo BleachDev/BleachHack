@@ -10,8 +10,8 @@ import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 public class Sneak extends Module {
 
 	public Sneak() {
-		super("Sneak", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Makes you automatically sneak",
-				new SettingMode("Mode", "Legit", "Packet").withDesc("Mode for sneaking (Only other players will see u sneaking with packet mode)"));
+		super("Sneak", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Makes you automatically sneak.",
+				new SettingMode("Mode", "Legit", "Packet").withDesc("Mode for sneaking (Only other players will see u sneaking with packet mode)."));
 	}
 
 	@BleachSubscribe

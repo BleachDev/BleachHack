@@ -18,7 +18,7 @@ import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 public class ColorSigns extends Module {
 
 	public ColorSigns() {
-		super("ColorSigns", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Allows you to use colors on signs on NON-PAPER servers (use \"&\" for color symbols)");
+		super("ColorSigns", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Allows you to use colors on signs on NON-PAPER servers (use \"&\" for color symbols).");
 	}
 
 	/* This works because the code to strip invalid characters from signs is flawed

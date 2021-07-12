@@ -41,23 +41,23 @@ public class Scaffold extends Module {
 
 	public Scaffold() {
 		super("Scaffold", GLFW.GLFW_KEY_N, ModuleCategory.WORLD, "Places blocks under you",
-				new SettingMode("Mode", "Normal", "3x3", "5x5", "7x7").withDesc("How big of an area to scaffold"),
-				new SettingSlider("BPT", 1, 10, 2, 0).withDesc("Blocks Per Tick, how many blocks to place per tick"),
-				new SettingSlider("Range", 0, 1, 0.3, 1).withDesc("How far to place ahead of you in Normal mode"),
-				new SettingRotate(false).withDesc("Rotates when placing blocks"),
-				new SettingToggle("LegitPlace", false).withDesc("Only places on sides you can see"),
-				new SettingToggle("Filter", false).withDesc("Filters certain blocks").withChildren(
-						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
-						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks")),
-				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier").withChildren(
-						new SettingToggle("Legit", false).withDesc("Slower mode that bypasses some anticheats")),
-				new SettingToggle("AirPlace", false).withDesc("Places blocks in the air without support blocks"),
-				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on"),
-				new SettingToggle("NoSwing", false).withDesc("Doesn't swing your hand clientside"),
-				new SettingToggle("EmptyToggle", false).withDesc("Turns off when you run out of blocks"),
-				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing").withChildren(
-						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight"),
-						new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed")));
+				new SettingMode("Area", "Normal", "3x3", "5x5", "7x7").withDesc("How big of an area to scaffold."),
+				new SettingSlider("BPT", 1, 10, 2, 0).withDesc("Blocks Per Tick, how many blocks to place per tick."),
+				new SettingSlider("Range", 0, 1, 0.3, 1).withDesc("How far to place ahead of you in Normal mode."),
+				new SettingRotate(false).withDesc("Rotates when placing blocks."),
+				new SettingToggle("LegitPlace", false).withDesc("Only places on sides you can see."),
+				new SettingToggle("Filter", false).withDesc("Filters certain blocks.").withChildren(
+						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
+						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks.")),
+				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier.").withChildren(
+						new SettingToggle("Legit", false).withDesc("Slower mode that bypasses some anticheats.")),
+				new SettingToggle("AirPlace", false).withDesc("Places blocks in the air without support blocks."),
+				new SettingToggle("SafeWalk", true).withDesc("Prevents you from walking of edges when scaffold is on."),
+				new SettingToggle("NoSwing", false).withDesc("Doesn't swing your hand clientside."),
+				new SettingToggle("EmptyToggle", false).withDesc("Turns off when you run out of blocks."),
+				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing.").withChildren(
+						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight."),
+						new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed.")));
 	}
 
 	private boolean shouldUseItem(Item item) {

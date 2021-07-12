@@ -16,6 +16,7 @@ import com.google.gson.JsonElement;
 
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.BleachHack;
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
@@ -38,11 +39,11 @@ public class DiscordRPCMod extends Module {
 	private boolean silent;
 
 	public DiscordRPCMod() {
-		super("DiscordRPC", KEY_UNBOUND, ModuleCategory.MISC, true, "Dicord RPC, use the \"rpc\" command to set a custom status",
-				new SettingMode("Text 1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%").withDesc("Line 1"),
-				new SettingMode("Text 2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%").withDesc("Line 2"),
+		super("DiscordRPC", KEY_UNBOUND, ModuleCategory.MISC, true, "Dicord RPC, use the " + Command.PREFIX + "rpc command to set a custom status.",
+				new SettingMode("Line1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%").withDesc("The top line."),
+				new SettingMode("Line2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%").withDesc("The bottom line."),
 				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None").withDesc("How to show elapsed time"),
-				new SettingToggle("Silent", false).withDesc("Use a generic Minecraft title and image"));
+				new SettingToggle("Silent", false).withDesc("Use a generic Minecraft title and image."));
 
 		JsonElement t1 = BleachFileHelper.readMiscSetting("discordRPCTopText");
 		JsonElement t2 = BleachFileHelper.readMiscSetting("discordRPCBottomText");

@@ -23,7 +23,7 @@ public class ElytraReplace extends Module {
 	private boolean jump = false;
 
 	public ElytraReplace() {
-		super("ElytraReplace", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically replaces broken elytra and continues flying");
+		super("ElytraReplace", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically replaces your elytra when its broken and continues flying.");
 	}
 
 	@BleachSubscribe

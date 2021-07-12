@@ -33,7 +33,7 @@ public class NotebotStealer extends Module {
 	private int ticks = 0;
 
 	public NotebotStealer() {
-		super("NotebotStealer", KEY_UNBOUND, ModuleCategory.MISC, "Steals noteblock songs");
+		super("NotebotStealer", KEY_UNBOUND, ModuleCategory.MISC, "Steals noteblock songs.");
 	}
 
 	@Override

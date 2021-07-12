@@ -40,15 +40,15 @@ public class Surround extends Module {
 			Blocks.RESPAWN_ANCHOR);
 
 	public Surround() {
-		super("Surround", KEY_UNBOUND, ModuleCategory.COMBAT, "Surrounds yourself with obsidian",
-				new SettingMode("Mode", "1x1", "Fit").withDesc("Mode, 1x1 places 4 blocks around you, fit fits the blocks around you so it doesn't place inside of you"),
-				new SettingMode("Support", "Place", "AirPlace", "Skip").withDesc("What to do when theres no blocks to place surround blocks on"),
-				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick"),
-				new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block"),
-				new SettingToggle("KeepOn", true).withDesc("Keeps the module on after placing the obsidian"),
-				new SettingToggle("JumpDisable", true).withDesc("Disables the module if you jump"),
-				new SettingRotate(false).withDesc("Rotates when placing"),
-				SettingLists.newBlockList("Blocks", "Surround Blocks", SURROUND_BLOCKS::contains, Blocks.OBSIDIAN).withDesc("What blocks to surround with"));
+		super("Surround", KEY_UNBOUND, ModuleCategory.COMBAT, "Surrounds yourself with unexplodable blocks.",
+				new SettingMode("Mode", "1x1", "Fit").withDesc("Mode, 1x1 places 4 blocks around you, fit fits the blocks around you so it doesn't place inside of you."),
+				new SettingMode("Support", "Place", "AirPlace", "Skip").withDesc("What to do when theres no blocks to place surround blocks on."),
+				new SettingSlider("BPT", 1, 8, 2, 0).withDesc("Blocks per tick, how many blocks to place per tick."),
+				new SettingToggle("Autocenter", false).withDesc("Autocenters you to the nearest block."),
+				new SettingToggle("KeepOn", true).withDesc("Keeps the module on after placing the obsidian."),
+				new SettingToggle("JumpDisable", true).withDesc("Disables the module if you jump."),
+				new SettingRotate(false).withDesc("Rotates when placing."),
+				SettingLists.newBlockList("Blocks", "Surround Blocks", SURROUND_BLOCKS::contains, Blocks.OBSIDIAN).withDesc("What blocks to surround with."));
 	}
 
 	public void onEnable() {

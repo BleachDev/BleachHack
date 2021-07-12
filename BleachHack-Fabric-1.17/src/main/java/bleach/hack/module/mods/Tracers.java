@@ -33,22 +33,22 @@ public class Tracers extends Module {
 
 	public Tracers() {
 		super("Tracers", KEY_UNBOUND, ModuleCategory.RENDER, "Shows lines to entities you select.",
-				new SettingToggle("Players", true).withDesc("Show Player Tracers").withChildren(
-						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players"),
-						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Tracer color for friends")),
-				new SettingToggle("Mobs", false).withDesc("Show Mob Tracers").withChildren(
-						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Tracer color for mobs")),
-				new SettingToggle("Animals", false).withDesc("Show Animal Tracers").withChildren(
-						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Tracer color for animals")),
-				new SettingToggle("Items", true).withDesc("Show Item Tracers").withChildren(
-						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Tracer color for items")),
-				new SettingToggle("Crystals", true).withDesc("Show End Crystal Tracers").withChildren(
-						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals")),
-				new SettingToggle("Vehicles", false).withDesc("Show Vehicle Tracers").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles (minecarts/boats)")),
+				new SettingToggle("Players", true).withDesc("Shows Tracers for Players.").withChildren(
+						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players."),
+						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Tracer color for friends.")),
+				new SettingToggle("Mobs", false).withDesc("Shows Tracers for Mobs.").withChildren(
+						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Tracer color for mobs.")),
+				new SettingToggle("Animals", false).withDesc("Shows Tracers for Animals.").withChildren(
+						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Tracer color for animals.")),
+				new SettingToggle("Items", true).withDesc("Shows Tracers for Items.").withChildren(
+						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Tracer color for items.")),
+				new SettingToggle("Crystals", true).withDesc("Shows Tracers for End Crystals.").withChildren(
+						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals.")),
+				new SettingToggle("Vehicles", false).withDesc("Shows Tracers for Vehicles.").withChildren(
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles (minecarts/boats).")),
 
-				new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers"),
-				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers"));
+				new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers."),
+				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers."));
 	}
 
 	@BleachSubscribe

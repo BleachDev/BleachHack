@@ -32,11 +32,11 @@ public class FastUse extends Module {
 			Items.ENDER_EYE, Items.ENDER_PEARL, Items.SPLASH_POTION, Items.LINGERING_POTION);
 
 	public FastUse() {
-		super("FastUse", GLFW.GLFW_KEY_B, ModuleCategory.PLAYER, "Allows you to use items faster",
-				new SettingMode("Mode", "Single", "Multi").withDesc("Whether to throw once per tick or multiple times"),
-				new SettingSlider("Multi", 1, 100, 20, 0).withDesc("How many items to user per tick if on multi mode"),
-				new SettingToggle("Throwables Only", true).withDesc("Only use throwables").withChildren(
-						new SettingToggle("XP Only", false).withDesc("Only use XP bottles")));
+		super("FastUse", GLFW.GLFW_KEY_B, ModuleCategory.PLAYER, "Allows you to use items faster.",
+				new SettingMode("Mode", "Single", "Multi").withDesc("Whether to throw once per tick or multiple times."),
+				new SettingSlider("Multi", 1, 100, 20, 0).withDesc("How many items to use per tick if on multi mode."),
+				new SettingToggle("Throwables Only", true).withDesc("Only uses throwables.").withChildren(
+						new SettingToggle("XP Only", false).withDesc("Only uses XP bottles.")));
 	}
 
 	@BleachSubscribe

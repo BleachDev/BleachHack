@@ -22,8 +22,8 @@ public class AntiHunger extends Module {
 	private boolean bool = false;
 
 	public AntiHunger() {
-		super("AntiHunger", KEY_UNBOUND, ModuleCategory.PLAYER, "Minimizes the amount of hunger you use",
-				new SettingToggle("Relaxed", false).withDesc("Only activates every other ticks, might fix getting fly kicked"));
+		super("AntiHunger", KEY_UNBOUND, ModuleCategory.PLAYER, "Minimizes the amount of hunger you use.",
+				new SettingToggle("Relaxed", false).withDesc("Only activates every other ticks, might fix getting fly kicked."));
 	}
 
 	@BleachSubscribe

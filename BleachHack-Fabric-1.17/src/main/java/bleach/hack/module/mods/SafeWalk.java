@@ -14,6 +14,6 @@ import bleach.hack.module.Module;
 public class SafeWalk extends Module {
 
 	public SafeWalk() {
-		super("SafeWalk", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Stops you walking off blocks");
+		super("SafeWalk", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Stops you from walking off blocks.");
 	}
 }

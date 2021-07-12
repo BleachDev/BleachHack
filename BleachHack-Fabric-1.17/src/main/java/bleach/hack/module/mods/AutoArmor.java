@@ -36,11 +36,11 @@ public class AutoArmor extends Module {
 	private int tickDelay = 0;
 
 	public AutoArmor() {
-		super("AutoArmor", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically equips armor",
-				new SettingToggle("Anti Break", false).withDesc("Unequips your armor when its about to break"),
-				new SettingToggle("Prefer Elytra", false).withDesc("Equips elytras instead of chestplates when possible"),
-				new SettingToggle("Delay", true).withDesc("Adds a delay between equipping armor pieces to make it bypass more anticheats").withChildren(
-						new SettingSlider("Delay", 0, 20, 1, 0).withDesc("How many ticks between putting on armor pieces")));
+		super("AutoArmor", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically equips armor.",
+				new SettingToggle("AntiBreak", false).withDesc("Unequips your armor when its about to break."),
+				new SettingToggle("PreferElytra", false).withDesc("Equips elytras instead of chestplates when possible."),
+				new SettingToggle("Delay", true).withDesc("Adds a delay between equipping armor pieces.").withChildren(
+						new SettingSlider("Delay", 0, 20, 1, 0).withDesc("How many ticks between putting on armor pieces.")));
 	}
 
 	@BleachSubscribe

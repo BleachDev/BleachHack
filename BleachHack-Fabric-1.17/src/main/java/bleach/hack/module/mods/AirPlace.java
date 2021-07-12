@@ -38,13 +38,13 @@ public class AirPlace extends Module {
 	private boolean pressed;
 
 	public AirPlace() {
-		super("AirPlace", KEY_UNBOUND, ModuleCategory.WORLD, "Allows you to place blocks in thin air",
-				new SettingToggle("Highlight", true).withDesc("Renders an overlay where it will place the block").withChildren(
-						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method"),
-						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines"),
-						new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill"),
-						new SettingColor("Color", 0.5f, 0.5f, 0.5f, false)),
-				new SettingMode("Mode", "Multi", "Single").withDesc("Whether to place a block once per click or multiple blocks if the button is held down"));
+		super("AirPlace", KEY_UNBOUND, ModuleCategory.WORLD, "Allows you to place blocks in thin air.",
+				new SettingToggle("Highlight", true).withDesc("Renders an overlay where it will place the block.").withChildren(
+						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method."),
+						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The width/thickness of the box lines."),
+						new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill."),
+						new SettingColor("Color", 0.5f, 0.5f, 0.5f, false).withDesc("The color of the highlight.")),
+				new SettingMode("Mode", "Multi", "Single").withDesc("Whether to place a block once per click or multiple blocks if the button is held down."));
 	}
 
 	@BleachSubscribe

@@ -46,19 +46,19 @@ public class NoSlow extends Module {
 	private long lastTime;
 
 	public NoSlow() {
-		super("NoSlow", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Disables Stuff From Slowing You Down",
-				new SettingToggle("Slowness", true).withDesc("Removes slowness effects"),
-				new SettingToggle("Soul Sand", true).withDesc("Removes the soul sand slowness"),
-				new SettingToggle("Slime Blocks", true).withDesc("Removes the slimeblock slowness"),
-				new SettingToggle("Webs", true).withDesc("Removes the web slowness"),
-				new SettingToggle("Berry Bush", true).withDesc("Removes the berry bush slowness"),
-				new SettingToggle("Items", true).withDesc("Removes the slowness while eating items"),
-				new SettingToggle("Inventory", true).withDesc("Allows you to move in inventories").withChildren(
-						new SettingToggle("Sneaking", false).withDesc("Enabled the sneak key while in a inventory"),
-						new SettingToggle("NCP Bypass", false).withDesc("Allows you to move items around while running on NCP"),
-						new SettingToggle("Rotate", true).withDesc("Allows you to use the arrow keys to rotate").withChildren(
-								new SettingToggle("Limit Pitch", true).withDesc("Prevents you from being able to do a 360 pitch spin"),
-								new SettingToggle("Anti-Spinbot", true).withDesc("Adds a random amount of rotation when spinning to prevent spinbot detects"))));
+		super("NoSlow", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Disables Stuff From Slowing You Down.",
+				new SettingToggle("Slowness", true).withDesc("Removes the slowness effect."),
+				new SettingToggle("SoulSand", true).withDesc("Removes soul sand slowness."),
+				new SettingToggle("SlimeBlocks", true).withDesc("Removes slimeblock slowness."),
+				new SettingToggle("Webs", true).withDesc("Removes cobweb slowness."),
+				new SettingToggle("Berry Bush", true).withDesc("Removes berry bush slowness."),
+				new SettingToggle("Items", true).withDesc("Removes the slowness while eating items."),
+				new SettingToggle("Inventory", true).withDesc("Allows you to move while in inventories.").withChildren(
+						new SettingToggle("Sneaking", false).withDesc("Enables the sneak key while in inventories."),
+						new SettingToggle("NCPBypass", false).withDesc("Allows you to move items around on serves with NCP."),
+						new SettingToggle("Rotate", true).withDesc("Allows you to use the arrow keys to rotate.").withChildren(
+								new SettingToggle("PitchLimit", true).withDesc("Prevents you from being able to do a 360 pitch spin."),
+								new SettingToggle("Anti-Spinbot", true).withDesc("Adds a random amount of rotation when spinning to prevent spinbot detects."))));
 	}
 
 	@BleachSubscribe
