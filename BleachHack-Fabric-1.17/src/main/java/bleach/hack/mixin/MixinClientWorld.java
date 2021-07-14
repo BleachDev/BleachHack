@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,6 +22,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.util.BleachQueue;
+import bleach.hack.util.io.BleachAPIMang;
 import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.SkyProperties;
@@ -31,6 +33,7 @@ import net.minecraft.util.math.Vec3d;
 public class MixinClientWorld {
 
 	@Final @Shadow private SkyProperties skyProperties;
+	@Unique private static long lastApiPing;
 
 	@Inject(method = "tickEntities", at = @At("HEAD"), cancellable = true)
 	public void tickEntities(CallbackInfo info) {
@@ -40,6 +43,14 @@ public class MixinClientWorld {
 				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
 				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
 				if (BleachFileHelper.SCHEDULE_SAVE_UI) BleachFileHelper.saveUI();
+			}
+			
+			if (lastApiPing + 600_000 < System.currentTimeMillis()) {
+				Thread pingThread = new Thread(() -> BleachAPIMang.get("ping?uuid=" + MinecraftClient.getInstance().getSession().getUuid()));
+				pingThread.setDaemon(true);
+				pingThread.start();
+
+				lastApiPing = System.currentTimeMillis();
 			}
 
 			BleachQueue.nextQueue();

@@ -21,19 +21,21 @@ import com.google.common.io.Resources;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * Utils for the BleachHack Resource Github, used for static assets (like the current version)
+ */
 public class BleachGithubReader {
 
 	private static URI url = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
 
 	public static List<String> readFileLines(String... path) {
-		List<String> st = new ArrayList<>();
 		try {
 			return Arrays.asList(Resources.toString(stringsToURI(path).toURL(), StandardCharsets.UTF_8).replace("\r", "").split("\n"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return st;
+		return new ArrayList<>();
 	}
 	
 	public static JsonObject readJson(String... path) {
