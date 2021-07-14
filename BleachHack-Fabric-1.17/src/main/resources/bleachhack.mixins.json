@@ -46,6 +46,7 @@
     "MixinPacketInflater",
     "MixinParticleManager",
     "MixinPlayerEntity",
+    "MixinPlayerListHud",
     "MixinRenderLayers",
     "MixinRenderTickCounter",
     "MixinScreen",

@@ -29,7 +29,6 @@ import bleach.hack.module.mods.ClickGui;
 import bleach.hack.module.mods.UI;
 import bleach.hack.setting.base.SettingBase;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.FriendManager;
 
 public class BleachFileHelper {
 
@@ -243,7 +242,7 @@ public class BleachFileHelper {
 	}
 
 	public static void readFriends() {
-		BleachHack.friendMang = new FriendManager(BleachFileMang.readFileLines("friends.txt"));
+		BleachHack.friendMang.addAll(BleachFileMang.readFileLines("friends.txt"));
 	}
 
 	public static void saveFriends() {

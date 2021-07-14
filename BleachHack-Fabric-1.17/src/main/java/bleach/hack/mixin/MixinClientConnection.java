@@ -79,6 +79,8 @@ public class MixinClientConnection {
 	
 	private void handlePlayerList(PlayerListS2CPacket packet) {
 		if (packet.getAction() == PlayerListS2CPacket.Action.ADD_PLAYER) {
+			BleachHack.playerMang.addQueueEntries(packet.getEntries());
+
 			List<PlayerListS2CPacket.Entry> newEntries = packet.getEntries().stream()
 					.map(e -> {
 						if (e.getProfile().getName().equalsIgnoreCase("bleachhack")) { /* :sunglasses: */
@@ -96,6 +98,8 @@ public class MixinClientConnection {
 			
 			packet.getEntries().clear();
 			packet.getEntries().addAll(newEntries);
+		} else if (packet.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
+			BleachHack.playerMang.removeQueueEntries(packet.getEntries());
 		}
 	}
 }

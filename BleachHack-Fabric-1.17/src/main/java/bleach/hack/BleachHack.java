@@ -17,10 +17,12 @@ import bleach.hack.gui.title.BleachTitleScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.BleachLogger;
+import bleach.hack.util.BleachPlayerManager;
 import bleach.hack.util.FriendManager;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
+
 import org.apache.logging.log4j.Level;
 
 public class BleachHack implements ModInitializer {
@@ -33,6 +35,7 @@ public class BleachHack implements ModInitializer {
 	public static BleachEventBus eventBus;
 
 	public static FriendManager friendMang;
+	public static BleachPlayerManager playerMang;
 
 	//private BleachFileMang bleachFileManager;
 
@@ -57,6 +60,9 @@ public class BleachHack implements ModInitializer {
 		instance = this;
 		eventBus = new BleachEventBus(BleachLogger.logger);
 
+		friendMang = new FriendManager();
+		playerMang = new BleachPlayerManager();
+
 		//TODO base-rewrite
 		//this.eventBus = new EventBus();
 		//this.bleachFileManager = new BleachFileMang();
@@ -72,6 +78,8 @@ public class BleachHack implements ModInitializer {
 		CommandManager.readPrefix();
 		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
 		CommandSuggestor.start();
+
+		playerMang.startPinger();
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
