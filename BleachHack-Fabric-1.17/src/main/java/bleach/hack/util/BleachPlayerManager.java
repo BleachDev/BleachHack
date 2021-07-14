@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonArray;
@@ -27,6 +28,8 @@ import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 
 public class BleachPlayerManager {
 
+	private static final Pattern UUID_ADD_DASHES_PATTERN = Pattern.compile("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)");
+
 	private ScheduledExecutorService pingExecutor;
 	private ScheduledExecutorService playerExecutor;
 
@@ -38,7 +41,7 @@ public class BleachPlayerManager {
 		playerExecutor.scheduleAtFixedRate(() -> {
 			if (!playerQueue.isEmpty()) {
 				JsonArray playersJson = new JsonArray();
-				playerQueue.forEach(p -> playersJson.add(p.toString().replace("-", "")));
+				playerQueue.forEach(p -> playersJson.add(p.toString()));
 				playerQueue.clear();
 
 				String response = BleachAPIMang.post("online", playersJson);
@@ -61,7 +64,7 @@ public class BleachPlayerManager {
 
 			if (!players.isEmpty()) {
 				JsonArray playersJson = new JsonArray();
-				players.forEach(p -> playersJson.add(p.toString().replace("-", "")));
+				players.forEach(p -> playersJson.add(p.toString()));
 
 				String response = BleachAPIMang.post("online", playersJson);
 
@@ -77,21 +80,19 @@ public class BleachPlayerManager {
 	public void startPinger() {
 		if (pingExecutor == null || pingExecutor.isShutdown()) {
 			pingExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setDaemon(true).build());
-			pingExecutor.scheduleAtFixedRate(() -> BleachAPIMang.get("online/ping?uuid=" + MinecraftClient.getInstance().getSession().getUuid().replace("-", "")), 0L, 14L, TimeUnit.MINUTES);
+			pingExecutor.scheduleAtFixedRate(() -> BleachAPIMang.get("online/ping?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid())), 0L, 14L, TimeUnit.MINUTES);
 		}
 	}
 
 	public void stopPinger() {
 		if (pingExecutor != null && !pingExecutor.isShutdown()) {
-			pingExecutor.execute(() -> BleachAPIMang.get("online/disconnect?uuid=" + MinecraftClient.getInstance().getSession().getUuid().replace("-", "")));
-			try {
-				pingExecutor.awaitTermination(15L, TimeUnit.SECONDS);
-			} catch (InterruptedException ignored) { }
+			pingExecutor.execute(() -> BleachAPIMang.get("online/disconnect?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid().replace("-", ""))));
+			pingExecutor.shutdown();
 		}
 	}
 
 	public void addQueueEntries(Collection<PlayerListS2CPacket.Entry> entries) {
-		UUID playerUuid = UUID.fromString(MinecraftClient.getInstance().getSession().getUuid());
+		UUID playerUuid = UUID.fromString(toProperUUID(MinecraftClient.getInstance().getSession().getUuid()));
 		entries.stream()
 		.map(e -> e.getProfile().getId())
 		.filter(e -> !players.contains(e))
@@ -110,5 +111,13 @@ public class BleachPlayerManager {
 
 	public Set<UUID> getPlayers() {
 		return players;
+	}
+
+	private String toProperUUID(String uuid) {
+		if (uuid.contains("-")) {
+			return uuid;
+		}
+
+		return UUID_ADD_DASHES_PATTERN.matcher(uuid).replaceFirst("$1-$2-$3-$4-$5");
 	}
 }
