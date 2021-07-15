@@ -8,6 +8,8 @@
  */
 package bleach.hack.util;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,8 +21,6 @@ import java.util.regex.Pattern;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
-
 import bleach.hack.util.io.BleachAPIMang;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -44,11 +44,20 @@ public class BleachPlayerManager {
 				playerQueue.forEach(p -> playersJson.add(p.toString()));
 				playerQueue.clear();
 
-				String response = BleachAPIMang.post("online", playersJson);
+				String response = BleachAPIMang.post("online/inlistbin", playersJson);
 
-				try {
-					new JsonParser().parse(response).getAsJsonArray().forEach(j -> players.add(UUID.fromString(j.getAsString())));
-				} catch (Exception ignored) { }
+				if (response != null) {
+					boolean[] binary = toBinaryArray(response);
+					for (int i = 0; i < playersJson.size(); i++) {
+						if (binary.length <= i) {
+							break;
+						}
+
+						if (binary[i]) {
+							players.add(UUID.fromString(playersJson.get(i).getAsString()));
+						}
+					}
+				}
 			}
 		}, 0L, 10L, TimeUnit.SECONDS);
 
@@ -66,11 +75,20 @@ public class BleachPlayerManager {
 				JsonArray playersJson = new JsonArray();
 				players.forEach(p -> playersJson.add(p.toString()));
 
-				String response = BleachAPIMang.post("online", playersJson);
+				String response = BleachAPIMang.post("online/inlistbin", playersJson);
 
-				try {
-					new JsonParser().parse(response).getAsJsonArray().forEach(j -> players.add(UUID.fromString(j.getAsString())));
-				} catch (Exception ignored) { }
+				if (response != null) {
+					boolean[] binary = toBinaryArray(response);
+					for (int i = 0; i < playersJson.size(); i++) {
+						if (binary.length <= i) {
+							break;
+						}
+
+						if (binary[i]) {
+							players.add(UUID.fromString(playersJson.get(i).getAsString()));
+						}
+					}
+				}
 
 				players.clear();
 			}
@@ -119,5 +137,19 @@ public class BleachPlayerManager {
 		}
 
 		return UUID_ADD_DASHES_PATTERN.matcher(uuid).replaceFirst("$1-$2-$3-$4-$5");
+	}
+
+	private boolean[] toBinaryArray(String string) {
+		boolean[] array = new boolean[string.length() * 8];
+		int index = 0;
+		for (byte b: string.getBytes(StandardCharsets.ISO_8859_1)) {
+			for (byte bit = 7; bit >= 0; bit--) {
+				array[index] = ((b >> bit) & 1) == 1;
+				index++;
+			}
+		}
+
+		System.out.println(string + " | " + Arrays.toString(array));
+		return array;
 	}
 }
