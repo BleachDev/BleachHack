@@ -22,14 +22,10 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 import org.apache.logging.log4j.Level;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class BleachHack implements ModInitializer {
 
@@ -101,16 +97,5 @@ public class BleachHack implements ModInitializer {
 
 	public static Text getBHText() {
 		return new LiteralText("B").styled(s -> s.withColor(0xffbf30)).append(new LiteralText("H").styled(s -> s.withColor(0xffafcc)));
-	}
-
-	public static void renderLatencyIcon(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo callback) {
-		MinecraftClient client = MinecraftClient.getInstance();
-		if (BleachHack.playerMang.getPlayers().contains(entry.getProfile().getId())) {
-			matrices.push();
-			matrices.translate(x + width - 21, y + 1.5, 0);
-			matrices.scale(0.67f, 0.7f, 1f);
-			client.textRenderer.drawWithShadow(matrices, getBHText(), 0, 0, -1);
-			matrices.pop();
-		}
 	}
 }
