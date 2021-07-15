@@ -31,8 +31,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.TextColor;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
@@ -84,9 +82,7 @@ public class MixinClientConnection {
 			List<PlayerListS2CPacket.Entry> newEntries = packet.getEntries().stream()
 					.map(e -> {
 						if (e.getProfile().getName().equalsIgnoreCase("bleachhack")) { /* :sunglasses: */
-							MutableText text1 = new LiteralText("Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
-							MutableText text2 = new LiteralText("Hack ").styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
-							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(), text1.append(text2));
+							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(), BleachHack.getBleachHackText());
 						} else if (BleachHack.friendMang.has(e.getProfile().getName())) {
 							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(),
 									new LiteralText("\u00a7b" + e.getProfile().getName()));

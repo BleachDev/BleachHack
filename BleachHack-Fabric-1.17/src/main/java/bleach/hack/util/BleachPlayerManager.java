@@ -60,9 +60,9 @@ public class BleachPlayerManager {
 				return;
 			}
 
-			players.removeIf(p -> !player.networkHandler.getPlayerUuids().contains(p));
+			players.removeIf(p -> p != player.getUuid() && !player.networkHandler.getPlayerUuids().contains(p));
 
-			if (!players.isEmpty()) {
+			if (!players.isEmpty() && !(players.size() == 1 && players.contains(player.getUuid()))) {
 				JsonArray playersJson = new JsonArray();
 				players.forEach(p -> playersJson.add(p.toString()));
 

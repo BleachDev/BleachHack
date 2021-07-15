@@ -18,15 +18,14 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import com.google.gson.JsonObject;
 
+import bleach.hack.BleachHack;
 import bleach.hack.gui.window.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 
 public class BleachCreditsScreen extends WindowScreen {
 
@@ -67,9 +66,7 @@ public class BleachCreditsScreen extends WindowScreen {
 		int w = getWindow(0).x2 - getWindow(0).x1;
 		int h = getWindow(0).y2 - getWindow(0).y1;
 
-		MutableText text1 = new LiteralText("Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
-		MutableText text2 = new LiteralText("Hack").styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
-		getWindow(0).addWidget(new WindowTextWidget(text1.append(text2), true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, 22, 0xb0b0b0));
+		getWindow(0).addWidget(new WindowTextWidget(BleachHack.getBleachHackText(), true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, 22, 0xb0b0b0));
 
 		getWindow(0).addWidget(new WindowTextWidget("Main Developer", true, w / 2 - 60, 65, 0xb0b0b0));
 		getWindow(0).addWidget(new WindowTextWidget(
