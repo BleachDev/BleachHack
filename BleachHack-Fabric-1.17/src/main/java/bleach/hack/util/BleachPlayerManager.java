@@ -9,7 +9,6 @@
 package bleach.hack.util;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -69,7 +68,7 @@ public class BleachPlayerManager {
 				return;
 			}
 
-			players.removeIf(p -> p != player.getUuid() && !player.networkHandler.getPlayerUuids().contains(p));
+			players.removeIf(p -> !player.getUuid().equals(p) && !player.networkHandler.getPlayerUuids().contains(p));
 
 			if (!players.isEmpty() && !(players.size() == 1 && players.contains(player.getUuid()))) {
 				JsonArray playersJson = new JsonArray();
@@ -89,10 +88,8 @@ public class BleachPlayerManager {
 						}
 					}
 				}
-
-				players.clear();
 			}
-		}, 0L, 10L, TimeUnit.MINUTES);
+		}, 0L, 1L, TimeUnit.MINUTES);
 	}
 
 	public void startPinger() {
@@ -149,7 +146,6 @@ public class BleachPlayerManager {
 			}
 		}
 
-		System.out.println(string + " | " + Arrays.toString(array));
 		return array;
 	}
 }
