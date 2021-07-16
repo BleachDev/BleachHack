@@ -89,7 +89,7 @@ public class BleachPlayerManager {
 					}
 				}
 			}
-		}, 0L, 1L, TimeUnit.MINUTES);
+		}, 0L, 5L, TimeUnit.MINUTES);
 	}
 
 	public void startPinger() {
