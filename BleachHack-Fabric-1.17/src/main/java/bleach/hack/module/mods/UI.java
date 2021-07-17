@@ -54,7 +54,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.math.BlockPos;
@@ -209,11 +208,8 @@ public class UI extends Module {
 			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
 
 			if (watermarkMode == 0) {
-				MutableText text1 = new LiteralText("Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
-				MutableText text2 = new LiteralText("Hack ").styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
-				MutableText text3 = new LiteralText(BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)));
 
-				lines.add(0, text1.append(text2).append(text3));
+				lines.add(0, BleachHack.watermark.getText().append(new LiteralText(" " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)))));
 			} else {
 				lines.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
 			}

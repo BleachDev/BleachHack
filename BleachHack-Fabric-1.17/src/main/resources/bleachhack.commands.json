@@ -27,6 +27,7 @@
 	"CmdSkull",
 	"CmdSpammer",
 	"CmdTerrain",
-	"CmdToggle"
+	"CmdToggle",
+	"CmdWatermark"
   ]
 }

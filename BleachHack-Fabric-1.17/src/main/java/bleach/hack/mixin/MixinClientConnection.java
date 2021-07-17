@@ -82,7 +82,7 @@ public class MixinClientConnection {
 			List<PlayerListS2CPacket.Entry> newEntries = packet.getEntries().stream()
 					.map(e -> {
 						if (e.getProfile().getName().equalsIgnoreCase("bleachhack")) { /* :sunglasses: */
-							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(), BleachHack.getBleachHackText());
+							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(), BleachHack.watermark.getText());
 						} else if (BleachHack.friendMang.has(e.getProfile().getName())) {
 							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(),
 									new LiteralText("\u00a7b" + e.getProfile().getName()));

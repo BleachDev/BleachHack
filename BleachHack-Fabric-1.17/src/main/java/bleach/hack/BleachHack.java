@@ -19,12 +19,10 @@ import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.BleachPlayerManager;
 import bleach.hack.util.FriendManager;
+import bleach.hack.util.Watermark;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-
 import org.apache.logging.log4j.Level;
 
 public class BleachHack implements ModInitializer {
@@ -33,6 +31,7 @@ public class BleachHack implements ModInitializer {
 
 	public static final String VERSION = "1.1";
 	public static final int INTVERSION = 33;
+	public static Watermark watermark;
 
 	public static BleachEventBus eventBus;
 
@@ -60,6 +59,7 @@ public class BleachHack implements ModInitializer {
 		}
 
 		instance = this;
+		watermark = new Watermark();
 		eventBus = new BleachEventBus(BleachLogger.logger);
 
 		friendMang = new FriendManager();
@@ -89,13 +89,5 @@ public class BleachHack implements ModInitializer {
 		}
 
 		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
-	}
-	
-	public static Text getBleachHackText() {
-		return new LiteralText("Bleach").styled(s -> s.withColor(0xffbf30)).append(new LiteralText("Hack").styled(s -> s.withColor(0xffafcc)));
-	}
-
-	public static Text getBHText() {
-		return new LiteralText("B").styled(s -> s.withColor(0xffbf30)).append(new LiteralText("H").styled(s -> s.withColor(0xffafcc)));
 	}
 }
