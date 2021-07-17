@@ -8,9 +8,6 @@
  */
 package bleach.hack.mixin;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +27,6 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
-import net.minecraft.text.LiteralText;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
@@ -48,7 +44,13 @@ public class MixinClientConnection {
 			if (event.isCancelled()) {
 				callback.cancel();
 			} else if (packet instanceof PlayerListS2CPacket) {
-				handlePlayerList((PlayerListS2CPacket) packet);
+				PlayerListS2CPacket p = (PlayerListS2CPacket) packet;
+
+				if (p.getAction() == PlayerListS2CPacket.Action.ADD_PLAYER) {
+					BleachHack.playerMang.addQueueEntries(p.getEntries());
+				} else if (p.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
+					BleachHack.playerMang.removeQueueEntries(p.getEntries());
+				}
 			}
 		}
 	}
@@ -72,30 +74,6 @@ public class MixinClientConnection {
 
 		if (event.isCancelled()) {
 			callback.cancel();
-		}
-	}
-	
-	private void handlePlayerList(PlayerListS2CPacket packet) {
-		if (packet.getAction() == PlayerListS2CPacket.Action.ADD_PLAYER) {
-			BleachHack.playerMang.addQueueEntries(packet.getEntries());
-
-			List<PlayerListS2CPacket.Entry> newEntries = packet.getEntries().stream()
-					.map(e -> {
-						if (e.getProfile().getName().equalsIgnoreCase("bleachhack")) { /* :sunglasses: */
-							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(), BleachHack.watermark.getText());
-						} else if (BleachHack.friendMang.has(e.getProfile().getName())) {
-							return new PlayerListS2CPacket.Entry(e.getProfile(), e.getLatency(), e.getGameMode(),
-									new LiteralText("\u00a7b" + e.getProfile().getName()));
-						} else {
-							return e;
-						}
-					})
-					.collect(Collectors.toList());
-			
-			packet.getEntries().clear();
-			packet.getEntries().addAll(newEntries);
-		} else if (packet.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
-			BleachHack.playerMang.removeQueueEntries(packet.getEntries());
 		}
 	}
 }
