@@ -15,7 +15,10 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.block.CactusBlock;
+import net.minecraft.block.CobwebBlock;
 import net.minecraft.block.FireBlock;
+import net.minecraft.block.HoneyBlock;
+import net.minecraft.block.SweetBerryBushBlock;
 import net.minecraft.fluid.LavaFluid;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
@@ -29,6 +32,9 @@ public class Avoid extends Module {
 				new SettingToggle("Cactus", true).withDesc("Adds a bigger collision box to cactuses."),
 				new SettingToggle("Fire", true).withDesc("Adds a collision box to fire."),
 				new SettingToggle("Lava", true).withDesc("Adds a collision box to lava."),
+				new SettingToggle("Cobweb", false).withDesc("Adds a collision box to cobweb."),
+				new SettingToggle("BerryBushes", false).withDesc("Adds a collision box to berry bushes."),
+				new SettingToggle("Honeyblocks", false).withDesc("Adds a bigger collision box to honey blocks so you don't slide on the edges."),
 				new SettingToggle("Unloaded", true).withDesc("Adds walls to unloaded chunks."));
 	}
 
@@ -36,7 +42,10 @@ public class Avoid extends Module {
 	public void onBlockShape(EventBlockShape event) {
 		if ((getSetting(0).asToggle().state && event.getState().getBlock() instanceof CactusBlock)
 				|| (getSetting(1).asToggle().state && event.getState().getBlock() instanceof FireBlock)
-				|| (getSetting(2).asToggle().state && event.getState().getFluidState().getFluid() instanceof LavaFluid)) {
+				|| (getSetting(2).asToggle().state && event.getState().getFluidState().getFluid() instanceof LavaFluid)
+				|| (getSetting(3).asToggle().state && event.getState().getBlock() instanceof CobwebBlock)
+				|| (getSetting(4).asToggle().state && event.getState().getBlock() instanceof SweetBerryBushBlock)
+				|| (getSetting(5).asToggle().state && event.getState().getBlock() instanceof HoneyBlock)) {
 			event.setShape(VoxelShapes.fullCube());
 		}
 	}
@@ -45,14 +54,14 @@ public class Avoid extends Module {
 	public void onClientMove(EventClientMove event) {
 		int x = (int) (mc.player.getX() + event.getVec().x) >> 4;
 		int z = (int) (mc.player.getZ() + event.getVec().z) >> 4;
-		if (getSetting(3).asToggle().state && !mc.world.getChunkManager().isChunkLoaded(x, z)) {
+		if (getSetting(6).asToggle().state && !mc.world.getChunkManager().isChunkLoaded(x, z)) {
 			event.setCancelled(true);
 		}
 	}
 
 	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
-		if (getSetting(3).asToggle().state) {
+		if (getSetting(6).asToggle().state) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
 				VehicleMoveC2SPacket packet = (VehicleMoveC2SPacket) event.getPacket();
 				if (!mc.world.getChunkManager().isChunkLoaded((int) packet.getX() >> 4, (int) packet.getZ() >> 4)) {
