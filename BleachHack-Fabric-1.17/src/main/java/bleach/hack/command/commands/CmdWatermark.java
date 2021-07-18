@@ -8,16 +8,35 @@
  */
 package bleach.hack.command.commands;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
+import bleach.hack.util.io.BleachFileHelper;
+import net.minecraft.text.LiteralText;
 
 public class CmdWatermark extends Command {
 
 	public CmdWatermark() {
 		super("watermark", "Sets the client watermark.", "watermark reset [color/text] | watermark text <text> | watermark color <color 1> <color 2>", CommandCategory.MISC);
+
+		JsonElement text1 = BleachFileHelper.readMiscSetting("watermarkText1");
+		JsonElement text2 = BleachFileHelper.readMiscSetting("watermarkText2");
+		JsonElement color1 = BleachFileHelper.readMiscSetting("watermarkColor1");
+		JsonElement color2 = BleachFileHelper.readMiscSetting("watermarkColor2");
+
+		if (text1 != null && text1.isJsonPrimitive() && text2 != null && text2.isJsonPrimitive()) {
+			BleachHack.watermark.setStrings(text1.getAsString(), text2.getAsString());
+		}
+
+		if (color1 != null && color1.isJsonPrimitive() && color1.getAsJsonPrimitive().isNumber()
+				&& color2 != null && color2.isJsonPrimitive() && color2.getAsJsonPrimitive().isNumber()) {
+			BleachHack.watermark.setColor(color1.getAsInt(), color2.getAsInt());
+		}
 	}
 
 	@Override
@@ -43,18 +62,21 @@ public class CmdWatermark extends Command {
 			if (args.length == 1) {
 				throw new CmdSyntaxException();
 			}
-			
+
 			if (args[0].equalsIgnoreCase("text")) {
 				if (args.length > 3) {
 					throw new CmdSyntaxException("The watermark can't contain more than 2 words.");
 				}
-				
+
 				if ((args.length == 2 && args[1].length() < 2) || (args.length == 3 && args[1].length() < 1 && args[2].length() < 1)) {
 					throw new CmdSyntaxException("The watermark can't be less than 2 characters long.");
 				}
-				
+
 				BleachHack.watermark.setStrings(args[1], args.length == 3 ? args[2] : null);
-				BleachLogger.infoMessage("Set the watermark to " + BleachHack.watermark.getText());
+				BleachLogger.infoMessage(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
+
+				BleachFileHelper.saveMiscSetting("watermarkText1", new JsonPrimitive(BleachHack.watermark.getString1()));
+				BleachFileHelper.saveMiscSetting("watermarkText2", new JsonPrimitive(BleachHack.watermark.getString2()));
 			} else if (args[0].equalsIgnoreCase("color")) {
 				if (args.length > 3) {
 					throw new CmdSyntaxException("The watermark can't contain more than 2 colors.");
@@ -63,7 +85,10 @@ public class CmdWatermark extends Command {
 				BleachHack.watermark.setColor(
 						Integer.parseInt(args[1].replace("x", "").replace("#", ""), 16),
 						args.length == 3 ? Integer.parseInt(args[2].replace("x", "").replace("#", ""), 16) : BleachHack.watermark.getColor2());
-				BleachLogger.infoMessage("Set the watermark to " + BleachHack.watermark.getText());
+				BleachLogger.infoMessage(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
+
+				BleachFileHelper.saveMiscSetting("watermarkColor1", new JsonPrimitive(BleachHack.watermark.getColor1()));
+				BleachFileHelper.saveMiscSetting("watermarkColor2", new JsonPrimitive(BleachHack.watermark.getColor2()));
 			} else {
 				throw new CmdSyntaxException();
 			}
