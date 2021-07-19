@@ -13,7 +13,10 @@ public abstract class WindowWidget {
 	public int y1;
 	public int x2;
 	public int y2;
+
 	public boolean visible = true;
+	public boolean cullX;
+	public boolean cullY;
 
 	protected Consumer<WindowWidget> renderEvent;
 	protected Consumer<WindowWidget> hoverEvent;
@@ -42,13 +45,13 @@ public abstract class WindowWidget {
 			clickEvent.accept(this);
 		}
 	}
-	
+
 	public void mouseReleased(int windowX, int windowY, int mouseX, int mouseY, int button) {
 		if (releaseEvent != null && isInBounds(windowX, windowY, mouseX, mouseY)) {
 			releaseEvent.accept(this);
 		}
 	}
-	
+
 	public void tick() {
 	}
 
@@ -57,11 +60,15 @@ public abstract class WindowWidget {
 
 	public void keyPressed(int keyCode, int scanCode, int modifiers) {
 	}
-	
+
 	protected boolean isInBounds(int windowX, int windowY, int x, int y) {
 		return x >= windowX + x1 && y >= windowY + y1 && x <= windowX + x2 && y <= windowY + y2;
 	}
-	
+
+	public boolean shouldRender(int windowX1, int windowY1, int windowX2, int windowY2) {
+		return visible && (!cullX || (x1 >= 0 && x2 <= windowX2 - windowX1)) && (!cullY || (y1 >= 12 && y2 <= windowY2 - windowY1 + 1));
+	}
+
 	public WindowWidget withRenderEvent(Consumer<WindowWidget> consumer) {
 		renderEvent = renderEvent == null ? renderEvent = consumer : renderEvent.andThen(consumer);
 		return this;
@@ -76,7 +83,7 @@ public abstract class WindowWidget {
 		clickEvent = clickEvent == null ? clickEvent = consumer : clickEvent.andThen(consumer);
 		return this;
 	}
-	
+
 	public WindowWidget withReleaseEvent(Consumer<WindowWidget> consumer) {
 		releaseEvent = releaseEvent == null ? releaseEvent = consumer : releaseEvent.andThen(consumer);
 		return this;

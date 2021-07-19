@@ -55,7 +55,7 @@ public class WindowButtonWidget extends WindowWidget {
 	public void mouseClicked(int windowX, int windowY, int mouseX, int mouseY, int button) {
 		super.mouseClicked(windowX, windowY, mouseX, mouseY, button);
 
-		if (mouseX >= windowX + x1 && mouseX <= windowX + x2 && mouseY >= windowY + y1 && mouseY <= windowY + y2) {
+		if (isInBounds(windowX, windowY, mouseX, mouseY)) {
 			action.run();
 			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		}

@@ -83,7 +83,7 @@ public class Window {
 		drawBar(matrices, mouseX, mouseY, textRend);
 
 		for (WindowWidget w : widgets) {
-			if (w.visible) {
+			if (w.shouldRender(x1, y1, x2, y2)) {
 				w.render(matrices, x1, y1, mouseX, mouseY);
 			}
 		}
@@ -144,7 +144,9 @@ public class Window {
 
 		if (selected) {
 			for (WindowWidget w : widgets) {
-				w.mouseClicked(x1, y1, (int) mouseX, (int) mouseY, button);
+				if (w.shouldRender(x1, y1, x2, y2)) {
+					w.mouseClicked(x1, y1, (int) mouseX, (int) mouseY, button);
+				}
 			}
 		}
 	}
@@ -154,7 +156,9 @@ public class Window {
 		
 		if (selected) {
 			for (WindowWidget w : widgets) {
-				w.mouseReleased(x1, y1, (int) mouseX, (int) mouseY, button);
+				if (w.shouldRender(x1, y1, x2, y2)) {
+					w.mouseReleased(x1, y1, (int) mouseX, (int) mouseY, button);
+				}
 			}
 		}
 	}

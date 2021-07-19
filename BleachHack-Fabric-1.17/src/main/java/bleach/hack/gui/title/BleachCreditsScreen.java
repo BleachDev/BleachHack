@@ -100,6 +100,12 @@ public class BleachCreditsScreen extends WindowScreen {
 			y += 12;
 		}
 
+		for (WindowWidget widget: getWindow(0).getWidgets()) {
+			if (!(widget instanceof WindowScrollbarWidget)) {
+				widget.cullY = true;
+			}
+		}
+
 		scrollbar = getWindow(0).addWidget(new WindowScrollbarWidget(w - 11, 12, y - 10, h - 13, 0));
 		lastScroll = 0;
 	}
@@ -121,8 +127,6 @@ public class BleachCreditsScreen extends WindowScreen {
 			if (!(widget instanceof WindowScrollbarWidget)) {
 				widget.y1 -= offset;
 				widget.y2 -= offset;
-				
-				widget.visible = widget.y1 >= 12 && widget.y2 <= getWindow(0).y2 - getWindow(0).y1;
 			}
 		}
 
