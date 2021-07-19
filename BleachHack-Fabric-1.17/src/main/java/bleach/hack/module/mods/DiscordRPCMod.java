@@ -34,7 +34,8 @@ public class DiscordRPCMod extends Module {
 	private String customText1 = "top text";
 	private String customText2 = "bottom text";
 
-	private int tick = 0;
+	private int tick;
+	private long startTime;
 
 	private boolean silent;
 
@@ -61,6 +62,7 @@ public class DiscordRPCMod extends Module {
 		silent = getSetting(3).asToggle().state;
 
 		tick = 0;
+		startTime = System.currentTimeMillis();
 
 		BleachLogger.logger.info("Initing Discord RPC...");
 		DiscordRPCManager.initialize(silent ? "727434331089272903" : "740928841433743370",
@@ -145,13 +147,13 @@ public class DiscordRPCMod extends Module {
 
 			switch (getSetting(2).asMode().mode) {
 				case 0:
-					start = System.currentTimeMillis() - tick * 50;
+					start = startTime;
 					break;
 				case 1:
 					start = System.currentTimeMillis() - RandomUtils.nextInt(0, 86400000);
 					break;
 				case 2:
-					start = 1590000000000l + tick * 100;
+					start = System.currentTimeMillis() - 86400000L + (long) tick * 50;
 					break;
 			}
 
