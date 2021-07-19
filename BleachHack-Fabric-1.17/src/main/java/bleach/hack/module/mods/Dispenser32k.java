@@ -263,7 +263,7 @@ public class Dispenser32k extends Module {
 			Entity target = null;
 
 			List<Entity> players = Streams.stream(mc.world.getEntities())
-					.filter(e -> e instanceof PlayerEntity && e != mc.player && !(BleachHack.friendMang.has(e.getName().getString())))
+					.filter(e -> e instanceof PlayerEntity && e != mc.player && !BleachHack.friendMang.has(e))
 					.sorted((a, b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)))
 					.collect(Collectors.toList());
 

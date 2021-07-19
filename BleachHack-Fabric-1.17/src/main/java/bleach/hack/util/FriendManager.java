@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.Formatting;
 
 public class FriendManager {
@@ -24,6 +25,10 @@ public class FriendManager {
 
 	public FriendManager(Collection<String> names) {
 		friends.addAll(names);
+	}
+	
+	public void add(Entity entity) {
+		add(entity.getName().getString());
 	}
 
 	public void add(String name) {
@@ -39,6 +44,10 @@ public class FriendManager {
 	public void addAll(Collection<String> names) {
 		names.forEach(this::add);
 	}
+	
+	public void remove(Entity entity) {
+		remove(entity.getName().getString());
+	}
 
 	public void remove(String name) {
 		for (Formatting f : Formatting.values()) {
@@ -52,6 +61,10 @@ public class FriendManager {
 
 	public void removeAll(Collection<String> names) {
 		names.forEach(this::remove);
+	}
+	
+	public boolean has(Entity entity) {
+		return has(entity.getName().getString());
 	}
 
 	public boolean has(String name) {

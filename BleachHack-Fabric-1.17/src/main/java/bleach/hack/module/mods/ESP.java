@@ -152,7 +152,7 @@ public class ESP extends Module {
 
 	private float[] getColorForEntity(Entity entity) {
 		if (entity instanceof PlayerEntity && entity != mc.player && getSetting(5).asToggle().state) {
-			return getSetting(5).asToggle().getChild(BleachHack.friendMang.has(entity.getName().getString()) ? 1 : 0).asColor().getRGBFloat();
+			return getSetting(5).asToggle().getChild(BleachHack.friendMang.has(entity) ? 1 : 0).asColor().getRGBFloat();
 		} else if (entity instanceof Monster && getSetting(6).asToggle().state) {
 			return getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
 		} // Before animals to prevent animals from overlapping donkeys

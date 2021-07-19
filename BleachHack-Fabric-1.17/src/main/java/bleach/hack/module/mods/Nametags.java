@@ -229,7 +229,7 @@ public class Nametags extends Module {
 	}
 
 	public void addPlayerLines(List<String> lines, PlayerEntity player) {
-		addPlayerNameHealthLine(lines, player, BleachHack.friendMang.has(player.getName().getString()) ? Formatting.AQUA : Formatting.RED,
+		addPlayerNameHealthLine(lines, player, BleachHack.friendMang.has(player) ? Formatting.AQUA : Formatting.RED,
 				getSetting(2).asToggle().getChild(1).asToggle().state,
 				getSetting(2).asToggle().getChild(2).asToggle().state,
 				getSetting(2).asToggle().getChild(3).asToggle().state,

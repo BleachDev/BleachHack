@@ -95,7 +95,7 @@ public class AutoLog extends Module {
 
 		if (getSetting(1).asToggle().state && !hasTotem) {
 			for (PlayerEntity player: mc.world.getPlayers()) {
-				if ((!getSetting(1).asToggle().getChild(0).asToggle().state && BleachHack.friendMang.has(player.getDisplayName().getString()))
+				if ((!getSetting(1).asToggle().getChild(0).asToggle().state && BleachHack.friendMang.has(player))
 						|| player == mc.player) {
 					continue;
 				}

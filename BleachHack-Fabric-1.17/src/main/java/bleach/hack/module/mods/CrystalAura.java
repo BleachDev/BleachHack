@@ -105,7 +105,7 @@ public class CrystalAura extends Module {
 		}
 
 		List<LivingEntity> targets = Streams.stream(mc.world.getEntities())
-				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
+				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e))
 						&& e.isAlive()
 						&& !e.getEntityName().equals(mc.getSession().getUsername())
 						&& e != mc.player.getVehicle())

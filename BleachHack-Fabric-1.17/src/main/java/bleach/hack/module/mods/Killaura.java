@@ -139,7 +139,7 @@ public class Killaura extends Module {
 		}
 
 		return targets
-				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e.getName().getString()))
+				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e))
 						&& e.isAlive()
 						&& e != mc.player.getVehicle()
 						&& !e.getEntityName().equals(mc.getSession().getUsername())
