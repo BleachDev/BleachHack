@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.io.Resources;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -27,10 +25,14 @@ import com.google.gson.JsonParser;
 public class BleachGithubReader {
 
 	private static URI url = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
+	
+	public static URI getUrl() {
+		return url;
+	}
 
-	public static List<String> readFileLines(String... path) {
+	public static List<String> readFileLines(String path) {
 		try {
-			return Arrays.asList(Resources.toString(stringsToURI(path).toURL(), StandardCharsets.UTF_8).replace("\r", "").split("\n"));
+			return Arrays.asList(Resources.toString(getUrl().resolve(path).toURL(), StandardCharsets.UTF_8).replace("\r", "").split("\n"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -38,17 +40,13 @@ public class BleachGithubReader {
 		return new ArrayList<>();
 	}
 	
-	public static JsonObject readJson(String... path) {
+	public static JsonObject readJson(String path) {
 		try {
-			String s = Resources.toString(stringsToURI(path).toURL(), StandardCharsets.UTF_8);
+			String s = Resources.toString(getUrl().resolve(path).toURL(), StandardCharsets.UTF_8);
 			return new JsonParser().parse(s).getAsJsonObject();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	public static URI stringsToURI(String... strings) {
-		return url.resolve(StringUtils.join(strings, '/'));
 	}
 }

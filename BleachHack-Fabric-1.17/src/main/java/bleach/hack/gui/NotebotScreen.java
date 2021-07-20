@@ -216,10 +216,9 @@ public class NotebotScreen extends WindowScreen {
 			}
 
 			if (entry != null) {
-				/* Pfft why use buttons when you can use meaningless rectangles with messy
-				 * code */
+				/* Pfft why use buttons when you can use meaningless rectangles with messy code */
 				if (mouseX > x + w - w / 2 + 10 && mouseX < x + w - w / 4 && mouseY > y + h - 15 && mouseY < y + h - 5) {
-					BleachFileMang.deleteFile("notebot", entry.fileName);
+					BleachFileMang.deleteFile("notebot/" + entry.fileName);
 					client.setScreen(this);
 				}
 				if (mouseX > x + w - w / 4 + 5 && mouseX < x + w - 5 && mouseY > y + h - 15 && mouseY < y + h - 5) {
@@ -277,7 +276,7 @@ public class NotebotScreen extends WindowScreen {
 		public NotebotEntry(String file) {
 			/* File and lines */
 			fileName = file;
-			lines = BleachFileMang.readFileLines("notebot", file)
+			lines = BleachFileMang.readFileLines("notebot/" + file)
 					.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 
 			/* Get length */

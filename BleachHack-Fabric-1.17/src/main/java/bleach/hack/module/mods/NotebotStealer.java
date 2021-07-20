@@ -50,14 +50,14 @@ public class NotebotStealer extends Module {
 		int i = 0;
 		StringBuilder s = new StringBuilder();
 
-		while (BleachFileMang.fileExists("notebot", "notebot" + i + ".txt"))
+		while (BleachFileMang.fileExists("notebot/notebot" + i + ".txt"))
 			i++;
 
 		for (List<Integer> i1 : notes)
 			s.append(i1.get(0)).append(":").append(i1.get(1)).append(":").append(i1.get(2)).append("\n");
 
-		BleachFileMang.createEmptyFile("notebot", "notebot" + i + ".txt");
-		BleachFileMang.appendFile(s.toString(), "notebot", "notebot" + i + ".txt");
+		BleachFileMang.createEmptyFile("notebot/notebot" + i + ".txt");
+		BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s.toString());
 		BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
 	}
 

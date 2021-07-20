@@ -85,7 +85,7 @@ public class BleachFileHelper {
 			}
 		}
 
-		BleachJsonHelper.setJsonFile(jo, "modules.json");
+		BleachJsonHelper.setJsonFile("modules.json", jo);
 	}
 
 	public static void readModules() {
@@ -157,7 +157,7 @@ public class BleachFileHelper {
 			jo.add(w.title, jw);
 		}
 
-		BleachJsonHelper.setJsonFile(jo, "clickgui.json");
+		BleachJsonHelper.setJsonFile("clickgui.json", jo);
 	}
 
 	public static void readClickGui() {
@@ -211,7 +211,7 @@ public class BleachFileHelper {
 			jo.add(w.getKey(), jw);
 		}
 
-		BleachJsonHelper.setJsonFile(jo, "ui.json");
+		BleachJsonHelper.setJsonFile("ui.json", jo);
 	}
 
 	public static void readUI() {
@@ -253,11 +253,11 @@ public class BleachFileHelper {
 			toWrite += s + "\n";
 
 		BleachFileMang.createEmptyFile("friends.txt");
-		BleachFileMang.appendFile(toWrite, "friends.txt");
+		BleachFileMang.appendFile("friends.txt", toWrite);
 	}
 
 	public static JsonElement readMiscSetting(String key) {
-		JsonElement element = BleachJsonHelper.readJsonElement(key, "misc.json");
+		JsonElement element = BleachJsonHelper.readJsonElement("misc.json", key);
 
 		try {
 			return element;
@@ -267,6 +267,6 @@ public class BleachFileHelper {
 	}
 
 	public static void saveMiscSetting(String key, JsonElement value) {
-		BleachJsonHelper.addJsonElement(key, value, "misc.json");
+		BleachJsonHelper.addJsonElement("misc.json", key, value);
 	}
 }

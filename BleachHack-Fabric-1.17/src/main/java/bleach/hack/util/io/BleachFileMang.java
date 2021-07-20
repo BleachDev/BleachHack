@@ -14,7 +14,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.util.BleachLogger;
@@ -37,13 +36,13 @@ public class BleachFileMang {
 	}
 
 	/** Reads a file and returns a list of the lines. **/
-	public static List<String> readFileLines(String... file) {
+	public static List<String> readFileLines(String path) {
 		try {
-			return Files.readAllLines(stringsToPath(file));
+			return Files.readAllLines(getDir().resolve(path));
 		} catch (NoSuchFileException e) {
 
 		} catch (Exception e) {
-			BleachLogger.logger.error("Error Reading File: " + stringsToPath(file));
+			BleachLogger.logger.error("Error Reading File: " + path);
 			e.printStackTrace();
 		}
 
@@ -51,76 +50,64 @@ public class BleachFileMang {
 	}
 
 	/** Creates a file, doesn't do anything if the file already exists. **/
-	public static void createFile(String... file) {
+	public static void createFile(String path) {
 		try {
-			if (!fileExists(file)) {
-				stringsToPath(file).getParent().toFile().mkdirs();
-				Files.createFile(stringsToPath(file));
+			if (!fileExists(path)) {
+				getDir().resolve(path).getParent().toFile().mkdirs();
+				Files.createFile(getDir().resolve(path));
 			}
 		} catch (Exception e) {
-			BleachLogger.logger.error("Error Creating File: " + Arrays.toString(file));
+			BleachLogger.logger.error("Error Creating File: " + path);
 			e.printStackTrace();
 		}
 	}
 
 	/** Creates a file, clears it if it already exists **/
-	public static void createEmptyFile(String... file) {
+	public static void createEmptyFile(String path) {
 		try {
-			createFile(file);
+			createFile(path);
 
-			FileWriter writer = new FileWriter(stringsToPath(file).toFile());
+			FileWriter writer = new FileWriter(getDir().resolve(path).toFile());
 			writer.write("");
 			writer.close();
 		} catch (Exception e) {
-			BleachLogger.logger.error("Error Clearing/Creating File: " + Arrays.toString(file));
+			BleachLogger.logger.error("Error Clearing/Creating File: " + path);
 			e.printStackTrace();
 		}
 	}
 
 	/** Adds a line to a file. **/
-	public static void appendFile(String content, String... file) {
+	public static void appendFile(String path, String content) {
 		try {
-			String fileContent = new String(Files.readAllBytes(stringsToPath(file)));
-			FileWriter writer = new FileWriter(stringsToPath(file).toFile(), true);
+			String fileContent = new String(Files.readAllBytes(getDir().resolve(path)));
+			FileWriter writer = new FileWriter(getDir().resolve(path).toFile(), true);
 			writer.write(
 					(fileContent.endsWith("\n") || !fileContent.contains("\n") ? "" : "\n")
 					+ content
 					+ (content.endsWith("\n") ? "" : "\n"));
 			writer.close();
 		} catch (Exception e) {
-			BleachLogger.logger.error("Error Appending File: " + Arrays.toString(file));
+			BleachLogger.logger.error("Error Appending File: " + path);
 			e.printStackTrace();
 		}
 	}
 
 	/** Returns true if a file exists, returns false otherwise **/
-	public static boolean fileExists(String... file) {
+	public static boolean fileExists(String path) {
 		try {
-			return stringsToPath(file).toFile().exists();
+			return getDir().resolve(path).toFile().exists();
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
 	/** Deletes a file if it exists. **/
-	public static void deleteFile(String... file) {
+	public static void deleteFile(String path) {
 		try {
-			Files.deleteIfExists(stringsToPath(file));
+			Files.deleteIfExists(getDir().resolve(path));
 		} catch (Exception e) {
-			BleachLogger.logger.error("Error Deleting File: " + Arrays.toString(file));
+			BleachLogger.logger.error("Error Deleting File: " + path);
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Gets a file by walking down all of the parameters (starts at
-	 * .minecraft/bleach/).
-	 **/
-	public static Path stringsToPath(String... strings) {
-		Path path = dir;
-		for (String s : strings)
-			path = path.resolve(s);
-		return path;
-	}
-
 }

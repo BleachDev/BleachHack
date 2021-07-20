@@ -24,7 +24,7 @@ public class BleachJsonHelper {
 
 	private static Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
 
-	public static void addJsonElement(String key, JsonElement element, String... path) {
+	public static void addJsonElement(String path, String key, JsonElement element) {
 		JsonObject file = null;
 		boolean overwrite = false;
 
@@ -52,20 +52,20 @@ public class BleachJsonHelper {
 			JsonObject mainJO = new JsonObject();
 			mainJO.add(key, element);
 
-			BleachFileMang.appendFile(jsonWriter.toJson(mainJO), path);
+			BleachFileMang.appendFile(path, jsonWriter.toJson(mainJO));
 		} else {
 			file.add(key, element);
 
-			BleachFileMang.appendFile(jsonWriter.toJson(file), path);
+			BleachFileMang.appendFile(path, jsonWriter.toJson(file));
 		}
 	}
 
-	public static void setJsonFile(JsonObject element, String... path) {
+	public static void setJsonFile(String path, JsonObject element) {
 		BleachFileMang.createEmptyFile(path);
-		BleachFileMang.appendFile(jsonWriter.toJson(element), path);
+		BleachFileMang.appendFile(path, jsonWriter.toJson(element));
 	}
 
-	public static JsonElement readJsonElement(String key, String... path) {
+	public static JsonElement readJsonElement(String path, String key) {
 		JsonObject jo = readJsonFile(path);
 
 		if (jo == null)
@@ -78,7 +78,7 @@ public class BleachJsonHelper {
 		return null;
 	}
 
-	public static JsonObject readJsonFile(String... path) {
+	public static JsonObject readJsonFile(String path) {
 		List<String> lines = BleachFileMang.readFileLines(path);
 
 		if (lines.isEmpty())

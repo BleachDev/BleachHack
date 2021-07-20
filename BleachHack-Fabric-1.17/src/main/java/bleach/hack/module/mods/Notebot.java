@@ -249,8 +249,8 @@ public class Notebot extends Module {
 		notes.clear();
 
 		/* Read the file */
-		BleachFileMang.createFile("notebot", fileName);
-		List<String> lines = BleachFileMang.readFileLines("notebot", fileName)
+		BleachFileMang.createFile("notebot/" + fileName);
+		List<String> lines = BleachFileMang.readFileLines("notebot/" + fileName)
 				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
 		for (String s : lines)
 			s = s.replaceAll(" ", "");

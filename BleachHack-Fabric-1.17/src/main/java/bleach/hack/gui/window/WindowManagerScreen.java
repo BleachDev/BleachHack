@@ -73,7 +73,7 @@ public class WindowManagerScreen extends Screen {
 		textRenderer.draw(matrices, "\u00a7cX", 7, height - 10, -1);
 
 		int wid = 20;
-		int size = 90;
+		int size = Math.min((width - wid) / windows.length, 90);
 		for (int i = 0; i < windows.length; i++) {
 			DrawableHelper.fill(matrices, wid, height - 13, wid + size - 1, height - 12, 0xff6060b0);
 			DrawableHelper.fill(matrices, wid, height - 13, wid + 1, height, 0xff6060b0);
@@ -102,7 +102,7 @@ public class WindowManagerScreen extends Screen {
 		}
 
 		if (mouseY > height - 14 && mouseY < height && mouseX > 20) {
-			int sel = ((int) mouseX - 20) / 90;
+			int sel = ((int) mouseX - 20) / Math.min((width - 20) / windows.length, 90);
 
 			if (sel >= 0 && sel < windows.length) {
 				selectWindow(sel);

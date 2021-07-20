@@ -24,7 +24,7 @@ public class CmdSpammer extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		BleachFileMang.createFile("spammer.txt");
-		Util.getOperatingSystem().open(BleachFileMang.stringsToPath("spammer.txt").toUri());
+		Util.getOperatingSystem().open(BleachFileMang.getDir().resolve("spammer.txt").toUri());
 
 		BleachLogger.infoMessage("Opened spammer file.");
 	}

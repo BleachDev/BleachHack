@@ -35,9 +35,9 @@ public class NotebotUtils {
 	public static void downloadSongs(boolean log) {
 		try {
 			FileUtils.copyURLToFile(
-					BleachGithubReader.stringsToURI("notebot", "songs.zip").toURL(),
-					BleachFileMang.stringsToPath("notebot", "songs.zip").toFile());
-			ZipFile zip = new ZipFile(BleachFileMang.stringsToPath("notebot", "songs.zip").toFile());
+					BleachGithubReader.getUrl().resolve("notebot/songs.zip").toURL(),
+					BleachFileMang.getDir().resolve("notebot/songs.zip").toFile());
+			ZipFile zip = new ZipFile(BleachFileMang.getDir().resolve("notebot/songs.zip").toFile());
 			Enumeration<? extends ZipEntry> files = zip.entries();
 			int count = 0;
 			while (files.hasMoreElements()) {

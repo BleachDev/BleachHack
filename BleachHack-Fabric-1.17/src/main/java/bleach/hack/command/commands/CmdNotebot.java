@@ -29,15 +29,15 @@ public class CmdNotebot extends Command {
 		if (args.length >= 2 && args[0].equalsIgnoreCase("convert")) {
 			int i = 0;
 			String s = "";
-			List<List<Integer>> notes = Midi2Notebot.convert(BleachFileMang.stringsToPath(args[1]));
+			List<List<Integer>> notes = Midi2Notebot.convert(BleachFileMang.getDir().resolve(args[1]));
 
-			while (BleachFileMang.fileExists("notebot", "notebot" + i + ".txt"))
+			while (BleachFileMang.fileExists("notebot/notebot" + i + ".txt"))
 				i++;
 
 			for (List<Integer> i1 : notes)
 				s += i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
 
-			BleachFileMang.appendFile(s, "notebot", "notebot" + i + ".txt");
+			BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s);
 			BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
 		} else {
 			BleachQueue.add(() -> mc.setScreen(new NotebotScreen()));

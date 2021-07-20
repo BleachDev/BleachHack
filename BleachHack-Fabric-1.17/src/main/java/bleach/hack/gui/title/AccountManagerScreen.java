@@ -128,8 +128,8 @@ public class AccountManagerScreen extends WindowScreen {
 				if (checkBox.checked && login.getRight() != null && !accounts.hasEmail(email)) {
 					accountQueue.add(new Account(email, pass, session.getUuid(), session.getUsername()));
 					BleachFileMang.createFile("logins.txt");
-					BleachFileMang.appendFile(
-							email + ":" + session.getUuid() + ":" + session.getUsername() + ":" + crypter.encrypt(pass), "logins.txt");
+					BleachFileMang.appendFile("logins.txt",
+							email + ":" + session.getUuid() + ":" + session.getUsername() + ":" + crypter.encrypt(pass));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -267,7 +267,7 @@ public class AccountManagerScreen extends WindowScreen {
 					lines.removeIf(s -> s.startsWith(a.email));
 
 					BleachFileMang.createEmptyFile("logins.txt");
-					BleachFileMang.appendFile(String.join("\n", lines), "logins.txt");
+					BleachFileMang.appendFile("logins.txt", String.join("\n", lines));
 					accounts.getAccounts().removeIf(ac -> ac.email.equals(a.email));
 					break;
 				}
