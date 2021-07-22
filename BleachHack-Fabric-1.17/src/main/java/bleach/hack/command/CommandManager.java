@@ -18,12 +18,10 @@ import java.util.TreeMap;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
@@ -89,14 +87,6 @@ public class CommandManager {
 		}
 	}
 
-	public static void readPrefix() {
-		JsonElement prefix = BleachFileHelper.readMiscSetting("prefix");
-
-		if (prefix != null) {
-			Command.PREFIX = prefix.getAsString();
-		}
-	}
-
 	public static void callCommand(String input) {
 		String[] split = input.split(" ");
 		BleachLogger.logger.info("Running command: " + Arrays.toString(split));
@@ -108,7 +98,7 @@ public class CommandManager {
 				} catch (CmdSyntaxException e) {
 					BleachLogger.errorMessage((MutableText) e.getTextMessage());
 
-					MutableText text = new LiteralText("\u00a7b" + Command.PREFIX + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
+					MutableText text = new LiteralText("\u00a7b" + Command.getPrefix() + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
 
 					BleachLogger.infoMessage(
 							text.styled(style -> style
@@ -133,7 +123,7 @@ public class CommandManager {
 			}
 		}
 
-		BleachLogger.errorMessage("Command Not Found, Maybe Try " + Command.PREFIX + "help");
+		BleachLogger.errorMessage("Command Not Found, Maybe Try " + Command.getPrefix() + "help");
 	}
 
 	private class CommandListJson {

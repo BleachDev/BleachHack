@@ -14,9 +14,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
+import bleach.hack.command.Command;
 import bleach.hack.event.events.EventKeyPress;
+import bleach.hack.gui.title.option.Option;
 import bleach.hack.module.ModuleManager;
 import net.minecraft.client.Keyboard;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 
 @Mixin(Keyboard.class)
 public class MixinKeyboard {
@@ -35,11 +39,9 @@ public class MixinKeyboard {
 	
 	@Inject(method = "onKey", at = @At(value = "INVOKE", target = "net/minecraft/client/util/InputUtil.isKeyPressed(JI)Z", ordinal = 5), cancellable = true)
 	private void onKeyEvent_1(long windowPointer, int key, int scanCode, int action, int modifiers, CallbackInfo callbackInfo) {
-		// TODO: bh setting 
-		/*if (InputUtil.getKeycodeName(InputUtil.fromKeyCode(key, scanCode).getKeyCode()) != null &&
-			InputUtil.getKeycodeName(InputUtil.fromKeyCode(key, canCode).getKeyCode()).equals(CommandManager.prefix)) {
-			MinecraftClient.getInstance().setScreen(new ChatScreen(CommandManager.prefix));
-		}*/
+		if (Option.CHAT_QUICK_PREFIX.getValue() && Command.getPrefix().length() == 1 && key == Command.getPrefix().charAt(0)) {
+			MinecraftClient.getInstance().setScreen(new ChatScreen(Command.getPrefix()));
+		}
 
 		ModuleManager.handleKeyPress(key);
 

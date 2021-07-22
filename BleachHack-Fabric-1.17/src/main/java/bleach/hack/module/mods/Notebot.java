@@ -74,7 +74,7 @@ public class Notebot extends Module {
 			setEnabled(false);
 			return;
 		} else if (filePath.isEmpty()) {
-			BleachLogger.errorMessage("No Song Loaded!, Use " + Command.PREFIX + "notebot to select a song.");
+			BleachLogger.errorMessage("No Song Loaded!, Use " + Command.getPrefix() + "notebot to select a song.");
 			setEnabled(false);
 			return;
 		} else {

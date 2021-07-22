@@ -37,6 +37,7 @@ public class MixinClientWorld {
 		try {
 			if (MinecraftClient.getInstance().player.age % 100 == 0) {
 				if (BleachFileHelper.SCHEDULE_SAVE_MODULES) BleachFileHelper.saveModules();
+				if (BleachFileHelper.SCHEDULE_SAVE_OPTIONS) BleachFileHelper.saveOptions();
 				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
 				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
 				if (BleachFileHelper.SCHEDULE_SAVE_UI) BleachFileHelper.saveUI();

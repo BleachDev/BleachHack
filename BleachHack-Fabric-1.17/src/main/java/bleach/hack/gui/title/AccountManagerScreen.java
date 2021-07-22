@@ -41,6 +41,7 @@ import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginManager;
 import bleach.hack.util.io.BleachFileMang;
 import bleach.hack.BleachHack;
+import bleach.hack.gui.title.option.Option;
 import bleach.hack.gui.window.Window;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
@@ -114,9 +115,13 @@ public class AccountManagerScreen extends WindowScreen {
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
-			BleachHack.playerMang.stopPinger();
+			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
+				BleachHack.playerMang.stopPinger();
+
 			Pair<String, Session> login = LoginManager.login(userField.textField.getText(), passField.textField.getText());
-			BleachHack.playerMang.startPinger();
+			
+			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
+				BleachHack.playerMang.startPinger();
 
 			loginResult.setText(new LiteralText("|  " + login.getLeft()));
 

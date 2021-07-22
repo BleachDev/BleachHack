@@ -68,8 +68,11 @@ public class WindowTextWidget extends WindowWidget {
 
 		if (text.getStyle() != null && mc.currentScreen != null
 				&& mouseX >= windowX + x1 - offset && mouseX <= windowX + x2 - offset && mouseY >= windowY + y1 && mouseY <= windowY + y2) {
+			matrices.push();
+			matrices.translate(0, 0, 250);
 			((AccessorScreen) mc.currentScreen).callRenderTextHoverEffect(
 					matrices, text.getStyle(), mouseX - (windowX + x1 - (int) offset), mouseY - (windowY + y1));
+			matrices.pop();
 		}
 
 		matrices.pop();

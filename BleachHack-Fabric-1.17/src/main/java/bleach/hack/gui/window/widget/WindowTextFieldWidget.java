@@ -15,7 +15,7 @@ public class WindowTextFieldWidget extends WindowWidget {
 	}
 
 	public WindowTextFieldWidget(int x, int y, int width, int height, Text text) {
-		super(x, y, width, height);
+		super(x, y, x + width + 1, y + height + 1);
 		this.textField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, x, y, width, height, text);
 	}
 

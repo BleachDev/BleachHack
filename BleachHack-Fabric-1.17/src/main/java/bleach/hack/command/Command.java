@@ -12,15 +12,14 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import bleach.hack.gui.title.option.Option;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 public abstract class Command {
 
-	public static String PREFIX = "$";
-
-	protected MinecraftClient mc = MinecraftClient.getInstance();
+	protected final MinecraftClient mc = MinecraftClient.getInstance();
 
 	private String[] aliases;
 	private String description;
@@ -32,6 +31,10 @@ public abstract class Command {
 		this.description = desc;
 		this.syntax = syntax;
 		this.category = category;
+	}
+	
+	public static final String getPrefix() {
+		return Option.CHAT_COMMAND_PREFIX.getValue();
 	}
 
 	public String[] getAliases() {
@@ -57,7 +60,7 @@ public abstract class Command {
 	public Text getHelpTooltip() {
 		return new LiteralText(
 				"\u00a72Category: " + getCategory()
-				+ "\n\u00a7bAliases: \u00a7f" + PREFIX + String.join(" \u00a77/\u00a7f " + PREFIX, getAliases())
+				+ "\n\u00a7bAliases: \u00a7f" + getPrefix() + String.join(" \u00a77/\u00a7f " + getPrefix(), getAliases())
 				+ "\n\u00a7bUsage: \u00a7f" + getSyntax()
 				+ "\n\u00a7bDesc: \u00a7f" + getDescription());
 	}

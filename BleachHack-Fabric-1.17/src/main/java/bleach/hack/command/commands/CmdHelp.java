@@ -32,14 +32,14 @@ public class CmdHelp extends Command {
 		if (cmd.isEmpty()) {
 			BleachLogger.infoMessage("Commands:");
 		} else {
-			BleachLogger.infoMessage("Syntax for " + PREFIX + cmd.toLowerCase(Locale.ENGLISH) + ":");
+			BleachLogger.infoMessage("Syntax for " + getPrefix() + cmd.toLowerCase(Locale.ENGLISH) + ":");
 		}
 
 		for (Command c : CommandManager.getCommands()) {
 			if (!cmd.isEmpty() && Stream.of(c.getAliases()).noneMatch(cmd::equalsIgnoreCase))
 				continue;
 
-			MutableText text = new LiteralText("\u00a7b" + PREFIX + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
+			MutableText text = new LiteralText("\u00a7b" + getPrefix() + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
 
 			BleachLogger.noPrefixMessage(
 					text.styled(style -> style

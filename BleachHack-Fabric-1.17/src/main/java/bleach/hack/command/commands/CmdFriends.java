@@ -69,7 +69,7 @@ public class CmdFriends extends Command {
 					.append(new LiteralText("\u00a7c[Del]")
 							.styled(style -> style
 									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Remove " + f + " from your friendlist")))
-									.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, PREFIX + "friends remove " + f))))
+									.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getPrefix() + "friends remove " + f))))
 					.append("   ")
 					.append(new LiteralText("\u00a73[NameMC]")
 							.styled(style -> style

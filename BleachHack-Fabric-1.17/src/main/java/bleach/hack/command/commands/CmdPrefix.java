@@ -8,18 +8,17 @@
  */
 package bleach.hack.command.commands;
 
-import com.google.gson.JsonPrimitive;
-
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
+import bleach.hack.gui.title.option.Option;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
 
 public class CmdPrefix extends Command {
 
 	public CmdPrefix() {
-		super("prefix", "Sets the BleachHack command prefix.", "prefix <char>", CommandCategory.MISC);
+		super("prefix", "Sets the BleachHack command prefix.", "prefix <prefix>", CommandCategory.MISC);
 	}
 
 	@Override
@@ -28,9 +27,9 @@ public class CmdPrefix extends Command {
 			throw new CmdSyntaxException("Prefix Cannot Be Empty");
 		}
 
-		PREFIX = args[0];
-		BleachFileHelper.saveMiscSetting("prefix", new JsonPrimitive(PREFIX));
-		BleachLogger.infoMessage("Set Prefix To: \"" + args[0] + "\"");
+		Option.CHAT_COMMAND_PREFIX.setValue(args[0]);
+		BleachFileHelper.SCHEDULE_SAVE_OPTIONS = true;
+		BleachLogger.infoMessage("Set Prefix To: \"" + getPrefix() + "\"");
 	}
 
 }

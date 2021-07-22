@@ -6,7 +6,7 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.eventbus.BleachSubscribe;
-
+import bleach.hack.gui.title.option.Option;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventRenderInGameHud;
 import bleach.hack.event.events.EventKeyPress;
@@ -46,6 +46,9 @@ public class CommandSuggestor {
 
 	@BleachSubscribe
 	public void onDrawOverlay(EventRenderInGameHud event) {
+		if (!Option.CHAT_SHOW_SUGGESTIONS.getValue())
+			return;
+
 		Screen screen = MinecraftClient.getInstance().currentScreen;
 
 		if (screen instanceof ChatScreen) {
@@ -56,8 +59,8 @@ public class CommandSuggestor {
 				suggestions.clear();
 				curText = text;
 
-				if (text.startsWith(Command.PREFIX)) {
-					suggestions.addAll(CommandManager.getSuggestionProvider().getSuggestions(text.substring(Command.PREFIX.length()).split(" ", -1)));
+				if (text.startsWith(Command.getPrefix())) {
+					suggestions.addAll(CommandManager.getSuggestionProvider().getSuggestions(text.substring(Command.getPrefix().length()).split(" ", -1)));
 				}
 
 				selected = 0;
@@ -66,7 +69,7 @@ public class CommandSuggestor {
 
 			if (selected >= 0 && selected < suggestions.size()) {
 				String[] split = field.getText().split(" ", -1);
-				int offset = split[split.length - 1].length() - (split.length == 1 ? Command.PREFIX.length() : 0);
+				int offset = split[split.length - 1].length() - (split.length == 1 ? Command.getPrefix().length() : 0);
 
 				if (offset > suggestions.get(selected).length()) {
 					field.setSuggestion("");
@@ -85,7 +88,7 @@ public class CommandSuggestor {
 						.findFirst().orElse(0);
 
 				int startX = MinecraftClient.getInstance().textRenderer.getWidth(
-						field.getText().replaceFirst("[^ ]*$", "") + (!field.getText().contains(" ") ? Command.PREFIX : "")) + 3;
+						field.getText().replaceFirst("[^ ]*$", "") + (!field.getText().contains(" ") ? Command.getPrefix() : "")) + 3;
 				int startY = screen.height - Math.min(suggestions.size(), 10) * 12 - 15;
 				for (int i = scroll; i < suggestions.size() && i < scroll + 10; i++) {
 					String suggestion = suggestions.get(i);
@@ -115,7 +118,7 @@ public class CommandSuggestor {
 				if (selected >= 0 && selected < suggestions.size()) {
 					TextFieldWidget field = ((AccessorChatScreen) MinecraftClient.getInstance().currentScreen).getChatField();
 					String[] split = field.getText().split(" ", -1);
-					int offset = split[split.length - 1].length() - (split.length == 1 ? Command.PREFIX.length() : 0);
+					int offset = split[split.length - 1].length() - (split.length == 1 ? Command.getPrefix().length() : 0);
 
 					if (offset < suggestions.get(selected).length() && !suggestions.get(selected).matches("^<.*>$")) {
 						field.setText(field.getText() + suggestions.get(selected).substring(offset));
@@ -128,7 +131,7 @@ public class CommandSuggestor {
 	@BleachSubscribe
 	public void onKeyPressChat(EventKeyPress.InChat event) {
 		TextFieldWidget field = ((AccessorChatScreen) MinecraftClient.getInstance().currentScreen).getChatField();
-		if (field.getText().startsWith(Command.PREFIX)
+		if (field.getText().startsWith(Command.getPrefix())
 				&& (event.getKey() == GLFW.GLFW_KEY_TAB || event.getKey() == GLFW.GLFW_KEY_UP || event.getKey() == GLFW.GLFW_KEY_DOWN)) {
 			event.setCancelled(true);
 		}

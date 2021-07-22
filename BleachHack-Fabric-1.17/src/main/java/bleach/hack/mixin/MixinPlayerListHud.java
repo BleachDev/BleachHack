@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.BleachHack;
+import bleach.hack.gui.title.option.Option;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
@@ -23,14 +24,14 @@ public class MixinPlayerListHud {
 
 	@Inject(method = "getPlayerName", at = @At("RETURN"), cancellable = true)
 	public void getPlayerName(PlayerListEntry entry, CallbackInfoReturnable<Text> callback) {
-		if (BleachHack.friendMang.has(entry.getProfile().getName())) {
+		if (Option.PLAYERLIST_SHOW_FRIENDS.getValue() && BleachHack.friendMang.has(entry.getProfile().getName())) {
 			callback.setReturnValue(((MutableText) callback.getReturnValue()).styled(s -> s.withColor(Formatting.AQUA)));
 		}
 	}
 
 	@Inject(method = "renderLatencyIcon", at = @At("RETURN"))
 	public void renderLatencyIcon(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo callback) {
-		if (BleachHack.playerMang.getPlayers().contains(entry.getProfile().getId())) {
+		if (Option.PLAYERLIST_SHOW_BH_USERS.getValue() && BleachHack.playerMang.getPlayers().contains(entry.getProfile().getId())) {
 			matrices.push();
 			matrices.translate(x + width - 21, y + 1.5, 0);
 			matrices.scale(0.67f, 0.7f, 1f);

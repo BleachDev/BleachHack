@@ -14,6 +14,7 @@ import bleach.hack.command.CommandManager;
 import bleach.hack.command.CommandSuggestor;
 import bleach.hack.eventbus.BleachEventBus;
 import bleach.hack.gui.title.BleachTitleScreen;
+import bleach.hack.gui.title.option.Option;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.BleachLogger;
@@ -74,14 +75,15 @@ public class BleachHack implements ModInitializer {
 
 		ClickGui.clickGui.initWindows();
 		BleachFileHelper.readClickGui();
+		BleachFileHelper.readOptions();
 		BleachFileHelper.readFriends();
 		BleachFileHelper.readUI();
 
-		CommandManager.readPrefix();
 		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
 		CommandSuggestor.start();
 
-		playerMang.startPinger();
+		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
+			playerMang.startPinger();
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {

@@ -22,6 +22,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.clickgui.window.UIWindow;
 import bleach.hack.gui.clickgui.window.UIWindow.Position;
+import bleach.hack.gui.title.option.Option;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -33,6 +34,7 @@ import bleach.hack.util.BleachLogger;
 public class BleachFileHelper {
 
 	public static boolean SCHEDULE_SAVE_MODULES = false;
+	public static boolean SCHEDULE_SAVE_OPTIONS = false;
 	public static boolean SCHEDULE_SAVE_FRIENDS = false;
 	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
 	public static boolean SCHEDULE_SAVE_UI = false;
@@ -140,6 +142,31 @@ public class BleachFileHelper {
 		}
 	}
 
+	public static void saveOptions() {
+		SCHEDULE_SAVE_OPTIONS = false;
+
+		JsonObject jo = new JsonObject();
+
+		for (Option<?> o: Option.OPTIONS) {
+			jo.add(o.getName(), o.serialize());
+		}
+
+		BleachJsonHelper.setJsonFile("options.json", jo);
+	}
+
+	public static void readOptions() {
+		JsonObject jo = BleachJsonHelper.readJsonFile("options.json");
+
+		if (jo == null)
+			return;
+
+		for (Option<?> o: Option.OPTIONS) {
+			if (jo.has(o.getName())) {
+				o.deserialize(jo.get(o.getName()));
+			}
+		}
+	}
+
 	public static void saveClickGui() {
 		SCHEDULE_SAVE_CLICKGUI = false;
 
@@ -207,7 +234,7 @@ public class BleachFileHelper {
 			if (ja.size() > 0) {
 				jw.add("attachments", ja);
 			}
-			
+
 			jo.add(w.getKey(), jw);
 		}
 
@@ -230,7 +257,7 @@ public class BleachFileHelper {
 				continue;
 
 			Position pos = new Position(jw.get("x").getAsDouble(), jw.get("y").getAsDouble());
-			
+
 			if (jw.has("attachments")) {
 				for (Entry<String, JsonElement> ja : jw.get("attachments").getAsJsonObject().entrySet()) {
 					pos.addAttachment(Pair.of(ja.getKey(), ja.getValue().getAsInt()));

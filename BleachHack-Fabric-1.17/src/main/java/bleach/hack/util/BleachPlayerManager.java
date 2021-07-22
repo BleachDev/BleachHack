@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonArray;
+
+import bleach.hack.gui.title.option.Option;
 import bleach.hack.util.io.BleachAPIMang;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -113,7 +115,9 @@ public class BleachPlayerManager {
 		.filter(e -> !players.contains(e))
 		.forEach(e -> {
 			if (playerUuid.equals(e)) {
-				players.add(e);
+				if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue()) {
+					players.add(e);
+				}
 			} else {
 				playerQueue.add(e);
 			}
@@ -128,7 +132,7 @@ public class BleachPlayerManager {
 		return players;
 	}
 
-	private String toProperUUID(String uuid) {
+	public static String toProperUUID(String uuid) {
 		if (uuid.contains("-")) {
 			return uuid;
 		}
@@ -136,7 +140,7 @@ public class BleachPlayerManager {
 		return UUID_ADD_DASHES_PATTERN.matcher(uuid).replaceFirst("$1-$2-$3-$4-$5");
 	}
 
-	private boolean[] toBinaryArray(String string) {
+	private static boolean[] toBinaryArray(String string) {
 		boolean[] array = new boolean[string.length() * 8];
 		int index = 0;
 		for (byte b: string.getBytes(StandardCharsets.ISO_8859_1)) {

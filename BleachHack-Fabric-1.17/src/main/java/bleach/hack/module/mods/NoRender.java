@@ -50,7 +50,7 @@ public class NoRender extends Module {
 						new SettingToggle("Frostbite", true).withDesc("Removes the frostbite overlay when you walk in powdered snow.")), // 0-7
 				new SettingToggle("World", true).withDesc("Removes certain things in the world.").withChildren( // 1
 						new SettingToggle("Signs", false).withDesc("Doesn't render signs.").withChildren( // 1-0
-								new SettingMode("Mode", "Unrender", "Blank", "Custom").withDesc("How to render signs, use the " + Command.PREFIX + "customsign command to set sign text.")),
+								new SettingMode("Mode", "Unrender", "Blank", "Custom").withDesc("How to render signs, use the " + Command.getPrefix() + "customsign command to set sign text.")),
 						new SettingToggle("Totem", false).withDesc("Removes the totem animation.").withChildren( // 1-1
 								new SettingToggle("Particles", true).withDesc("Removes the yellow-green particles when a totem is used."),
 								new SettingToggle("Sound", false).withDesc("Removes the totem sound when a totem is used.")),
