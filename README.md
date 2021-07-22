@@ -25,7 +25,7 @@ Obama client for Fabric 1.16 & 1.17 (1.14-1.15 is discontinued).
 ## Installation
 ### For normal people
 
-Download [fabric for minecraft 1.16/1.17](https://fabricmc.net/use/).
+Download [Fabric for Minecraft 1.16/1.17](https://fabricmc.net/use/).
 Download the latest version of BleachHack for your Minecraft version [from the website](https://bleachhack.github.io/).
 
 
