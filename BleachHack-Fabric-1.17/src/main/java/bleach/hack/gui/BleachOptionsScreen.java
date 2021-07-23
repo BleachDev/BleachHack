@@ -6,15 +6,14 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.gui.title;
+package bleach.hack.gui;
 
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowScrollbarWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.gui.window.widget.WindowWidget;
-
-import bleach.hack.gui.title.option.Option;
+import bleach.hack.gui.option.Option;
 import bleach.hack.gui.window.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;

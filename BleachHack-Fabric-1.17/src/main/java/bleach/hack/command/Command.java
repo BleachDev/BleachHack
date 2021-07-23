@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import bleach.hack.gui.title.option.Option;
+import bleach.hack.gui.option.Option;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;

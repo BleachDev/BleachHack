@@ -6,7 +6,7 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.gui.title.effect;
+package bleach.hack.gui.effect;
 
 import java.util.ArrayList;
 import java.util.List;

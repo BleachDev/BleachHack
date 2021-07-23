@@ -6,7 +6,7 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.gui.title;
+package bleach.hack.gui;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginManager;
 import bleach.hack.util.io.BleachFileMang;
 import bleach.hack.BleachHack;
-import bleach.hack.gui.title.option.Option;
+import bleach.hack.gui.option.Option;
 import bleach.hack.gui.window.Window;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;

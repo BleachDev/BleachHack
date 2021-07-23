@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.event.events.EventKeyPress;
-import bleach.hack.gui.title.option.Option;
+import bleach.hack.gui.option.Option;
 import bleach.hack.module.ModuleManager;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;

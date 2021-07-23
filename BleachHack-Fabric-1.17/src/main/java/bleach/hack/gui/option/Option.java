@@ -1,4 +1,4 @@
-package bleach.hack.gui.title.option;
+package bleach.hack.gui.option;
 
 import java.util.UUID;
 import java.util.stream.Stream;

@@ -6,7 +6,7 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.eventbus.BleachSubscribe;
-import bleach.hack.gui.title.option.Option;
+import bleach.hack.gui.option.Option;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventRenderInGameHud;
 import bleach.hack.event.events.EventKeyPress;

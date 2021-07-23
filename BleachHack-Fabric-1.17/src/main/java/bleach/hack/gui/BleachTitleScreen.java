@@ -6,7 +6,7 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.gui.title;
+package bleach.hack.gui;
 
 import java.io.File;
 import java.net.URI;
@@ -25,7 +25,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
-import bleach.hack.gui.title.effect.ParticleManager;
+import bleach.hack.gui.effect.ParticleManager;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.UI;
 import bleach.hack.util.BleachLogger;

@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonArray;
 
-import bleach.hack.gui.title.option.Option;
+import bleach.hack.gui.option.Option;
 import bleach.hack.util.io.BleachAPIMang;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;

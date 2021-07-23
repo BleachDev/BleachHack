@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.gson.JsonPrimitive;
 
-import bleach.hack.gui.title.AccountManagerScreen;
-import bleach.hack.gui.title.BleachCreditsScreen;
-import bleach.hack.gui.title.BleachOptionsScreen;
-import bleach.hack.gui.title.BleachTitleScreen;
+import bleach.hack.gui.AccountManagerScreen;
+import bleach.hack.gui.BleachCreditsScreen;
+import bleach.hack.gui.BleachOptionsScreen;
+import bleach.hack.gui.BleachTitleScreen;
 import bleach.hack.gui.window.WindowManagerScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;

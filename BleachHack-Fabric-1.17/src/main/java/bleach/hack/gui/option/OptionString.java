@@ -1,4 +1,4 @@
-package bleach.hack.gui.title.option;
+package bleach.hack.gui.option;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;

@@ -22,7 +22,7 @@ import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.clickgui.window.UIWindow;
 import bleach.hack.gui.clickgui.window.UIWindow.Position;
-import bleach.hack.gui.title.option.Option;
+import bleach.hack.gui.option.Option;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
