@@ -21,7 +21,7 @@ import net.minecraft.client.util.InputUtil;
 public class CmdBind extends Command {
 
 	public CmdBind() {
-		super("bind", "Binds a module.", "bind set <Module> <Key> | bind del <Module> | bind clear", CommandCategory.MODULES);
+		super("bind", "Binds a module.", "bind set <module> <key> | bind del <module> | bind clear", CommandCategory.MODULES);
 	}
 
 	@Override
