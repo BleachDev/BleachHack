@@ -9,6 +9,7 @@
 package bleach.hack.module.mods;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import bleach.hack.eventbus.BleachSubscribe;
@@ -56,7 +57,7 @@ public class AutoArmor extends Module {
 		tickDelay = (getSetting(2).asToggle().state ? getSetting(2).asToggle().getChild(0).asSlider().getValueInt() : 0);
 
 		/* [Slot type, [Armor slot, Armor prot, New armor slot, New armor prot]] */
-		HashMap<EquipmentSlot, int[]> armorMap = new HashMap<>(4);
+		Map<EquipmentSlot, int[]> armorMap = new HashMap<>(4);
 		armorMap.put(EquipmentSlot.FEET, new int[] { 36, getProtection(mc.player.getInventory().getStack(36)), -1, -1 });
 		armorMap.put(EquipmentSlot.LEGS, new int[] { 37, getProtection(mc.player.getInventory().getStack(37)), -1, -1 });
 		armorMap.put(EquipmentSlot.CHEST, new int[] { 38, getProtection(mc.player.getInventory().getStack(38)), -1, -1 });

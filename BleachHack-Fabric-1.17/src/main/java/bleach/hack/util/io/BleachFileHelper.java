@@ -124,7 +124,7 @@ public class BleachFileHelper {
 				if (mo.has("settings") && mo.get("settings").isJsonObject()) {
 					for (Entry<String, JsonElement> se : mo.get("settings").getAsJsonObject().entrySet()) {
 						// Map to keep track if there are multiple settings with the same name
-						HashMap<String, Integer> sNames = new HashMap<>();
+						Map<String, Integer> sNames = new HashMap<>();
 
 						for (SettingBase sb : mod.getSettings()) {
 							String name = sNames.containsKey(sb.getName()) ? sb.getName() + sNames.get(sb.getName()) : sb.getName();

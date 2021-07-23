@@ -15,7 +15,7 @@ import bleach.hack.command.CommandCategory;
 import bleach.hack.gui.NotebotScreen;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.BleachQueue;
-import bleach.hack.util.Midi2Notebot;
+import bleach.hack.util.NotebotUtils;
 import bleach.hack.util.io.BleachFileMang;
 
 public class CmdNotebot extends Command {
@@ -29,13 +29,13 @@ public class CmdNotebot extends Command {
 		if (args.length >= 2 && args[0].equalsIgnoreCase("convert")) {
 			int i = 0;
 			String s = "";
-			List<List<Integer>> notes = Midi2Notebot.convert(BleachFileMang.getDir().resolve(args[1]));
+			List<int[]> notes = NotebotUtils.convertMidi(BleachFileMang.getDir().resolve(args[1]));
 
 			while (BleachFileMang.fileExists("notebot/notebot" + i + ".txt"))
 				i++;
 
-			for (List<Integer> i1 : notes)
-				s += i1.get(0) + ":" + i1.get(1) + ":" + i1.get(2) + "\n";
+			for (int[] i1 : notes)
+				s += i1[0] + ":" + i1[1] + ":" + i1[2] + "\n";
 
 			BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s);
 			BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");

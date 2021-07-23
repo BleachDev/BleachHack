@@ -9,7 +9,6 @@
 package bleach.hack.module.mods;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -28,7 +27,7 @@ import net.minecraft.sound.SoundCategory;
 
 public class NotebotStealer extends Module {
 
-	private List<List<Integer>> notes = new ArrayList<>();
+	private List<int[]> notes = new ArrayList<>();
 	private Multimap<SoundCategory, SoundInstance> prevSoundMap = HashMultimap.create();
 	private int ticks = 0;
 
@@ -53,8 +52,8 @@ public class NotebotStealer extends Module {
 		while (BleachFileMang.fileExists("notebot/notebot" + i + ".txt"))
 			i++;
 
-		for (List<Integer> i1 : notes)
-			s.append(i1.get(0)).append(":").append(i1.get(1)).append(":").append(i1.get(2)).append("\n");
+		for (int[] i1 : notes)
+			s.append(i1[0]).append(":").append(i1[1]).append(":").append(i1[2]).append("\n");
 
 		BleachFileMang.createEmptyFile("notebot/notebot" + i + ".txt");
 		BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s.toString());
@@ -115,7 +114,7 @@ public class NotebotStealer extends Module {
 					type = 14;
 				else if (e.getValue().getId().getPath().contains("pling"))
 					type = 15;
-				notes.add(Arrays.asList(ticks + 0, note, type));
+				notes.add(new int[] { ticks + 0, note, type });
 			}
 		}
 

@@ -11,14 +11,14 @@ package bleach.hack.util;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
 public class BleachQueue {
 
-	/* cum queue */
-	private static HashMap<String, Deque<MutablePair<Runnable, Integer>>> queues = new HashMap<>();
+	private static Map<String, Deque<MutablePair<Runnable, Integer>>> queues = new HashMap<>();
 
 	public static void add(Runnable runnable) {
 		add("", runnable);

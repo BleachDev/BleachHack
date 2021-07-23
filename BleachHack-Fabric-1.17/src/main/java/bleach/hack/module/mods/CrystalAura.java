@@ -58,7 +58,7 @@ public class CrystalAura extends Module {
 	private BlockPos render = null;
 	private int breakCooldown = 0;
 	private int placeCooldown = 0;
-	private HashMap<BlockPos, Integer> blacklist = new HashMap<>();
+	private Map<BlockPos, Integer> blacklist = new HashMap<>();
 
 	public CrystalAura() {
 		super("CrystalAura", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically does crystalpvp for you.",

@@ -11,6 +11,7 @@ package bleach.hack.module.mods;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import bleach.hack.eventbus.BleachSubscribe;
@@ -137,7 +138,7 @@ public class CustomChat extends Module {
 
 	static class CustomFont {
 
-		private HashMap<Character, Character> allMaps = new HashMap<>();
+		private Map<Character, Character> allMaps = new HashMap<>();
 
 		public CustomFont(CharMap... maps) {
 			for (CharMap map : maps) {
@@ -155,7 +156,7 @@ public class CustomChat extends Module {
 
 		static class CharMap {
 
-			private HashMap<Character, Character> map = new HashMap<>();
+			private Map<Character, Character> map = new HashMap<>();
 
 			private CharMap(char... mappings) {
 				for (int i = 0; i < mappings.length - 1; i += 2) {
@@ -178,7 +179,7 @@ public class CustomChat extends Module {
 				return new CharMap(chars);
 			}
 
-			public HashMap<Character, Character> getMap() {
+			public Map<Character, Character> getMap() {
 				return map;
 			}
 		}

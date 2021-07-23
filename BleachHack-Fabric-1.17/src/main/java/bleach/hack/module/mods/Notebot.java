@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -44,13 +45,13 @@ import net.minecraft.util.math.Direction;
 public class Notebot extends Module {
 
 	/* All the lines of the file [tick:pitch:instrument] */
-	private List<List<Integer>> notes = new ArrayList<>();
+	private List<int[]> notes = new ArrayList<>();
 
 	/* All unique intruments and pitches [pitch:instrument] */
-	private List<List<Integer>> tunes = new ArrayList<>();
+	private List<int[]> tunes = new ArrayList<>();
 
 	/* Map of noteblocks to hit when playing and the pitch of each */
-	private HashMap<BlockPos, Integer> blockTunes = new HashMap<>();
+	private Map<BlockPos, Integer> blockTunes = new HashMap<>();
 	private int timer = -10;
 	private int tuneDelay = 0;
 
@@ -83,7 +84,7 @@ public class Notebot extends Module {
 
 		timer = -10;
 
-		for (List<Integer> i : tunes) {
+		for (int[] i : tunes) {
 			BlockPos found = null;
 			loop: for (int x = -4; x <= 4; x++) {
 				for (int y = -4; y <= 4; y++) {
@@ -93,22 +94,22 @@ public class Notebot extends Module {
 							continue;
 						if (getSetting(2).asToggle().state) {
 							if (blockTunes.get(pos) != null)
-								if (!blockTunes.get(pos).equals(i.get(0)))
+								if (!blockTunes.get(pos).equals(i[0]))
 									continue;
-							blockTunes.put(pos, i.get(0));
+							blockTunes.put(pos, i[0]);
 							break loop;
 						} else {
-							if (i.get(1) != getInstrument(pos).ordinal() || blockTunes.get(pos) != null)
+							if (i[1] != getInstrument(pos).ordinal() || blockTunes.get(pos) != null)
 								continue;
 							found = pos;
-							if (i.get(0) == getNote(pos))
+							if (i[0] == getNote(pos))
 								break loop;
 						}
 					}
 				}
 			}
 			if (found != null)
-				blockTunes.put(found, i.get(0));
+				blockTunes.put(found, i[0]);
 		}
 
 		if (tunes.size() > blockTunes.size() && !getSetting(2).asToggle().state) {
@@ -170,8 +171,8 @@ public class Notebot extends Module {
 
 		/* Loop */
 		boolean loopityloop = true;
-		for (List<Integer> n : notes) {
-			if (timer - 10 < n.get(0)) {
+		for (int[] n : notes) {
+			if (timer - 10 < n[0]) {
 				loopityloop = false;
 				break;
 			}
@@ -198,18 +199,18 @@ public class Notebot extends Module {
 		/* Play Noteblocks */
 		timer++;
 
-		List<List<Integer>> curNotes = new ArrayList<>();
-		for (List<Integer> i : notes)
-			if (i.get(0) == timer)
+		List<int[]> curNotes = new ArrayList<>();
+		for (int[] i : notes)
+			if (i[0] == timer)
 				curNotes.add(i);
 		if (curNotes.isEmpty())
 			return;
 
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
-			for (List<Integer> i : curNotes) {
-				if (isNoteblock(e.getKey()) && (i.get(1) == (getNote(e.getKey()))
+			for (int[] i : curNotes) {
+				if (isNoteblock(e.getKey()) && (i[1] == (getNote(e.getKey()))
 						&& (getSetting(2).asToggle().state
-								|| i.get(2) == (getInstrument(e.getKey()).ordinal()))))
+								|| i[2] == (getInstrument(e.getKey()).ordinal()))))
 					playBlock(e.getKey());
 			}
 		}
@@ -259,7 +260,7 @@ public class Notebot extends Module {
 		for (String s : lines) {
 			String[] s1 = s.split(":");
 			try {
-				notes.add(Arrays.asList(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
+				notes.add(new int[] { Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2]) });
 			} catch (Exception e) {
 				BleachLogger.warningMessage("Error Parsing Note: \u00a7o" + s);
 			}
@@ -269,8 +270,9 @@ public class Notebot extends Module {
 		for (String s : lines) {
 			try {
 				List<String> strings = Arrays.asList(s.split(":"));
-				if (!tunes.contains(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))))) {
-					tunes.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
+				int[] tune = new int[] { Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)) };
+				if (!tunes.contains(tune)) {
+					tunes.add(tune);
 				}
 			} catch (Exception e) {
 				BleachLogger.warningMessage("Error Trying To Tune: \u00a7o" + s);
