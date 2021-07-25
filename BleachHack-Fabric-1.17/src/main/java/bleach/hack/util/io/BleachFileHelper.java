@@ -11,9 +11,13 @@ package bleach.hack.util.io;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -33,11 +37,31 @@ import bleach.hack.util.BleachLogger;
 
 public class BleachFileHelper {
 
+	private static ScheduledExecutorService savingExecutor;
+
 	public static boolean SCHEDULE_SAVE_MODULES = false;
 	public static boolean SCHEDULE_SAVE_OPTIONS = false;
 	public static boolean SCHEDULE_SAVE_FRIENDS = false;
 	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
 	public static boolean SCHEDULE_SAVE_UI = false;
+
+	public static void startSavingExecutor() {
+		if (savingExecutor == null)
+			savingExecutor = MoreExecutors.getExitingScheduledExecutorService(new ScheduledThreadPoolExecutor(1));
+
+		savingExecutor.scheduleAtFixedRate(() -> {
+			if (SCHEDULE_SAVE_MODULES) saveModules();
+			if (SCHEDULE_SAVE_OPTIONS) saveOptions();
+			if (SCHEDULE_SAVE_CLICKGUI) saveClickGui();
+			if (SCHEDULE_SAVE_FRIENDS) saveFriends();
+			if (SCHEDULE_SAVE_UI) saveUI();
+		}, 0, 5, TimeUnit.SECONDS);
+	}
+
+	public static void stopSavingExecutor() {
+		savingExecutor.shutdown();
+		savingExecutor = null;
+	}
 
 	public static void saveModules() {
 		SCHEDULE_SAVE_MODULES = false;

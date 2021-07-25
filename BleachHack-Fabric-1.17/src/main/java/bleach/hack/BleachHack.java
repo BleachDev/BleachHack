@@ -78,6 +78,7 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readOptions();
 		BleachFileHelper.readFriends();
 		BleachFileHelper.readUI();
+		BleachFileHelper.startSavingExecutor();
 
 		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
 		CommandSuggestor.start();

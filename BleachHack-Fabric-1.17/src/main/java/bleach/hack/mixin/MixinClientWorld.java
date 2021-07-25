@@ -21,7 +21,6 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.util.BleachQueue;
-import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.SkyProperties;
 import net.minecraft.client.world.ClientWorld;
@@ -34,17 +33,7 @@ public class MixinClientWorld {
 
 	@Inject(method = "tickEntities", at = @At("HEAD"), cancellable = true)
 	public void tickEntities(CallbackInfo info) {
-		try {
-			if (MinecraftClient.getInstance().player.age % 100 == 0) {
-				if (BleachFileHelper.SCHEDULE_SAVE_MODULES) BleachFileHelper.saveModules();
-				if (BleachFileHelper.SCHEDULE_SAVE_OPTIONS) BleachFileHelper.saveOptions();
-				if (BleachFileHelper.SCHEDULE_SAVE_CLICKGUI) BleachFileHelper.saveClickGui();
-				if (BleachFileHelper.SCHEDULE_SAVE_FRIENDS) BleachFileHelper.saveFriends();
-				if (BleachFileHelper.SCHEDULE_SAVE_UI) BleachFileHelper.saveUI();
-			}
-
-			BleachQueue.nextQueue();
-		} catch (Exception e) {}
+		BleachQueue.nextQueue();
 
 		EventTick event = new EventTick();
 		BleachHack.eventBus.post(event);
