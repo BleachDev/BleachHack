@@ -112,13 +112,13 @@ public class BookCrash extends Module {
 		}
 	}
 
-	private static String repeat(int count, String with) {
-		return new String(new char[count]).replace("\0", with);
-	}
-
 	@BleachSubscribe
-	private void EventDisconnect(EventReadPacket event) {
+	public void EventDisconnect(EventReadPacket event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state)
 			setEnabled(false);
+	}
+
+	private static String repeat(int count, String with) {
+		return new String(new char[count]).replace("\0", with);
 	}
 }
