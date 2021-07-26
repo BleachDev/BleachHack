@@ -22,8 +22,6 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.Block;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -51,17 +49,17 @@ public class AirPlace extends Module {
 	public void onTick(EventTick event) {
 		boolean isKeyUsePressed = mc.options.keyUse.isPressed();
 
-		if (!(mc.crosshairTarget instanceof BlockHitResult)) {
+		if (!canPlaceAtCrosshair()) {
 			return;
 		}
 
 		if (getSetting(1).asMode().mode == 0) {
 			if (((AccessorMinecraftClient) mc).getItemUseCooldown() == 4 && isKeyUsePressed) {
-				sendInteractionBlockC2SPacket();
+				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget));
 			}
 		} else if (getSetting(1).asMode().mode == 1) {
 			if (!pressed && isKeyUsePressed) {
-				sendInteractionBlockC2SPacket();
+				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget));
 				pressed = true;
 			} else if (!isKeyUsePressed) {
 				pressed = false;
@@ -70,16 +68,12 @@ public class AirPlace extends Module {
 	}
 
 	@BleachSubscribe
-	public void onWorldRender(EventWorldRender event) {
-		if (!(mc.crosshairTarget instanceof BlockHitResult) || !getSetting(0).asToggle().state) {
+	public void onWorldRender(EventWorldRender.Post event) {
+		if (!canPlaceAtCrosshair()) {
 			return;
 		}
 
-		BlockPos pos = new BlockPos(mc.crosshairTarget.getPos());
-		Block block = mc.world.getBlockState(pos).getBlock();
-		if (!(block instanceof AirBlock)) {
-			return;
-		}
+		BlockPos pos = ((BlockHitResult) mc.crosshairTarget).getBlockPos();
 
 		int mode = getSetting(0).asToggle().getChild(0).asMode().mode;
 		float[] rgb = getSetting(0).asToggle().getChild(3).asColor().getRGBFloat();
@@ -100,12 +94,12 @@ public class AirPlace extends Module {
 	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof PlayerInteractBlockC2SPacket) {
-			event.setCancelled(true);
+			//event.setCancelled(true);
 		}
 	}
-
-	private void sendInteractionBlockC2SPacket() {
-		PlayerInteractBlockC2SPacket packet = new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget);
-		mc.getNetworkHandler().sendPacket(packet);
+	
+	private boolean canPlaceAtCrosshair() {
+		return mc.crosshairTarget instanceof BlockHitResult
+				&& mc.world.getBlockState(((BlockHitResult) mc.crosshairTarget).getBlockPos()).getMaterial().isReplaceable();
 	}
 }

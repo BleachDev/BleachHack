@@ -98,7 +98,7 @@ public class AutoParkour extends Module {
 	}
 	
 	@BleachSubscribe
-	public void onWorldRender(EventWorldRender event) {
+	public void onWorldRender(EventWorldRender.Post event) {
 		if (smartPos != null && getSetting(1).asToggle().getChild(1).asToggle().state) {
 			float[] rgb = getSetting(1).asToggle().getChild(1).asToggle().getChild(0).asColor().getRGBFloat();
 			RenderUtils.drawBoxBoth(smartPos, QuadColor.single(rgb[0], rgb[1], rgb[2], 0.5f), 2.5f);
