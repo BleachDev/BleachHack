@@ -18,7 +18,6 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
-import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.PistonBlock;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
@@ -58,7 +57,7 @@ public class AutoBedrockBreak extends Module {
 						return;
 					}
 
-					if (WorldUtils.placeBlock(pos.up(3), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK), 0, false, true, true))
+					if (dirtyPlace(pos.up(3), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK), Direction.DOWN))
 						step++;
 
 					break;
