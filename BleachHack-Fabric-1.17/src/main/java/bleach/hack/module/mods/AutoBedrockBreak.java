@@ -23,7 +23,6 @@ import net.minecraft.block.PistonBlock;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -50,13 +49,7 @@ public class AutoBedrockBreak extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (pos == null) {
-			if (mc.mouse.wasRightButtonClicked()
-					&& mc.crosshairTarget instanceof BlockHitResult
-					&& !mc.world.isAir(((BlockHitResult) mc.crosshairTarget).getBlockPos())) {
-				pos = ((BlockHitResult) mc.crosshairTarget).getBlockPos();
-			}
-		} else {
+		if (pos != null) {
 			switch (step) {
 				case 0:
 					if (!mc.world.isSpaceEmpty(new Box(pos.up(), pos.add(1, 8, 1)))) {
@@ -76,30 +69,31 @@ public class AutoBedrockBreak extends Module {
 
 					break;
 				case 2:
-					if (WorldUtils.placeBlock(pos.up(), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON), 0, false, true, true))
+					if (dirtyPlace(pos.up(), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON), Direction.DOWN))
 						step++;
 
 					break;
 				case 3:
-					if (WorldUtils.placeBlock(pos.up(7), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT), 0, false, true, true))
+					if (dirtyPlace(pos.up(7), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT), Direction.DOWN))
 						step++;
 
 					break;
 				case 4:
-					if (WorldUtils.placeBlock(pos.up(6), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.LEVER), 0, false, false, true))
+					if (dirtyPlace(pos.up(6), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.LEVER), Direction.UP))
 						step++;
 
 					break;
 				case 5:
-					if (WorldUtils.placeBlock(pos.up(5), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT), 0, false, true, true))
+					if (dirtyPlace(pos.up(5), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT), Direction.DOWN))
 						step++;
 
 					break;
 				case 6:
 					Vec3d leverCenter = Vec3d.ofCenter(pos.up(6));
-					if (mc.player.getEyePos().distanceTo(leverCenter) <= 4.25
-							&& mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(leverCenter, Direction.DOWN, pos.up(6), false)) == ActionResult.SUCCESS)
+					if (mc.player.getEyePos().distanceTo(leverCenter) <= 4.75) {
+						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(leverCenter, Direction.DOWN, pos.up(6), false));
 						step++;
+					}
 
 					break;
 				default:
@@ -111,10 +105,15 @@ public class AutoBedrockBreak extends Module {
 						return;
 					}
 
-					if (step > 84) {
+					if (step == 82) {
 						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), -90, mc.player.isOnGround()));
-						mc.player.setPitch(-90);
+					}
 
+					if (step > 82) {
+						mc.player.setPitch(-90);
+					}
+
+					if (step > 84) {
 						Hand hand = InventoryUtils.selectSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON);
 						if (hand != null) {
 							mc.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(hand,
@@ -142,8 +141,24 @@ public class AutoBedrockBreak extends Module {
 
 	@BleachSubscribe
 	public void onInteract(EventInteract.InteractBlock event) {
-		if (pos == null) {
+		if (pos == null && !mc.world.isAir(event.getHitResult().getBlockPos())) {
+			pos = event.getHitResult().getBlockPos();
 			event.setCancelled(true);
 		}
+	}
+
+	private boolean dirtyPlace(BlockPos pos, int slot, Direction dir) {
+		Vec3d hitPos = Vec3d.ofCenter(pos).add(dir.getOffsetX() * 0.5, dir.getOffsetY() * 0.5, dir.getOffsetZ() * 0.5);
+		if (mc.player.getEyePos().distanceTo(hitPos) >= 4.75) {
+			return false;
+		}
+
+		Hand hand = InventoryUtils.selectSlot(slot);
+		if (hand != null) {
+			mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(hitPos, dir, pos, false));
+			return true;
+		}
+
+		return false;
 	}
 }
