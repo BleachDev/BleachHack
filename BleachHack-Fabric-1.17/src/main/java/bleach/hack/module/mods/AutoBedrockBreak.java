@@ -58,7 +58,8 @@ public class AutoBedrockBreak extends Module {
 						return;
 					}
 
-					if (dirtyPlace(pos.up(3), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK), Direction.DOWN))						step++;
+					if (dirtyPlace(pos.up(3), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK), Direction.DOWN))
+						step++;
 
 					break;
 				case 1:
