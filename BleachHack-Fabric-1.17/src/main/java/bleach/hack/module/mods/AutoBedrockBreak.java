@@ -40,8 +40,7 @@ public class AutoBedrockBreak extends Module {
 
 	@Override
 	public void onDisable() {
-		pos = null;
-		step = 0;
+		reset();
 
 		super.onDisable();
 	}
@@ -52,13 +51,23 @@ public class AutoBedrockBreak extends Module {
 			switch (step) {
 				case 0:
 					if (!mc.world.isSpaceEmpty(new Box(pos.up(), pos.add(1, 8, 1)))) {
-						pos = null;
+						reset();
 						BleachLogger.infoMessage("Not enough empty space to break this block!");
-						return;
-					}
-
-					if (dirtyPlace(pos.up(3), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK), Direction.DOWN))
+					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON) == -1) {
+						reset();
+						BleachLogger.infoMessage("Missing pistons!");
+					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK) == -1) {
+						reset();
+						BleachLogger.infoMessage("Missing a redstone block!");
+					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT) == -1) {
+						reset();
+						BleachLogger.infoMessage("Missing TNT!");
+					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT) == -1) {
+						reset();
+						BleachLogger.infoMessage("Missing a lever!");
+					} else if (dirtyPlace(pos.up(3), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK), Direction.DOWN)) {
 						step++;
+					}
 
 					break;
 				case 1:
@@ -145,7 +154,7 @@ public class AutoBedrockBreak extends Module {
 
 	private boolean dirtyPlace(BlockPos pos, int slot, Direction dir) {
 		Vec3d hitPos = Vec3d.ofCenter(pos).add(dir.getOffsetX() * 0.5, dir.getOffsetY() * 0.5, dir.getOffsetZ() * 0.5);
-		if (mc.player.getEyePos().distanceTo(hitPos) >= 4.75) {
+		if (mc.player.getEyePos().distanceTo(hitPos) >= 4.75 || !mc.world.getOtherEntities(null, new Box(pos)).isEmpty()) {
 			return false;
 		}
 
@@ -156,5 +165,10 @@ public class AutoBedrockBreak extends Module {
 		}
 
 		return false;
+	}
+
+	private void reset() {
+		pos = null;
+		step = 0;
 	}
 }
