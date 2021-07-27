@@ -18,6 +18,7 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
+import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.PistonBlock;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
@@ -62,12 +63,13 @@ public class AutoBedrockBreak extends Module {
 
 					break;
 				case 1:
-					//mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), 90, mc.player.isOnGround()));
-					mc.player.setPitch(90);
+					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), 90, mc.player.isOnGround()));
+//					mc.player.setPitch(90)	"its jank either way"
 					step++;
 
 					break;
 				case 2:
+					mc.player.jump();
 					if (dirtyPlace(pos.up(), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON), Direction.DOWN))
 						step++;
 
@@ -99,17 +101,19 @@ public class AutoBedrockBreak extends Module {
 					if (mc.world.getBlockState(pos).isAir()
 							|| mc.world.getBlockState(pos).getBlock() instanceof PistonBlock
 							|| (mc.world.getBlockState(pos.up()).getBlock() instanceof PistonBlock
-									&&  mc.world.getBlockState(pos.up()).get(PistonBlock.FACING) != Direction.UP)) {
+							&&  mc.world.getBlockState(pos.up()).get(PistonBlock.FACING) != Direction.UP)) {
 						setEnabled(false);
 						return;
 					}
 
 					if (step == 82) {
 						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), -90, mc.player.isOnGround()));
+//						mc.player.setPitch(-90)	"its jank either way"
 					}
 
 					if (step > 82) {
-						mc.player.setPitch(-90);
+						mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), -90, mc.player.isOnGround()));
+//						mc.player.setPitch(-90)	"its jank either way"
 					}
 
 					if (step > 84) {
