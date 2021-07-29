@@ -89,14 +89,6 @@ public class AirPlace extends Module {
 		}
 
 	}
-
-
-	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
-		if (event.getPacket() instanceof PlayerInteractBlockC2SPacket) {
-			//event.setCancelled(true);
-		}
-	}
 	
 	private boolean canPlaceAtCrosshair() {
 		return mc.crosshairTarget instanceof BlockHitResult
