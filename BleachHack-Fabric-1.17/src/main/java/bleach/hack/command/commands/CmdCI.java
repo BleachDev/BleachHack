@@ -10,7 +10,6 @@ package bleach.hack.command.commands;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
-import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.GameMode;
@@ -25,7 +24,8 @@ public class CmdCI extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (mc.interactionManager.getCurrentGameMode() != GameMode.CREATIVE) {
-			throw new CmdSyntaxException("Bruh you're not in creative.");
+			BleachLogger.errorMessage("Bruh you're not in creative.");
+			return;
 		}
 
 		for (int i = 0; i < mc.player.playerScreenHandler.getStacks().size(); i++) {

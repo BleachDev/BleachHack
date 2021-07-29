@@ -10,7 +10,6 @@ package bleach.hack.module.mods;
 
 import bleach.hack.eventbus.BleachSubscribe;
 
-import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.mixin.AccessorMinecraftClient;
