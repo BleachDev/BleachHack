@@ -108,13 +108,13 @@ public class CommandSuggestor {
 	@BleachSubscribe
 	public void onKeyPressGlobal(EventKeyPress.Global event) {
 		if (event.getAction() != 0 && !suggestions.isEmpty() && !curText.isEmpty()) {
-			if (event.getKey() == GLFW.GLFW_KEY_DOWN || event.getKey() == GLFW.GLFW_KEY_TAB) {
+			if (event.getKey() == GLFW.GLFW_KEY_DOWN) {
 				selected = selected >= suggestions.size() - 1 ? 0 : selected + 1;
 				updateScroll();
 			} else if (event.getKey() == GLFW.GLFW_KEY_UP) {
 				selected = selected <= 0 ? suggestions.size() - 1 : selected - 1;
 				updateScroll();
-			} else if (event.getKey() == GLFW.GLFW_KEY_SPACE) {
+			} else if (event.getKey() == GLFW.GLFW_KEY_SPACE || event.getKey() == GLFW.GLFW_KEY_TAB) {
 				if (selected >= 0 && selected < suggestions.size()) {
 					TextFieldWidget field = ((AccessorChatScreen) MinecraftClient.getInstance().currentScreen).getChatField();
 					String[] split = field.getText().split(" ", -1);
