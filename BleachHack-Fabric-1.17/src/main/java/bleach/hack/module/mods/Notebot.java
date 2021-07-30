@@ -275,7 +275,7 @@ public class Notebot extends Module {
 					tunes.add(tune);
 				}
 			} catch (Exception e) {
-				BleachLogger.warningMessage("Error Trying To Tune: \u00a7o" + s);
+				BleachLogger.warningMessage("Error trying to parse tune: \u00a7o" + s);
 			}
 		}
 	}

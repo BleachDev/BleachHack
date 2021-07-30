@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,6 +27,7 @@ import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.Notebot;
+import bleach.hack.util.BleachLogger;
 import bleach.hack.util.NotebotUtils;
 import bleach.hack.util.io.BleachFileMang;
 import net.minecraft.block.enums.Instrument;
@@ -172,7 +174,7 @@ public class NotebotScreen extends WindowScreen {
 					else if (e.getKey() == Instrument.PLING)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
 					c2++;
-					
+
 					DiffuseLighting.disableGuiDepthLighting();
 				}
 
@@ -267,7 +269,7 @@ public class NotebotScreen extends WindowScreen {
 	public class NotebotEntry {
 		public String fileName;
 		public List<String> lines = new ArrayList<>();
-		public HashMap<Instrument, Integer> notes = new HashMap<>();
+		public Map<Instrument, Integer> notes = new HashMap<>();
 		public int length;
 
 		public boolean playing = false;
@@ -291,25 +293,28 @@ public class NotebotScreen extends WindowScreen {
 			length = maxLeng;
 
 			/* Requirements */
-			List<List<Integer>> t = new ArrayList<>();
+			List<int[]> tunes = new ArrayList<>();
 
 			for (String s : lines) {
 				try {
 					List<String> strings = Arrays.asList(s.split(":"));
-					if (!t.contains(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))))) {
-						t.add(Arrays.asList(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2))));
+					int[] tune = new int[] { Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)) };
+					if (tunes.stream().noneMatch(i -> i[0] == tune[0] && i[1] == tune[1])) {
+						tunes.add(tune);
 					}
 				} catch (Exception e) {
+					BleachLogger.warningMessage("Error trying to parse tune: \u00a7o" + s);
 				}
 			}
 
-			List<Integer> t1 = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			int[] instruments = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-			for (List<Integer> i : t)
-				t1.set(i.get(1), t1.get(i.get(1)) + 1);
-			for (int i = 0; i < t1.size(); i++) {
-				if (t1.get(i) != 0)
-					notes.put(Instrument.values()[i], t1.get(i));
+			for (int[] i : tunes)
+				instruments[i[1]] = instruments[i[1]] + 1;
+
+			for (int i = 0; i < instruments.length; i++) {
+				if (instruments[i] != 0)
+					notes.put(Instrument.values()[i], instruments[i]);
 			}
 		}
 	}
