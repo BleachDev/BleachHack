@@ -39,7 +39,7 @@ public class CmdGive extends Command {
 			throw new CmdSyntaxException();
 		}
 
-		if (!mc.player.getAbilities().creativeMode) {
+		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
 			BleachLogger.errorMessage("Not In Creative Mode!");
 			return;
 		}

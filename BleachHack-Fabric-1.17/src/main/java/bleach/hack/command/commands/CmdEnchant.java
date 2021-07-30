@@ -48,7 +48,7 @@ public class CmdEnchant extends Command {
 			return;
 		}
 
-		if (!mc.player.getAbilities().creativeMode) {
+		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
 			throw new CmdSyntaxException("Not In Creative Mode!");
 		}
 

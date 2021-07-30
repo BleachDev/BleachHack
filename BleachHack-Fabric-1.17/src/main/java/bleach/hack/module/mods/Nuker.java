@@ -131,7 +131,7 @@ public class Nuker extends Module {
 			float breakingDelta = mc.world.getBlockState(pos.getKey()).calcBlockBreakingDelta(mc.player, mc.world, pos.getKey());
 
 			// Unbreakable block
-			if (!mc.player.getAbilities().creativeMode && breakingDelta == 0) {
+			if (mc.interactionManager.getCurrentGameMode().isSurvivalLike() && breakingDelta == 0) {
 				continue;
 			}
 

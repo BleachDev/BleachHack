@@ -12,7 +12,6 @@ import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.GameMode;
 
 public class CmdCI extends Command {
 
@@ -23,7 +22,7 @@ public class CmdCI extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		if (mc.interactionManager.getCurrentGameMode() != GameMode.CREATIVE) {
+		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
 			BleachLogger.errorMessage("Bruh you're not in creative.");
 			return;
 		}

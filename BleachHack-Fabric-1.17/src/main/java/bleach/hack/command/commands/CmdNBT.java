@@ -29,7 +29,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameMode;
 
 public class CmdNBT extends Command {
 
@@ -74,7 +73,7 @@ public class CmdNBT extends Command {
 				BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + NbtHelper.toPrettyPrintedString(nbt) + "\n\u00a76to clipboard.");
 			}
 		} else if (args[0].equalsIgnoreCase("set")) {
-			if (mc.interactionManager.getCurrentGameMode() != GameMode.CREATIVE) {
+			if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
 				BleachLogger.errorMessage("You must be in creative mode to set NBT!");
 				return;
 			}
@@ -87,7 +86,7 @@ public class CmdNBT extends Command {
 			item.setNbt(StringNbtReader.parse(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), ' ')));
 			BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getNbt().toString()));
 		} else if (args[0].equalsIgnoreCase("wipe")) {
-			if (mc.interactionManager.getCurrentGameMode() != GameMode.CREATIVE) {
+			if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
 				BleachLogger.errorMessage("You must be in creative mode to wipe NBT!");
 				return;
 			}
