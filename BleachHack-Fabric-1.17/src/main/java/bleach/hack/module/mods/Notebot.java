@@ -47,7 +47,7 @@ public class Notebot extends Module {
 	/* All the lines of the file [tick:pitch:instrument] */
 	private List<int[]> notes = new ArrayList<>();
 
-	/* All unique intruments and pitches [pitch:instrument] */
+	/* All unique instruments and pitches [pitch:instrument] */
 	private List<int[]> tunes = new ArrayList<>();
 
 	/* Map of noteblocks to hit when playing and the pitch of each */
@@ -271,7 +271,7 @@ public class Notebot extends Module {
 			try {
 				List<String> strings = Arrays.asList(s.split(":"));
 				int[] tune = new int[] { Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)) };
-				if (!tunes.contains(tune)) {
+				if (tunes.stream().noneMatch(i -> i[0] == tune[0] && i[1] == tune[1])) {
 					tunes.add(tune);
 				}
 			} catch (Exception e) {
