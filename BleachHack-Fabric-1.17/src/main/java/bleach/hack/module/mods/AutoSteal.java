@@ -26,7 +26,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
+import bleach.hack.setting.other.SettingItemList;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.WorldRenderUtils;
@@ -76,7 +76,7 @@ public class AutoSteal extends Module {
 						new SettingRotate(false).withDesc("Rotates to chests when opening them.")),
 				new SettingToggle("Filter", false).withDesc("Filters certain items.").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
-						SettingLists.newItemList("Edit Items", "Edit Filtered Items").withDesc("Edit the filtered items.")));
+						new SettingItemList("Edit Items", "Edit Filtered Items").withDesc("Edit the filtered items.")));
 	}
 
 	public boolean isBlacklisted(Item item) {

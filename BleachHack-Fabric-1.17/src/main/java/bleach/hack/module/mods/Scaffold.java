@@ -23,7 +23,7 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
+import bleach.hack.setting.other.SettingItemList;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
@@ -48,7 +48,7 @@ public class Scaffold extends Module {
 				new SettingToggle("LegitPlace", false).withDesc("Only places on sides you can see."),
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks.").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
-						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks.")),
+						new SettingItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks.")),
 				new SettingToggle("Tower", true).withDesc("Makes scaffolding straight up much easier.").withChildren(
 						new SettingToggle("Legit", false).withDesc("Slower mode that bypasses some anticheats.")),
 				new SettingToggle("AirPlace", false).withDesc("Places blocks in the air without support blocks."),

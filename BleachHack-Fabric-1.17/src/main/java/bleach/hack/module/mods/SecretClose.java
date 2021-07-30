@@ -11,7 +11,7 @@ public class SecretClose extends Module {
 	public SecretClose() {
 		super("SecretClose", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Makes the server think you're still in a container after closing it.");
 	}
-	
+
 	@BleachSubscribe
 	public void onSendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof CloseHandledScreenC2SPacket) {

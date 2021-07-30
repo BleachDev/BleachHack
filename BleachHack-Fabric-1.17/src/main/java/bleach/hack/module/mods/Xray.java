@@ -17,7 +17,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
+import bleach.hack.setting.other.SettingBlockList;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 
@@ -31,7 +31,7 @@ public class Xray extends Module {
 				new SettingToggle("Opacity", true).withDesc("Toggles an adjustable alpha level for non-xray blocks.").withChildren(
 						new SettingSlider("Value", 0, 255, 64, 0).withDesc("Block alpha value."),
 						new SettingToggle("HideSurface", false).withDesc("Hides the surface of the world to make it easier to see blocks.")),
-				SettingLists.newBlockList("Edit Blocks", "Edit Xray Blocks",
+				new SettingBlockList("Edit Blocks", "Edit Xray Blocks",
 						Blocks.COPPER_ORE,
 						Blocks.IRON_ORE,
 						Blocks.GOLD_ORE,

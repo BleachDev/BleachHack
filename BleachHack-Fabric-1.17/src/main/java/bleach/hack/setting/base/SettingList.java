@@ -36,18 +36,18 @@ import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 
-public abstract class SettingList<E> extends SettingBase {
+public abstract class SettingList<T> extends SettingBase {
 
 	protected String text;
 	protected String windowText;
 
-	protected Set<E> itemPool = new LinkedHashSet<>();
-	protected Set<E> items = new LinkedHashSet<>();
+	protected Set<T> itemPool = new LinkedHashSet<>();
+	protected Set<T> items = new LinkedHashSet<>();
 
-	protected Set<E> defaultItems = new LinkedHashSet<>();
+	protected Set<T> defaultItems = new LinkedHashSet<>();
 
 	@SafeVarargs // eclipse bruh hours
-	public SettingList(String text, String windowText, Collection<E> itemPool, E... defaultItems) {
+	public SettingList(String text, String windowText, Collection<T> itemPool, T... defaultItems) {
 		this.text = text;
 		this.windowText = windowText;
 
@@ -78,15 +78,15 @@ public abstract class SettingList<E> extends SettingBase {
 		}
 	}
 
-	public boolean contains(E item) {
+	public boolean contains(T item) {
 		return items.contains(item);
 	}
 
-	public Set<E> getItems() {
+	public Set<T> getItems() {
 		return items;
 	}
 
-	public void renderItem(MinecraftClient mc, MatrixStack matrices, E item, int x, int y, int w, int h) {
+	public void renderItem(MinecraftClient mc, MatrixStack matrices, T item, int x, int y, int w, int h) {
 		matrices.push();
 
 		float scale = (h - 2) / 10f;
@@ -99,10 +99,10 @@ public abstract class SettingList<E> extends SettingBase {
 		matrices.pop();
 	}
 
-	public abstract E getItemFromString(String string);
-	public abstract String getStringFromItem(E item);
+	public abstract T getItemFromString(String string);
+	public abstract String getStringFromItem(T item);
 
-	public SettingList<E> withDesc(String desc) {
+	public SettingList<T> withDesc(String desc) {
 		description = desc;
 		return this;
 	}
@@ -118,7 +118,7 @@ public abstract class SettingList<E> extends SettingBase {
 		items.clear();
 		for (JsonElement je: ja) {
 			if (je.isJsonPrimitive()) {
-				E item = getItemFromString(je.getAsString());
+				T item = getItemFromString(je.getAsString());
 				if (item != null) {
 					itemPool.remove(item);
 					items.add(item);
@@ -132,7 +132,7 @@ public abstract class SettingList<E> extends SettingBase {
 	public JsonElement saveSettings() {
 		JsonArray ja = new JsonArray();
 
-		for (E e: items) {
+		for (T e: items) {
 			ja.add(getStringFromItem(e));
 		}
 
@@ -150,8 +150,8 @@ public abstract class SettingList<E> extends SettingBase {
 		private WindowTextFieldWidget inputField;
 		private WindowScrollbarWidget scrollbar;
 
-		private E toDeleteItem;
-		private E toAddItem;
+		private T toDeleteItem;
+		private T toAddItem;
 
 		public ListWidowScreen(Screen parent) {
 			super(new LiteralText(windowText));
@@ -223,7 +223,7 @@ public abstract class SettingList<E> extends SettingBase {
 				scrollbar.setTotalHeight(items.size() * 21);
 				int offset = scrollbar.getPageOffset();
 
-				for (E e: items) {
+				for (T e: items) {
 					if (entries >= offset / 21 && renderEntries < maxEntries) {
 						drawEntry(matrices, e, x1 + 6, y1 + 15 + entries * 21 - offset, x2 - x1 - 19, 20, mouseX, mouseY);
 						renderEntries++;
@@ -236,9 +236,9 @@ public abstract class SettingList<E> extends SettingBase {
 				Window.horizontalGradient(matrices, x1 + 1, y2 - 27, x2 - 1, y2 - 26, 0xff606090, 0x50606090);
 
 				if (inputField.textField.isFocused()) {
-					Set<E> toDraw = new LinkedHashSet<>();
+					Set<T> toDraw = new LinkedHashSet<>();
 
-					for (E e: itemPool) {
+					for (T e: itemPool) {
 						if (toDraw.size() >= 10) break;
 
 						if (getStringFromItem(e).toLowerCase(Locale.ENGLISH).contains(inputField.textField.getText().toLowerCase(Locale.ENGLISH))) {
@@ -255,7 +255,7 @@ public abstract class SettingList<E> extends SettingBase {
 					matrices.push();
 					matrices.translate(0, 0, 150);
 
-					for (E e: toDraw) {
+					for (T e: toDraw) {
 						drawSearchEntry(matrices, e, x1 + inputField.x1, curY, longest + 23, 16, mouseX, mouseY);
 						curY += 17;
 					}
@@ -267,7 +267,7 @@ public abstract class SettingList<E> extends SettingBase {
 			}
 		}
 
-		private void drawEntry(MatrixStack matrices, E item, int x, int y, int width, int height, int mouseX, int mouseY) {
+		private void drawEntry(MatrixStack matrices, T item, int x, int y, int width, int height, int mouseX, int mouseY) {
 			boolean mouseOverDelete = mouseX >= x + width - 14 && mouseX <= x + width - 1 && mouseY >= y + 2 && mouseY <= y + height - 2;
 			Window.fill(matrices, x + width - 14, y + 2, x + width - 1, y + height - 2, mouseOverDelete ? 0x4fb070f0 : 0x60606090);
 
@@ -281,7 +281,7 @@ public abstract class SettingList<E> extends SettingBase {
 			drawStringWithShadow(matrices, textRenderer, "\u00a7cx", x + width - 10, y + 5, -1);
 		}
 
-		private void drawSearchEntry(MatrixStack matrices, E item, int x, int y, int width, int height, int mouseX, int mouseY) {
+		private void drawSearchEntry(MatrixStack matrices, T item, int x, int y, int width, int height, int mouseX, int mouseY) {
 			boolean mouseOver = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
 			DrawableHelper.fill(matrices, x, y - 1, x + width, y + height, mouseOver ? 0xdf8070d0 : 0xb0606090);
 

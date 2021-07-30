@@ -13,7 +13,7 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
+import bleach.hack.setting.other.SettingItemList;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
@@ -43,7 +43,7 @@ public class LiquidFiller extends Module {
 				new SettingToggle("LegitPlace", false).withDesc("Only places on sides of blocks you can see."),
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks from being placed.").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
-						SettingLists.newItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks.")),
+						new SettingItemList("Edit Blocks", "Edit Filtered Blocks", i -> i instanceof BlockItem).withDesc("Edit the filtered blocks.")),
 				new SettingRotate(false).withDesc("Rotates when placing blocks."),
 				new SettingToggle("Highlight", true).withDesc("Highlights liquids to fill.").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2),

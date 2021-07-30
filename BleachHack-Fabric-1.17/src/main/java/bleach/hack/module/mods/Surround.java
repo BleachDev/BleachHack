@@ -19,7 +19,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
+import bleach.hack.setting.other.SettingBlockList;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.InventoryUtils;
@@ -48,7 +48,7 @@ public class Surround extends Module {
 				new SettingToggle("KeepOn", true).withDesc("Keeps the module on after placing the obsidian."),
 				new SettingToggle("JumpDisable", true).withDesc("Disables the module if you jump."),
 				new SettingRotate(false).withDesc("Rotates when placing."),
-				SettingLists.newBlockList("Blocks", "Surround Blocks", SURROUND_BLOCKS::contains, Blocks.OBSIDIAN).withDesc("What blocks to surround with."));
+				new SettingBlockList("Blocks", "Surround Blocks", SURROUND_BLOCKS::contains, Blocks.OBSIDIAN).withDesc("What blocks to surround with."));
 	}
 
 	public void onEnable() {

@@ -27,7 +27,7 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
+import bleach.hack.setting.other.SettingBlockList;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.Boxes;
 import bleach.hack.util.FabricReflect;
@@ -60,7 +60,7 @@ public class Nuker extends Module {
 				new SettingMode("Sort", "Closest", "Furthest", "Softest", "Hardest", "None").withDesc("Which order to mine blocks in."),
 				new SettingToggle("Filter", false).withDesc("Filters certain blocks.").withChildren(
 						new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list."),
-						SettingLists.newBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks.")),
+						new SettingBlockList("Edit Blocks", "Edit Filtered Blocks").withDesc("Edit the filtered blocks.")),
 				new SettingToggle("Raycast", true).withDesc("Only mines blocks you can see."),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you."),
 				new SettingRotate(false).withDesc("Rotate to blocks that you're mining."),

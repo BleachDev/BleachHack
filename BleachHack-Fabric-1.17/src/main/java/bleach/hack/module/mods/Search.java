@@ -33,7 +33,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
+import bleach.hack.setting.other.SettingBlockList;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
@@ -84,7 +84,7 @@ public class Search extends Module {
 				new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks.").withChildren(
 						new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers."),
 						new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers.")),
-				SettingLists.newBlockList("Edit Blocks", "Edit Search Blocks",
+				new SettingBlockList("Edit Blocks", "Edit Search Blocks",
 						Blocks.DIAMOND_ORE,
 						Blocks.EMERALD_ORE,
 						Blocks.DIAMOND_BLOCK,
