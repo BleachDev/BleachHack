@@ -34,19 +34,19 @@ public class CmdGamemode extends Command {
 		if (gm == 0) {
 			//mc.player.setGameMode(GameMode.SURVIVAL);
 			mc.interactionManager.setGameMode(GameMode.SURVIVAL);
-			BleachLogger.infoMessage("Set gamemode to survival.");
+			BleachLogger.info("Set gamemode to survival.");
 		} else if (gm == 1) {
 			//mc.player.setGameMode(GameMode.CREATIVE);
 			mc.interactionManager.setGameMode(GameMode.CREATIVE);
-			BleachLogger.infoMessage("Set gamemode to creative.");
+			BleachLogger.info("Set gamemode to creative.");
 		} else if (gm == 2) {
 			//mc.player.setGameMode(GameMode.ADVENTURE);
 			mc.interactionManager.setGameMode(GameMode.ADVENTURE);
-			BleachLogger.infoMessage("Set gamemode to adventure.");
+			BleachLogger.info("Set gamemode to adventure.");
 		} else if (gm == 3) {
 			//mc.player.setGameMode(GameMode.SPECTATOR);
 			mc.interactionManager.setGameMode(GameMode.SPECTATOR);
-			BleachLogger.infoMessage("Set gamemode to spectator.");
+			BleachLogger.info("Set gamemode to spectator.");
 		} else {
 			throw new CmdSyntaxException("Unknown Gamemode Number.");
 		}

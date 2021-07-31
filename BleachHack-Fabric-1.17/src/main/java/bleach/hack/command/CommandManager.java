@@ -96,25 +96,25 @@ public class CommandManager {
 				try {
 					c.onCommand(split[0], ArrayUtils.subarray(split, 1, split.length));
 				} catch (CmdSyntaxException e) {
-					BleachLogger.errorMessage((MutableText) e.getTextMessage());
+					BleachLogger.error((MutableText) e.getTextMessage());
 
 					MutableText text = new LiteralText("\u00a7b" + Command.getPrefix() + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
 
-					BleachLogger.infoMessage(
+					BleachLogger.info(
 							text.styled(style -> style
 									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, c.getHelpTooltip()))));
 				} catch (Exception e) {
 					e.printStackTrace();
 
-					BleachLogger.errorMessage("\u00a7l> " + e.getClass().getSimpleName());
-					BleachLogger.errorMessage("\u00a7l> \u00a7c" + e.getMessage());
+					BleachLogger.error("\u00a7l> " + e.getClass().getSimpleName());
+					BleachLogger.error("\u00a7l> \u00a7c" + e.getMessage());
 
 					int i = 0;
 					for (StackTraceElement st: e.getStackTrace()) {
 						if (i >= 8) break;
 
 						String[] bruh = st.getClassName().split("\\.");
-						BleachLogger.errorMessage(bruh[bruh.length - 1] + "." + st.getMethodName() + "():" + st.getLineNumber());
+						BleachLogger.error(bruh[bruh.length - 1] + "." + st.getMethodName() + "():" + st.getLineNumber());
 						i++;
 					}
 				}
@@ -123,7 +123,7 @@ public class CommandManager {
 			}
 		}
 
-		BleachLogger.errorMessage("Command Not Found, Maybe Try " + Command.getPrefix() + "help");
+		BleachLogger.error("Command Not Found, Maybe Try " + Command.getPrefix() + "help");
 	}
 
 	private class CommandListJson {

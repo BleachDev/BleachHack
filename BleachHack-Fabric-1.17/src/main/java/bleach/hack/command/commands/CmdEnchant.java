@@ -36,7 +36,7 @@ public class CmdEnchant extends Command {
 		}
 
 		if (args[0].equalsIgnoreCase("list")) {
-			BleachLogger.infoMessage("\u00a7d[Aqua_Affinity/Aqua] \u00a75[Arthropods] \u00a7d[Blast/Blast_Prot] "
+			BleachLogger.info("\u00a7d[Aqua_Affinity/Aqua] \u00a75[Arthropods] \u00a7d[Blast/Blast_Prot] "
 					+ "\u00a75[Channeling] \u00a7d[Curse_Binding/Binding] \u00a75[Curse_Vanish/Vanish] \u00a7d[Depth_Strider/Strider] "
 					+ "\u00a75[Efficiency/Eff] \u00a7d[Feather_Falling/Fall] \u00a75[Fire_Aspect] \u00a7d[Fire_Prot] "
 					+ "\u00a75[Flame] \u00a7d[Fortune] \u00a75[Frost_Walker/Frost] \u00a7d[Impaling] \u00a75[Infinity] \u00a7d[Knockback/Knock] "

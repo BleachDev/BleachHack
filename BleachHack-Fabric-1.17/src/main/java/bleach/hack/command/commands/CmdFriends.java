@@ -42,17 +42,17 @@ public class CmdFriends extends Command {
 			}
 
 			BleachHack.friendMang.add(args[1]);
-			BleachLogger.infoMessage("Added \"" + args[1] + "\" to the friend list");
+			BleachLogger.info("Added \"" + args[1] + "\" to the friend list");
 		} else if (args[0].equalsIgnoreCase("remove")) {
 			if (args.length < 2) {
 				throw new CmdSyntaxException("No username selected");
 			}
 
 			BleachHack.friendMang.remove(args[1].toLowerCase(Locale.ENGLISH));
-			BleachLogger.infoMessage("Removed \"" + args[1] + "\" from the friend list");
+			BleachLogger.info("Removed \"" + args[1] + "\" from the friend list");
 		} else if (args[0].equalsIgnoreCase("list")) {
 			if (BleachHack.friendMang.getFriends().isEmpty()) {
-				BleachLogger.infoMessage("You don't have any friends :(");
+				BleachLogger.info("You don't have any friends :(");
 			} else {
 				int len = BleachHack.friendMang.getFriends().stream()
 						.sorted((f1, f2) -> f2.length() - f1.length())
@@ -77,12 +77,12 @@ public class CmdFriends extends Command {
 									.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + f))));
 				}
 
-				BleachLogger.infoMessage(text);
+				BleachLogger.info(text);
 			}
 		} else if (args[0].equalsIgnoreCase("clear")) {
 			BleachHack.friendMang.getFriends().clear();
 
-			BleachLogger.infoMessage("Cleared Friend list");
+			BleachLogger.info("Cleared Friend list");
 		} else {
 			throw new CmdSyntaxException();
 		}

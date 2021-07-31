@@ -60,7 +60,7 @@ public class CmdClickGui extends Command {
 			}
 
 			BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
-			BleachLogger.infoMessage("Reset the clickgui!");
+			BleachLogger.info("Reset the clickgui!");
 		} else if (args[0].equalsIgnoreCase("length")) {
 			if (!NumberUtils.isCreatable(args[1])) {
 				throw new CmdSyntaxException("Invalid clickgui length: " + args[1]);
@@ -69,7 +69,7 @@ public class CmdClickGui extends Command {
 			ModuleManager.getModule("ClickGui").getSetting(0).asSlider().setValue(NumberUtils.createNumber(args[1]).intValue());
 			BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
 
-			BleachLogger.infoMessage("Set the clickgui length to: " + args[1]);
+			BleachLogger.info("Set the clickgui length to: " + args[1]);
 		} else {
 			throw new CmdSyntaxException();
 		}

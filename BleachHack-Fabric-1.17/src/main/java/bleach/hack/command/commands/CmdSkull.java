@@ -59,7 +59,7 @@ public class CmdSkull extends Command {
 						+ "\"}]}}}"));
 			} catch (Exception e) {
 				e.printStackTrace();
-				BleachLogger.errorMessage("Error getting head! (" + e.getClass().getSimpleName() + ")");
+				BleachLogger.error("Error getting head! (" + e.getClass().getSimpleName() + ")");
 			}
 		} else if (args[0].equalsIgnoreCase("img")) {
 			NbtCompound tag = StringNbtReader.parse(

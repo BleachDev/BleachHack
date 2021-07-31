@@ -35,24 +35,24 @@ public class CmdCustomChat extends Command {
 		CustomChat chat = (CustomChat) ModuleManager.getModule("CustomChat");
 
 		if (args[0].equalsIgnoreCase("current")) {
-			BleachLogger.infoMessage("Current prefix: \"" + chat.prefix + "\", suffix: \"" + chat.suffix + "\"");
+			BleachLogger.info("Current prefix: \"" + chat.prefix + "\", suffix: \"" + chat.suffix + "\"");
 		} else if (args[0].equalsIgnoreCase("reset")) {
 			chat.prefix = "";
 			chat.suffix = " \u25ba \u0432\u2113\u0454\u03b1c\u043d\u043d\u03b1c\u043a";
 
 			BleachFileHelper.saveMiscSetting("customChatPrefix", new JsonPrimitive(chat.prefix));
 			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
-			BleachLogger.infoMessage("Reset the chat prefix and suffix");
+			BleachLogger.info("Reset the chat prefix and suffix");
 		} else if (args[0].equalsIgnoreCase("prefix")) {
 			chat.prefix = String.join(" ", ArrayUtils.subarray(args, 1, args.length)).trim() + " ";
 
 			BleachFileHelper.saveMiscSetting("customChatPrefix", new JsonPrimitive(chat.prefix));
-			BleachLogger.infoMessage("Set prefix to: \"" + chat.prefix + "\"");
+			BleachLogger.info("Set prefix to: \"" + chat.prefix + "\"");
 		} else if (args[0].equalsIgnoreCase("suffix")) {
 			chat.suffix = " " + String.join(" ", ArrayUtils.subarray(args, 1, args.length)).trim();
 
 			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
-			BleachLogger.infoMessage("Set suffix to: \"" + chat.suffix + "\"");
+			BleachLogger.info("Set suffix to: \"" + chat.suffix + "\"");
 		} else {
 			throw new CmdSyntaxException();
 		}

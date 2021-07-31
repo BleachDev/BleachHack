@@ -25,14 +25,14 @@ public class CmdRename extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
-			BleachLogger.errorMessage("Not In Creative Mode!");
+			BleachLogger.error("Not In Creative Mode!");
 			return;
 		}
 
 		ItemStack i = mc.player.getInventory().getMainHandStack();
 
 		i.setCustomName(new LiteralText(StringUtils.join(args, ' ').replace("&", "\u00a7").replace("\u00a7\u00a7", "&")));
-		BleachLogger.infoMessage("Renamed Item");
+		BleachLogger.info("Renamed Item");
 	}
 
 }

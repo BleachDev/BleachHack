@@ -52,19 +52,19 @@ public class AutoBedrockBreak extends Module {
 				case 0:
 					if (!mc.world.isSpaceEmpty(new Box(pos.up(), pos.add(1, 8, 1)))) {
 						reset();
-						BleachLogger.infoMessage("Not enough empty space to break this block!");
+						BleachLogger.info("Not enough empty space to break this block!");
 					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON) == -1) {
 						reset();
-						BleachLogger.infoMessage("Missing pistons!");
+						BleachLogger.info("Missing pistons!");
 					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK) == -1) {
 						reset();
-						BleachLogger.infoMessage("Missing a redstone block!");
+						BleachLogger.info("Missing a redstone block!");
 					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT) == -1) {
 						reset();
-						BleachLogger.infoMessage("Missing TNT!");
+						BleachLogger.info("Missing TNT!");
 					} else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.TNT) == -1) {
 						reset();
-						BleachLogger.infoMessage("Missing a lever!");
+						BleachLogger.info("Missing a lever!");
 					} else if (dirtyPlace(pos.up(3), InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_BLOCK), Direction.DOWN)) {
 						step++;
 					}

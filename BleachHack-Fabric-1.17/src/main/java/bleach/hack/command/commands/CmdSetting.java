@@ -41,11 +41,11 @@ public class CmdSetting extends Command {
 		} else if (s instanceof SettingMode) {
 			s.asMode().mode = Integer.parseInt(args[2]);
 		} else {
-			BleachLogger.errorMessage("Invalid Command");
+			BleachLogger.error("Invalid Command");
 			return;
 		}
 
-		BleachLogger.infoMessage("Set Setting " + args[1] + " Of " + m.getName() + " To " + args[2]);
+		BleachLogger.info("Set Setting " + args[1] + " Of " + m.getName() + " To " + args[2]);
 	}
 
 }

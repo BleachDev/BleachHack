@@ -59,7 +59,7 @@ public class CmdNBT extends Command {
 						.withHoverEvent(
 								new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Copy the nbt of this item to your clipboard"))));
 
-				BleachLogger.infoMessage(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + stringNbt));
+				BleachLogger.info(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + stringNbt));
 			}
 		} else if (args[0].equalsIgnoreCase("copy")) {
 			if (args.length != 2) {
@@ -70,11 +70,11 @@ public class CmdNBT extends Command {
 
 			if (nbt != null) {
 				mc.keyboard.setClipboard(nbt.toString());
-				BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + NbtHelper.toPrettyPrintedString(nbt) + "\n\u00a76to clipboard.");
+				BleachLogger.info("\u00a76Copied\n\u00a7f" + NbtHelper.toPrettyPrintedString(nbt) + "\n\u00a76to clipboard.");
 			}
 		} else if (args[0].equalsIgnoreCase("set")) {
 			if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
-				BleachLogger.errorMessage("You must be in creative mode to set NBT!");
+				BleachLogger.error("You must be in creative mode to set NBT!");
 				return;
 			}
 
@@ -84,10 +84,10 @@ public class CmdNBT extends Command {
 
 			ItemStack item = mc.player.getMainHandStack();
 			item.setNbt(StringNbtReader.parse(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), ' ')));
-			BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getNbt().toString()));
+			BleachLogger.info("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getNbt().toString()));
 		} else if (args[0].equalsIgnoreCase("wipe")) {
 			if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
-				BleachLogger.errorMessage("You must be in creative mode to wipe NBT!");
+				BleachLogger.error("You must be in creative mode to wipe NBT!");
 				return;
 			}
 
@@ -113,7 +113,7 @@ public class CmdNBT extends Command {
 				}
 			}
 
-			BleachLogger.errorMessage("Not looking at a block.");
+			BleachLogger.error("Not looking at a block.");
 			return null;
 		} else if (arg.equalsIgnoreCase("entity")) {
 			HitResult target = mc.crosshairTarget;
@@ -121,7 +121,7 @@ public class CmdNBT extends Command {
 				return ((EntityHitResult) target).getEntity().writeNbt(new NbtCompound());
 			}
 
-			BleachLogger.errorMessage("Not looking at an entity.");
+			BleachLogger.error("Not looking at an entity.");
 			return null;
 		}
 

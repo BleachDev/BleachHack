@@ -43,7 +43,7 @@ public class CmdCustomSign extends Command {
 				s += "\n\u00a77" + text.getString();
 			}
 
-			BleachLogger.infoMessage(s);
+			BleachLogger.info(s);
 			return;
 		}
 
@@ -67,7 +67,7 @@ public class CmdCustomSign extends Command {
 		}
 
 		BleachFileHelper.saveMiscSetting("customSignText", json);
-		BleachLogger.infoMessage("Changed sign text!");
+		BleachLogger.info("Changed sign text!");
 	}
 
 }

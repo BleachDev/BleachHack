@@ -46,7 +46,7 @@ public class CmdClip extends Command {
 				}
 			}
 
-			BleachLogger.errorMessage("No empty spaces to clip you to!");
+			BleachLogger.error("No empty spaces to clip you to!");
 		} else {
 			if (args.length != 3) {
 				throw new CmdSyntaxException();

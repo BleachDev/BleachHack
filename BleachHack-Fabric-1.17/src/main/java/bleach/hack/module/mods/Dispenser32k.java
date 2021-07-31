@@ -104,15 +104,15 @@ public class Dispenser32k extends Module {
 		}
 
 		if (hopper == -1)
-			BleachLogger.errorMessage("Missing Hopper");
+			BleachLogger.error("Missing Hopper");
 		else if (dispenser == -1)
-			BleachLogger.errorMessage("Missing Dispenser");
+			BleachLogger.error("Missing Dispenser");
 		else if (redstone == -1)
-			BleachLogger.errorMessage("Missing Redstone Block");
+			BleachLogger.error("Missing Redstone Block");
 		else if (shulker == -1)
-			BleachLogger.errorMessage("Missing Shulker");
+			BleachLogger.error("Missing Shulker");
 		else if (block == -1)
-			BleachLogger.errorMessage("Missing Generic Block");
+			BleachLogger.error("Missing Generic Block");
 
 		if (hopper == -1 || dispenser == -1 || redstone == -1 || shulker == -1 || block == -1) {
 			setEnabled(false);
@@ -134,7 +134,7 @@ public class Dispenser32k extends Module {
 					|| !WorldUtils.isBlockEmpty(pos.add(0, 1, 0))
 					|| !WorldUtils.isBlockEmpty(pos.add(0, 2, 0))
 					|| !WorldUtils.isBlockEmpty(pos.add(rot[0], 1, rot[1]))) {
-				BleachLogger.errorMessage("Unable to place 32k");
+				BleachLogger.error("Unable to place 32k");
 				setEnabled(false);
 				return;
 			}
@@ -173,7 +173,7 @@ public class Dispenser32k extends Module {
 			}
 		}
 
-		BleachLogger.errorMessage("Unable to place 32k");
+		BleachLogger.error("Unable to place 32k");
 		setEnabled(false);
 	}
 

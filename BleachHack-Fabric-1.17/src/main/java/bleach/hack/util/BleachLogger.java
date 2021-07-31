@@ -22,7 +22,7 @@ public class BleachLogger {
 
 	public static final Logger logger = LogManager.getFormatterLogger("BleachHack");
 
-	public static void infoMessage(MutableText t) {
+	public static void info(MutableText t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.DARK_AQUA) + "\u00a73\u00a7lINFO: \u00a73")
@@ -32,11 +32,11 @@ public class BleachLogger {
 		}
 	}
 
-	public static void infoMessage(String s) {
-		infoMessage(new LiteralText(s));
+	public static void info(String s) {
+		info(new LiteralText(s));
 	}
 
-	public static void warningMessage(MutableText t) {
+	public static void warn(MutableText t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e")
@@ -46,11 +46,11 @@ public class BleachLogger {
 		}
 	}
 
-	public static void warningMessage(String s) {
-		warningMessage(new LiteralText(s));
+	public static void warn(String s) {
+		warn(new LiteralText(s));
 	}
 
-	public static void errorMessage(MutableText t) {
+	public static void error(MutableText t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c")
@@ -60,11 +60,11 @@ public class BleachLogger {
 		}
 	}
 
-	public static void errorMessage(String s) {
-		errorMessage(new LiteralText(s));
+	public static void error(String s) {
+		error(new LiteralText(s));
 	}
 
-	public static void noPrefixMessage(String s) {
+	public static void noPrefix(String s) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(s));
 		} catch (Exception e) {
@@ -72,7 +72,7 @@ public class BleachLogger {
 		}
 	}
 
-	public static void noPrefixMessage(Text text) {
+	public static void noPrefix(Text text) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(text);
 		} catch (Exception e) {

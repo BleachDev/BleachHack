@@ -30,9 +30,9 @@ public class CmdHelp extends Command {
 		String cmd = args.length == 0 ? "" : args[0];
 
 		if (cmd.isEmpty()) {
-			BleachLogger.infoMessage("Commands:");
+			BleachLogger.info("Commands:");
 		} else {
-			BleachLogger.infoMessage("Syntax for " + getPrefix() + cmd.toLowerCase(Locale.ENGLISH) + ":");
+			BleachLogger.info("Syntax for " + getPrefix() + cmd.toLowerCase(Locale.ENGLISH) + ":");
 		}
 
 		for (Command c : CommandManager.getCommands()) {
@@ -41,7 +41,7 @@ public class CmdHelp extends Command {
 
 			MutableText text = new LiteralText("\u00a7b" + getPrefix() + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
 
-			BleachLogger.noPrefixMessage(
+			BleachLogger.noPrefix(
 					text.styled(style -> style
 							.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, c.getHelpTooltip()))));
 		}

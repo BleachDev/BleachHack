@@ -26,7 +26,7 @@ public class CmdSpammer extends Command {
 		BleachFileMang.createFile("spammer.txt");
 		Util.getOperatingSystem().open(BleachFileMang.getDir().resolve("spammer.txt").toUri());
 
-		BleachLogger.infoMessage("Opened spammer file.");
+		BleachLogger.info("Opened spammer file.");
 	}
 
 }

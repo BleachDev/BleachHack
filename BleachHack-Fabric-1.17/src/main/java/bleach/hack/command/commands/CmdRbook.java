@@ -34,7 +34,7 @@ public class CmdRbook extends Command {
 		ItemStack item = mc.player.getInventory().getMainHandStack();
 
 		if (item.getItem() != Items.WRITABLE_BOOK) {
-			BleachLogger.errorMessage("Not Holding A Writable Book!");
+			BleachLogger.error("Not Holding A Writable Book!");
 			return;
 		}
 
@@ -50,7 +50,7 @@ public class CmdRbook extends Command {
 
 		mc.player.networkHandler.sendPacket(new BookUpdateC2SPacket(mc.player.getInventory().selectedSlot, textSplit, Optional.empty()));
 
-		BleachLogger.infoMessage("Written book (" + pages + " pages, " + pageChars + " chars/page)");
+		BleachLogger.info("Written book (" + pages + " pages, " + pageChars + " chars/page)");
 	}
 
 }

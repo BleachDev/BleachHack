@@ -133,7 +133,7 @@ public class BleachFileHelper {
 						mod.setEnabled(mo.get("toggled").getAsBoolean());
 					} catch (Exception ex) {
 						try {
-							BleachLogger.errorMessage("Error enabling " + e.getKey() + ", Disabling!");
+							BleachLogger.error("Error enabling " + e.getKey() + ", Disabling!");
 							mod.setEnabled(false);
 						} catch (Exception ex2) {
 							// ????

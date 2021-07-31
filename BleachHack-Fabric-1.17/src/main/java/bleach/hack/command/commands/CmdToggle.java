@@ -31,12 +31,12 @@ public class CmdToggle extends Command {
 		for (Module m : ModuleManager.getModules()) {
 			if (args[0].equalsIgnoreCase(m.getName())) {
 				BleachQueue.add(() -> m.toggle());
-				BleachLogger.infoMessage(m.getName() + " Toggled");
+				BleachLogger.info(m.getName() + " Toggled");
 				return;
 			}
 		}
 
-		BleachLogger.errorMessage("Module \"" + args[0] + "\" Not Found!");
+		BleachLogger.error("Module \"" + args[0] + "\" Not Found!");
 	}
 
 }

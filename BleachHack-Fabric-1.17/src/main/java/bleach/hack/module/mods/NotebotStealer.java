@@ -57,7 +57,7 @@ public class NotebotStealer extends Module {
 
 		BleachFileMang.createEmptyFile("notebot/notebot" + i + ".txt");
 		BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s.toString());
-		BleachLogger.infoMessage("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
+		BleachLogger.info("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
 	}
 
 	@SuppressWarnings("unchecked")

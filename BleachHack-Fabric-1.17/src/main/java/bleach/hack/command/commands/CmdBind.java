@@ -39,7 +39,7 @@ public class CmdBind extends Command {
 				}
 			}
 
-			BleachLogger.infoMessage("Cleared " + c + " Binds");
+			BleachLogger.info("Cleared " + c + " Binds");
 		} else if (args.length >= 2 && (args.length >= 3 || !args[1].equalsIgnoreCase("set"))) {
 			for (Module m : ModuleManager.getModules()) {
 				if (m.getName().equalsIgnoreCase(args[1])) {
@@ -68,10 +68,10 @@ public class CmdBind extends Command {
 						}
 
 						m.setKey(key);
-						BleachLogger.infoMessage("Bound " + m.getName() + " To " + args[2] + " (KEY" + key + ")");
+						BleachLogger.info("Bound " + m.getName() + " To " + args[2] + " (KEY" + key + ")");
 					} else if (args[0].equalsIgnoreCase("del")) {
 						m.setKey(Module.KEY_UNBOUND);
-						BleachLogger.infoMessage("Removed Bind For " + m.getName());
+						BleachLogger.info("Removed Bind For " + m.getName());
 					}
 
 					return;

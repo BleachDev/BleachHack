@@ -48,13 +48,13 @@ public class CmdWatermark extends Command {
 		if (args[0].equalsIgnoreCase("reset")) {
 			if (args.length == 1) {
 				BleachHack.watermark.reset(true, true);
-				BleachLogger.infoMessage("Reset the watermark text and colors!");
+				BleachLogger.info("Reset the watermark text and colors!");
 			} else if (args[1].equalsIgnoreCase("color")) {
 				BleachHack.watermark.reset(false, true);
-				BleachLogger.infoMessage("Reset the watermark colors!");
+				BleachLogger.info("Reset the watermark colors!");
 			} else if (args[1].equalsIgnoreCase("text")) {
 				BleachHack.watermark.reset(true, false);
-				BleachLogger.infoMessage("Reset the watermark text!");
+				BleachLogger.info("Reset the watermark text!");
 			} else {
 				throw new CmdSyntaxException();
 			}
@@ -73,7 +73,7 @@ public class CmdWatermark extends Command {
 				}
 
 				BleachHack.watermark.setStrings(args[1], args.length == 3 ? args[2] : null);
-				BleachLogger.infoMessage(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
+				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
 
 				BleachFileHelper.saveMiscSetting("watermarkText1", new JsonPrimitive(BleachHack.watermark.getString1()));
 				BleachFileHelper.saveMiscSetting("watermarkText2", new JsonPrimitive(BleachHack.watermark.getString2()));
@@ -85,7 +85,7 @@ public class CmdWatermark extends Command {
 				BleachHack.watermark.setColor(
 						Integer.parseInt(args[1].replace("x", "").replace("#", ""), 16),
 						args.length == 3 ? Integer.parseInt(args[2].replace("x", "").replace("#", ""), 16) : BleachHack.watermark.getColor2());
-				BleachLogger.infoMessage(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
+				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
 
 				BleachFileHelper.saveMiscSetting("watermarkColor1", new JsonPrimitive(BleachHack.watermark.getColor1()));
 				BleachFileHelper.saveMiscSetting("watermarkColor2", new JsonPrimitive(BleachHack.watermark.getColor2()));

@@ -96,7 +96,7 @@ public class EntityMenuScreen extends Screen {
 				try {
 					Util.getOperatingSystem().open(new URI(message.substring(5)));
 				} catch (Exception e) {
-					BleachLogger.errorMessage("Invalid url \"" + message.substring(5) + "\"");
+					BleachLogger.error("Invalid url \"" + message.substring(5) + "\"");
 				}
 
 				client.setScreen((Screen) null);

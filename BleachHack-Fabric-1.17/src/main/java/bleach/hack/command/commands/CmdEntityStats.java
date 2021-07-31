@@ -31,19 +31,19 @@ public class CmdEntityStats extends Command {
 			if (mc.player.getVehicle() instanceof HorseBaseEntity) {
 				HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
 
-				BleachLogger.infoMessage("\n\u00a7bEntity Stats:"
+				BleachLogger.info("\n\u00a7bEntity Stats:"
 						+ "\n\u00a7cMax Health: \u00a7b" + (int) h.getMaxHealth() + " HP"
 						+ "\n\u00a7cSpeed: \u00a7b" + getSpeed(h) + " m/s"
 						+ "\n\u00a7cJump: \u00a7b" + getJumpHeight(h) + " m");
 			} else if (mc.player.getVehicle() instanceof LivingEntity) {
 				LivingEntity l = (LivingEntity) mc.player.getVehicle();
 
-				BleachLogger.infoMessage("\n\u00a76Entity Stats:"
+				BleachLogger.info("\n\u00a76Entity Stats:"
 						+ "\n\u00a7cMax Health: \u00a7b" + (int) l.getMaxHealth() + " HP"
 						+ "\n\u00a7cSpeed: \u00a7b" + getSpeedLiving(l) + " m/s");
 			}
 		} else {
-			BleachLogger.errorMessage("Not riding a living entity.");
+			BleachLogger.error("Not riding a living entity.");
 		}
 	}
 

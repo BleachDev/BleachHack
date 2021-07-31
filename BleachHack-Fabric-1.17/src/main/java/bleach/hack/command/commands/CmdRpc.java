@@ -39,15 +39,15 @@ public class CmdRpc extends Command {
 		if (args[0].equalsIgnoreCase("top")) {
 			rpc.setTopText(text);
 
-			BleachLogger.infoMessage("Set top RPC text to \"" + text + "\"");
+			BleachLogger.info("Set top RPC text to \"" + text + "\"");
 			BleachFileHelper.saveMiscSetting("discordRPCTopText", new JsonPrimitive(text));
 		} else if (args[0].equalsIgnoreCase("bottom")) {
 			rpc.setBottomText(text);
 
-			BleachLogger.infoMessage("Set bottom RPC text to \"" + text + "\"");
+			BleachLogger.info("Set bottom RPC text to \"" + text + "\"");
 			BleachFileHelper.saveMiscSetting("discordRPCBottomText", new JsonPrimitive(text));
 		} else if (args[0].equalsIgnoreCase("current")) {
-			BleachLogger.infoMessage("Current RPC status:\n" + rpc.getTopText() + "\n" + rpc.getBottomText());
+			BleachLogger.info("Current RPC status:\n" + rpc.getTopText() + "\n" + rpc.getBottomText());
 		} else {
 			throw new CmdSyntaxException();
 		}

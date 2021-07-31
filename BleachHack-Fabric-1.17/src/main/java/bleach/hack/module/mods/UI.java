@@ -291,7 +291,7 @@ public class UI extends Module {
 						NbtIo.writeCompressed(tag, output);
 					} catch (IOException e) {
 						e.printStackTrace();
-						BleachLogger.errorMessage("[ChunkSize] Error serializing chunk");
+						BleachLogger.error("[ChunkSize] Error serializing chunk");
 						return 0;
 					}
 

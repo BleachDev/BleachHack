@@ -303,7 +303,7 @@ public class NotebotScreen extends WindowScreen {
 						tunes.add(tune);
 					}
 				} catch (Exception e) {
-					BleachLogger.warningMessage("Error trying to parse tune: \u00a7o" + s);
+					BleachLogger.warn("Error trying to parse tune: \u00a7o" + s);
 				}
 			}
 

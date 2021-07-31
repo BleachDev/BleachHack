@@ -36,7 +36,7 @@ public class CmdInvPeek extends Command {
 		for (AbstractClientPlayerEntity e: mc.world.getPlayers()) {
 			if (e.getDisplayName().getString().equalsIgnoreCase(args[0])) {
 				BleachQueue.add(() -> {
-					BleachLogger.infoMessage("Opened inventory for " + e.getDisplayName().getString());
+					BleachLogger.info("Opened inventory for " + e.getDisplayName().getString());
 
 					mc.setScreen(new InventoryScreen(e) {
 						public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -57,7 +57,7 @@ public class CmdInvPeek extends Command {
 			}
 		}
 
-		BleachLogger.errorMessage("Player " + args[0] + " not found!");
+		BleachLogger.error("Player " + args[0] + " not found!");
 	}
 
 }

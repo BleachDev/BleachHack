@@ -72,11 +72,11 @@ public class Notebot extends Module {
 		blockTunes.clear();
 
 		if (!mc.interactionManager.getCurrentGameMode().isSurvivalLike()) {
-			BleachLogger.errorMessage("Not In Survival Mode!");
+			BleachLogger.error("Not In Survival Mode!");
 			setEnabled(false);
 			return;
 		} else if (filePath.isEmpty()) {
-			BleachLogger.errorMessage("No Song Loaded!, Use " + Command.getPrefix() + "notebot to select a song.");
+			BleachLogger.error("No Song Loaded!, Use " + Command.getPrefix() + "notebot to select a song.");
 			setEnabled(false);
 			return;
 		} else {
@@ -114,7 +114,7 @@ public class Notebot extends Module {
 		}
 
 		if (tunes.size() > blockTunes.size() && !getSetting(2).asToggle().state) {
-			BleachLogger.warningMessage("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
+			BleachLogger.warn("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
 		}
 	}
 
@@ -189,7 +189,7 @@ public class Notebot extends Module {
 					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
 					setEnabled(false);
 					setEnabled(true);
-					BleachLogger.infoMessage("Now Playing: \u00a7a" + filePath);
+					BleachLogger.info("Now Playing: \u00a7a" + filePath);
 				} catch (IOException e) {
 				}
 			} else if (getSetting(1).asToggle().state) {
@@ -263,7 +263,7 @@ public class Notebot extends Module {
 			try {
 				notes.add(new int[] { Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2]) });
 			} catch (Exception e) {
-				BleachLogger.warningMessage("Error Parsing Note: \u00a7o" + s);
+				BleachLogger.warn("Error Parsing Note: \u00a7o" + s);
 			}
 		}
 
@@ -276,7 +276,7 @@ public class Notebot extends Module {
 					tunes.add(tune);
 				}
 			} catch (Exception e) {
-				BleachLogger.warningMessage("Error trying to parse tune: \u00a7o" + s);
+				BleachLogger.warn("Error trying to parse tune: \u00a7o" + s);
 			}
 		}
 	}

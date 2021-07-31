@@ -55,6 +55,6 @@ public class CmdTerrain extends Command {
 		}
 
 		mc.keyboard.setClipboard(builder.toString().trim());
-		BleachLogger.infoMessage("Copied terrain to clipboard!");
+		BleachLogger.info("Copied terrain to clipboard!");
 	}
 }

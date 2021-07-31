@@ -74,10 +74,10 @@ public class NotebotUtils {
 			Files.deleteIfExists(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip"));
 
 			if (log)
-				BleachLogger.infoMessage("Downloaded " + count + " Songs");
+				BleachLogger.info("Downloaded " + count + " Songs");
 		} catch (Exception e) {
 			if (log)
-				BleachLogger.warningMessage("Error Downloading Songs... " + e);
+				BleachLogger.warn("Error Downloading Songs... " + e);
 			e.printStackTrace();
 		}
 	}
