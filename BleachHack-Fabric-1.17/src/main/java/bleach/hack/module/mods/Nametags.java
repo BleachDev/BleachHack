@@ -384,7 +384,7 @@ public class Nametags extends Module {
 	}
 
 	private void addPlayerNameHealthLine(List<String> lines, PlayerEntity player, Formatting color, boolean addName, boolean addHealth, boolean addPing, boolean addGm) {
-		PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
+		PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(player.getGameProfile().getId());
 
 		String pingText = addPing && playerEntry != null ? Formatting.GRAY.toString() + playerEntry.getLatency() + "ms" : "";
 		String nameText = addName ? color + player.getName().getString() : "";
