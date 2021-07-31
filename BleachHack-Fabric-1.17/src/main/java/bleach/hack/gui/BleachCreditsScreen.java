@@ -68,12 +68,12 @@ public class BleachCreditsScreen extends WindowScreen {
 
 		getWindow(0).addWidget(new WindowTextWidget(BleachHack.watermark.getText(), true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, 22, 0xb0b0b0));
 
-		getWindow(0).addWidget(new WindowTextWidget("Main Developer", true, w / 2 - 60, 65, 0xb0b0b0));
+		getWindow(0).addWidget(new WindowTextWidget("- Main Developer -", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 65, 0xe0e0e0));
 		getWindow(0).addWidget(new WindowTextWidget(
 				new LiteralText("Bleach").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("arabfunny")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 80, 0x00a000));
 
-		getWindow(0).addWidget(new WindowTextWidget("Contributors", true, w / 2 - 60, 100, 0xb0b0b0));
+		getWindow(0).addWidget(new WindowTextWidget("- Contributors -", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 100, 0xe0e0e0));
 		getWindow(0).addWidget(new WindowTextWidget(
 				new LiteralText("LasnikProgram").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/lasnikprogram\n\n\u00a7fMade first version of LogoutSpot, AirPlace, EntityMenu, HoleESP, AutoParkour and Search")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 115, 0x00a0a0));
@@ -93,7 +93,7 @@ public class BleachCreditsScreen extends WindowScreen {
 				new LiteralText("ThePapanoob").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/thepapanoob\n\n\u00a7fAdded Projectiles mode in killaura")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 175, 0x00a0a0));
 
-		getWindow(0).addWidget(new WindowTextWidget("Donators/Boosters", true, w / 2 - 60, 195, 0xb0b0b0));
+		getWindow(0).addWidget(new WindowTextWidget("- Donators/Boosters -", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 195, 0xe0e0e0));
 		int y = 210;
 		for (ImmutablePair<Boolean, String> i: boosterList) {
 			getWindow(0).addWidget(new WindowTextWidget(getBoosterText(i), true, WindowTextWidget.TextAlign.MIDDLE, w / 2, y, 0));
