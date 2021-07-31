@@ -63,7 +63,7 @@ public class Ambience extends Module {
 						new SettingToggle("Water Color", false).withDesc("Changes the water color.").withChildren(
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("The color of the water."))));
 	}
-	
+
 	@Override
 	public void onDisable() {
 		weatherManager.applyWeather(mc.world);
@@ -160,36 +160,36 @@ public class Ambience extends Module {
 	private SettingToggle getCurrentDimSetting() {
 		return getSetting(mc.world.getRegistryKey() == World.END ? 4 : mc.world.getRegistryKey() == World.NETHER ? 3 : 2).asToggle();
 	}
-	
+
 	private static class WeatherManager {
-		
+
 		private float rain = -1f;
 		private float thunder = -1f;
-		
+
 		public void setRain(float rain) {
 			this.rain = rain;
 		}
-		
+
 		public void setThunder(float thunder) {
 			this.thunder = thunder;
 		}
-		
+
 		public void reset() {
 			rain = -1f;
 			thunder = -1f;
 		}
-		
+
 		public void applyWeather(World world) {
 			if (rain >= 0f) {
 				world.getLevelProperties().setRaining(rain > 0f);
 				world.setRainGradient(rain);
 			}
-			
+
 			if (thunder >= 0f) {
 				world.setThunderGradient(thunder);
 			}
 		}
-		
+
 		public boolean isActive() {
 			return rain >= 0f || thunder >= 1f;
 		}

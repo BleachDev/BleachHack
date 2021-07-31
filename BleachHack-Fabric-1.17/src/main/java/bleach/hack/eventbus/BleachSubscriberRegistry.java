@@ -54,13 +54,15 @@ public class BleachSubscriberRegistry {
 	}
 
 	public void post(Event event, Logger logger) {
-		if (subscribers.containsKey(event.getClass())) {
-			for (BleachSubscriber s: subscribers.get(event.getClass())) {
-				try {
-					eventsPosted.incrementAndGet();
-					s.callSubscriber(event);
-				} catch (Throwable t) {
-					logger.error("Exception thrown by subscriber method " + s.getSignature() + " when dispatching event: " + s.getEventClass().getName(), t);
+		for (Entry<Class<?>, List<BleachSubscriber>> entry: subscribers.entrySet()) {
+			if (entry.getKey().isAssignableFrom(event.getClass())) {
+				for (BleachSubscriber s: entry.getValue()) {
+					try {
+						eventsPosted.incrementAndGet();
+						s.callSubscriber(event);
+					} catch (Throwable t) {
+						logger.error("Exception thrown by subscriber method " + s.getSignature() + " when dispatching event: " + s.getEventClass().getName(), t);
+					}
 				}
 			}
 		}
