@@ -12,11 +12,11 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -231,7 +231,7 @@ public class UI extends Module {
 		if (y + infoList.size() * 5 > mc.getWindow().getScaledHeight() / 2) {
 			Collections.reverse(infoList);
 		}
-		
+
 		int count = 0;
 		int longestText = infoList.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
 		boolean rightAlign = x + longestText / 2 > mc.getWindow().getScaledWidth() / 2;
@@ -246,10 +246,10 @@ public class UI extends Module {
 		List<String> infoList = new ArrayList<>();
 
 		if (getSetting(1).asToggle().getChild(5).asToggle().state) {
-			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
-					+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-					+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : ""))
-					.format(new Date()));
+			infoList.add("\u00a77Time: \u00a7e"
+					+ ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
+							+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+							+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : ""))));
 		}
 
 		if (getSetting(1).asToggle().getChild(2).asToggle().state) {
@@ -276,7 +276,7 @@ public class UI extends Module {
 					} catch (InterruptedException | ExecutionException e) {
 						e.printStackTrace();
 					}
-					
+
 					if (System.currentTimeMillis() - lastChunkTime > 1500) {
 						chunkFuture = null;
 					}
