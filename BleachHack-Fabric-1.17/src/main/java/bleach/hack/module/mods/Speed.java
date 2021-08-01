@@ -27,7 +27,7 @@ public class Speed extends Module {
 	public Speed() {
 		super("Speed", GLFW.GLFW_KEY_V, ModuleCategory.MOVEMENT, "Allows you to go faster, what did you expect?",
 				new SettingMode("Mode", "StrafeHop", "Strafe", "OnGround", "MiniHop", "Bhop").withDesc("Speed mode."),
-				new SettingSlider("Strafe", 0.15, 0.4, 0.27, 2).withDesc("Strafe speed."),
+				new SettingSlider("Strafe", 0.15, 0.55, 0.27, 2).withDesc("Strafe speed."),
 				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround speed."),
 				new SettingSlider("MiniHop", 0.1, 10, 2, 1).withDesc("MiniHop speed."),
 				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop speed."));
