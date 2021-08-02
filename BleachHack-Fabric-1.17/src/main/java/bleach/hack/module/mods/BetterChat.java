@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import bleach.hack.eventbus.BleachSubscribe;
@@ -45,6 +46,8 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
 import bleach.hack.util.Texts;
 import bleach.hack.util.io.BleachFileHelper;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.bytes.ByteList;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
@@ -172,7 +175,8 @@ public class BetterChat extends Module {
 
 			if (getSetting(6).asToggle().state) {
 				String[] split = message.getString().split(" ");
-				if (split[split.length - 1].matches("[i\u00a1-\u00f5]+\u00ff[0-~]+")) {
+				System.out.println(split[split.length - 1]);
+				if (split[split.length - 1].matches("['\u00a1-\u00f5]+\u00ff[0-~]+")) {
 					String decrypted = decrypt(split[split.length - 1]);
 
 					if (decrypted != null) {
@@ -271,20 +275,28 @@ public class BetterChat extends Module {
 	private String encrypt(String text, String key) {
 		byte[] keyBytes = Hashing.sha512().hashUnencodedChars(key).asBytes();
 		byte[] encrypted = new byte[text.getBytes(StandardCharsets.UTF_8).length + 1];
+		ByteList offsets = new ByteArrayList();
 
 		int i = 0;
-		for (byte b: (text + "~").getBytes(StandardCharsets.UTF_8)) {
+		for (byte b: ('~' + text).getBytes(StandardCharsets.UTF_8)) {
 			if (i % keyBytes.length == 0 && i != 0)
 				keyBytes = Hashing.sha512().hashBytes(keyBytes).asBytes();
 
 			encrypted[i] = (byte) (b ^ keyBytes[i % keyBytes.length]);
+			offsets.add(keyBytes[i % keyBytes.length]);
 			i++;
 		}
 
 		byte[] baseEncrypted = Ascii85.encode(encrypted).getBytes(StandardCharsets.ISO_8859_1);
+		int cutoff = 2;
+		while (baseEncrypted.length > 250) {
+			baseEncrypted = Ascii85.encode(ArrayUtils.subarray(encrypted, 0, encrypted.length - cutoff)).getBytes(StandardCharsets.ISO_8859_1);
+			cutoff += 2;
+		}
+
 		// Ascii85 so chunky we have to move it to block 2 to not cause any problems
 		for (int j = 0; j < baseEncrypted.length; j++)
-			if (baseEncrypted[j] != 105)
+			if (baseEncrypted[j] != 39)
 				baseEncrypted[j] += 128;
 
 		return new String(baseEncrypted, StandardCharsets.ISO_8859_1);
@@ -298,7 +310,7 @@ public class BetterChat extends Module {
 		try {
 			byte[] baseEncrypted = split[0].getBytes(StandardCharsets.ISO_8859_1);
 			for (int j = 0; j < baseEncrypted.length; j++) {
-				if (baseEncrypted[j] != 105)
+				if (baseEncrypted[j] != 39)
 					baseEncrypted[j] -= 128;
 			}
 
@@ -313,8 +325,9 @@ public class BetterChat extends Module {
 			}
 
 			String finalString = new String(encrypted, StandardCharsets.UTF_8);
-			if (finalString.charAt(finalString.length() - 1) == '~') {
-				return finalString.substring(0, finalString.length() - 1);
+			// Checksum
+			if (finalString.charAt(0) == '~') {
+				return finalString.substring(1);
 			} else {
 				return null;
 			}
