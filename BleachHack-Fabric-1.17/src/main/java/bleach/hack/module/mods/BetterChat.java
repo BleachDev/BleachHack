@@ -133,10 +133,22 @@ public class BetterChat extends Module {
 	@BleachSubscribe
 	public void onPacketSend(EventSendPacket event) {
 		if (event.getPacket() instanceof ChatMessageC2SPacket) {
+			String prefix = "";
 			String text = ((ChatMessageC2SPacket) event.getPacket()).getChatMessage();
 
-			if (text.startsWith("/") || text.startsWith("!"))
+			if (text.startsWith("/r") || text.startsWith("/reply")) {
+				String[] split = text.split(" ");
+				prefix = split[0] + " ";
+				text = String.join(" ", ArrayUtils.subarray(split, 1, split.length));
+			} else if (text.startsWith("/msg") || text.startsWith("/tell") || text.startsWith("/w")) {
+				String[] split = text.split(" ");
+				if (split.length >= 3) {
+					prefix = split[0] + " " + split[1] + " ";
+					text = String.join(" ", ArrayUtils.subarray(split, 2, split.length));
+				}
+			} else if (text.startsWith("/") || text.startsWith("!")) {
 				return;
+			}
 
 			if (getSetting(0).asToggle().state) {
 				text = fonts.get(getSetting(0).asToggle().getChild(0).asMode().mode).replace(text);
@@ -156,7 +168,7 @@ public class BetterChat extends Module {
 			}
 
 			if (!text.equals(((ChatMessageC2SPacket) event.getPacket()).getChatMessage())) {
-				FabricReflect.writeField(event.getPacket(), text, "field_12764", "chatMessage");
+				FabricReflect.writeField(event.getPacket(), prefix + text, "field_12764", "chatMessage");
 			}
 		}
 	}
@@ -180,17 +192,17 @@ public class BetterChat extends Module {
 						MutableText newMessage = new LiteralText("");
 						List<Text> texts = Texts.unpack(message);
 
-						for (int i = 0; i < texts.size() - 2; i++) {
+						for (int i = 0; i < texts.size() - 1; i++) {
 							newMessage.append(texts.get(i));
 						}
 
 						Text lastText = texts.get(texts.size() - 1);
 						String lastString = lastText.getString();
-						int lastSpace = Math.max(lastString.indexOf(' '), 0);
+						int lastSpace = Math.max(lastString.lastIndexOf(' '), 0);
 
 						newMessage
-						.append(new LiteralText(lastString.substring(0, lastSpace) + " "))
-						.append(new LiteralText("<").styled(style -> style.withColor(BleachHack.watermark.getColor1())))
+						.append(new LiteralText(lastString.substring(0, lastSpace)).styled(style -> lastText.getStyle()))
+						.append(new LiteralText(" <").styled(style -> style.withColor(BleachHack.watermark.getColor1())))
 						.append(new LiteralText(decrypted)
 								.styled(style -> style
 										.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(split[split.length - 1])))))
