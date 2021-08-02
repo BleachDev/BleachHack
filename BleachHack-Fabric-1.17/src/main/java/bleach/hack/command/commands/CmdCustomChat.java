@@ -8,51 +8,106 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.CustomChat;
+import bleach.hack.module.mods.BetterChat;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 
 public class CmdCustomChat extends Command {
 
 	public CmdCustomChat() {
-		super("customchat", "Changes customchat prefix and suffix.", "customchat current | customchat reset | customchat prefix <prefix> | customchat suffix <suffix>", CommandCategory.MODULES);
+		super("betterchat", "Changes betterchat settings.", "betterchat filter list | betterchat filter [add/remove] <filter> | betterchat [prefix/suffix] current | betterchat [prefix/suffix] reset | betterchat [prefix/suffix] set <text>", CommandCategory.MODULES);
 	}
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		if (args.length == 0) {
+		if (args.length < 2) {
 			throw new CmdSyntaxException();
 		}
 
-		CustomChat chat = (CustomChat) ModuleManager.getModule("CustomChat");
+		BetterChat chat = (BetterChat) ModuleManager.getModule("BetterChat");
 
-		if (args[0].equalsIgnoreCase("current")) {
-			BleachLogger.info("Current prefix: \"" + chat.prefix + "\", suffix: \"" + chat.suffix + "\"");
-		} else if (args[0].equalsIgnoreCase("reset")) {
-			chat.prefix = "";
-			chat.suffix = " \u25ba \u0432\u2113\u0454\u03b1c\u043d\u043d\u03b1c\u043a";
+		if (args[0].equalsIgnoreCase("filter")) {
+			if (args[1].equalsIgnoreCase("list")) {
+				MutableText text = new LiteralText("Filter Entries:");
 
-			BleachFileHelper.saveMiscSetting("customChatPrefix", new JsonPrimitive(chat.prefix));
-			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
-			BleachLogger.info("Reset the chat prefix and suffix");
+				int i = 1;
+				for (Pattern pat: chat.filterPatterns) {
+					text = text.append(new LiteralText("\n\u00a76" + i + " > \u00a7f" + pat.toString())
+							.styled(style -> style
+									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to remove this filter.")))
+									.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getPrefix() + "customchat filter remove " + pat.toString()))));
+					i++;
+				}
+
+				BleachLogger.info(text);
+			} else if (args[1].equalsIgnoreCase("add")) {
+				String arg = String.join(" ", ArrayUtils.subarray(args, 2, args.length)).trim();
+				chat.filterPatterns.add(Pattern.compile(arg));
+
+				JsonArray jsonFilter = new JsonArray();
+				chat.filterPatterns.forEach(p -> jsonFilter.add(p.toString()));
+				BleachFileHelper.saveMiscSetting("betterChatFilter", jsonFilter);
+
+				BleachLogger.info("Added \"" + arg + "\" to the filter patterns.");
+			} else if (args[1].equalsIgnoreCase("remove")) {
+				String arg = String.join(" ", ArrayUtils.subarray(args, 2, args.length)).trim();
+				if (chat.filterPatterns.removeIf(p -> p.toString().equals(arg))) {
+					JsonArray jsonFilter = new JsonArray();
+					chat.filterPatterns.forEach(p -> jsonFilter.add(p.toString()));
+					BleachFileHelper.saveMiscSetting("betterChatFilter", jsonFilter);
+
+					BleachLogger.info("Removed \"" + arg + "\" from the filter patterns.");
+				} else {
+					BleachLogger.info("Could not find \"" + arg + "\" in the pattern list.");
+				}
+			} else {
+				throw new CmdSyntaxException();
+			}
 		} else if (args[0].equalsIgnoreCase("prefix")) {
-			chat.prefix = String.join(" ", ArrayUtils.subarray(args, 1, args.length)).trim() + " ";
+			if (args[1].equalsIgnoreCase("current")) {
+				BleachLogger.info("Current prefix: \"" + chat.prefix + "\"");
+			} else if (args[1].equalsIgnoreCase("reset")) {
+				chat.prefix = "";
+				BleachFileHelper.saveMiscSetting("betterChatPrefix", new JsonPrimitive(chat.prefix));
+				BleachLogger.info("Reset the customchat prefix!");
+			} else if (args[1].equalsIgnoreCase("set") && args.length >= 3) {
+				chat.prefix = String.join(" ", ArrayUtils.subarray(args, 2, args.length)).trim() + " ";
 
-			BleachFileHelper.saveMiscSetting("customChatPrefix", new JsonPrimitive(chat.prefix));
-			BleachLogger.info("Set prefix to: \"" + chat.prefix + "\"");
+				BleachFileHelper.saveMiscSetting("betterChatPrefix", new JsonPrimitive(chat.prefix));
+				BleachLogger.info("Set prefix to: \"" + chat.prefix + "\"");
+			} else {
+				throw new CmdSyntaxException();
+			}
 		} else if (args[0].equalsIgnoreCase("suffix")) {
-			chat.suffix = " " + String.join(" ", ArrayUtils.subarray(args, 1, args.length)).trim();
+			if (args[1].equalsIgnoreCase("current")) {
+				BleachLogger.info("Current suffix: \"" + chat.suffix + "\"");
+			} else if (args[1].equalsIgnoreCase("reset")) {
+				chat.suffix = " \u25ba \u0432\u029f\u0454\u03b1c\u043d\u043d\u03b1c\u043a";
+				BleachFileHelper.saveMiscSetting("betterChatSuffix", new JsonPrimitive(chat.suffix));
+				BleachLogger.info("Reset the customchat suffix!");
+			} else if (args[1].equalsIgnoreCase("set") && args.length >= 3) {
+				chat.suffix = String.join(" ", ArrayUtils.subarray(args, 2, args.length)).trim() + " ";
 
-			BleachFileHelper.saveMiscSetting("customChatSuffix", new JsonPrimitive(chat.suffix));
-			BleachLogger.info("Set suffix to: \"" + chat.suffix + "\"");
+				BleachFileHelper.saveMiscSetting("betterChatSuffix", new JsonPrimitive(chat.suffix));
+				BleachLogger.info("Set suffix to: \"" + chat.suffix + "\"");
+			} else {
+				throw new CmdSyntaxException();
+			}
 		} else {
 			throw new CmdSyntaxException();
 		}
