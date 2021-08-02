@@ -27,9 +27,9 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 
-public class CmdCustomChat extends Command {
+public class CmdBetterChat extends Command {
 
-	public CmdCustomChat() {
+	public CmdBetterChat() {
 		super("betterchat", "Changes betterchat settings.", "betterchat filter list | betterchat filter [add/remove] <filter> | betterchat [prefix/suffix] current | betterchat [prefix/suffix] reset | betterchat [prefix/suffix] set <text>", CommandCategory.MODULES);
 	}
 

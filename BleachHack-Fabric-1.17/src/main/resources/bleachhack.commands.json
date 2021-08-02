@@ -1,11 +1,11 @@
 {
   "package": "bleach.hack.command.commands",
   "commands": [
+	"CmdBetterChat",
     "CmdBind",
 	"CmdCI",
 	"CmdClickGui",
 	"CmdClip",
-	"CmdCustomChat",
 	"CmdCustomSign",
 	"CmdEnchant",
 	"CmdEntityMenu",
