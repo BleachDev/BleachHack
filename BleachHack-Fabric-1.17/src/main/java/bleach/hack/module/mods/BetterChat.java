@@ -46,8 +46,6 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
 import bleach.hack.util.Texts;
 import bleach.hack.util.io.BleachFileHelper;
-import it.unimi.dsi.fastutil.bytes.ByteArrayList;
-import it.unimi.dsi.fastutil.bytes.ByteList;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
@@ -175,7 +173,6 @@ public class BetterChat extends Module {
 
 			if (getSetting(6).asToggle().state) {
 				String[] split = message.getString().split(" ");
-				System.out.println(split[split.length - 1]);
 				if (split[split.length - 1].matches("['\u00a1-\u00f5]+\u00ff[0-~]+")) {
 					String decrypted = decrypt(split[split.length - 1]);
 
@@ -275,7 +272,6 @@ public class BetterChat extends Module {
 	private String encrypt(String text, String key) {
 		byte[] keyBytes = Hashing.sha512().hashUnencodedChars(key).asBytes();
 		byte[] encrypted = new byte[text.getBytes(StandardCharsets.UTF_8).length + 1];
-		ByteList offsets = new ByteArrayList();
 
 		int i = 0;
 		for (byte b: ('~' + text).getBytes(StandardCharsets.UTF_8)) {
@@ -283,7 +279,6 @@ public class BetterChat extends Module {
 				keyBytes = Hashing.sha512().hashBytes(keyBytes).asBytes();
 
 			encrypted[i] = (byte) (b ^ keyBytes[i % keyBytes.length]);
-			offsets.add(keyBytes[i % keyBytes.length]);
 			i++;
 		}
 
