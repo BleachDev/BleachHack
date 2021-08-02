@@ -154,7 +154,7 @@ public class BetterChat extends Module {
 				text = fonts.get(getSetting(0).asToggle().getChild(0).asMode().mode).replace(text);
 			}
 
-			if (getSetting(1).asToggle().state && prefix != null) {
+			if (getSetting(1).asToggle().state && !prefix.isEmpty()) {
 				text = prefix + text;
 			}
 
