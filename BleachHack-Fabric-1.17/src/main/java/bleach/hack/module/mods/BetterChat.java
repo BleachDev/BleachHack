@@ -151,7 +151,7 @@ public class BetterChat extends Module {
 
 			if (getSetting(5).asToggle().state) {
 				String key = getRandomString(4);
-				text = encrypt(text, key) + "\u00f7" + key;
+				text = encrypt(text, key) + "\u00ff" + key;
 			}
 
 			if (!text.equals(((ChatMessageC2SPacket) event.getPacket()).getChatMessage())) {
@@ -172,7 +172,7 @@ public class BetterChat extends Module {
 
 			if (getSetting(6).asToggle().state) {
 				String[] split = message.getString().split(" ");
-				if (split[split.length - 1].matches("[i\u00a1-\u00f5]+\u00f7[0-~]+")) {
+				if (split[split.length - 1].matches("[i\u00a1-\u00f5]+\u00ff[0-~]+")) {
 					String decrypted = decrypt(split[split.length - 1]);
 
 					if (decrypted != null) {
@@ -291,7 +291,7 @@ public class BetterChat extends Module {
 	}
 
 	private String decrypt(String text) {
-		String[] split = text.split("\u00f7");
+		String[] split = text.split("\u00ff");
 		if (split.length != 2)
 			return null;
 
