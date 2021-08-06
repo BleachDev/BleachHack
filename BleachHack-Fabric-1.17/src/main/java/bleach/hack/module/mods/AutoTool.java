@@ -36,7 +36,7 @@ public class AutoTool extends Module {
 		super("AutoTool", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically uses best tool when breaking blocks.",
 				new SettingToggle("AntiBreak", false).withDesc("Doesn't use the tool if its about to break."),
 				new SettingToggle("SwitchBack", true).withDesc("Switches back to your previous item when done breaking."),
-				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damagable item when possible."));
+				new SettingToggle("DurabilitySave", true).withDesc("Swiches to a non-damageable item when possible."));
 	}
 
 	@BleachSubscribe

@@ -39,7 +39,7 @@ public class AutoThrow extends Module {
 				new SettingToggle("XP", true).withDesc("Automatically throws XP."),
 				new SettingToggle("Potions", true).withDesc("Automatically throws splash potions.").withChildren(
 						new SettingToggle("Smart", true).withDesc("Only throws if you don't have the effect already.")),
-				new SettingToggle("SwitchBack", true).withDesc("Switches back to your prevous item after throwing."),
+				new SettingToggle("SwitchBack", true).withDesc("Switches back to your previous item after throwing."),
 				new SettingSlider("Delay", 0, 6, 4, 0).withDesc("How long to wait before throwing the next item (in ticks)."));
 	}
 

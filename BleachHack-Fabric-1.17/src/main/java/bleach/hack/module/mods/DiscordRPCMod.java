@@ -40,7 +40,7 @@ public class DiscordRPCMod extends Module {
 	private boolean silent;
 
 	public DiscordRPCMod() {
-		super("DiscordRPC", KEY_UNBOUND, ModuleCategory.MISC, true, "Dicord RPC, use the " + Command.getPrefix() + "rpc command to set a custom status.",
+		super("DiscordRPC", KEY_UNBOUND, ModuleCategory.MISC, true, "Discord RPC, use the " + Command.getPrefix() + "rpc command to set a custom status.",
 				new SettingMode("Line1", "Playing %server%", "%server%", "%type%", "%username% ontop", "Minecraft %mcver%", "%username%", "<- bad client", "%custom%").withDesc("The top line."),
 				new SettingMode("Line2", "%hp% hp - Holding %item%", "%username% - %hp% hp", "Holding %item%", "%hp% hp - At %coords%", "At %coords%", "%custom%").withDesc("The bottom line."),
 				new SettingMode("Elapsed", "Normal", "Random", "Backwards", "None").withDesc("How to show elapsed time"),
