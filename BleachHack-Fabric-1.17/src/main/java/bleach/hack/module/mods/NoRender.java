@@ -202,8 +202,8 @@ public class NoRender extends Module {
 						event.getMatrices(),
 						0, 0,
 						mc.currentScreen.width, mc.currentScreen.height,
-						(opacity  << 24) | 0x101010,
-						(opacity2 << 24) | 0x101010);
+						(opacity2 << 24) | 0x101010,
+						(opacity  << 24) | 0x101010);
 			}
 
 			event.setCancelled(true);
