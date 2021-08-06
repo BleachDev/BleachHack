@@ -22,7 +22,7 @@ public class MixinBossBarHud {
 
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	private void render(CallbackInfo info) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveOverlay(6)) {
+		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(6)) {
 			info.cancel();
 		}
 	}

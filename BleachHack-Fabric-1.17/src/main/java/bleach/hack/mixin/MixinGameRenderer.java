@@ -35,14 +35,14 @@ public class MixinGameRenderer {
 
 	@Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveOverlay(2)) {
+		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(2)) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "showFloatingItem", at = @At("HEAD"), cancellable = true)
 	private void showFloatingItem(ItemStack floatingItem, CallbackInfo ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveWorld(1) && floatingItem.getItem() == Items.TOTEM_OF_UNDYING) {
+		if (((NoRender) ModuleManager.getModule("NoRender")).isWorldToggled(1) && floatingItem.getItem() == Items.TOTEM_OF_UNDYING) {
 			ci.cancel();
 		}
 	}
@@ -50,7 +50,7 @@ public class MixinGameRenderer {
 	@Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0),
 			require = 0 /* TODO: meteor */)
 	private float nauseaWobble(float delta, float first, float second) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveOverlay(5)) {
+		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(5)) {
 			return 0;
 		}
 

@@ -30,7 +30,7 @@ public class MixinCamera {
 
 	@Inject(method = "getSubmersionType", at = @At("HEAD"), cancellable = true)
 	private void getSubmergedFluidState(CallbackInfoReturnable<CameraSubmersionType> ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveOverlay(3)) {
+		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(3)) {
 			ci.setReturnValue(CameraSubmersionType.NONE);
 		}
 	}

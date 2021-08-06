@@ -25,7 +25,7 @@ public class MixinMapRenderer {
 
 	@Inject(method = "draw", at = @At("HEAD"), cancellable = true)
 	public void draw(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int id, MapState state, boolean hidePlayerIcons, int light, CallbackInfo ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).shouldRemoveWorld(3)) {
+		if (((NoRender) ModuleManager.getModule("NoRender")).isWorldToggled(3)) {
 			ci.cancel();
 		}
 	}

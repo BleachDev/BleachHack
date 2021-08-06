@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventRenderScreenBackground;
 import bleach.hack.event.events.EventRenderTooltip;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipData;
@@ -53,6 +54,16 @@ public class MixinScreen {
 		} else if (!event.getText().equals(lines) || event.getX() != x || event.getY() != y) {
 			skipTooltip = true;
 			((Screen) (Object) this).renderTooltip(matrices, lines, data, x, y);
+			callback.cancel();
+		}
+	}
+
+	@Inject(at = @At("HEAD"), method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;I)V", cancellable = true)
+	public void renderBackground(MatrixStack matrices, int vOffset, CallbackInfo callback) {
+		EventRenderScreenBackground event = new EventRenderScreenBackground(matrices, vOffset);
+		BleachHack.eventBus.post(event);
+
+		if (event.isCancelled()) {
 			callback.cancel();
 		}
 	}
