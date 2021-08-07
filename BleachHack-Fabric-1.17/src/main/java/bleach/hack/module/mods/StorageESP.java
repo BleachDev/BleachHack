@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import bleach.hack.eventbus.BleachSubscribe;
+import bleach.hack.util.render.color.LineColor;
 import com.google.gson.JsonSyntaxException;
 
 import bleach.hack.event.events.EventBlockEntityRender;
@@ -64,6 +65,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 public class StorageESP extends Module {
 
@@ -83,7 +85,9 @@ public class StorageESP extends Module {
 				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline."),
 				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The thickness of the box lines."),
 				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill."),
-
+				new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks.").withChildren(
+						new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers."),
+						new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers.")),
 				new SettingToggle("Chests", true).withDesc("Highlights chests."),
 				new SettingToggle("EnderChests", true).withDesc("Highlights enderchests."),
 				new SettingToggle("Furnaces", true).withDesc("Highlights furnaces."),
@@ -158,6 +162,19 @@ public class StorageESP extends Module {
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
 					RenderUtils.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), getSetting(2).asSlider().getValueFloat());
+				}
+				SettingToggle tracers = getSetting(4).asToggle();
+				if (tracers.state) {
+					Vec3d lookVec = new Vec3d(0, 0, 75)
+							.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
+							.rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw()))
+							.add(mc.cameraEntity.getEyePos());
+
+					RenderUtils.drawLine(
+							lookVec.x, lookVec.y, lookVec.z,
+							e.getKey().getPos().getX() + 0.5, e.getKey().getPos().getY() + 0.5, e.getKey().getPos().getZ() + 0.5,
+							LineColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], (float) tracers.getChild(1).asSlider().getValue()),
+							(float) tracers.getChild(0).asSlider().getValue());
 				}
 			}
 
@@ -259,19 +276,19 @@ public class StorageESP extends Module {
 	}
 
 	private float[] getColorForBlock(BlockEntity be) {
-		if ((be instanceof ChestBlockEntity || be instanceof BarrelBlockEntity) && getSetting(4).asToggle().state) {
+		if ((be instanceof ChestBlockEntity || be instanceof BarrelBlockEntity) && getSetting(5).asToggle().state) {
 			return new float[] { 1F, 0.6F, 0.3F };
-		} else if (be instanceof EnderChestBlockEntity && getSetting(5).asToggle().state) {
+		} else if (be instanceof EnderChestBlockEntity && getSetting(6).asToggle().state) {
 			return new float[] { 1F, 0.05F, 1F };
-		} else if (be instanceof AbstractFurnaceBlockEntity && getSetting(6).asToggle().state) {
+		} else if (be instanceof AbstractFurnaceBlockEntity && getSetting(7).asToggle().state) {
 			return new float[] { 0.5F, 0.5F, 0.5F };
-		} else if (be instanceof DispenserBlockEntity && getSetting(7).asToggle().state) {
+		} else if (be instanceof DispenserBlockEntity && getSetting(8).asToggle().state) {
 			return new float[] { 0.55F, 0.55F, 0.7F };
-		} else if (be instanceof HopperBlockEntity && getSetting(8).asToggle().state) {
+		} else if (be instanceof HopperBlockEntity && getSetting(9).asToggle().state) {
 			return new float[] { 0.45F, 0.45F, 0.6F };
-		} else if (be instanceof ShulkerBoxBlockEntity && getSetting(9).asToggle().state) {
+		} else if (be instanceof ShulkerBoxBlockEntity && getSetting(10).asToggle().state) {
 			return new float[] { 0.5F, 0.2F, 1F };
-		} else if (be instanceof BrewingStandBlockEntity && getSetting(10).asToggle().state) {
+		} else if (be instanceof BrewingStandBlockEntity && getSetting(11).asToggle().state) {
 			return new float[] { 0.5F, 0.4F, 0.2F };
 		}
 
@@ -279,13 +296,13 @@ public class StorageESP extends Module {
 	}
 
 	private float[] getColorForEntity(Entity e) {
-		if (e instanceof ChestMinecartEntity && getSetting(11).asToggle().state) {
+		if (e instanceof ChestMinecartEntity && getSetting(12).asToggle().state) {
 			return new float[] { 1F, 0.65F, 0.3F };
-		} else if (e instanceof FurnaceMinecartEntity && getSetting(12).asToggle().state) {
+		} else if (e instanceof FurnaceMinecartEntity && getSetting(13).asToggle().state) {
 			return new float[] { 0.5F, 0.5F, 0.5F };
-		} else if (e instanceof HopperMinecartEntity && getSetting(13).asToggle().state) {
+		} else if (e instanceof HopperMinecartEntity && getSetting(14).asToggle().state) {
 			return new float[] { 0.45F, 0.45F, 0.6F };
-		} else if (e instanceof ItemFrameEntity && getSetting(14).asToggle().state) {
+		} else if (e instanceof ItemFrameEntity && getSetting(15).asToggle().state) {
 			if (((ItemFrameEntity) e).getHeldItemStack().isEmpty()) {
 				return new float[] { 0.45F, 0.1F, 0.1F };
 			} else if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {
@@ -293,7 +310,7 @@ public class StorageESP extends Module {
 			} else {
 				return new float[] { 0.1F, 0.45F, 0.1F };
 			}
-		} else if (e instanceof ArmorStandEntity && getSetting(15).asToggle().state) {
+		} else if (e instanceof ArmorStandEntity && getSetting(16).asToggle().state) {
 			return new float[] { 0.7F, 0.6F, 0.2F };
 		}
 
