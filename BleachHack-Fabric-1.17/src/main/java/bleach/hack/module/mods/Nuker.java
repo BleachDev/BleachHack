@@ -64,7 +64,7 @@ public class Nuker extends Module {
 				new SettingToggle("Raycast", true).withDesc("Only mines blocks you can see."),
 				new SettingToggle("Flatten", false).withDesc("Flatten the area around you."),
 				new SettingRotate(false).withDesc("Rotate to blocks that you're mining."),
-				new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles."),
+				new SettingToggle("NoParticles", false).withDesc("Removes block breaking particles."),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you're currently mining.").withChildren(
 						new SettingMode("Mode", "Opacity", "Expand").withDesc("How to show the mining progress."),
 						new SettingColor("Color", 1f, 0.5f, 0.5f, false).withDesc("The color of the highlight.")),

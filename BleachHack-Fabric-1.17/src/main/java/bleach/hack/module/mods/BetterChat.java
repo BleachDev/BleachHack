@@ -96,13 +96,13 @@ public class BetterChat extends Module {
 	public Set<Pattern> filterPatterns = new LinkedHashSet<>();
 
 	public BetterChat() {
-		super("BetterChat", KEY_UNBOUND, ModuleCategory.MISC, "Adds more cuztomibability to the chat, use the " + Command.getPrefix() + "betterchat command to edit the stuff.",
+		super("BetterChat", KEY_UNBOUND, ModuleCategory.MISC, "Adds more customizability to the chat, use the " + Command.getPrefix() + "betterchat command to edit the stuff.",
 				new SettingToggle("CustomFont", false).withDesc("Uses a custom font in your messages.").withChildren(
 						new SettingMode("Font", "\uff41\uff42\uff43\uff44\uff45", "\u1D00\u0299\u1d04\u1d05\u1d07",
 								"\u24d0\u24d1\u24d2\u24d3\u24d4", "\u039bb\u1455d\u03A3", "\u03b1\u0432c\u2202\u0454").withDesc("The custom font to use.")),
 				new SettingToggle("Prefix", false).withDesc("Message prepended to the message, edit with " + Command.getPrefix() + "betterchat prefix."),
 				new SettingToggle("Suffix", false).withDesc("Message appended to the message, edit with " + Command.getPrefix() + "betterchat suffix."),
-				new SettingToggle("Timestamp", true).withDesc("Adds a timestamp in front of evey message."),
+				new SettingToggle("Timestamp", true).withDesc("Adds a timestamp in front of every message."),
 				new SettingToggle("Filter", false).withDesc("Filters certain text from the chat, edit the filters with " + Command.getPrefix() + "betterchat filter.").withChildren(
 						new SettingMode("Mode", "Censor", "Block", "Remove").withDesc("How to handle filtered messages.")),
 				new SettingToggle("ChatEncrypt", false).withDesc("Encrypts messages so only BleachHack users can read them."), //.withChildren(

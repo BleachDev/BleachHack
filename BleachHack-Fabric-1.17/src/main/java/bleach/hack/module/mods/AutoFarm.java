@@ -58,7 +58,7 @@ public class AutoFarm extends Module {
 	private Map<BlockPos, Integer> mossMap = new HashMap<>();
 
 	public AutoFarm() {
-		super("AutoFarm", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically does farming activies for you.",
+		super("AutoFarm", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically does farming activities for you.",
 				new SettingSlider("Range", 1, 6, 4.5, 1).withDesc("Farming reach."),
 				new SettingToggle("Till", true).withDesc("Tills dirt around you.").withChildren(
 						new SettingToggle("WateredOnly", false).withDesc("Only tills watered dirt.")),

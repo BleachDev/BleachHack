@@ -39,9 +39,9 @@ public class Ambience extends Module {
 				new SettingToggle("Time", false).withDesc("Changes the world time.").withChildren(
 						new SettingSlider("Time", 0, 24000, 12500, 0).withDesc("What time to set the world to.")),
 				new SettingToggle("Overworld", true).withDesc("Changes the overworld ambience-").withChildren(
-						new SettingToggle("Sky Color", true).withDesc("Changes the overworld sky color-").withChildren(
+						new SettingToggle("Sky Color", true).withDesc("Changes the overworld sky color.").withChildren(
 								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?"),
-								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky-")),
+								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky.")),
 						new SettingToggle("Foilage Color", false).withDesc("Changes the foilage color.").withChildren(
 								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("The color of the foilage.")),
 						new SettingToggle("Water Color", false).withDesc("Changes the water color.").withChildren(

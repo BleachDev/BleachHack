@@ -62,8 +62,8 @@ public class Notebot extends Module {
 				new SettingToggle("Tune", true).withDesc("Tunes the noteblocks before and while playing.").withChildren(
 						new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All").withDesc("How to tune the noteblocks.")),
 				new SettingToggle("Loop", false).withDesc("Loop the song you're playing."),
-				new SettingToggle("NoInstruments", false).withDesc("Ignores intruments."),
-				new SettingToggle("AutoPlay", false).withDesc("Auto plays a random song after one is fininshed."));
+				new SettingToggle("NoInstruments", false).withDesc("Ignores instruments."),
+				new SettingToggle("AutoPlay", false).withDesc("Auto plays a random song after one is finished."));
 	}
 
 	@Override
