@@ -15,7 +15,7 @@ public class AutoFish extends Module {
 	public AutoFish() {
 		super("AutoFish", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically fish.");
 	}
-	
+
 	@Override
 	public void onDisable() {
 		super.onDisable();
@@ -28,6 +28,6 @@ public class AutoFish extends Module {
 			mc.interactionManager.interactItem(mc.player, mc.world, mc.player.preferredHand);
 			//throw again
 			mc.interactionManager.interactItem(mc.player, mc.world, mc.player.preferredHand);
-			}
 		}
 	}
+}
