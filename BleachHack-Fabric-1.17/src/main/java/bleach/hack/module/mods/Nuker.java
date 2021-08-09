@@ -37,6 +37,7 @@ import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.client.particle.BlockDustParticle;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -99,7 +100,7 @@ public class Nuker extends Module {
 							//? Math.min(Math.min(Math.abs(mc.player.getX() - (pos.getX() + 0.5)), Math.abs(mc.player.getY() - (pos.getY() + 0.5))), Math.abs(mc.player.getZ() - (pos.getZ() + 0.5)))
 									: mc.player.getPos().distanceTo(Vec3d.ofCenter(pos));
 
-					if (distTo - 0.5 <= getSetting(4).asSlider().getValue() && !mc.world.isAir(pos) && !WorldUtils.isFluid(pos)) {
+					if (distTo - 0.5 <= getSetting(4).asSlider().getValue() && !mc.world.isAir(pos) && !(mc.world.getBlockState(pos).getBlock() instanceof FluidBlock)) {
 						Pair<Vec3d, Direction> vec = getBlockAngle(pos);
 
 						if (vec != null) {
