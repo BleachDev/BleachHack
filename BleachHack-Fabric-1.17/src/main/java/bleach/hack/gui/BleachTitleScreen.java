@@ -30,7 +30,7 @@ import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.UI;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
-import bleach.hack.util.io.BleachGithubReader;
+import bleach.hack.util.io.BleachOnlineMang;
 import net.fabricmc.loader.ModContainer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
@@ -69,7 +69,7 @@ public class BleachTitleScreen extends WindowScreen {
 		super.init();
 
 		if (version == null) {
-			version = BleachGithubReader.readJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
+			version = BleachOnlineMang.readResourceJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
 
 			if (version == null) {
 				version = new JsonObject();
@@ -77,8 +77,8 @@ public class BleachTitleScreen extends WindowScreen {
 		}
 
 		if (splash.isEmpty()) {
-			List<String> sp = BleachGithubReader.readFileLines("splashes.txt");
-			splash = !sp.isEmpty() ? sp.get(new Random().nextInt(sp.size())) : "";
+			List<String> sp = BleachOnlineMang.readResourceLines("splashes.txt");
+			splash = sp.isEmpty() ? "" : sp.get(new Random().nextInt(sp.size()));
 		}
 
 		clearWindows();

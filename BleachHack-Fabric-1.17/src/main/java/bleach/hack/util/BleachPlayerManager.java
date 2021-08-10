@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonArray;
 
 import bleach.hack.gui.option.Option;
-import bleach.hack.util.io.BleachAPIMang;
+import bleach.hack.util.io.BleachOnlineMang;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
@@ -45,7 +45,7 @@ public class BleachPlayerManager {
 				playerQueue.forEach(p -> playersJson.add(p.toString()));
 				playerQueue.clear();
 
-				String response = BleachAPIMang.post("online/inlistbin", playersJson);
+				String response = BleachOnlineMang.apiPost("online/inlistbin", playersJson);
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -76,7 +76,7 @@ public class BleachPlayerManager {
 				JsonArray playersJson = new JsonArray();
 				players.forEach(p -> playersJson.add(p.toString()));
 
-				String response = BleachAPIMang.post("online/inlistbin", playersJson);
+				String response = BleachOnlineMang.apiPost("online/inlistbin", playersJson);
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -97,13 +97,13 @@ public class BleachPlayerManager {
 	public void startPinger() {
 		if (pingExecutor == null || pingExecutor.isShutdown()) {
 			pingExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setDaemon(true).build());
-			pingExecutor.scheduleAtFixedRate(() -> BleachAPIMang.get("online/ping?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid())), 0L, 14L, TimeUnit.MINUTES);
+			pingExecutor.scheduleAtFixedRate(() -> BleachOnlineMang.apiGet("online/ping?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid())), 0L, 14L, TimeUnit.MINUTES);
 		}
 	}
 
 	public void stopPinger() {
 		if (pingExecutor != null && !pingExecutor.isShutdown()) {
-			pingExecutor.execute(() -> BleachAPIMang.get("online/disconnect?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid().replace("-", ""))));
+			pingExecutor.execute(() -> BleachOnlineMang.apiGet("online/disconnect?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid().replace("-", ""))));
 			pingExecutor.shutdown();
 		}
 	}

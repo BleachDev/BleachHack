@@ -35,7 +35,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import bleach.hack.util.io.BleachFileMang;
-import bleach.hack.util.io.BleachGithubReader;
+import bleach.hack.util.io.BleachOnlineMang;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -50,7 +50,7 @@ public class NotebotUtils {
 	public static void downloadSongs(boolean log) {
 		try {
 			FileUtils.copyURLToFile(
-					BleachGithubReader.getUrl().resolve("notebot/songs.zip").toURL(),
+					BleachOnlineMang.getResourceUrl().resolve("notebot/songs.zip").toURL(),
 					BleachFileMang.getDir().resolve("notebot/songs.zip").toFile());
 			ZipFile zip = new ZipFile(BleachFileMang.getDir().resolve("notebot/songs.zip").toFile());
 			Enumeration<? extends ZipEntry> files = zip.entries();

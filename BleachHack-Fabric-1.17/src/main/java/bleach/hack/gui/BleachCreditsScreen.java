@@ -13,7 +13,7 @@ import bleach.hack.gui.window.widget.WindowScrollbarWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.gui.window.widget.WindowWidget;
 import bleach.hack.util.collections.ImmutablePairList;
-import bleach.hack.util.io.BleachGithubReader;
+import bleach.hack.util.io.BleachOnlineMang;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import com.google.gson.JsonObject;
@@ -44,7 +44,7 @@ public class BleachCreditsScreen extends WindowScreen {
 
 		if (boosterList == null) {
 			boosterList = new ImmutablePairList<>();
-			JsonObject json = BleachGithubReader.readJson("credits.json");
+			JsonObject json = BleachOnlineMang.readResourceJson("credits.json");
 
 			if (json != null) {
 				if (json.has("donators") && json.get("donators").isJsonArray()) {
