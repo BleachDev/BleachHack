@@ -78,7 +78,7 @@ public class BleachTitleScreen extends WindowScreen {
 
 		if (splash.isEmpty()) {
 			List<String> sp = BleachOnlineMang.readResourceLines("splashes.txt");
-			splash = sp.isEmpty() ? "" : sp.get(new Random().nextInt(sp.size()));
+			splash = sp == null? "" : sp.get(new Random().nextInt(sp.size()));
 		}
 
 		clearWindows();
