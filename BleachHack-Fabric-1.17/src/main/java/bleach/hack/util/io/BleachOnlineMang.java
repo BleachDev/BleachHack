@@ -27,8 +27,8 @@ import bleach.hack.util.BleachLogger;
  */
 public class BleachOnlineMang {
 
-	private static URI resourceUrl = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
-	private static URI apiUrl = URI.create("http://api.bleachhack.org/");
+	private static URI resourceUrl = URI.create("https://res.bleachhack.org/");
+	private static URI apiUrl = URI.create("http://api.bleachhack.org/"); // http because epic amazon fail
 
 	public static URI getResourceUrl() {
 		return resourceUrl;
