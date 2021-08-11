@@ -39,7 +39,7 @@ public class LogoutSpot extends Module {
 								new SettingSlider("Duration", 1, 1800, 120, 0).withDesc("Duration after which a logged out players gets removed (in seconds).")), // 0-1-0
 						new SettingToggle("Disconnect", true).withDesc("Removes all logout spots when disconnecting."), // 0-2
 						new SettingToggle("Disable", true).withDesc("Removes all logout spots when disabling LogoutSpot.")), // 0-3
-				new SettingToggle("Text", true).withDesc("Adds text next to player.s").withChildren( // 1
+				new SettingToggle("Text", true).withDesc("Adds text next to players.").withChildren( // 1
 						new SettingToggle("Name", true).withDesc("Shows the name of the logged player."), // 1-0
 						new SettingToggle("Coords", false).withDesc("Shows the coords of the logged player."), // 1-1
 						new SettingToggle("Health", true).withDesc("Shows the health of the logged player."), // 1-2

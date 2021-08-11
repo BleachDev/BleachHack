@@ -183,8 +183,9 @@ public class BetterChat extends Module {
 
 			if (getSetting(6).asToggle().state) {
 				message = Texts.forEachWord(message, (string, style) -> {
-					if (string.matches("['\u00a1-\u00f5]+\u00ff[0-~]+")) {
-						String decrypted = decrypt(Formatting.strip(string));
+					String stripped = Formatting.strip(string);
+					if (stripped.matches("['\u00a1-\u00f5]+\u00ff[0-~]+")) {
+						String decrypted = decrypt(stripped);
 						if (decrypted != null) {
 							return new LiteralText("<").styled(s -> s.withColor(BleachHack.watermark.getColor1()))
 									.append(new LiteralText(decrypted).styled(s -> s.withColor(0xffffff).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(string).setStyle(style)))))
