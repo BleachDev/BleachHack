@@ -47,10 +47,10 @@ public class CmdBetterChat extends Command {
 
 				int i = 1;
 				for (Pattern pat: chat.filterPatterns) {
-					text = text.append(new LiteralText("\n\u00a76" + i + " > \u00a7f" + pat.toString())
+					text = text.append(new LiteralText("\n\u00a76" + i + " > \u00a7f" + pat.pattern())
 							.styled(style -> style
 									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to remove this filter.")))
-									.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getPrefix() + "customchat filter remove " + pat.toString()))));
+									.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getPrefix() + "betterchat filter remove " + pat.pattern()))));
 					i++;
 				}
 

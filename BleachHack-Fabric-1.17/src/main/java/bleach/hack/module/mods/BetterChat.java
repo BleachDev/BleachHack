@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -51,7 +50,6 @@ import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -136,15 +134,15 @@ public class BetterChat extends Module {
 			String prefix = "";
 			String text = ((ChatMessageC2SPacket) event.getPacket()).getChatMessage();
 
-			if (text.startsWith("/r") || text.startsWith("/reply")) {
+			if (text.startsWith("/r ") || text.startsWith("/reply ")) {
 				String[] split = text.split(" ");
 				prefix = split[0] + " ";
-				text = String.join(" ", ArrayUtils.subarray(split, 1, split.length));
-			} else if (text.startsWith("/msg") || text.startsWith("/tell") || text.startsWith("/w")) {
+				text = text.substring(prefix.length());
+			} else if (text.startsWith("/msg ") || text.startsWith("/tell ") || text.startsWith("/w ") || text.startsWith("/whisper ") || text.startsWith("/pm ")) {
 				String[] split = text.split(" ");
 				if (split.length >= 3) {
 					prefix = split[0] + " " + split[1] + " ";
-					text = String.join(" ", ArrayUtils.subarray(split, 2, split.length));
+					text = text.substring(prefix.length());
 				}
 			} else if (text.startsWith("/") || text.startsWith("!")) {
 				return;
@@ -154,12 +152,12 @@ public class BetterChat extends Module {
 				text = fonts.get(getSetting(0).asToggle().getChild(0).asMode().mode).replace(text);
 			}
 
-			if (getSetting(1).asToggle().state && !prefix.isEmpty()) {
-				text = prefix + text;
+			if (getSetting(1).asToggle().state) {
+				text = this.prefix + text;
 			}
 
 			if (getSetting(2).asToggle().state) {
-				text = text + suffix;
+				text = text + this.suffix;
 			}
 
 			if (getSetting(5).asToggle().state) {
@@ -184,76 +182,30 @@ public class BetterChat extends Module {
 			Text message = packet.getMessage().shallowCopy();
 
 			if (getSetting(6).asToggle().state) {
-				String[] split = message.getString().split(" ");
-				if (split[split.length - 1].matches("['\u00a1-\u00f5]+\u00ff[0-~]+")) {
-					String decrypted = decrypt(split[split.length - 1]);
-
-					if (decrypted != null) {
-						MutableText newMessage = new LiteralText("");
-						List<Text> texts = Texts.unpack(message);
-
-						for (int i = 0; i < texts.size() - 1; i++) {
-							newMessage.append(texts.get(i));
+				message = Texts.forEachWord(message, (string, style) -> {
+					if (string.matches("['\u00a1-\u00f5]+\u00ff[0-~]+")) {
+						String decrypted = decrypt(Formatting.strip(string));
+						if (decrypted != null) {
+							return new LiteralText("<").styled(s -> s.withColor(BleachHack.watermark.getColor1()))
+									.append(new LiteralText(decrypted).styled(s -> s.withColor(0xffffff).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(string).setStyle(style)))))
+									.append(new LiteralText(">").styled(s -> s.withColor(BleachHack.watermark.getColor2())));
 						}
-
-						Text lastText = texts.get(texts.size() - 1);
-						String lastString = lastText.getString();
-						int lastSpace = Math.max(lastString.lastIndexOf(' '), 0);
-
-						newMessage
-						.append(new LiteralText(lastString.substring(0, lastSpace)).styled(style -> lastText.getStyle()))
-						.append(new LiteralText(" <").styled(style -> style.withColor(BleachHack.watermark.getColor1())))
-						.append(new LiteralText(decrypted)
-								.styled(style -> style
-										.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(split[split.length - 1])))))
-						.append(new LiteralText(">").styled(style -> style.withColor(BleachHack.watermark.getColor2())));
-
-						message = newMessage;
 					}
-				}
+
+					return null;
+				});
 			}
 
 			if (!filterPatterns.isEmpty() && getSetting(4).asToggle().state) {
 				int mode = getSetting(4).asToggle().getChild(0).asMode().mode;
 				if (mode == 0) {
-					MutableText newMessage = new LiteralText("");
-
-					for (Text text: Texts.unpack(message)) {
-						String string = text.getString();
-
-						Map<Character, String> replaceMap = new HashMap<>();
-						for (Pattern pat: filterPatterns) {
-							Matcher mat = pat.matcher(string);
-							while (mat.find()) {
-								char c = (char) (0xc500 + replaceMap.size());
-								replaceMap.put(c, mat.group());
-								string = mat.replaceFirst(String.valueOf(c));
-								mat = pat.matcher(string);
-							}
-						}
-
-						String curString = "";
-						for (char c: string.toCharArray()) {
-							if (replaceMap.containsKey(c)) {
-								if (!curString.isEmpty()) {
-									newMessage = newMessage.append(new LiteralText(curString).styled(s -> text.getStyle()));
-									curString = "";
-								}
-
-								newMessage = newMessage.append(new LiteralText(StringUtils.repeat('|', replaceMap.get(c).length() * 2))
-										.styled(style -> style
-												.withColor(Formatting.GRAY)
-												.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(replaceMap.get(c)).styled(style0 -> text.getStyle())))));
-							} else {
-								curString += c;
-							}
-						}
-
-						if (!curString.isEmpty())
-							newMessage = newMessage.append(new LiteralText(curString).styled(s -> text.getStyle()));
+					for (Pattern pattern: filterPatterns) {
+						message = Texts.replaceAll(message, pattern,
+								(string, style) -> new LiteralText(StringUtils.repeat('|', string.length() * 2))
+								.styled(s -> s
+										.withColor(Formatting.GRAY)
+										.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(string).setStyle(style)))));
 					}
-
-					message = newMessage;
 				} else {
 					for (Pattern pat: filterPatterns) {
 						if (pat.matcher(message.getString()).find()) {
@@ -296,7 +248,7 @@ public class BetterChat extends Module {
 
 		byte[] baseEncrypted = Ascii85.encode(encrypted).getBytes(StandardCharsets.ISO_8859_1);
 		int cutoff = 2;
-		while (baseEncrypted.length > 250) {
+		while (baseEncrypted.length > 254 - key.length()) {
 			baseEncrypted = Ascii85.encode(ArrayUtils.subarray(encrypted, 0, encrypted.length - cutoff)).getBytes(StandardCharsets.ISO_8859_1);
 			cutoff += 2;
 		}
