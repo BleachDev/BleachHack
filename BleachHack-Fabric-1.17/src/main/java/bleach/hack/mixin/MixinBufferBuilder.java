@@ -11,7 +11,7 @@ import net.minecraft.client.render.FixedColorVertexConsumer;
 /**
  * BufferBuilder patch that allows the color to be temporarily fixed even when the VertexFormatElement isn't COLOR
  */
-@Mixin(BufferBuilder.class)
+@Mixin(value = BufferBuilder.class, priority = 1010 /* TODO: iris */)
 public abstract class MixinBufferBuilder extends FixedColorVertexConsumer implements BufferVertexConsumer {
 
 	@Redirect(method = { "color", "vertex" }, at = @At(value = "FIELD", target = "*:Z", ordinal = 0, remap = false))
