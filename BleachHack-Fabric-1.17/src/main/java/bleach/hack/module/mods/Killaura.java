@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ShulkerBulletEntity;
-import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Streams;
 import bleach.hack.eventbus.BleachSubscribe;
@@ -48,7 +47,7 @@ public class Killaura extends Module {
 	private int delay = 0;
 
 	public Killaura() {
-		super("Killaura", GLFW.GLFW_KEY_K, ModuleCategory.COMBAT, "Automatically attacks entities.",
+		super("Killaura", KEY_UNBOUND, ModuleCategory.COMBAT, "Automatically attacks entities.",
 				new SettingMode("Sort", "Angle", "Distance").withDesc("How to sort targets."),
 				new SettingToggle("Players", true).withDesc("Attacks Players."),
 				new SettingToggle("Mobs", true).withDesc("Attacks Mobs."),

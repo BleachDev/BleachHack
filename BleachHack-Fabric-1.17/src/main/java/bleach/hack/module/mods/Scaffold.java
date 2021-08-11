@@ -10,7 +10,6 @@ package bleach.hack.module.mods;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.Sets;
 import bleach.hack.eventbus.BleachSubscribe;
@@ -40,7 +39,7 @@ public class Scaffold extends Module {
 	private Set<BlockPos> renderBlocks = new LinkedHashSet<>();
 
 	public Scaffold() {
-		super("Scaffold", GLFW.GLFW_KEY_N, ModuleCategory.WORLD, "Places blocks under you",
+		super("Scaffold", KEY_UNBOUND, ModuleCategory.WORLD, "Places blocks under you",
 				new SettingMode("Area", "Normal", "3x3", "5x5", "7x7").withDesc("How big of an area to scaffold."),
 				new SettingSlider("BPT", 1, 10, 2, 0).withDesc("Blocks Per Tick, how many blocks to place per tick."),
 				new SettingSlider("Range", 0, 1, 0.3, 1).withDesc("How far to place ahead of you in Normal mode."),

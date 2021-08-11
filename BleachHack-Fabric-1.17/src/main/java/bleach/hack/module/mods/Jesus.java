@@ -8,8 +8,6 @@
  */
 package bleach.hack.module.mods;
 
-import org.lwjgl.glfw.GLFW;
-
 import bleach.hack.eventbus.BleachSubscribe;
 import bleach.hack.event.events.EventBlockShape;
 import bleach.hack.event.events.EventTick;
@@ -24,7 +22,7 @@ import net.minecraft.util.shape.VoxelShapes;
 public class Jesus extends Module {
 
 	public Jesus() {
-		super("Jesus", GLFW.GLFW_KEY_J, ModuleCategory.PLAYER, "Allows you to walk on water.",
+		super("Jesus", KEY_UNBOUND, ModuleCategory.PLAYER, "Allows you to walk on water.",
 				new SettingMode("Mode", "Vibrate", "Solid").withDesc("The jesus mode."));
 	}
 

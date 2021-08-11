@@ -8,8 +8,6 @@
  */
 package bleach.hack.module.mods;
 
-import org.lwjgl.glfw.GLFW;
-
 import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventClientMove;
@@ -41,7 +39,7 @@ public class Freecam extends Module {
 	private float prevFlySpeed;
 
 	public Freecam() {
-		super("Freecam", GLFW.GLFW_KEY_U, ModuleCategory.PLAYER, "Its freecam, you know what it does.",
+		super("Freecam", KEY_UNBOUND, ModuleCategory.PLAYER, "Its freecam, you know what it does.",
 				new SettingSlider("Speed", 0, 3, 0.5, 2).withDesc("Moving speed in freecam."),
 				new SettingToggle("HorseInv", true).withDesc("Opens your Horse inventory when riding a horse."));
 	}
