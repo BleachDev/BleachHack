@@ -87,7 +87,7 @@ public class CmdFriends extends Command {
 			throw new CmdSyntaxException();
 		}
 
-		BleachFileHelper.SCHEDULE_SAVE_FRIENDS = true;
+		BleachFileHelper.SCHEDULE_SAVE_FRIENDS.set(true);
 	}
 
 }

@@ -93,7 +93,7 @@ public class SettingToggle extends SettingBase {
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			state = !state;
 			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
-			BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+			BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 		}
 	}
 

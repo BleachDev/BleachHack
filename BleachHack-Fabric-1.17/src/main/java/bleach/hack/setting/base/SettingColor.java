@@ -125,7 +125,7 @@ public class SettingColor extends SettingBase {
 		}
 
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {
-			BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+			BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			hue = 1f / ((float) (ey - sy) / (window.mouseY - sy));
 		}
 

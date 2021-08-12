@@ -82,7 +82,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
+		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI.set(true);
 
 		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state;
 

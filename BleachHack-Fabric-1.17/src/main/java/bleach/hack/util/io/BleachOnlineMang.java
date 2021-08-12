@@ -68,7 +68,7 @@ public class BleachOnlineMang {
 		return read(createConnection(apiUrl.resolve(path), "POST", body.toString(), 10000));
 	}
 
-	private static HttpURLConnection createConnection(URI url, String method, /* @Nullable */ String body, int timeout) {
+	private static HttpURLConnection createConnection(URI url, String method, String body, int timeout) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.toURL().openConnection();
 			con.setRequestMethod(method);

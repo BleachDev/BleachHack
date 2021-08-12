@@ -27,7 +27,7 @@ public class OptionString extends Option<String> {
 				super.charTyped(chr, modifiers);
 
 				setValue(textField.getText());
-				BleachFileHelper.SCHEDULE_SAVE_OPTIONS = true;
+				BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 			}
 
 			@Override
@@ -35,7 +35,7 @@ public class OptionString extends Option<String> {
 				super.keyPressed(keyCode, scanCode, modifiers);
 
 				setValue(textField.getText());
-				BleachFileHelper.SCHEDULE_SAVE_OPTIONS = true;
+				BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 			}
 
 		}.withRenderEvent(w -> {

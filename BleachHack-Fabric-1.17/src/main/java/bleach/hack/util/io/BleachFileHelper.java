@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -39,22 +40,22 @@ public class BleachFileHelper {
 
 	private static ScheduledExecutorService savingExecutor;
 
-	public static boolean SCHEDULE_SAVE_MODULES = false;
-	public static boolean SCHEDULE_SAVE_OPTIONS = false;
-	public static boolean SCHEDULE_SAVE_FRIENDS = false;
-	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
-	public static boolean SCHEDULE_SAVE_UI = false;
+	public static AtomicBoolean SCHEDULE_SAVE_MODULES = new AtomicBoolean();
+	public static AtomicBoolean SCHEDULE_SAVE_OPTIONS = new AtomicBoolean();
+	public static AtomicBoolean SCHEDULE_SAVE_FRIENDS = new AtomicBoolean();
+	public static AtomicBoolean SCHEDULE_SAVE_CLICKGUI = new AtomicBoolean();
+	public static AtomicBoolean SCHEDULE_SAVE_UI = new AtomicBoolean();
 
 	public static void startSavingExecutor() {
 		if (savingExecutor == null)
 			savingExecutor = MoreExecutors.getExitingScheduledExecutorService(new ScheduledThreadPoolExecutor(1));
 
 		savingExecutor.scheduleAtFixedRate(() -> {
-			if (SCHEDULE_SAVE_MODULES) saveModules();
-			if (SCHEDULE_SAVE_OPTIONS) saveOptions();
-			if (SCHEDULE_SAVE_CLICKGUI) saveClickGui();
-			if (SCHEDULE_SAVE_FRIENDS) saveFriends();
-			if (SCHEDULE_SAVE_UI) saveUI();
+			if (SCHEDULE_SAVE_MODULES.getAndSet(false)) saveModules();
+			if (SCHEDULE_SAVE_OPTIONS.getAndSet(false)) saveOptions();
+			if (SCHEDULE_SAVE_CLICKGUI.getAndSet(false)) saveClickGui();
+			if (SCHEDULE_SAVE_FRIENDS.getAndSet(false)) saveFriends();
+			if (SCHEDULE_SAVE_UI.getAndSet(false)) saveUI();
 		}, 0, 5, TimeUnit.SECONDS);
 	}
 
@@ -64,8 +65,6 @@ public class BleachFileHelper {
 	}
 
 	public static void saveModules() {
-		SCHEDULE_SAVE_MODULES = false;
-
 		JsonObject jo = new JsonObject();
 
 		for (Module m : ModuleManager.getModules()) {
@@ -167,8 +166,6 @@ public class BleachFileHelper {
 	}
 
 	public static void saveOptions() {
-		SCHEDULE_SAVE_OPTIONS = false;
-
 		JsonObject jo = new JsonObject();
 
 		for (Option<?> o: Option.OPTIONS) {
@@ -192,8 +189,6 @@ public class BleachFileHelper {
 	}
 
 	public static void saveClickGui() {
-		SCHEDULE_SAVE_CLICKGUI = false;
-
 		JsonObject jo = new JsonObject();
 
 		for (Window w : ClickGui.clickGui.getWindows()) {
@@ -241,8 +236,6 @@ public class BleachFileHelper {
 	}
 
 	public static void saveUI() {
-		SCHEDULE_SAVE_UI = false;
-
 		JsonObject jo = new JsonObject();
 
 		for (Entry<String, UIWindow> w : UI.uiScreen.uiWindows.entrySet()) {
@@ -297,8 +290,6 @@ public class BleachFileHelper {
 	}
 
 	public static void saveFriends() {
-		SCHEDULE_SAVE_FRIENDS = false;
-
 		String toWrite = "";
 		for (String s : BleachHack.friendMang.getFriends())
 			toWrite += s + "\n";

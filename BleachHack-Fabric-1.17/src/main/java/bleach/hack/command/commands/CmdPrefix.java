@@ -28,7 +28,7 @@ public class CmdPrefix extends Command {
 		}
 
 		Option.CHAT_COMMAND_PREFIX.setValue(args[0]);
-		BleachFileHelper.SCHEDULE_SAVE_OPTIONS = true;
+		BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 		BleachLogger.info("Set Prefix To: \"" + getPrefix() + "\"");
 	}
 

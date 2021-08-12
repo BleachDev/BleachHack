@@ -8,7 +8,6 @@
  */
 package bleach.hack.util.io;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -41,7 +40,7 @@ public class BleachJsonHelper {
 				try {
 					file = new JsonParser().parse(merged).getAsJsonObject();
 				} catch (Exception e) {
-					e.printStackTrace();
+					BleachLogger.logger.error("Error trying to read json file \"" + path + "\", Overwriting file to add element!", e);
 					overwrite = true;
 				}
 			}
@@ -89,8 +88,7 @@ public class BleachJsonHelper {
 		try {
 			return new JsonParser().parse(merged).getAsJsonObject();
 		} catch (JsonParseException | IllegalStateException e) {
-			BleachLogger.logger.error("Json error Trying to read " + Arrays.asList(path) + "! DELETING ENTIRE FILE!");
-			e.printStackTrace();
+			BleachLogger.logger.error("Error trying to read json file \"" + path + "\", Deleting file!", e);
 
 			BleachFileMang.deleteFile(path);
 			return null;

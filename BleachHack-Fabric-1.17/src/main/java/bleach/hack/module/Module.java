@@ -65,13 +65,13 @@ public class Module {
 	}
 
 	public void onEnable() {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 		subscribed = BleachHack.eventBus.subscribe(this);
 	}
 
 	public void onDisable() {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 		if (subscribed) {
 			BleachHack.eventBus.unsubscribe(this);
@@ -111,7 +111,7 @@ public class Module {
 	}
 
 	public void setKey(int key) {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 		this.key = key;
 	}
 

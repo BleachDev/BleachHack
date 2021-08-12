@@ -59,7 +59,7 @@ public class CmdClickGui extends Command {
 				throw new CmdSyntaxException("Invalid reset mode!");
 			}
 
-			BleachFileHelper.SCHEDULE_SAVE_CLICKGUI = true;
+			BleachFileHelper.SCHEDULE_SAVE_CLICKGUI.set(true);
 			BleachLogger.info("Reset the clickgui!");
 		} else if (args[0].equalsIgnoreCase("length")) {
 			if (!NumberUtils.isCreatable(args[1])) {
@@ -67,7 +67,7 @@ public class CmdClickGui extends Command {
 			}
 
 			ModuleManager.getModule("ClickGui").getSetting(0).asSlider().setValue(NumberUtils.createNumber(args[1]).intValue());
-			BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+			BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 			BleachLogger.info("Set the clickgui length to: " + args[1]);
 		} else {

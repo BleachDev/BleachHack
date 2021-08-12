@@ -95,7 +95,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		BleachFileHelper.SCHEDULE_SAVE_UI = true;
+		BleachFileHelper.SCHEDULE_SAVE_UI.set(true);
 
 		uiWindows.forEach((id, window) -> {
 			window.x1 = getLeft(id);

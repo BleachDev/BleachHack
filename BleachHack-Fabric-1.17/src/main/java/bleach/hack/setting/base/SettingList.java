@@ -178,19 +178,19 @@ public abstract class SettingList<T> extends SettingBase {
 				items.clear();
 				items.addAll(defaultItems);
 				itemPool.removeAll(defaultItems);
-				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}));
 
 			getWindow(0).addWidget(new WindowButtonWidget(x2 - 100, y2 - 22, x2 - 55, y2 - 5, "Clear", () -> {
 				itemPool.addAll(items);
 				items.clear();
-				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}));
 
 			getWindow(0).addWidget(new WindowButtonWidget(x2 - 150, y2 - 22, x2 - 105, y2 - 5, "Add All", () -> {
 				items.addAll(itemPool);
 				itemPool.clear();
-				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}));
 
 			inputField = getWindow(0).addWidget(new WindowTextFieldWidget(5, y2 - 22, x2 / 3, 17, inputField != null ? inputField.textField.getText() : ""));
@@ -309,13 +309,13 @@ public abstract class SettingList<T> extends SettingBase {
 				itemPool.remove(toAddItem);
 				inputField.textField.setTextFieldFocused(true);
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
-				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 				return false;
 			} else if (toDeleteItem != null) {
 				itemPool.add(toDeleteItem);
 				items.remove(toDeleteItem);
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
-				BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}
 
 			return super.mouseClicked(mouseX, mouseY, button);

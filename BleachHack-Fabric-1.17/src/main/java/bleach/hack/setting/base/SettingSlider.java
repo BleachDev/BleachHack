@@ -62,7 +62,7 @@ public class SettingSlider extends SettingBase {
 
 	public void setValue(double value) {
 		this.value = value;
-		BleachFileHelper.SCHEDULE_SAVE_MODULES = true;
+		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 	}
 
 	public double round(double value, int places) {
