@@ -35,6 +35,14 @@ public class AutoFish extends Module {
 		}
 
 		InventoryUtils.selectSlot(slot);
+		
+		if (mc.player.fishHook == null) {
+			Hand hand = mc.player.getMainHandStack().getItem() == Items.FISHING_ROD ? Hand.MAIN_HAND
+					: mc.player.getOffHandStack().getItem() == Items.FISHING_ROD ? Hand.OFF_HAND
+							: null;
+
+			mc.interactionManager.interactItem(mc.player, mc.world, hand);
+		}
 	}
 
 	@BleachSubscribe
