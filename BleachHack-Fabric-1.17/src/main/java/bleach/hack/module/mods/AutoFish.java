@@ -11,7 +11,6 @@ import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.setting.base.SettingMode;
-import bleach.hack.util.BleachLogger;
 import bleach.hack.util.InventoryUtils;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
@@ -26,18 +25,6 @@ public class AutoFish extends Module {
 	public AutoFish() {
 		super("AutoFish", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically fishes for you.",
 				new SettingMode("Mode", "Normal", "Aggressive", "Passive").withDesc("AutoFish mode."));
-	}
-
-	@Override
-	public void onEnable() {
-		super.onEnable();
-
-		int slot = getBestRodSlot();
-		if (slot == -1) {
-			BleachLogger.error("No fishing rods in your inventory!");
-			setEnabled(false);
-			return;
-		}
 	}
 
 	@Override
