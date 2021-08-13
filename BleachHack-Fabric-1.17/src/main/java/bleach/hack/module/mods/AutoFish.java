@@ -12,10 +12,12 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.util.InventoryUtils;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
 import bleach.hack.module.Module;
 
 public class AutoFish extends Module {
@@ -50,7 +52,10 @@ public class AutoFish extends Module {
 
 	@BleachSubscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
-		if (event.instance.getId().getPath().equals("entity.fishing_bobber.splash")) {
+		SoundInstance si = event.instance;
+		if (si.getId().getPath().equals("entity.fishing_bobber.splash")
+				&& mc.player.fishHook != null
+				&& mc.player.fishHook.getPos().distanceTo(new Vec3d(si.getX(), si.getY(), si.getZ())) <= 1) {
 			Hand hand = getHandWithRod();
 
 			if (hand != null) {

@@ -19,12 +19,12 @@ public abstract class Option<T> {
 	public static Option<Boolean> PLAYERLIST_SHOW_FRIENDS = new OptionBoolean("Highlight Friends", "Highlights friends in aqua on the playerlist.", true);
 	public static Option<Boolean> PLAYERLIST_SHOW_BH_USERS = new OptionBoolean("Show BH Users", "Shows other BleachHack players on the playerlist.", true);
 	public static Option<Boolean> PLAYERLIST_SHOW_AS_BH_USER = new OptionBoolean("Appear As BH User", "Makes you show up as a BleachHack user to others.", true, (b) -> {
-		MinecraftClient mc = MinecraftClient.getInstance();
+		String uuid = BleachPlayerManager.toProperUUID(MinecraftClient.getInstance().getSession().getUuid());
 		if (b) {
-			BleachHack.playerMang.getPlayers().add(UUID.fromString(BleachPlayerManager.toProperUUID(mc.getSession().getUuid())));
+			BleachHack.playerMang.getPlayers().add(UUID.fromString(uuid));
 			BleachHack.playerMang.startPinger();
 		} else {
-			BleachHack.playerMang.getPlayers().remove(UUID.fromString(BleachPlayerManager.toProperUUID(mc.getSession().getUuid())));
+			BleachHack.playerMang.getPlayers().remove(UUID.fromString(uuid));
 			BleachHack.playerMang.stopPinger();
 		}
 	});
