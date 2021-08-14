@@ -92,6 +92,8 @@ public class BleachOnlineMang {
 		} catch (IOException e) {
 			BleachLogger.logger.error(e);
 			return null;
+		} finally {
+			con.disconnect();
 		}
 	}
 
@@ -101,6 +103,8 @@ public class BleachOnlineMang {
 		} catch (IOException e) {
 			BleachLogger.logger.error(e);
 			return null;
+		} finally {
+			con.disconnect();
 		}
 	}
 }
