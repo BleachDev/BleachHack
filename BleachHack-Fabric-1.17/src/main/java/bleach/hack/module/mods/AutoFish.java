@@ -55,7 +55,7 @@ public class AutoFish extends Module {
 		SoundInstance si = event.instance;
 		if (si.getId().getPath().equals("entity.fishing_bobber.splash")
 				&& mc.player.fishHook != null
-				&& mc.player.fishHook.getPos().distanceTo(new Vec3d(si.getX(), si.getY(), si.getZ())) <= 1) {
+				&& mc.player.fishHook.getPos().distanceTo(new Vec3d(si.getX(), si.getY(), si.getZ())) <= 2) {
 			Hand hand = getHandWithRod();
 
 			if (hand != null) {
