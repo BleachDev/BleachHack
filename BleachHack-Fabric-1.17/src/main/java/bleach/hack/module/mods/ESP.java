@@ -9,6 +9,9 @@
 package bleach.hack.module.mods;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
 
 import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonSyntaxException;
@@ -24,8 +27,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.shader.OutlineShaderManager;
-import bleach.hack.util.shader.StaticShaders;
-import bleach.hack.util.shader.StringShaderEffect;
+import bleach.hack.util.shader.ShaderEffectLoader;
 import bleach.hack.util.world.EntityUtils;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.BufferBuilderStorage;
@@ -84,10 +86,11 @@ public class ESP extends Module {
 			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
 					|| lastShaderWidth != getSetting(1).asSlider().getValue() || shaderUnloaded) {
 				try {
-					ShaderEffect shader = new StringShaderEffect(mc.getFramebuffer(), mc.getResourceManager(), mc.getTextureManager(),
-							StaticShaders.MC_SHADER_UNFOMATTED
-									.replace("%1", "" + getSetting(1).asSlider().getValue() / 2)
-									.replace("%2", "" + getSetting(1).asSlider().getValue() / 4));
+					ShaderEffect shader = ShaderEffectLoader.load(mc.getFramebuffer(), "esp-shader",
+							String.format(
+									IOUtils.toString(getClass().getResource("/assets/bleachhack/shaders/mc_outline.ujson"), StandardCharsets.UTF_8), 
+									getSetting(1).asSlider().getValue() / 2,
+									getSetting(1).asSlider().getValue() / 4));
 
 					shader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
 					lastWidth = mc.getWindow().getFramebufferWidth();

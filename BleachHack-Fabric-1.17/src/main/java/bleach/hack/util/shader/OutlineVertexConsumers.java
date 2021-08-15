@@ -26,7 +26,7 @@ public class OutlineVertexConsumers {
 		return new Override(vertexProvider);
 	}
 
-	static class Override implements VertexConsumerProvider {
+	private static class Override implements VertexConsumerProvider {
 
 		private OutlineVertexConsumerProvider parentProvider;
 

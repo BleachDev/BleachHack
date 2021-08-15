@@ -1,0 +1,48 @@
+{
+    "targets": [
+        "swap",
+        "final"
+    ],
+    "passes": [
+        {
+            "name": "entity_outline",
+            "intarget": "final",
+            "outtarget": "swap"
+        },
+        {
+            "name": "blur",
+            "intarget": "swap",
+            "outtarget": "final",
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ %2$f, 0.0 ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ %1$f ]
+                }
+            ]
+        },
+        {
+            "name": "blur",
+            "intarget": "final",
+            "outtarget": "swap",
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ 0.0, %2$f ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ %1$f ]
+                }
+            ]
+        },
+        {
+            "name": "blit",
+            "intarget": "swap",
+            "outtarget": "final"
+        }
+    ]
+}

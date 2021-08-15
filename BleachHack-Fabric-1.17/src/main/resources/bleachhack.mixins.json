@@ -51,7 +51,6 @@
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinServerScreen",
-    "MixinShaderEffect",
     "MixinSharedConstants",
     "MixinSkyProperties",
     "MixinSoundSystem",
