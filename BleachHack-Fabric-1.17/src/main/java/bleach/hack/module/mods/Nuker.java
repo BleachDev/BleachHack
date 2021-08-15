@@ -37,6 +37,7 @@ import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.particle.BlockDustParticle;
 import net.minecraft.util.Hand;
@@ -89,7 +90,8 @@ public class Nuker extends Module {
 
 		ImmutablePairList<BlockPos, Pair<Vec3d, Direction>> blocks = new ImmutablePairList<>();
 
-		/* Add blocks around player */
+		// Add blocks around player
+		SettingToggle filterToggler = getSetting(6).asToggle();
 		for (int x = MathHelper.ceil(range); x >= MathHelper.floor(-range); x--) {
 			for (int y = MathHelper.ceil(range); y >= (getSetting(8).asToggle().state ? -mc.player.getEyeHeight(mc.player.getPose()) + 0.2 : MathHelper.floor(-range)); y--) {
 				for (int z = MathHelper.ceil(range); z >= MathHelper.floor(-range); z--) {
@@ -97,17 +99,27 @@ public class Nuker extends Module {
 
 					double distTo = getSetting(3).asMode().mode == 0
 							? MathHelper.absMax(MathHelper.absMax(mc.player.getX() - (pos.getX() + 0.5), mc.player.getEyeY() - (pos.getY() + 0.5)), mc.player.getZ() - (pos.getZ() + 0.5))
-							//? Math.min(Math.min(Math.abs(mc.player.getX() - (pos.getX() + 0.5)), Math.abs(mc.player.getY() - (pos.getY() + 0.5))), Math.abs(mc.player.getZ() - (pos.getZ() + 0.5)))
 									: mc.player.getPos().distanceTo(Vec3d.ofCenter(pos));
 
-					if (distTo - 0.5 <= getSetting(4).asSlider().getValue() && !mc.world.isAir(pos) && !(mc.world.getBlockState(pos).getBlock() instanceof FluidBlock)) {
-						Pair<Vec3d, Direction> vec = getBlockAngle(pos);
+					BlockState state = mc.world.getBlockState(pos);
+					if (distTo - 0.5 > getSetting(4).asSlider().getValue() || state.isAir() || state.getBlock() instanceof FluidBlock)
+						continue;
 
-						if (vec != null) {
-							blocks.add(pos, vec);
-						} else if (!getSetting(7).asToggle().state) {
-							blocks.add(pos, Pair.of(Vec3d.ofCenter(pos), Direction.UP));
+					if (filterToggler.state) {
+						boolean contains = filterToggler.getChild(1).asList(Block.class).contains(state.getBlock());
+
+						if ((filterToggler.getChild(0).asMode().mode == 0 && contains)
+								|| (filterToggler.getChild(0).asMode().mode == 1 && !contains)) {
+							continue;
 						}
+					}
+
+					Pair<Vec3d, Direction> vec = getBlockAngle(pos);
+
+					if (vec != null) {
+						blocks.add(pos, vec);
+					} else if (!getSetting(7).asToggle().state) {
+						blocks.add(pos, Pair.of(Vec3d.ofCenter(pos), Direction.UP));
 					}
 				}
 			}
@@ -120,15 +132,6 @@ public class Nuker extends Module {
 
 		int broken = 0;
 		for (ImmutablePair<BlockPos, Pair<Vec3d, Direction>> pos : blocks) {
-			if (getSetting(6).asToggle().state) {
-				boolean contains = getSetting(6).asToggle().getChild(1).asList(Block.class).contains(mc.world.getBlockState(pos.getKey()).getBlock());
-
-				if ((getSetting(6).asToggle().getChild(0).asMode().mode == 0 && contains)
-						|| (getSetting(6).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
-					continue;
-				}
-			}
-
 			float breakingDelta = mc.world.getBlockState(pos.getKey()).calcBlockBreakingDelta(mc.player, mc.world, pos.getKey());
 
 			// Unbreakable block
@@ -200,12 +203,11 @@ public class Nuker extends Module {
 
 					double x = range * sin;
 					double z = range * cos;
-					//System.out.println(mc.player.getX() + lastX);
 					RenderUtils.drawLine(
 							pos.x + lastX, pos.y, pos.z + lastZ,
 							pos.x + x, pos.y, pos.z + z,
 							LineColor.single(color), width);
-					
+
 					lastX = x;
 					lastZ = z;
 				}
@@ -227,7 +229,7 @@ public class Nuker extends Module {
 
 	private Pair<Vec3d, Direction> getBlockAngle(BlockPos pos) {
 		for (Direction d: Direction.values()) {
-			if (!mc.world.getBlockState(pos.offset(d)).isFullCube(mc.world, pos)) {
+			if (!mc.world.getBlockState(pos.offset(d)).isFullCube(mc.world, pos.offset(d))) {
 				Vec3d vec = WorldUtils.getLegitLookPos(pos, d, true, 5);
 
 				if (vec != null) {
