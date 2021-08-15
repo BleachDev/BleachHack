@@ -10,8 +10,11 @@ package bleach.hack.module;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.gson.Gson;
@@ -36,28 +39,34 @@ public class ModuleManager {
 	}
 
 	public static void loadModules(InputStream jsonInputStream) {
-		ModuleListJson json = moduleGson.fromJson(new InputStreamReader(jsonInputStream), ModuleListJson.class);
+		InputStreamReader inputReader = new InputStreamReader(jsonInputStream, StandardCharsets.UTF_8);
 
-		for (String moduleString : json.getModules()) {
-			try {
-				Class<?> moduleClass = Class.forName(String.format("%s.%s", json.getPackage(), moduleString));
+		try {
+			ModuleListJson json = moduleGson.fromJson(inputReader, ModuleListJson.class);
 
-				if (Module.class.isAssignableFrom(moduleClass)) {
-					try {
-						Module module = (Module) moduleClass.getConstructor().newInstance();
+			for (String moduleString : json.getModules()) {
+				try {
+					Class<?> moduleClass = Class.forName(String.format("%s.%s", json.getPackage(), moduleString));
 
-						loadModule(module);
-					} catch (Exception exception) {
-						BleachLogger.logger.error("Failed to load module %s: could not instantiate.", moduleClass);
-						exception.printStackTrace();
+					if (Module.class.isAssignableFrom(moduleClass)) {
+						try {
+							Module module = (Module) moduleClass.getConstructor().newInstance();
+
+							loadModule(module);
+						} catch (Exception exception) {
+							BleachLogger.logger.error("Failed to load module %s: could not instantiate.", moduleClass);
+							exception.printStackTrace();
+						}
+					} else {
+						BleachLogger.logger.error("Failed to load module %s: not a descendant of Module.", moduleClass);
 					}
-				} else {
-					BleachLogger.logger.error("Failed to load module %s: not a descendant of Module.", moduleClass);
+				} catch (Exception exception) {
+					BleachLogger.logger.error("Failed to load module %s.", moduleString);
+					exception.printStackTrace();
 				}
-			} catch (Exception exception) {
-				BleachLogger.logger.error("Failed to load module %s.", moduleString);
-				exception.printStackTrace();
 			}
+		} finally {
+			IOUtils.closeQuietly(inputReader);
 		}
 	}
 

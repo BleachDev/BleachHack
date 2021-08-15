@@ -23,7 +23,7 @@ import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
 
 public class ShaderEffectLoader {
-	
+
 	private static final TextureManager textureManager = MinecraftClient.getInstance().getTextureManager();
 	private static final ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
 
@@ -31,15 +31,15 @@ public class ShaderEffectLoader {
 		Identifier id = new Identifier("bleachhack", name);
 		return new ShaderEffect(textureManager, new OwResourceManager(resourceManager, id, new InputStreamResource(input)), framebuffer, id);
 	}
-	
+
 	public static ShaderEffect load(Framebuffer framebuffer, String name, String input) throws JsonSyntaxException, IOException {
 		return load(framebuffer, name, new FastByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 	}
 
 	private static class InputStreamResource implements Resource {
-		
+
 		private InputStream input;
-		
+
 		public InputStreamResource(InputStream input) {
 			this.input = input;
 		}

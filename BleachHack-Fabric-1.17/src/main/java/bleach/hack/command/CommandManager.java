@@ -10,11 +10,13 @@ package bleach.hack.command;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.gson.Gson;
@@ -47,28 +49,34 @@ public class CommandManager {
 	}
 
 	public static void loadCommands(InputStream jsonInputStream) {
-		CommandListJson json = commandGson.fromJson(new InputStreamReader(jsonInputStream), CommandListJson.class);
+		InputStreamReader inputReader = new InputStreamReader(jsonInputStream, StandardCharsets.UTF_8);
 
-		for (String commandString : json.getCommands()) {
-			try {
-				Class<?> commandClass = Class.forName(String.format("%s.%s", json.getPackage(), commandString));
+		try {
+			CommandListJson json = commandGson.fromJson(inputReader, CommandListJson.class);
 
-				if (Command.class.isAssignableFrom(commandClass)) {
-					try {
-						Command command = (Command) commandClass.getConstructor().newInstance();
+			for (String commandString : json.getCommands()) {
+				try {
+					Class<?> commandClass = Class.forName(String.format("%s.%s", json.getPackage(), commandString));
 
-						loadCommand(command);
-					} catch (Exception exception) {
-						BleachLogger.logger.error("Failed to load command %s: could not instantiate.", commandClass);
-						exception.printStackTrace();
+					if (Command.class.isAssignableFrom(commandClass)) {
+						try {
+							Command command = (Command) commandClass.getConstructor().newInstance();
+
+							loadCommand(command);
+						} catch (Exception exception) {
+							BleachLogger.logger.error("Failed to load command %s: could not instantiate.", commandClass);
+							exception.printStackTrace();
+						}
+					} else {
+						BleachLogger.logger.error("Failed to load command %s: not a descendant of Command.", commandClass);
 					}
-				} else {
-					BleachLogger.logger.error("Failed to load command %s: not a descendant of Command.", commandClass);
+				} catch (Exception exception) {
+					BleachLogger.logger.error("Failed to load command %s.", commandString);
+					exception.printStackTrace();
 				}
-			} catch (Exception exception) {
-				BleachLogger.logger.error("Failed to load command %s.", commandString);
-				exception.printStackTrace();
 			}
+		} finally {
+			IOUtils.closeQuietly(inputReader);
 		}
 	}
 
