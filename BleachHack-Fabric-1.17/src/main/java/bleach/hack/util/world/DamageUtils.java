@@ -103,8 +103,6 @@ public class DamageUtils {
 		if (mc.world.getDifficulty() == Difficulty.PEACEFUL)
 			return 0f;
 
-		Explosion explosion = new Explosion(mc.world, null, explosionPos.x, explosionPos.y, explosionPos.z, power, false, Explosion.DestructionType.DESTROY);
-
 		double maxDist = power * 2;
 		if (!mc.world.getOtherEntities(null, new Box(
 				MathHelper.floor(explosionPos.x - maxDist - 1.0),
@@ -151,7 +149,7 @@ public class DamageUtils {
 					if (toDamage <= 0f) {
 						toDamage = 0f;
 					} else {
-						int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), explosion.getDamageSource());
+						int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), DamageSource.explosion((LivingEntity) null));
 						if (protAmount > 0) {
 							toDamage = DamageUtil.getInflictedDamage(toDamage, protAmount);
 						}
@@ -165,23 +163,27 @@ public class DamageUtils {
 		return 0f;
 	}
 
-	public static boolean willExplosionKill(Vec3d explosionPos, float power, LivingEntity target) {
+	public static boolean willKill(LivingEntity target, float damage) {
 		if (target.getMainHandStack().getItem() == Items.TOTEM_OF_UNDYING || target.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING) {
 			return false;
 		}
 
-		return getExplosionDamage(explosionPos, power, target) >= target.getHealth() + target.getAbsorptionAmount();
+		return damage >= target.getHealth() + target.getAbsorptionAmount();
 	}
 
-	public static boolean willExplosionPop(Vec3d explosionPos, float power, LivingEntity target) {
+	public static boolean willPop(LivingEntity target, float damage) {
 		if (target.getMainHandStack().getItem() != Items.TOTEM_OF_UNDYING && target.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING) {
 			return false;
 		}
 
-		return getExplosionDamage(explosionPos, power, target) >= target.getHealth() + target.getAbsorptionAmount();
+		return damage >= target.getHealth() + target.getAbsorptionAmount();
 	}
 
-	public static boolean willExplosionPopOrKill(Vec3d explosionPos, float power, LivingEntity target) {
-		return getExplosionDamage(explosionPos, power, target) >= target.getHealth() + target.getAbsorptionAmount();
+	public static boolean willPopOrKill(LivingEntity target, float damage) {
+		return damage >= target.getHealth() + target.getAbsorptionAmount();
+	}
+	
+	public static boolean willGoBelowHealth(LivingEntity target, float damage, float minHealth) {
+		return target.getHealth() + target.getAbsorptionAmount() - damage < minHealth;
 	}
 }
