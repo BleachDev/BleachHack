@@ -21,6 +21,7 @@ import net.minecraft.util.math.Vec3d;
 
 import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -28,7 +29,7 @@ import java.util.*;
 
 public class LogoutSpot extends Module {
 
-	private final HashMap<UUID, Pair<PlayerCopyEntity, Long>> players = new HashMap<>();
+	private final Map<UUID, Pair<PlayerCopyEntity, Long>> players = new ConcurrentHashMap<>();
 
 	public LogoutSpot() {
 		super("LogoutSpot", KEY_UNBOUND, ModuleCategory.RENDER, "Shows where players logged out.",
@@ -82,9 +83,10 @@ public class LogoutSpot extends Module {
 			for (PlayerListS2CPacket.Entry entry : list.getEntries()) {
 				PlayerEntity player = mc.world.getPlayerByUuid(entry.getProfile().getId());
 
-				if (player != null && !mc.player.equals(player)) {
-					Pair<PlayerCopyEntity, Long> fakePlayer = Pair.of(spawnDummy(player), System.currentTimeMillis());
-					BleachQueue.add("logoutspot", () -> players.put(player.getUuid(), fakePlayer));
+				if (player != null && !mc.player.equals(player) && !players.keySet().contains(player.getUuid())) {
+					PlayerCopyEntity copy = new PlayerCopyEntity(player);
+					players.put(player.getUuid(), Pair.of(copy, System.currentTimeMillis()));
+					BleachQueue.add("logoutspot", copy::spawn);
 				}
 			}
 		}
@@ -95,7 +97,7 @@ public class LogoutSpot extends Module {
 				Pair<PlayerCopyEntity, Long> fakePlayer = players.remove(entry.getProfile().getId());
 
 				if (fakePlayer != null && mc.world != null) {
-					BleachQueue.add("logoutspot", () -> fakePlayer.getLeft().despawn());
+					BleachQueue.add("logoutspot", fakePlayer.getLeft()::despawn);
 				}
 			}
 		}
@@ -105,10 +107,10 @@ public class LogoutSpot extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(0).asToggle().state) {
-			players.keySet().removeIf(player -> {
-				if (mc.player.distanceTo(players.get(player).getKey())
+			players.values().removeIf(pair -> {
+				if (mc.player.distanceTo(pair.getLeft())
 						> getSetting(0).asToggle().getChild(0).asToggle().getChild(0).asSlider().getValue()) {
-					players.get(player).getKey().despawn();
+					pair.getLeft().despawn();
 					return true;
 				}
 
@@ -117,10 +119,10 @@ public class LogoutSpot extends Module {
 		}
 
 		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(1).asToggle().state) {
-			players.keySet().removeIf(player -> {
-				if ((System.currentTimeMillis() - players.get(player).getValue()) / 1000L
+			players.values().removeIf(pair -> {
+				if ((System.currentTimeMillis() - pair.getRight()) / 1000L
 						> getSetting(0).asToggle().getChild(1).asToggle().getChild(0).asSlider().getValueLong()) {
-					players.get(player).getKey().despawn();
+					pair.getLeft().despawn();
 					return true;
 				}
 
@@ -172,18 +174,6 @@ public class LogoutSpot extends Module {
 				&& event.getScreen() instanceof DisconnectedScreen) {
 			players.clear();
 		}
-	}
-
-	private PlayerCopyEntity spawnDummy(PlayerEntity player) {
-		PlayerCopyEntity dummy = new PlayerCopyEntity(player);
-
-		if (getSetting(2).asToggle().state) {
-			dummy.setGhost(true);
-		}
-
-		dummy.spawn();
-
-		return dummy;
 	}
 
 	private String getTimeElapsed(long time) {
