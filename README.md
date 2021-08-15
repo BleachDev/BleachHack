@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/daily%20commit-yes-blue?style=flat-square)
 ![](https://img.shields.io/discord/620600892718055434?style=flat-square)
 
-Obama client for Fabric 1.16 & 1.17 (1.14-1.15 is discontinued).
+Obama approved utility mod for Fabric 1.16 & 1.17.
 
 > Website: https://bleachhack.org/  
 > Discord: https://bleachhack.org/discord
