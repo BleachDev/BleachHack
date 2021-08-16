@@ -20,8 +20,6 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.world.EntityUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Items;
@@ -65,14 +63,16 @@ public class BowBot extends Module {
 		}
 
 		// skidded from wurst no bully pls
-		if (getSetting(1).asToggle().state) {
-			LivingEntity target = (LivingEntity) Streams.stream(mc.world.getEntities())
-					.filter(e -> e instanceof LivingEntity && e != mc.player)
-					.filter(e -> getSetting(1).asToggle().getChild(0).asToggle().state || !(e instanceof PlayerEntity))
-					.filter(e -> getSetting(1).asToggle().getChild(1).asToggle().state || !(e instanceof Monster))
-					.filter(e -> getSetting(1).asToggle().getChild(2).asToggle().state || !EntityUtils.isAnimal(e))
-					.filter(e -> !getSetting(1).asToggle().getChild(3).asToggle().state || mc.player.canSee(e))
+		SettingToggle aimToggle = getSetting(1).asToggle();
+		if (aimToggle.state) {
+			LivingEntity target = Streams.stream(mc.world.getEntities())
+					.filter(e -> EntityUtils.isAttackable(e, true)
+							&& (!aimToggle.getChild(3).asToggle().state || mc.player.canSee(e)))
+					.filter(e -> (aimToggle.getChild(0).asToggle().state && EntityUtils.isPlayer(e))
+							|| (aimToggle.getChild(1).asToggle().state && EntityUtils.isMob(e))
+							|| (aimToggle.getChild(2).asToggle().state && EntityUtils.isAnimal(e)))
 					.sorted(Comparator.comparing(mc.player::distanceTo))
+					.map(e -> (LivingEntity) e)
 					.findFirst().orElse(null);
 
 			if (target == null)

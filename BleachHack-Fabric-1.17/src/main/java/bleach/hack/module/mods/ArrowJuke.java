@@ -48,7 +48,7 @@ public class ArrowJuke extends Module {
 			int steps = getSetting(2).asSlider().getValueInt();
 
 			Box playerBox = mc.player.getBoundingBox().expand(0.3);
-			List<Box> futureBoxes = new ArrayList<>();
+			List<Box> futureBoxes = new ArrayList<>(steps);
 
 			Box currentBox = e.getBoundingBox();
 			Vec3d currentVel = e.getVelocity();

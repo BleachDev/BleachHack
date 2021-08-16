@@ -36,9 +36,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 
@@ -154,9 +152,9 @@ public class ESP extends Module {
 	}
 
 	private float[] getColorForEntity(Entity entity) {
-		if (entity instanceof PlayerEntity && entity != mc.player && getSetting(5).asToggle().state) {
+		if (EntityUtils.isPlayer(entity) && entity != mc.player && getSetting(5).asToggle().state) {
 			return getSetting(5).asToggle().getChild(BleachHack.friendMang.has(entity) ? 1 : 0).asColor().getRGBFloat();
-		} else if (entity instanceof Monster && getSetting(6).asToggle().state) {
+		} else if (EntityUtils.isMob(entity) && getSetting(6).asToggle().state) {
 			return getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
 		} // Before animals to prevent animals from overlapping donkeys
 		else if (entity instanceof AbstractDonkeyEntity && getSetting(11).asToggle().state) {

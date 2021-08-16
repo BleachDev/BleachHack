@@ -21,7 +21,6 @@ import net.minecraft.entity.projectile.ShulkerBulletEntity;
 import com.google.common.collect.Streams;
 import bleach.hack.eventbus.BleachSubscribe;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
@@ -34,8 +33,6 @@ import bleach.hack.util.world.WorldUtils;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
 import net.minecraft.util.Hand;
@@ -58,7 +55,7 @@ public class Killaura extends Module {
 				new SettingToggle("MultiAura", false).withDesc("Atacks multiple entities at once.").withChildren(
 						new SettingSlider("Targets", 1, 20, 3, 0).withDesc("How many targets to attack at once.")),
 				new SettingRotate(true).withDesc("Rotates when attackign entities."),
-				new SettingToggle("Thru Walls", false).withDesc("Attacks through walls."),
+				new SettingToggle("Raycast", true).withDesc("Only attacks if you can see the target."),
 				new SettingToggle("1.9 Delay", false).withDesc("Uses the 1.9+ delay between hits."),
 				new SettingSlider("Range", 0, 6, 4.25, 2).withDesc("Attack range."),
 				new SettingSlider("CPS", 0, 20, 8, 0).withDesc("Attack CPS if 1.9 delay is disabled."));
@@ -138,14 +135,11 @@ public class Killaura extends Module {
 		}
 
 		return targets
-				.filter(e -> !(e instanceof PlayerEntity && BleachHack.friendMang.has(e))
-						&& e.isAlive()
-						&& e != mc.player.getVehicle()
-						&& !e.getEntityName().equals(mc.getSession().getUsername())
+				.filter(e -> EntityUtils.isAttackable(e, true)
 						&& mc.player.distanceTo(e) <= getSetting(11).asSlider().getValue()
-						&& (mc.player.canSee(e) || getSetting(9).asToggle().state))
-				.filter(e -> (e instanceof PlayerEntity && getSetting(1).asToggle().state)
-						|| (e instanceof Monster && getSetting(2).asToggle().state)
+						&& (mc.player.canSee(e) || !getSetting(9).asToggle().state))
+				.filter(e -> (EntityUtils.isPlayer(e) && getSetting(1).asToggle().state)
+						|| (EntityUtils.isMob(e) && getSetting(2).asToggle().state)
 						|| (EntityUtils.isAnimal(e) && getSetting(3).asToggle().state)
 						|| (e instanceof ArmorStandEntity && getSetting(4).asToggle().state)
 						|| ((e instanceof ShulkerBulletEntity || e instanceof FireballEntity) && getSetting(5).asToggle().state))

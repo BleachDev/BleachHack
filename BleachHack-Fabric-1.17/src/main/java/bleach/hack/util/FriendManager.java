@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Formatting;
 
 public class FriendManager {
@@ -28,16 +29,15 @@ public class FriendManager {
 	}
 	
 	public void add(Entity entity) {
-		add(entity.getName().getString());
+		if (entity instanceof PlayerEntity)
+			add(entity.getName().getString());
 	}
 
 	public void add(String name) {
-		for (Formatting f : Formatting.values()) {
-			name = name.replace(f.toString(), "");
-		}
+		name = Formatting.strip(name).toLowerCase(Locale.ENGLISH);
 
 		if (!name.isEmpty()) {
-			friends.add(name.toLowerCase(Locale.ENGLISH));
+			friends.add(name);
 		}
 	}
 
@@ -46,16 +46,15 @@ public class FriendManager {
 	}
 	
 	public void remove(Entity entity) {
-		remove(entity.getName().getString());
+		if (entity instanceof PlayerEntity)
+			remove(entity.getName().getString());
 	}
 
 	public void remove(String name) {
-		for (Formatting f : Formatting.values()) {
-			name = name.replace(f.toString(), "");
-		}
+		name = Formatting.strip(name).toLowerCase(Locale.ENGLISH);
 
 		if (!name.isEmpty()) {
-			friends.remove(name.toLowerCase(Locale.ENGLISH));
+			friends.remove(name);
 		}
 	}
 
@@ -64,16 +63,17 @@ public class FriendManager {
 	}
 	
 	public boolean has(Entity entity) {
-		return has(entity.getName().getString());
+		if (entity instanceof PlayerEntity)
+			return has(entity.getName().getString());
+		
+		return false;
 	}
 
 	public boolean has(String name) {
-		for (Formatting f : Formatting.values()) {
-			name = name.replace(f.toString(), "");
-		}
+		name = Formatting.strip(name).toLowerCase(Locale.ENGLISH);
 
 		if (!name.isEmpty()) {
-			return friends.contains(name.toLowerCase(Locale.ENGLISH));
+			return friends.contains(name);
 		}
 
 		return false;

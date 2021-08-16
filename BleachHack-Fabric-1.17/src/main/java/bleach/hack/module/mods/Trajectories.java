@@ -95,6 +95,7 @@ public class Trajectories extends Module {
 			for (PlayerEntity e : mc.world.getPlayers()) {
 				if (e == mc.player)
 					continue;
+
 				Entity proj = ProjectileSimulator.summonProjectile(
 						e, getSetting(1).asToggle().state, getSetting(2).asToggle().state, getSetting(3).asToggle().state);
 

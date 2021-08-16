@@ -18,6 +18,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.world.DamageUtils;
+import bleach.hack.util.world.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -122,8 +123,8 @@ public class AutoLog extends Module {
 							: Double.MAX_VALUE;
 
 			for (PlayerEntity player: mc.world.getPlayers()) {
-				if ((!getSetting(3).asToggle().getChild(1).asToggle().state && BleachHack.friendMang.has(player.getDisplayName().getString()))
-						|| player == mc.player) {
+				if (!EntityUtils.isOtherServerPlayer(player)
+						|| (!getSetting(3).asToggle().getChild(1).asToggle().state && BleachHack.friendMang.has(player))) {
 					continue;
 				}
 
