@@ -35,11 +35,14 @@ import net.minecraft.world.chunk.WorldChunk;
 
 public class NewChunks extends Module {
 
+	private static final Direction[] skipDirs = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
+
 	private Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
 	private Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
 
 	public NewChunks() {
 		super("NewChunks", KEY_UNBOUND, ModuleCategory.WORLD, "Detects completely new chunks using certain traits of them.",
+				new SettingSlider("Y-Offset", -100, 100, 0, 0).withDesc("The offset from the bottom of the world to render the squares at."),
 				new SettingToggle("Remove", true).withDesc("Removes the cached chunks when disabling the module."),
 				new SettingToggle("Fill", true).withDesc("Fills in the newchunks.").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2).withDesc("The opacity of the fill.")),
@@ -51,7 +54,7 @@ public class NewChunks extends Module {
 
 	@Override
 	public void onDisable() {
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(1).asToggle().state) {
 			newChunks.clear();
 			oldChunks.clear();
 		}
@@ -118,21 +121,21 @@ public class NewChunks extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		Direction[] skipDirs = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
+		int renderY = mc.world.getBottomY() + getSetting(0).asSlider().getValueInt();
 
-		if (getSetting(2).asToggle().state) {
-			int color = getSetting(2).asToggle().getChild(0).asColor().getRGB();
+		if (getSetting(3).asToggle().state) {
+			int color = getSetting(3).asToggle().getChild(0).asColor().getRGB();
 			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
-			QuadColor fillColor = QuadColor.single(((int) (getSetting(1).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
+			QuadColor fillColor = QuadColor.single(((int) (getSetting(2).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
 
 			synchronized (newChunks) {
 				for (ChunkPos c: newChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
 						Box box = new Box(
-								c.getStartX(), mc.world.getBottomY(), c.getStartZ(),
-								c.getStartX() + 16, mc.world.getBottomY(), c.getStartZ() + 16);
+								c.getStartX(), renderY, c.getStartZ(),
+								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
-						if (getSetting(1).asToggle().state) {
+						if (getSetting(2).asToggle().state) {
 							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
 						}
 	
@@ -142,19 +145,19 @@ public class NewChunks extends Module {
 			}
 		}
 
-		if (getSetting(3).asToggle().state) {
-			int color = getSetting(3).asToggle().getChild(0).asColor().getRGB();
+		if (getSetting(4).asToggle().state) {
+			int color = getSetting(4).asToggle().getChild(0).asColor().getRGB();
 			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
-			QuadColor fillColor = QuadColor.single(((int) (getSetting(1).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
+			QuadColor fillColor = QuadColor.single(((int) (getSetting(2).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
 
 			synchronized (oldChunks) {
 				for (ChunkPos c: oldChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
 						Box box = new Box(
-								c.getStartX(), mc.world.getBottomY(), c.getStartZ(),
-								c.getStartX() + 16, mc.world.getBottomY(), c.getStartZ() + 16);
+								c.getStartX(), renderY, c.getStartZ(),
+								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
-						if (getSetting(1).asToggle().state) {
+						if (getSetting(2).asToggle().state) {
 							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
 						}
 	
