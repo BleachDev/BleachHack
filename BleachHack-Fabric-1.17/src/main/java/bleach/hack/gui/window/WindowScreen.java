@@ -113,6 +113,7 @@ public abstract class WindowScreen extends Screen {
 			Window w = windows.get(i);
 
 			if (i == window) {
+				w.closed = false;
 				w.selected = true;
 				int index = -1;
 				for (Entry<Integer, Integer> e: windowOrder.entrySet()) {

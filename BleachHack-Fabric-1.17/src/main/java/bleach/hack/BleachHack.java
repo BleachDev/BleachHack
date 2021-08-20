@@ -9,6 +9,7 @@
 package bleach.hack;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import bleach.hack.command.CommandManager;
 import bleach.hack.command.CommandSuggestor;
@@ -23,7 +24,10 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.Watermark;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
+import bleach.hack.util.io.BleachOnlineMang;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.SharedConstants;
+
 import org.apache.logging.log4j.Level;
 
 public class BleachHack implements ModInitializer {
@@ -38,6 +42,8 @@ public class BleachHack implements ModInitializer {
 
 	public static FriendManager friendMang;
 	public static BleachPlayerManager playerMang;
+
+	public static JsonObject updateJson;
 
 	//private BleachFileMang bleachFileManager;
 
@@ -90,6 +96,8 @@ public class BleachHack implements ModInitializer {
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
 			BleachTitleScreen.customTitleScreen = false;
 		}
+
+		updateJson = BleachOnlineMang.readResourceJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
 
 		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
 	}

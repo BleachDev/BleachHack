@@ -8,17 +8,9 @@
  */
 package bleach.hack.gui;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
-
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
@@ -28,13 +20,10 @@ import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.gui.effect.ParticleManager;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.mods.UI;
-import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachOnlineMang;
-import net.fabricmc.loader.ModContainer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -57,9 +46,6 @@ public class BleachTitleScreen extends WindowScreen {
 	public static boolean customTitleScreen = true;
 
 	public static String splash = "";
-	public static JsonObject version = null;
-
-	private static String updaterText = "";
 
 	public BleachTitleScreen() {
 		super(new TranslatableText("narrator.screen.title"));
@@ -67,14 +53,6 @@ public class BleachTitleScreen extends WindowScreen {
 
 	public void init() {
 		super.init();
-
-		if (version == null) {
-			version = BleachOnlineMang.readResourceJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
-
-			if (version == null) {
-				version = new JsonObject();
-			}
-		}
 
 		if (splash.isEmpty()) {
 			List<String> sp = BleachOnlineMang.readResourceLines("splashes.txt");
@@ -147,86 +125,14 @@ public class BleachTitleScreen extends WindowScreen {
 		}
 
 		// Update Text
-		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
+		if (BleachHack.updateJson != null
+				&& BleachHack.updateJson.has("version")
+				&& BleachHack.updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
 			getWindow(0).addWidget(new WindowTextWidget("\u00a76\u00a7nUpdate\u00a76", true, 4, h - 12, 0xffffff)
 					.withClickEvent(widget -> {
-						getWindow(1).closed = false;
-						selectWindow(1);
+						client.setScreen(new UpdateScreen(client.currentScreen, BleachHack.updateJson));
 					}));
 		}
-
-		addWindow(new Window(width / 2 - 100,
-				height / 2 - 70,
-				width / 2 + 100,
-				height / 2 + 70, "Update", new ItemStack(Items.MAGENTA_GLAZED_TERRACOTTA),
-				!(version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION)) {
-
-			protected void drawBar(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
-				super.drawBar(matrices, mouseX, mouseY, textRend);
-
-				Window.verticalGradient(matrices, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0xff606090, 0x00606090);
-			}
-		});
-
-		getWindow(1).addWidget(
-				new WindowButtonWidget(5, 115, 95, 135, "Update", () -> {
-					try {
-						if (!SystemUtils.IS_OS_WINDOWS) {
-							updaterText = "Updater only supports Windows";
-							return;
-						}
-
-						File modpath = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginUrl().toURI());
-
-						if (!modpath.isFile()) {
-							updaterText = "Invalid mod path";
-							return;
-						}
-
-						if (version == null || !version.has("installer")) {
-							updaterText = "Invalid metadata json";
-							return;
-						}
-
-						String link = version.get("installer").getAsJsonObject().get("link").getAsString();
-						String name = link.replaceFirst("^.*\\/", "");
-
-						File installerFile = new File(System.getProperty("java.io.tmpdir"), name);
-
-						BleachLogger.logger.info(
-								"\n> Installer path: " + installerFile
-								+ "\n> Installer URL: " + link
-								+ "\n> Installer file name: " + name
-								+ "\n> Regular File: " + Files.isRegularFile(installerFile.toPath())
-								+ "\n> File Length: " + installerFile.length());
-
-						if (!Files.isRegularFile(installerFile.toPath()) || installerFile.length() <= 1024L) {
-							FileUtils.copyURLToFile(new URL(link), installerFile);
-						}
-
-						Runtime.getRuntime().exec("cmd /c start "
-								+ installerFile.getAbsolutePath().toString()
-								+ " "
-								+ modpath.toString()
-								+ " "
-								+ version.get("installer").getAsJsonObject().get("url").getAsString());
-
-						client.scheduleStop();
-					} catch (Exception e) {
-						updaterText = "Unknown error";
-						e.printStackTrace();
-					}
-				}));
-
-		getWindow(1).addWidget(
-				new WindowButtonWidget(105, 115, 195, 135, "Github", () -> {
-					Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/"));
-				}));
-
-		getWindow(1).addWidget(new WindowTextWidget("\u00a7cOutdated BleachHack version!", true, WindowTextWidget.TextAlign.MIDDLE, 100, 15, 0xffffff));
-		getWindow(1).addWidget(new WindowTextWidget("\u00a7eClick update to auto-update", true, WindowTextWidget.TextAlign.MIDDLE, 100, 28, 0xffffff));
-		getWindow(1).addWidget(new WindowTextWidget("\u00a7eOr Github to manually update", true, WindowTextWidget.TextAlign.MIDDLE, 100, 38, 0xffffff));
-		getWindow(1).addWidget(new WindowTextWidget("\u00a7c\u00a7o" + updaterText, true, WindowTextWidget.TextAlign.MIDDLE, 100, 58, 0xffffff));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

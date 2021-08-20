@@ -10,16 +10,19 @@ package bleach.hack.mixin;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.gson.JsonPrimitive;
 
+import bleach.hack.BleachHack;
 import bleach.hack.gui.AccountManagerScreen;
 import bleach.hack.gui.BleachCreditsScreen;
 import bleach.hack.gui.BleachOptionsScreen;
 import bleach.hack.gui.BleachTitleScreen;
+import bleach.hack.gui.UpdateScreen;
 import bleach.hack.gui.window.WindowManagerScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -35,6 +38,8 @@ import net.minecraft.text.Text;
 
 @Mixin(TitleScreen.class)
 public class MixinTitleScreen extends Screen {
+	
+	@Unique private static boolean firstLoad = true;
 
 	protected MixinTitleScreen(Text title) {
 		super(title);
@@ -42,6 +47,17 @@ public class MixinTitleScreen extends Screen {
 
 	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
+		if (firstLoad) {
+			if (BleachHack.updateJson != null
+					&& BleachHack.updateJson.has("version")
+					&& BleachHack.updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
+				client.setScreen(new UpdateScreen(null, BleachHack.updateJson));
+			}
+
+			firstLoad = false;
+			return;
+		}
+
 		if (BleachTitleScreen.customTitleScreen) {
 			MinecraftClient.getInstance().setScreen(
 					new WindowManagerScreen(
