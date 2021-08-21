@@ -121,12 +121,12 @@ public class PacketFly extends Module {
 
 		Entity target = mc.player.getRootVehicle();
 		if (getSetting(0).asMode().mode == 0) {
-			cachedPos = cachedPos.add(moveVec);
-
 			if (timer > getSetting(3).asSlider().getValue()) {
-				//posY -= 0.2;
+				moveVec = moveVec.add(0, -vspeed, 0);
 				timer = 0;
 			}
+
+			cachedPos = cachedPos.add(moveVec);
 
 			//target.noClip = true;
 			target.updatePositionAndAngles(cachedPos.x, cachedPos.y, cachedPos.z, mc.player.getYaw(), mc.player.getPitch());
