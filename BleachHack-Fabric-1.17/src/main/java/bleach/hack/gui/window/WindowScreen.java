@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -57,7 +56,7 @@ public abstract class WindowScreen extends Screen {
 	}
 
 	protected List<Integer> getWindowsBackToFront() {
-		return windowOrder.values().stream().collect(Collectors.toList());
+		return new ArrayList<>(windowOrder.values());
 	}
 
 	protected List<Integer> getWindowsFrontToBack() {
@@ -195,6 +194,13 @@ public abstract class WindowScreen extends Screen {
 	}
 
 	public void renderBackgroundTexture(int vOffset) {
+		int colorOffset = (int) ((System.currentTimeMillis() / 75) % 100);
+		if (colorOffset > 50)
+			colorOffset = 50 - (colorOffset - 50);
+
+		// smooth
+		colorOffset = (int) (-(Math.cos(Math.PI * (colorOffset / 50d)) - 1) / 2 * 55);
+
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
@@ -203,13 +209,14 @@ public abstract class WindowScreen extends Screen {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		bufferBuilder.vertex(width, 0, 0).color(70, 20, 120, 255).next();
-		bufferBuilder.vertex(0, 0, 0).color(100, 0, 120, 255).next();
-		bufferBuilder.vertex(0, height + 14, 0).color(60, 0, 160, 255).next();
-		bufferBuilder.vertex(width, height + 14, 0).color(60, 60, 200, 255).next();
+		bufferBuilder.vertex(width, 0, 0).color(46, 39, 107, 255).next();
+		bufferBuilder.vertex(0, 0, 0).color(31 + colorOffset / 2, 22, 82, 255).next();
+		bufferBuilder.vertex(0, height + 14, 0).color(90, 54, 159, 255).next();
+		bufferBuilder.vertex(width, height + 14, 0).color(100 + colorOffset, 54, 189, 255).next();
 		tessellator.draw();
 
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
+		//fill(new MatrixStack(), 0, 0, width, height + 14, 0xff1f1652);1e1654
 	}
 }
