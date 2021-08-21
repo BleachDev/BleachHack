@@ -217,6 +217,5 @@ public abstract class WindowScreen extends Screen {
 
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
-		//fill(new MatrixStack(), 0, 0, width, height + 14, 0xff1f1652);1e1654
 	}
 }

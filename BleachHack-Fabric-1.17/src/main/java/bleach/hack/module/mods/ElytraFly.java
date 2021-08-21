@@ -88,7 +88,7 @@ public class ElytraFly extends Module {
 				break;
 			case 2:
 				if (mc.player.isFallFlying()) {
-					if (mc.options.keyBack.isPressed()) vec3d = vec3d.multiply(-1);
+					if (mc.options.keyBack.isPressed()) vec3d = vec3d.negate();
 					if (mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
 					else if (mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
 					if (mc.options.keyJump.isPressed()) vec3d = vec3d.add(0, getSetting(3).asSlider().getValue(), 0);
