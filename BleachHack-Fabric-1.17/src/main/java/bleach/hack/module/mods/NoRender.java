@@ -33,6 +33,7 @@ import net.minecraft.client.particle.ExplosionLargeParticle;
 import net.minecraft.client.particle.FireworksSparkParticle.FireworkParticle;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.FallingBlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
@@ -79,7 +80,8 @@ public class NoRender extends Module {
 						new SettingToggle("Falling Blocks", false).withDesc("Removes falling blocks."),                            // 3-1
 						new SettingToggle("Minecarts", false).withDesc("Removes minecarts."),                                      // 3-2
 						new SettingToggle("Snowballs", false).withDesc("Removes snowballs."),                                      // 3-3
-						new SettingToggle("Xp Orbs", false).withDesc("Removes experience orbs.")));
+						new SettingToggle("Xp Orbs", false).withDesc("Removes experience orbs."),
+						new SettingToggle("Items", false).withDesc("Removes Items")));
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 
@@ -137,7 +139,8 @@ public class NoRender extends Module {
 				|| (isEntityToggled(1) && event.getEntity() instanceof FallingBlockEntity)
 				|| (isEntityToggled(2) && event.getEntity() instanceof AbstractMinecartEntity)
 				|| (isEntityToggled(3) && event.getEntity() instanceof SnowballEntity)
-				|| (isEntityToggled(4) && event.getEntity() instanceof ExperienceOrbEntity)) {
+				|| (isEntityToggled(4) && event.getEntity() instanceof ExperienceOrbEntity)
+				|| (isEntityToggled(5) && event.getEntity() instanceof ItemEntity)) {
 			event.setCancelled(true);
 		}
 	}
