@@ -44,7 +44,8 @@ public class BleachOptionsScreen extends WindowScreen {
 		int y = 20;
 
 		y = addCategory(0, w / 2, y, "General Settings",
-				Option.GENERAL_CHECK_FOR_UPDATES);
+				Option.GENERAL_CHECK_FOR_UPDATES,
+				Option.GENERAL_SHOW_UPDATE_SCREEN);
 
 		y = addCategory(0, w / 2, y + 15, "Playerlist Settings",
 				Option.PLAYERLIST_SHOW_FRIENDS,

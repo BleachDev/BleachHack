@@ -92,12 +92,13 @@ public class BleachHack implements ModInitializer {
 		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
 			playerMang.startPinger();
 
+		if (Option.GENERAL_CHECK_FOR_UPDATES.getValue())
+			updateJson = BleachOnlineMang.readResourceJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
+
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
 			BleachTitleScreen.customTitleScreen = false;
 		}
-
-		updateJson = BleachOnlineMang.readResourceJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
 
 		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
 	}

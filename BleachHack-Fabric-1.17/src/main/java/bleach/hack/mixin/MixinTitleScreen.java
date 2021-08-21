@@ -23,6 +23,7 @@ import bleach.hack.gui.BleachCreditsScreen;
 import bleach.hack.gui.BleachOptionsScreen;
 import bleach.hack.gui.BleachTitleScreen;
 import bleach.hack.gui.UpdateScreen;
+import bleach.hack.gui.option.Option;
 import bleach.hack.gui.window.WindowManagerScreen;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
@@ -48,7 +49,8 @@ public class MixinTitleScreen extends Screen {
 	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
 		if (firstLoad) {
-			if (BleachHack.updateJson != null
+			if (Option.GENERAL_SHOW_UPDATE_SCREEN.getValue()
+					&& BleachHack.updateJson != null
 					&& BleachHack.updateJson.has("version")
 					&& BleachHack.updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
 				client.setScreen(new UpdateScreen(null, BleachHack.updateJson));
