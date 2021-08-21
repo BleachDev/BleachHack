@@ -81,7 +81,7 @@ public class NoRender extends Module {
 						new SettingToggle("Minecarts", false).withDesc("Removes minecarts."),                                      // 3-2
 						new SettingToggle("Snowballs", false).withDesc("Removes snowballs."),                                      // 3-3
 						new SettingToggle("Xp Orbs", false).withDesc("Removes experience orbs."),
-						new SettingToggle("Items", false).withDesc("Removes Items")));
+						new SettingToggle("Items", false).withDesc("Removes items.")));
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 
