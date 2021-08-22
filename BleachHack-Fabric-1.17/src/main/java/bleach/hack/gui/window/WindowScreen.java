@@ -209,10 +209,10 @@ public abstract class WindowScreen extends Screen {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		bufferBuilder.vertex(width, 0, 0).color(46, 39, 107, 255).next();
-		bufferBuilder.vertex(0, 0, 0).color(31 + colorOffset / 2, 22, 82, 255).next();
+		bufferBuilder.vertex(width, 0, 0).color(50, 45, 110, 255).next();
+		bufferBuilder.vertex(0, 0, 0).color(45 + colorOffset / 2, 35, 100, 255).next();
 		bufferBuilder.vertex(0, height + 14, 0).color(90, 54, 159, 255).next();
-		bufferBuilder.vertex(width, height + 14, 0).color(100 + colorOffset, 54, 189, 255).next();
+		bufferBuilder.vertex(width, height + 14, 0).color(105 + colorOffset, 54, 189, 255).next();
 		tessellator.draw();
 
 		RenderSystem.disableBlend();
