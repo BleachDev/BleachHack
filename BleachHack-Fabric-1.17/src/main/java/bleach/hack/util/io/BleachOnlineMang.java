@@ -9,12 +9,18 @@
 package bleach.hack.util.io;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Redirect;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandler;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.time.Duration;
 import java.util.List;
-
-import org.apache.commons.io.IOUtils;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,8 +33,19 @@ import bleach.hack.util.BleachLogger;
  */
 public class BleachOnlineMang {
 
-	private static URI resourceUrl = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/"); // URI.create("https://res.bleachhack.org/");
-	private static URI apiUrl = URI.create("http://13.53.235.214:8080/");                                                 // URI.create("http://api.bleachhack.org/");
+	private static HttpClient httpClient = HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
+	private static URI resourceUrl = URI.create("https://res.bleachhack.org/");
+	private static URI apiUrl = URI.create("https://api.bleachhack.org/");
+
+	public static void warmUp() {
+		// Caches the dns of the urls
+		sendAsyncRequest(resourceUrl, "GET", null, 5000, BodyHandlers.discarding());
+		sendAsyncRequest(apiUrl, "GET", null, 5000, BodyHandlers.discarding());
+	}
+
+	public static HttpClient getHttpClient() {
+		return httpClient;
+	}
 
 	public static URI getResourceUrl() {
 		return resourceUrl;
@@ -40,12 +57,12 @@ public class BleachOnlineMang {
 
 	public static List<String> readResourceLines(String path) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
-		return readLines(createConnection(resourceUrl.resolve(path), "GET", null, 10000));
+		return sendRequest(resourceUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofLines()).collect(Collectors.toList());
 	}
 
 	public static JsonObject readResourceJson(String path) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
-		String s = read(createConnection(resourceUrl.resolve(path), "GET", null, 10000));
+		String s = sendRequest(resourceUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofString());
 
 		if (s != null) {
 			try {
@@ -60,51 +77,36 @@ public class BleachOnlineMang {
 
 	public static String apiGet(String path) {
 		BleachLogger.logger.info("Trying to call API (GET, /" + path + ")");
-		return read(createConnection(apiUrl.resolve(path), "GET", null, 10000));
+		return sendRequest(apiUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofString());
 	}
 
 	public static String apiPost(String path, JsonElement body) {
 		BleachLogger.logger.info("Trying to call API (POST, /" + path + ", " + body.toString() + ")");
-		return read(createConnection(apiUrl.resolve(path), "POST", body.toString(), 10000));
+		return sendRequest(apiUrl.resolve(path), "POST", body.toString(), 5000, BodyHandlers.ofString());
 	}
 
-	private static HttpURLConnection createConnection(URI url, String method, String body, int timeout) {
+	private static <T> T sendRequest(URI url, String method, String body, int timeout, BodyHandler<T> handler) {
 		try {
-			HttpURLConnection con = (HttpURLConnection) url.toURL().openConnection();
-			con.setRequestMethod(method);
-			con.setConnectTimeout(timeout);
-			con.setReadTimeout(timeout);
-
-			if (body != null && !body.isEmpty()) {
-				con.setDoOutput(true);
-				con.getOutputStream().write(body.toString().getBytes(StandardCharsets.UTF_8));
-			}
-
-			return con;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static String read(HttpURLConnection con) {
-		try {
-			return IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8);
-		} catch (IOException e) {
+			return httpClient.send(
+					HttpRequest
+					.newBuilder(url)
+					.timeout(Duration.ofMillis(timeout))
+					.method(method, body != null ? BodyPublishers.ofString(body) : BodyPublishers.noBody())
+					.build(), handler)
+					.body();
+		} catch (IOException | InterruptedException e) {
 			BleachLogger.logger.error(e);
 			return null;
-		} finally {
-			con.disconnect();
 		}
 	}
 
-	private static List<String> readLines(HttpURLConnection con) {
-		try {
-			return IOUtils.readLines(con.getInputStream(), StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			BleachLogger.logger.error(e);
-			return null;
-		} finally {
-			con.disconnect();
-		}
+	private static <T> CompletableFuture<T> sendAsyncRequest(URI url, String method, String body, int timeout, BodyHandler<T> handler) {
+		return httpClient.sendAsync(
+				HttpRequest
+				.newBuilder(url)
+				.timeout(Duration.ofMillis(timeout))
+				.method(method, body != null ? BodyPublishers.ofString(body) : BodyPublishers.noBody())
+				.build(), handler)
+				.thenApply(HttpResponse::body);
 	}
 }

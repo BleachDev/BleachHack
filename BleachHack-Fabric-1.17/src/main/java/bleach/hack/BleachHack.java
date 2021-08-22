@@ -76,6 +76,8 @@ public class BleachHack implements ModInitializer {
 		//this.eventBus = new EventBus();
 		//this.bleachFileManager = new BleachFileMang();
 		BleachFileMang.init();
+		BleachOnlineMang.warmUp();
+
 		ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
 		BleachFileHelper.readModules();
 
