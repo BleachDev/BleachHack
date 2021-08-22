@@ -11,7 +11,6 @@ package bleach.hack.module.mods;
 import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventOpenScreen;
-import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
@@ -28,7 +27,6 @@ import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
@@ -52,60 +50,52 @@ public class AutoReconnect extends Module {
 	}
 
 	@BleachSubscribe
-	public void readPacket(EventReadPacket event) {
-		if (event.getPacket() instanceof DisconnectS2CPacket) {
-			try {
-				server = mc.getCurrentServerEntry();
-			} catch (Exception e) {
-			}
-		}
-	}
-
-	@BleachSubscribe
 	public void sendPacket(EventSendPacket event) {
 		if (event.getPacket() instanceof HandshakeC2SPacket) {
-			server = new ServerInfo("Server",
-					(String) FabricReflect.getFieldValue(event.getPacket(), "field_13159", "address") + ":"
-							+ (int) FabricReflect.getFieldValue(event.getPacket(), "field_13157", "port"),
-							false);
+			HandshakeC2SPacket packet = (HandshakeC2SPacket) event.getPacket();
+			server = new ServerInfo("Server", packet.getAddress() + ":" + packet.getPort(), false);
 		}
 	}
 
 	public class NewDisconnectScreen extends DisconnectedScreen {
 
 		public long reconnectTime = Long.MAX_VALUE - 1000000L;
-		public int reasonH = 0;
 
 		private ButtonWidget reconnectButton;
 
 		public NewDisconnectScreen(DisconnectedScreen screen) {
-			super((Screen) FabricReflect.getFieldValue(screen, "field_2456", "parent"), new LiteralText("Disconnect"),
+			super((Screen) FabricReflect.getFieldValue(screen, "field_2456", "parent"),
+					screen.getTitle(),
 					(Text) FabricReflect.getFieldValue(screen, "field_2457", "reason"));
-			reasonH = (int) FabricReflect.getFieldValue(screen, "field_2454", "reasonHeight");
 		}
 
 		public void init() {
 			super.init();
+
 			reconnectTime = System.currentTimeMillis();
-			addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 35, 200, 20, new LiteralText("Reconnect"), button -> {
+			int reasonH = (int) FabricReflect.getFieldValue(this, "field_2454", "reasonHeight");
+			int buttonH = Math.min(height / 2 + reasonH / 2 + 9, height - 30);
+
+			addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 22, 200, 20, new LiteralText("Reconnect"), button -> {
 				if (server != null)
 					ConnectScreen.connect(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
 			}));
-			reconnectButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + reasonH / 2 + 57, 200, 20, LiteralText.EMPTY,
-					button -> {
-						getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
-						reconnectTime = System.currentTimeMillis();
-					}));
+			reconnectButton = addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 44, 200, 20, LiteralText.EMPTY, button -> {
+				getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
+				reconnectTime = System.currentTimeMillis();
+			}));
 		}
 
 		public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 			super.render(matrices, mouseX, mouseY, delta);
 
-			reconnectButton.setMessage(new LiteralText(getSetting(0).asToggle().state ? "\u00a7aAutoReconnect ["
-					+ (reconnectTime + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000 - System.currentTimeMillis())
-					+ "]" : "\u00a7cAutoReconnect [" + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000 + "]"));
+			int startTime = (int) (getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000);
+			reconnectButton.setMessage(new LiteralText(
+					getSetting(0).asToggle().state
+					? "\u00a7aAutoReconnect [" + (reconnectTime + startTime - System.currentTimeMillis()) + "]"
+							: "\u00a7cAutoReconnect [" + startTime + "]"));
 
-			if (reconnectTime + getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000 < System.currentTimeMillis() && getSetting(0).asToggle().state) {
+			if (reconnectTime + startTime < System.currentTimeMillis() && getSetting(0).asToggle().state) {
 				if (server != null)
 					ConnectScreen.connect(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
 				reconnectTime = System.currentTimeMillis();
