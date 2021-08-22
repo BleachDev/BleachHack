@@ -10,6 +10,7 @@ package bleach.hack.module.mods;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 
@@ -86,6 +87,7 @@ public class ESP extends Module {
 				try {
 					ShaderEffect shader = ShaderEffectLoader.load(mc.getFramebuffer(), "esp-shader",
 							String.format(
+									Locale.ENGLISH,
 									IOUtils.toString(getClass().getResource("/assets/bleachhack/shaders/mc_outline.ujson"), StandardCharsets.UTF_8), 
 									getSetting(1).asSlider().getValue() / 2,
 									getSetting(1).asSlider().getValue() / 4));

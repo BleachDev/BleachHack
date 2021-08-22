@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -383,7 +384,7 @@ public class UI extends Module {
 	public void drawLagMeter(MatrixStack matrices, int x, int y) {
 		long time = System.currentTimeMillis();
 		if (time - lastPacket > 500) {
-			String text = "Server Lagging For: " + String.format("%.2f", (time - lastPacket) / 1000d) + "s";
+			String text = "Server Lagging For: " + String.format(Locale.ENGLISH, "%.2f", (time - lastPacket) / 1000d) + "s";
 
 			int xd = x + 72 - mc.textRenderer.getWidth(text) / 2;
 			switch (getSetting(4).asToggle().getChild(0).asMode().mode) {

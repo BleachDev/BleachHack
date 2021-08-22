@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -193,6 +194,7 @@ public class StorageESP extends Module {
 				try {
 					ShaderEffect shader = ShaderEffectLoader.load(mc.getFramebuffer(), "storageesp-shader",
 							String.format(
+									Locale.ENGLISH,
 									IOUtils.toString(getClass().getResource("/assets/bleachhack/shaders/mc_outline.ujson"), StandardCharsets.UTF_8), 
 									getSetting(1).asSlider().getValue() / 2,
 									getSetting(1).asSlider().getValue() / 4));

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
@@ -139,7 +140,7 @@ public class NotebotUtils {
 					long second = (time / 1000) % 60;
 					long minute = (time / (1000 * 60)) % 60;
 
-					String out = trackCount + "-" + event.getTick() + " | [" + String.format("%02d:%02d.%d", minute, second, millis) + "]";
+					String out = trackCount + "-" + event.getTick() + " | [" + String.format(Locale.ENGLISH, "%02d:%02d.%d", minute, second, millis) + "]";
 
 					if (message instanceof ShortMessage) {
 						ShortMessage msg = (ShortMessage) message;

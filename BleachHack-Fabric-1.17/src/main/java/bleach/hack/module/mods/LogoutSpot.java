@@ -180,17 +180,17 @@ public class LogoutSpot extends Module {
 		long timeDiff = (System.currentTimeMillis() - time) / 1000L;
 
 		if (timeDiff < 60L) {
-			return String.format("%ds", timeDiff);
+			return String.format(Locale.ENGLISH, "%ds", timeDiff);
 		}
 
 		if (timeDiff < 3600L) {
-			return String.format("%dm %ds", timeDiff / 60L, timeDiff % 60L);
+			return String.format(Locale.ENGLISH, "%dm %ds", timeDiff / 60L, timeDiff % 60L);
 		}
 
 		if (timeDiff < 86400L) {
-			return String.format("%dh %dm", timeDiff / 3600L, timeDiff / 60L % 60L);
+			return String.format(Locale.ENGLISH, "%dh %dm", timeDiff / 3600L, timeDiff / 60L % 60L);
 		}
 
-		return String.format("%dd %dh", timeDiff / 86400L, timeDiff / 3600L % 24L);
+		return String.format(Locale.ENGLISH, "%dd %dh", timeDiff / 86400L, timeDiff / 3600L % 24L);
 	}
 }
