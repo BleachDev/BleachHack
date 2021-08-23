@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventBlockBreakCooldown;
 import bleach.hack.event.events.EventInteract;
+import bleach.hack.event.events.EventReach;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
@@ -99,5 +100,13 @@ public class MixinClientPlayerInteractionManager {
 		if (event.isCancelled()) {
 			callback.setReturnValue(ActionResult.PASS);
 		}
+	}
+
+	@Inject(method = "getReachDistance", at = @At("RETURN"), cancellable = true)
+	public void getReachDistance(CallbackInfoReturnable<Float> callback) {
+		EventReach event = new EventReach(callback.getReturnValueF());
+		BleachHack.eventBus.post(event);
+
+		callback.setReturnValue(event.getReach());
 	}
 }

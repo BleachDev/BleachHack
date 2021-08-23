@@ -16,19 +16,27 @@ public class EventSoundPlay extends Event {
 
 	public static class Normal extends EventSoundPlay {
 
-		public SoundInstance instance;
+		private SoundInstance instance;
 
 		public Normal(SoundInstance si) {
 			instance = si;
+		}
+
+		public SoundInstance getInstance() {
+			return instance;
 		}
 	}
 
 	public static class Preloaded extends EventSoundPlay {
 
-		public Sound sound;
+		private Sound sound;
 
 		public Preloaded(Sound s) {
 			sound = s;
+		}
+
+		public Sound getSound() {
+			return sound;
 		}
 	}
 

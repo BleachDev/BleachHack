@@ -199,7 +199,7 @@ public abstract class WindowScreen extends Screen {
 			colorOffset = 50 - (colorOffset - 50);
 
 		// smooth
-		colorOffset = (int) (-(Math.cos(Math.PI * (colorOffset / 50d)) - 1) / 2 * 55);
+		colorOffset = (int) (-(Math.cos(Math.PI * (colorOffset / 50d)) - 1) / 2 * 50);
 
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();

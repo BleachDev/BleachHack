@@ -52,7 +52,7 @@ public class AutoFish extends Module {
 
 	@BleachSubscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
-		SoundInstance si = event.instance;
+		SoundInstance si = event.getInstance();
 		if (si.getId().getPath().equals("entity.fishing_bobber.splash")
 				&& mc.player.fishHook != null
 				&& mc.player.fishHook.getPos().distanceTo(new Vec3d(si.getX(), si.getY(), si.getZ())) <= 2) {

@@ -17,7 +17,7 @@ public class EventBiomeColor extends Event {
 	protected BlockRenderView world;
 	protected BlockPos pos;
 
-	private Integer color = null;
+	private Integer color;
 
 	public static class Grass extends EventBiomeColor {
 

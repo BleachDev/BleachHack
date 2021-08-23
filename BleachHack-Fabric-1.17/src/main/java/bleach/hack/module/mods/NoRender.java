@@ -186,9 +186,10 @@ public class NoRender extends Module {
 
 	@BleachSubscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
-		if (isWorldToggled(1) && getWorldChild(1).getChild(1).asToggle().state && event.instance.getId().getPath().equals("item.totem.use")) {
+		String path = event.getInstance().getId().getPath();
+		if (isWorldToggled(1) && getWorldChild(1).getChild(1).asToggle().state && path.equals("item.totem.use")) {
 			event.setCancelled(true);
-		} else if (isWorldToggled(2) && event.instance.getId().getPath().equals("entity.elder_guardian.curse")) {
+		} else if (isWorldToggled(2) && path.equals("entity.elder_guardian.curse")) {
 			event.setCancelled(true);
 		}
 	}

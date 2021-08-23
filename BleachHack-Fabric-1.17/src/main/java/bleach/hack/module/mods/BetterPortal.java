@@ -51,8 +51,8 @@ public class BetterPortal extends Module {
 	@BleachSubscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
 		if (getSetting(3).asToggle().state) {
-			if (event.instance.getId().getPath().equals("block.portal.trigger")
-					|| (getSetting(3).asToggle().getChild(0).asToggle().state && event.instance.getId().getPath().equals("block.portal.ambient"))) {
+			String path = event.getInstance().getId().getPath();
+			if (path.equals("block.portal.trigger") || (getSetting(3).asToggle().getChild(0).asToggle().state && path.equals("block.portal.ambient"))) {
 				event.setCancelled(true);
 			}
 		}
