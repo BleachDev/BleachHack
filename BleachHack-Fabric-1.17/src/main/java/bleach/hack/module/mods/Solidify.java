@@ -25,10 +25,10 @@ import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.util.shape.VoxelShapes;
 import bleach.hack.module.Module;
 
-public class Avoid extends Module {
+public class Solidify extends Module {
 
-	public Avoid() {
-		super("Avoid", KEY_UNBOUND, ModuleCategory.WORLD, "Adds collision boxes to certain blocks/areas.",
+	public Solidify() {
+		super("Solidify", KEY_UNBOUND, ModuleCategory.WORLD, "Adds collision boxes to certain blocks/areas.",
 				new SettingToggle("Cactus", true).withDesc("Adds a bigger collision box to cactuses."),
 				new SettingToggle("Fire", true).withDesc("Adds a collision box to fire."),
 				new SettingToggle("Lava", true).withDesc("Adds a collision box to lava."),
