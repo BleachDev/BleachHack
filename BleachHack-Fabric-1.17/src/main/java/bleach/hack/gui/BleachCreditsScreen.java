@@ -44,7 +44,7 @@ public class BleachCreditsScreen extends WindowScreen {
 
 		if (boosterList == null) {
 			boosterList = new ImmutablePairList<>();
-			JsonObject json = BleachOnlineMang.readResourceJson("credits.json");
+			JsonObject json = BleachOnlineMang.getResourceAsJson("credits.json");
 
 			if (json != null) {
 				if (json.has("donators") && json.get("donators").isJsonArray()) {

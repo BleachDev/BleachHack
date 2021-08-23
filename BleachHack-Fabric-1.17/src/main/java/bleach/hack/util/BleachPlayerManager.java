@@ -24,11 +24,11 @@ import com.google.gson.JsonArray;
 import bleach.hack.gui.option.Option;
 import bleach.hack.util.io.BleachOnlineMang;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 
 public class BleachPlayerManager {
 
+	private static MinecraftClient mc = MinecraftClient.getInstance();
 	private static final Pattern UUID_ADD_DASHES_PATTERN = Pattern.compile("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)");
 
 	private ScheduledExecutorService pingExecutor;
@@ -45,7 +45,7 @@ public class BleachPlayerManager {
 				playerQueue.forEach(p -> playersJson.add(p.toString()));
 				playerQueue.clear();
 
-				String response = BleachOnlineMang.apiPost("online/inlistbin", playersJson);
+				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString());
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -63,20 +63,18 @@ public class BleachPlayerManager {
 		}, 0L, 10L, TimeUnit.SECONDS);
 
 		playerExecutor.scheduleAtFixedRate(() -> {
-			ClientPlayerEntity player = MinecraftClient.getInstance().player;
-
-			if (player == null) {
+			if (mc.player == null) {
 				players.clear();
 				return;
 			}
 
-			players.removeIf(p -> !player.getUuid().equals(p) && !player.networkHandler.getPlayerUuids().contains(p));
+			players.removeIf(p -> !mc.player.getUuid().equals(p) && !mc.player.networkHandler.getPlayerUuids().contains(p));
 
-			if (!players.isEmpty() && !(players.size() == 1 && players.contains(player.getUuid()))) {
+			if (!players.isEmpty() && !(players.size() == 1 && players.contains(mc.player.getUuid()))) {
 				JsonArray playersJson = new JsonArray();
 				players.forEach(p -> playersJson.add(p.toString()));
 
-				String response = BleachOnlineMang.apiPost("online/inlistbin", playersJson);
+				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString());
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -97,19 +95,19 @@ public class BleachPlayerManager {
 	public void startPinger() {
 		if (pingExecutor == null || pingExecutor.isShutdown()) {
 			pingExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setDaemon(true).build());
-			pingExecutor.scheduleAtFixedRate(() -> BleachOnlineMang.apiGet("online/ping?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid())), 0L, 14L, TimeUnit.MINUTES);
+			pingExecutor.scheduleAtFixedRate(() -> BleachOnlineMang.sendApiGet("online/ping?uuid=" + toProperUUID(mc.getSession().getUuid())), 0L, 14L, TimeUnit.MINUTES);
 		}
 	}
 
 	public void stopPinger() {
 		if (pingExecutor != null && !pingExecutor.isShutdown()) {
-			pingExecutor.execute(() -> BleachOnlineMang.apiGet("online/disconnect?uuid=" + toProperUUID(MinecraftClient.getInstance().getSession().getUuid().replace("-", ""))));
+			pingExecutor.execute(() -> BleachOnlineMang.sendApiGet("online/disconnect?uuid=" + toProperUUID(mc.getSession().getUuid().replace("-", ""))));
 			pingExecutor.shutdown();
 		}
 	}
 
 	public void addQueueEntries(Collection<PlayerListS2CPacket.Entry> entries) {
-		UUID playerUuid = UUID.fromString(toProperUUID(MinecraftClient.getInstance().getSession().getUuid()));
+		UUID playerUuid = UUID.fromString(toProperUUID(mc.getSession().getUuid()));
 		entries.stream()
 		.map(e -> e.getProfile().getId())
 		.filter(e -> !players.contains(e))

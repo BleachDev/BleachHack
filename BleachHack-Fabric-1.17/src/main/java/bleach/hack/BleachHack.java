@@ -76,7 +76,6 @@ public class BleachHack implements ModInitializer {
 		//this.eventBus = new EventBus();
 		//this.bleachFileManager = new BleachFileMang();
 		BleachFileMang.init();
-		BleachOnlineMang.warmUp();
 
 		ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
 		BleachFileHelper.readModules();
@@ -95,7 +94,7 @@ public class BleachHack implements ModInitializer {
 			playerMang.startPinger();
 
 		if (Option.GENERAL_CHECK_FOR_UPDATES.getValue())
-			updateJson = BleachOnlineMang.readResourceJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
+			updateJson = BleachOnlineMang.getResourceAsJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
