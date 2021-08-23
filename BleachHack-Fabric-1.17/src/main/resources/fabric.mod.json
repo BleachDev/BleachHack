@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "id": "bleachhack",
-  "version": "1.1",
+  "version": "1.2",
 
   "name": "BleachHack",
-  "description": "gamer hack",
+  "description": "gamer obama utility mod",
   "authors": [
-    "Bleach#0136"
+    "Bleach"
   ],
   "contact": {
-    "homepage": "https://github.com/BleachDrinker420/",
+    "homepage": "https://bleachhack.org/",
     "sources": "https://github.com/BleachDrinker420/BleachHack"
   },
 
@@ -24,5 +24,8 @@
   },
   "mixins": [
     "bleachhack.mixins.json"
-  ]
+  ],
+  "depends": {
+    "minecraft": "1.17.1+"
+  }
 }
