@@ -68,11 +68,11 @@ public class CmdWatermark extends Command {
 					throw new CmdSyntaxException("The watermark can't contain more than 2 words.");
 				}
 
-				if ((args.length == 2 && args[1].length() < 2) || (args.length == 3 && args[1].length() < 1 && args[2].length() < 1)) {
+				if ((args.length == 2 && args[1].length() < 2) || (args.length == 3 && (args[1].isEmpty() || args[2].isEmpty()))) {
 					throw new CmdSyntaxException("The watermark can't be less than 2 characters long.");
 				}
 
-				BleachHack.watermark.setStrings(args[1], args.length == 3 ? args[2] : null);
+				BleachHack.watermark.setStrings(args[1], args.length == 3 ? args[2] : "");
 				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
 
 				BleachFileHelper.saveMiscSetting("watermarkText1", new JsonPrimitive(BleachHack.watermark.getString1()));
