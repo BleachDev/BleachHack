@@ -50,7 +50,7 @@ public class Notebot extends Module {
 	/* All unique instruments and pitches [pitch:instrument] */
 	private List<int[]> tunes = new ArrayList<>();
 
-	/* Map of noteblocks to hit when playing and the pitch of each */
+	/* Map of noteblocks to hit when playing and the pitch of each [blockpos:pitch] */
 	private Map<BlockPos, Integer> blockTunes = new HashMap<>();
 	private int timer = -10;
 	private int tuneDelay = 0;
@@ -85,36 +85,37 @@ public class Notebot extends Module {
 
 		timer = -10;
 
+		List<BlockPos> noteblocks = BlockPos.streamOutwards(new BlockPos(mc.player.getEyePos()), 4, 4, 4)
+				.filter(this::isNoteblock)
+				.map(BlockPos::toImmutable)
+				.collect(Collectors.toList());
+
 		for (int[] i : tunes) {
-			BlockPos found = null;
-			loop: for (int x = -4; x <= 4; x++) {
-				for (int y = -4; y <= 4; y++) {
-					for (int z = -4; z <= 4; z++) {
-						BlockPos pos = mc.player.getBlockPos().add(x, y, z);
-						if (!isNoteblock(pos))
-							continue;
-						if (getSetting(2).asToggle().state) {
-							if (blockTunes.get(pos) != null)
-								if (!blockTunes.get(pos).equals(i[0]))
-									continue;
-							blockTunes.put(pos, i[0]);
-							break loop;
-						} else {
-							if (i[1] != getInstrument(pos).ordinal() || blockTunes.get(pos) != null)
-								continue;
-							found = pos;
-							if (i[0] == getNote(pos))
-								break loop;
-						}
+			for (BlockPos pos: noteblocks) {
+				if (blockTunes.containsKey(pos))
+					continue;
+
+				if (getSetting(2).asToggle().state) {
+					if (!blockTunes.containsValue(i[0])) {
+						blockTunes.put(pos, i[0]); 
+						break;
+					}
+				} else {
+					int instrument = getInstrument(pos).ordinal();
+					if (i[1] == instrument
+							&& blockTunes.entrySet().stream()
+							.filter(e -> e.getValue() == i[0])
+							.noneMatch(e -> getInstrument(e.getKey()).ordinal() == instrument)) {
+						blockTunes.put(pos, i[0]);
+						break;
 					}
 				}
 			}
-			if (found != null)
-				blockTunes.put(found, i[0]);
 		}
 
-		if (tunes.size() > blockTunes.size() && !getSetting(2).asToggle().state) {
-			BleachLogger.warn("Mapping Error: Missing " + (tunes.size() - blockTunes.size()) + " Noteblocks");
+		int totalTunes = getSetting(2).asToggle().state ? (int) tunes.stream().map(i -> i[0]).distinct().count() : tunes.size();
+		if (totalTunes > blockTunes.size()) {
+			BleachLogger.warn("Mapping Error: Missing " + (totalTunes - blockTunes.size()) + " Noteblocks");
 		}
 	}
 
@@ -234,7 +235,7 @@ public class Notebot extends Module {
 	public boolean isNoteblock(BlockPos pos) {
 		/* Checks if this block is a noteblock and the noteblock can be played */
 		return mc.world.getBlockState(pos).getBlock() instanceof NoteBlock
-			&& mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
+				&& mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
 	}
 
 	public void playBlock(BlockPos pos) {
