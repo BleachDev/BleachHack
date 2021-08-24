@@ -18,7 +18,7 @@ public class StarGithub extends Module {
 		super("StarGithub", KEY_UNBOUND, ModuleCategory.MISC, "I need to feed my 420 children pls star github.");
 	}
 
-	public void onEnable() {
+	public void onEnable(boolean inWorld) {
 		try {
 			Util.getOperatingSystem().open("https://github.com/BleachDrinker420/BleachHack");
 		} catch (Exception e) {

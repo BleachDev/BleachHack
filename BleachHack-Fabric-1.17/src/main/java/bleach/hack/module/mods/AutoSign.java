@@ -27,7 +27,7 @@ import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 
 public class AutoSign extends Module {
 
-	public String[] text = new String[] {};
+	public String[] text = new String[0];
 
 	public AutoSign() {
 		super("AutoSign", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically writes on signs.",
@@ -35,9 +35,11 @@ public class AutoSign extends Module {
 						new SettingSlider("Length", 1, 1000, 500, 0).withDesc("How many characters to write per line.")));
 	}
 
-	public void onDisable() {
-		text = new String[] {};
-		super.onDisable();
+	@Override
+	public void onDisable(boolean inWorld) {
+		text = new String[0];
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

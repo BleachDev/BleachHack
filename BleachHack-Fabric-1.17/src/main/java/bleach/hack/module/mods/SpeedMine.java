@@ -33,9 +33,11 @@ public class SpeedMine extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		super.onDisable();
-		mc.player.removeStatusEffect(StatusEffects.HASTE);
+	public void onDisable(boolean inWorld) {
+		if (inWorld)
+			mc.player.removeStatusEffect(StatusEffects.HASTE);
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

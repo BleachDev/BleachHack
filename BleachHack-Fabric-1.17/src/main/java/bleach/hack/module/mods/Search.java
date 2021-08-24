@@ -93,10 +93,10 @@ public class Search extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		reset();
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

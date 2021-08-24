@@ -30,9 +30,10 @@ public class AutoFish extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		threwRod = false;
-		super.onDisable();
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

@@ -58,7 +58,8 @@ public class DiscordRPCMod extends Module {
 		}
 	}
 
-	public void onEnable() {
+	@Override
+	public void onEnable(boolean inWorld) {
 		silent = getSetting(3).asToggle().state;
 
 		tick = 0;
@@ -70,20 +71,21 @@ public class DiscordRPCMod extends Module {
 				.withReadyEventHandler(user -> BleachLogger.logger.info(user.username + "#" + user.discriminator + " is big gay"))
 				.build());
 
-		super.onEnable();
+		super.onEnable(inWorld);
 	}
 
-	public void onDisable() {
+	@Override
+	public void onDisable(boolean inWorld) {
 		DiscordRPCManager.shutdown();
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (silent != getSetting(3).asToggle().state) {
-			onDisable();
-			onEnable();
+			onDisable(false);
+			onEnable(false);
 		}
 
 		if (tick % 40 == 0) {

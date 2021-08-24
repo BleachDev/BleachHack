@@ -29,8 +29,9 @@ public class Zoom extends Module {
 				new SettingToggle("Smooth", false).withDesc("Smooths the zoom when enabling and disabling."));
 	}
 
-	public void onEnable() {
-		super.onEnable();
+	@Override
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
 		BleachQueue.runAllInQueue("zoom");
 
 		prevFov = mc.options.fov;
@@ -42,7 +43,8 @@ public class Zoom extends Module {
 		}
 	}
 
-	public void onDisable() {
+	@Override
+	public void onDisable(boolean inWorld) {
 		if (getSetting(0).asSlider().getValue() < 1 || !getSetting(1).asToggle().state) {
 			mc.options.fov = prevFov;
 			mc.options.mouseSensitivity = prevSens;
@@ -55,7 +57,7 @@ public class Zoom extends Module {
 			}
 		}
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

@@ -108,7 +108,8 @@ public class Nametags extends Module {
 						new SettingToggle("ItemCount", true).withDesc("Shows how many items are in the stack.")));
 	}
 
-	public void onDisable() {
+	@Override
+	public void onDisable(boolean inWorld) {
 		uuidQueue.clear();
 		failedUUIDs.clear();
 		uuidExecutor.shutdownNow();
@@ -121,11 +122,13 @@ public class Nametags extends Module {
 			if (!s.startsWith("\u00a7c")) uuidCache.put(u, s);
 		});
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
-	public void onEnable() {
-		super.onEnable();
+	@Override
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
+
 		uuidExecutor = Executors.newFixedThreadPool(4);
 	}
 

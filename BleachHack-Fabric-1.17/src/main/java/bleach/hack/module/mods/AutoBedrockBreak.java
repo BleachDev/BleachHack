@@ -39,10 +39,10 @@ public class AutoBedrockBreak extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		reset();
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

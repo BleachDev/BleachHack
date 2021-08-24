@@ -30,14 +30,14 @@ public class DeathExplorer extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		if (dead) {
+	public void onDisable(boolean inWorld) {
+		if (dead && inWorld) {
 			mc.player.setHealth(0f);
 			mc.setScreen(new DeathScreen(null, mc.world.getLevelProperties().isHardcore()));
 		}
 
 		dead = false;
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

@@ -61,8 +61,8 @@ public class Xray extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
 
 		mc.chunkCullingEnabled = false;
 		mc.worldRenderer.reload();
@@ -71,13 +71,13 @@ public class Xray extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		mc.options.gamma = gamma;
 
 		mc.chunkCullingEnabled = true;
 		mc.worldRenderer.reload();
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

@@ -152,12 +152,12 @@ public class AutoBuild extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		current = null;
 		ray = null;
 		active = false;
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

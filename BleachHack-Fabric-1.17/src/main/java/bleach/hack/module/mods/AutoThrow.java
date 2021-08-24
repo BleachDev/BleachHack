@@ -44,9 +44,10 @@ public class AutoThrow extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		effectCache.clear();
-		super.onDisable();
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

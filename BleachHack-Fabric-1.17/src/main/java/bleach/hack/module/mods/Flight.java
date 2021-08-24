@@ -34,10 +34,11 @@ public class Flight extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		mc.player.getAbilities().flying = false;
+	public void onDisable(boolean inWorld) {
+		if (inWorld)
+			mc.player.getAbilities().flying = false;
 		
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

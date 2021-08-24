@@ -22,7 +22,7 @@ public class Module {
 
 	public static final int KEY_UNBOUND = -1481058891;
 
-	protected final MinecraftClient mc = MinecraftClient.getInstance();
+	protected static final MinecraftClient mc = MinecraftClient.getInstance();
 	private String name;
 	private int key;
 	private int defaultKey;
@@ -46,31 +46,21 @@ public class Module {
 		category = c;
 		desc = d;
 		settings = new ArrayList<>(Arrays.asList(s));
+		settings.add(new SettingBind(this));
 		
 		defaultEnabled = enabled;
 		if (enabled) {
 			setEnabled(true);
 		}
-
-		settings.add(new SettingBind(this));
 	}
 
-	public void toggle() {
-		enabled = !enabled;
-		if (enabled) {
-			onEnable();
-		} else {
-			onDisable();
-		}
-	}
-
-	public void onEnable() {
+	public void onEnable(boolean inWorld) {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 		subscribed = BleachHack.eventBus.subscribe(this);
 	}
 
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 		if (subscribed) {
@@ -119,17 +109,21 @@ public class Module {
 		return enabled;
 	}
 
-	public void setEnabled(boolean toggled) {
-		this.enabled = toggled;
-		if (toggled) {
-			onEnable();
-		} else {
-			onDisable();
-		}
+	public void setEnabled(boolean enabled) {
+		if (this.enabled != enabled)
+			toggle();
 	}
 
 	public boolean isDefaultEnabled() {
 		return defaultEnabled;
 	}
 
+	public void toggle() {
+		enabled = !enabled;
+		if (enabled) {
+			onEnable(mc.world != null);
+		} else {
+			onDisable(mc.world != null);
+		}
+	}
 }

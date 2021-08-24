@@ -37,31 +37,33 @@ public class Step extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		super.onDisable();
-		mc.player.stepHeight = 0.5F;
+	public void onDisable(boolean inWorld) {
+		if (inWorld)
+			mc.player.stepHeight = 0.5F;
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		mc.player.stepHeight = getSetting(0).asMode().mode == 1 ? getSetting(1).asSlider().getValueFloat() : 0.5f;
-		
+
 		if (!mc.player.horizontalCollision) {
 			queue.clear();
 		}
-		
+
 		if (getSetting(2).asToggle().state) {
 			if (!(mc.player.age < lastStep || mc.player.age >= lastStep + getSetting(2).asToggle().getChild(0).asSlider().getValue() * 20)) {
 				return;
 			}
 		}
-		
+
 		if (!mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight() + 1, 0)).getMaterial().isReplaceable()
 				|| mc.player.input.jumping
 				|| !(mc.player.input.pressingForward || mc.player.input.pressingBack || mc.player.input.pressingLeft || mc.player.input.pressingRight)) {
 			return;
 		}
-		
+
 		if (!queue.isEmpty()) {
 			mc.player.updatePosition(mc.player.getX(), queue.poll(), mc.player.getZ());
 			return;
@@ -71,7 +73,7 @@ public class Step extends Module {
 			if (!isTouchingWall(mc.player.getBoundingBox().offset(0, 1, 0)) || !isTouchingWall(mc.player.getBoundingBox().offset(0, 1.5, 0))) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.42, mc.player.getZ(), false));
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.75, mc.player.getZ(), false));
-				
+
 				if (isTouchingWall(mc.player.getBoundingBox().offset(0, 1, 0)) && !isTouchingWall(mc.player.getBoundingBox().offset(0, 1.5, 0))) {
 					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 1, mc.player.getZ(), false));
 					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 1.15, mc.player.getZ(), false));
@@ -81,7 +83,7 @@ public class Step extends Module {
 				} else {
 					mc.player.updatePosition(mc.player.getX(), mc.player.getY() + 1, mc.player.getZ());
 				}
-				
+
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true));
 				lastStep = mc.player.age;
 			}
@@ -107,7 +109,7 @@ public class Step extends Module {
 			}
 		}
 	}
-	
+
 	private boolean isTouchingWall(Box box) {
 		// Check in 2 calls instead of just box.expand(0.01, 0, 0.01) to prevent it getting stuck in corners
 		return !mc.world.isSpaceEmpty(box.expand(0.01, 0, 0)) || !mc.world.isSpaceEmpty(box.expand(0, 0, 0.01));

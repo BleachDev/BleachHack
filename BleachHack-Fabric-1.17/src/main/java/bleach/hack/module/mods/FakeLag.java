@@ -36,16 +36,19 @@ public class FakeLag extends Module {
 	}
 
 	@Override
-	public void onEnable() {
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
+
 		startTime = System.currentTimeMillis();
 		queue.clear();
-		super.onEnable();
 	}
 
 	@Override
-	public void onDisable() {
-		sendPackets();
-		super.onDisable();
+	public void onDisable(boolean inWorld) {
+		if (inWorld)
+			sendPackets();
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

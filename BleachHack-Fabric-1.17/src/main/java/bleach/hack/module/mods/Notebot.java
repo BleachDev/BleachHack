@@ -67,8 +67,11 @@ public class Notebot extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		if (!inWorld)
+			return;
+
+		super.onEnable(inWorld);
 		blockTunes.clear();
 
 		if (!mc.interactionManager.getCurrentGameMode().isSurvivalLike()) {

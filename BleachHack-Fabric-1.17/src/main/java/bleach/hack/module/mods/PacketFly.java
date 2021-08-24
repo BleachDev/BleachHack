@@ -42,19 +42,23 @@ public class PacketFly extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		if (!inWorld)
+			return;
+
+		super.onEnable(inWorld);
+
 		cachedPos = mc.player.getRootVehicle().getPos();
 	}
 
 	@BleachSubscribe
-	public void onMovement(EventSendMovementPackets event) {
+	public void onMovementPackets(EventSendMovementPackets event) {
 		mc.player.setVelocity(Vec3d.ZERO);
 		event.setCancelled(true);
 	}
 
 	@BleachSubscribe
-	public void onMovement(EventClientMove event) {
+	public void onClientMove(EventClientMove event) {
 		event.setCancelled(true);
 	}
 

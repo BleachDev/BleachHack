@@ -53,13 +53,13 @@ public class NewChunks extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		if (getSetting(1).asToggle().state) {
 			newChunks.clear();
 			oldChunks.clear();
 		}
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

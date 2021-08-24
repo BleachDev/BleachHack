@@ -45,8 +45,11 @@ public class Freecam extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		if (!inWorld)
+			return;
+
+		super.onEnable(inWorld);
 
 		mc.chunkCullingEnabled = false;
 
@@ -71,22 +74,24 @@ public class Freecam extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		mc.chunkCullingEnabled = true;
-
-		dummy.despawn();
-		mc.player.noClip = false;
-		mc.player.getAbilities().flying = prevFlying;
-		mc.player.getAbilities().setFlySpeed(prevFlySpeed);
-
-		mc.player.refreshPositionAndAngles(playerPos[0], playerPos[1], playerPos[2], playerRot[0], playerRot[1]);
-		mc.player.setVelocity(Vec3d.ZERO);
-
-		if (riding != null && mc.world.getEntityById(riding.getId()) != null) {
-			mc.player.startRiding(riding);
+	public void onDisable(boolean inWorld) {
+		if (inWorld) {
+			mc.chunkCullingEnabled = true;
+	
+			dummy.despawn();
+			mc.player.noClip = false;
+			mc.player.getAbilities().flying = prevFlying;
+			mc.player.getAbilities().setFlySpeed(prevFlySpeed);
+	
+			mc.player.refreshPositionAndAngles(playerPos[0], playerPos[1], playerPos[2], playerRot[0], playerRot[1]);
+			mc.player.setVelocity(Vec3d.ZERO);
+	
+			if (riding != null && mc.world.getEntityById(riding.getId()) != null) {
+				mc.player.startRiding(riding);
+			}
 		}
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

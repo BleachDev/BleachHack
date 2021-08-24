@@ -85,10 +85,10 @@ public class AutoFarm extends Module {
 	}
 	
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		mossMap.clear();
 		
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

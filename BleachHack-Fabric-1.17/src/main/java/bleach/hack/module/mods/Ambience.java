@@ -65,11 +65,13 @@ public class Ambience extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		weatherManager.applyWeather(mc.world);
+	public void onDisable(boolean inWorld) {
+		if (inWorld)
+			weatherManager.applyWeather(mc.world);
+
 		weatherManager.reset();
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

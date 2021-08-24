@@ -30,9 +30,7 @@ public class Fullbright extends Module {
 	// table setting [B]roke
 
 	@Override
-	public void onDisable() {
-		super.onDisable();
-
+	public void onDisable(boolean inWorld) {
 		if (mc.options.gamma > 1) {
 			double g = mc.options.gamma;
 
@@ -43,15 +41,19 @@ public class Fullbright extends Module {
 			}
 		}
 
-		mc.player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+		if (inWorld)
+			mc.player.removeStatusEffect(StatusEffects.NIGHT_VISION);
 		// Vanilla code to remap light level table.
 		/* for (int i = 0; i <= 15; ++i) { float float_2 = 1.0F - (float)i / 15.0F;
 		 * mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) /
 		 * (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F; } */
+
+		super.onDisable(inWorld);
 	}
 
-	public void onEnable() {
-		super.onEnable();
+	@Override
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
 
 		BleachQueue.cancelQueue("fullbright");
 	}

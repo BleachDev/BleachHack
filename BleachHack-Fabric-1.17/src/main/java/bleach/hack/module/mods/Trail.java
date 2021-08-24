@@ -43,13 +43,13 @@ public class Trail extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		if (!getSetting(1).asToggle().state) {
 			trails.clear();
 		}
 
 		lastVec = null;
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

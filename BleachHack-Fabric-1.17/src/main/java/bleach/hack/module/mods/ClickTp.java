@@ -45,11 +45,12 @@ public class ClickTp extends Module {
 				new SettingColor("Highlight", 1f, 0.2f, 0.8f, false).withDesc("The color of the target block."));
 	}
 
-	public void onDisable() {
+	@Override
+	public void onDisable(boolean inWorld) {
 		pos = null;
 		dir = null;
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

@@ -72,11 +72,12 @@ public class Dispenser32k extends Module {
 				new SettingMode("Place", "Auto", "Looking").withDesc("Where to place the dispenser."));
 	}
 
-	public void onEnable() {
-		if (mc.world == null)
+	@Override
+	public void onEnable(boolean inWorld) {
+		if (!inWorld)
 			return;
 
-		super.onEnable();
+		super.onEnable(inWorld);
 
 		ticksPassed = 0;
 		hopper = -1;

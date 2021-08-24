@@ -36,16 +36,16 @@ public class NotebotStealer extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
+
 		notes.clear();
 		prevSoundMap.clear();
 		ticks = 0;
 	}
 
 	@Override
-	public void onDisable() {
-		super.onDisable();
+	public void onDisable(boolean inWorld) {
 		int i = 0;
 		StringBuilder s = new StringBuilder();
 
@@ -58,6 +58,8 @@ public class NotebotStealer extends Module {
 		BleachFileMang.createEmptyFile("notebot/notebot" + i + ".txt");
 		BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s.toString());
 		BleachLogger.info("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
+
+		super.onDisable(inWorld);
 	}
 
 	@SuppressWarnings("unchecked")

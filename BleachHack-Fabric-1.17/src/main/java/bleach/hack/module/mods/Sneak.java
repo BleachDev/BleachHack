@@ -18,20 +18,24 @@ public class Sneak extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		super.onDisable();
-
+	public void onDisable(boolean inWorld) {
 		packetSent = false;
 		mc.options.keySneak.setPressed(false);
-		mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+
+		if (inWorld)
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
+	
+		super.onDisable(inWorld);
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
 
 		if (getSetting(0).asMode().mode == 1) {
-			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
+			if (inWorld)
+				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
+
 			packetSent = true;
 		}
 	}

@@ -36,8 +36,9 @@ public class Spammer extends Module {
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
+
 		BleachFileMang.createFile("spammer.txt");
 		lines = BleachFileMang.readFileLines("spammer.txt");
 		lineCount = 0;

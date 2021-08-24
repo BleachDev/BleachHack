@@ -49,8 +49,8 @@ public class LogoutSpot extends Module {
 	}
 
 	@Override
-	public void onDisable() {
-		if (mc.world != null) {
+	public void onDisable(boolean inWorld) {
+		if (inWorld) {
 			players.values().forEach(e -> e.getKey().despawn());
 		}
 
@@ -58,14 +58,14 @@ public class LogoutSpot extends Module {
 			players.clear();
 		}
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
 
-		if (mc.world != null) {
+		if (inWorld) {
 			players.values().forEach(e -> e.getKey().spawn());
 		}
 	}

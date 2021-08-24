@@ -21,9 +21,10 @@ public class AutoWalk extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		mc.options.keyForward.setPressed(false);
-		super.onDisable();
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

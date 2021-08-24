@@ -51,16 +51,19 @@ public class Surround extends Module {
 				new SettingBlockList("Blocks", "Surround Blocks", SURROUND_BLOCKS::contains, Blocks.OBSIDIAN).withDesc("What blocks to surround with."));
 	}
 
-	public void onEnable() {
-		super.onEnable();
+	@Override
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
 
-		if (getSetting(3).asToggle().state) {
-			Vec3d centerPos = Vec3d.ofBottomCenter(mc.player.getBlockPos());
-			mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
-			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
+		if (inWorld) {
+			if (getSetting(3).asToggle().state) {
+				Vec3d centerPos = Vec3d.ofBottomCenter(mc.player.getBlockPos());
+				mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
+			}
+
+			place();
 		}
-
-		place();
 	}
 
 	@BleachSubscribe

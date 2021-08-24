@@ -102,11 +102,12 @@ public class StorageESP extends Module {
 				new SettingToggle("ArmorStands", true).withDesc("Highlights armor stands."));
 	}
 
-	public void onDisable() {
+	@Override
+	public void onDisable(boolean inWorld) {
 		blockEntities.clear();
 		entities.clear();
 
-		super.onDisable();
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe

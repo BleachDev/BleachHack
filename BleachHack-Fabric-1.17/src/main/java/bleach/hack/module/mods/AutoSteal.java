@@ -87,11 +87,12 @@ public class AutoSteal extends Module {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable(boolean inWorld) {
 		opened.clear();
 		currentItems = null;
 		currentSyncId = -1;
-		super.onDisable();
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe
