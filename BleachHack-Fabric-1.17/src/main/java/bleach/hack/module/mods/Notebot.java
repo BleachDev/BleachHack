@@ -132,39 +132,39 @@ public class Notebot extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		/* Tune Noteblocks */
+		int tuneMode = getSetting(0).asToggle().getChild(0).asMode().mode;
+
 		if (getSetting(0).asToggle().state) {
 			for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
-				if (getNote(e.getKey()) != e.getValue()) {
-					if (getSetting(0).asToggle().getChild(0).asMode().mode <= 2) {
-						if (getSetting(0).asToggle().getChild(0).asMode().mode >= 1) {
+				int note = getNote(e.getKey());
+				if (note == -1)
+					continue;
+
+				if (note != e.getValue()) {
+					if (tuneMode <= 2) {
+						if (tuneMode >= 1) {
 							if (mc.player.age % 2 == 0 ||
-									(mc.player.age % 3 == 0 && getSetting(0).asToggle().getChild(0).asMode().mode == 2))
+									(mc.player.age % 3 == 0 && tuneMode == 2))
 								return;
 						}
+
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
 								new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
-					} else if (getSetting(0).asToggle().getChild(0).asMode().mode >= 3) {
-						if (tuneDelay < (getSetting(0).asToggle().getChild(0).asMode().mode == 3 ? 3 : 5)) {
+					} else if (tuneMode >= 3) {
+						if (tuneDelay < (tuneMode == 3 ? 3 : 5)) {
 							tuneDelay++;
 							return;
 						}
 
-						int tunes = getNote(e.getKey());
-						int reqTunes = 0;
-						for (int i = 0; i < (getSetting(0).asToggle().getChild(0).asMode().mode == 3 ? 5 : 25); i++) {
-							if (tunes == 25)
-								tunes = 0;
-							if (tunes == e.getValue())
-								break;
-							tunes++;
-							reqTunes++;
-						}
-
+						int neededNote = e.getValue() < note ? e.getValue() + 25 : e.getValue();
+						int reqTunes = Math.min(tuneMode == 3 ? 5 : 25, neededNote - note);
 						for (int i = 0; i < reqTunes; i++)
 							mc.interactionManager.interactBlock(mc.player, mc.world,
 									Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
+
 						tuneDelay = 0;
 					}
+
 					return;
 				}
 			}
@@ -226,17 +226,15 @@ public class Notebot extends Module {
 
 	public int getNote(BlockPos pos) {
 		if (!isNoteblock(pos))
-			return 0;
+			return -1;
 
 		return mc.world.getBlockState(pos).get(NoteBlock.NOTE);
 	}
 
 	public boolean isNoteblock(BlockPos pos) {
 		/* Checks if this block is a noteblock and the noteblock can be played */
-		if (mc.world.getBlockState(pos).getBlock() instanceof NoteBlock) {
-			return mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
-		}
-		return false;
+		return mc.world.getBlockState(pos).getBlock() instanceof NoteBlock
+			&& mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
 	}
 
 	public void playBlock(BlockPos pos) {
