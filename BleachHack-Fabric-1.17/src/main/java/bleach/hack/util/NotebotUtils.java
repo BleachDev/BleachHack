@@ -15,11 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -84,31 +81,24 @@ public class NotebotUtils {
 	}
 
 	public static void playNote(List<String> lines, int tick) {
-		Map<Instrument, Integer> notes = new HashMap<>();
-
 		for (String s : lines) {
 			try {
 				String[] split = s.split(":");
 				if (split[0].equals(tick + ""))
-					notes.put(Instrument.values()[Integer.parseInt(split[2])], Integer.parseInt(split[1]));
+					play(Instrument.values()[Integer.parseInt(split[2])].getSound(),
+							(float) Math.pow(2.0D, (Integer.parseInt(split[1]) - 12) / 12.0D));
 			} catch (Exception e) {
 				BleachLogger.logger.error("oops");
 			}
 		}
-
-		for (Entry<Instrument, Integer> e : notes.entrySet()) {
-			// System.out.println(e.getValue() + " | " + i + " | "); /* this is how debugging works right? */
-			play(e.getKey().getSound(), (float) Math.pow(2.0D, (e.getValue() - 12) / 12.0D));
-		}
 	}
 
 	private static void play(SoundEvent sound, float pitch) {
-		if (MinecraftClient.getInstance().world != null && MinecraftClient.getInstance().player != null) {
-			MinecraftClient.getInstance().world.playSound(MinecraftClient.getInstance().player,
-					MinecraftClient.getInstance().player.getBlockPos(), sound, SoundCategory.RECORDS, 3.0F, pitch);
+		MinecraftClient mc = MinecraftClient.getInstance();
+		if (mc.world != null && mc.player != null) {
+			mc.world.playSound(mc.player, mc.player.getBlockPos(), sound, SoundCategory.RECORDS, 3.0F, pitch);
 		} else {
-			MinecraftClient.getInstance().getSoundManager().play(
-					new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, 0F, 0F, 0F));
+			mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, 0F, 0F, 0F));
 		}
 	}
 

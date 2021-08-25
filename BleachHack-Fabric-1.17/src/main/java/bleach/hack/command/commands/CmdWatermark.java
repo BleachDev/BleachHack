@@ -51,9 +51,13 @@ public class CmdWatermark extends Command {
 				BleachLogger.info("Reset the watermark text and colors!");
 			} else if (args[1].equalsIgnoreCase("color")) {
 				BleachHack.watermark.reset(false, true);
+				saveColor();
+
 				BleachLogger.info("Reset the watermark colors!");
 			} else if (args[1].equalsIgnoreCase("text")) {
 				BleachHack.watermark.reset(true, false);
+				saveText();
+
 				BleachLogger.info("Reset the watermark text!");
 			} else {
 				throw new CmdSyntaxException();
@@ -73,10 +77,9 @@ public class CmdWatermark extends Command {
 				}
 
 				BleachHack.watermark.setStrings(args[1], args.length == 3 ? args[2] : "");
-				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
+				saveText();
 
-				BleachFileHelper.saveMiscSetting("watermarkText1", new JsonPrimitive(BleachHack.watermark.getString1()));
-				BleachFileHelper.saveMiscSetting("watermarkText2", new JsonPrimitive(BleachHack.watermark.getString2()));
+				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
 			} else if (args[0].equalsIgnoreCase("color")) {
 				if (args.length > 3) {
 					throw new CmdSyntaxException("The watermark can't contain more than 2 colors.");
@@ -85,14 +88,22 @@ public class CmdWatermark extends Command {
 				BleachHack.watermark.setColor(
 						Integer.parseInt(args[1].replace("x", "").replace("#", ""), 16),
 						args.length == 3 ? Integer.parseInt(args[2].replace("x", "").replace("#", ""), 16) : BleachHack.watermark.getColor2());
+				saveColor();
+				
 				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
-
-				BleachFileHelper.saveMiscSetting("watermarkColor1", new JsonPrimitive(BleachHack.watermark.getColor1()));
-				BleachFileHelper.saveMiscSetting("watermarkColor2", new JsonPrimitive(BleachHack.watermark.getColor2()));
 			} else {
 				throw new CmdSyntaxException();
 			}
 		}
 	}
 
+	private void saveColor() {
+		BleachFileHelper.saveMiscSetting("watermarkColor1", new JsonPrimitive(BleachHack.watermark.getColor1()));
+		BleachFileHelper.saveMiscSetting("watermarkColor2", new JsonPrimitive(BleachHack.watermark.getColor2()));
+	}
+	
+	private void saveText() {
+		BleachFileHelper.saveMiscSetting("watermarkText1", new JsonPrimitive(BleachHack.watermark.getString1()));
+		BleachFileHelper.saveMiscSetting("watermarkText2", new JsonPrimitive(BleachHack.watermark.getString2()));
+	}
 }
