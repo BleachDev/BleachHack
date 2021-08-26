@@ -19,6 +19,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -48,7 +49,8 @@ public class BleachOnlineMang {
 
 	public static List<String> getResourceAsLines(String path) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
-		return sendRequest(resourceUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofLines()).collect(Collectors.toList());
+		Stream<String> response = sendRequest(resourceUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofLines());
+		return response != null ? response.collect(Collectors.toList()) : null;
 	}
 
 	public static JsonObject getResourceAsJson(String path) {
