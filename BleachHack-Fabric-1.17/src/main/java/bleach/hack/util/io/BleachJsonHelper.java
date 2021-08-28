@@ -94,11 +94,20 @@ public class BleachJsonHelper {
 			return null;
 		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public static <T extends JsonElement> T parseOrNull(String json, Class<T> type) {
+		try {
+			return (T) new JsonParser().parse(json);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	public static String formatJson(String json) {
 		return jsonWriter.toJson(new JsonParser().parse(json));
 	}
-	
+
 	public static String formatJson(JsonElement json) {
 		return jsonWriter.toJson(json);
 	}

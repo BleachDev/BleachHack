@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
@@ -39,7 +40,7 @@ import net.minecraft.text.Text;
 
 @Mixin(TitleScreen.class)
 public class MixinTitleScreen extends Screen {
-	
+
 	@Unique private static boolean firstLoad = true;
 
 	protected MixinTitleScreen(Text title) {
@@ -49,11 +50,10 @@ public class MixinTitleScreen extends Screen {
 	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
 		if (firstLoad) {
-			if (Option.GENERAL_SHOW_UPDATE_SCREEN.getValue()
-					&& BleachHack.updateJson != null
-					&& BleachHack.updateJson.has("version")
-					&& BleachHack.updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
-				client.setScreen(new UpdateScreen(null, BleachHack.updateJson));
+			if (Option.GENERAL_SHOW_UPDATE_SCREEN.getValue()) {
+				JsonObject updateJson = BleachHack.getUpdateJson();
+				if (updateJson != null && updateJson.has("version") && updateJson.get("version").getAsInt() > BleachHack.INTVERSION)
+					client.setScreen(new UpdateScreen(null, updateJson));
 			}
 
 			firstLoad = false;
@@ -68,7 +68,7 @@ public class MixinTitleScreen extends Screen {
 							Triple.of(ClickGui.clickGui, "ClickGui", new ItemStack(Items.TOTEM_OF_UNDYING)),
 							Triple.of(new BleachOptionsScreen(), "Options", new ItemStack(Items.REDSTONE)),
 							Triple.of(new BleachCreditsScreen(), "Credits", new ItemStack(Items.DRAGON_HEAD))) {
-						
+
 						public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 							if (keyCode == ModuleManager.getModule("ClickGui").getKey()) {
 								selectWindow(2);

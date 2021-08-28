@@ -8,9 +8,12 @@
  */
 package bleach.hack.gui;
 
+import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
@@ -45,20 +48,25 @@ public class BleachTitleScreen extends WindowScreen {
 	private ParticleManager particleMang = new ParticleManager();
 	public static boolean customTitleScreen = true;
 
-	public static String splash = "";
+	private static String splash;
+	private static int splashTicks;
+
+	static {
+		BleachOnlineMang.getResourceAsync("splashes.txt", BodyHandlers.ofLines()).thenAccept(st -> {
+			if (st != null) {
+				List<String> list = st.collect(Collectors.toList());
+				splash = list.get(new Random().nextInt(list.size()));
+			}
+		});
+	}
 
 	public BleachTitleScreen() {
 		super(new TranslatableText("narrator.screen.title"));
 	}
 
+	@Override
 	public void init() {
 		super.init();
-
-		if (splash.isEmpty()) {
-			List<String> sp = BleachOnlineMang.getResourceAsLines("splashes.txt");
-			if (sp != null && !sp.isEmpty())
-				splash = sp.get(new Random().nextInt(sp.size()));
-		}
 
 		clearWindows();
 		addWindow(new Window(width / 8,
@@ -115,26 +123,30 @@ public class BleachTitleScreen extends WindowScreen {
 		getWindow(0).addWidget(new WindowTextWidget(BleachHack.VERSION, true, WindowTextWidget.TextAlign.MIDDLE, 1.5f, w / 2, h / 4 - 6, 0xffc050));
 
 		// Splash
-		if (!splash.isEmpty()) {
-			getWindow(0).addWidget(new WindowTextWidget(new LiteralText(splash), true, WindowTextWidget.TextAlign.MIDDLE, 2f, -20f, w / 2 + 80, h / 4 + 6, 0xffff00)
-					.withRenderEvent(widget -> {
+		getWindow(0).addWidget(new WindowTextWidget(LiteralText.EMPTY, true, WindowTextWidget.TextAlign.MIDDLE, 2f, -20f, w / 2 + 80, h / 4 + 6, 0xffff00)
+				.withRenderEvent(widget -> {
+					if (splash != null) {
+						WindowTextWidget windgetText = (WindowTextWidget) widget;
+						windgetText.setText(new LiteralText(splash));
+						windgetText.color = (windgetText.color & 0x00ffffff) | ((splashTicks * 17) << 24);
+
 						float scale = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
 						scale = scale * 66.0F / (textRenderer.getWidth(splash) + 32);
-						((WindowTextWidget) widget).setScale(scale);
-					}));
-		}
+						windgetText.setScale(scale);
+					}
+				}));
 
 		// Update Text
-		if (BleachHack.updateJson != null
-				&& BleachHack.updateJson.has("version")
-				&& BleachHack.updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
+		JsonObject updateJson = BleachHack.getUpdateJson();
+		if (updateJson != null && updateJson.has("version") && updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
 			getWindow(0).addWidget(new WindowTextWidget("\u00a76\u00a7nUpdate\u00a76", true, 4, h - 12, 0xffffff)
 					.withClickEvent(widget -> {
-						client.setScreen(new UpdateScreen(client.currentScreen, BleachHack.updateJson));
+						client.setScreen(new UpdateScreen(client.currentScreen, updateJson));
 					}));
 		}
 	}
 
+	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 
@@ -150,5 +162,11 @@ public class BleachTitleScreen extends WindowScreen {
 		particleMang.addParticle(mouseX, mouseY);
 		particleMang.renderParticles(matrices);
 
+	}
+
+	@Override
+	public void tick() {
+		if (splash != null && splashTicks < 15)
+			splashTicks++;
 	}
 }

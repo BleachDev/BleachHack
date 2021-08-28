@@ -13,9 +13,12 @@ import bleach.hack.gui.window.widget.WindowScrollbarWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.gui.window.widget.WindowWidget;
 import bleach.hack.util.collections.ImmutablePairList;
+import bleach.hack.util.io.BleachJsonHelper;
 import bleach.hack.util.io.BleachOnlineMang;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.net.http.HttpResponse.BodyHandlers;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import com.google.gson.JsonObject;
 
 import bleach.hack.BleachHack;
@@ -31,20 +34,15 @@ public class BleachCreditsScreen extends WindowScreen {
 
 	// <If Donator, Name/Discord tag>
 	private static ImmutablePairList<Boolean, String> boosterList;
+	private static boolean boostersLoaded;
 
 	private WindowScrollbarWidget scrollbar;
 	private int lastScroll;
 
-	public BleachCreditsScreen() {
-		super(new LiteralText("BleachHack Credits"));
-	}
-
-	public void init() {
-		super.init();
-
-		if (boosterList == null) {
+	static {
+		BleachOnlineMang.getResourceAsync("credits.json", BodyHandlers.ofString()).thenAccept(st -> {
 			boosterList = new ImmutablePairList<>();
-			JsonObject json = BleachOnlineMang.getResourceAsJson("credits.json");
+			JsonObject json = BleachJsonHelper.parseOrNull(st, JsonObject.class);
 
 			if (json != null) {
 				if (json.has("donators") && json.get("donators").isJsonArray()) {
@@ -55,7 +53,15 @@ public class BleachCreditsScreen extends WindowScreen {
 					json.get("boosters").getAsJsonArray().forEach(j -> boosterList.add(new ImmutablePair<>(false, j.getAsString())));
 				}
 			}
-		}
+		});
+	}
+
+	public BleachCreditsScreen() {
+		super(new LiteralText("BleachHack Credits"));
+	}
+
+	public void init() {
+		super.init();
 
 		clearWindows();
 		addWindow(new Window(width / 8,
@@ -95,8 +101,14 @@ public class BleachCreditsScreen extends WindowScreen {
 
 		getWindow(0).addWidget(new WindowTextWidget("- Donators/Boosters -", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 195, 0xe0e0e0));
 		int y = 210;
-		for (ImmutablePair<Boolean, String> i: boosterList) {
-			getWindow(0).addWidget(new WindowTextWidget(getBoosterText(i), true, WindowTextWidget.TextAlign.MIDDLE, w / 2, y, 0));
+		if (boosterList != null) {
+			boostersLoaded = true;
+			for (ImmutablePair<Boolean, String> i: boosterList) {
+				getWindow(0).addWidget(new WindowTextWidget(getBoosterText(i), true, WindowTextWidget.TextAlign.MIDDLE, w / 2, y, 0));
+				y += 12;
+			}
+		} else {
+			getWindow(0).addWidget(new WindowTextWidget("\u00a77Loading..", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, y, 0));
 			y += 12;
 		}
 
@@ -121,6 +133,12 @@ public class BleachCreditsScreen extends WindowScreen {
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
+		
+		if (!boostersLoaded && boosterList != null) {
+			int scroll = scrollbar.getPageOffset();
+			init();
+			scrollbar.setPageOffset(scroll);
+		}
 
 		int offset = scrollbar.getPageOffset() - lastScroll;
 		for (WindowWidget widget: getWindow(0).getWidgets()) {

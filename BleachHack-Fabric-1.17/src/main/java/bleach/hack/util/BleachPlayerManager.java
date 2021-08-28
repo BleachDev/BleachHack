@@ -8,6 +8,7 @@
  */
 package bleach.hack.util;
 
+import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
@@ -45,7 +46,7 @@ public class BleachPlayerManager {
 				playerQueue.forEach(p -> playersJson.add(p.toString()));
 				playerQueue.clear();
 
-				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString());
+				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString(), BodyHandlers.ofString());
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -74,7 +75,7 @@ public class BleachPlayerManager {
 				JsonArray playersJson = new JsonArray();
 				players.forEach(p -> playersJson.add(p.toString()));
 
-				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString());
+				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString(), BodyHandlers.ofString());
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -95,13 +96,13 @@ public class BleachPlayerManager {
 	public void startPinger() {
 		if (pingExecutor == null || pingExecutor.isShutdown()) {
 			pingExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setDaemon(true).build());
-			pingExecutor.scheduleAtFixedRate(() -> BleachOnlineMang.sendApiGet("online/ping?uuid=" + toProperUUID(mc.getSession().getUuid())), 0L, 14L, TimeUnit.MINUTES);
+			pingExecutor.scheduleAtFixedRate(() -> BleachOnlineMang.sendApiGet("online/ping?uuid=" + toProperUUID(mc.getSession().getUuid()), BodyHandlers.discarding()), 0L, 14L, TimeUnit.MINUTES);
 		}
 	}
 
 	public void stopPinger() {
 		if (pingExecutor != null && !pingExecutor.isShutdown()) {
-			pingExecutor.execute(() -> BleachOnlineMang.sendApiGet("online/disconnect?uuid=" + toProperUUID(mc.getSession().getUuid().replace("-", ""))));
+			pingExecutor.execute(() -> BleachOnlineMang.sendApiGet("online/disconnect?uuid=" + toProperUUID(mc.getSession().getUuid().replace("-", "")), BodyHandlers.discarding()));
 			pingExecutor.shutdown();
 		}
 	}

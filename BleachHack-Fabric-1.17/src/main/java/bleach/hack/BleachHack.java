@@ -24,9 +24,13 @@ import bleach.hack.util.FriendManager;
 import bleach.hack.util.Watermark;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
+import bleach.hack.util.io.BleachJsonHelper;
 import bleach.hack.util.io.BleachOnlineMang;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.SharedConstants;
+
+import java.net.http.HttpResponse.BodyHandlers;
+import java.util.concurrent.CompletableFuture;
 
 import org.apache.logging.log4j.Level;
 
@@ -43,7 +47,7 @@ public class BleachHack implements ModInitializer {
 	public static FriendManager friendMang;
 	public static BleachPlayerManager playerMang;
 
-	public static JsonObject updateJson;
+	private static CompletableFuture<JsonObject> updateJson;
 
 	//private BleachFileMang bleachFileManager;
 
@@ -90,11 +94,14 @@ public class BleachHack implements ModInitializer {
 		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
 		CommandSuggestor.start();
 
-		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
+		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue()) {
 			playerMang.startPinger();
+		}
 
-		if (Option.GENERAL_CHECK_FOR_UPDATES.getValue())
-			updateJson = BleachOnlineMang.getResourceAsJson("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
+		if (Option.GENERAL_CHECK_FOR_UPDATES.getValue()) {
+			updateJson = BleachOnlineMang.getResourceAsync("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json", BodyHandlers.ofString())
+					.thenApply(s -> BleachJsonHelper.parseOrNull(s, JsonObject.class));
+		}
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
@@ -102,5 +109,13 @@ public class BleachHack implements ModInitializer {
 		}
 
 		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
+	}
+
+	public static JsonObject getUpdateJson() {
+		try {
+			return updateJson.get();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

@@ -14,15 +14,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandler;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import java.util.concurrent.CompletableFuture;
 
 import bleach.hack.util.BleachLogger;
 
@@ -47,35 +42,25 @@ public class BleachOnlineMang {
 		return apiUrl;
 	}
 
-	public static List<String> getResourceAsLines(String path) {
+	public static <T> T getResource(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
-		Stream<String> response = sendRequest(resourceUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofLines());
-		return response != null ? response.collect(Collectors.toList()) : null;
+		return sendRequest(resourceUrl.resolve(path), "GET", null, 5000, handler);
 	}
-
-	public static JsonObject getResourceAsJson(String path) {
+	
+	public static <T> CompletableFuture<T> getResourceAsync(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
-		String s = sendRequest(resourceUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofString());
-
-		if (s != null) {
-			try {
-				return new JsonParser().parse(s).getAsJsonObject();
-			} catch (Exception e) {
-				BleachLogger.logger.error("Error parsing json from resource: /" + path, e);
-			}
-		}
-
-		return null;
+		return sendAsyncRequest(resourceUrl.resolve(path), "GET", null, 5000, handler);
 	}
+	//BleachLogger.logger.error("Error parsing json from resource: /" + path, e);
 
-	public static String sendApiGet(String path) {
+	public static <T> T sendApiGet(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Trying to call API (GET, /" + path + ")");
-		return sendRequest(apiUrl.resolve(path), "GET", null, 5000, BodyHandlers.ofString());
+		return sendRequest(apiUrl.resolve(path), "GET", null, 5000, handler);
 	}
 
-	public static String sendApiPost(String path, String body) {
+	public static <T> T sendApiPost(String path, String body, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Trying to call API (POST, /" + path + ", " + body.toString() + ")");
-		return sendRequest(apiUrl.resolve(path), "POST", body, 5000, BodyHandlers.ofString());
+		return sendRequest(apiUrl.resolve(path), "POST", body, 5000, handler);
 	}
 
 	private static <T> T sendRequest(URI url, String method, String body, int timeout, BodyHandler<T> handler) {
@@ -93,7 +78,7 @@ public class BleachOnlineMang {
 		}
 	}
 
-	/*private static <T> CompletableFuture<T> sendAsyncRequest(URI url, String method, String body, int timeout, BodyHandler<T> handler) {
+	private static <T> CompletableFuture<T> sendAsyncRequest(URI url, String method, String body, int timeout, BodyHandler<T> handler) {
 		return httpClient.sendAsync(
 				HttpRequest
 				.newBuilder(url)
@@ -101,5 +86,5 @@ public class BleachOnlineMang {
 				.method(method, body != null ? BodyPublishers.ofString(body) : BodyPublishers.noBody())
 				.build(), handler)
 				.thenApply(HttpResponse::body);
-	}*/
+	}
 }
