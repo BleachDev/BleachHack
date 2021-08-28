@@ -35,12 +35,12 @@ public abstract class MixinBeaconScreen extends HandledScreen<BeaconScreenHandle
 	}
 
 	@Inject(method = "init", at = @At("RETURN"))
-	protected void init(CallbackInfo ci) {
+	protected void init(CallbackInfo callback) {
 		addDrawableChild(new ButtonWidget((width - backgroundWidth) / 2 + 2, (height - backgroundHeight) / 2 - 15, 46, 14, new LiteralText("Unlock"), button -> unlocked = true));
 	}
 
 	@Inject(method = "render", at = @At("HEAD"))
-	public void tick(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo callback) {
 		if (unlocked) {
 			for (Drawable b: ((AccessorScreen) this).getDrawables()) {
 				if (b instanceof ClickableWidget) {

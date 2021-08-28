@@ -15,6 +15,7 @@ import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.gui.window.widget.WindowWidget;
 import bleach.hack.gui.option.Option;
 import bleach.hack.gui.window.Window;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -23,13 +24,17 @@ import net.minecraft.text.LiteralText;
 
 public class BleachOptionsScreen extends WindowScreen {
 
+	private Screen parent;
+
 	private WindowScrollbarWidget scrollbar;
 	private int lastScroll;
 
-	public BleachOptionsScreen() {
+	public BleachOptionsScreen(Screen parent) {
 		super(new LiteralText("BleachHack Options"));
+		this.parent = parent;
 	}
 
+	@Override
 	public void init() {
 		super.init();
 
@@ -91,6 +96,7 @@ public class BleachOptionsScreen extends WindowScreen {
 		return y;
 	}
 
+	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 
@@ -107,9 +113,15 @@ public class BleachOptionsScreen extends WindowScreen {
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 
+	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		scrollbar.moveScrollbar((int) -amount * 7);
 
 		return super.mouseScrolled(mouseX, mouseY, amount);
+	}
+
+	@Override
+	public void onClose() {
+		client.setScreen(parent);
 	}
 }

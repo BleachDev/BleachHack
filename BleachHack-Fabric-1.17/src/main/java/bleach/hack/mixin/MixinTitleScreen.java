@@ -66,7 +66,7 @@ public class MixinTitleScreen extends Screen {
 							Triple.of(new BleachTitleScreen(), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)),
 							Triple.of(new AccountManagerScreen(), "Accounts", new ItemStack(Items.PAPER)),
 							Triple.of(ClickGui.clickGui, "ClickGui", new ItemStack(Items.TOTEM_OF_UNDYING)),
-							Triple.of(new BleachOptionsScreen(), "Options", new ItemStack(Items.REDSTONE)),
+							Triple.of(new BleachOptionsScreen(null), "Options", new ItemStack(Items.REDSTONE)),
 							Triple.of(new BleachCreditsScreen(), "Credits", new ItemStack(Items.DRAGON_HEAD))) {
 
 						public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
