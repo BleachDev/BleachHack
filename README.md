@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/daily%20commit-yes-blue?style=flat-square)
 ![](https://img.shields.io/discord/620600892718055434?style=flat-square)
 
-Obama approved utility mod for Fabric 1.16 & 1.17.
+Obama approved Minecraft utility mod for Fabric 1.17.
 
 > Website: https://bleachhack.org/  
 > Discord: https://bleachhack.org/discord
@@ -25,7 +25,7 @@ Obama approved utility mod for Fabric 1.16 & 1.17.
 ## Installation
 ### For normal people
 
-Download [Fabric for Minecraft 1.16/1.17](https://fabricmc.net/use/).
+Download [Fabric for Minecraft 1.17](https://fabricmc.net/use/).
 Download the latest version of BleachHack for your Minecraft version [from the website](https://bleachhack.org/).
 
 
