@@ -27,8 +27,8 @@ import bleach.hack.util.BleachLogger;
 public class BleachOnlineMang {
 
 	private static HttpClient httpClient = HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
-	private static URI resourceUrl = URI.create("https://res.bleachhack.org/");
-	private static URI apiUrl = URI.create("https://api.bleachhack.org/");
+	private static URI resourceUrl = URI.create("http://res.bleachhack.org/");
+	private static URI apiUrl = URI.create("http://api.bleachhack.org/");
 
 	public static HttpClient getHttpClient() {
 		return httpClient;
