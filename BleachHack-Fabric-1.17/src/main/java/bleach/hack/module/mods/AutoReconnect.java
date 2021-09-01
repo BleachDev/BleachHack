@@ -98,7 +98,6 @@ public class AutoReconnect extends Module {
 			if (reconnectTime + startTime < System.currentTimeMillis() && getSetting(0).asToggle().state) {
 				if (server != null)
 					ConnectScreen.connect(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
-				reconnectTime = System.currentTimeMillis();
 			}
 		}
 

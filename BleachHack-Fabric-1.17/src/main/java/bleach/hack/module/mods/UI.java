@@ -35,6 +35,9 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventRenderInGameHud;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.UIClickGuiScreen;
+import bleach.hack.gui.clickgui.window.UIContainer;
+import bleach.hack.gui.clickgui.window.UIWindow;
+import bleach.hack.gui.clickgui.window.UIWindow.Position;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
@@ -64,7 +67,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class UI extends Module {
 
-	public static UIClickGuiScreen uiScreen;
+	public static UIContainer uiContainer = new UIContainer();
 
 	private long prevTime = 0;
 	private double tps = 20;
@@ -101,9 +104,42 @@ public class UI extends Module {
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability.")), // 3-0
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")), // 4
-				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(uiScreen)).withDesc("Edit the position of the UI."));
+				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
+	
+		uiContainer.windows.put("ml",
+				new UIWindow(new Position(Pair.of("l", 1), Pair.of("t", 2)), uiContainer,
+						() -> getSetting(0).asToggle().state,
+						this::getModuleListSize,
+						this::drawModuleList)
+				);
 
-		uiScreen = new UIClickGuiScreen(ClickGui.clickGui, this);
+		uiContainer.windows.put("if",
+				new UIWindow(new Position(Pair.of("l", 1), Pair.of("b", 0)), uiContainer,
+						() -> getSetting(1).asToggle().state,
+						this::getInfoSize,
+						this::drawInfo)
+				);
+
+		uiContainer.windows.put("pl",
+				new UIWindow(new Position(Pair.of("l", 1), Pair.of("ml", 2)), uiContainer,
+						() -> getSetting(2).asToggle().state,
+						this::getPlayerSize,
+						this::drawPlayerList)
+				);
+
+		uiContainer.windows.put("ar",
+				new UIWindow(new Position(0.5, 0.85), uiContainer,
+						() -> getSetting(3).asToggle().state,
+						this::getArmorSize,
+						this::drawArmor)
+				);
+
+		uiContainer.windows.put("lm",
+				new UIWindow(new Position(0, 0.05, Pair.of("c", 1)), uiContainer,
+						() -> getSetting(4).asToggle().state,
+						this::getLagMeterSize,
+						this::drawLagMeter)
+				);
 	}
 
 	@Override
@@ -126,14 +162,8 @@ public class UI extends Module {
 			return;
 		}
 
-		// Shit way to keep the ui synced
-		uiScreen.init(mc, mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
-
-		uiScreen.uiWindows.values().forEach(window -> {
-			if (!window.shouldClose(this)) {
-				window.renderUI(event.getMatrix());
-			}
-		});
+		uiContainer.resizeScreen(mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
+		uiContainer.render(event.getMatrix());
 	}
 
 	// --- Module List
@@ -147,7 +177,7 @@ public class UI extends Module {
 
 		int inner = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
 		int outer = getSetting(0).asToggle().getChild(1).asToggle().state ? 4 : 3;
-		return new int[] { mc.textRenderer.getWidth(lines.get(0)) + inner + outer, lines.size() * 10};
+		return new int[] { mc.textRenderer.getWidth(lines.get(0)) + inner + outer, lines.size() * 10 };
 	}
 
 	public void drawModuleList(MatrixStack matrices, int x, int y) {

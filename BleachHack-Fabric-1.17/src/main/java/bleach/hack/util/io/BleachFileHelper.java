@@ -238,7 +238,7 @@ public class BleachFileHelper {
 	public static void saveUI() {
 		JsonObject jo = new JsonObject();
 
-		for (Entry<String, UIWindow> w : UI.uiScreen.uiWindows.entrySet()) {
+		for (Entry<String, UIWindow> w : UI.uiContainer.windows.entrySet()) {
 			JsonObject jw = new JsonObject();
 			jw.addProperty("x", w.getValue().position.xPercent);
 			jw.addProperty("y", w.getValue().position.yPercent);
@@ -264,7 +264,7 @@ public class BleachFileHelper {
 		if (jo == null)
 			return;
 
-		Map<String, UIWindow> uiWindows = UI.uiScreen.uiWindows;
+		Map<String, UIWindow> uiWindows = UI.uiContainer.windows;
 		for (Entry<String, JsonElement> e : jo.entrySet()) {
 			if (!e.getValue().isJsonObject() || !uiWindows.containsKey(e.getKey()))
 				continue;

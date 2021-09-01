@@ -10,17 +10,13 @@ package bleach.hack.gui.clickgui.window;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.TriConsumer;
 
-import bleach.hack.gui.clickgui.UIClickGuiScreen;
-import bleach.hack.module.ModuleManager;
-import bleach.hack.module.mods.UI;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -31,20 +27,20 @@ public class UIWindow extends ClickGuiWindow {
 
 	public Position position;
 
-	private Function<UI, Boolean> enabledFunction;
+	private BooleanSupplier enabledSupplier;
 	private Supplier<int[]> sizeSupplier;
 	private TriConsumer<MatrixStack, Integer, Integer> renderConsumer;
 
-	private Map<String, UIWindow> otherWindows;
+	private UIContainer parentContainer;
 
 	private boolean detachedFromOthers = false;
 
-	public UIWindow(Position pos, Map<String, UIWindow> otherWindows, Function<UI, Boolean> enabledFunction, Supplier<int[]> sizeSupplier, TriConsumer<MatrixStack, Integer, Integer> renderConsumer) {
+	public UIWindow(Position pos, UIContainer parentContainer, BooleanSupplier enabledSupplier, Supplier<int[]> sizeSupplier, TriConsumer<MatrixStack, Integer, Integer> renderConsumer) {
 		super(0, 0, 0, 0, "", null);
 
 		this.position = pos;
-		this.otherWindows = otherWindows;
-		this.enabledFunction = enabledFunction;
+		this.parentContainer = parentContainer;
+		this.enabledSupplier = enabledSupplier;
 		this.sizeSupplier = sizeSupplier;
 		this.renderConsumer = renderConsumer;
 	}
@@ -58,25 +54,29 @@ public class UIWindow extends ClickGuiWindow {
 		renderConsumer.accept(matrices, x1 + 1, y1 + 1);
 	}
 
-	public boolean shouldClose(UI uiModule) {
-		return !enabledFunction.apply(uiModule);
+	public boolean shouldClose() {
+		return !enabledSupplier.getAsBoolean();
 	}
 
 	private void detachFromOthers(boolean detachFromConstants) {
 		// Really messy way to detach this from all its neighbors
-		String thisId = otherWindows.entrySet().stream()
+		String thisId = parentContainer.windows.entrySet().stream()
 				.filter(p -> p.getValue() == this)
-				.findFirst().orElse(null).getKey();
+				.map(e -> e.getKey())
+				.findFirst().orElse(null);
+		
+		if (thisId == null)
+			return;
 
 		position.getAttachments().stream()
 		.filter(p -> p.getLeft().length() > 1)
-		.forEach(p -> otherWindows.get(p.getLeft()).position.getAttachments()
+		.forEach(p -> parentContainer.windows.get(p.getLeft()).position.getAttachments()
 				.removeIf(a -> a.getLeft().equals(thisId)));
 		position.getAttachments().removeIf(p -> detachFromConstants || p.getLeft().length() > 1);
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		if (shouldClose((UI) ModuleManager.getModule("UI"))) {
+		if (shouldClose()) {
 			if (!detachedFromOthers) {
 				detachFromOthers(false);
 				detachedFromOthers = true;
@@ -92,41 +92,46 @@ public class UIWindow extends ClickGuiWindow {
 		if (dragging) {
 			detachFromOthers(true);
 
-			x2 = (x2 - x1) + mouseX - dragOffX - Math.min(0, mouseX - dragOffX);
-			y2 = (y2 - y1) + mouseY - dragOffY - Math.min(0, mouseY - dragOffY);
+			int width = mc.getWindow().getScaledWidth();
+			int height = mc.getWindow().getScaledHeight();
+			int wWidth = x2 - x1;
+			int wHeight = y2 - y1;
+			
+			x2 = wWidth + mouseX - dragOffX - Math.min(0, mouseX - dragOffX);
+			y2 = wHeight + mouseY - dragOffY - Math.min(0, mouseY - dragOffY);
 			x1 = Math.max(0, mouseX - dragOffX);
 			y1 = Math.max(0, mouseY - dragOffY);
 
-			Position newPos = new Position((double) x1 / mc.getWindow().getScaledWidth(), (double) y1 / mc.getWindow().getScaledHeight());
+			Position newPos = new Position((double) x1 / width, (double) y1 / height);
 
 			if (mouseX - dragOffX < sens) {
 				newPos.addAttachment(Pair.of("l", 1));
-				x2 = x2 - x1 - 1;
+				x2 = wWidth - 1;
 				x1 = -1;
-			} else if (mouseX - dragOffX + (x2 - x1) > mc.getWindow().getScaledWidth() - sens) {
+			} else if (mouseX - dragOffX + wWidth > width - sens) {
 				newPos.addAttachment(Pair.of("r", 3));
-				x1 = mc.getWindow().getScaledWidth() + 1 - (x2 - x1);
-				x2 = mc.getWindow().getScaledWidth() + 1;
-			} else if (Math.abs(mouseX - dragOffX + (x2 - x1) / 2 - mc.getWindow().getScaledWidth() / 2) < sens) {
+				x1 = width + 1 - wWidth;
+				x2 = width + 1;
+			} else if (Math.abs(mouseX - dragOffX + wWidth / 2 - width / 2) < sens) {
 				newPos.addAttachment(Pair.of("c", 1));
-				int w = x2 - x1;
-				x1 = mc.getWindow().getScaledWidth() / 2 - w / 2;
+				int w = wWidth;
+				x1 = width / 2 - w / 2;
 				x2 = x1 + w;
 			} else {
-				for (Entry<String, UIWindow> e: otherWindows.entrySet()) {
+				for (Entry<String, UIWindow> e: parentContainer.windows.entrySet()) {
 					UIWindow window = e.getValue();
 					if (window != this
-							&& !window.shouldClose((UI) ModuleManager.getModule("UI"))
+							&& !window.shouldClose()
 							&& ((y1 >= window.y1 && y1 <= window.y2)
 									|| (y2 >= window.y1 && y2 <= window.y2)
 									|| (y1 <= window.y1 && y2 >= window.y2))) {
 						if (Math.abs(window.x1 - x2) < sens) {
 							newPos.addAttachment(Pair.of(e.getKey(), 3));
-							x1 = window.x1 - (x2 - x1);
+							x1 = window.x1 - wWidth;
 							x2 = window.x1;
 						} else if (Math.abs(window.x2 - x1) < sens) {
 							newPos.addAttachment(Pair.of(e.getKey(), 1));
-							x2 = window.x2 + (x2 - x1);
+							x2 = window.x2 + wWidth;
 							x1 = window.x2;
 						}
 					}
@@ -135,27 +140,27 @@ public class UIWindow extends ClickGuiWindow {
 
 			if (mouseY - dragOffY < sens) {
 				newPos.addAttachment(Pair.of("t", 2));
-				y2 = y2 - y1 - 1;
+				y2 = wHeight - 1;
 				y1 = -1;
-			} else if (mouseY - dragOffY + (y2 - y1) > UIClickGuiScreen.getScreenBottom(mc) - sens) {
+			} else if (mouseY - dragOffY + wHeight > parentContainer.getScreenBottom(height) - sens) {
 				newPos.addAttachment(Pair.of("b", 0));
-				y1 = mc.getWindow().getScaledHeight() + 1 - (y2 - y1);
-				y2 = mc.getWindow().getScaledHeight() + 1;
+				y1 = height + 1 - wHeight;
+				y2 = height + 1;
 			} else {
-				for (Entry<String, UIWindow> e: otherWindows.entrySet()) {
+				for (Entry<String, UIWindow> e: parentContainer.windows.entrySet()) {
 					UIWindow window = e.getValue();
 					if (window != this
-							&& !window.shouldClose((UI) ModuleManager.getModule("UI"))
+							&& !window.shouldClose()
 							&& ((x1 >= window.x1 && x1 <= window.x2)
 									|| (x2 >= window.x1 && x2 <= window.x2)
 									|| (x1 <= window.x1 && x2 >= window.x2))) {
 						if (Math.abs(window.y1 - y2) < sens) {
 							newPos.addAttachment(Pair.of(e.getKey(), 0));
-							y1 = window.y1 - (y2 - y1);
+							y1 = window.y1 - wHeight;
 							y2 = window.y1;
 						} else if (Math.abs(window.y2 - y1) < sens) {
 							newPos.addAttachment(Pair.of(e.getKey(), 2));
-							y2 = window.y2 + (y2 - y1);
+							y2 = window.y2 + wHeight;
 							y1 = window.y2;
 						}
 					}
