@@ -27,7 +27,7 @@ import bleach.hack.util.BleachLogger;
 public class BleachOnlineMang {
 
 	private static HttpClient httpClient = HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
-	private static URI resourceUrl = URI.create("http://res.bleachhack.org/");
+	private static URI resourceUrl = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
 	private static URI apiUrl = URI.create("http://api.bleachhack.org/");
 
 	public static HttpClient getHttpClient() {
@@ -51,7 +51,6 @@ public class BleachOnlineMang {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
 		return sendAsyncRequest(resourceUrl.resolve(path), "GET", null, 5000, handler);
 	}
-	//BleachLogger.logger.error("Error parsing json from resource: /" + path, e);
 
 	public static <T> T sendApiGet(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Trying to call API (GET, /" + path + ")");
