@@ -87,7 +87,7 @@ public class UIWindow extends ClickGuiWindow {
 
 		detachedFromOthers = false;
 
-		// Snapping
+		// Handling of attaching/detaching when dragging
 		int sens = 5;
 		if (dragging) {
 			detachFromOthers(true);

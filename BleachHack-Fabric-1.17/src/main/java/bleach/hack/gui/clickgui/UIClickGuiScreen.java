@@ -47,7 +47,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		BleachFileHelper.SCHEDULE_SAVE_UI.set(true);
 
-		uiContainer.resizeScreen(width, height);
+		uiContainer.updatePositions(width, height);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 }

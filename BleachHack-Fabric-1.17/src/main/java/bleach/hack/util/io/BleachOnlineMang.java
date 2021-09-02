@@ -28,7 +28,7 @@ public class BleachOnlineMang {
 
 	private static HttpClient httpClient = HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
 	private static URI resourceUrl = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
-	private static URI apiUrl = URI.create("http://api.bleachhack.org/");
+	private static URI apiUrl = URI.create("http://api0.bleachhack.org/"); // using api0 because of compatibility with BH 1.2.1 and under.
 
 	public static HttpClient getHttpClient() {
 		return httpClient;

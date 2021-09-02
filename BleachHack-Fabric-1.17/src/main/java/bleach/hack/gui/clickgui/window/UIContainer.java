@@ -25,7 +25,7 @@ public class UIContainer {
 		}
 	}
 
-	public void resizeScreen(int width, int height) {
+	public void updatePositions(int width, int height) {
 		windows.forEach((id, window) -> {
 			window.x1 = getLeft(id, width, height);
 			window.y1 = getTop(id, width, height);

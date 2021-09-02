@@ -162,7 +162,7 @@ public class UI extends Module {
 			return;
 		}
 
-		uiContainer.resizeScreen(mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
+		uiContainer.updatePositions(mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
 		uiContainer.render(event.getMatrix());
 	}
 
