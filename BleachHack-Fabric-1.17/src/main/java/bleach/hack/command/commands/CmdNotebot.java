@@ -37,6 +37,7 @@ public class CmdNotebot extends Command {
 			for (int[] i1 : notes)
 				s += i1[0] + ":" + i1[1] + ":" + i1[2] + "\n";
 
+			BleachFileMang.createEmptyFile("notebot/notebot" + i + ".txt");
 			BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s);
 			BleachLogger.info("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
 		} else {
