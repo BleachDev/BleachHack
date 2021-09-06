@@ -26,6 +26,7 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.zip.DeflaterOutputStream;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import bleach.hack.eventbus.BleachSubscribe;
@@ -209,13 +210,13 @@ public class UI extends Module {
 		if (getSetting(1).asToggle().getChild(4).asToggle().state) {
 			ItemStack is = mc.player.getMainHandStack();
 			if (is.isDamageable()) {
-				if (is.getOrCreateNbt().getInt("dmg") != 0) {
-					infoText.add("Durability: \u00a7b" + is.getOrCreateNbt().getInt("dmg"));
+				if (is.getOrCreateNbt().contains("dmg")) {
+					infoText.add("Durability: \u00a7b" + NumberUtils.toInt(is.getOrCreateNbt().get("dmg").asString()));
 				} else {
 					infoText.add("Durability: \u00a7b" + (is.getMaxDamage() - is.getDamage()));
 				}
 			} else {
-				infoText.add("Durability: -");
+				infoText.add("Durability: ---");
 			}
 		}
 
