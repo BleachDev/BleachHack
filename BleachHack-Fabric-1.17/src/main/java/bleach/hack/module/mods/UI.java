@@ -33,6 +33,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventRenderInGameHud;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventReadPacket;
 import bleach.hack.gui.clickgui.UIClickGuiScreen;
 import bleach.hack.gui.clickgui.window.UIContainer;
@@ -68,6 +69,9 @@ import net.minecraft.util.math.Vec3d;
 public class UI extends Module {
 
 	public static UIContainer uiContainer = new UIContainer();
+	
+	private List<Text> moduleListText = new ArrayList<>();
+	private List<String> infoText = new ArrayList<>();
 
 	private long prevTime = 0;
 	private double tps = 20;
@@ -94,6 +98,7 @@ public class UI extends Module {
 						new SettingToggle("Ping", true).withDesc("Shows your ping."), // 1-1
 						new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords."), // 1-2
 						new SettingToggle("TPS", true).withDesc("Shows the estimated server tps."), // 1-3
+						new SettingToggle("Durability", true).withDesc("Shows durability left on the item you're holding."), // 1-3
 						new SettingToggle("Server", false).withDesc("Shows the current server you are on."), // 1-4
 						new SettingToggle("TimeStamp", false).withDesc("Shows the current time.").withChildren( // 1-5
 								new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."), // 1-5-0
@@ -155,134 +160,40 @@ public class UI extends Module {
 
 		super.onDisable(inWorld);
 	}
-
+	
 	@BleachSubscribe
-	public void onDrawOverlay(EventRenderInGameHud event) {
-		if (mc.currentScreen instanceof UIClickGuiScreen) {
-			return;
-		}
-
-		uiContainer.updatePositions(mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
-		uiContainer.render(event.getMatrix());
-	}
-
-	// --- Module List
-
-	public int[] getModuleListSize() {
-		List<Text> lines = getModuleListText();
-
-		if (lines.isEmpty()) {
-			return new int[] { 0, 0 };
-		}
-
-		int inner = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
-		int outer = getSetting(0).asToggle().getChild(1).asToggle().state ? 4 : 3;
-		return new int[] { mc.textRenderer.getWidth(lines.get(0)) + inner + outer, lines.size() * 10 };
-	}
-
-	public void drawModuleList(MatrixStack matrices, int x, int y) {
-		List<Text> lines = getModuleListText();
-
-		if (lines.isEmpty()) return;
-
-		int arrayCount = 0;
-		boolean inner = getSetting(0).asToggle().getChild(0).asToggle().state;
-		boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
-		boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
-		boolean rightAlign = x + mc.textRenderer.getWidth(lines.get(0)) / 2 > mc.getWindow().getScaledWidth() / 2;
-
-		int startX = rightAlign ? x + mc.textRenderer.getWidth(lines.get(0)) + 3 + (inner ? 1 : 0) + (outer ? 1 : 0) : x;
-		for (Text t : lines) {
-			int color = getRainbowFromSettings(arrayCount * 40);
-			int textStart = (rightAlign ? startX - mc.textRenderer.getWidth(t) - 1 : startX + 2) + (inner ? 1 : 0) * (rightAlign ? -1 : 1);
-			int outerX = rightAlign ? textStart - 3 : textStart + mc.textRenderer.getWidth(t) + 1;
-
-			if (fill) {
-				DrawableHelper.fill(matrices, rightAlign ? textStart - 2 : startX, y + arrayCount * 10, rightAlign ? startX : outerX, y + 10 + arrayCount * 10, 0x70003030);
-			}
-
-			if (inner) {
-				DrawableHelper.fill(matrices, rightAlign ? startX - 1 : startX, y + arrayCount * 10, rightAlign ? startX : startX + 1, y + 10 + arrayCount * 10, color);
-			}
-
-			if (outer) {
-				DrawableHelper.fill(matrices, outerX, y + arrayCount * 10, outerX + 1, y + 10 + arrayCount * 10, color);
-
-				/*if (arrayCount + 1 < lines.size()) {
-					DrawableHelper.fill(matrices, x + mc.textRenderer.getWidth(t) + 4 + inner, y + 10 + arrayCount * 10,
-							x + mc.textRenderer.getWidth(t) + 4 + inner, y + 11 + arrayCount * 10, color);
-				}*/
-			}
-
-			mc.textRenderer.drawWithShadow(matrices, t, textStart, y + 1 + arrayCount * 10, color);
-			arrayCount++;
-		}
-
-		/*if (outer) {
-			DrawableHelper.fill(matrices,
-					x, y + arrayCount * 10,
-					x + mc.textRenderer.getWidth(lines.get(arrayCount - 1)) + 4 + inner, y + 1 + arrayCount * 10,
-					getRainbowFromSettings(arrayCount * 40));
-		}*/
-	}
-
-	private List<Text> getModuleListText() {
-		List<Text> lines = new ArrayList<>();
+	public void onTick(EventTick event) {
+		// ModuleList text
+		moduleListText.clear();
 
 		for (Module m : ModuleManager.getModules())
 			if (m.isEnabled())
-				lines.add(new LiteralText(m.getName()));
+				moduleListText.add(new LiteralText(m.getName()));
 
-		lines.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
+		moduleListText.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
 
 		if (getSetting(0).asToggle().getChild(3).asToggle().state) {
 			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
 
 			if (watermarkMode == 0) {
-
-				lines.add(0, BleachHack.watermark.getText().append(new LiteralText(" " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)))));
+				moduleListText.add(0, BleachHack.watermark.getText().append(new LiteralText(" " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)))));
 			} else {
-				lines.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
+				moduleListText.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
 			}
 		}
+		
+		// Info Text
+		infoText.clear();
 
-		return lines;
-	}
-
-	// --- Info
-
-	public int[] getInfoSize() {
-		List<String> infoList = getInfoText();
-		return new int[] { infoList.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0) + 2, infoList.size() * 10};
-	}
-
-	public void drawInfo(MatrixStack matrices, int x, int y) {
-		List<String> infoList = getInfoText();
-
-		if (y + infoList.size() * 5 > mc.getWindow().getScaledHeight() / 2) {
-			Collections.reverse(infoList);
-		}
-
-		int count = 0;
-		int longestText = infoList.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
-		boolean rightAlign = x + longestText / 2 > mc.getWindow().getScaledWidth() / 2;
-		for (String s : infoList) {
-			mc.textRenderer.drawWithShadow(matrices, s,
-					rightAlign ? x + longestText - mc.textRenderer.getWidth(s) + 1 : x + 1, y + 1 + count * 10, 0xa0a0a0);
-			count++;
-		}
-	}
-
-	private List<String> getInfoText() {
-		List<String> infoList = new ArrayList<>();
-
-		if (getSetting(1).asToggle().getChild(5).asToggle().state) {
-			infoList.add("\u00a77Time: \u00a7e"
+		// Timestamp
+		if (getSetting(1).asToggle().getChild(6).asToggle().state) {
+			infoText.add("Time: \u00a7e"
 					+ ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
 							+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
 							+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : ""))));
 		}
 
+		// Coords
 		if (getSetting(1).asToggle().getChild(2).asToggle().state) {
 			boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 			BlockPos pos = mc.player.getBlockPos();
@@ -290,16 +201,32 @@ public class UI extends Module {
 			BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
 					: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
 
-			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
+			infoText.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
-
+		
+		// Durability
 		if (getSetting(1).asToggle().getChild(4).asToggle().state) {
-			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-			infoList.add("\u00a77Server: \u00a7d" + server);
+			ItemStack is = mc.player.getMainHandStack();
+			if (is.isDamageable()) {
+				if (is.getOrCreateNbt().getType("dmg") == NbtCompound.SHORT_TYPE) {
+					infoText.add("Durability: \u00a7b" + is.getOrCreateNbt().getShort("dmg"));
+				} else {
+					infoText.add("Durability: \u00a7b" + (is.getMaxDamage() - is.getDamage()));
+				}
+			} else {
+				infoText.add("Durability: --");
+			}
 		}
 
-		if (getSetting(1).asToggle().getChild(6).asToggle().state) {
+		// Server
+		if (getSetting(1).asToggle().getChild(5).asToggle().state) {
+			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
+			infoText.add("Server: \u00a7d" + server);
+		}
+
+		// ChunkSize
+		if (getSetting(1).asToggle().getChild(7).asToggle().state) {
 			if (chunkFuture != null && new ChunkPos(mc.player.getBlockPos()).equals(chunkFuture.getLeft())) {
 				if (chunkFuture.getRight().isDone()) {
 					try {
@@ -330,18 +257,18 @@ public class UI extends Module {
 				}));
 			}
 
-			infoList.add("Chunk: \u00a7f" + (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"));
+			infoText.add("Chunk: \u00a7f" + (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"));
 		}
 
 		if (getSetting(1).asToggle().getChild(0).asToggle().state) {
 			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
-			infoList.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
+			infoText.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
 		}
 
 		if (getSetting(1).asToggle().getChild(1).asToggle().state) {
 			PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
 			int ping = playerEntry == null ? 0 : playerEntry.getLatency();
-			infoList.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
+			infoText.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
 		}
 
 		if (getSetting(1).asToggle().getChild(3).asToggle().state) {
@@ -355,10 +282,84 @@ public class UI extends Module {
 			else if (lastPacket + 1200 < System.currentTimeMillis())
 				suffix += ".";
 
-			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
+			infoText.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
+		}
+	}
+
+	@BleachSubscribe
+	public void onDrawOverlay(EventRenderInGameHud event) {
+		if (mc.currentScreen instanceof UIClickGuiScreen) {
+			return;
 		}
 
-		return infoList;
+		uiContainer.updatePositions(mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
+		uiContainer.render(event.getMatrix());
+	}
+
+	// --- Module List
+
+	public int[] getModuleListSize() {
+		if (moduleListText.isEmpty()) {
+			return new int[] { 0, 0 };
+		}
+
+		int inner = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
+		int outer = getSetting(0).asToggle().getChild(1).asToggle().state ? 4 : 3;
+		return new int[] { mc.textRenderer.getWidth(moduleListText.get(0)) + inner + outer, moduleListText.size() * 10 };
+	}
+
+	public void drawModuleList(MatrixStack matrices, int x, int y) {
+		if (moduleListText.isEmpty()) return;
+
+		int arrayCount = 0;
+		boolean inner = getSetting(0).asToggle().getChild(0).asToggle().state;
+		boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
+		boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
+		boolean rightAlign = x + mc.textRenderer.getWidth(moduleListText.get(0)) / 2 > mc.getWindow().getScaledWidth() / 2;
+
+		int startX = rightAlign ? x + mc.textRenderer.getWidth(moduleListText.get(0)) + 3 + (inner ? 1 : 0) + (outer ? 1 : 0) : x;
+		for (Text t : moduleListText) {
+			int color = getRainbowFromSettings(arrayCount * 40);
+			int textStart = (rightAlign ? startX - mc.textRenderer.getWidth(t) - 1 : startX + 2) + (inner ? 1 : 0) * (rightAlign ? -1 : 1);
+			int outerX = rightAlign ? textStart - 3 : textStart + mc.textRenderer.getWidth(t) + 1;
+
+			if (fill) {
+				DrawableHelper.fill(matrices, rightAlign ? textStart - 2 : startX, y + arrayCount * 10, rightAlign ? startX : outerX, y + 10 + arrayCount * 10, 0x70003030);
+			}
+
+			if (inner) {
+				DrawableHelper.fill(matrices, rightAlign ? startX - 1 : startX, y + arrayCount * 10, rightAlign ? startX : startX + 1, y + 10 + arrayCount * 10, color);
+			}
+
+			if (outer) {
+				DrawableHelper.fill(matrices, outerX, y + arrayCount * 10, outerX + 1, y + 10 + arrayCount * 10, color);
+			}
+
+			mc.textRenderer.drawWithShadow(matrices, t, textStart, y + 1 + arrayCount * 10, color);
+			arrayCount++;
+		}
+	}
+
+	// --- Info
+
+	public int[] getInfoSize() {
+		return new int[] { infoText.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0) + 2, infoText.size() * 10};
+	}
+
+	public void drawInfo(MatrixStack matrices, int x, int y) {
+		List<String> infoList = new ArrayList<>(infoText);
+		if (y + infoList.size() * 5 > mc.getWindow().getScaledHeight() / 2) {
+			Collections.reverse(infoList);
+		}
+
+		int count = 0;
+		int longestText = infoList.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
+		boolean rightAlign = x + longestText / 2 > mc.getWindow().getScaledWidth() / 2;
+		for (String s : infoList) {
+			mc.textRenderer.drawWithShadow(matrices, s,
+					rightAlign ? x + longestText - mc.textRenderer.getWidth(s) + 1 : x + 1, y + 1 + count * 10, 0xa0a0a0);
+			count++;
+		}
 	}
 
 	// --- Players
