@@ -62,17 +62,17 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 
 public class UI extends Module {
 
 	public static UIContainer uiContainer = new UIContainer();
-	
+
 	private List<Text> moduleListText = new ArrayList<>();
-	private List<String> infoText = new ArrayList<>();
+	private List<Text> infoText = new ArrayList<>();
 
 	private long prevTime = 0;
 	private double tps = 20;
@@ -111,7 +111,7 @@ public class UI extends Module {
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")), // 4
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
-	
+
 		uiContainer.windows.put("ml",
 				new UIWindow(new Position(Pair.of("l", 1), Pair.of("t", 2)), uiContainer,
 						() -> getSetting(0).asToggle().state,
@@ -161,7 +161,7 @@ public class UI extends Module {
 
 		super.onDisable(inWorld);
 	}
-	
+
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		// ModuleList text
@@ -173,6 +173,7 @@ public class UI extends Module {
 
 		moduleListText.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
 
+
 		if (getSetting(0).asToggle().getChild(3).asToggle().state) {
 			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
 
@@ -182,52 +183,62 @@ public class UI extends Module {
 				moduleListText.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
 			}
 		}
-		
+
 		// Info Text
+		SettingToggle infoToggle = getSetting(1).asToggle();
 		infoText.clear();
 
 		// Timestamp
-		if (getSetting(1).asToggle().getChild(6).asToggle().state) {
-			infoText.add("Time: \u00a7e"
-					+ ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
-							+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-							+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : ""))));
+		if (infoToggle.getChild(6).asToggle().state) {
+			String time = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
+					+ (infoToggle.getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+					+ (infoToggle.getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : "")));
+					
+			infoText.add(
+					new LiteralText("Time: ")
+					.append(new LiteralText(time).styled(s -> s.withColor(Formatting.YELLOW))));
 		}
 
 		// Coords
-		if (getSetting(1).asToggle().getChild(2).asToggle().state) {
+		if (infoToggle.getChild(2).asToggle().state) {
 			boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 			BlockPos pos = mc.player.getBlockPos();
-			Vec3d vec = mc.player.getPos();
-			BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
-					: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
+			BlockPos pos2 = nether ? new BlockPos(mc.player.getPos().multiply(8, 1, 8))
+					: new BlockPos(mc.player.getPos().multiply(0.125, 1, 0.125));
 
-			infoText.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-			+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
+			infoText.add(
+					new LiteralText("XYZ: ")
+					.append(new LiteralText(pos.getX() + " " + pos.getY() + " " + pos.getZ()).styled(s -> s.withColor(nether ? 0xb02020 : 0x40f0f0)))
+					.append(" [")
+					.append(new LiteralText(pos2.getX() + " " + pos2.getY() + " " + pos2.getZ()).styled(s -> s.withColor(nether ? 0x40f0f0 : 0xb02020)))
+					.append("]"));
 		}
-		
+
 		// Durability
-		if (getSetting(1).asToggle().getChild(4).asToggle().state) {
+		if (infoToggle.getChild(4).asToggle().state) {
 			ItemStack is = mc.player.getMainHandStack();
 			if (is.isDamageable()) {
-				if (is.getOrCreateNbt().contains("dmg")) {
-					infoText.add("Durability: \u00a7b" + NumberUtils.toInt(is.getOrCreateNbt().get("dmg").asString()));
-				} else {
-					infoText.add("Durability: \u00a7b" + (is.getMaxDamage() - is.getDamage()));
-				}
+				int durability = is.getOrCreateNbt().contains("dmg")
+						? NumberUtils.toInt(is.getOrCreateNbt().get("dmg").asString()) : is.getMaxDamage() - is.getDamage();
+
+				infoText.add(
+						new LiteralText("Durability: ")
+						.append(colorText(Integer.toString(durability), (float) durability / is.getMaxDamage() / 3f % 1f)));
 			} else {
-				infoText.add("Durability: ---");
+				infoText.add(new LiteralText("Durability: --"));
 			}
 		}
 
 		// Server
-		if (getSetting(1).asToggle().getChild(5).asToggle().state) {
+		if (infoToggle.getChild(5).asToggle().state) {
 			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-			infoText.add("Server: \u00a7d" + server);
+			infoText.add(
+					new LiteralText("Server: ")
+					.append(new LiteralText(server).styled(s -> s.withColor(Formatting.LIGHT_PURPLE))));
 		}
 
 		// ChunkSize
-		if (getSetting(1).asToggle().getChild(7).asToggle().state) {
+		if (infoToggle.getChild(7).asToggle().state) {
 			if (chunkFuture != null && new ChunkPos(mc.player.getBlockPos()).equals(chunkFuture.getLeft())) {
 				if (chunkFuture.getRight().isDone()) {
 					try {
@@ -258,32 +269,37 @@ public class UI extends Module {
 				}));
 			}
 
-			infoText.add("Chunk: \u00a7f" + (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"));
+			infoText.add(
+					new LiteralText("Chunk: ")
+					.append(new LiteralText(chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB").styled(s -> s.withColor(Formatting.WHITE))));
 		}
 
-		if (getSetting(1).asToggle().getChild(0).asToggle().state) {
+		// FPS
+		if (infoToggle.getChild(0).asToggle().state) {
 			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
-			infoText.add("FPS: " + getColorString(fps, 120, 60, 30, 15, 10, false) + fps);
+			infoText.add(
+					new LiteralText("FPS: ")
+					.append(colorText(Integer.toString(fps), Math.min(fps, 120) / 360f)));
 		}
 
-		if (getSetting(1).asToggle().getChild(1).asToggle().state) {
+		// Ping
+		if (infoToggle.getChild(1).asToggle().state) {
 			PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
 			int ping = playerEntry == null ? 0 : playerEntry.getLatency();
-			infoText.add("Ping: " + getColorString(ping, 75, 180, 300, 500, 1000, true) + ping);
+			infoText.add(
+					new LiteralText("Ping: ")
+					.append(colorText(Integer.toString(ping), (800 - MathHelper.clamp(ping, 0, 800)) / 2400f)));
 		}
 
-		if (getSetting(1).asToggle().getChild(3).asToggle().state) {
-			String suffix = "\u00a77";
-			if (lastPacket + 7500 < System.currentTimeMillis())
-				suffix += "....";
-			else if (lastPacket + 5000 < System.currentTimeMillis())
-				suffix += "...";
-			else if (lastPacket + 2500 < System.currentTimeMillis())
-				suffix += "..";
-			else if (lastPacket + 1200 < System.currentTimeMillis())
-				suffix += ".";
+		// TPS
+		if (infoToggle.getChild(3).asToggle().state) {
+			int time = (int) (System.currentTimeMillis() - lastPacket);
+			String suffix = time >= 7500 ? "...." : time >= 5000 ? "..." : time >= 2500 ? ".." : time >= 1200 ? ".." : "";
 
-			infoText.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
+			infoText.add(
+					new LiteralText("TPS: ")
+					.append(colorText(Double.toString(tps), (float) MathHelper.clamp(tps - 2, 0, 16) / 48))
+					.append(suffix));
 		}
 	}
 
@@ -348,7 +364,7 @@ public class UI extends Module {
 	}
 
 	public void drawInfo(MatrixStack matrices, int x, int y) {
-		List<String> infoList = new ArrayList<>(infoText);
+		List<Text> infoList = new ArrayList<>(infoText);
 		if (y + infoList.size() * 5 > mc.getWindow().getScaledHeight() / 2) {
 			Collections.reverse(infoList);
 		}
@@ -356,9 +372,9 @@ public class UI extends Module {
 		int count = 0;
 		int longestText = infoList.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
 		boolean rightAlign = x + longestText / 2 > mc.getWindow().getScaledWidth() / 2;
-		for (String s : infoList) {
-			mc.textRenderer.drawWithShadow(matrices, s,
-					rightAlign ? x + longestText - mc.textRenderer.getWidth(s) + 1 : x + 1, y + 1 + count * 10, 0xa0a0a0);
+		for (Text t : infoList) {
+			mc.textRenderer.drawWithShadow(matrices, t,
+					rightAlign ? x + longestText - mc.textRenderer.getWidth(t) + 1 : x + 1, y + 1 + count * 10, 0xa0a0a0);
 			count++;
 		}
 	}
@@ -450,7 +466,7 @@ public class UI extends Module {
 			RenderSystem.enableDepthTest();
 			mc.getItemRenderer().renderGuiItemIcon(is, curX, y + 4);
 
-			int durcolor = is.isDamageable() ? 0xff000000 | MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F) : 0;
+			int durcolor = is.isDamageable() ? 0xff000000 | MathHelper.hsvToRgb((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage() / 3.0F, 1.0F, 1.0F) : 0;
 
 			matrices.push();
 			matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
@@ -496,20 +512,8 @@ public class UI extends Module {
 		}
 	}
 
-	public String getColorString(int value, int best, int good, int mid, int bad, int worst, boolean rev) {
-		if (!rev ? value > best : value < best) {
-			return "\u00a72";
-		} else if (!rev ? value > good : value < good) {
-			return "\u00a7a";
-		} else if (!rev ? value > mid : value < mid) {
-			return "\u00a7e";
-		} else if (!rev ? value > bad : value < bad) {
-			return "\u00a76";
-		} else if (!rev ? value > worst : value < worst) {
-			return "\u00a7c";
-		} else {
-			return "\u00a74";
-		}
+	private static Text colorText(String text, float hue) {
+		return new LiteralText(text).styled(s -> s.withColor(MathHelper.hsvToRgb(hue, 1f, 1f)));
 	}
 
 	public static int getRainbow(float sat, float bri, double speed, int offset) {
