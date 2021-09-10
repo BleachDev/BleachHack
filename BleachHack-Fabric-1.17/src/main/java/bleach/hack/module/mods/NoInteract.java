@@ -9,6 +9,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 
+/**
+ * @author CUPZYY
+ */
+
 public class NoInteract extends Module {
 
     public NoInteract() {
