@@ -1,13 +1,12 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.event.events.EventSendPacket;
+import bleach.hack.event.events.EventInteract;
 import bleach.hack.eventbus.BleachSubscribe;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.setting.other.SettingBlockList;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 
 /**
  * @author CUPZYY
@@ -38,10 +37,7 @@ public class NoInteract extends Module {
     }
 
     @BleachSubscribe
-    public void onSendPacket(EventSendPacket event) {
-        if (event.getPacket() instanceof PlayerInteractBlockC2SPacket) {
-            Boolean ignore = getSetting(0).asList(Block.class).contains(mc.world.getBlockState(((PlayerInteractBlockC2SPacket) event.getPacket()).getBlockHitResult().getBlockPos()).getBlock());
-            if (ignore) event.setCancelled(true);
-        }
+    public void onSendPacket(EventInteract.InteractBlock event) {
+        if (getSetting(0).asList(Block.class).contains(mc.world.getBlockState(event.getHitResult().getBlockPos()).getBlock())) event.setCancelled(true);
     }
 }
