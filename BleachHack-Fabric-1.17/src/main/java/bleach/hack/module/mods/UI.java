@@ -46,7 +46,6 @@ import bleach.hack.setting.base.SettingButton;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
 import bleach.hack.util.world.ClientChunkSerializer;
 import net.minecraft.client.MinecraftClient;
@@ -132,49 +131,49 @@ public class UI extends Module {
 						() -> new int[] { mc.textRenderer.getWidth(coordsText), 8 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, coordsText, x, y, 0xa0a0a0))
 				);
-		
+
 		uiContainer.windows.put("fps",
 				new UIWindow(new Position("l", 1, "coords", 0), uiContainer,
 						() -> getSetting(1).asToggle().state,
 						() -> new int[] { mc.textRenderer.getWidth(fpsText), 8 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, fpsText, x, y, 0xa0a0a0))
 				);
-		
+
 		uiContainer.windows.put("ping",
 				new UIWindow(new Position("l", 1, "fps", 0), uiContainer,
 						() -> getSetting(2).asToggle().state,
 						() -> new int[] { mc.textRenderer.getWidth(pingText), 8 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, pingText, x, y, 0xa0a0a0))
 				);
-		
+
 		uiContainer.windows.put("tps",
 				new UIWindow(new Position("l", 1, "ping", 0), uiContainer,
 						() -> getSetting(4).asToggle().state,
 						() -> new int[] { mc.textRenderer.getWidth(tpsText), 8 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, tpsText, x, y, 0xa0a0a0))
 				);
-		
+
 		uiContainer.windows.put("durability",
 				new UIWindow(new Position(0.2, 0.9), uiContainer,
 						() -> getSetting(5).asToggle().state,
 						() -> new int[] { mc.textRenderer.getWidth(durabilityText), 8 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, durabilityText, x, y, 0xa0a0a0))
 				);
-		
+
 		uiContainer.windows.put("server",
 				new UIWindow(new Position(0.2, 0.85, "durability", 0), uiContainer,
 						() -> getSetting(6).asToggle().state,
 						() -> new int[] { mc.textRenderer.getWidth(serverText), 8 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, serverText, x, y, 0xa0a0a0))
 				);
-		
+
 		uiContainer.windows.put("timestamp",
 				new UIWindow(new Position(0.2, 0.8, "server", 0), uiContainer,
 						() -> getSetting(7).asToggle().state,
 						() -> new int[] { mc.textRenderer.getWidth(timestampText), 8 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, timestampText, x, y, 0xa0a0a0))
 				);
-		
+
 		uiContainer.windows.put("chunksize",
 				new UIWindow(new Position(0.2, 0.75, "timestamp", 0), uiContainer,
 						() -> getSetting(8).asToggle().state,
@@ -314,18 +313,15 @@ public class UI extends Module {
 		} else if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
 			lastChunkTime = System.currentTimeMillis();
 			chunkFuture = Pair.of(new ChunkPos(mc.player.getBlockPos()), chunkExecutor.submit(() -> {
-				NbtCompound tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
-				DataOutputStream output = new DataOutputStream(
-						new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
 				try {
+					NbtCompound tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
+					DataOutputStream output = new DataOutputStream(
+							new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
 					NbtIo.writeCompressed(tag, output);
+					return output.size();
 				} catch (IOException e) {
-					e.printStackTrace();
-					BleachLogger.error("[ChunkSize] Error serializing chunk");
 					return 0;
 				}
-
-				return output.size();
 			}));
 		}
 
