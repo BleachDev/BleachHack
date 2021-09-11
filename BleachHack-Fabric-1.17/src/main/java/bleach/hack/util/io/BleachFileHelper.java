@@ -16,8 +16,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -35,6 +33,7 @@ import bleach.hack.module.mods.ClickGui;
 import bleach.hack.module.mods.UI;
 import bleach.hack.setting.base.SettingBase;
 import bleach.hack.util.BleachLogger;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 public class BleachFileHelper {
 
@@ -244,8 +243,8 @@ public class BleachFileHelper {
 			jw.addProperty("y", w.getValue().position.yPercent);
 
 			JsonObject ja = new JsonObject();
-			for (Pair<String, Integer> atm: w.getValue().position.getAttachments()) {
-				ja.add(atm.getLeft(), new JsonPrimitive(atm.getRight()));
+			for (Object2IntMap.Entry<String> atm: w.getValue().position.getAttachments().object2IntEntrySet()) {
+				ja.add(atm.getKey(), new JsonPrimitive(atm.getIntValue()));
 			}
 
 			if (ja.size() > 0) {
@@ -277,7 +276,9 @@ public class BleachFileHelper {
 
 			if (jw.has("attachments")) {
 				for (Entry<String, JsonElement> ja : jw.get("attachments").getAsJsonObject().entrySet()) {
-					pos.addAttachment(Pair.of(ja.getKey(), ja.getValue().getAsInt()));
+					if (uiWindows.keySet().contains(ja.getKey()) || ja.getKey().length() == 1) {
+						pos.addAttachment(ja.getKey(), ja.getValue().getAsInt());
+					}
 				}
 			}
 

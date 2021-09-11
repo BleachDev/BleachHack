@@ -11,6 +11,7 @@ package bleach.hack.gui.clickgui;
 import java.util.Arrays;
 import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.clickgui.window.UIContainer;
+import bleach.hack.gui.clickgui.window.UIWindow;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.gui.screen.Screen;
@@ -48,6 +49,15 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 		BleachFileHelper.SCHEDULE_SAVE_UI.set(true);
 
 		uiContainer.updatePositions(width, height);
+
+		for (UIWindow w: uiContainer.windows.values()) {
+			boolean shouldClose = w.shouldClose();
+			if (shouldClose && !w.closed)
+				w.detachFromOthers(false);
+
+			w.closed = shouldClose;
+		}
+
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 }

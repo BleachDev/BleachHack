@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -72,7 +71,14 @@ public class UI extends Module {
 	public static UIContainer uiContainer = new UIContainer();
 
 	private List<Text> moduleListText = new ArrayList<>();
-	private List<Text> infoText = new ArrayList<>();
+	private Text fpsText = LiteralText.EMPTY;
+	private Text pingText = LiteralText.EMPTY;
+	private Text coordsText = LiteralText.EMPTY;
+	private Text tpsText = LiteralText.EMPTY;
+	private Text durabilityText = LiteralText.EMPTY;
+	private Text serverText = LiteralText.EMPTY;
+	private Text timestampText = LiteralText.EMPTY;
+	private Text chunksizeText = LiteralText.EMPTY;
 
 	private long prevTime = 0;
 	private double tps = 20;
@@ -94,17 +100,16 @@ public class UI extends Module {
 						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("The hue of the rainbow."), // 0-4
 						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("The saturation of the rainbow."), // 0-5
 						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("The speed of the rainbow.")), // 0-6
-				new SettingToggle("Info", true).withDesc("Shows info/stats.").withChildren( // 1
-						new SettingToggle("FPS", true).withDesc("Shows your FPS."), // 1-0
-						new SettingToggle("Ping", true).withDesc("Shows your ping."), // 1-1
-						new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords."), // 1-2
-						new SettingToggle("TPS", true).withDesc("Shows the estimated server tps."), // 1-3
-						new SettingToggle("Durability", true).withDesc("Shows durability left on the item you're holding."), // 1-3
-						new SettingToggle("Server", false).withDesc("Shows the current server you are on."), // 1-4
-						new SettingToggle("TimeStamp", false).withDesc("Shows the current time.").withChildren( // 1-5
-								new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."), // 1-5-0
-								new SettingToggle("Year", false).withDesc("Shows the current year in the time.")), // 1-5-1
-						new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in.")), // 1-6
+				new SettingToggle("FPS", true).withDesc("Shows your FPS."), // 1-0
+				new SettingToggle("Ping", true).withDesc("Shows your ping."), // 1-1
+				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords."), // 1-2
+				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps."), // 1-3
+				new SettingToggle("Durability", false).withDesc("Shows durability left on the item you're holding."), // 1-3
+				new SettingToggle("Server", false).withDesc("Shows the current server you are on."), // 1-4
+				new SettingToggle("Timestamp", false).withDesc("Shows the current time.").withChildren( // 1-5
+						new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."), // 1-5-0
+						new SettingToggle("Year", false).withDesc("Shows the current year in the time.")), // 1-5-1
+				new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in."), // 1-6
 				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance."), //2
 				new SettingToggle("Armor", true).withDesc("Shows your current armor.").withChildren( // 3
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability.")), // 3-0
@@ -112,37 +117,91 @@ public class UI extends Module {
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")), // 4
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
 
-		uiContainer.windows.put("ml",
-				new UIWindow(new Position(Pair.of("l", 1), Pair.of("t", 2)), uiContainer,
+		// Modulelist
+		uiContainer.windows.put("modulelist",
+				new UIWindow(new Position("l", 1, "t", 2), uiContainer,
 						() -> getSetting(0).asToggle().state,
 						this::getModuleListSize,
 						this::drawModuleList)
 				);
 
-		uiContainer.windows.put("if",
-				new UIWindow(new Position(Pair.of("l", 1), Pair.of("b", 0)), uiContainer,
+		// Info
+		uiContainer.windows.put("coords",
+				new UIWindow(new Position("l", 1, "b", 0), uiContainer,
+						() -> getSetting(3).asToggle().state,
+						() -> new int[] { mc.textRenderer.getWidth(coordsText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, coordsText, x, y, 0xa0a0a0))
+				);
+		
+		uiContainer.windows.put("fps",
+				new UIWindow(new Position("l", 1, "coords", 0), uiContainer,
 						() -> getSetting(1).asToggle().state,
-						this::getInfoSize,
-						this::drawInfo)
+						() -> new int[] { mc.textRenderer.getWidth(fpsText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, fpsText, x, y, 0xa0a0a0))
+				);
+		
+		uiContainer.windows.put("ping",
+				new UIWindow(new Position("l", 1, "fps", 0), uiContainer,
+						() -> getSetting(2).asToggle().state,
+						() -> new int[] { mc.textRenderer.getWidth(pingText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, pingText, x, y, 0xa0a0a0))
+				);
+		
+		uiContainer.windows.put("tps",
+				new UIWindow(new Position("l", 1, "ping", 0), uiContainer,
+						() -> getSetting(4).asToggle().state,
+						() -> new int[] { mc.textRenderer.getWidth(tpsText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, tpsText, x, y, 0xa0a0a0))
+				);
+		
+		uiContainer.windows.put("durability",
+				new UIWindow(new Position(0.2, 0.9), uiContainer,
+						() -> getSetting(5).asToggle().state,
+						() -> new int[] { mc.textRenderer.getWidth(durabilityText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, durabilityText, x, y, 0xa0a0a0))
+				);
+		
+		uiContainer.windows.put("server",
+				new UIWindow(new Position(0.2, 0.85, "durability", 0), uiContainer,
+						() -> getSetting(6).asToggle().state,
+						() -> new int[] { mc.textRenderer.getWidth(serverText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, serverText, x, y, 0xa0a0a0))
+				);
+		
+		uiContainer.windows.put("timestamp",
+				new UIWindow(new Position(0.2, 0.8, "server", 0), uiContainer,
+						() -> getSetting(7).asToggle().state,
+						() -> new int[] { mc.textRenderer.getWidth(timestampText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, timestampText, x, y, 0xa0a0a0))
+				);
+		
+		uiContainer.windows.put("chunksize",
+				new UIWindow(new Position(0.2, 0.75, "timestamp", 0), uiContainer,
+						() -> getSetting(8).asToggle().state,
+						() -> new int[] { mc.textRenderer.getWidth(chunksizeText), 8 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, chunksizeText, x, y, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("pl",
-				new UIWindow(new Position(Pair.of("l", 1), Pair.of("ml", 2)), uiContainer,
-						() -> getSetting(2).asToggle().state,
+		// Players
+		uiContainer.windows.put("players",
+				new UIWindow(new Position("l", 1, "modulelist", 2), uiContainer,
+						() -> getSetting(9).asToggle().state,
 						this::getPlayerSize,
 						this::drawPlayerList)
 				);
 
-		uiContainer.windows.put("ar",
+		// Armor
+		uiContainer.windows.put("armor",
 				new UIWindow(new Position(0.5, 0.85), uiContainer,
-						() -> getSetting(3).asToggle().state,
+						() -> getSetting(10).asToggle().state,
 						this::getArmorSize,
 						this::drawArmor)
 				);
 
-		uiContainer.windows.put("lm",
-				new UIWindow(new Position(0, 0.05, Pair.of("c", 1)), uiContainer,
-						() -> getSetting(4).asToggle().state,
+		// Lag-Meter
+		uiContainer.windows.put("lagmeter",
+				new UIWindow(new Position(0, 0.05, "c", 1), uiContainer,
+						() -> getSetting(11).asToggle().state,
 						this::getLagMeterSize,
 						this::drawLagMeter)
 				);
@@ -164,7 +223,7 @@ public class UI extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		// ModuleList text
+		// ModuleList
 		moduleListText.clear();
 
 		for (Module m : ModuleManager.getModules())
@@ -172,7 +231,6 @@ public class UI extends Module {
 				moduleListText.add(new LiteralText(m.getName()));
 
 		moduleListText.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
-
 
 		if (getSetting(0).asToggle().getChild(3).asToggle().state) {
 			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
@@ -184,123 +242,95 @@ public class UI extends Module {
 			}
 		}
 
-		// Info Text
-		SettingToggle infoToggle = getSetting(1).asToggle();
-		infoText.clear();
+		// FPS
+		int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
+		fpsText = new LiteralText("FPS: ")
+				.append(colorText(Integer.toString(fps), Math.min(fps, 120) / 360f));
 
-		// Timestamp
-		if (infoToggle.getChild(6).asToggle().state) {
-			String time = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
-					+ (infoToggle.getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-					+ (infoToggle.getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : "")));
-					
-			infoText.add(
-					new LiteralText("Time: ")
-					.append(new LiteralText(time).styled(s -> s.withColor(Formatting.YELLOW))));
-		}
+		// Ping
+		PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
+		int ping = playerEntry == null ? 0 : playerEntry.getLatency();
+		pingText = new LiteralText("Ping: ")
+				.append(colorText(Integer.toString(ping), (800 - MathHelper.clamp(ping, 0, 800)) / 2400f));
 
 		// Coords
-		if (infoToggle.getChild(2).asToggle().state) {
-			boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
-			BlockPos pos = mc.player.getBlockPos();
-			BlockPos pos2 = nether ? new BlockPos(mc.player.getPos().multiply(8, 1, 8))
-					: new BlockPos(mc.player.getPos().multiply(0.125, 1, 0.125));
+		boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
+		BlockPos pos = mc.player.getBlockPos();
+		BlockPos pos2 = nether ? new BlockPos(mc.player.getPos().multiply(8, 1, 8))
+				: new BlockPos(mc.player.getPos().multiply(0.125, 1, 0.125));
 
-			infoText.add(
-					new LiteralText("XYZ: ")
-					.append(new LiteralText(pos.getX() + " " + pos.getY() + " " + pos.getZ()).styled(s -> s.withColor(nether ? 0xb02020 : 0x40f0f0)))
-					.append(" [")
-					.append(new LiteralText(pos2.getX() + " " + pos2.getY() + " " + pos2.getZ()).styled(s -> s.withColor(nether ? 0x40f0f0 : 0xb02020)))
-					.append("]"));
-		}
+		coordsText = new LiteralText("XYZ: ")
+				.append(new LiteralText(pos.getX() + " " + pos.getY() + " " + pos.getZ()).styled(s -> s.withColor(nether ? 0xb02020 : 0x40f0f0)))
+				.append(" [")
+				.append(new LiteralText(pos2.getX() + " " + pos2.getY() + " " + pos2.getZ()).styled(s -> s.withColor(nether ? 0x40f0f0 : 0xb02020)))
+				.append("]");
+
+		// TPS
+		int time = (int) (System.currentTimeMillis() - lastPacket);
+		String suffix = time >= 7500 ? "...." : time >= 5000 ? "..." : time >= 2500 ? ".." : time >= 1200 ? ".." : "";
+
+		tpsText = new LiteralText("TPS: ")
+				.append(colorText(Double.toString(tps), (float) MathHelper.clamp(tps - 2, 0, 16) / 48))
+				.append(suffix);
 
 		// Durability
-		if (infoToggle.getChild(4).asToggle().state) {
-			ItemStack is = mc.player.getMainHandStack();
-			if (is.isDamageable()) {
-				int durability = is.getOrCreateNbt().contains("dmg")
-						? NumberUtils.toInt(is.getOrCreateNbt().get("dmg").asString()) : is.getMaxDamage() - is.getDamage();
+		ItemStack mainhand = mc.player.getMainHandStack();
+		if (mainhand.isDamageable()) {
+			int durability = mainhand.getOrCreateNbt().contains("dmg")
+					? NumberUtils.toInt(mainhand.getOrCreateNbt().get("dmg").asString()) : mainhand.getMaxDamage() - mainhand.getDamage();
 
-				infoText.add(
-						new LiteralText("Durability: ")
-						.append(colorText(Integer.toString(durability), (float) durability / is.getMaxDamage() / 3f % 1f)));
-			} else {
-				infoText.add(new LiteralText("Durability: --"));
-			}
+			durabilityText = new LiteralText("Durability: ")
+					.append(colorText(Integer.toString(durability), (float) durability / mainhand.getMaxDamage() / 3f % 1f));
+		} else {
+			durabilityText = new LiteralText("Durability: --");
 		}
 
 		// Server
-		if (infoToggle.getChild(5).asToggle().state) {
-			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-			infoText.add(
-					new LiteralText("Server: ")
-					.append(new LiteralText(server).styled(s -> s.withColor(Formatting.LIGHT_PURPLE))));
-		}
+		String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
+		serverText = new LiteralText("Server: ")
+				.append(new LiteralText(server).styled(s -> s.withColor(Formatting.LIGHT_PURPLE)));
+
+		// Timestamp
+		String timeString = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
+				+ (getSetting(7).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+				+ (getSetting(7).asToggle().getChild(1).asToggle().state ? " yyyy" : "")));
+
+		timestampText = new LiteralText("Time: ")
+				.append(new LiteralText(timeString).styled(s -> s.withColor(Formatting.YELLOW)));
 
 		// ChunkSize
-		if (infoToggle.getChild(7).asToggle().state) {
-			if (chunkFuture != null && new ChunkPos(mc.player.getBlockPos()).equals(chunkFuture.getLeft())) {
-				if (chunkFuture.getRight().isDone()) {
-					try {
-						chunkSize = chunkFuture.getRight().get();
-					} catch (InterruptedException | ExecutionException e) {
-						e.printStackTrace();
-					}
-
-					if (System.currentTimeMillis() - lastChunkTime > 1500) {
-						chunkFuture = null;
-					}
+		if (chunkFuture != null && new ChunkPos(mc.player.getBlockPos()).equals(chunkFuture.getLeft())) {
+			if (chunkFuture.getRight().isDone()) {
+				try {
+					chunkSize = chunkFuture.getRight().get();
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
 				}
-			} else if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
-				lastChunkTime = System.currentTimeMillis();
-				chunkFuture = Pair.of(new ChunkPos(mc.player.getBlockPos()), chunkExecutor.submit(() -> {
-					NbtCompound tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
-					DataOutputStream output = new DataOutputStream(
-							new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
-					try {
-						NbtIo.writeCompressed(tag, output);
-					} catch (IOException e) {
-						e.printStackTrace();
-						BleachLogger.error("[ChunkSize] Error serializing chunk");
-						return 0;
-					}
 
-					return output.size();
-				}));
+				if (System.currentTimeMillis() - lastChunkTime > 1500) {
+					chunkFuture = null;
+				}
 			}
+		} else if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
+			lastChunkTime = System.currentTimeMillis();
+			chunkFuture = Pair.of(new ChunkPos(mc.player.getBlockPos()), chunkExecutor.submit(() -> {
+				NbtCompound tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
+				DataOutputStream output = new DataOutputStream(
+						new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
+				try {
+					NbtIo.writeCompressed(tag, output);
+				} catch (IOException e) {
+					e.printStackTrace();
+					BleachLogger.error("[ChunkSize] Error serializing chunk");
+					return 0;
+				}
 
-			infoText.add(
-					new LiteralText("Chunk: ")
-					.append(new LiteralText(chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB").styled(s -> s.withColor(Formatting.WHITE))));
+				return output.size();
+			}));
 		}
 
-		// FPS
-		if (infoToggle.getChild(0).asToggle().state) {
-			int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
-			infoText.add(
-					new LiteralText("FPS: ")
-					.append(colorText(Integer.toString(fps), Math.min(fps, 120) / 360f)));
-		}
-
-		// Ping
-		if (infoToggle.getChild(1).asToggle().state) {
-			PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
-			int ping = playerEntry == null ? 0 : playerEntry.getLatency();
-			infoText.add(
-					new LiteralText("Ping: ")
-					.append(colorText(Integer.toString(ping), (800 - MathHelper.clamp(ping, 0, 800)) / 2400f)));
-		}
-
-		// TPS
-		if (infoToggle.getChild(3).asToggle().state) {
-			int time = (int) (System.currentTimeMillis() - lastPacket);
-			String suffix = time >= 7500 ? "...." : time >= 5000 ? "..." : time >= 2500 ? ".." : time >= 1200 ? ".." : "";
-
-			infoText.add(
-					new LiteralText("TPS: ")
-					.append(colorText(Double.toString(tps), (float) MathHelper.clamp(tps - 2, 0, 16) / 48))
-					.append(suffix));
-		}
+		chunksizeText = new LiteralText("Chunk: ")
+				.append(new LiteralText(chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB").styled(s -> s.withColor(Formatting.WHITE)));
 	}
 
 	@BleachSubscribe
@@ -354,28 +384,6 @@ public class UI extends Module {
 
 			mc.textRenderer.drawWithShadow(matrices, t, textStart, y + 1 + arrayCount * 10, color);
 			arrayCount++;
-		}
-	}
-
-	// --- Info
-
-	public int[] getInfoSize() {
-		return new int[] { infoText.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0) + 2, infoText.size() * 10};
-	}
-
-	public void drawInfo(MatrixStack matrices, int x, int y) {
-		List<Text> infoList = new ArrayList<>(infoText);
-		if (y + infoList.size() * 5 > mc.getWindow().getScaledHeight() / 2) {
-			Collections.reverse(infoList);
-		}
-
-		int count = 0;
-		int longestText = infoList.stream().map(mc.textRenderer::getWidth).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
-		boolean rightAlign = x + longestText / 2 > mc.getWindow().getScaledWidth() / 2;
-		for (Text t : infoList) {
-			mc.textRenderer.drawWithShadow(matrices, t,
-					rightAlign ? x + longestText - mc.textRenderer.getWidth(t) + 1 : x + 1, y + 1 + count * 10, 0xa0a0a0);
-			count++;
 		}
 	}
 
@@ -435,7 +443,7 @@ public class UI extends Module {
 			String text = "Server Lagging For: " + String.format(Locale.ENGLISH, "%.2f", (time - lastPacket) / 1000d) + "s";
 
 			int xd = x + 72 - mc.textRenderer.getWidth(text) / 2;
-			switch (getSetting(4).asToggle().getChild(0).asMode().mode) {
+			switch (getSetting(11).asToggle().getChild(0).asMode().mode) {
 				case 0:
 					mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1 + Math.min((time - lastPacket - 1200) / 20, 0), 0xd0d0d0);
 					break;
@@ -470,13 +478,13 @@ public class UI extends Module {
 
 			matrices.push();
 			matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
-			if (getSetting(3).asToggle().getChild(0).asMode().mode > 0 && is.isDamaged()) {
+			if (getSetting(10).asToggle().getChild(0).asMode().mode > 0 && is.isDamaged()) {
 				int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
 				DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 15, y + 19, 0xff000000);
 				DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 2 + barLength, y + 18, durcolor);
 			}
 
-			if (getSetting(3).asToggle().getChild(0).asMode().mode != 1) {
+			if (getSetting(10).asToggle().getChild(0).asMode().mode != 1) {
 				matrices.push();
 				matrices.scale(0.75f, 0.75f, 1f);
 				RenderSystem.disableDepthTest();
