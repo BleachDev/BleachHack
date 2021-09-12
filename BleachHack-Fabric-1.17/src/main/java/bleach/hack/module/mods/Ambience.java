@@ -127,8 +127,9 @@ public class Ambience extends Module {
 	public void onBiomeColor(EventBiomeColor event) {
 		int type = event instanceof EventBiomeColor.Water ? 2 : 1;
 
-		event.setColor(getCurrentDimSetting().state && getCurrentDimSetting().getChild(type).asToggle().state
-				? getCurrentDimSetting().getChild(type).asToggle().getChild(0).asColor().getRGB() : null);
+		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(type).asToggle().state) {
+			event.setColor(getCurrentDimSetting().getChild(type).asToggle().getChild(0).asColor().getRGB());
+		}
 	}
 
 	@BleachSubscribe

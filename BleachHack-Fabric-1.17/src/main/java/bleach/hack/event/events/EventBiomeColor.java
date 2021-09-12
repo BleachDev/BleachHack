@@ -16,32 +16,34 @@ public class EventBiomeColor extends Event {
 
 	protected BlockRenderView world;
 	protected BlockPos pos;
-
-	private Integer color;
+	protected int color;
 
 	public static class Grass extends EventBiomeColor {
 
-		public Grass(BlockRenderView world, BlockPos pos) {
+		public Grass(BlockRenderView world, BlockPos pos, int color) {
 			this.world = world;
 			this.pos = pos;
+			this.color = color;
 		}
 
 	}
 
 	public static class Foilage extends EventBiomeColor {
 
-		public Foilage(BlockRenderView world, BlockPos pos) {
+		public Foilage(BlockRenderView world, BlockPos pos, int color) {
 			this.world = world;
 			this.pos = pos;
+			this.color = color;
 		}
 
 	}
 
 	public static class Water extends EventBiomeColor {
 
-		public Water(BlockRenderView world, BlockPos pos) {
+		public Water(BlockRenderView world, BlockPos pos, int color) {
 			this.world = world;
 			this.pos = pos;
+			this.color = color;
 		}
 
 	}
@@ -61,13 +63,13 @@ public class EventBiomeColor extends Event {
 	public void setPos(BlockPos pos) {
 		this.pos = pos;
 	}
-	
-	public void setColor(Integer color) {
-		this.color = color;
+
+	public int getColor() {
+		return color;
 	}
 
-	public Integer getColor() {
-		return color;
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 }

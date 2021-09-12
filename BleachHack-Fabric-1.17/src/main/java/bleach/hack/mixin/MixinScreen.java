@@ -39,7 +39,7 @@ public class MixinScreen {
 		lastMY = mouseY;
 	}
 
-	@Inject(at = @At("HEAD"), method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;Ljava/util/Optional;II)V", cancellable = true)
+	@Inject(method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;Ljava/util/Optional;II)V", at = @At("HEAD"), cancellable = true)
 	public void renderTooltip(MatrixStack matrices, List<Text> lines, Optional<TooltipData> data, int x, int y, CallbackInfo callback) {
 		if (skipTooltip) {
 			skipTooltip = false;
@@ -58,7 +58,7 @@ public class MixinScreen {
 		}
 	}
 
-	@Inject(at = @At("HEAD"), method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;I)V", cancellable = true)
+	@Inject(method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;I)V", at = @At("HEAD"), cancellable = true)
 	public void renderBackground(MatrixStack matrices, int vOffset, CallbackInfo callback) {
 		EventRenderScreenBackground event = new EventRenderScreenBackground(matrices, vOffset);
 		BleachHack.eventBus.post(event);
