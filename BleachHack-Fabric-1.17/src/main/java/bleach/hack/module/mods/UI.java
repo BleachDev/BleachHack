@@ -11,7 +11,6 @@ package bleach.hack.module.mods;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -306,11 +305,9 @@ public class UI extends Module {
 					e.printStackTrace();
 				}
 
-				if (System.currentTimeMillis() - lastChunkTime > 1500) {
-					chunkFuture = null;
-				}
+				chunkFuture = null;
 			}
-		} else if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
+		} else if (System.currentTimeMillis() - lastChunkTime > 1500 && mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
 			lastChunkTime = System.currentTimeMillis();
 			chunkFuture = Pair.of(new ChunkPos(mc.player.getBlockPos()), chunkExecutor.submit(() -> {
 				try {
@@ -319,7 +316,7 @@ public class UI extends Module {
 							new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
 					NbtIo.writeCompressed(tag, output);
 					return output.size();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					return 0;
 				}
 			}));
