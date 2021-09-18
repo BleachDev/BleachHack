@@ -38,6 +38,8 @@ public class NoInteract extends Module {
 
     @BleachSubscribe
     public void onSendPacket(EventInteract.InteractBlock event) {
-        if (getSetting(0).asList(Block.class).contains(mc.world.getBlockState(event.getHitResult().getBlockPos()).getBlock())) event.setCancelled(true);
+        if (getSetting(0).asList(Block.class).contains(mc.world.getBlockState(event.getHitResult().getBlockPos()).getBlock())) {
+        	event.setCancelled(true);
+        }
     }
 }

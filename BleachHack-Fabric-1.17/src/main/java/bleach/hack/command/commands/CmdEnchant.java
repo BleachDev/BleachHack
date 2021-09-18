@@ -31,7 +31,7 @@ public class CmdEnchant extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		if (args.length == 0 || (args.length == 1 && !args[0].equalsIgnoreCase("list"))) {
+		if (args.length == 0) {
 			throw new CmdSyntaxException();
 		}
 
@@ -52,7 +52,7 @@ public class CmdEnchant extends Command {
 			throw new CmdSyntaxException("Not In Creative Mode!");
 		}
 
-		int level = Integer.parseInt(args[1]);
+		int level = args.length == 1 ? 1 : Integer.parseInt(args[1]);
 		ItemStack item = mc.player.getInventory().getMainHandStack();
 
 		if (args[0].equalsIgnoreCase("all")) {
