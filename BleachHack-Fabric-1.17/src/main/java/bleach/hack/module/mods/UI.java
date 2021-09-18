@@ -89,30 +89,31 @@ public class UI extends Module {
 
 	public UI() {
 		super("UI", KEY_UNBOUND, ModuleCategory.RENDER, true, "Shows stuff onscreen.",
-				new SettingToggle("Modulelist", true).withDesc("Shows the module list.").withChildren( // 0
-						new SettingToggle("InnerLine", true).withDesc("Adds an extra line to the front of the module list."), // 0-0
-						new SettingToggle("OuterLine", false).withDesc("Adds an outer line to the module list."), // 0-1
-						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list."), // 0-2
+				new SettingToggle("Modulelist", true).withDesc("Shows the module list.").withChildren(                                 // 0
+						new SettingToggle("InnerLine", true).withDesc("Adds an extra line to the front of the module list."),            // 0-0
+						new SettingToggle("OuterLine", false).withDesc("Adds an outer line to the module list."),                        // 0-1
+						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list."),                           // 0-2
 						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list.").withChildren( // 0-3
-								new SettingMode("Mode", "New", "Old").withDesc("The watermark type.")), // 0-3-0
-						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("The hue of the rainbow."), // 0-4
-						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("The saturation of the rainbow."), // 0-5
-						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("The speed of the rainbow.")), // 0-6
-				new SettingToggle("FPS", true).withDesc("Shows your FPS."), // 1-0
-				new SettingToggle("Ping", true).withDesc("Shows your ping."), // 1-1
-				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords."), // 1-2
-				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps."), // 1-3
-				new SettingToggle("Durability", false).withDesc("Shows durability left on the item you're holding."), // 1-3
-				new SettingToggle("Server", false).withDesc("Shows the current server you are on."), // 1-4
-				new SettingToggle("Timestamp", false).withDesc("Shows the current time.").withChildren( // 1-5
-						new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."), // 1-5-0
-						new SettingToggle("Year", false).withDesc("Shows the current year in the time.")), // 1-5-1
-				new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in."), // 1-6
-				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance."), //2
-				new SettingToggle("Armor", true).withDesc("Shows your current armor.").withChildren( // 3
-						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability.")), // 3-0
-				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(
-						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")), // 4
+								new SettingMode("Mode", "New", "Old").withDesc("The watermark type.")),                                    // 0-3-0
+						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("The hue of the rainbow."),                                  // 0-4
+						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("The saturation of the rainbow."),                            // 0-5
+						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("The speed of the rainbow.")),                            // 0-6
+				new SettingToggle("FPS", true).withDesc("Shows your FPS."),                                                            // 1
+				new SettingToggle("Ping", true).withDesc("Shows your ping."),                                                          // 2
+				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords."),                                    // 3
+				new SettingToggle("TPS", true).withDesc("Shows the estimated server tps."),                                            // 4
+				new SettingToggle("Durability", false).withDesc("Shows durability left on the item you're holding."),                  // 5
+				new SettingToggle("Server", false).withDesc("Shows the current server you are on."),                                   // 6
+				new SettingToggle("Timestamp", false).withDesc("Shows the current time.").withChildren(                                // 7
+						new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."),                               // 7-0
+						new SettingToggle("Year", false).withDesc("Shows the current year in the time.")),                               // 7-1
+				new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in."),               // 8
+				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance."),                        // 9
+				new SettingToggle("Armor", true).withDesc("Shows your current armor.").withChildren(                                   // 10
+						new SettingToggle("Vertical", false).withDesc("Displays your armor vertically."),
+						new SettingMode("Damage", "Number", "Bar", "BarV").withDesc("How to show the armor durability.")),               // 10-0
+				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 11
+						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),  // 11-0
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
 
 		// Modulelist
@@ -453,48 +454,55 @@ public class UI extends Module {
 	// --- Armor
 
 	public int[] getArmorSize() {
-		return new int[] { 80, 20 };
+		boolean vertical = getSetting(10).asToggle().getChild(0).asToggle().state;
+		return new int[] { vertical ? 16 : 72, vertical ? 62 : 16 };
 	}
 
 	public void drawArmor(MatrixStack matrices, int x, int y) {
+		boolean vertical = getSetting(10).asToggle().getChild(0).asToggle().state;
+
 		for (int count = 0; count < mc.player.getInventory().armor.size(); count++) {
 			ItemStack is = mc.player.getInventory().armor.get(count);
 
 			if (is.isEmpty())
 				continue;
 
-			int curX = x + count * 20;
+			int curX = vertical ? x : x + count * 19;
+			int curY = vertical ? y + 47 - count * 16 : y;
 			RenderSystem.enableDepthTest();
-			mc.getItemRenderer().renderGuiItemIcon(is, curX, y + 4);
+			mc.getItemRenderer().renderGuiItemIcon(is, curX, curY);
 
 			int durcolor = is.isDamageable() ? 0xff000000 | MathHelper.hsvToRgb((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage() / 3.0F, 1.0F, 1.0F) : 0;
 
 			matrices.push();
 			matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
-			if (getSetting(10).asToggle().getChild(0).asMode().mode > 0 && is.isDamaged()) {
-				int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
-				DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 15, y + 19, 0xff000000);
-				DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 2 + barLength, y + 18, durcolor);
-			}
-
-			if (getSetting(10).asToggle().getChild(0).asMode().mode != 1) {
+			int mode = getSetting(10).asToggle().getChild(1).asMode().mode;
+			if (mode == 0) {
 				matrices.push();
 				matrices.scale(0.75f, 0.75f, 1f);
 				RenderSystem.disableDepthTest();
 
 				if (is.getCount() > 1) {
 					String s = "x" + is.getCount();
-					mc.textRenderer.drawWithShadow(matrices, s, (curX + 21 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 13) * 1.333f, 0xffffff);
+					mc.textRenderer.drawWithShadow(matrices, s, (curX + 21 - mc.textRenderer.getWidth(s)) * 1.333f, (curY + 9) * 1.333f, 0xffffff);
 				}
 
 				if (is.isDamageable()) {
 					String dur = Integer.toString(is.getMaxDamage() - is.getDamage());
 					mc.textRenderer.drawWithShadow(
-							matrices, dur, (curX + 7 - mc.textRenderer.getWidth(dur) * 1.333f / 4) * 1.333f, (y + 1) * 1.333f, durcolor);
+							matrices, dur, (curX + 7 - mc.textRenderer.getWidth(dur) * 1.333f / 4) * 1.333f, (curY - (vertical ? 2 : 3)) * 1.333f, durcolor);
 				}
 
 				RenderSystem.enableDepthTest();
 				matrices.pop();
+			} else if (mode == 1) {
+				int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
+				DrawableHelper.fill(matrices, curX + 2, curY + 13, curX + 15, curY + 15, 0xff000000);
+				DrawableHelper.fill(matrices, curX + 2, curY + 13, curX + 2 + barLength, curY + 14, durcolor);
+			} else {
+				int barLength = Math.round(12.0F - is.getDamage() * 12.0F / is.getMaxDamage());
+				DrawableHelper.fill(matrices, curX, curY + 2, curX + 2, curY + 14, 0xff000000);
+				DrawableHelper.fill(matrices, curX, curY + 2, curX + 1, curY + 2 + barLength, durcolor);
 			}
 
 			matrices.pop();
