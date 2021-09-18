@@ -22,11 +22,11 @@ public class BleachLogger {
 
 	public static final Logger logger = LogManager.getFormatterLogger("BleachHack");
 
-	public static void info(MutableText t) {
+	public static void info(Text t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.DARK_AQUA) + "\u00a73\u00a7lINFO: \u00a73")
-					.append(t.formatted(Formatting.DARK_AQUA)));
+					.append(((MutableText) t).formatted(Formatting.DARK_AQUA)));
 		} catch (Exception e) {
 			logger.log(Level.INFO, t.asString());
 		}
@@ -36,11 +36,11 @@ public class BleachLogger {
 		info(new LiteralText(s));
 	}
 
-	public static void warn(MutableText t) {
+	public static void warn(Text t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e")
-					.append(t.formatted(Formatting.YELLOW)));
+					.append(((MutableText) t).formatted(Formatting.YELLOW)));
 		} catch (Exception e) {
 			logger.log(Level.WARN, t.asString());
 		}
@@ -50,11 +50,11 @@ public class BleachLogger {
 		warn(new LiteralText(s));
 	}
 
-	public static void error(MutableText t) {
+	public static void error(Text t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
 			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c")
-					.append(t.formatted(Formatting.RED)));
+					.append(((MutableText) t).formatted(Formatting.RED)));
 		} catch (Exception e) {
 			logger.log(Level.ERROR, t.asString());
 		}

@@ -2,7 +2,7 @@
   "package": "bleach.hack.command.commands",
   "commands": [
 	"CmdBetterChat",
-    "CmdBind",
+	"CmdBind",
 	"CmdCI",
 	"CmdClickGui",
 	"CmdClip",
@@ -23,6 +23,7 @@
 	"CmdRename",
 	"CmdRpc",
 	"CmdSay",
+	"CmdServer",
 	"CmdSetting",
 	"CmdSkull",
 	"CmdSpammer",
