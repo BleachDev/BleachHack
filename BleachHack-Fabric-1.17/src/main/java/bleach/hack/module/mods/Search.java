@@ -8,20 +8,9 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
-import java.util.Map.Entry;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import org.apache.commons.lang3.tuple.Pair;
+import com.google.common.collect.Sets;
 
 import bleach.hack.eventbus.BleachSubscribe;
 
@@ -30,6 +19,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
+import bleach.hack.setting.base.SettingList;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
@@ -37,25 +27,18 @@ import bleach.hack.setting.other.SettingBlockList;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
-import bleach.hack.util.world.WorldUtils;
+import bleach.hack.util.world.ChunkProcessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
-import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
-import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
-import net.minecraft.network.packet.s2c.play.UnloadChunkS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.chunk.Chunk;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -63,17 +46,37 @@ import net.minecraft.world.chunk.Chunk;
 
 public class Search extends Module {
 
-	private Set<BlockPos> foundBlocks = new HashSet<>();
+	private Set<BlockPos> foundBlocks = Sets.newConcurrentHashSet();
 
-	private ExecutorService chunkSearchers = Executors.newFixedThreadPool(4);
-	private Map<ChunkPos, Future<Set<BlockPos>>> chunkFutures = new HashMap<>();
-
-	private Queue<ChunkPos> queuedChunks = new ArrayDeque<>();
-	private Queue<ChunkPos> queuedUnloads = new ArrayDeque<>();
-	private Queue<Pair<BlockPos, BlockState>> queuedBlocks = new ArrayDeque<>();
+	private ChunkProcessor processor = new ChunkProcessor(1,
+			(cp, chunk) -> {
+				SettingList<Block> list = getSetting(4).asList(Block.class);
+				for (int x = 0; x < 16; x++) {
+					for (int y = mc.world.getBottomY(); y < mc.world.getTopY(); y++) {
+						for (int z = 0; z < 16; z++) {
+							BlockPos pos = new BlockPos(cp.getStartX() + x, y, cp.getStartZ() + z);
+							if (list.contains(chunk.getBlockState(pos).getBlock()))
+								foundBlocks.add(pos);
+						}
+					}
+				}
+			},
+			(cp, chunk) -> {
+				foundBlocks.removeIf(pos
+						-> pos.getX() >= cp.getStartX()
+						&& pos.getX() <= cp.getEndX()
+						&& pos.getZ() >= cp.getStartZ()
+						&& pos.getZ() <= cp.getEndZ());
+			},
+			(pos, state) -> {
+				if (getSetting(4).asList(Block.class).contains(state.getBlock())) {
+					foundBlocks.add(pos);
+				} else {
+					foundBlocks.remove(pos);
+				}
+			});
 
 	private Set<Block> prevBlockList = new HashSet<>();
-
 	private int oldViewDistance = -1;
 
 	public Search() {
@@ -84,6 +87,7 @@ public class Search extends Module {
 				new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks.").withChildren(
 						new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers."),
 						new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers.")),
+				//new SettingToggle("LogBlocks", false).withDesc("Saves all the found blocks in .minecraft/bleach/search/"),
 				new SettingBlockList("Edit Blocks", "Edit Search Blocks",
 						Blocks.DIAMOND_ORE,
 						Blocks.EMERALD_ORE,
@@ -94,9 +98,18 @@ public class Search extends Module {
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		reset();
+		foundBlocks.clear();
+		prevBlockList.clear();
+		processor.stop();
 
 		super.onDisable(inWorld);
+	}
+	
+	@Override
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
+
+		processor.start();
 	}
 
 	@BleachSubscribe
@@ -104,58 +117,13 @@ public class Search extends Module {
 		Set<Block> blockList = getSetting(4).asList(Block.class).getItems();
 
 		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
-			reset();
+			foundBlocks.clear();
 
-			for (Chunk chunk: WorldUtils.getLoadedChunks()) {
-				submitChunk(chunk.getPos(), chunk);
-			}
+			processor.submitAllLoadedChunks();
 
 			prevBlockList = new HashSet<>(blockList);
 			oldViewDistance = mc.options.viewDistance;
-			return;
 		}
-
-
-		while (!queuedBlocks.isEmpty()) {
-			Pair<BlockPos, BlockState> blockPair = queuedBlocks.poll();
-
-			if (getSetting(4).asList(Block.class).contains(blockPair.getRight().getBlock())) {
-				foundBlocks.add(blockPair.getLeft());
-			} else {
-				foundBlocks.remove(blockPair.getLeft());
-			}
-		}
-
-		while (!queuedUnloads.isEmpty()) {
-			ChunkPos chunkPos = queuedUnloads.poll();
-			queuedChunks.remove(chunkPos);
-
-			for (BlockPos pos: new HashSet<>(foundBlocks)) {
-				if (pos.getX() >= chunkPos.getStartX()
-						&& pos.getX() <= chunkPos.getEndX()
-						&& pos.getZ() >= chunkPos.getStartZ()
-						&& pos.getZ() <= chunkPos.getEndZ()) {
-					foundBlocks.remove(pos);
-				}
-			}
-		}
-
-		while (!queuedChunks.isEmpty()) {
-			submitChunk(queuedChunks.poll());
-		}
-
-		for (Entry<ChunkPos, Future<Set<BlockPos>>> f: new HashMap<>(chunkFutures).entrySet()) {
-			if (f.getValue().isDone()) {
-				try {
-					foundBlocks.addAll(f.getValue().get());
-
-					chunkFutures.remove(f.getKey());
-				} catch (InterruptedException | ExecutionException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
 	}
 
 	@BleachSubscribe
@@ -163,31 +131,9 @@ public class Search extends Module {
 		if (event.getPacket() instanceof DisconnectS2CPacket
 				|| event.getPacket() instanceof GameJoinS2CPacket
 				|| event.getPacket() instanceof PlayerRespawnS2CPacket) {
-			reset();
-		} else if (event.getPacket() instanceof BlockUpdateS2CPacket) {
-			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
-
-			queuedBlocks.add(Pair.of(packet.getPos(), packet.getState()));
-		} else if (event.getPacket() instanceof ExplosionS2CPacket) {
-			ExplosionS2CPacket packet = (ExplosionS2CPacket) event.getPacket();
-
-			for (BlockPos pos: packet.getAffectedBlocks()) {
-				queuedBlocks.add(Pair.of(pos, Blocks.AIR.getDefaultState()));
-			}
-		} else if (event.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
-			ChunkDeltaUpdateS2CPacket packet = (ChunkDeltaUpdateS2CPacket) event.getPacket();
-
-			packet.visitUpdates((pos, state) -> queuedBlocks.add(Pair.of(pos.toImmutable(), state)));
-		} else if (event.getPacket() instanceof ChunkDataS2CPacket) {
-			ChunkDataS2CPacket packet = (ChunkDataS2CPacket) event.getPacket();
-
-			ChunkPos cp = new ChunkPos(packet.getX(), packet.getZ());
-			queuedChunks.add(cp);
-			queuedUnloads.remove(cp);
-		} else if (event.getPacket() instanceof UnloadChunkS2CPacket) {
-			UnloadChunkS2CPacket packet = (UnloadChunkS2CPacket) event.getPacket();
-
-			queuedUnloads.add(new ChunkPos(packet.getX(), packet.getZ()));
+			foundBlocks.clear();
+			prevBlockList.clear();
+			processor.restartExecutor();
 		}
 	}
 
@@ -198,7 +144,7 @@ public class Search extends Module {
 		for (BlockPos pos : foundBlocks) {
 			BlockState state = mc.world.getBlockState(pos);
 
-			float[] color = getColorForBlock(state, pos);
+			int[] color = getColorForBlock(state, pos);
 
 			VoxelShape voxelShape = state.getOutlineShape(mc.world, pos);
 			if (voxelShape.isEmpty()) {
@@ -206,7 +152,7 @@ public class Search extends Module {
 			}
 
 			if (mode == 0 || mode == 2) {
-				float fillAlpha = getSetting(2).asSlider().getValueFloat();
+				int fillAlpha = (int) (getSetting(2).asSlider().getValue() * 255);
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
 					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(color[0], color[1], color[2], fillAlpha));
@@ -214,10 +160,10 @@ public class Search extends Module {
 			}
 
 			if (mode == 0 || mode == 1) {
-				float outlineWidth = getSetting(1).asSlider().getValueFloat();
+				int outlineWidth = (int) (getSetting(1).asSlider().getValue() * 255);
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(color[0], color[1], color[2], 1f), outlineWidth);
+					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(color[0], color[1], color[2], 255), outlineWidth);
 				}
 			}
 
@@ -232,58 +178,18 @@ public class Search extends Module {
 				RenderUtils.drawLine(
 						lookVec.x, lookVec.y, lookVec.z,
 						pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-						LineColor.single(color[0], color[1], color[2], (float) tracers.getChild(1).asSlider().getValue()),
+						LineColor.single(color[0], color[1], color[2], (int) (tracers.getChild(1).asSlider().getValue() * 255)),
 						(float) tracers.getChild(0).asSlider().getValue());
 			}
 		}
 	}
 
-	private void submitChunk(ChunkPos pos) {
-		submitChunk(pos, mc.world.getChunk(pos.x, pos.z));
-	}
-
-	private void submitChunk(ChunkPos pos, Chunk chunk) {
-		chunkFutures.put(chunk.getPos(), chunkSearchers.submit(new Callable<Set<BlockPos>>() {
-
-			@Override
-			public Set<BlockPos> call() throws Exception {
-				Set<BlockPos> found = new HashSet<>();
-
-				for (int x = 0; x < 16; x++) {
-					for (int y = mc.world.getBottomY(); y <= mc.world.getTopY(); y++) {
-						for (int z = 0; z < 16; z++) {
-							BlockPos pos = new BlockPos(chunk.getPos().x * 16 + x, y, chunk.getPos().z * 16 + z);
-							BlockState state = chunk.getBlockState(pos);
-
-							if (getSetting(4).asList(Block.class).contains(state.getBlock())) {
-								found.add(pos);
-							}
-						}
-					}
-				}
-
-				return found;
-			}
-		}));
-	}
-	
-	public float[] getColorForBlock(BlockState state, BlockPos pos) {
+	public int[] getColorForBlock(BlockState state, BlockPos pos) {
 		if (state.getBlock() == Blocks.NETHER_PORTAL) {
-			return new float[] { 0.42f, 0f, 0.82f };
+			return new int[] { 107, 0, 209 };
 		}
-		
+
 		int color = state.getMapColor(mc.world, pos).color;
-		return new float[] { ((color & 0xff0000) >> 16) / 255f, ((color & 0xff00) >> 8) / 255f, (color & 0xff) / 255f };
-	}
-
-	private void reset() {
-		chunkSearchers.shutdownNow();
-		chunkSearchers = Executors.newFixedThreadPool(4);
-
-		chunkFutures.clear();
-		foundBlocks.clear();
-		queuedChunks.clear();
-		queuedUnloads.clear();
-		prevBlockList.clear();
+		return new int[] { (color & 0xff0000) >> 16, (color & 0xff00) >> 8, color & 0xff };
 	}
 }

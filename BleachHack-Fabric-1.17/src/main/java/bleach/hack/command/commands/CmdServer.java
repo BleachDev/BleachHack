@@ -93,6 +93,8 @@ public class CmdServer extends Command {
 	@BleachSubscribe
 	public void onReadPacket(EventReadPacket event) {
 		if (event.getPacket() instanceof CommandSuggestionsS2CPacket) {
+			BleachHack.eventBus.unsubscribe(this);
+
 			CommandSuggestionsS2CPacket packet = (CommandSuggestionsS2CPacket) event.getPacket();
 			List<String> plugins = packet.getSuggestions().getList().stream()
 					.map(s -> {
@@ -109,8 +111,6 @@ public class CmdServer extends Command {
 			} else {
 				BleachLogger.noPrefix("\u00a7cNo plugins found");
 			}
-
-			BleachHack.eventBus.unsubscribe(this);
 		}
 	}
 
