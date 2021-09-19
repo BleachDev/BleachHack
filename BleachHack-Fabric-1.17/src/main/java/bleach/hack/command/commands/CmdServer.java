@@ -60,8 +60,7 @@ public class CmdServer extends Command {
 			BleachLogger.noPrefix(createText("Permission Level", getPerms(sp)));
 			BleachLogger.noPrefix(createText("Protocol", getProtocol(sp)));
 			BleachLogger.noPrefix(createText("Version", getVersion(sp)));
-			BleachHack.eventBus.subscribe(this); // Plugins
-			mc.player.networkHandler.sendPacket(new RequestCommandCompletionsC2SPacket(0, "/"));
+			checkForPlugins();
 		} else if (args[0].equalsIgnoreCase("address")) {
 			BleachLogger.noPrefix(createText("Address", getAddress(sp)));
 		} else if (args[0].equalsIgnoreCase("brand")) {
@@ -79,8 +78,7 @@ public class CmdServer extends Command {
 		} else if (args[0].equalsIgnoreCase("permissions")) {
 			BleachLogger.noPrefix(createText("Permission Level", getPerms(sp)));
 		} else if (args[0].equalsIgnoreCase("plugins")) {
-			BleachHack.eventBus.subscribe(this); // Plugins
-			mc.player.networkHandler.sendPacket(new RequestCommandCompletionsC2SPacket(0, "/"));
+			checkForPlugins();
 		} else if (args[0].equalsIgnoreCase("protocol")) {
 			BleachLogger.noPrefix(createText("Protocol", getProtocol(sp)));
 		} else if (args[0].equalsIgnoreCase("version")) {
@@ -119,6 +117,22 @@ public class CmdServer extends Command {
 		return new LiteralText("\u00a77" + name + "\u00a7f:" + (newlines ? "\n" : " " ) + "\u00a7a" + value).styled(style -> style
 				.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Click to copy to clipboard")))
 				.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, Formatting.strip(value))));
+	}
+
+	public void checkForPlugins() {
+		BleachHack.eventBus.subscribe(this); // Plugins
+		mc.player.networkHandler.sendPacket(new RequestCommandCompletionsC2SPacket(0, "/"));
+
+		Thread timeoutThread = new Thread(() -> {
+			try {
+				Thread.sleep(5000);
+				if (BleachHack.eventBus.unsubscribe(this))
+					BleachLogger.noPrefix("\u00a7cPlugin check timed out");
+			} catch (InterruptedException e) {
+			}
+		});
+		timeoutThread.setDaemon(true);
+		timeoutThread.start();
 	}
 
 	public String getAddress(boolean singleplayer) {
