@@ -104,7 +104,7 @@ public class NewChunks extends Module {
 				chunk.loadFromPacket(null, packet.getReadBuffer(), new NbtCompound(), packet.getVerticalStripBitmask());
 				
 				for (int x = 0; x < 16; x++) {
-					for (int y = 0; y < mc.world.getHeight(); y++) {
+					for (int y = mc.world.getBottomY(); y < mc.world.getTopY(); y++) {
 						for (int z = 0; z < 16; z++) {
 							FluidState fluid = chunk.getFluidState(x, y, z);
 							
