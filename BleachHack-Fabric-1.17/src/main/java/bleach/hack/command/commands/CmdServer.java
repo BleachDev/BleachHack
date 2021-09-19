@@ -182,7 +182,7 @@ public class CmdServer extends Command {
 
 	public String getPerms(boolean singleplayer) {
 		int p = 0;
-		while (mc.player.hasPermissionLevel(p) && p < 5) p++;
+		while (mc.player.hasPermissionLevel(p + 1) && p < 5) p++;
 
 		switch (p) {
 			case 0: return "0 (No Perms)";
