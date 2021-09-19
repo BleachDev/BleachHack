@@ -8,6 +8,8 @@
  */
 package bleach.hack.module.mods;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import com.google.common.collect.Sets;
@@ -24,6 +26,7 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingBlockList;
+import bleach.hack.util.io.BleachFileMang;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
@@ -46,19 +49,39 @@ import net.minecraft.util.shape.VoxelShapes;
 
 public class Search extends Module {
 
+	private String logFile;
 	private Set<BlockPos> foundBlocks = Sets.newConcurrentHashSet();
 
 	private ChunkProcessor processor = new ChunkProcessor(1,
 			(cp, chunk) -> {
-				SettingList<Block> list = getSetting(4).asList(Block.class);
+				boolean log = getSetting(4).asToggle().state;
+				StringBuilder logBuilder = new StringBuilder();
+
+				SettingList<Block> list = getSetting(5).asList(Block.class);
 				for (int x = 0; x < 16; x++) {
 					for (int y = mc.world.getBottomY(); y < mc.world.getTopY(); y++) {
 						for (int z = 0; z < 16; z++) {
 							BlockPos pos = new BlockPos(cp.getStartX() + x, y, cp.getStartZ() + z);
-							if (list.contains(chunk.getBlockState(pos).getBlock()))
+							BlockState state = chunk.getBlockState(pos);
+							if (list.contains(state.getBlock())) {
 								foundBlocks.add(pos);
+								if (log) {
+									logBuilder
+									.append('[')
+									.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")))
+									.append("] {")
+									.append(pos.toShortString()).append("} ")
+									.append(state.toString())
+									.append('\n');
+								}
+							}
 						}
 					}
+				}
+
+				if (logBuilder.length() != 0) {
+					BleachFileMang.createFile("search/" + logFile);
+					BleachFileMang.appendFile("search/" + logFile, logBuilder.toString());
 				}
 			},
 			(cp, chunk) -> {
@@ -69,7 +92,7 @@ public class Search extends Module {
 						&& pos.getZ() <= cp.getEndZ());
 			},
 			(pos, state) -> {
-				if (getSetting(4).asList(Block.class).contains(state.getBlock())) {
+				if (getSetting(5).asList(Block.class).contains(state.getBlock())) {
 					foundBlocks.add(pos);
 				} else {
 					foundBlocks.remove(pos);
@@ -87,7 +110,7 @@ public class Search extends Module {
 				new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks.").withChildren(
 						new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers."),
 						new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers.")),
-				//new SettingToggle("LogBlocks", false).withDesc("Saves all the found blocks in .minecraft/bleach/search/"),
+				new SettingToggle("LogBlocks", false).withDesc("Saves all the found blocks in .minecraft/bleach/search/"),
 				new SettingBlockList("Edit Blocks", "Edit Search Blocks",
 						Blocks.DIAMOND_ORE,
 						Blocks.EMERALD_ORE,
@@ -104,17 +127,18 @@ public class Search extends Module {
 
 		super.onDisable(inWorld);
 	}
-	
+
 	@Override
 	public void onEnable(boolean inWorld) {
 		super.onEnable(inWorld);
 
 		processor.start();
+		logFile = "Search-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".log";
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		Set<Block> blockList = getSetting(4).asList(Block.class).getItems();
+		Set<Block> blockList = getSetting(5).asList(Block.class).getItems();
 
 		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
 			foundBlocks.clear();
