@@ -34,6 +34,8 @@ import bleach.hack.util.world.ChunkProcessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
@@ -71,8 +73,16 @@ public class Search extends Module {
 									.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")))
 									.append("] {")
 									.append(pos.toShortString()).append("} ")
-									.append(state.toString())
-									.append('\n');
+									.append(state.toString());
+
+									BlockEntity be = mc.world.getBlockEntity(pos);
+									if (be != null) {
+										logBuilder
+										.append(" BlockEntity")
+										.append(be.writeNbt(new NbtCompound()).asString());
+									}
+
+									logBuilder.append('\n');
 								}
 							}
 						}
