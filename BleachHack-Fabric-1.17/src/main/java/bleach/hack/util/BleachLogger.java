@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import bleach.hack.BleachHack;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
@@ -22,11 +23,16 @@ public class BleachLogger {
 
 	public static final Logger logger = LogManager.getFormatterLogger("BleachHack");
 
+	public static int INFO_COLOR = 0x64b9fa;
+	public static int WARN_COLOR = Formatting.YELLOW.getColorValue();
+	public static int ERROR_COLOR = Formatting.RED.getColorValue();
+
 	public static void info(Text t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.DARK_AQUA) + "\u00a73\u00a7lINFO: \u00a73")
-					.append(((MutableText) t).formatted(Formatting.DARK_AQUA)));
+			.addMessage(getBHText(INFO_COLOR)
+					//.append("\u00a73\u00a7lINFO: \u00a73")
+					.append(((MutableText) t).styled(s -> s.withColor(INFO_COLOR))));
 		} catch (Exception e) {
 			logger.log(Level.INFO, t.asString());
 		}
@@ -39,8 +45,9 @@ public class BleachLogger {
 	public static void warn(Text t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.YELLOW) + "\u00a7e\u00a7lWARN: \u00a7e")
-					.append(((MutableText) t).formatted(Formatting.YELLOW)));
+			.addMessage(getBHText(WARN_COLOR)
+					//.append("\u00a7e\u00a7lWARN: \u00a7e")
+					.append(((MutableText) t).styled(s -> s.withColor(WARN_COLOR))));
 		} catch (Exception e) {
 			logger.log(Level.WARN, t.asString());
 		}
@@ -53,8 +60,9 @@ public class BleachLogger {
 	public static void error(Text t) {
 		try {
 			MinecraftClient.getInstance().inGameHud.getChatHud()
-			.addMessage(new LiteralText(getBHText(Formatting.RED) + "\u00a7c\u00a7lERROR: \u00a7c")
-					.append(((MutableText) t).formatted(Formatting.RED)));
+			.addMessage(getBHText(ERROR_COLOR)
+					//.append("\u00a7c\u00a7lERROR: \u00a7c")
+					.append(((MutableText) t).styled(s -> s.withColor(ERROR_COLOR))));
 		} catch (Exception e) {
 			logger.log(Level.ERROR, t.asString());
 		}
@@ -80,7 +88,9 @@ public class BleachLogger {
 		}
 	}
 
-	private static String getBHText(Formatting color) {
-		return color + "\u00a7l[\u00a76B\u00a7dH" + color + "\u00a7l] ";
+	private static MutableText getBHText(int color) {
+		return new LiteralText("[").styled(s -> s.withColor(color))
+				.append(BleachHack.watermark.getText())
+				.append(new LiteralText("] ").styled(s -> s.withColor(color)));
 	}
 }

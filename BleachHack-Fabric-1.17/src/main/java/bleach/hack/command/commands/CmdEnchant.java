@@ -8,8 +8,11 @@
  */
 package bleach.hack.command.commands;
 
-import java.util.Locale;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
@@ -21,9 +24,56 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 
 public class CmdEnchant extends Command {
+
+	private static Map<String[], Enchantment> enchantments = new LinkedHashMap<>();
+
+	static {
+		enchantments.put(new String[] { "aqua_affinity", "aqua" }, Enchantments.AQUA_AFFINITY);
+		enchantments.put(new String[] { "bane_of_arthropods", "arthropods" }, Enchantments.BANE_OF_ARTHROPODS);
+		enchantments.put(new String[] { "blast", "blast_prot" }, Enchantments.BLAST_PROTECTION);
+		enchantments.put(new String[] { "channeling" }, Enchantments.CHANNELING);
+		enchantments.put(new String[] { "curse_binding", "binding" }, Enchantments.BINDING_CURSE);
+		enchantments.put(new String[] { "curse_vanish", "vanish" }, Enchantments.VANISHING_CURSE);
+		enchantments.put(new String[] { "depth_strider", "strider" }, Enchantments.DEPTH_STRIDER);
+		enchantments.put(new String[] { "efficiency", "eff" }, Enchantments.EFFICIENCY);
+		enchantments.put(new String[] { "feather_falling", "fall" }, Enchantments.FEATHER_FALLING);
+		enchantments.put(new String[] { "fire_aspect" }, Enchantments.FIRE_ASPECT);
+		enchantments.put(new String[] { "fire_prot" }, Enchantments.FIRE_PROTECTION);
+		enchantments.put(new String[] { "flame" }, Enchantments.FLAME);
+		enchantments.put(new String[] { "fortune" }, Enchantments.FORTUNE);
+		enchantments.put(new String[] { "frost_walker", "frost" }, Enchantments.FROST_WALKER);
+		enchantments.put(new String[] { "impaling" }, Enchantments.IMPALING);
+		enchantments.put(new String[] { "infinity" }, Enchantments.INFINITY);
+		enchantments.put(new String[] { "knockback", "knock" }, Enchantments.KNOCKBACK);
+		enchantments.put(new String[] { "looting", "loot" }, Enchantments.LOOTING);
+		enchantments.put(new String[] { "loyalty" }, Enchantments.LOOTING);
+		enchantments.put(new String[] { "luck_of_the_sea", "luck" }, Enchantments.LUCK_OF_THE_SEA);
+		enchantments.put(new String[] { "lure" }, Enchantments.LURE);
+		enchantments.put(new String[] { "mending", "mend" }, Enchantments.MENDING);
+		enchantments.put(new String[] { "multishot" }, Enchantments.MULTISHOT);
+		enchantments.put(new String[] { "piercing" }, Enchantments.PIERCING);
+		enchantments.put(new String[] { "power" }, Enchantments.POWER);
+		enchantments.put(new String[] { "projectile_prot", "proj_prot" }, Enchantments.PROJECTILE_PROTECTION);
+		enchantments.put(new String[] { "protection", "prot" }, Enchantments.PROTECTION);
+		enchantments.put(new String[] { "punch" }, Enchantments.PUNCH);
+		enchantments.put(new String[] { "quick_charge", "charge" }, Enchantments.QUICK_CHARGE);
+		enchantments.put(new String[] { "respiration", "resp" }, Enchantments.RESPIRATION);
+		enchantments.put(new String[] { "riptide" }, Enchantments.RIPTIDE);
+		enchantments.put(new String[] { "sharpness", "sharp" }, Enchantments.SHARPNESS);
+		enchantments.put(new String[] { "silk_touch", "silk" }, Enchantments.SILK_TOUCH);
+		enchantments.put(new String[] { "smite" }, Enchantments.SMITE);
+		enchantments.put(new String[] { "sweeping_edge", "sweep" }, Enchantments.SWEEPING);
+		enchantments.put(new String[] { "thorns" }, Enchantments.THORNS);
+		enchantments.put(new String[] { "soul_speed", "soul" }, Enchantments.SOUL_SPEED);
+		enchantments.put(new String[] { "unbreaking" }, Enchantments.UNBREAKING);
+	}
 
 	public CmdEnchant() {
 		super("enchant", "Enchants an item.", "enchant <enchant/id> <level> | enchant all <level> | enchant list", CommandCategory.CREATIVE);
@@ -36,15 +86,15 @@ public class CmdEnchant extends Command {
 		}
 
 		if (args[0].equalsIgnoreCase("list")) {
-			BleachLogger.info("\u00a7d[Aqua_Affinity/Aqua] \u00a75[Arthropods] \u00a7d[Blast/Blast_Prot] "
-					+ "\u00a75[Channeling] \u00a7d[Curse_Binding/Binding] \u00a75[Curse_Vanish/Vanish] \u00a7d[Depth_Strider/Strider] "
-					+ "\u00a75[Efficiency/Eff] \u00a7d[Feather_Falling/Fall] \u00a75[Fire_Aspect] \u00a7d[Fire_Prot] "
-					+ "\u00a75[Flame] \u00a7d[Fortune] \u00a75[Frost_Walker/Frost] \u00a7d[Impaling] \u00a75[Infinity] \u00a7d[Knockback/Knock] "
-					+ "\u00a75[Looting/Loot] \u00a7d[Loyalty] \u00a75[Luck_Of_The_Sea/Luck] \u00a7d[Lure] \u00a75[Mending/Mend] \u00a7d[Multishot] "
-					+ "\u00a75[Piercing] \u00a7d[Power] \u00a75[Projectile_Prot/Proj_Prot] \u00a7d[Protection/Prot] "
-					+ "\u00a75[Punch] \u00a7d[Quick_Charge/Charge] \u00a75[Respiration/Resp] \u00a7d[Riptide] "
-					+ "\u00a75[Sharpness/Sharp] \u00a7d[Silk_Touch/Silk] \u00a75[Smite] \u007d[Soul_Speed/Soul] "
-					+ "\u00a75[Sweeping_Edge/Sweep] \u00a7d[Thorns] \u00a75[Unbreaking]");
+			MutableText text = new LiteralText("");
+			int i = 0;
+			for (String[] s: enchantments.keySet()) {
+				int color = i % 2 == 0 ? BleachLogger.INFO_COLOR : Formatting.AQUA.getColorValue();
+				text.append(new LiteralText("\u00a77[\u00a7r" + String.join("\u00a77/\u00a7r", s) + "\u00a77] ").setStyle(Style.EMPTY.withColor(color)));
+				i++;
+			}
+
+			BleachLogger.info(text);
 			return;
 		}
 
@@ -68,111 +118,10 @@ public class CmdEnchant extends Command {
 		if (i != -1) {
 			enchant(item, Enchantment.byRawId(i), level);
 		} else {
-			enchant(item, fromString(args[0]), level);
-		}
-	}
-
-	public Enchantment fromString(String s) {
-		// programming
-		switch (s.toLowerCase(Locale.ENGLISH)) {
-			case "aqua_affinity":
-			case "aqua":
-				return Enchantments.AQUA_AFFINITY;
-			case "arthropods":
-				return Enchantments.BANE_OF_ARTHROPODS;
-			case "blast":
-			case "blast_prot":
-				return Enchantments.BLAST_PROTECTION;
-			case "channeling":
-				return Enchantments.CHANNELING;
-			case "curse_binding":
-			case "binding":
-				return Enchantments.BINDING_CURSE;
-			case "curse_vanish":
-			case "vanish":
-				return Enchantments.VANISHING_CURSE;
-			case "depth_strider":
-			case "strider":
-				return Enchantments.DEPTH_STRIDER;
-			case "efficiency":
-			case "eff":
-				return Enchantments.EFFICIENCY;
-			case "feather_falling":
-			case "fall":
-				return Enchantments.FEATHER_FALLING;
-			case "fire_aspect":
-				return Enchantments.FIRE_ASPECT;
-			case "fire_prot":
-				return Enchantments.FIRE_PROTECTION;
-			case "flame":
-				return Enchantments.FLAME;
-			case "fortune":
-				return Enchantments.FORTUNE;
-			case "frost_walker":
-			case "frost":
-				return Enchantments.FROST_WALKER;
-			case "impaling":
-				return Enchantments.IMPALING;
-			case "infinity":
-				return Enchantments.INFINITY;
-			case "knockback":
-			case "knock":
-				return Enchantments.KNOCKBACK;
-			case "looting":
-			case "loot":
-				return Enchantments.LOOTING;
-			case "loyalty":
-				return Enchantments.LOYALTY;
-			case "luck_of_the_sea":
-			case "luck":
-				return Enchantments.LUCK_OF_THE_SEA;
-			case "lure":
-				return Enchantments.LURE;
-			case "mending":
-			case "mend":
-				return Enchantments.MENDING;
-			case "multishot":
-				return Enchantments.MULTISHOT;
-			case "piercing":
-				return Enchantments.PIERCING;
-			case "power":
-				return Enchantments.POWER;
-			case "projectile_prot":
-			case "proj_prot":
-				return Enchantments.PROJECTILE_PROTECTION;
-			case "protection":
-			case "prot":
-				return Enchantments.PROTECTION;
-			case "punch":
-				return Enchantments.PUNCH;
-			case "quick_charge":
-			case "charge":
-				return Enchantments.QUICK_CHARGE;
-			case "respiration":
-			case "resp":
-				return Enchantments.RESPIRATION;
-			case "riptide":
-				return Enchantments.RIPTIDE;
-			case "sharpness":
-			case "sharp":
-				return Enchantments.SHARPNESS;
-			case "silk_touch":
-			case "silk":
-				return Enchantments.SILK_TOUCH;
-			case "smite":
-				return Enchantments.SMITE;
-			case "soul_speed":
-			case "soul":
-				return Enchantments.SOUL_SPEED;
-			case "sweeping_edge":
-			case "sweep":
-				return Enchantments.SWEEPING;
-			case "thorns":
-				return Enchantments.THORNS;
-			case "unbreaking":
-				return Enchantments.UNBREAKING;
-			default:
-				return null;
+			enchant(item, enchantments.entrySet().stream()
+					.filter(e -> ArrayUtils.contains(e.getKey(), args[0]))
+					.map(Entry::getValue)
+					.findFirst().orElse(null), level);
 		}
 	}
 

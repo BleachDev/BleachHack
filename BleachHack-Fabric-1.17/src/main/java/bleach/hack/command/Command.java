@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 
 import bleach.hack.gui.option.Option;
+import bleach.hack.util.BleachLogger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -32,7 +33,7 @@ public abstract class Command {
 		this.syntax = syntax;
 		this.category = category;
 	}
-	
+
 	public static final String getPrefix() {
 		return Option.CHAT_COMMAND_PREFIX.getValue();
 	}
@@ -58,11 +59,10 @@ public abstract class Command {
 	}
 
 	public Text getHelpTooltip() {
-		return new LiteralText(
-				"\u00a72Category: " + getCategory()
-				+ "\n\u00a7bAliases: \u00a7f" + getPrefix() + String.join(" \u00a77/\u00a7f " + getPrefix(), getAliases())
-				+ "\n\u00a7bUsage: \u00a7f" + getSyntax()
-				+ "\n\u00a7bDesc: \u00a7f" + getDescription());
+		return new LiteralText("\u00a77Category: " + getCategory() + "\n")
+				.append("Aliases: \u00a7f" + getPrefix() + String.join(" \u00a77/\u00a7f " + getPrefix(), getAliases()) + "\n").styled(s -> s.withColor(BleachLogger.INFO_COLOR))
+				.append("Usage: \u00a7f" + getSyntax() + "\n").styled(s -> s.withColor(BleachLogger.INFO_COLOR))
+				.append("Description: \u00a7f" + getDescription()).styled(s -> s.withColor(BleachLogger.INFO_COLOR));
 	}
 
 	public abstract void onCommand(String alias, String[] args) throws Exception;

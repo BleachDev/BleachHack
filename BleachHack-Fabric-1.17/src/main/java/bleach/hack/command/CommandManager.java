@@ -106,7 +106,8 @@ public class CommandManager {
 				} catch (CmdSyntaxException e) {
 					BleachLogger.error((MutableText) e.getTextMessage());
 
-					MutableText text = new LiteralText("\u00a7b" + Command.getPrefix() + c.getAliases()[0] + " - \u00a7f" + c.getDescription());
+					MutableText text = new LiteralText(Command.getPrefix() + c.getAliases()[0] + ": \u00a7f" + c.getDescription())
+							.styled(s -> s.withColor(BleachLogger.INFO_COLOR));
 
 					BleachLogger.info(
 							text.styled(style -> style

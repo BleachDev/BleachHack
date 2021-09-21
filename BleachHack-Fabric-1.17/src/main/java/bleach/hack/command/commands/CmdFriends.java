@@ -65,7 +65,9 @@ public class CmdFriends extends Command {
 					String spaces = StringUtils.repeat(' ', len - f.length());
 
 					text
-					.append("\n\u00a7b> " + f + spaces)
+					.append(new LiteralText("\n> " + f + spaces)
+							.styled(style -> style
+									.withColor(BleachLogger.INFO_COLOR)))
 					.append(new LiteralText("\u00a7c[Del]")
 							.styled(style -> style
 									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Remove " + f + " from your friendlist")))
