@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 public class CmdTerrain extends Command {
 
 	public CmdTerrain() {
-		super("terrain", "Export an area to the c++ terrain finder format (very popbob command).", "terrain <x1> <y1> <z1> <x2> <y2> <z2>", CommandCategory.MISC,
+		super("terrain", "Export an area to the c++ terrain finder format (don't use at 3am).", "terrain <x1> <y1> <z1> <x2> <y2> <z2>", CommandCategory.MISC,
 				"tf");
 	}
 
