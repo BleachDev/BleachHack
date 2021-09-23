@@ -15,6 +15,7 @@ import bleach.hack.command.CommandCategory;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.BleachQueue;
 import bleach.hack.util.ItemContentUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HopperBlock;
@@ -24,6 +25,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.ShulkerBoxScreenHandler;
 import net.minecraft.text.Text;
 
@@ -37,15 +39,16 @@ public class CmdPeek extends Command {
 	public void onCommand(String alias, String[] args) throws Exception {
 		ItemStack item = mc.player.getInventory().getMainHandStack();
 
-		if (!(item.getItem() instanceof BlockItem)) {
-			BleachLogger.error("Must be holding a containter to peek.");
-			return;
-		}
-
-		if (!(((BlockItem) item.getItem()).getBlock() instanceof ShulkerBoxBlock)
-				&& !(((BlockItem) item.getItem()).getBlock() instanceof ChestBlock)
-				&& !(((BlockItem) item.getItem()).getBlock() instanceof DispenserBlock)
-				&& !(((BlockItem) item.getItem()).getBlock() instanceof HopperBlock)) {
+		if (item.getItem() instanceof BlockItem) {
+			Block block = ((BlockItem) item.getItem()).getBlock();
+			if (!(block instanceof ShulkerBoxBlock
+					|| block instanceof ChestBlock
+					|| block instanceof DispenserBlock
+					|| block instanceof HopperBlock)) {
+				BleachLogger.error("Must be holding a containter to peek.");
+				return;
+			}
+		} else if (item.getItem() != Items.BUNDLE) {
 			BleachLogger.error("Must be holding a containter to peek.");
 			return;
 		}

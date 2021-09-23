@@ -23,15 +23,14 @@ public class ItemContentUtils {
 
 	public static List<ItemStack> getItemsInContainer(ItemStack item) {
 		List<ItemStack> items = new ArrayList<>(Collections.nCopies(27, new ItemStack(Items.AIR)));
-		NbtCompound nbt = item.getNbt();
+		NbtCompound nbt = item.getOrCreateNbt().contains("BlockEntityTag", 10)
+				? item.getNbt().getCompound("BlockEntityTag") : item.getNbt();
 
-		if (nbt != null && nbt.contains("BlockEntityTag")) {
-			NbtCompound nbt2 = nbt.getCompound("BlockEntityTag");
-			if (nbt2.contains("Items")) {
-				NbtList nbt3 = (NbtList) nbt2.get("Items");
-				for (int i = 0; i < nbt3.size(); i++) {
-					items.set(nbt3.getCompound(i).getByte("Slot"), ItemStack.fromNbt(nbt3.getCompound(i)));
-				}
+		if (nbt.contains("Items", 9)) {
+			NbtList nbt2 = nbt.getList("Items", 10);
+			for (int i = 0; i < nbt2.size(); i++) {
+				int slot = nbt2.getCompound(i).contains("Slot", 99) ? nbt2.getCompound(i).getByte("Slot") : i;
+				items.set(slot, ItemStack.fromNbt(nbt2.getCompound(i)));
 			}
 		}
 
@@ -49,7 +48,7 @@ public class ItemContentUtils {
 					pages.add(nbt2.getString(i));
 				} else {
 					Text text = Text.Serializer.fromLenientJson(nbt2.getString(i));
-	
+
 					pages.add(text != null ? text.getString() : nbt2.getString(i));
 				}
 			}
