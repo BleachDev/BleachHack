@@ -10,22 +10,18 @@ package bleach.hack.module.mods;
 
 import bleach.hack.eventbus.BleachSubscribe;
 
-import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.block.Blocks;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Nofall extends Module {
-	
-	private boolean altBool = false;
 
 	public Nofall() {
 		super("Nofall", KEY_UNBOUND, ModuleCategory.PLAYER, "Prevents you from taking fall damage.",
-				new SettingMode("Mode", "Simple", "Packet", "ec.me").withDesc("What Nofall mode to use."));
+				new SettingMode("Mode", "Simple", "Packet").withDesc("What Nofall mode to use."));
 	}
 
 	@BleachSubscribe
@@ -45,18 +41,4 @@ public class Nofall extends Module {
 			mc.player.fallDistance = 0;
 		}
 	}
-	
-	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
-		if (event.getPacket() instanceof PlayerMoveC2SPacket && getSetting(0).asMode().mode == 2) {
-			if (mc.player.fallDistance > 2.5f && !altBool) {
-				mc.player.setOnGround(true);
-				FabricReflect.writeField(event.getPacket(), true, "field_29179", "onGround");
-				altBool = true;
-			} else {
-				altBool = false;
-			}
-		}
-	}
-
 }
