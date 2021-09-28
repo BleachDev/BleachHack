@@ -39,8 +39,7 @@ public class EntityControl extends Module {
 						new SettingSlider("Speed", 0, 5, 1.2, 2).withDesc("The speed of the entity.")),
 				new SettingToggle("EntityFly", false).withDesc("Lets you fly with entities.").withChildren(
 						new SettingSlider("Ascend", 0, 2, 0.3, 2).withDesc("Ascend speed."),
-						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed."),
-						new SettingToggle("EcmeBypass", false).withDesc("Prevents you from getting kicked off when flying on ec.me")),
+						new SettingSlider("Descend", 0, 2, 0.5, 2).withDesc("Descend speed.")),
 				new SettingToggle("HorseJump", true).withDesc("Makes your horse always do the highest jump it can."),
 				new SettingToggle("GroundSnap", false).withDesc("Snaps the entity to the ground when going down blocks."),
 				new SettingToggle("AntiStuck", false).withDesc("Tries to prevent rubberbanding when going up blocks."),
@@ -48,7 +47,8 @@ public class EntityControl extends Module {
 				new SettingToggle("RotationLock", false).withDesc("Locks the rotation of the vehicle to a certain angle serverside.").withChildren(
 						new SettingSlider("Yaw", -180, 180, 0, 0).withDesc("Yaw of the vehicle."),
 						new SettingSlider("Pitch", -90, 90, 0, 0).withDesc("Pitch of the vehicle."),
-						new SettingToggle("Player", true).withDesc("Also locks roation for player packets.")));
+						new SettingToggle("Player", true).withDesc("Also locks roation for player packets.")),
+				new SettingToggle("AntiDismount", false).withDesc("Prevents you from getting distmounted by the server"));
 	}
 
 	@BleachSubscribe
@@ -136,19 +136,16 @@ public class EntityControl extends Module {
 			}
 		}
 
-		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state
-				&& mc.player != null && mc.player.getVehicle() != null && event.getPacket() instanceof VehicleMoveC2SPacket) {
+		if (getSetting(7).asToggle().state && event.getPacket() instanceof VehicleMoveC2SPacket && mc.player.hasVehicle()) {
 			mc.interactionManager.interactEntity(mc.player, mc.player.getVehicle(), Hand.MAIN_HAND);
 		}
 	}
 
 	@BleachSubscribe
 	public void onReadPacket(EventReadPacket event) {
-		if (getSetting(1).asToggle().state && getSetting(1).asToggle().getChild(2).asToggle().state
-				&& mc.player != null && mc.player.hasVehicle()) {
-			if (event.getPacket() instanceof PlayerPositionLookS2CPacket
-					|| event.getPacket() instanceof EntityPassengersSetS2CPacket)
-				event.setCancelled(true);
+		if (getSetting(7).asToggle().state && mc.player != null && mc.player.hasVehicle() && !mc.player.input.sneaking
+				&& (event.getPacket() instanceof PlayerPositionLookS2CPacket || event.getPacket() instanceof EntityPassengersSetS2CPacket)) {
+			event.setCancelled(true);
 		}
 	}
 
