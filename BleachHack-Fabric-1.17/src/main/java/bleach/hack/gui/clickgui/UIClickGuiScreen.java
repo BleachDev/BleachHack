@@ -71,6 +71,13 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 						() -> uiModule.getLagMeterSize(),
 						(ms, x, y) -> uiModule.drawLagMeter(ms, x, y))
 				);
+
+		uiWindows.put("iv",
+				new UIWindow(new Position(0.8, 0.90), uiWindows,
+						ui -> ui.getSetting(5).asToggle().state,
+						() -> uiModule.getInventorySize(),
+						(ms, x, y) -> uiModule.drawInventory(ms, x, y))
+		);
 	}
 
 	public void init() {

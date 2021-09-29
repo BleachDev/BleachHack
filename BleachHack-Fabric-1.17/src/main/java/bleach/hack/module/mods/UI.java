@@ -14,11 +14,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,6 +22,14 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.zip.DeflaterOutputStream;
 
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import bleach.hack.eventbus.BleachSubscribe;
@@ -101,6 +105,8 @@ public class UI extends Module {
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability.")), // 3-0
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")), // 4
+				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren( // 5
+						new SettingToggle("Background", true).withDesc("Draws background behind the inventory.")), // 5-0
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(uiScreen)).withDesc("Edit the position of the UI."));
 
 		uiScreen = new UIClickGuiScreen(ClickGui.clickGui, this);
@@ -449,6 +455,34 @@ public class UI extends Module {
 			}
 
 			matrices.pop();
+		}
+	}
+
+	// --- Inventory
+
+	public int[] getInventorySize() {
+		return new int[] { 145, 50 };
+	}
+
+	public void drawInventory(MatrixStack matrices, int x, int y) {
+		if (getSetting(5).asToggle().state && !mc.options.debugEnabled) {
+			if (mc.player == null)
+				return;
+			matrices.push();
+			for (int i = 0; i < 27; i++) {
+				ItemStack itemStack = mc.player.getInventory().main.get(i + 9);
+				int offSetX = x +  (i % 9) * 16;
+				int offSetY = y + (i / 9) * 16;
+				mc.getItemRenderer().renderGuiItemIcon(itemStack, offSetX, offSetY);
+				mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, itemStack, offSetX, offSetY);
+			}
+			mc.getItemRenderer().zOffset = 0.0F;
+			RenderSystem.enableDepthTest();
+			matrices.pop();
+
+			if (getSetting(5).asToggle().getChild(0).asToggle().state) {
+				DrawableHelper.fill(matrices, x + 145, y, x, y + 50, 0x90212120);
+			}
 		}
 	}
 
