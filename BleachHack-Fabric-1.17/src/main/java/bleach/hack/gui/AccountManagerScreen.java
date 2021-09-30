@@ -16,9 +16,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -67,8 +64,6 @@ public class AccountManagerScreen extends WindowScreen {
 
 	private static final LoginCrypter crypter = new LoginCrypter(LoginCrypter.PASS_PHRASE);
 
-	private static final ExecutorService accountExecutor = Executors.newFixedThreadPool(4);
-
 	private static List<Account> accounts;
 	private static int selected = -1;
 	private static int hovered = -1;
@@ -105,9 +100,14 @@ public class AccountManagerScreen extends WindowScreen {
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
 				BleachHack.playerMang.stopPinger();
 
-			String result = accounts.get(selected).login();
-			loginResult.setText(new LiteralText(result));
-			accounts.get(selected).success = result.startsWith("\u00a7a") ? 2 : 1;
+			Account account = accounts.get(selected);
+			for (int i = 0; i < textFieldWidgets.size(); i++) {
+				account.input[i] = textFieldWidgets.get(i).textField.getText();
+			}
+
+			Either<Session, String> either = account.login();
+			loginResult.setText(new LiteralText(either.left().isPresent() ? "\u00a7aLogin Successful!" : either.right().get()));
+			account.success = either.left().isPresent() ? 2 : 1;
 			saveAccounts();
 
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
@@ -126,13 +126,16 @@ public class AccountManagerScreen extends WindowScreen {
 		updateRightside();
 
 		// Left side
+		scrollbar = mainWindow.addWidget(
+				new WindowScrollbarWidget(listW - 10, 28, accounts == null ? 0 : accounts.size() * 28 - 1, h - 29, 0));
+
 		if (accounts == null) {
-			accounts = new CopyOnWriteArrayList<>(); // java developers HATE him
+			accounts = new ArrayList<>();
 
 			BleachFileMang.createFile("logins.txt");
 
 			for (String s : BleachFileMang.readFileLines("logins.txt")) {
-				submitAccount(Account.deserialize(s.replace("\r", "").replace("\n", "").split(":", -1)));
+				addAccount(Account.deserialize(s.replace("\r", "").replace("\n", "").split(":", -1)));
 			}
 		}
 
@@ -141,8 +144,6 @@ public class AccountManagerScreen extends WindowScreen {
 			selectWindow(1);
 			removeWindow(2);
 		}));
-
-		scrollbar = mainWindow.addWidget(new WindowScrollbarWidget(listW - 10, 28, accounts.size() * 28 - 1, h - 29, 0));
 
 		// Select type to add window
 		Window typeWindow = addWindow(new Window(
@@ -231,7 +232,7 @@ public class AccountManagerScreen extends WindowScreen {
 		textRenderer.drawWithShadow(matrices, "\u00a77Name: " + acc.username,
 				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + 4, -1);
 		textRenderer.drawWithShadow(matrices,
-				(acc.type == AccountType.NO_AUTH ? "\u00a7eCracked" : acc.type == AccountType.MOJANG ? "\u00a7aMojang" : "\u00a7bMicrosoft"),
+				(acc.type == AccountType.NO_AUTH ? "\u00a7eNo Auth" : acc.type == AccountType.MOJANG ? "\u00a7aMojang" : "\u00a7bMicrosoft"),
 				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + height - 11, -1);
 
 		if (acc.type != AccountType.NO_AUTH) {
@@ -243,6 +244,12 @@ public class AccountManagerScreen extends WindowScreen {
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (hovered >= 0 && hovered < accounts.size()) {
+			if (selected >= 0 && selected < accounts.size()) {
+				for (int i = 0; i < textFieldWidgets.size(); i++) {
+					accounts.get(selected).input[i] = textFieldWidgets.get(i).textField.getText();
+				}
+			}
+
 			selected = hovered;
 			updateRightside();
 			client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -300,7 +307,7 @@ public class AccountManagerScreen extends WindowScreen {
 			account.getSesson().ifLeft(s -> {
 				account.uuid = s.getUuid();
 				account.username = s.getUsername();
-				submitAccount(account);
+				addAccount(account);
 				getWindow(2).closed = true;
 			}).ifRight(s -> {
 				result.setText(new LiteralText(s));
@@ -341,37 +348,40 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 	}
 
-	private void submitAccount(Account account) {
-		accountExecutor.submit(() -> {
-			if (account == null)
+	private void addAccount(Account account) {
+		if (account == null)
+			return;
+
+		if (account.uuid == null) {
+			Session session = account.getSesson().left().orElse(null);
+
+			if (session == null)
 				return;
 
-			if (account.uuid == null) {
-				Session session = account.getSesson().left().orElse(null);
+			account.uuid = session.getUuid();
+			account.username = session.getUsername();
 
-				if (session == null)
-					return;
+			account.textures.clear();
+			client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> {
+				account.textures.put(type, identifier);
+			}, true);
+		} else {
+			GameProfile profile = new GameProfile(UUID.fromString(account.uuid), account.username);
 
-				account.uuid = session.getUuid();
-				account.username = session.getUsername();
+			account.textures.clear();
+			client.getSkinProvider().loadSkin(profile, (type, identifier, minecraftProfileTexture) -> {
+				account.textures.put(type, identifier);
+			}, true);
+		}
 
-				account.textures.clear();
-				client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> {
-					account.textures.put(type, identifier);
-				}, true);
-			} else {
-				GameProfile profile = new GameProfile(UUID.fromString(account.uuid), account.username);
-				System.out.println(account.uuid + " " + account.username);
-
-				account.textures.clear();
-				client.getSkinProvider().loadSkin(profile, (type, identifier, minecraftProfileTexture) -> {
-					account.textures.put(type, identifier);
-				}, true);
+		for (int i = 0; i <= accounts.size(); i++) {
+			if (i == accounts.size() || String.CASE_INSENSITIVE_ORDER.compare(accounts.get(i).username, account.username) >= 0) {
+				accounts.add(i, account);
+				break;
 			}
+		}
 
-			accounts.add(account);
-			scrollbar.setTotalHeight(accounts.size() * 28 - 1);
-		});
+		scrollbar.setTotalHeight(accounts.size() * 28 - 1);
 	}
 
 	private static class Account {
@@ -415,14 +425,13 @@ public class AccountManagerScreen extends WindowScreen {
 			this.input = input;
 		}
 
-		public String login() {
+		public Either<Session, String> login() {
 			Either<Session, String> either = getSesson();
 			if (either.left().isPresent()) {
 				FabricReflect.writeField(MinecraftClient.getInstance(), either.left().get(), "field_1726", "session");
-				return "\u00a7aLogin Successful!";
 			}
 
-			return either.right().get();
+			return either;
 		}
 
 		public Either<Session, String> getSesson() {
@@ -457,7 +466,7 @@ public class AccountManagerScreen extends WindowScreen {
 				String id = new JsonParser().parse(
 						Resources.toString(new URL("https://api.mojang.com/users/profiles/minecraft/" + input[0]), StandardCharsets.UTF_8))
 						.getAsJsonObject().get("id").getAsString();
-				
+
 				if (id.length() == 32)
 					id = id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20);
 
