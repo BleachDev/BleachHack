@@ -305,7 +305,7 @@ public class AccountManagerScreen extends WindowScreen {
 			}
 		}
 
-		addWindow.addWidget(new WindowButtonWidget(100, h - 20, 157, h - 2, "Add", () -> {
+		addWindow.addWidget(new WindowButtonWidget(100, h - 20, 157, h - 3, "Add", () -> {
 			Account account = new Account(type.ordinal(), 0, null, null, tf.stream().map(t -> t.textField.getText()).toArray(String[]::new));
 			account.getSesson().ifLeft(s -> {
 				account.uuid = s.getUuid();
