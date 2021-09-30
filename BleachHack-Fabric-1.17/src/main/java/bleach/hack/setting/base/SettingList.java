@@ -194,7 +194,6 @@ public abstract class SettingList<T> extends SettingBase {
 			}));
 
 			inputField = getWindow(0).addWidget(new WindowTextFieldWidget(5, y2 - 22, x2 / 3, 17, inputField != null ? inputField.textField.getText() : ""));
-			inputField.textField.setMaxLength(32767);
 
 			scrollbar = getWindow(0).addWidget(new WindowScrollbarWidget(x2 - 11, 12, 0, y2 - 39, scrollbar == null ? 0 : scrollbar.getPageOffset()));
 		}

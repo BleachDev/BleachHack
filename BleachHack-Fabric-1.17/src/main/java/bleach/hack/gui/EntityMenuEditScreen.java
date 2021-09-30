@@ -63,12 +63,10 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 		if (editNameField == null) {
 			editNameField = new TextFieldWidget(textRenderer, 0, 0, 1000, 16, LiteralText.EMPTY);
-			editNameField.setMaxLength(32767);
 		}
 
 		if (editValueField == null) {
 			editValueField = new TextFieldWidget(textRenderer, 0, 0, 1000, 16, LiteralText.EMPTY);
-			editValueField.setMaxLength(32767);
 		}
 	}
 

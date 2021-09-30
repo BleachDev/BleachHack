@@ -9,6 +9,7 @@
 package bleach.hack.gui.window;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -60,11 +61,11 @@ public class Window {
 		this.icon = icon;
 		this.closed = closed;
 	}
-	
+
 	public List<WindowWidget> getWidgets() {
 		return widgets;
 	}
-	
+
 	public <T extends WindowWidget> T addWidget(T widget) {
 		widgets.add(widget);
 		return widget;
@@ -143,17 +144,19 @@ public class Window {
 		}
 
 		if (selected) {
-			for (WindowWidget w : widgets) {
-				if (w.shouldRender(x1, y1, x2, y2)) {
-					w.mouseClicked(x1, y1, (int) mouseX, (int) mouseY, button);
+			try {
+				for (WindowWidget w : widgets) {
+					if (w.shouldRender(x1, y1, x2, y2)) {
+						w.mouseClicked(x1, y1, (int) mouseX, (int) mouseY, button);
+					}
 				}
-			}
+			} catch (ConcurrentModificationException e) {}
 		}
 	}
-	
+
 	public void mouseReleased(double mouseX, double mouseY, int button) {
 		dragging = false;
-		
+
 		if (selected) {
 			for (WindowWidget w : widgets) {
 				if (w.shouldRender(x1, y1, x2, y2)) {

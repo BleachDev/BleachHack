@@ -6,17 +6,12 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 
 public class WindowPassTextFieldWidget extends WindowTextFieldWidget {
 
 	private static final Field TEXT_FIELD = FabricReflect.getField(TextFieldWidget.class, "field_2092", "text");
 
 	public WindowPassTextFieldWidget(int x, int y, int width, int height, String text) {
-		super(x, y, width, height, text);
-	}
-
-	public WindowPassTextFieldWidget(int x, int y, int width, int height, Text text) {
 		super(x, y, width, height, text);
 	}
 

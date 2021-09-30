@@ -23,6 +23,15 @@ import bleach.hack.util.BleachLogger;
 
 public class LoginCrypter {
 
+	public static final String PASS_PHRASE = Hashing.sha256().hashString(
+			System.getProperty("user.home")
+			+ System.getProperty("os.name")
+			+ System.getProperty("os.version")
+			+ Integer.toString(Runtime.getRuntime().availableProcessors())
+			+ System.getProperty("os.arch")
+			+ System.getProperty("user.name"),
+			StandardCharsets.UTF_8).toString();
+
 	private Cipher dcipher;
 	private SecretKey key;
 
@@ -37,17 +46,6 @@ public class LoginCrypter {
 		} catch (Exception e) {
 			BleachLogger.logger.error("Error initing login crypter");
 		}
-	}
-
-	public static String getPassPhrase() {
-		return Hashing.sha256().hashString(new StringBuilder()
-				.append(System.getProperty("user.home"))
-				.append(System.getProperty("os.name"))
-				.append(System.getProperty("os.version"))
-				.append(String.valueOf(Runtime.getRuntime().availableProcessors()))
-				.append(System.getProperty("os.arch"))
-				.append(System.getProperty("user.name"))
-				.toString(), StandardCharsets.UTF_8).toString();
 	}
 
 	public String encrypt(String data) throws Exception {

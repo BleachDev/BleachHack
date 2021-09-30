@@ -10,6 +10,7 @@ public class WindowScrollbarWidget extends WindowWidget {
 	private int totalHeight;
 	private int pageHeight;
 	private int pageOffset;
+	private int lastRenderOffset;
 
 	private boolean buttonDown;
 	private int lastY;
@@ -18,7 +19,9 @@ public class WindowScrollbarWidget extends WindowWidget {
 		super(x, y, x + 10, y + pageHeight);
 		this.totalHeight = totalHeight;
 		this.pageHeight = pageHeight;
+
 		setPageOffset(pageOffset);
+		this.lastRenderOffset = getPageOffset();
 	}
 
 	@Override
@@ -26,6 +29,7 @@ public class WindowScrollbarWidget extends WindowWidget {
 		super.render(matrices, windowX, windowY, mouseX, mouseY);
 
 		int[] pos = getCurrentPos(windowX, windowY);
+		lastRenderOffset = getPageOffset();
 
 		//System.out.println(getScrollbarHeight());
 		if (pos != null) {
@@ -90,6 +94,10 @@ public class WindowScrollbarWidget extends WindowWidget {
 
 		return (int) Math.max(25, pageHeight * (pageHeight / (double) totalHeight));
 	}
+	
+	public int getOffsetSinceRender() {
+		return getPageOffset() - lastRenderOffset;
+	}
 
 	public int getTotalHeight() {
 		return totalHeight;
@@ -97,15 +105,6 @@ public class WindowScrollbarWidget extends WindowWidget {
 
 	public void setTotalHeight(int totalHeight) {
 		this.totalHeight = totalHeight;
-		setPageOffset(getPageOffset());
-	}
-
-	public int getPageHeight() {
-		return pageHeight;
-	}
-
-	public void setPageHeight(int pageHeight) {
-		this.pageHeight = pageHeight;
 		setPageOffset(getPageOffset());
 	}
 

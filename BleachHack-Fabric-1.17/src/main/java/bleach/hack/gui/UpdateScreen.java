@@ -47,7 +47,6 @@ public class UpdateScreen extends WindowScreen {
 	private JsonObject updateJson;
 
 	private WindowScrollbarWidget scrollbar;
-	private int lastScroll;
 	private Set<WindowWidget> changelogWidgets = new HashSet<>();
 	
 	private String updateResult = "";
@@ -106,7 +105,6 @@ public class UpdateScreen extends WindowScreen {
 		}
 
 		scrollbar = getWindow(0).addWidget(new WindowScrollbarWidget(w - 14, 51, 37 + changelog.size() * 10, h - 75, 0));
-		lastScroll = 0;
 
 		getWindow(0).addWidget(
 				new WindowButtonWidget(3, h - 21, w / 2 - 2, h - 3, "Website", () -> {
@@ -180,15 +178,13 @@ public class UpdateScreen extends WindowScreen {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 
-		int offset = scrollbar.getPageOffset() - lastScroll;
+		int offset = scrollbar.getOffsetSinceRender();
 		int wh = getWindow(0).y2 - getWindow(0).y1;
 		for (WindowWidget widget: changelogWidgets) {
 			widget.visible = widget.y1 >= 50 && widget.y2 <= wh - 22;
 			widget.y1 -= offset;
 			widget.y2 -= offset;
 		}
-
-		lastScroll = scrollbar.getPageOffset();
 
 		super.render(matrices, mouseX, mouseY, delta);
 	}

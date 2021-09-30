@@ -11,12 +11,12 @@ package bleach.hack.gui.window;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap.Entry;
+import it.unimi.dsi.fastutil.ints.Int2IntRBTreeMap;
+import it.unimi.dsi.fastutil.ints.Int2IntSortedMap;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
@@ -31,15 +31,33 @@ public abstract class WindowScreen extends Screen {
 	private List<Window> windows = new ArrayList<>();
 
 	/* [Layer, Window Index] */
-	private SortedMap<Integer, Integer> windowOrder = new TreeMap<>(); 
+	private Int2IntSortedMap windowOrder = new Int2IntRBTreeMap(); 
 
 	public WindowScreen(Text title) {
 		super(title);
 	}
 
-	public void addWindow(Window window) {
+	public Window addWindow(Window window) {
 		windows.add(window);
 		windowOrder.put(windows.size() - 1, windows.size() - 1);
+		return window;
+	}
+
+	public void removeWindow(int index) {
+		if (index >= 0 && index < windows.size()) {
+			windows.remove(index);
+			int key = windowOrder.int2IntEntrySet().stream().filter(i -> i.getIntValue() == index).map(Entry::getIntKey).findFirst().orElse(0);
+			Int2IntSortedMap newWindowOrder = new Int2IntRBTreeMap();
+			for (Entry e: windowOrder.int2IntEntrySet()) {
+				if (e.getIntKey() < key) {
+					newWindowOrder.put(e.getIntKey(), e.getIntValue());
+				} else if (e.getIntKey() > key) {
+					newWindowOrder.put(e.getIntKey() - 1, e.getIntValue());
+				}
+			}
+
+			windowOrder = newWindowOrder;
+		}
 	}
 
 	public Window getWindow(int i) {
@@ -115,18 +133,18 @@ public abstract class WindowScreen extends Screen {
 				w.closed = false;
 				w.selected = true;
 				int index = -1;
-				for (Entry<Integer, Integer> e: windowOrder.entrySet()) {
-					if (e.getValue() == window) {
-						index = e.getKey();
+				for (Entry e: windowOrder.int2IntEntrySet()) {
+					if (e.getIntValue() == window) {
+						index = e.getIntKey();
 						break;
 					}
 				}
 
 				windowOrder.remove(index);
-				for (Entry<Integer, Integer> e: new TreeMap<>(windowOrder).entrySet()) {
-					if (e.getKey() > index) {
-						windowOrder.remove(e.getKey());
-						windowOrder.put(e.getKey() - 1, e.getValue());
+				for (Entry e: new Int2IntRBTreeMap(windowOrder).int2IntEntrySet()) {
+					if (e.getIntKey() > index) {
+						windowOrder.remove(e.getIntKey());
+						windowOrder.put(e.getIntKey() - 1, e.getIntValue());
 					}
 				}
 

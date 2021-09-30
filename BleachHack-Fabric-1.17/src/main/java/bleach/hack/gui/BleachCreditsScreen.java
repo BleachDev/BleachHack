@@ -37,7 +37,6 @@ public class BleachCreditsScreen extends WindowScreen {
 	private static boolean boostersLoaded;
 
 	private WindowScrollbarWidget scrollbar;
-	private int lastScroll;
 
 	static {
 		BleachOnlineMang.getResourceAsync("credits.json", BodyHandlers.ofString()).thenAccept(st -> {
@@ -119,7 +118,6 @@ public class BleachCreditsScreen extends WindowScreen {
 		}
 
 		scrollbar = getWindow(0).addWidget(new WindowScrollbarWidget(w - 11, 12, y - 10, h - 13, 0));
-		lastScroll = 0;
 	}
 
 	private Text getBoosterText(ImmutablePair<Boolean, String> pair) {
@@ -140,15 +138,13 @@ public class BleachCreditsScreen extends WindowScreen {
 			scrollbar.setPageOffset(scroll);
 		}
 
-		int offset = scrollbar.getPageOffset() - lastScroll;
+		int offset = scrollbar.getOffsetSinceRender();
 		for (WindowWidget widget: getWindow(0).getWidgets()) {
 			if (!(widget instanceof WindowScrollbarWidget)) {
 				widget.y1 -= offset;
 				widget.y2 -= offset;
 			}
 		}
-
-		lastScroll = scrollbar.getPageOffset();
 
 		super.render(matrices, mouseX, mouseY, delta);
 	}

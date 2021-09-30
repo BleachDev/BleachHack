@@ -229,7 +229,7 @@ public class UI extends Module {
 			if (m.isEnabled())
 				moduleListText.add(new LiteralText(m.getName()));
 
-		moduleListText.sort(Comparator.comparing(t -> -mc.textRenderer.getWidth(t)));
+		moduleListText.sort(Comparator.comparingInt(t -> -mc.textRenderer.getWidth(t)));
 
 		if (getSetting(0).asToggle().getChild(3).asToggle().state) {
 			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;

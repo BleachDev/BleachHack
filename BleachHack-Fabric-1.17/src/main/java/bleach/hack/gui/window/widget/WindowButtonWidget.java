@@ -45,6 +45,7 @@ public class WindowButtonWidget extends WindowWidget {
 
 		Window.fill(matrices,
 				bx1, by1, bx2, by2,
+				colorTop, colorBottom,
 				isInBounds(windowX, windowY, mouseX, mouseY) ? colorHoverFill : colorFill);
 
 		mc.textRenderer.drawWithShadow(

@@ -27,7 +27,6 @@ public class BleachOptionsScreen extends WindowScreen {
 	private Screen parent;
 
 	private WindowScrollbarWidget scrollbar;
-	private int lastScroll;
 
 	public BleachOptionsScreen(Screen parent) {
 		super(new LiteralText("BleachHack Options"));
@@ -69,7 +68,6 @@ public class BleachOptionsScreen extends WindowScreen {
 		}
 
 		scrollbar = getWindow(0).addWidget(new WindowScrollbarWidget(w - 11, 12, y - 7, h - 13, 0));
-		lastScroll = 0;
 	}
 
 	private int addCategory(int window, int x, int y, String name, Option<?>... entries) {
@@ -100,15 +98,13 @@ public class BleachOptionsScreen extends WindowScreen {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 
-		int offset = scrollbar.getPageOffset() - lastScroll;
+		int offset = scrollbar.getOffsetSinceRender();
 		for (WindowWidget widget: getWindow(0).getWidgets()) {
 			if (!(widget instanceof WindowScrollbarWidget)) {
 				widget.y1 -= offset;
 				widget.y2 -= offset;
 			}
 		}
-
-		lastScroll = scrollbar.getPageOffset();
 
 		super.render(matrices, mouseX, mouseY, delta);
 	}

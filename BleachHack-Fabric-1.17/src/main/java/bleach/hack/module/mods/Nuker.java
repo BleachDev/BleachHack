@@ -246,7 +246,7 @@ public class Nuker extends Module {
 		// so it doesn't mine itself down without clearing everything above first
 		Comparator<BlockPos> keepBlockUnderComparator = Comparator.comparing(new BlockPos(mc.player.getPos().add(0, -0.8, 0))::equals);
 
-		Comparator<BlockPos> distComparator = Comparator.comparing(b -> mc.player.getEyePos().distanceTo(Vec3d.ofCenter(b)));
+		Comparator<BlockPos> distComparator = Comparator.comparingDouble(b -> mc.player.getEyePos().distanceTo(Vec3d.ofCenter(b)));
 		Comparator<BlockPos> hardnessComparator = Comparator.comparing(b -> mc.world.getBlockState(b).getHardness(mc.world, b));
 
 		switch (getSetting(5).asMode().mode) {

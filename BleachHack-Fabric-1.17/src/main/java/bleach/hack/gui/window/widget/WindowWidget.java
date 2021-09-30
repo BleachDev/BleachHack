@@ -61,7 +61,7 @@ public abstract class WindowWidget {
 	public void keyPressed(int keyCode, int scanCode, int modifiers) {
 	}
 
-	protected boolean isInBounds(int windowX, int windowY, int x, int y) {
+	public boolean isInBounds(int windowX, int windowY, int x, int y) {
 		return x >= windowX + x1 && y >= windowY + y1 && x <= windowX + x2 && y <= windowY + y2;
 	}
 

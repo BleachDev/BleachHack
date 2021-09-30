@@ -4,19 +4,16 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
 
 public class WindowTextFieldWidget extends WindowWidget {
 
 	public TextFieldWidget textField;
 	
 	public WindowTextFieldWidget(int x, int y, int width, int height, String text) {
-		this(x, y, width, height, new LiteralText(text));
-	}
-
-	public WindowTextFieldWidget(int x, int y, int width, int height, Text text) {
 		super(x, y, x + width + 1, y + height + 1);
-		this.textField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, x, y, width, height, text);
+		this.textField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, x, y, width, height, LiteralText.EMPTY);
+		this.textField.setText(text);
+		this.textField.setMaxLength(32767);
 	}
 
 	@Override

@@ -8,35 +8,41 @@
  */
 package bleach.hack.gui;
 
-import java.util.ArrayDeque;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.io.Resources;
+import com.google.common.util.concurrent.Runnables;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Either;
 
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
-import bleach.hack.gui.window.widget.WindowCheckboxWidget;
 import bleach.hack.gui.window.widget.WindowPassTextFieldWidget;
+import bleach.hack.gui.window.widget.WindowScrollbarWidget;
 import bleach.hack.gui.window.widget.WindowTextFieldWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
+import bleach.hack.gui.window.widget.WindowWidget;
 import bleach.hack.util.BleachLogger;
+import bleach.hack.util.FabricReflect;
 import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginManager;
 import bleach.hack.util.io.BleachFileMang;
@@ -45,6 +51,7 @@ import bleach.hack.gui.option.Option;
 import bleach.hack.gui.window.Window;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.DefaultSkinHelper;
@@ -58,22 +65,20 @@ import net.minecraft.util.Identifier;
 
 public class AccountManagerScreen extends WindowScreen {
 
-	private static final LoginCrypter crypter = new LoginCrypter(LoginCrypter.getPassPhrase());
+	private static final LoginCrypter crypter = new LoginCrypter(LoginCrypter.PASS_PHRASE);
 
 	private static final ExecutorService accountExecutor = Executors.newFixedThreadPool(4);
-	private static final List<Future<Account>> accountFutures = new ArrayList<>();
-	private static final Queue<Account> accountQueue = new ArrayDeque<>();
 
-	private static int accHeight = 32;
-	private static int accStart = 20;
+	private static List<Account> accounts;
+	private static int selected = -1;
+	private static int hovered = -1;
 
-	private static AccountList accounts = null;
+	private WindowScrollbarWidget scrollbar;
 
-	public WindowTextFieldWidget userField;
-	public WindowTextFieldWidget passField;
-	public WindowCheckboxWidget checkBox;
-
-	public WindowTextWidget loginResult;
+	private List<WindowWidget> rightsideWidgets = new ArrayList<>();
+	private List<WindowTextFieldWidget> textFieldWidgets = new ArrayList<>();
+	private List<WindowTextWidget> textWidgets = new ArrayList<>();
+	private WindowTextWidget loginResult;
 
 	public AccountManagerScreen() {
 		super(new LiteralText("Account Manager"));
@@ -83,83 +88,72 @@ public class AccountManagerScreen extends WindowScreen {
 		super.init();
 
 		clearWindows();
-		addWindow(new Window(width / 8,
+		Window mainWindow = addWindow(new Window(
+				width / 8,
 				height / 8,
 				width - width / 8,
-				height - height / 8, "Login Manager", new ItemStack(Items.PAPER), false));
-		addWindow(new Window(width / 8 + 15,
-				height / 8 + 15,
-				width - width / 8 - 15,
-				height - height / 8 - 15, "Accounts", new ItemStack(Items.WRITABLE_BOOK), true));
+				height - height / 8, "Accounts", new ItemStack(Items.PAPER)));
 
-		int w = width - width / 4;
-		int h = height - height / 4;
+		int w = mainWindow.x2 - mainWindow.x1;
+		int h = mainWindow.y2 - mainWindow.y1;
+		int listW = Math.max(140, w / 3);
 
-		userField = getWindow(0).addWidget(new WindowTextFieldWidget(w / 2 - 98, h / 4, 196, 18, userField != null ? userField.textField.getText() : ""));
-		userField.textField.setMaxLength(32767);
+		// Right side
+		loginResult = mainWindow.addWidget(new WindowTextWidget(loginResult != null ? loginResult.getText() : LiteralText.EMPTY, true, listW + 11, 96, 0xc0c0c0));
 
-		passField = getWindow(0).addWidget(new WindowPassTextFieldWidget(w / 2 - 98, h / 4 + 30, 196, 18, passField != null ? passField.textField.getText() : ""));
-		passField.textField.setMaxLength(32767);
-
-		getWindow(0).addWidget(new WindowTextWidget("Email:", true, WindowTextWidget.TextAlign.RIGHT, w / 2 - 102, h / 4 + 5, 0xc0c0c0));
-		getWindow(0).addWidget(new WindowTextWidget("Pass:", true, WindowTextWidget.TextAlign.RIGHT, w / 2 - 102, h / 4 + 35, 0xc0c0c0));
-
-		checkBox = getWindow(0).addWidget(new WindowCheckboxWidget(w / 2 - 99, h / 4 + 53, "Save Login", false));
-		loginResult = getWindow(0).addWidget(new WindowTextWidget(loginResult != null ? loginResult.getText() : LiteralText.EMPTY, true, WindowTextWidget.TextAlign.LEFT, w / 2 - 23, h / 4 + 55, 0xc0c0c0));
-
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 84, w / 2 + 100, h / 3 + 104, "Done", this::onClose));
-
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 3 + 62, w / 2 - 2, h / 3 + 82, "Accounts", () -> {
-			getWindow(1).closed = false;
-			selectWindow(1);
-		}));
-
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 + 2, h / 3 + 62, w / 2 + 100, h / 3 + 82, "Login", () -> {
+		mainWindow.addWidget(new WindowButtonWidget(w - 143, h - 22, w - 73, h - 3, "Login", () -> {
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
 				BleachHack.playerMang.stopPinger();
 
-			Pair<String, Session> login = LoginManager.login(userField.textField.getText(), passField.textField.getText());
-			
+			String result = accounts.get(selected).login();
+			loginResult.setText(new LiteralText(result));
+			accounts.get(selected).success = result.startsWith("\u00a7a") ? 2 : 1;
+			saveAccounts();
+
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
 				BleachHack.playerMang.startPinger();
-
-			loginResult.setText(new LiteralText("|  " + login.getLeft()));
-
-			try {
-				String email = userField.textField.getText();
-				String pass = passField.textField.getText();
-				Session session = login.getRight();
-
-				if (checkBox.checked && login.getRight() != null && !accounts.hasEmail(email)) {
-					accountQueue.add(new Account(email, pass, session.getUuid(), session.getUsername()));
-					BleachFileMang.createFile("logins.txt");
-					BleachFileMang.appendFile("logins.txt",
-							email + ":" + session.getUuid() + ":" + session.getUsername() + ":" + crypter.encrypt(pass));
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}));
 
+		mainWindow.addWidget(new WindowButtonWidget(w - 70, h - 22, w - 3, h - 3, 0x60e05050, 0x60c07070, 0x10e07070, 0x20e05050, "Delete", () -> {
+			accounts.remove(selected);
+			selected = -1;
+			scrollbar.setTotalHeight(accounts.size() * 28 - 1);
+			updateRightside();
+			saveAccounts();
+		}));
+
+		mainWindow.getWidgets().forEach(rightsideWidgets::add);
+		updateRightside();
+
+		// Left side
 		if (accounts == null) {
-			accounts = new AccountList();
+			accounts = new CopyOnWriteArrayList<>(); // java developers HATE him
 
 			BleachFileMang.createFile("logins.txt");
 
 			for (String s : BleachFileMang.readFileLines("logins.txt")) {
-				String[] split = s.replace("\r", "").replace("\n", "").split(":", -1);
-
-				try {
-					if (split.length == 2) {
-						accountQueue.add(new Account(split[0], crypter.decrypt(split[1])));
-					} else if (split.length == 4) {
-						accountQueue.add(new Account(split[0], crypter.decrypt(split[3]), split[1], split[2]));
-					}
-				} catch (Exception e) {
-					BleachLogger.logger.info("Error decrypting accout: " + split[0]);
-				}
+				submitAccount(Account.deserialize(s.replace("\r", "").replace("\n", "").split(":", -1)));
 			}
 		}
+
+		mainWindow.addWidget(new WindowTextWidget("Accounts", true, 6, 17, 0xf0f0f0));
+		mainWindow.addWidget(new WindowButtonWidget(listW - 14, 14, listW - 2, 26, "\u00a7a+", () -> {
+			selectWindow(1);
+			removeWindow(2);
+		}));
+
+		scrollbar = mainWindow.addWidget(new WindowScrollbarWidget(listW - 10, 28, accounts.size() * 28 - 1, h - 29, 0));
+
+		// Select type to add window
+		Window typeWindow = addWindow(new Window(
+				width / 2 - 96,
+				height / 2 - 17,
+				width / 2 + 96,
+				height / 2 + 17, "Add Account..", new ItemStack(Items.LIME_GLAZED_TERRACOTTA), true));
+
+		typeWindow.addWidget(new WindowButtonWidget(3, 15, 63, 31, "No Auth", () -> openAddAccWindow(AccountType.NO_AUTH)));
+		typeWindow.addWidget(new WindowButtonWidget(66, 15, 126, 31, "Mojang", () -> openAddAccWindow(AccountType.MOJANG)));
+		typeWindow.addWidget(new WindowButtonWidget(129, 15, 189, 31, "Microsoft", Runnables::doNothing /*() -> openAddAccWindow(AccountType.MICROSOFT))*/));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -170,39 +164,41 @@ public class AccountManagerScreen extends WindowScreen {
 		textRenderer.drawWithShadow(matrices, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
 		textRenderer.drawWithShadow(matrices, "Logged in as: \u00a7a" + client.getSession().getUsername(), 4, height - 10, -1);
 
+		hovered = -1;
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 
 	public void onRenderWindow(MatrixStack matrices, int window, int mouseX, int mouseY) {
 		super.onRenderWindow(matrices, window, mouseX, mouseY);
 
-		if (window == 1) {
-			int x = getWindow(1).x1;
-			int y = getWindow(1).y1;
-			int w = getWindow(1).x2 - x;
-			//h = height - height / 3;
+		if (window == 0) {
+			int x = getWindow(0).x1;
+			int y = getWindow(0).y1;
+			int w = getWindow(0).x2 - x;
+			int h = getWindow(0).y2 - y;
+			int listW = Math.max(140, w / 3);
 
-			int c = 0;
-			for (Account a: accounts.getAccounts()) {
-				int length = 250;
-				drawEntry(matrices, a,
-						x + w / 2 - length / 2,
-						y + accStart + c,
-						length,
-						28,
-						mouseX, mouseY,
-						0x60606090, 0x60b070f0);
+			boolean shrink = accounts.size() * 28 >= h - 28;
+			for (int c = 0; c < accounts.size(); c++) {
+				int curY = y + 28 + c * 28 - scrollbar.getPageOffset();
 
-				c += accHeight;
+				if (curY + 28 > y + h || curY < y + 27)
+					continue;
+
+				boolean hover = getWindow(0).selected && mouseX >= x + 1 && mouseX <= x + listW - (shrink ? 12 : 1) && mouseY >= curY && mouseY <= curY + 27;
+				drawEntry(matrices, accounts.get(c), x + 2, curY + 1, listW - (shrink ? 13 : 3), 26,
+						selected == c ? 0x6090e090 : hover ? 0x60b070f0 : 0x60606090);
+
+				if (hover)
+					hovered = c;
 			}
+
+			fill(matrices, x + listW, y + 12, x + listW + 1, y + h - 1, 0xff606090);
 		}
 	}
 
-	private void drawEntry(MatrixStack matrices, Account acc, int x, int y, int width, int height, int mouseX, int mouseY, int color, int hoverColor) {
-		Window.fill(matrices, x, y, x + width, y + height,
-				mouseX >= x && mouseY >= y && mouseX <= x + width && mouseY <= y + height ? hoverColor : color);
-
-		drawStringWithShadow(matrices, textRenderer, "\u00a7cx", x + width + 2, y + 2, -1);
+	private void drawEntry(MatrixStack matrices, Account acc, int x, int y, int width, int height, int color) {
+		Window.fill(matrices, x, y, x + width, y + height, color);
 
 		if (acc.bindSkin()) {
 			double pixelSize = (height - 6) / 8d;
@@ -232,156 +228,210 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 
 		double pixelSize = ((height - 6) / 10d) * 0.625;
-		drawStringWithShadow(matrices, textRenderer, "\u00a77Name: " + (acc.username == null ? "\u00a78Unknown" : acc.username),
+		textRenderer.drawWithShadow(matrices, "\u00a77Name: " + acc.username,
 				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + 4, -1);
-		drawStringWithShadow(matrices, textRenderer,
-				(acc.pass == null ? "\u00aeCracked" : acc.username == null ? "\u00a78Unchecked" : "\u00a7aWorking"),
+		textRenderer.drawWithShadow(matrices,
+				(acc.type == AccountType.NO_AUTH ? "\u00a7eCracked" : acc.type == AccountType.MOJANG ? "\u00a7aMojang" : "\u00a7bMicrosoft"),
 				extendText ? (int) (x + height + pixelSize * 10 + 3) : x + height, y + height - 11, -1);
+
+		if (acc.type != AccountType.NO_AUTH) {
+			textRenderer.drawWithShadow(matrices,
+					(acc.success == 0 ? "\u00a76?" : acc.success == 1 ? "\u00a7cx" : "\u00a7a+"),
+					x + width - 10, y + height - 11, -1);
+		}
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (!getWindow(1).closed && getWindow(1).selected) {
-			int x = getWindow(1).x1;
-			int y = getWindow(1).y1;
-			int w = getWindow(1).x2 - x;
-
-			int c = 0;
-			for (Account a: new ArrayList<>(accounts.getAccounts())) {
-				int length = 250;
-
-				if (mouseX >= x + w / 2 - length / 2 && mouseX <= x + w / 2 + length / 2
-						&& mouseY >= y + accStart + c * accHeight && mouseY <= y + accStart + c * accHeight + 28) {
-					userField.textField.setText(a.email);
-
-					try {
-						passField.textField.setText(a.pass);
-					} catch (Exception e1) {
-						passField.textField.setText("");
-						e1.printStackTrace();
-					}
-
-					getWindow(1).closed = true;
-					selectWindow(0);
-					client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-					return super.mouseClicked(mouseX, mouseY, button);
-				}
-
-				if (mouseX >= x + w / 2 + length / 2 + 1 && mouseX <= x + w / 2 + length / 2 + 14
-						&& mouseY >= y + accStart + c * accHeight && mouseY <= y + accStart + c * accHeight + 11) {
-					List<String> lines = BleachFileMang.readFileLines("logins.txt");
-					lines.removeIf(s -> s.startsWith(a.email));
-
-					BleachFileMang.createEmptyFile("logins.txt");
-					BleachFileMang.appendFile("logins.txt", String.join("\n", lines));
-					accounts.getAccounts().removeIf(ac -> ac.email.equals(a.email));
-					break;
-				}
-
-				c++;
-			}
+		if (hovered >= 0 && hovered < accounts.size()) {
+			selected = hovered;
+			updateRightside();
+			client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		}
 
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	public void tick() {
-		for (Future<Account> f: new ArrayList<>(accountFutures)) {
-			if (f.isDone()) {
-				try {
-					accounts.addAccount(f.get());
+	private void saveAccounts() {
+		BleachFileMang.createEmptyFile("logins.txt");
+		BleachFileMang.appendFile("logins.txt", accounts.stream()
+				.map(a -> {
+					try {
+						return a.type.ordinal() + ":" + a.success + ":"
+								+ a.uuid + ":" + a.username + ":"
+								+ IntStream.range(0, a.input.length).mapToObj(i -> {
+									try {
+										return a.type.fields[i].getRight() ? crypter.encrypt(a.input[i]) : a.input[i];
+									} catch (Exception e) {
+										throw new RuntimeException();
+									}
+								}).collect(Collectors.joining(":"));
+					} catch (Exception e) {
+						return null;
+					}
+				})
+				.filter(a -> a != null)
+				.collect(Collectors.joining("\n")));
+	}
 
-					accountFutures.remove(f);
-				} catch (InterruptedException | ExecutionException e) {
-					e.printStackTrace();
-				}
+	private void openAddAccWindow(AccountType type) {
+		getWindow(1).closed = true;
+
+		int h = 40 + type.fields.length * 40;
+		Window addWindow = addWindow(new Window(
+				width / 2 - 80,
+				height / 2 - h / 2,
+				width / 2 + 80,
+				height / 2 + h / 2, "Add Account", new ItemStack(Items.LIGHT_BLUE_GLAZED_TERRACOTTA)));
+
+		WindowTextWidget result = addWindow.addWidget(new WindowTextWidget("", true, 10, h - 16, -1));
+		List<WindowTextFieldWidget> tf = new ArrayList<>();
+		for (int i = 0; i < type.fields.length; i++) {
+			addWindow.addWidget(new WindowTextWidget(type.getFields()[i].getLeft(), true, 10, 20 + i * 40, 0xf0f0f0));
+
+			if (type.getFields()[i].getRight()) {
+				tf.add(addWindow.addWidget(new WindowPassTextFieldWidget(10, 33 + i * 40, 140, 18, "")));
+			} else {
+				tf.add(addWindow.addWidget(new WindowTextFieldWidget(10, 33 + i * 40, 140, 18, "")));
 			}
 		}
 
-		if (!accountQueue.isEmpty()) {
-			Account account = accountQueue.poll();
-			accountFutures.add(accountExecutor.submit(new Callable<Account>() {
+		addWindow.addWidget(new WindowButtonWidget(100, h - 20, 157, h - 2, "Add", () -> {
+			Account account = new Account(type.ordinal(), 0, null, null, tf.stream().map(t -> t.textField.getText()).toArray(String[]::new));
+			account.getSesson().ifLeft(s -> {
+				account.uuid = s.getUuid();
+				account.username = s.getUsername();
+				submitAccount(account);
+				getWindow(2).closed = true;
+			}).ifRight(s -> {
+				result.setText(new LiteralText(s));
+			});
+		}));
+	}
 
-				@Override
-				public Account call() throws Exception {
-					if (StringUtils.isEmpty(account.pass) || StringUtils.isEmpty(account.pass)) {
-						return account;
-					}
+	private void updateRightside() {
+		getWindow(0).getWidgets().removeAll(textFieldWidgets);
+		getWindow(0).getWidgets().removeAll(textWidgets);
+		textFieldWidgets.clear();
+		textWidgets.clear();
+		loginResult.setText(LiteralText.EMPTY);
 
-					if (account.uuid == null) {
-						Session session = LoginManager.createSessionSilent(account.email, account.pass);
+		if (selected != -1) {
+			Account a = accounts.get(selected);
+			int w = getWindow(0).x2 - getWindow(0).x1;
+			int listW = Math.max(140, w / 3);
 
-						if (session == null) {
-							return account;
-						}
+			for (int i = 0; i < a.input.length; i++) {
+				textWidgets.add(getWindow(0).addWidget(
+						new WindowTextWidget(a.type.getFields()[i].getLeft(), true, listW + 10, 20 + i * 40, 0xf0f0f0)));
 
-						account.uuid = session.getUuid();
-						account.username = session.getUsername();
-
-						account.textures.clear();
-						client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> {
-							account.textures.put(type, identifier);
-						}, true);
-					} else {
-						GameProfile profile = new GameProfile(UUID.fromString(account.uuid), account.uuid);
-
-						account.textures.clear();
-						client.getSkinProvider().loadSkin(profile, (type, identifier, minecraftProfileTexture) -> {
-							account.textures.put(type, identifier);
-						}, true);
-					}
-
-					return account;
+				if (a.type.getFields()[i].getRight()) {
+					textFieldWidgets.add(getWindow(0).addWidget(
+							new WindowPassTextFieldWidget(listW + 10, 33 + i * 40, w - listW - 20, 18, a.input[i])));
+				} else {
+					textFieldWidgets.add(getWindow(0).addWidget(
+							new WindowTextFieldWidget(listW + 10, 33 + i * 40, w - listW - 20, 18, a.input[i])));
 				}
-			}));
+			}
+
+			loginResult.y1 = 16 + a.input.length * 40;
+			loginResult.y2 = loginResult.y1 + 10;
+			rightsideWidgets.forEach(wg -> wg.visible = true);
+		} else {
+			rightsideWidgets.forEach(wg -> wg.visible = false);
 		}
 	}
 
-	private static class AccountList {
+	private void submitAccount(Account account) {
+		accountExecutor.submit(() -> {
+			if (account == null)
+				return;
 
-		private Set<Account> accounts = new TreeSet<Account>((i, j) -> i.email.compareTo(j.email));
+			if (account.uuid == null) {
+				Session session = account.getSesson().left().orElse(null);
 
-		public AccountList() {
-		}
+				if (session == null)
+					return;
 
-		public Set<Account> getAccounts() {
-			return accounts;
-		}
+				account.uuid = session.getUuid();
+				account.username = session.getUsername();
 
-		public void addAccount(Account account) {
+				account.textures.clear();
+				client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> {
+					account.textures.put(type, identifier);
+				}, true);
+			} else {
+				GameProfile profile = new GameProfile(UUID.fromString(account.uuid), account.username);
+				System.out.println(account.uuid + " " + account.username);
+
+				account.textures.clear();
+				client.getSkinProvider().loadSkin(profile, (type, identifier, minecraftProfileTexture) -> {
+					account.textures.put(type, identifier);
+				}, true);
+			}
+
 			accounts.add(account);
-		}
-
-		public boolean hasEmail(String email) {
-			return accounts.stream().anyMatch(a -> a.email.equals(email));
-		}
-
+			scrollbar.setTotalHeight(accounts.size() * 28 - 1);
+		});
 	}
 
 	private static class Account {
 
-		public String email;
-		public String pass;
+		public String[] input;
 		public String uuid;
 		public String username;
+		public AccountType type;
+		public int success;
 
 		public Map<Type, Identifier> textures = new EnumMap<>(Type.class);
 
-		public Account(String email, String pass) {
-			this.email = email;
-			this.pass = pass;
+		public static Account deserialize(String[] data) {
+			try {
+				if (data.length == 4) { // Old 4-part accounts
+					return new Account(1, 0, data[1], data[2], data[0], crypter.decrypt(data[3]));
+				} else if (data.length > 4) {
+					AccountType type = AccountType.values()[Integer.parseInt(data[0])];
+					return new Account(
+							Integer.parseInt(data[0]), Integer.parseInt(data[1]), data[2], data[3],
+							IntStream.range(0, data.length - 4).mapToObj(i -> {
+								try {
+									return type.fields[i].getRight() ? crypter.decrypt(data[i + 4]) : data[i + 4];
+								} catch (Exception e) {
+									throw new RuntimeException();
+								}
+							}).toArray(String[]::new));
+				}
+			} catch (Exception e) {
+				BleachLogger.logger.error("Unable to deserialize account " + data[0], e);
+			}
+
+			return null;
 		}
 
-		public Account(String email, String pass, String uuid, String username) {
-			this.email = email;
-			this.pass = pass;
+		public Account(int type, int success, String uuid, String username, String... input) {
+			this.type = AccountType.values()[type];
+			this.success = success;
 			this.uuid = uuid;
 			this.username = username;
+			this.input = input;
+		}
+
+		public String login() {
+			Either<Session, String> either = getSesson();
+			if (either.left().isPresent()) {
+				FabricReflect.writeField(MinecraftClient.getInstance(), either.left().get(), "field_1726", "session");
+				return "\u00a7aLogin Successful!";
+			}
+
+			return either.right().get();
+		}
+
+		public Either<Session, String> getSesson() {
+			return type.createSession(input);
 		}
 
 		public boolean bindSkin() {
 			if (textures.containsKey(Type.SKIN)) {
 				RenderSystem.setShaderTexture(0, textures.get(Type.SKIN));
-				//System.out.println("Binded custom skin: " + skin);
 			} else {
 				RenderSystem.setShaderTexture(0, DefaultSkinHelper.getTexture());
 			}
@@ -397,14 +447,55 @@ public class AccountManagerScreen extends WindowScreen {
 
 			return false;
 		}
+	}
 
-		@Override
-		public boolean equals(Object obj) {
-			if (super.equals(obj)) {
-				return true;
+	@SuppressWarnings("unchecked")
+	private static enum AccountType {
+
+		NO_AUTH((input) -> {
+			try {
+				String id = new JsonParser().parse(
+						Resources.toString(new URL("https://api.mojang.com/users/profiles/minecraft/" + input[0]), StandardCharsets.UTF_8))
+						.getAsJsonObject().get("id").getAsString();
+				
+				if (id.length() == 32)
+					id = id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20);
+
+				return Either.left(new Session(input[0], id, "", "mojang"));
+			} catch (Exception e) {
+				return Either.left(new Session(input[0], "00000000-0000-0000-0000-000000000000", "", "mojang"));
 			}
+		}, Pair.of("Username", false)),
+		MOJANG((input) -> {
+			try {
+				return Either.left(LoginManager.createSession(input[0], input[1]));
+			} catch (AuthenticationException e) {
+				if (e.getMessage().toLowerCase(Locale.ENGLISH).contains("invalid username or password") || e.getMessage().toLowerCase(Locale.ENGLISH).contains("account migrated")) {
+					return Either.right("\u00a74Wrong password!");
+				}
 
-			return obj instanceof Account && this.email.equals(((Account) obj).email);
+				BleachLogger.logger.error(e);
+				return Either.right("\u00a7cCannot contact authentication server!");
+			}
+		}, Pair.of("Email", false), Pair.of("Password", true)),
+		MICROSOFT((input) -> {
+			return Either.right("\u00a7aMS Support not added yet!");
+		}, Pair.of("Email", false), Pair.of("Password", true));
+
+		private Pair<String, Boolean>[] fields;
+		private Function<String[], Either<Session, String>> sessionCreator;
+
+		private AccountType(Function<String[], Either<Session, String>> sessionCreator, Pair<String, Boolean>... fields) {
+			this.fields = fields;
+			this.sessionCreator = sessionCreator;
+		}
+
+		public Pair<String, Boolean>[] getFields() {
+			return fields;
+		}
+
+		public Either<Session, String> createSession(String... input) {
+			return sessionCreator.apply(input);
 		}
 	}
 }
