@@ -152,9 +152,12 @@ public class AccountManagerScreen extends WindowScreen {
 				width / 2 + 96,
 				height / 2 + 17, "Add Account..", new ItemStack(Items.LIME_GLAZED_TERRACOTTA), true));
 
-		typeWindow.addWidget(new WindowButtonWidget(3, 15, 63, 31, "No Auth", () -> openAddAccWindow(AccountType.NO_AUTH)));
-		typeWindow.addWidget(new WindowButtonWidget(66, 15, 126, 31, "Mojang", () -> openAddAccWindow(AccountType.MOJANG)));
-		typeWindow.addWidget(new WindowButtonWidget(129, 15, 189, 31, "Microsoft", Runnables::doNothing /*() -> openAddAccWindow(AccountType.MICROSOFT))*/));
+		typeWindow.addWidget(new WindowButtonWidget(3, 15, 63, 31, "No Auth",
+				() -> openAddAccWindow(AccountType.NO_AUTH, "No Auth", new ItemStack(Items.LIGHT_BLUE_GLAZED_TERRACOTTA))));
+		typeWindow.addWidget(new WindowButtonWidget(66, 15, 126, 31, "Mojang",
+				() -> openAddAccWindow(AccountType.MOJANG, "Mojang", new ItemStack(Items.GREEN_GLAZED_TERRACOTTA))));
+		typeWindow.addWidget(new WindowButtonWidget(129, 15, 189, 31, "Microsoft",
+				Runnables::doNothing /*() -> openAddAccWindow(AccountType.MICROSOFT, "Microsoft", new ItemStack(Items.PURPLE_GLAZED_TERRACOTTA)))*/));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -280,7 +283,7 @@ public class AccountManagerScreen extends WindowScreen {
 				.collect(Collectors.joining("\n")));
 	}
 
-	private void openAddAccWindow(AccountType type) {
+	private void openAddAccWindow(AccountType type, String name, ItemStack item) {
 		getWindow(1).closed = true;
 
 		int h = 40 + type.fields.length * 40;
@@ -288,7 +291,7 @@ public class AccountManagerScreen extends WindowScreen {
 				width / 2 - 80,
 				height / 2 - h / 2,
 				width / 2 + 80,
-				height / 2 + h / 2, "Add Account", new ItemStack(Items.LIGHT_BLUE_GLAZED_TERRACOTTA)));
+				height / 2 + h / 2, "Add " + name + " Account", item));
 
 		WindowTextWidget result = addWindow.addWidget(new WindowTextWidget("", true, 10, h - 16, -1));
 		List<WindowTextFieldWidget> tf = new ArrayList<>();
