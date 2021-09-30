@@ -194,7 +194,7 @@ public class Search extends Module {
 			}
 
 			if (mode == 0 || mode == 1) {
-				int outlineWidth = (int) (getSetting(1).asSlider().getValue() * 255);
+				float outlineWidth = getSetting(1).asSlider().getValueFloat();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
 					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(color[0], color[1], color[2], 255), outlineWidth);
