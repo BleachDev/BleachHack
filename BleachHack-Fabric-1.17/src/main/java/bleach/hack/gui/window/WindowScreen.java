@@ -30,7 +30,7 @@ public abstract class WindowScreen extends Screen {
 
 	private List<Window> windows = new ArrayList<>();
 
-	/* [Layer, Window Index] */
+	// <Layer, Window Index>
 	private Int2IntSortedMap windowOrder = new Int2IntRBTreeMap(); 
 
 	public WindowScreen(Text title) {
@@ -45,18 +45,16 @@ public abstract class WindowScreen extends Screen {
 
 	public void removeWindow(int index) {
 		if (index >= 0 && index < windows.size()) {
+			int layer = getWindowLayer(index);
+
 			windows.remove(index);
-			int key = windowOrder.int2IntEntrySet().stream().filter(i -> i.getIntValue() == index).map(Entry::getIntKey).findFirst().orElse(0);
-			Int2IntSortedMap newWindowOrder = new Int2IntRBTreeMap();
-			for (Entry e: windowOrder.int2IntEntrySet()) {
-				if (e.getIntKey() < key) {
-					newWindowOrder.put(e.getIntKey(), e.getIntValue());
-				} else if (e.getIntKey() > key) {
-					newWindowOrder.put(e.getIntKey() - 1, e.getIntValue());
+			windowOrder.remove(layer);
+			for (Entry e: new Int2IntRBTreeMap(windowOrder).int2IntEntrySet()) {
+				if (e.getIntKey() > layer) {
+					windowOrder.remove(e.getIntKey());
+					windowOrder.put(e.getIntKey() - 1, e.getIntValue());
 				}
 			}
-
-			windowOrder = newWindowOrder;
 		}
 	}
 
@@ -81,6 +79,10 @@ public abstract class WindowScreen extends Screen {
 		List<Integer> w = getWindowsBackToFront();
 		Collections.reverse(w);
 		return w;
+	}
+	
+	protected int getWindowLayer(int index) {
+		return windowOrder.int2IntEntrySet().stream().filter(i -> i.getIntValue() == index).findFirst().get().getIntKey();
 	}
 
 	protected int getSelectedWindow() {
@@ -132,17 +134,11 @@ public abstract class WindowScreen extends Screen {
 			if (i == window) {
 				w.closed = false;
 				w.selected = true;
-				int index = -1;
-				for (Entry e: windowOrder.int2IntEntrySet()) {
-					if (e.getIntValue() == window) {
-						index = e.getIntKey();
-						break;
-					}
-				}
+				int layer = getWindowLayer(window);
 
-				windowOrder.remove(index);
+				windowOrder.remove(layer);
 				for (Entry e: new Int2IntRBTreeMap(windowOrder).int2IntEntrySet()) {
-					if (e.getIntKey() > index) {
+					if (e.getIntKey() > layer) {
 						windowOrder.remove(e.getIntKey());
 						windowOrder.put(e.getIntKey() - 1, e.getIntValue());
 					}
@@ -160,18 +156,16 @@ public abstract class WindowScreen extends Screen {
 		for (int wi: getWindowsFrontToBack()) {
 			Window w = getWindow(wi);
 
-			if (mouseX > w.x1 && mouseX < w.x2 && mouseY > w.y1 && mouseY < w.y2 && !w.closed) {
+			if (mouseX >= w.x1 && mouseX <= w.x2 && mouseY >= w.y1 && mouseY <= w.y2 && !w.closed) {
 				if (w.shouldClose((int) mouseX, (int) mouseY)) {
 					w.closed = true;
 					break;
 				}
-
-				if (w.selected) {
-					w.mouseClicked(mouseX, mouseY, button);
-				} else {
+				
+				if (!w.selected)
 					selectWindow(wi);
-				}
 
+				w.mouseClicked(mouseX, mouseY, button);
 				break;
 			}
 		}
