@@ -115,7 +115,7 @@ public class UI extends Module {
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 11
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),  // 11-0
 				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren(                      //12
-						new SettingToggle("Background", true).withDesc("Draws a background behind the inventory.")),                     // 12-0
+						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")),               // 12-0
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
 
 		// Modulelist
@@ -213,7 +213,7 @@ public class UI extends Module {
 						() -> getSetting(12).asToggle().state,
 						this::getInventorySize,
 						this::drawInventory)
-		);
+				);
 	}
 
 	@Override
@@ -522,28 +522,26 @@ public class UI extends Module {
 	// --- Inventory
 
 	public int[] getInventorySize() {
-		return new int[] { 145, 50 };
+		return new int[] { 155, 53 };
 	}
 
 	public void drawInventory(MatrixStack matrices, int x, int y) {
-		if (getSetting(12).asToggle().state && !mc.options.debugEnabled) {
-			if (mc.player == null)
-				return;
+		if (getSetting(12).asToggle().state) {
+			DrawableHelper.fill(matrices, x + 155, y, x, y + 53,
+					(getSetting(12).asToggle().getChild(0).asSlider().getValueInt() << 24) | 0x212120);
+
 			matrices.push();
 			for (int i = 0; i < 27; i++) {
-				ItemStack itemStack = mc.player.getInventory().main.get(i + 9);
-				int offSetX = x +  (i % 9) * 16;
-				int offSetY = y + (i / 9) * 16;
-				mc.getItemRenderer().renderGuiItemIcon(itemStack, offSetX, offSetY);
-				mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, itemStack, offSetX, offSetY);
+				ItemStack itemStack = mc.player.getInventory().getStack(i + 9);
+				int offsetX = x + 1 + (i % 9) * 17;
+				int offsetY = y + 1 + (i / 9) * 17;
+				mc.getItemRenderer().renderGuiItemIcon(itemStack, offsetX, offsetY);
+				mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, itemStack, offsetX, offsetY);
 			}
+
 			mc.getItemRenderer().zOffset = 0.0F;
 			RenderSystem.enableDepthTest();
 			matrices.pop();
-
-			if (getSetting(12).asToggle().getChild(0).asToggle().state) {
-				DrawableHelper.fill(matrices, x + 145, y, x, y + 50, 0x90212120);
-			}
 		}
 	}
 

@@ -152,7 +152,10 @@ public class BleachFileHelper {
 							String name = sNames.containsKey(sb.getName()) ? sb.getName() + sNames.get(sb.getName()) : sb.getName();
 
 							if (name.equals(se.getKey())) {
-								sb.readSettings(se.getValue());
+								try {
+									sb.readSettings(se.getValue());
+								} catch (Exception ignored) {}
+
 								break;
 							} else {
 								sNames.put(sb.getName(), sNames.containsKey(sb.getName()) ? sNames.get(sb.getName()) + 1 : 1);
