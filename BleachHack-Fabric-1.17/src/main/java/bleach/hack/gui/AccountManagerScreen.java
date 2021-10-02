@@ -144,7 +144,7 @@ public class AccountManagerScreen extends WindowScreen {
 				updateRightside();
 				saveAccounts();
 			}
-		}));
+		}).withRenderEvent(wg -> ((WindowButtonWidget) wg).text = selected >= 0 && selected < accounts.size() ? "\u00a7c-" : "\u00a77-"));
 
 		// Select type to add window
 		Window typeWindow = addWindow(new Window(
