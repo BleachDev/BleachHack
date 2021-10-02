@@ -67,20 +67,20 @@ public class MixinWorldRenderer {
 
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	private void render_head(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
-			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
-		EventWorldRender.Pre event = new EventWorldRender.Pre(tickDelta);
+			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo callback) {
+		EventWorldRender.Pre event = new EventWorldRender.Pre(tickDelta, matrices);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {
-			info.cancel();
+			callback.cancel();
 		}
 	}
 
 	@Inject(method = "render", at = @At("RETURN"))
 	private void render_return(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer,
-			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
+			LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo callback) {
 		RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);
-		EventWorldRender.Post event = new EventWorldRender.Post(tickDelta);
+		EventWorldRender.Post event = new EventWorldRender.Post(tickDelta, matrices);
 		BleachHack.eventBus.post(event);
 	}
 
