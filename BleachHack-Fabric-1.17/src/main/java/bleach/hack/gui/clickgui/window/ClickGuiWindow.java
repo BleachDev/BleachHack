@@ -42,7 +42,7 @@ public abstract class ClickGuiWindow extends Window {
 		return false;
 	}
 
-	protected void drawBar(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
+	protected void drawBackground(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
 		DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
 		horizontalGradient(matrices, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);

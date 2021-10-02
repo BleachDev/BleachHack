@@ -110,12 +110,12 @@ public class UI extends Module {
 				new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in."),               // 8
 				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance."),                        // 9
 				new SettingToggle("Armor", true).withDesc("Shows your current armor.").withChildren(                                   // 10
-						new SettingToggle("Vertical", false).withDesc("Displays your armor vertically."),
-						new SettingMode("Damage", "Number", "Bar", "BarV").withDesc("How to show the armor durability.")),               // 10-0
+						new SettingToggle("Vertical", false).withDesc("Displays your armor vertically."),                                // 10-0
+						new SettingMode("Damage", "Number", "Bar", "BarV").withDesc("How to show the armor durability.")),               // 10-1
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 11
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),  // 11-0
-				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren( //12
-						new SettingToggle("Background", true).withDesc("Draws a background behind the inventory.")), // 12-0
+				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren(                      //12
+						new SettingToggle("Background", true).withDesc("Draws a background behind the inventory.")),                     // 12-0
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
 
 		// Modulelist
@@ -208,7 +208,7 @@ public class UI extends Module {
 				);
 
 		// Inventory
-		uiContainer.windows.put("iv",
+		uiContainer.windows.put("inventory",
 				new UIWindow(new Position(0.7, 0.90), uiContainer,
 						() -> getSetting(12).asToggle().state,
 						this::getInventorySize,

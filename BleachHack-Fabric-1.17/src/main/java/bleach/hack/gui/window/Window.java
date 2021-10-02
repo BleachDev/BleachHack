@@ -81,7 +81,7 @@ public class Window {
 			y1 = Math.max(0, mouseY - dragOffY);
 		}
 
-		drawBar(matrices, mouseX, mouseY, textRend);
+		drawBackground(matrices, mouseX, mouseY, textRend);
 
 		for (WindowWidget w : widgets) {
 			if (w.shouldRender(x1, y1, x2, y2)) {
@@ -94,11 +94,11 @@ public class Window {
 		/* window icon */
 		if (icon != null) {
 			RenderSystem.getModelViewStack().push();
+			RenderSystem.getModelViewStack().translate(x1 + (blockItem ? 3 : 2), y1 + 2, 0);
 			RenderSystem.getModelViewStack().scale(0.6f, 0.6f, 1f);
 
 			DiffuseLighting.enableGuiDepthLighting();
-			MinecraftClient.getInstance().getItemRenderer().renderInGui(
-					icon, (int) ((x1 + (blockItem ? 3 : 2)) * 1 / 0.6), (int) ((y1 + 2) * 1 / 0.6));
+			MinecraftClient.getInstance().getItemRenderer().renderInGui(icon, 0, 0);
 			DiffuseLighting.disableGuiDepthLighting();
 
 			RenderSystem.getModelViewStack().pop();
@@ -110,7 +110,7 @@ public class Window {
 				x1 + (icon == null || icon.getItem() == Items.AIR ? 4 : (blockItem ? 15 : 14)), y1 + 3, -1);
 	}
 
-	protected void drawBar(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
+	protected void drawBackground(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
 		DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
 		horizontalGradient(matrices, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
@@ -123,11 +123,9 @@ public class Window {
 		horizontalGradient(matrices, x1 + 1, y1 + 1, x2 - 1, y1 + 12, (selected ? 0xff6060b0 : 0xff606060), (selected ? 0xff8070b0 : 0xffa0a0a0));
 
 		/* buttons */
-		//fillGrey(matrix, x2 - 12, y1 + 3, x2 - 4, y1 + 11);
 		textRend.draw(matrices, "x", x2 - 10, y1 + 3, 0);
 		textRend.draw(matrices, "x", x2 - 11, y1 + 2, -1);
 
-		//fillGrey(matrix, x2 - 22, y1 + 3, x2 - 14, y1 + 11);
 		textRend.draw(matrices, "_", x2 - 21, y1 + 2, 0);
 		textRend.draw(matrices, "_", x2 - 22, y1 + 1, -1);
 	}

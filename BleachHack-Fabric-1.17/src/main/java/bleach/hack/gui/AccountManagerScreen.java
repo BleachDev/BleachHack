@@ -96,7 +96,7 @@ public class AccountManagerScreen extends WindowScreen {
 		// Right side
 		loginResult = mainWindow.addWidget(new WindowTextWidget(loginResult != null ? loginResult.getText() : LiteralText.EMPTY, true, listW + 11, 96, 0xc0c0c0));
 
-		mainWindow.addWidget(new WindowButtonWidget(w - 143, h - 22, w - 73, h - 3, "Login", () -> {
+		mainWindow.addWidget(new WindowButtonWidget(w - 70, h - 22, w - 3, h - 3, "Login", () -> {
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
 				BleachHack.playerMang.stopPinger();
 
@@ -112,14 +112,6 @@ public class AccountManagerScreen extends WindowScreen {
 
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
 				BleachHack.playerMang.startPinger();
-		}));
-
-		mainWindow.addWidget(new WindowButtonWidget(w - 70, h - 22, w - 3, h - 3, 0x60e05050, 0x60c07070, 0x10e07070, 0x20e05050, "Delete", () -> {
-			accounts.remove(selected);
-			selected = -1;
-			scrollbar.setTotalHeight(accounts.size() * 28 - 1);
-			updateRightside();
-			saveAccounts();
 		}));
 
 		mainWindow.getWidgets().forEach(rightsideWidgets::add);
@@ -143,6 +135,15 @@ public class AccountManagerScreen extends WindowScreen {
 		mainWindow.addWidget(new WindowButtonWidget(listW - 14, 14, listW - 2, 26, "\u00a7a+", () -> {
 			selectWindow(1);
 			removeWindow(2);
+		}));
+		mainWindow.addWidget(new WindowButtonWidget(listW - 29, 14, listW - 17, 26, "\u00a7c-", () -> {
+			if (selected >= 0 && selected < accounts.size()) {
+				accounts.remove(selected);
+				selected = -1;
+				scrollbar.setTotalHeight(accounts.size() * 28 - 1);
+				updateRightside();
+				saveAccounts();
+			}
 		}));
 
 		// Select type to add window
