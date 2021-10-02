@@ -114,6 +114,8 @@ public class UI extends Module {
 						new SettingMode("Damage", "Number", "Bar", "BarV").withDesc("How to show the armor durability.")),               // 10-0
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 11
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),  // 11-0
+				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren( //12
+						new SettingToggle("Background", true).withDesc("Draws a background behind the inventory.")), // 12-0
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
 
 		// Modulelist
@@ -204,6 +206,14 @@ public class UI extends Module {
 						this::getLagMeterSize,
 						this::drawLagMeter)
 				);
+
+		// Inventory
+		uiContainer.windows.put("iv",
+				new UIWindow(new Position(0.7, 0.90), uiContainer,
+						() -> getSetting(12).asToggle().state,
+						this::getInventorySize,
+						this::drawInventory)
+		);
 	}
 
 	@Override
@@ -506,6 +516,34 @@ public class UI extends Module {
 			}
 
 			matrices.pop();
+		}
+	}
+
+	// --- Inventory
+
+	public int[] getInventorySize() {
+		return new int[] { 145, 50 };
+	}
+
+	public void drawInventory(MatrixStack matrices, int x, int y) {
+		if (getSetting(12).asToggle().state && !mc.options.debugEnabled) {
+			if (mc.player == null)
+				return;
+			matrices.push();
+			for (int i = 0; i < 27; i++) {
+				ItemStack itemStack = mc.player.getInventory().main.get(i + 9);
+				int offSetX = x +  (i % 9) * 16;
+				int offSetY = y + (i / 9) * 16;
+				mc.getItemRenderer().renderGuiItemIcon(itemStack, offSetX, offSetY);
+				mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, itemStack, offSetX, offSetY);
+			}
+			mc.getItemRenderer().zOffset = 0.0F;
+			RenderSystem.enableDepthTest();
+			matrices.pop();
+
+			if (getSetting(12).asToggle().getChild(0).asToggle().state) {
+				DrawableHelper.fill(matrices, x + 145, y, x, y + 50, 0x90212120);
+			}
 		}
 	}
 
