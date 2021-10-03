@@ -24,6 +24,7 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.zip.DeflaterOutputStream;
 
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -115,7 +116,9 @@ public class UI extends Module {
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 11
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),  // 11-0
 				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren(                      //12
-						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")),               // 12-0
+						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")),// 12-0
+				new SettingToggle("PlayerModel", false).withDesc("Renders your player model on screen.").withChildren(                 // 13
+						new SettingSlider("Size", 10, 50, 25, 0).withDesc("Size of your player model.")),                                                        // 13-0
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
 
 		// Modulelist
@@ -214,6 +217,14 @@ public class UI extends Module {
 						this::getInventorySize,
 						this::drawInventory)
 				);
+
+		// Player-Model
+		uiContainer.windows.put("playermodel",
+				new UIWindow(new Position(0, 0.70), uiContainer,
+						() -> getSetting(13).asToggle().state,
+						this::getModelSize,
+						this::drawModel)
+		        );
 	}
 
 	@Override
@@ -543,6 +554,22 @@ public class UI extends Module {
 			RenderSystem.enableDepthTest();
 			matrices.pop();
 		}
+	}
+
+	// --- Player Model
+
+	public int[] getModelSize() {
+		return new int[] {50, 50};
+	}
+	public void drawModel(MatrixStack matrices, int x, int y) {
+		if (getSetting(13).asToggle().state) {
+			float yaw = MathHelper.wrapDegrees(mc.player.prevYaw + (mc.player.getYaw() - mc.player.prevYaw) * mc.getTickDelta());
+			float pitch = mc.player.getPitch();
+			matrices.push();
+			InventoryScreen.drawEntity(x + 25, y + 45, (int) getSetting(13).asToggle().getChild(0).asSlider().getValue(), -yaw, -pitch, mc.player);
+		}
+		RenderSystem.enableDepthTest();
+		matrices.pop();
 	}
 
 	@BleachSubscribe
