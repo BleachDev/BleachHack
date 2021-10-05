@@ -148,9 +148,9 @@ public class AccountManagerScreen extends WindowScreen {
 
 		// Select type to add window
 		Window typeWindow = addWindow(new Window(
-				width / 2 - 96,
+				width / 2 - 127,
 				height / 2 - 17,
-				width / 2 + 96,
+				width / 2 + 127,
 				height / 2 + 17, "Add Account..", new ItemStack(Items.LIME_GLAZED_TERRACOTTA), true));
 
 		typeWindow.addWidget(new WindowButtonWidget(3, 15, 63, 31, "No Auth",
@@ -159,6 +159,8 @@ public class AccountManagerScreen extends WindowScreen {
 				() -> openAddAccWindow(AccountType.MOJANG, "Mojang", new ItemStack(Items.GREEN_GLAZED_TERRACOTTA))));
 		typeWindow.addWidget(new WindowButtonWidget(129, 15, 189, 31, "Microsoft",
 				Runnables::doNothing /*() -> openAddAccWindow(AccountType.MICROSOFT, "Microsoft", new ItemStack(Items.PURPLE_GLAZED_TERRACOTTA)))*/));
+		typeWindow.addWidget(new WindowButtonWidget(192, 15, 252, 31, "Altening",
+				() -> openAddAccWindow(AccountType.ALTENING, "Altening", new ItemStack(Items.RED_GLAZED_TERRACOTTA))));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -493,7 +495,15 @@ public class AccountManagerScreen extends WindowScreen {
 		}, Pair.of("Email", false), Pair.of("Password", true)),
 		MICROSOFT((input) -> {
 			return Either.right("\u00a7aMS Support not added yet!");
-		}, Pair.of("Email", false), Pair.of("Password", true));
+		}, Pair.of("Email", false), Pair.of("Password", true)),
+		ALTENING((input) -> {
+			try {
+				return Either.left(LoginManager.createAlteningSession(input[0]));
+			} catch (Exception e) {
+				BleachLogger.logger.error(e);
+				return Either.right("\u00a7cException occurred!");
+			}
+		}, Pair.of("Token", false));
 
 		private Pair<String, Boolean>[] fields;
 		private Function<String[], Either<Session, String>> sessionCreator;

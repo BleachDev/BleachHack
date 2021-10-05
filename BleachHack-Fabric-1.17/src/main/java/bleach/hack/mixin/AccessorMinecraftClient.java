@@ -8,7 +8,9 @@
  */
 package bleach.hack.mixin;
 
+import net.minecraft.client.util.Session;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import net.minecraft.client.MinecraftClient;
@@ -18,4 +20,8 @@ public interface AccessorMinecraftClient {
 
 	@Accessor
 	public abstract int getItemUseCooldown();
+
+	@Mutable
+	@Accessor("session")
+	void setSession(Session session);
 }
