@@ -56,6 +56,9 @@ public class Search extends Module {
 
 	private ChunkProcessor processor = new ChunkProcessor(1,
 			(cp, chunk) -> {
+				if (foundBlocks.size() > 1000000)
+					return;
+
 				boolean log = getSetting(4).asToggle().state;
 				StringBuilder logBuilder = new StringBuilder();
 
@@ -175,7 +178,11 @@ public class Search extends Module {
 	public void onRender(EventWorldRender.Post event) {
 		int mode = getSetting(0).asMode().mode;
 
+		int i = 0;
 		for (BlockPos pos : foundBlocks) {
+			if (i > 1000)
+				return;
+
 			BlockState state = mc.world.getBlockState(pos);
 
 			int[] color = getColorForBlock(state, pos);
@@ -215,6 +222,8 @@ public class Search extends Module {
 						LineColor.single(color[0], color[1], color[2], (int) (tracers.getChild(1).asSlider().getValue() * 255)),
 						(float) tracers.getChild(0).asSlider().getValue());
 			}
+
+			i++;
 		}
 	}
 
