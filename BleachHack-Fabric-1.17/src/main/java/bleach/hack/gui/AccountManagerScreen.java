@@ -23,7 +23,6 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.io.Resources;
-import com.google.common.util.concurrent.Runnables;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationException;
@@ -41,7 +40,7 @@ import bleach.hack.gui.window.widget.WindowWidget;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
 import bleach.hack.util.auth.LoginCrypter;
-import bleach.hack.util.auth.LoginManager;
+import bleach.hack.util.auth.LoginHelper;
 import bleach.hack.util.io.BleachFileMang;
 import bleach.hack.BleachHack;
 import bleach.hack.gui.option.Option;
@@ -158,7 +157,7 @@ public class AccountManagerScreen extends WindowScreen {
 		typeWindow.addWidget(new WindowButtonWidget(66, 15, 126, 31, "Mojang",
 				() -> openAddAccWindow(AccountType.MOJANG, "Mojang", new ItemStack(Items.GREEN_GLAZED_TERRACOTTA))));
 		typeWindow.addWidget(new WindowButtonWidget(129, 15, 189, 31, "Microsoft",
-				Runnables::doNothing /*() -> openAddAccWindow(AccountType.MICROSOFT, "Microsoft", new ItemStack(Items.PURPLE_GLAZED_TERRACOTTA)))*/));
+				() -> openAddAccWindow(AccountType.MICROSOFT, "Microsoft", new ItemStack(Items.PURPLE_GLAZED_TERRACOTTA))));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -433,6 +432,7 @@ public class AccountManagerScreen extends WindowScreen {
 			Either<Session, String> either = getSesson();
 			if (either.left().isPresent()) {
 				FabricReflect.writeField(MinecraftClient.getInstance(), either.left().get(), "field_1726", "session");
+				MinecraftClient.getInstance().getSessionProperties().clear();
 			}
 
 			return either;
@@ -481,7 +481,7 @@ public class AccountManagerScreen extends WindowScreen {
 		}, Pair.of("Username", false)),
 		MOJANG((input) -> {
 			try {
-				return Either.left(LoginManager.createSession(input[0], input[1]));
+				return Either.left(LoginHelper.createMojangSession(input[0], input[1]));
 			} catch (AuthenticationException e) {
 				if (e.getMessage().toLowerCase(Locale.ENGLISH).contains("invalid username or password") || e.getMessage().toLowerCase(Locale.ENGLISH).contains("account migrated")) {
 					return Either.right("\u00a74Wrong password!");
@@ -492,7 +492,11 @@ public class AccountManagerScreen extends WindowScreen {
 			}
 		}, Pair.of("Email", false), Pair.of("Password", true)),
 		MICROSOFT((input) -> {
-			return Either.right("\u00a7aMS Support not added yet!");
+			try {
+				return Either.left(LoginHelper.createMicrosoftSession(input[0], input[1]));
+			} catch (AuthenticationException e) {
+				return Either.right(e.getMessage());
+			}
 		}, Pair.of("Email", false), Pair.of("Password", true));
 
 		private Pair<String, Boolean>[] fields;
