@@ -13,10 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,8 +26,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.datafixers.util.Either;
-
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.gui.window.widget.WindowPassTextFieldWidget;
@@ -104,9 +100,9 @@ public class AccountManagerScreen extends WindowScreen {
 				account.input[i] = textFieldWidgets.get(i).textField.getText();
 			}
 
-			Either<Session, String> either = account.login();
-			loginResult.setText(new LiteralText(either.left().isPresent() ? "\u00a7aLogin Successful!" : either.right().get()));
-			account.success = either.left().isPresent() ? 2 : 1;
+			AuthenticationException exception = account.login();
+			loginResult.setText(new LiteralText(exception == null ? "\u00a7aLogin Successful!" : "\u00a7c" + exception.getMessage()));
+			account.success = exception == null ? 2 : 1;
 			saveAccounts();
 
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
@@ -307,14 +303,15 @@ public class AccountManagerScreen extends WindowScreen {
 
 		addWindow.addWidget(new WindowButtonWidget(100, h - 20, 157, h - 3, "Add", () -> {
 			Account account = new Account(type.ordinal(), 0, null, null, tf.stream().map(t -> t.textField.getText()).toArray(String[]::new));
-			account.getSesson().ifLeft(s -> {
-				account.uuid = s.getUuid();
-				account.username = s.getUsername();
+			try {
+				Session session = account.getSesson();
+				account.uuid = session.getUuid();
+				account.username = session.getUsername();
 				addAccount(account);
 				getWindow(2).closed = true;
-			}).ifRight(s -> {
-				result.setText(new LiteralText(s));
-			});
+			} catch (AuthenticationException e) {
+				result.setText(new LiteralText("\u00a7c" + e.getMessage()));
+			}
 		}));
 	}
 
@@ -356,18 +353,17 @@ public class AccountManagerScreen extends WindowScreen {
 			return;
 
 		if (account.uuid == null) {
-			Session session = account.getSesson().left().orElse(null);
+			try {
+				Session session = account.getSesson();
 
-			if (session == null)
-				return;
+				account.uuid = session.getUuid();
+				account.username = session.getUsername();
 
-			account.uuid = session.getUuid();
-			account.username = session.getUsername();
-
-			account.textures.clear();
-			client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> {
-				account.textures.put(type, identifier);
-			}, true);
+				account.textures.clear();
+				client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> {
+					account.textures.put(type, identifier);
+				}, true);
+			} catch (AuthenticationException ignored) { }
 		} else {
 			GameProfile profile = new GameProfile(UUID.fromString(account.uuid), account.username);
 
@@ -428,17 +424,17 @@ public class AccountManagerScreen extends WindowScreen {
 			this.input = input;
 		}
 
-		public Either<Session, String> login() {
-			Either<Session, String> either = getSesson();
-			if (either.left().isPresent()) {
-				FabricReflect.writeField(MinecraftClient.getInstance(), either.left().get(), "field_1726", "session");
+		public AuthenticationException login() {
+			try {
+				FabricReflect.writeField(MinecraftClient.getInstance(), getSesson(), "field_1726", "session");
 				MinecraftClient.getInstance().getSessionProperties().clear();
+				return null;
+			} catch (AuthenticationException e) {
+				return e;
 			}
-
-			return either;
 		}
 
-		public Either<Session, String> getSesson() {
+		public Session getSesson() throws AuthenticationException {
 			return type.createSession(input);
 		}
 
@@ -474,35 +470,22 @@ public class AccountManagerScreen extends WindowScreen {
 				if (id.length() == 32)
 					id = id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20);
 
-				return Either.left(new Session(input[0], id, "", "mojang"));
+				return new Session(input[0], id, "", "mojang");
 			} catch (Exception e) {
-				return Either.left(new Session(input[0], "00000000-0000-0000-0000-000000000000", "", "mojang"));
+				return new Session(input[0], "00000000-0000-0000-0000-000000000000", "", "mojang");
 			}
 		}, Pair.of("Username", false)),
 		MOJANG((input) -> {
-			try {
-				return Either.left(LoginHelper.createMojangSession(input[0], input[1]));
-			} catch (AuthenticationException e) {
-				if (e.getMessage().toLowerCase(Locale.ENGLISH).contains("invalid username or password") || e.getMessage().toLowerCase(Locale.ENGLISH).contains("account migrated")) {
-					return Either.right("\u00a74Wrong password!");
-				}
-
-				BleachLogger.logger.error(e);
-				return Either.right("\u00a7cCannot contact authentication server!");
-			}
+			return LoginHelper.createMojangSession(input[0], input[1]);
 		}, Pair.of("Email", false), Pair.of("Password", true)),
 		MICROSOFT((input) -> {
-			try {
-				return Either.left(LoginHelper.createMicrosoftSession(input[0], input[1]));
-			} catch (AuthenticationException e) {
-				return Either.right(e.getMessage());
-			}
+			return LoginHelper.createMicrosoftSession(input[0], input[1]);
 		}, Pair.of("Email", false), Pair.of("Password", true));
 
 		private Pair<String, Boolean>[] fields;
-		private Function<String[], Either<Session, String>> sessionCreator;
+		private SessionCreator sessionCreator;
 
-		private AccountType(Function<String[], Either<Session, String>> sessionCreator, Pair<String, Boolean>... fields) {
+		private AccountType(SessionCreator sessionCreator, Pair<String, Boolean>... fields) {
 			this.fields = fields;
 			this.sessionCreator = sessionCreator;
 		}
@@ -511,8 +494,13 @@ public class AccountManagerScreen extends WindowScreen {
 			return fields;
 		}
 
-		public Either<Session, String> createSession(String... input) {
+		public Session createSession(String... input) throws AuthenticationException {
 			return sessionCreator.apply(input);
 		}
+	}
+
+	@FunctionalInterface
+	private static interface SessionCreator {
+		Session apply(String[] input) throws AuthenticationException;
 	}
 }
