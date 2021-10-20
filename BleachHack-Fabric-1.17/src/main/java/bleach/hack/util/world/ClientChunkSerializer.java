@@ -40,6 +40,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkNibbleArray;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.UpgradeData;
 import net.minecraft.world.chunk.WorldChunk;
@@ -64,6 +65,9 @@ public class ClientChunkSerializer {
 		if (!upgradeData.isDone()) {
 			nbtCompound2.put("UpgradeData", upgradeData.toNbt());
 		}
+		
+		if (chunk instanceof EmptyChunk)
+			return nbtCompound;
 
 		ChunkSection[] chunkSections = chunk.getSectionArray();
 		NbtList nbtList = new NbtList();
