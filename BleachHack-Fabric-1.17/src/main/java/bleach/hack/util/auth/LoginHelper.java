@@ -15,8 +15,6 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -80,11 +78,10 @@ public final class LoginHelper {
 		if (!loginMatcher.find())
 			throw new AuthenticationException("Failed to find the login url!");
 
-		Map<String, String> cookies = new HashMap<>();
-
-		oauthResponse.headers().allValues("Set-Cookie").stream()
-		.map(s -> s.substring(0, s.indexOf(';')).split("="))
-		.forEach(s -> cookies.put(s[0], s[1]));
+		String cookie = oauthResponse.headers().allValues("Set-Cookie").stream()
+		.filter(s -> s.startsWith("MSPOK="))
+		.map(s -> s.substring(0, s.indexOf(';')))
+		.findFirst().get();
 
 		// Login to Microsoft
 		HttpResponse<String> loginResponse = BleachOnlineMang.sendRequest(
@@ -92,18 +89,12 @@ public final class LoginHelper {
 				"POST",
 				new String[] {
 						"Content-Type", "application/x-www-form-urlencoded",
-						"Cookie", cookies.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("; ")) },
+						"Cookie", cookie },
 				"login=" + URLEncoder.encode(email, StandardCharsets.UTF_8) +
 				"&passwd=" + URLEncoder.encode(password, StandardCharsets.UTF_8) +
 				"&PPFT=" + URLEncoder.encode(ppftMatcher.group(1), StandardCharsets.UTF_8),
 				5000,
 				BodyHandlers.ofString(StandardCharsets.UTF_8));
-		
-		BleachLogger.logger.error("> " + loginResponse);
-		if (loginResponse != null) {
-			System.out.println("> Headers: " + loginResponse.headers());
-			System.out.println("> Body: " + loginResponse.body());
-		}
 		
 		throwIfInvalid(loginResponse, true, "Failed to login!");
 
@@ -111,10 +102,10 @@ public final class LoginHelper {
 		if (!redirectMatcher.find())
 			throw new AuthenticationException("Failed to find the MS redirect link!");
 
-		loginResponse.headers().allValues("Set-Cookie").stream()
-		.map(s -> s.substring(0, s.indexOf(';')).split("="))
-		.filter(s -> s.length == 2 && !s[1].equals(" "))
-		.forEach(s -> cookies.put(s[0], s[1]));
+		cookie = loginResponse.headers().allValues("Set-Cookie").stream()
+		.map(s -> s.substring(0, s.indexOf(';')))
+		.filter(s -> !s.endsWith("= ") && !s.endsWith("="))
+		.collect(Collectors.joining("; "));
 
 		// Get Redirect page to the access token
 		HttpResponse<String> redirectResponse = BleachOnlineMang.sendRequest(
@@ -122,7 +113,7 @@ public final class LoginHelper {
 				"POST",
 				new String[] {
 						"Content-Type", "application/x-www-form-urlencoded",
-						"Cookie", cookies.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("; ")) },
+						"Cookie", cookie },
 				"PPFT=" + URLEncoder.encode(ppftMatcher.group(1), StandardCharsets.UTF_8) +
 				"&type=28",
 				5000,
