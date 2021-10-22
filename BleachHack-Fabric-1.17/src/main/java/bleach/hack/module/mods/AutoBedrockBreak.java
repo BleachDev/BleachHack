@@ -16,7 +16,7 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.InventoryUtils;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.block.PistonBlock;
 import net.minecraft.item.Items;
@@ -137,10 +137,10 @@ public class AutoBedrockBreak extends Module {
 		if (pos == null) {
 			if (mc.crosshairTarget instanceof BlockHitResult
 					&& !mc.world.isAir(((BlockHitResult) mc.crosshairTarget).getBlockPos())) {
-				RenderUtils.drawBoxOutline(((BlockHitResult) mc.crosshairTarget).getBlockPos(), QuadColor.single(0xffc040c0), 2f);
+				Renderer.drawBoxOutline(((BlockHitResult) mc.crosshairTarget).getBlockPos(), QuadColor.single(0xffc040c0), 2f);
 			}
 		} else {
-			RenderUtils.drawBoxOutline(pos, QuadColor.single(0xffc080c0), 2f);
+			Renderer.drawBoxOutline(pos, QuadColor.single(0xffc080c0), 2f);
 		}
 	}
 

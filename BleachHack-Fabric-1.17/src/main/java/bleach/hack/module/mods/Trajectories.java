@@ -23,7 +23,7 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.ProjectileSimulator;
@@ -115,7 +115,7 @@ public class Trajectories extends Module {
 			if (t.getLeft().size() >= 2) {
 				if (getSetting(0).asMode().mode == 0) {
 					for (int i = 1; i < t.getLeft().size(); i++) {
-						RenderUtils.drawLine(
+						Renderer.drawLine(
 								t.getLeft().get(i - 1).x, t.getLeft().get(i - 1).y, t.getLeft().get(i - 1).z,
 								t.getLeft().get(i).x, t.getLeft().get(i).y, t.getLeft().get(i).z,
 								LineColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()),
@@ -123,17 +123,17 @@ public class Trajectories extends Module {
 					}
 				} else {
 					for (Vec3d v : t.getLeft()) {
-						RenderUtils.drawBoxFill(new Box(v, v).expand(0.08), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()));
+						Renderer.drawBoxFill(new Box(v, v).expand(0.08), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()));
 					}
 				}
 			}
 
 			if (t.getMiddle() != null) {
-				RenderUtils.drawBoxBoth(t.getMiddle().getBoundingBox(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
+				Renderer.drawBoxBoth(t.getMiddle().getBoundingBox(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
 			}
 
 			if (t.getRight() != null) {
-				RenderUtils.drawBoxBoth(t.getRight(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
+				Renderer.drawBoxBoth(t.getRight(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
 			}
 		}
 	}

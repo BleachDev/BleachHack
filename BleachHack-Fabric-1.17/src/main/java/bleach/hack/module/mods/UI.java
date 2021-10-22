@@ -90,14 +90,14 @@ public class UI extends Module {
 	public UI() {
 		super("UI", KEY_UNBOUND, ModuleCategory.RENDER, true, "Shows stuff onscreen.",
 				new SettingToggle("Modulelist", true).withDesc("Shows the module list.").withChildren(                                 // 0
-						new SettingToggle("InnerLine", true).withDesc("Adds an extra line to the front of the module list."),            // 0-0
-						new SettingToggle("OuterLine", false).withDesc("Adds an outer line to the module list."),                        // 0-1
-						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list."),                           // 0-2
-						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list.").withChildren( // 0-3
-								new SettingMode("Mode", "New", "Old").withDesc("The watermark type.")),                                    // 0-3-0
-						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("The hue of the rainbow."),                                  // 0-4
-						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("The saturation of the rainbow."),                            // 0-5
-						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("The speed of the rainbow.")),                            // 0-6
+						new SettingToggle("InnerLine", true).withDesc("Adds an extra line to the front of the module list."),
+						new SettingToggle("OuterLine", false).withDesc("Adds an outer line to the module list."),
+						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list."),
+						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list.").withChildren(
+								new SettingMode("Mode", "New", "Old").withDesc("The watermark type.")),
+						new SettingSlider("HueBright", 0, 1, 1, 2).withDesc("The hue of the rainbow."),
+						new SettingSlider("HueSat", 0, 1, 0.5, 2).withDesc("The saturation of the rainbow."),
+						new SettingSlider("HueSpeed", 0.1, 50, 25, 1).withDesc("The speed of the rainbow.")),
 				new SettingToggle("FPS", true).withDesc("Shows your FPS."),                                                            // 1
 				new SettingToggle("Ping", true).withDesc("Shows your ping."),                                                          // 2
 				new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords."),                                    // 3
@@ -105,17 +105,17 @@ public class UI extends Module {
 				new SettingToggle("Durability", false).withDesc("Shows durability left on the item you're holding."),                  // 5
 				new SettingToggle("Server", false).withDesc("Shows the current server you are on."),                                   // 6
 				new SettingToggle("Timestamp", false).withDesc("Shows the current time.").withChildren(                                // 7
-						new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."),                               // 7-0
-						new SettingToggle("Year", false).withDesc("Shows the current year in the time.")),                               // 7-1
+						new SettingToggle("TimeZone", true).withDesc("Shows your time zone in the time."),
+						new SettingToggle("Year", false).withDesc("Shows the current year in the time.")),
 				new SettingToggle("ChunkSize", false).withDesc("Shows the data size of the chunk you are standing in."),               // 8
 				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance."),                        // 9
 				new SettingToggle("Armor", true).withDesc("Shows your current armor.").withChildren(                                   // 10
-						new SettingToggle("Vertical", false).withDesc("Displays your armor vertically."),                                // 10-0
-						new SettingMode("Damage", "Number", "Bar", "BarV").withDesc("How to show the armor durability.")),               // 10-1
+						new SettingToggle("Vertical", false).withDesc("Displays your armor vertically."),
+						new SettingMode("Damage", "Number", "Bar", "BarV").withDesc("How to show the armor durability.")),
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 11
-						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),  // 11-0
-				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren(                      //12
-						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")),               // 12-0
+						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),
+				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren(                      // 12
+						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")),
 				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
 
 		// Modulelist

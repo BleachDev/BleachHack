@@ -32,7 +32,7 @@ import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.Boxes;
 import bleach.hack.util.FabricReflect;
 import bleach.hack.util.collections.ImmutablePairList;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
@@ -175,10 +175,10 @@ public class Nuker extends Module {
 
 				if (!shape.isEmpty()) {
 					if (getSetting(11).asToggle().getChild(0).asMode().mode == 0) {
-						RenderUtils.drawBoxBoth(shape.getBoundingBox().offset(pos),
+						Renderer.drawBoxBoth(shape.getBoundingBox().offset(pos),
 								QuadColor.single(color[0], color[1], color[2], breakingProgress * 0.8f), 2.5f);
 					} else {
-						RenderUtils.drawBoxBoth(Boxes.multiply(shape.getBoundingBox().offset(pos), breakingProgress),
+						Renderer.drawBoxBoth(Boxes.multiply(shape.getBoundingBox().offset(pos), breakingProgress),
 								QuadColor.single(color[0], color[1], color[2], 0.5f), 2.5f);
 					}
 				}
@@ -186,13 +186,13 @@ public class Nuker extends Module {
 		}
 
 		if (getSetting(12).asToggle().state) {
-			Vec3d pos = mc.player.getPos().subtract(RenderUtils.getInterpolationOffset(mc.player));
+			Vec3d pos = mc.player.getPos().subtract(Renderer.getInterpolationOffset(mc.player));
 			double range = getSetting(4).asSlider().getValue();
 			int color = 0xff000000 | getSetting(12).asToggle().getChild(1).asColor().getRGB();
 			float width = getSetting(12).asToggle().getChild(0).asSlider().getValueFloat();
 
 			if (getSetting(3).asMode().mode == 0) {
-				RenderUtils.drawBoxOutline(new Box(pos, pos).expand(range, 0, range), QuadColor.single(color), width,
+				Renderer.drawBoxOutline(new Box(pos, pos).expand(range, 0, range), QuadColor.single(color), width,
 						Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.EAST, Direction.DOWN);
 			} else {
 				double lastX = 0;
@@ -203,7 +203,7 @@ public class Nuker extends Module {
 
 					double x = range * sin;
 					double z = range * cos;
-					RenderUtils.drawLine(
+					Renderer.drawLine(
 							pos.x + lastX, pos.y, pos.z + lastZ,
 							pos.x + x, pos.y, pos.z + z,
 							LineColor.single(color), width);

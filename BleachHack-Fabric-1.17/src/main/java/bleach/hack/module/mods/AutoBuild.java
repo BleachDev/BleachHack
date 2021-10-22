@@ -28,7 +28,7 @@ import bleach.hack.util.operation.blueprint.OperationBlueprint;
 import bleach.hack.util.operation.blueprint.PlaceDirOperationBlueprint;
 import bleach.hack.util.operation.blueprint.PlaceOperationBlueprint;
 import bleach.hack.util.operation.blueprint.RemoveOperationBlueprint;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.item.Items;
 import net.minecraft.util.hit.BlockHitResult;
@@ -197,13 +197,13 @@ public class AutoBuild extends Module {
 				o.render();
 			}
 
-			RenderUtils.drawBoxOutline(new Box(current.getNext().pos).contract(0.01), QuadColor.single(1f, 1f, 0f, 0.5f), 3f);
+			Renderer.drawBoxOutline(new Box(current.getNext().pos).contract(0.01), QuadColor.single(1f, 1f, 0f, 0.5f), 3f);
 		}
 
 		if (ray != null && !active) {
 			BlockPos pos = ray.getBlockPos();
 
-			RenderUtils.drawBoxFill(pos, QuadColor.single(1f, 1f, 0f, 0.3f), ArrayUtils.remove(Direction.values(), ray.getSide().ordinal()));
+			Renderer.drawBoxFill(pos, QuadColor.single(1f, 1f, 0f, 0.3f), ArrayUtils.remove(Direction.values(), ray.getSide().ordinal()));
 		}
 	}
 

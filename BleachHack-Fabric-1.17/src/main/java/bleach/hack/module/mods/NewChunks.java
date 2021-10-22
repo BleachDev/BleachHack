@@ -21,7 +21,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.NbtCompound;
@@ -136,10 +136,10 @@ public class NewChunks extends Module {
 								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
 						if (getSetting(2).asToggle().state) {
-							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
+							Renderer.drawBoxFill(box, fillColor, skipDirs);
 						}
 	
-						RenderUtils.drawBoxOutline(box, outlineColor, 2f, skipDirs);
+						Renderer.drawBoxOutline(box, outlineColor, 2f, skipDirs);
 					}
 				}
 			}
@@ -158,10 +158,10 @@ public class NewChunks extends Module {
 								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
 						if (getSetting(2).asToggle().state) {
-							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
+							Renderer.drawBoxFill(box, fillColor, skipDirs);
 						}
 	
-						RenderUtils.drawBoxOutline(box, outlineColor, 2f, skipDirs);
+						Renderer.drawBoxOutline(box, outlineColor, 2f, skipDirs);
 					}
 				}
 			}

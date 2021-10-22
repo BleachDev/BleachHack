@@ -8,7 +8,7 @@
  */
 package bleach.hack.util.operation;
 
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -55,7 +55,7 @@ public class RemoveOperation extends Operation {
 
 	@Override
 	public void render() {
-		RenderUtils.drawBoxBoth(pos, QuadColor.single(1f, 0f, 0f, 0.3f), 2.5f);
+		Renderer.drawBoxBoth(pos, QuadColor.single(1f, 0f, 0f, 0.3f), 2.5f);
 	}
 
 }

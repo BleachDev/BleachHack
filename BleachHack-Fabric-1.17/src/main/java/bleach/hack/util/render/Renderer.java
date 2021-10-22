@@ -29,7 +29,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
-public class RenderUtils {
+public class Renderer {
 
 	// -------------------- Fill + Outline Boxes --------------------
 

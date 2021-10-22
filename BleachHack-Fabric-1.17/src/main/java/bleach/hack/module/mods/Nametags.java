@@ -46,7 +46,7 @@ import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.WorldRenderUtils;
 import bleach.hack.util.world.EntityUtils;
 import net.minecraft.client.network.PlayerListEntry;
@@ -166,7 +166,7 @@ public class Nametags extends Module {
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		for (Entity entity: mc.world.getEntities()) {
-			Vec3d rPos = entity.getPos().subtract(RenderUtils.getInterpolationOffset(entity)).add(0, entity.getHeight(), 0);
+			Vec3d rPos = entity.getPos().subtract(Renderer.getInterpolationOffset(entity)).add(0, entity.getHeight(), 0);
 			List<String> lines = new ArrayList<>();
 			double scale = 0;
 

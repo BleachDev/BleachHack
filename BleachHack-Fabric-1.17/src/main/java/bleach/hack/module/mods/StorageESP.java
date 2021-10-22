@@ -33,7 +33,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.shader.OutlineShaderManager;
 import bleach.hack.util.shader.OutlineVertexConsumers;
@@ -158,11 +158,11 @@ public class StorageESP extends Module {
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], getSetting(3).asSlider().getValueFloat()));
+					Renderer.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], getSetting(3).asSlider().getValueFloat()));
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-					RenderUtils.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), getSetting(2).asSlider().getValueFloat());
+					Renderer.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), getSetting(2).asSlider().getValueFloat());
 				}
 			}
 
@@ -177,11 +177,11 @@ public class StorageESP extends Module {
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 3) {
-					RenderUtils.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], getSetting(3).asSlider().getValueFloat()));
+					Renderer.drawBoxFill(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], getSetting(3).asSlider().getValueFloat()));
 				}
 
 				if (getSetting(0).asMode().mode == 1 || getSetting(0).asMode().mode == 2) {
-					RenderUtils.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), getSetting(2).asSlider().getValueFloat());
+					Renderer.drawBoxOutline(box, QuadColor.single(e.getValue()[0], e.getValue()[1], e.getValue()[2], 1f), getSetting(2).asSlider().getValueFloat());
 				}
 			}
 		}
@@ -224,7 +224,7 @@ public class StorageESP extends Module {
 				BlockEntityRenderer<BlockEntity> beRenderer = mc.getBlockEntityRenderDispatcher().get(be.getKey());
 	
 				BlockPos pos = be.getKey().getPos();
-				MatrixStack matrices = RenderUtils.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
+				MatrixStack matrices = Renderer.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
 				if (beRenderer != null) {
 					beRenderer.render(
 							be.getKey(),

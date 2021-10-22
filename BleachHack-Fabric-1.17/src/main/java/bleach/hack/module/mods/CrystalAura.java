@@ -30,7 +30,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.EntityUtils;
 import bleach.hack.util.world.DamageUtils;
@@ -268,7 +268,7 @@ public class CrystalAura extends Module {
 	public void onRenderWorld(EventWorldRender.Post event) {
 		if (this.render != null) {
 			float[] col = getSetting(4).asToggle().getChild(8).asColor().getRGBFloat();
-			RenderUtils.drawBoxBoth(render, QuadColor.single(col[0], col[1], col[2], 0.4f), 2.5f);
+			Renderer.drawBoxBoth(render, QuadColor.single(col[0], col[1], col[2], 0.4f), 2.5f);
 		}
 	}
 

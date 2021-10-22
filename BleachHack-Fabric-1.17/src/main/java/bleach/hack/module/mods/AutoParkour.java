@@ -20,7 +20,7 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import net.minecraft.block.LadderBlock;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
@@ -101,7 +101,7 @@ public class AutoParkour extends Module {
 	public void onWorldRender(EventWorldRender.Post event) {
 		if (smartPos != null && getSetting(1).asToggle().getChild(1).asToggle().state) {
 			float[] rgb = getSetting(1).asToggle().getChild(1).asToggle().getChild(0).asColor().getRGBFloat();
-			RenderUtils.drawBoxBoth(smartPos, QuadColor.single(rgb[0], rgb[1], rgb[2], 0.5f), 2.5f);
+			Renderer.drawBoxBoth(smartPos, QuadColor.single(rgb[0], rgb[1], rgb[2], 0.5f), 2.5f);
 		}
 	}
 

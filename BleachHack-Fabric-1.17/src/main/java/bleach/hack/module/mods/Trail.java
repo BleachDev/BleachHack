@@ -21,7 +21,7 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.LineColor;
 import net.minecraft.util.math.Vec3d;
 
@@ -78,7 +78,7 @@ public class Trail extends Module {
 				color = blendColor(getSetting(2).asColor().getRGB(), getSetting(3).asToggle().getChild(0).asColor().getRGB(), count / 255f);
 			}
 
-			RenderUtils.drawLine(
+			Renderer.drawLine(
 					e.getKey().x, e.getKey().y, e.getKey().z,
 					e.getValue().x, e.getValue().y, e.getValue().z,
 					LineColor.single(((color & 0xff0000) >> 16) / 255f, ((color & 0xff00) >> 8) / 255f, (color & 0xff) / 255f, getSetting(5).asSlider().getValueFloat()),

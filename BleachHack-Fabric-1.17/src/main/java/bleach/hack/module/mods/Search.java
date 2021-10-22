@@ -27,7 +27,7 @@ import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingBlockList;
 import bleach.hack.util.io.BleachFileMang;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.LineColor;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.ChunkProcessor;
@@ -196,7 +196,7 @@ public class Search extends Module {
 				int fillAlpha = (int) (getSetting(2).asSlider().getValue() * 255);
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(color[0], color[1], color[2], fillAlpha));
+					Renderer.drawBoxFill(box.offset(pos), QuadColor.single(color[0], color[1], color[2], fillAlpha));
 				}
 			}
 
@@ -204,7 +204,7 @@ public class Search extends Module {
 				float outlineWidth = getSetting(1).asSlider().getValueFloat();
 
 				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(color[0], color[1], color[2], 255), outlineWidth);
+					Renderer.drawBoxOutline(box.offset(pos), QuadColor.single(color[0], color[1], color[2], 255), outlineWidth);
 				}
 			}
 
@@ -216,7 +216,7 @@ public class Search extends Module {
 						.rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw()))
 						.add(mc.cameraEntity.getEyePos());
 
-				RenderUtils.drawLine(
+				Renderer.drawLine(
 						lookVec.x, lookVec.y, lookVec.z,
 						pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
 						LineColor.single(color[0], color[1], color[2], (int) (tracers.getChild(1).asSlider().getValue() * 255)),

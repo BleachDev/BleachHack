@@ -16,7 +16,7 @@ import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.setting.other.SettingItemList;
 import bleach.hack.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
-import bleach.hack.util.render.RenderUtils;
+import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.fluid.FluidState;
@@ -104,9 +104,9 @@ public class LiquidFiller extends Module {
 				FluidState fluid = mc.world.getFluidState(pos);
 
 				if (fluid.getFluid() instanceof WaterFluid.Still && getSetting(0).asMode().mode != 0) {
-					RenderUtils.drawBoxBoth(fluid.getShape(mc.world, pos).getBoundingBox().offset(pos), waterColor, 3f);
+					Renderer.drawBoxBoth(fluid.getShape(mc.world, pos).getBoundingBox().offset(pos), waterColor, 3f);
 				} else if (fluid.getFluid() instanceof LavaFluid.Still && getSetting(0).asMode().mode != 1) {
-					RenderUtils.drawBoxBoth(fluid.getShape(mc.world, pos).getBoundingBox().offset(pos), lavaColor, 3f);
+					Renderer.drawBoxBoth(fluid.getShape(mc.world, pos).getBoundingBox().offset(pos), lavaColor, 3f);
 				}
 			}
 		}
