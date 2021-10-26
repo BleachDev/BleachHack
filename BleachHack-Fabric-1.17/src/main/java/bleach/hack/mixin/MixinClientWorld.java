@@ -22,14 +22,14 @@ import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.util.BleachQueue;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.SkyProperties;
+import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
 
 @Mixin(ClientWorld.class)
 public class MixinClientWorld {
 
-	@Shadow @Final private SkyProperties skyProperties;
+	@Shadow @Final private DimensionEffects dimensionEffects;
 
 	@Inject(method = "tickEntities", at = @At("HEAD"), cancellable = true)
 	public void tickEntities(CallbackInfo info) {
@@ -66,12 +66,12 @@ public class MixinClientWorld {
 	}
 
 	@Overwrite
-	public SkyProperties getSkyProperties() {
+	public DimensionEffects getDimensionEffects() {
 		if (MinecraftClient.getInstance().world == null) {
-			return skyProperties;
+			return dimensionEffects;
 		}
 
-		EventSkyRender.Properties event = new EventSkyRender.Properties(skyProperties);
+		EventSkyRender.Properties event = new EventSkyRender.Properties(dimensionEffects);
 		BleachHack.eventBus.post(event);
 
 		return event.getSky();

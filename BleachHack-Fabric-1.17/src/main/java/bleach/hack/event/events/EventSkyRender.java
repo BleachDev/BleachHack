@@ -9,24 +9,24 @@
 package bleach.hack.event.events;
 
 import bleach.hack.event.Event;
-import net.minecraft.client.render.SkyProperties;
+import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.util.math.Vec3d;
 
 public class EventSkyRender extends Event {
 
 	public static class Properties extends EventSkyRender {
 
-		private SkyProperties sky;
+		private DimensionEffects sky;
 
-		public Properties(SkyProperties sky) {
+		public Properties(DimensionEffects sky) {
 			this.setSky(sky);
 		}
 
-		public SkyProperties getSky() {
+		public DimensionEffects getSky() {
 			return sky;
 		}
 
-		public void setSky(SkyProperties sky) {
+		public void setSky(DimensionEffects sky) {
 			this.sky = sky;
 		}
 	}

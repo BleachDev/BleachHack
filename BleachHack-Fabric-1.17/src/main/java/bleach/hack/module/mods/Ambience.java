@@ -20,7 +20,7 @@ import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import net.minecraft.client.render.SkyProperties;
+import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
@@ -143,7 +143,7 @@ public class Ambience extends Module {
 	public void onSkyProperties(EventSkyRender.Properties event) {
 		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(0).asToggle().state
 				&& getCurrentDimSetting().getChild(0).asToggle().getChild(0).asToggle().state) {
-			event.setSky(new SkyProperties(event.getSky().getCloudsHeight(), false, SkyProperties.SkyType.END, true, false) {
+			event.setSky(new DimensionEffects(event.getSky().getCloudsHeight(), false, DimensionEffects.SkyType.END, true, false) {
 
 				public Vec3d adjustFogColor(Vec3d color, float sunHeight) {
 					return color.multiply(0.15000000596046448D);

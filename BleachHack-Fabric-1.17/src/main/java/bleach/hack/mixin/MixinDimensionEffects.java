@@ -15,10 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventSkyRender;
-import net.minecraft.client.render.SkyProperties;
+import net.minecraft.client.render.DimensionEffects;
 
-@Mixin(SkyProperties.class)
-public class MixinSkyProperties {
+@Mixin(DimensionEffects.class)
+public class MixinDimensionEffects {
 
 	@Inject(method = "getFogColorOverride", at = @At("HEAD"), cancellable = true)
 	public void getFogColorOverride(float skyAngle, float tickDelta, CallbackInfoReturnable<float[]> ci) {

@@ -21,7 +21,7 @@ import net.minecraft.entity.passive.HorseBaseEntity;
 public class CmdEntityStats extends Command {
 
 	public CmdEntityStats() {
-		super("estats", "Get stats of vehicle entity.", "estats", CommandCategory.MISC,
+		super("estats", "Get the stats of your vehicle entity.", "estats", CommandCategory.MISC,
 				"entitystats", "horsestats");
 	}
 
@@ -31,16 +31,18 @@ public class CmdEntityStats extends Command {
 			if (mc.player.getVehicle() instanceof HorseBaseEntity) {
 				HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
 
-				BleachLogger.info("\n\u00a7bEntity Stats:"
-						+ "\n\u00a7cMax Health: \u00a7b" + (int) h.getMaxHealth() + " HP"
-						+ "\n\u00a7cSpeed: \u00a7b" + getSpeed(h) + " m/s"
-						+ "\n\u00a7cJump: \u00a7b" + getJumpHeight(h) + " m");
+				BleachLogger.info("Entity Stats:");
+				BleachLogger.info("\u00a7cMax Health: \u00a7r" + (int) h.getMaxHealth() + " HP");
+				BleachLogger.info("\u00a7cSpeed: \u00a7r" + getSpeed(h) + " m/s");
+				BleachLogger.info("\u00a7cJump: \u00a7r" + getJumpHeight(h) + " m");
 			} else if (mc.player.getVehicle() instanceof LivingEntity) {
 				LivingEntity l = (LivingEntity) mc.player.getVehicle();
 
-				BleachLogger.info("\n\u00a76Entity Stats:"
-						+ "\n\u00a7cMax Health: \u00a7b" + (int) l.getMaxHealth() + " HP"
-						+ "\n\u00a7cSpeed: \u00a7b" + getSpeedLiving(l) + " m/s");
+				BleachLogger.info("Entity Stats:");
+				BleachLogger.info("\u00a7cMax Health: \u00a7r" + (int) l.getMaxHealth() + " HP");
+				BleachLogger.info("\u00a7cSpeed: \u00a7r" + getSpeedLiving(l) + " m/s");
+			} else {
+				BleachLogger.error("Current vehicle doesn't have stats.");
 			}
 		} else {
 			BleachLogger.error("Not riding a living entity.");

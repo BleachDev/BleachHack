@@ -26,6 +26,12 @@ public class BleachLogger {
 	public static int INFO_COLOR = 0x64b9fa;
 	public static int WARN_COLOR = Formatting.YELLOW.getColorValue();
 	public static int ERROR_COLOR = Formatting.RED.getColorValue();
+	
+	// Info
+	
+	public static void info(String s) {
+		info(new LiteralText(s));
+	}
 
 	public static void info(Text t) {
 		try {
@@ -37,9 +43,11 @@ public class BleachLogger {
 			logger.log(Level.INFO, t.asString());
 		}
 	}
-
-	public static void info(String s) {
-		info(new LiteralText(s));
+	
+	// Warn
+	
+	public static void warn(String s) {
+		warn(new LiteralText(s));
 	}
 
 	public static void warn(Text t) {
@@ -52,9 +60,11 @@ public class BleachLogger {
 			logger.log(Level.WARN, t.asString());
 		}
 	}
-
-	public static void warn(String s) {
-		warn(new LiteralText(s));
+	
+	// Error
+	
+	public static void error(String s) {
+		error(new LiteralText(s));
 	}
 
 	public static void error(Text t) {
@@ -68,16 +78,8 @@ public class BleachLogger {
 		}
 	}
 
-	public static void error(String s) {
-		error(new LiteralText(s));
-	}
-
 	public static void noPrefix(String s) {
-		try {
-			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText(s));
-		} catch (Exception e) {
-			logger.log(Level.INFO, s);
-		}
+		noPrefix(new LiteralText(s));
 	}
 
 	public static void noPrefix(Text text) {
