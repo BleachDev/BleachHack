@@ -81,6 +81,10 @@ public class CmdEnchant extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
+		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
+			throw new CmdSyntaxException("Not In Creative Mode!");
+		}
+
 		if (args.length == 0) {
 			throw new CmdSyntaxException();
 		}
@@ -96,10 +100,6 @@ public class CmdEnchant extends Command {
 
 			BleachLogger.info(text);
 			return;
-		}
-
-		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
-			throw new CmdSyntaxException("Not In Creative Mode!");
 		}
 
 		int level = args.length == 1 ? 1 : Integer.parseInt(args[1]);

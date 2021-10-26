@@ -8,6 +8,8 @@
  */
 package bleach.hack.command.commands;
 
+import java.util.Locale;
+
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
@@ -17,38 +19,32 @@ import net.minecraft.world.GameMode;
 public class CmdGamemode extends Command {
 
 	public CmdGamemode() {
-		super("gamemode", "Sets your clientside gamemode.", "gm <0-3>", CommandCategory.MISC,
+		super("gamemode", "Sets your clientside gamemode.", "gamemode [survival/creative/adventure/spectator]| gamemode <0-3>", CommandCategory.MISC,
 				"gm");
 	}
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		int gm;
-
-		try {
-			gm = Integer.parseInt(args[0]);
-		} catch (Exception e) {
-			throw new CmdSyntaxException("Unable to parse gamemode.");
+		if (args.length == 0) {
+			throw new CmdSyntaxException();
 		}
+		
+		String lower = args[0].toLowerCase(Locale.ENGLISH);
 
-		if (gm == 0) {
-			//mc.player.setGameMode(GameMode.SURVIVAL);
+		if (lower.equals("0") || lower.startsWith("su")) {
 			mc.interactionManager.setGameMode(GameMode.SURVIVAL);
-			BleachLogger.info("Set gamemode to survival.");
-		} else if (gm == 1) {
-			//mc.player.setGameMode(GameMode.CREATIVE);
+			BleachLogger.info("\u00a7l\u00a7nClientside\u00a7r gamemode has been set to survival.");
+		} else if (lower.equals("1") || lower.startsWith("c")) {
 			mc.interactionManager.setGameMode(GameMode.CREATIVE);
-			BleachLogger.info("Set gamemode to creative.");
-		} else if (gm == 2) {
-			//mc.player.setGameMode(GameMode.ADVENTURE);
+			BleachLogger.info("\u00a7l\u00a7nClientside\u00a7r gamemode has been set to creative.");
+		} else if (lower.equals("2") || lower.startsWith("a")) {
 			mc.interactionManager.setGameMode(GameMode.ADVENTURE);
-			BleachLogger.info("Set gamemode to adventure.");
-		} else if (gm == 3) {
-			//mc.player.setGameMode(GameMode.SPECTATOR);
+			BleachLogger.info("\u00a7l\u00a7nClientside\u00a7r gamemode has been set to adventure.");
+		} else if (lower.equals("3") || lower.startsWith("sp")) {
 			mc.interactionManager.setGameMode(GameMode.SPECTATOR);
-			BleachLogger.info("Set gamemode to spectator.");
+			BleachLogger.info("\u00a7l\u00a7nClientside\u00a7r gamemode has been set to spectator.");
 		} else {
-			throw new CmdSyntaxException("Unknown Gamemode Number.");
+			throw new CmdSyntaxException("Unknown Gamemode!");
 		}
 	}
 

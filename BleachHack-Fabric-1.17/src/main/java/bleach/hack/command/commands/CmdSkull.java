@@ -35,6 +35,11 @@ public class CmdSkull extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
+		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
+			BleachLogger.error("Not In Creative Mode!");
+			return;
+		}
+
 		if (args.length == 0) {
 			throw new CmdSyntaxException();
 		}

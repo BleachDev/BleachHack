@@ -35,13 +35,13 @@ public class CmdGive extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		if (args.length == 0) {
-			throw new CmdSyntaxException();
-		}
-
 		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
 			BleachLogger.error("Not In Creative Mode!");
 			return;
+		}
+
+		if (args.length == 0) {
+			throw new CmdSyntaxException();
 		}
 
 		if (args[0].equalsIgnoreCase("preset")) {
