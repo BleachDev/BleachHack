@@ -12,9 +12,9 @@ import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.ModuleClickGuiScreen;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingSlider;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
 
 public class ClickGui extends Module {
 

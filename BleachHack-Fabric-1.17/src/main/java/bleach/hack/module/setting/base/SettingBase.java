@@ -6,14 +6,14 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.setting.base;
+package bleach.hack.module.setting.base;
 
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.gson.JsonElement;
 
 import bleach.hack.gui.clickgui.window.ModuleWindow;
-import bleach.hack.setting.other.SettingRotate;
+import bleach.hack.module.setting.other.SettingRotate;
 import net.minecraft.client.util.math.MatrixStack;
 
 public abstract class SettingBase {

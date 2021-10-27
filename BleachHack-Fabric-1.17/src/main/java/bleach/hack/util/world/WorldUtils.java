@@ -14,7 +14,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-import bleach.hack.setting.other.SettingRotate;
+import bleach.hack.module.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

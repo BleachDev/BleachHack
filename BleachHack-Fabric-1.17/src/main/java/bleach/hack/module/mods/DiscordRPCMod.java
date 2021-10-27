@@ -15,12 +15,12 @@ import bleach.hack.eventbus.BleachSubscribe;
 import com.google.gson.JsonElement;
 
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.rpc.DiscordEventHandlers;

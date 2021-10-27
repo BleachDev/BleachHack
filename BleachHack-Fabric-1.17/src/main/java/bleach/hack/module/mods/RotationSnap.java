@@ -14,9 +14,9 @@ import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.math.MathHelper;
 

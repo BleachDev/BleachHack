@@ -16,10 +16,10 @@ import bleach.hack.eventbus.BleachSubscribe;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingSlider;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class FakeLag extends Module {

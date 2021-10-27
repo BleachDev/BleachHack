@@ -12,7 +12,7 @@ import bleach.hack.eventbus.BleachSubscribe;
 import bleach.hack.event.events.EventBlockShape;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
-import bleach.hack.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.Module;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;

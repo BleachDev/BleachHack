@@ -6,7 +6,7 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.setting.other;
+package bleach.hack.module.setting.other;
 
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import bleach.hack.setting.base.SettingList;
+import bleach.hack.module.setting.base.SettingList;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;

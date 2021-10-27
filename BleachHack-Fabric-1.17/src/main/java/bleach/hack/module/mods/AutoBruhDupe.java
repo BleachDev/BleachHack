@@ -12,7 +12,7 @@ import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
-import bleach.hack.setting.other.SettingItemList;
+import bleach.hack.module.setting.other.SettingItemList;
 import bleach.hack.module.Module;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.InventoryUtils;

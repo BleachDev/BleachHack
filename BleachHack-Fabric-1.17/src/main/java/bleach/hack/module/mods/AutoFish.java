@@ -10,7 +10,7 @@ import java.util.Comparator;
 import bleach.hack.event.events.EventSoundPlay;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
-import bleach.hack.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.util.InventoryUtils;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.enchantment.EnchantmentHelper;

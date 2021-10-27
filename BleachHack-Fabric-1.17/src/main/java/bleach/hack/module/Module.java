@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.BleachHack;
-import bleach.hack.setting.base.SettingBase;
-import bleach.hack.setting.base.SettingBind;
+import bleach.hack.module.setting.base.SettingBase;
+import bleach.hack.module.setting.base.SettingBind;
 import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 

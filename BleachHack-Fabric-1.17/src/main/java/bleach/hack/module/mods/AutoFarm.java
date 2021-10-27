@@ -18,8 +18,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
-import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.module.setting.base.SettingSlider;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.AzaleaBlock;

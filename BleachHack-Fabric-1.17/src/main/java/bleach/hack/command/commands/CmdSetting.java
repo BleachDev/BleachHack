@@ -13,10 +13,10 @@ import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
-import bleach.hack.setting.base.SettingBase;
-import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.module.setting.base.SettingBase;
+import bleach.hack.module.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingSlider;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.util.BleachLogger;
 
 public class CmdSetting extends Command {

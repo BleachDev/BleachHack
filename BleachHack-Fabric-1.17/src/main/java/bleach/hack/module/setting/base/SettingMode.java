@@ -6,25 +6,37 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package bleach.hack.setting.base;
+package bleach.hack.module.setting.base;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
+import com.google.gson.JsonPrimitive;
+
 import bleach.hack.gui.clickgui.window.ModuleWindow;
+import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 
-public class SettingButton extends SettingBase {
+public class SettingMode extends SettingBase {
 
+	public String[] modes;
+	public int mode;
 	public String text;
-	public Runnable action;
 
-	public SettingButton(String text, Runnable action) {
+	public SettingMode(String text, String... modes) {
+		this.modes = modes;
 		this.text = text;
-		this.action = action;
+	}
+
+	public int getNextMode() {
+		if (mode + 1 >= modes.length) {
+			return 0;
+		}
+
+		return mode + 1;
 	}
 
 	public String getName() {
@@ -36,17 +48,16 @@ public class SettingButton extends SettingBase {
 			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 		
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x + 3, y + 2, 0xcfe0cf);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text + ": " + modes[mode], x + 3, y + 2, 0xcfe0cf);
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
-			window.mouseReleased(window.mouseX, window.mouseY, 1);
-			MinecraftClient.getInstance().currentScreen.mouseReleased(window.mouseX, window.mouseY, 0);
+			mode = getNextMode();
 			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
-			action.run();
+			BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 		}
 	}
 
-	public SettingButton withDesc(String desc) {
+	public SettingMode withDesc(String desc) {
 		description = desc;
 		return this;
 	}
@@ -56,14 +67,17 @@ public class SettingButton extends SettingBase {
 	}
 
 	public void readSettings(JsonElement settings) {
+		if (settings.isJsonPrimitive()) {
+			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.length - 1);
+		}
 	}
 
 	public JsonElement saveSettings() {
-		return JsonNull.INSTANCE;
+		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length - 1));
 	}
 
 	@Override
 	public boolean isDefault() {
-		return true;
+		return mode == 0;
 	}
 }

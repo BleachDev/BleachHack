@@ -13,7 +13,7 @@ import bleach.hack.event.events.EventBlockShape;
 import bleach.hack.event.events.EventClientMove;
 import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleCategory;
-import bleach.hack.setting.base.SettingToggle;
+import bleach.hack.module.setting.base.SettingToggle;
 import net.minecraft.block.CactusBlock;
 import net.minecraft.block.CobwebBlock;
 import net.minecraft.block.FireBlock;

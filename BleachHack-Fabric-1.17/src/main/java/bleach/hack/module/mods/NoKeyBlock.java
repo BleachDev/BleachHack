@@ -9,8 +9,8 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingToggle;
 
 public class NoKeyBlock extends Module {
 

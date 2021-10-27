@@ -12,9 +12,9 @@ import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventOpenScreen;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingSlider;
+import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
 import bleach.hack.util.BleachQueue;
 import net.minecraft.client.gui.screen.DeathScreen;
 

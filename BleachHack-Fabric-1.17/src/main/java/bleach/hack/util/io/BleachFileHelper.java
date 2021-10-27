@@ -31,7 +31,7 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.module.mods.UI;
-import bleach.hack.setting.base.SettingBase;
+import bleach.hack.module.setting.base.SettingBase;
 import bleach.hack.util.BleachLogger;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 

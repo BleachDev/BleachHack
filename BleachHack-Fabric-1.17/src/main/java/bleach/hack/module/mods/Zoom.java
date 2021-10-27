@@ -10,8 +10,8 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingSlider;
 
 public class Zoom extends Module {
 

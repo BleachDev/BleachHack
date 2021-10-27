@@ -12,9 +12,9 @@ import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingSlider;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.util.math.Vec3d;
 

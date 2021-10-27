@@ -5,7 +5,7 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.eventbus.BleachSubscribe;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleCategory;
-import bleach.hack.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingMode;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 
 public class Sneak extends Module {

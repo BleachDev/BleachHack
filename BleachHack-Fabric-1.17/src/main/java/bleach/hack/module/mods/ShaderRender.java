@@ -18,8 +18,8 @@ import com.google.gson.JsonSyntaxException;
 
 import bleach.hack.event.events.EventRenderShader;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingMode;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.util.Identifier;
 

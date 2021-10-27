@@ -8,15 +8,14 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.setting.base.SettingSlider;
-
 import bleach.hack.eventbus.BleachSubscribe;
 
 import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
+import bleach.hack.module.setting.base.SettingSlider;
+import bleach.hack.module.setting.base.SettingToggle;
+import bleach.hack.module.setting.other.SettingBlockList;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingBlockList;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 

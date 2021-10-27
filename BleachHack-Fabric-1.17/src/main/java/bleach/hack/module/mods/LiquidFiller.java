@@ -9,12 +9,12 @@
 package bleach.hack.module.mods;
 
 import bleach.hack.module.ModuleCategory;
-import bleach.hack.setting.base.SettingColor;
-import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingSlider;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingItemList;
-import bleach.hack.setting.other.SettingRotate;
+import bleach.hack.module.setting.base.SettingColor;
+import bleach.hack.module.setting.base.SettingMode;
+import bleach.hack.module.setting.base.SettingSlider;
+import bleach.hack.module.setting.base.SettingToggle;
+import bleach.hack.module.setting.other.SettingItemList;
+import bleach.hack.module.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
