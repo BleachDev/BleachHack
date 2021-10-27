@@ -68,12 +68,12 @@ public class SettingMode extends SettingBase {
 
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
-			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.length);
+			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.length - 1);
 		}
 	}
 
 	public JsonElement saveSettings() {
-		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length));
+		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length - 1));
 	}
 
 	@Override
