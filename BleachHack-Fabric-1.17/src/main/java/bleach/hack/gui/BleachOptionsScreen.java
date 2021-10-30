@@ -80,9 +80,10 @@ public class BleachOptionsScreen extends WindowScreen {
 
 			// Revert button
 			getWindow(window).addWidget(new WindowButtonWidget(x + 68, y - 3, x + 84, y + 13, "", () -> entry.resetValue())
-					.withRenderEvent(w -> ((WindowButtonWidget) w).text = entry.isDefault() ? "\u00a77\u21c4" : "\u21c4"));
+					.withRenderEvent((w, ms, wx, wy)
+							-> ((WindowButtonWidget) w).text = entry.isDefault() ? "\u00a77\u21c4" : "\u21c4"));
 
-			// Name text (at the end because of.. reasons
+			// Name text (at the end because of.. reasons)
 			getWindow(window).addWidget(new WindowTextWidget(
 					new LiteralText(entry.getName()).styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(entry.getTooltip())))),
 					true, x - 107, y, 0xffffff));

@@ -30,7 +30,7 @@ public abstract class Option<T> {
 		}
 	});
 
-	public static Option<String> CHAT_COMMAND_PREFIX = new OptionString("Command Prefix", "The BleachHack command prefix.", "$");
+	public static Option<String> CHAT_COMMAND_PREFIX = new OptionString("Command Prefix", "The BleachHack command prefix.", "$", s -> !s.isEmpty());
 	public static Option<Boolean> CHAT_SHOW_SUGGESTIONS = new OptionBoolean("Show Suggestions", "Shows command suggestions when typing a BleachHack command.", true);
 	public static Option<Boolean> CHAT_QUICK_PREFIX = new OptionBoolean("Enable Quick Prefix", "Automatically opens chat with the BleachHack prefix when pressing that key.", false);
 
@@ -44,10 +44,6 @@ public abstract class Option<T> {
 
 	private final T defaultValue;
 	private T value;
-
-	public Option(String name, T value) {
-		this(name, "", value);
-	}
 
 	public Option(String name, String tooltip, T value) {
 		this.name = name;

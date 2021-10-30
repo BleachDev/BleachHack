@@ -1,21 +1,28 @@
 package bleach.hack.gui.option;
 
+import java.util.function.Function;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import bleach.hack.gui.window.widget.WindowTextFieldWidget;
 import bleach.hack.gui.window.widget.WindowWidget;
 import bleach.hack.util.io.BleachFileHelper;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 public class OptionString extends Option<String> {
 
-	public OptionString(String name, String value) {
-		super(name, value);
-	}
+	protected Function<String, Boolean> validator;
+	protected String lastValidValue;
 
 	public OptionString(String name, String tooltip, String value) {
 		super(name, tooltip, value);
+	}
+
+	public OptionString(String name, String tooltip, String value, Function<String, Boolean> validator) {
+		super(name, tooltip, value);
+		this.validator = validator;
 	}
 
 	@Override
@@ -27,6 +34,9 @@ public class OptionString extends Option<String> {
 				super.charTyped(chr, modifiers);
 
 				setValue(textField.getText());
+				if (validator == null || validator.apply(getRealValue()))
+					lastValidValue = getRealValue();
+
 				BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 			}
 
@@ -35,15 +45,34 @@ public class OptionString extends Option<String> {
 				super.keyPressed(keyCode, scanCode, modifiers);
 
 				setValue(textField.getText());
+				if (validator == null || validator.apply(getRealValue()))
+					lastValidValue = getRealValue();
+
 				BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 			}
 
-		}.withRenderEvent(w -> {
+		}.withRenderEvent((w, ms, wx, wy) -> {
 			TextFieldWidget textField = ((WindowTextFieldWidget) w).textField;
-			if (!textField.getText().equals(getValue())) {
-				textField.setText(getValue());
+			if (!textField.getText().equals(getRealValue()))
+				textField.setText(getRealValue());
+
+			if (validator != null && !validator.apply(getRealValue())) {
+				DrawableHelper.fill(ms, wx + w.x1 - 1, wy + w.y1 - 1, wx + w.x2 + 1, wy + w.y1, 0xffd07070);
+				DrawableHelper.fill(ms, wx + w.x1 - 1, wy + w.y2, wx + w.x2 + 1, wy + w.y2 + 1, 0xffd07070);
+				DrawableHelper.fill(ms, wx + w.x1 - 1, wy + w.y1, wx + w.x1, wy + w.y2, 0xffd07070);
+				DrawableHelper.fill(ms, wx + w.x2, wy + w.y1, wx + w.x2 + 1, wy + w.y2, 0xffd07070);
 			}
 		});
+	}
+
+	private String getRealValue() {
+		return super.getValue();
+	}
+	
+	// Overridden getValue to avoid getting a invalid value
+	@Override
+	public String getValue() {
+		return lastValidValue;
 	}
 
 	@Override
@@ -55,6 +84,7 @@ public class OptionString extends Option<String> {
 	public void deserialize(JsonElement json) {
 		if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
 			setValue(json.getAsString());
+			lastValidValue = json.getAsString();
 		}
 	}
 }

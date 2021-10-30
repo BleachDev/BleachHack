@@ -10,23 +10,23 @@ public class WindowTextFieldWidget extends WindowWidget {
 	public TextFieldWidget textField;
 
 	public WindowTextFieldWidget(int x, int y, int width, int height, String text) {
-		super(x, y, x + width + 1, y + height + 1);
+		super(x, y, x + width, y + height);
 		this.textField = new TextFieldWidget(mc.textRenderer, x, y, width, height, LiteralText.EMPTY);
 		this.textField.setText(text);
 		this.textField.setMaxLength(32767);
 	}
-	
+
 	protected WindowTextFieldWidget(int x, int y, int width, int height) {
-		super(x, y, x + width + 1, y + height + 1);
+		super(x, y, x + width, y + height);
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int windowX, int windowY, int mouseX, int mouseY) {
-		super.render(matrices, windowX, windowY, mouseX, mouseY);
-
 		textField.x = windowX + x1;
 		textField.y = windowY + y1;
 		textField.render(matrices, mouseX, mouseY, MinecraftClient.getInstance().getTickDelta());
+
+		super.render(matrices, windowX, windowY, mouseX, mouseY);
 	}
 
 	@Override

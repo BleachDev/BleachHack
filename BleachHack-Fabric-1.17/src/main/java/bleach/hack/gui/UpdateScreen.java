@@ -171,7 +171,8 @@ public class UpdateScreen extends WindowScreen {
 				height / 2 + 15, "Error updating!", new ItemStack(Items.RED_BANNER), true));
 
 		getWindow(1).addWidget(new WindowTextWidget("", true, WindowTextWidget.TextAlign.MIDDLE, wd, 16, 0xc05050)
-				.withRenderEvent(w_ -> ((WindowTextWidget) w_).setText(new LiteralText(updateResult))));
+				.withRenderEvent((wg, ms, wx, wy)
+						-> ((WindowTextWidget) wg).setText(new LiteralText(updateResult))));
 	}
 
 	@Override

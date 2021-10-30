@@ -106,7 +106,7 @@ public class BleachTitleScreen extends WindowScreen {
 
 		// Main Text
 		getWindow(0).addWidget(new WindowTextWidget(LiteralText.EMPTY, true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, h / 4 - 25, 0)
-				.withRenderEvent(widget -> {
+				.withRenderEvent((widget, ms, wx, wy) -> {
 					MutableText bhText = new LiteralText("");
 
 					int i = 0;
@@ -124,7 +124,7 @@ public class BleachTitleScreen extends WindowScreen {
 
 		// Splash
 		getWindow(0).addWidget(new WindowTextWidget(LiteralText.EMPTY, true, WindowTextWidget.TextAlign.MIDDLE, 2f, -20f, w / 2 + 80, h / 4 + 6, 0xffff00)
-				.withRenderEvent(widget -> {
+				.withRenderEvent((widget, ms, wx, wy) -> {
 					if (splash != null) {
 						WindowTextWidget windgetText = (WindowTextWidget) widget;
 						windgetText.setText(new LiteralText(splash));
@@ -140,7 +140,7 @@ public class BleachTitleScreen extends WindowScreen {
 		JsonObject updateJson = BleachHack.getUpdateJson();
 		if (updateJson != null && updateJson.has("version") && updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
 			getWindow(0).addWidget(new WindowTextWidget("\u00a76\u00a7nUpdate\u00a76", true, 4, h - 12, 0xffffff)
-					.withClickEvent(widget -> {
+					.withClickEvent((widget, mx, my, wx, wy) -> {
 						client.setScreen(new UpdateScreen(client.currentScreen, updateJson));
 					}));
 		}

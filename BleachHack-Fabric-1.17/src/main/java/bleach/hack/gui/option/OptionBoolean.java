@@ -13,10 +13,6 @@ public class OptionBoolean extends Option<Boolean> {
 
 	private Consumer<Boolean> onToggle;
 
-	public OptionBoolean(String name, Boolean value) {
-		super(name, value);
-	}
-
 	public OptionBoolean(String name, String tooltip, Boolean value) {
 		super(name, tooltip, value);
 	}
@@ -35,7 +31,7 @@ public class OptionBoolean extends Option<Boolean> {
 				onToggle.accept(getValue());
 
 			BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
-		}).withRenderEvent(w -> ((WindowButtonWidget) w).text = getValue() ? "\u00a7aTrue" : "\u00a7cFalse");
+		}).withRenderEvent((w, ms, wx, wy) -> ((WindowButtonWidget) w).text = getValue() ? "\u00a7aTrue" : "\u00a7cFalse");
 	}
 
 	@Override
