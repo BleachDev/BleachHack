@@ -32,7 +32,7 @@ public class AutoIStackDupe extends Module {
 	private int tick = 0;
 
 	public AutoIStackDupe() {
-		super("AutoIStackDupe", KEY_UNBOUND, ModuleCategory.EXPLOITS, "AutoBruhDupeAutoBruhDupeAutoBruhDupeAutoBruhDupe.",
+		super("AutoIStackDupe", KEY_UNBOUND, ModuleCategory.EXPLOITS, "Automatically does the IllegalStack dupe.",
 				new SettingItemList("Items", "Items to dupe",
 						Items.CHEST,
 						Items.BLACK_SHULKER_BOX,
