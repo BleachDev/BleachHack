@@ -27,12 +27,12 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Hand;
 
-public class AutoBruhDupe extends Module {
+public class AutoIStackDupe extends Module {
 	
 	private int tick = 0;
 
-	public AutoBruhDupe() {
-		super("AutoBruhDupe", KEY_UNBOUND, ModuleCategory.EXPLOITS, "AutoBruhDupeAutoBruhDupeAutoBruhDupeAutoBruhDupe.",
+	public AutoIStackDupe() {
+		super("AutoIStackDupe", KEY_UNBOUND, ModuleCategory.EXPLOITS, "AutoBruhDupeAutoBruhDupeAutoBruhDupeAutoBruhDupe.",
 				new SettingItemList("Items", "Items to dupe",
 						Items.CHEST,
 						Items.BLACK_SHULKER_BOX,
