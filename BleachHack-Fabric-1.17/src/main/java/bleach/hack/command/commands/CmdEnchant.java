@@ -82,7 +82,8 @@ public class CmdEnchant extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
-			throw new CmdSyntaxException("Not In Creative Mode!");
+			BleachLogger.error("Not In Creative Mode!");
+			return;
 		}
 
 		if (args.length == 0) {
