@@ -38,6 +38,8 @@ import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 
 public class Trajectories extends Module {
 
@@ -82,6 +84,9 @@ public class Trajectories extends Module {
 					if (!getSetting(4).asToggle().getChild(1).asToggle().state && e instanceof ExperienceBottleEntity) {
 						continue;
 					}
+
+					if (!mc.world.getBlockCollisions(e, e.getBoundingBox()).allMatch(VoxelShape::isEmpty))
+						continue;
 
 					Triple<List<Vec3d>, Entity, BlockPos> p = ProjectileSimulator.simulate(e);
 
@@ -128,12 +133,20 @@ public class Trajectories extends Module {
 				}
 			}
 
-			if (t.getMiddle() != null) {
-				Renderer.drawBoxBoth(t.getMiddle().getBoundingBox(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
-			}
+			VoxelShape hitbox = t.getMiddle() != null ? VoxelShapes.cuboid(t.getMiddle().getBoundingBox())
+					: t.getRight() != null ? mc.world.getBlockState(t.getRight()).getCollisionShape(mc.world, t.getRight()).offset(t.getRight().getX(), t.getRight().getY(), t.getRight().getZ())
+							: null;
+			Vec3d lastVec = !t.getLeft().isEmpty() ? t.getLeft().get(t.getLeft().size() - 1)
+					: mc.player.getEyePos();
 
-			if (t.getRight() != null) {
-				Renderer.drawBoxBoth(t.getRight(), QuadColor.single(col[0], col[1], col[2], getSetting(8).asSlider().getValueFloat()), 2.5f);
+			if (hitbox != null) {
+				Renderer.drawLine(lastVec.x + 0.25, lastVec.y, lastVec.z, lastVec.x - 0.25, lastVec.y, lastVec.z, LineColor.single(col[0], col[1], col[2], 1f), 1.75f);
+				Renderer.drawLine(lastVec.x, lastVec.y + 0.25, lastVec.z, lastVec.x, lastVec.y - 0.25, lastVec.z, LineColor.single(col[0], col[1], col[2], 1f), 1.75f);
+				Renderer.drawLine(lastVec.x, lastVec.y, lastVec.z + 0.25, lastVec.x, lastVec.y, lastVec.z - 0.25, LineColor.single(col[0], col[1], col[2], 1f), 1.75f);
+
+				for (Box box: hitbox.getBoundingBoxes()) {
+					Renderer.drawBoxOutline(box, QuadColor.single(col[0], col[1], col[2], 0.75f), 1f);
+				}
 			}
 		}
 	}

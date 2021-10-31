@@ -16,6 +16,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.TridentEntity;
@@ -35,6 +36,7 @@ import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.item.SnowballItem;
 import net.minecraft.item.ThrowablePotionItem;
 import net.minecraft.item.TridentItem;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -124,7 +126,7 @@ public class ProjectileSimulator {
 			Vec3d newVec = spoofE.getPos().add(vel);
 			// EntityHitResult entityHit = ProjectileUtil.raycast(mc.player, e.getPos(),
 			// newVec, e.getBoundingBox(), null, 1f);
-			List<Entity> entities = mc.world.getOtherEntities(null, spoofE.getBoundingBox().expand(0.15));
+			List<LivingEntity> entities = mc.world.getEntitiesByClass(LivingEntity.class, spoofE.getBoundingBox().expand(0.15), EntityPredicates.VALID_LIVING_ENTITY);
 			entities.removeAll(Arrays.asList(mc.player, e, spoofE));
 			if (!entities.isEmpty()) {
 				return Triple.of(vecs, entities.get(0), null);
@@ -133,6 +135,7 @@ public class ProjectileSimulator {
 			BlockHitResult blockHit = mc.world.raycast(
 					new RaycastContext(spoofE.getPos(), newVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, e));
 			if (blockHit.getType() != HitResult.Type.MISS) {
+				vecs.add(blockHit.getPos());
 				return Triple.of(vecs, null, blockHit.getBlockPos());
 			}
 
