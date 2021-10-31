@@ -100,7 +100,8 @@ public class BetterChat extends Module {
 								"\u24d0\u24d1\u24d2\u24d3\u24d4", "\u039bb\u1455d\u03A3", "\u03b1\u0432c\u2202\u0454").withDesc("The custom font to use.")),
 				new SettingToggle("Prefix", false).withDesc("Message prepended to the message, edit with " + Command.getPrefix() + "betterchat prefix."),
 				new SettingToggle("Suffix", false).withDesc("Message appended to the message, edit with " + Command.getPrefix() + "betterchat suffix."),
-				new SettingToggle("Timestamp", true).withDesc("Adds a timestamp in front of every message."),
+				new SettingToggle("Timestamp", true).withDesc("Adds a timestamp in front of every message.").withChildren(
+						new SettingToggle("Seconds", true).withDesc("Shows seconds in the timestamp.")),
 				new SettingToggle("Filter", false).withDesc("Filters certain text from the chat, edit the filters with " + Command.getPrefix() + "betterchat filter.").withChildren(
 						new SettingMode("Mode", "Censor", "Block", "Remove").withDesc("How to handle filtered messages.")),
 				new SettingToggle("ChatEncrypt", false).withDesc("Encrypts messages so only BleachHack users can read them."), //.withChildren(
@@ -225,7 +226,9 @@ public class BetterChat extends Module {
 			}
 
 			if (getSetting(3).asToggle().state) {
-				message = new LiteralText("\u00a78[\u00a77" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "\u00a78] ").append(message);
+				DateTimeFormatter formatter = getSetting(3).asToggle().getChild(0).asToggle().state
+						? DateTimeFormatter.ofPattern("HH:mm:ss") : DateTimeFormatter.ofPattern("HH:mm");
+				message = new LiteralText("\u00a78[\u00a77" + LocalDateTime.now().format(formatter) + "\u00a78] ").append(message);
 			}
 
 			if (!message.equals(packet.getMessage())) {
