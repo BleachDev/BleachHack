@@ -9,9 +9,8 @@
 package bleach.hack.mixin;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,9 +20,8 @@ import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventRenderScreenBackground;
 import bleach.hack.event.events.EventRenderTooltip;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipData;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 
 @Mixin(Screen.class)
 public class MixinScreen {
@@ -33,29 +31,31 @@ public class MixinScreen {
 
 	@Unique private boolean skipTooltip;
 
+	@Shadow public void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y) {}
+
 	@Inject(method = "render", at = @At("HEAD"))
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo callback) {
 		lastMX = mouseX;
 		lastMY = mouseY;
 	}
 
-	@Inject(method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;Ljava/util/Optional;II)V", at = @At("HEAD"), cancellable = true)
-	public void renderTooltip(MatrixStack matrices, List<Text> lines, Optional<TooltipData> data, int x, int y, CallbackInfo callback) {
+	@Inject(method = "renderTooltipFromComponents", at = @At("HEAD"), cancellable = true)
+	public void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y, CallbackInfo callback) {
 		if (skipTooltip) {
 			skipTooltip = false;
 			return;
 		}
 
-		EventRenderTooltip event = new EventRenderTooltip((Screen) (Object) this, matrices, lines, x, y, lastMX, lastMY);
+		EventRenderTooltip event = new EventRenderTooltip((Screen) (Object) this, matrices, components, x, y, lastMX, lastMY);
 		BleachHack.eventBus.post(event);
 
+		callback.cancel();
 		if (event.isCancelled()) {
-			callback.cancel();
-		} else if (!event.getText().equals(lines) || event.getX() != x || event.getY() != y) {
-			skipTooltip = true;
-			((Screen) (Object) this).renderTooltip(matrices, lines, data, x, y);
-			callback.cancel();
+			return;
 		}
+
+		skipTooltip = true;
+		renderTooltipFromComponents(event.getMatrix(), event.getComponents(), event.getX(), event.getY());
 	}
 
 	@Inject(method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;I)V", at = @At("HEAD"), cancellable = true)

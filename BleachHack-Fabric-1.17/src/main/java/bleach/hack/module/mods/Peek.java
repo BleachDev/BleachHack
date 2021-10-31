@@ -13,7 +13,6 @@ import java.util.List;
 
 import bleach.hack.eventbus.BleachSubscribe;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.datafixers.util.Either;
 
 import bleach.hack.event.events.EventRenderTooltip;
 import bleach.hack.module.ModuleCategory;
@@ -33,6 +32,7 @@ import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.GameRenderer;
@@ -95,9 +95,13 @@ public class Peek extends Module {
 		event.getMatrix().translate(0, 0, 400);
 
 		if (getSetting(0).asToggle().state) {
-			Either<Boolean, List<Text>> either = drawShulkerToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
-			if (either != null) {
-				either.ifLeft(event::setCancelled).ifRight(event::setText);
+			List<TooltipComponent> components = drawShulkerToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
+			if (components != null) {
+				if (components.isEmpty()) {
+					event.setCancelled(true);
+				} else {
+					event.setComponents(components);
+				}
 			}
 		}
 
@@ -107,7 +111,7 @@ public class Peek extends Module {
 		event.getMatrix().pop();
 	}
 
-	public Either<Boolean, List<Text>> drawShulkerToolTip(MatrixStack matrices, Slot slot, int mouseX, int mouseY) {
+	public List<TooltipComponent> drawShulkerToolTip(MatrixStack matrices, Slot slot, int mouseX, int mouseY) {
 		if (!(slot.getStack().getItem() instanceof BlockItem)) {
 			return null;
 		}
@@ -154,9 +158,9 @@ public class Peek extends Module {
 		}
 
 		if (mode == 1) {
-			return Either.right(Arrays.asList(slot.getStack().getName()));
+			return Arrays.asList(TooltipComponent.of(slot.getStack().getName().asOrderedText()));
 		} else if (mode == 2) {
-			return Either.left(true);
+			return List.of();
 		}
 
 		return null;

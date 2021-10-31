@@ -12,23 +12,23 @@ import java.util.List;
 
 import bleach.hack.event.Event;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
 
 public class EventRenderTooltip extends Event {
 
 	private Screen screen;
 	private MatrixStack matrices;
-	private List<Text> text;
+	private List<TooltipComponent> components;
 	private int x;
 	private int y;
 	private int mouseX;
 	private int mouseY;
 
-	public EventRenderTooltip(Screen screen, MatrixStack matrices, List<Text> text, int x, int y, int mouseX, int mouseY) {
+	public EventRenderTooltip(Screen screen, MatrixStack matrices, List<TooltipComponent> components, int x, int y, int mouseX, int mouseY) {
 		this.matrices = matrices;
 		this.screen = screen;
-		this.text = text;
+		this.components = components;
 		this.x = x;
 		this.y = y;
 		this.mouseX = mouseX;
@@ -47,12 +47,12 @@ public class EventRenderTooltip extends Event {
 		this.matrices = matrices;
 	}
 
-	public List<Text> getText() {
-		return text;
+	public List<TooltipComponent> getComponents() {
+		return components;
 	}
 
-	public void setText(List<Text> text) {
-		this.text = text;
+	public void setComponents(List<TooltipComponent> components) {
+		this.components = components;
 	}
 
 	public int getX() {
