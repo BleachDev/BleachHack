@@ -8,138 +8,103 @@
  */
 package bleach.hack.gui;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.mojang.bridge.game.PackType;
 
-import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FabricReflect;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
 public class ProtocolScreen extends Screen {
+	
+	public static String BRAND = null;
 
-	private TextFieldWidget nameField;
+	private TextFieldWidget versionField;
 	private TextFieldWidget protocolField; // int
-	private TextFieldWidget targetField;
 	private TextFieldWidget packVerField; // int
-	private MultiplayerScreen serverScreen;
+	private TextFieldWidget brandField;
+	private ButtonWidget addButton;
+	private Screen parent;
 
-	public ProtocolScreen(MultiplayerScreen serverScreen) {
+	public ProtocolScreen(Screen parent) {
 		super(new LiteralText("Protocol Screen"));
-		this.serverScreen = serverScreen;
+		this.parent = parent;
 	}
 
 	public void init() {
 		super.init();
 
-		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 50, 98, 20, new LiteralText("Update"), button -> {
-			try {
-				int i = Integer.parseInt(protocolField.getText());
-				int i1 = Integer.parseInt(packVerField.getText());
+		addButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 50, 196, 20, new LiteralText("Done"), button -> {
+			int i = Integer.parseInt(protocolField.getText());
+			int i1 = Integer.parseInt(packVerField.getText());
 
-				FabricReflect.writeField(SharedConstants.getGameVersion(), nameField.getText(), "field_16733", "name");
-				FabricReflect.writeField(SharedConstants.getGameVersion(), i, "field_16735", "protocolVersion");
-				FabricReflect.writeField(SharedConstants.getGameVersion(), i1, "field_16734", "dataPackVersion");
-				FabricReflect.writeField(SharedConstants.getGameVersion(), targetField.getText(), "field_16740", "releaseTarget");
-				BleachLogger.logger.info("Set Protocol");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}));
-		addDrawableChild(new ButtonWidget(width / 2 + 2, height / 2 + 50, 98, 20, new LiteralText("Done"), button -> {
-			client.setScreen(serverScreen);
+			FabricReflect.writeField(SharedConstants.getGameVersion(), versionField.getText(), "field_16733", "name");
+			FabricReflect.writeField(SharedConstants.getGameVersion(), versionField.getText(), "field_16740", "releaseTarget");
+			FabricReflect.writeField(SharedConstants.getGameVersion(), i, "field_16735", "protocolVersion");
+			FabricReflect.writeField(SharedConstants.getGameVersion(), i1, "field_16734", "dataPackVersion");
+			BRAND = brandField.getText();
+
+			onClose();
 		}));
 
-		nameField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, LiteralText.EMPTY);
-		nameField.setText(SharedConstants.getGameVersion().getName());
-		protocolField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 35, 196, 18, LiteralText.EMPTY);
-		protocolField.setText(SharedConstants.getGameVersion().getProtocolVersion() + "");
-		targetField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 10, 196, 18, LiteralText.EMPTY);
-		targetField.setText(SharedConstants.getGameVersion().getReleaseTarget());
-		packVerField = new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 196, 18, LiteralText.EMPTY);
-		packVerField.setText(SharedConstants.getGameVersion().getPackVersion(PackType.DATA) + "");
-		// ipField.changeFocus(true);
+		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 73, 196, 20, new LiteralText("Cancel"),
+				button -> onClose()));
+
+		versionField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, LiteralText.EMPTY));
+		versionField.setText(SharedConstants.getGameVersion().getName());
+
+		protocolField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 35, 196, 18, LiteralText.EMPTY));
+		protocolField.setText(Integer.toString(SharedConstants.getGameVersion().getProtocolVersion()));
+		protocolField.setChangedListener(text -> updateAddButton());
+
+		packVerField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 10, 196, 18, LiteralText.EMPTY));
+		packVerField.setText(Integer.toString(SharedConstants.getGameVersion().getPackVersion(PackType.DATA)));
+		protocolField.setChangedListener(text -> updateAddButton());
+		
+		brandField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 128, 18, LiteralText.EMPTY));
+		brandField.setText(ClientBrandRetriever.getClientModName());
+		
+		addDrawableChild(new ButtonWidget(width / 2 + 33, height / 2 + 14, 20, 20, new LiteralText("V"),
+				button -> brandField.setText("vanilla")));
+		addDrawableChild(new ButtonWidget(width / 2 + 56, height / 2 + 14, 20, 20, new LiteralText("Fa"),
+				button -> brandField.setText("fabric")));
+		addDrawableChild(new ButtonWidget(width / 2 + 79, height / 2 + 14, 20, 20, new LiteralText("Fo"),
+				button -> brandField.setText("forge")));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		renderBackground(matrices);
-		drawStringWithShadow(matrices, textRenderer, "\u00a77Name:", width / 2 - 103 - textRenderer.getWidth("Name:"), height / 2 - 55, -1);
-		drawStringWithShadow(matrices, textRenderer, "\u00a77Protocol:", width / 2 - 103 - textRenderer.getWidth("Protocol:"), height / 2 - 30, -1);
-		drawStringWithShadow(matrices, textRenderer, "\u00a77Target Ver:", width / 2 - 103 - textRenderer.getWidth("Target Ver:"), height / 2 - 5, -1);
-		drawStringWithShadow(matrices, textRenderer, "\u00a77Packet Ver:", width / 2 - 103 - textRenderer.getWidth("Packet Ver:"), height / 2 + 20, -1);
-		nameField.render(matrices, mouseX, mouseY, delta);
-		protocolField.render(matrices, mouseX, mouseY, delta);
-		targetField.render(matrices, mouseX, mouseY, delta);
-		packVerField.render(matrices, mouseX, mouseY, delta);
+		drawCenteredText(matrices, textRenderer, "NOTE: This will not make the game compatible with other versions", width / 2, 5, 0xaaaaaa);
+		drawCenteredText(matrices, textRenderer, "It will only change what the client says it is to servers.", width / 2, 15, 0xaaaaaa);
+
+		drawStringWithShadow(matrices, textRenderer, "Version:", width / 2 - 103 - textRenderer.getWidth("Version:"), height / 2 - 55, 0xaaaaaa);
+		drawStringWithShadow(matrices, textRenderer, "Protocol:", width / 2 - 103 - textRenderer.getWidth("Protocol:"), height / 2 - 30, 0xaaaaaa);
+		drawStringWithShadow(matrices, textRenderer, "Pack Ver:", width / 2 - 103 - textRenderer.getWidth("Pack Ver:"), height / 2 - 5, 0xaaaaaa);
+		drawStringWithShadow(matrices, textRenderer, "Brand:", width / 2 - 103 - textRenderer.getWidth("Brand:"), height / 2 + 20, 0xaaaaaa);
 
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 
 	public void onClose() {
-		client.setScreen(serverScreen);
-	}
-
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (mouseX >= nameField.x && mouseX <= nameField.x + nameField.getWidth() && mouseY >= nameField.y && mouseY <= nameField.y + 18) {
-			nameField.setTextFieldFocused(true);
-			protocolField.setTextFieldFocused(false);
-			targetField.setTextFieldFocused(false);
-			packVerField.setTextFieldFocused(false);
-		}
-		if (mouseX >= protocolField.x && mouseX <= protocolField.x + protocolField.getWidth() && mouseY >= protocolField.y && mouseY <= protocolField.y + 18) {
-			nameField.setTextFieldFocused(false);
-			protocolField.setTextFieldFocused(true);
-			targetField.setTextFieldFocused(false);
-			packVerField.setTextFieldFocused(false);
-		}
-		if (mouseX >= targetField.x && mouseX <= targetField.x + targetField.getWidth() && mouseY >= targetField.y && mouseY <= targetField.y + 18) {
-			nameField.setTextFieldFocused(false);
-			protocolField.setTextFieldFocused(false);
-			targetField.setTextFieldFocused(true);
-			packVerField.setTextFieldFocused(false);
-		}
-		if (mouseX >= packVerField.x && mouseX <= packVerField.x + packVerField.getWidth() && mouseY >= packVerField.y && mouseY <= packVerField.y + 18) {
-			nameField.setTextFieldFocused(false);
-			protocolField.setTextFieldFocused(false);
-			targetField.setTextFieldFocused(false);
-			packVerField.setTextFieldFocused(true);
-		}
-		return super.mouseClicked(mouseX, mouseY, button);
-	}
-
-	public boolean charTyped(char chr, int modifiers) {
-		if (nameField.isFocused())
-			nameField.charTyped(chr, modifiers);
-		if (protocolField.isFocused())
-			protocolField.charTyped(chr, modifiers);
-		if (targetField.isFocused())
-			targetField.charTyped(chr, modifiers);
-		if (packVerField.isFocused())
-			packVerField.charTyped(chr, modifiers);
-		return super.charTyped(chr, modifiers);
-	}
-
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		if (nameField.isFocused())
-			nameField.keyPressed(keyCode, scanCode, modifiers);
-		if (protocolField.isFocused())
-			protocolField.keyPressed(keyCode, scanCode, modifiers);
-		if (targetField.isFocused())
-			targetField.keyPressed(keyCode, scanCode, modifiers);
-		if (packVerField.isFocused())
-			packVerField.keyPressed(keyCode, scanCode, modifiers);
-		return super.keyPressed(keyCode, scanCode, modifiers);
+		client.setScreen(parent);
 	}
 
 	public void tick() {
-		nameField.tick();
+		versionField.tick();
 		protocolField.tick();
-		targetField.tick();
 		packVerField.tick();
+		brandField.tick();
+
 		super.tick();
+	}
+
+	private void updateAddButton() {
+		addButton.active = NumberUtils.isDigits(protocolField.getText()) && NumberUtils.isDigits(packVerField.getText());
 	}
 }
