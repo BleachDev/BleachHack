@@ -65,7 +65,7 @@ public class ProtocolScreen extends Screen {
 
 		packVerField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 10, 196, 18, LiteralText.EMPTY));
 		packVerField.setText(Integer.toString(SharedConstants.getGameVersion().getPackVersion(PackType.DATA)));
-		protocolField.setChangedListener(text -> updateAddButton());
+		packVerField.setChangedListener(text -> updateAddButton());
 		
 		brandField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 128, 18, LiteralText.EMPTY));
 		brandField.setText(ClientBrandRetriever.getClientModName());
