@@ -66,7 +66,7 @@ public class Watermark {
 	}
 
 	public MutableText getShortText() {
-		if (text2 == null) {
+		if (text2.isEmpty()) {
 			return new LiteralText(text1.substring(0, 2)).styled(s -> s.withColor(color1));
 		} else {
 			return new LiteralText(text1.substring(0, 1)).styled(s -> s.withColor(color1)).append(new LiteralText(text2.substring(0, 1)).styled(s -> s.withColor(color2)));
