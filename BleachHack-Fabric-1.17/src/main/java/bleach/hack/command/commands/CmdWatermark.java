@@ -48,6 +48,9 @@ public class CmdWatermark extends Command {
 		if (args[0].equalsIgnoreCase("reset")) {
 			if (args.length == 1) {
 				BleachHack.watermark.reset(true, true);
+				saveText();
+				saveColor();
+
 				BleachLogger.info("Reset the watermark text and colors!");
 			} else if (args[1].equalsIgnoreCase("color")) {
 				BleachHack.watermark.reset(false, true);
