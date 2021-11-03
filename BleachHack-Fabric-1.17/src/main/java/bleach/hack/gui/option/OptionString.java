@@ -22,6 +22,7 @@ public class OptionString extends Option<String> {
 
 	public OptionString(String name, String tooltip, String value, Function<String, Boolean> validator) {
 		super(name, tooltip, value);
+		this.lastValidValue = value;
 		this.validator = validator;
 	}
 
