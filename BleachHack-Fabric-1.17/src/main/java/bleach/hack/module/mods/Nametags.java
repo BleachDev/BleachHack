@@ -82,7 +82,7 @@ public class Nametags extends Module {
 
 	public Nametags() {
 		super("Nametags", KEY_UNBOUND, ModuleCategory.RENDER, "Shows bigger/cooler nametags above entities.",
-				new SettingMode("Armor", "H", "V", "None").withDesc("How to show items/armor."),
+				new SettingToggle("Inventory", true).withDesc("Shows the armor/items of the entity."),
 				new SettingMode("Health", "Number", "NumberOf", "Bar", "Percent").withDesc("How to show health."),
 				new SettingToggle("Players", true).withDesc("Shows nametags over player.").withChildren(
 						new SettingSlider("Size", 0.5, 5, 2, 1).withDesc("The size of the nametags."),
@@ -196,25 +196,17 @@ public class Nametags extends Module {
 				}
 
 				/* Drawing Items */
-				double c = 0;
 				double lscale = scale * 0.4;
 				double up = ((0.3 + lines.size() * 0.25) * scale) + lscale / 2;
 
-				if (getSetting(0).asMode().mode == 0) {
+				if (getSetting(0).asToggle().state) {
 					drawItem(rPos.x, rPos.y + up, rPos.z, -2.5, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.MAINHAND));
 					drawItem(rPos.x, rPos.y + up, rPos.z, 2.5, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.OFFHAND));
 
+					int c = 0;
 					for (ItemStack i : livingEntity.getArmorItems()) {
 						drawItem(rPos.x, rPos.y + up, rPos.z, c + 1.5, 0, lscale, i);
 						c--;
-					}
-				} else if (getSetting(0).asMode().mode == 1) {
-					drawItem(rPos.x, rPos.y + up, rPos.z, -1.25, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.MAINHAND));
-					drawItem(rPos.x, rPos.y + up, rPos.z, 1.25, 0, lscale, livingEntity.getEquippedStack(EquipmentSlot.OFFHAND));
-
-					for (ItemStack i : livingEntity.getArmorItems()) {
-						drawItem(rPos.x, rPos.y + up, rPos.z, 0, c, lscale, i);
-						c++;
 					}
 				}
 			}
