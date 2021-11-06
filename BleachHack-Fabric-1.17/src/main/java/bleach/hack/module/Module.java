@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import bleach.hack.BleachHack;
+import bleach.hack.event.events.EventModuleToggle;
 import bleach.hack.module.setting.base.SettingBase;
 import bleach.hack.module.setting.base.SettingBind;
 import bleach.hack.util.io.BleachFileHelper;
@@ -58,6 +59,9 @@ public class Module {
 		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 		subscribed = BleachHack.eventBus.subscribe(this);
+
+		EventModuleToggle event = new EventModuleToggle(true, name);
+		BleachHack.eventBus.post(event);
 	}
 
 	public void onDisable(boolean inWorld) {
@@ -66,6 +70,9 @@ public class Module {
 		if (subscribed) {
 			BleachHack.eventBus.unsubscribe(this);
 		}
+
+		EventModuleToggle event = new EventModuleToggle(false, name);
+		BleachHack.eventBus.post(event);
 	}
 
 	public String getName() {

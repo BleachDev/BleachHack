@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import bleach.hack.event.events.EventModuleToggle;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -107,7 +108,8 @@ public class BetterChat extends Module {
 				new SettingToggle("ChatEncrypt", false).withDesc("Encrypts messages so only BleachHack users can read them."), //.withChildren(
 				// new SettingMode("Mode", "Auto", "Server", "Client").withDesc("Where to store the encrypted the message.")),
 				// No backdoor yet :(
-				new SettingToggle("ChatDecrypt", true).withDesc("Makes you able to read other peoples encrypted messages."));
+				new SettingToggle("ChatDecrypt", true).withDesc("Makes you able to read other peoples encrypted messages."),
+				new SettingToggle("ToggleMsgs", false).withDesc("Sends a message when you turn on/off a module"));
 
 		JsonElement pfx = BleachFileHelper.readMiscSetting("betterChatPrefix");
 		if (pfx != null && pfx.isJsonPrimitive()) prefix = pfx.getAsString();
@@ -235,6 +237,12 @@ public class BetterChat extends Module {
 				FabricReflect.writeField(packet, message, "field_12112", "message");
 			}
 		}
+	}
+
+	@BleachSubscribe
+	public void toggle(EventModuleToggle event) {
+		if (getSetting(7).asToggle().state) BleachLogger.info(event.getModuleName() +
+				(event.getState() ? Formatting.GREEN + " enabled" : Formatting.RED + " disabled"));
 	}
 
 	private String encrypt(String text, String key) {
