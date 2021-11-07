@@ -109,7 +109,7 @@ public class AccountManagerScreen extends WindowScreen {
 				BleachHack.playerMang.startPinger();
 		}));
 
-		mainWindow.getWidgets().forEach(rightsideWidgets::add);
+		rightsideWidgets.addAll(mainWindow.getWidgets());
 		updateRightside();
 
 		// Left side
@@ -155,6 +155,8 @@ public class AccountManagerScreen extends WindowScreen {
 				() -> openAddAccWindow(AccountType.MOJANG, "Mojang", new ItemStack(Items.GREEN_GLAZED_TERRACOTTA))));
 		typeWindow.addWidget(new WindowButtonWidget(129, 15, 189, 31, "Microsoft",
 				() -> openAddAccWindow(AccountType.MICROSOFT, "Microsoft", new ItemStack(Items.PURPLE_GLAZED_TERRACOTTA))));
+		typeWindow.addWidget(new WindowButtonWidget(192, 15, 252, 31, "Altening",
+				() -> openAddAccWindow(AccountType.ALTENING, "Altening", new ItemStack(Items.RED_GLAZED_TERRACOTTA))));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -481,7 +483,10 @@ public class AccountManagerScreen extends WindowScreen {
 		}, Pair.of("Email", false), Pair.of("Password", true)),
 		MICROSOFT((input) -> {
 			return LoginHelper.createMicrosoftSession(input[0], input[1]);
-		}, Pair.of("Email", false), Pair.of("Password", true));
+		}, Pair.of("Email", false), Pair.of("Password", true)),
+		ALTENING((input) -> {
+			return LoginHelper.createAlteningSession(((String[])input)[0]);
+		}, Pair.of("Token", false));
 
 		private Pair<String, Boolean>[] fields;
 		private SessionCreator sessionCreator;

@@ -10,6 +10,7 @@ package bleach.hack.util.auth;
 
 import java.net.Proxy;
 import java.net.URI;
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
@@ -24,12 +25,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.Agent;
+import com.mojang.authlib.Environment;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachOnlineMang;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Session;
 
 public final class LoginHelper {
@@ -65,6 +69,44 @@ public final class LoginHelper {
 		return new Session(auth.getSelectedProfile().getName(),
 				auth.getSelectedProfile().getId().toString(),
 				auth.getAuthenticatedToken(), "mojang");
+	}
+
+	public static Field getField(YggdrasilMinecraftSessionService service, String name) throws Exception {
+		Field field = service.getClass().getDeclaredField(name);
+		field.setAccessible(true);
+		return field;
+	}
+
+	public static Session createAlteningSession(String token) throws AuthenticationException {
+		MinecraftClient mc = MinecraftClient.getInstance();
+		YggdrasilMinecraftSessionService service = (YggdrasilMinecraftSessionService) mc.getSessionService();
+		String AUTH = "http://authserver.thealtening.com";
+		String ACCOUNT = "https://api.mojang.com";
+		String SESSION = "http://sessionserver.thealtening.com";
+		String SERVICES = "https://api.minecraftservices.com";
+
+		try {
+			getField(service, "baseUrl").set(service, SESSION + "/session/minecraft/");
+			getField(service, "joinUrl").set(service, SESSION + "/session/minecraft/join");
+			getField(service, "checkUrl").set(service, SESSION + "/session/minecraft/hasJoined");
+		} catch (Exception e) {
+			BleachLogger.logger.error("Failed to login using Altening: getField failed!");
+			return null;
+		}
+
+		Environment environment = Environment.create(AUTH, ACCOUNT, SESSION, SERVICES, "The Altening");
+		YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(
+				Proxy.NO_PROXY, "", environment).createUserAuthentication(Agent.MINECRAFT);
+
+		auth.setUsername(token);
+		auth.setPassword("Password");
+		auth.logIn();
+
+		Session session = new Session(auth.getSelectedProfile().getName(),
+				auth.getSelectedProfile().getId().toString(),
+				auth.getAuthenticatedToken(), "mojang");
+
+		return session;
 	}
 
 	public static Session createMicrosoftSession(String email, String password) throws AuthenticationException {
