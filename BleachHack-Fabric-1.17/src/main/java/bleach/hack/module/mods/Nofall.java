@@ -58,6 +58,8 @@ public class Nofall extends Module {
 				break;
 			case 2:
 				if (mc.player.fallDistance > 2.5f) {
+					if (mc.player.isFallFlying())
+						return;
 					int slot = InventoryUtils.getSlot(false, i -> mc.player.getInventory().getStack(i).getItem()
 							== Registry.ITEM.get(new Identifier("cobweb")));
 					if (slot == -1) return;
