@@ -14,7 +14,7 @@ import bleach.hack.module.ModuleManager;
 
 public class DisableBleach extends Module {
     public DisableBleach() {
-        super("DisableBleach", KEY_UNBOUND, ModuleCategory.MISC, "Unloads BleachHack. IRREVERTABLE!");
+        super("DisableBleach", KEY_UNBOUND, ModuleCategory.MISC, "Unloads BleachHack. IRREVERSIBLE!");
     }
 
     @Override

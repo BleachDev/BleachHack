@@ -40,7 +40,6 @@ public class BleachHack implements ModInitializer {
 	public static Watermark watermark;
 
 	public static BleachEventBus eventBus;
-
 	public static FriendManager friendMang;
 	public static BleachPlayerManager playerMang;
 
