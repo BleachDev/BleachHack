@@ -103,6 +103,8 @@ public class BleachHack implements ModInitializer {
 			BleachTitleScreen.customTitleScreen = false;
 		}
 
+		BleachFileHelper.readBlueprints(); // We need to do it after all initialization stuff
+
 		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 

@@ -27,6 +27,7 @@ public class PlaceDirOperation extends PlaceOperation {
 	public PlaceDirOperation(BlockPos pos, Item item, Direction dir) {
 		super(pos, item);
 		this.dir = dir;
+		
 	}
 
 	@Override
