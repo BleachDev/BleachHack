@@ -8,14 +8,19 @@
  */
 package bleach.hack.util.io;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import bleach.hack.util.operation.blueprint.OperationBlueprint;
+import bleach.hack.util.operation.blueprint.PlaceDirOperationBlueprint;
+import bleach.hack.util.operation.blueprint.PlaceOperationBlueprint;
+import bleach.hack.util.operation.blueprint.RemoveOperationBlueprint;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,6 +39,10 @@ import bleach.hack.module.mods.UI;
 import bleach.hack.module.setting.base.SettingBase;
 import bleach.hack.util.BleachLogger;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 
 public class BleachFileHelper {
 
@@ -61,6 +70,66 @@ public class BleachFileHelper {
 	public static void stopSavingExecutor() {
 		savingExecutor.shutdown();
 		savingExecutor = null;
+	}
+
+	private static Direction stringToDirection(String str) throws NoSuchFieldException, IllegalAccessException {
+		var split = str.split(",");
+		if (split.length == 1) {
+			return (Direction)Direction.class.getField(split[0]).get(null);
+		} else {
+			var axis = (Direction.Axis)Direction.Axis.class.getField(split[0]).get(null);
+			var dir = (Direction.AxisDirection)Direction.AxisDirection.class.getField(split[0]).get(null);
+			return Direction.get(dir, axis);
+		}
+	}
+
+	private static BlockPos stringToBlockPos(String str) {
+		var split = str.split(",");
+		return new BlockPos(Integer.parseInt(split[0]),
+				Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+	}
+
+	public static void readBlueprints() {
+		var files = new File(Paths.get(
+				BleachFileMang.getDir().toString(), "blueprints").toString()).listFiles();
+		if (files == null) {
+			BleachLogger.logger.warn("No blueprints or it's directory doesn't exist!");
+			return;
+		}
+		for (final File fileEntry : files) {
+			if (fileEntry.isDirectory()) continue;
+			/* Example file (very popbob)
+			 * PlaceDir;69,69,69;cobweb;Y,Positive
+			 * PlaceDir;69,69,69;cobweb;WEST
+			 * Place;69,69,69;cobweb
+			 * Remove;69,69,69
+			 * File can be named as you want, even any extension
+			 * Also, you should create "blueprints" directory first
+			 */
+			try {
+				var lines = BleachFileMang.readFileLines(fileEntry.toString());
+				List<OperationBlueprint> blueprint = Arrays.asList();
+				for(final String line : lines) {
+					var split = line.split(";");
+					var pos = stringToBlockPos(split[1]);
+					switch(split[0]) {
+						case "PlaceDir":
+							blueprint.add(new PlaceDirOperationBlueprint(pos.getX(), pos.getY(), pos.getZ(),
+									Registry.ITEM.get(new Identifier(split[2])), stringToDirection(split[3])));
+							break;
+						case "Place":
+							blueprint.add(new PlaceOperationBlueprint(pos.getX(), pos.getY(), pos.getZ(),
+									Registry.ITEM.get(new Identifier(split[2]))));
+							break;
+						case "Remove":
+							blueprint.add(new RemoveOperationBlueprint(pos.getX(), pos.getY(), pos.getZ()));
+							break;
+					}
+				}
+			} catch(Exception e) {
+				BleachLogger.logger.error("Failed to import blueprint {}: {}", fileEntry.toString(), e);
+			}
+		}
 	}
 
 	public static void saveModules() {

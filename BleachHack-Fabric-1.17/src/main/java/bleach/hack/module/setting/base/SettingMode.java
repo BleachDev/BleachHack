@@ -20,19 +20,22 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class SettingMode extends SettingBase {
 
-	public String[] modes;
+	public List<String> modes;
 	public int mode;
 	public String text;
 
 	public SettingMode(String text, String... modes) {
-		this.modes = modes;
+		this.modes = Arrays.asList(modes);
 		this.text = text;
 	}
 
 	public int getNextMode() {
-		if (mode + 1 >= modes.length) {
+		if (mode + 1 >= modes.size()) {
 			return 0;
 		}
 
@@ -47,8 +50,8 @@ public class SettingMode extends SettingBase {
 		if (window.mouseOver(x, y, x + len, y + 12)) {
 			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
 		}
-		
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text + ": " + modes[mode], x + 3, y + 2, 0xcfe0cf);
+
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text + ": " + modes.get(mode), x + 3, y + 2, 0xcfe0cf);
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			mode = getNextMode();
@@ -68,12 +71,12 @@ public class SettingMode extends SettingBase {
 
 	public void readSettings(JsonElement settings) {
 		if (settings.isJsonPrimitive()) {
-			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.length - 1);
+			mode = MathHelper.clamp(settings.getAsInt(), 0, modes.size() - 1);
 		}
 	}
 
 	public JsonElement saveSettings() {
-		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.length - 1));
+		return new JsonPrimitive(MathHelper.clamp(mode, 0, modes.size() - 1));
 	}
 
 	@Override
