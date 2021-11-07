@@ -70,12 +70,19 @@ public class ModuleManager {
 		}
 	}
 
+	public static void unloadModule(Module module) {
+		if (!modules.containsValue(module))
+			BleachLogger.logger.error("Failed to unload module %s: a module with this name isn't loaded.", module.getName());
+		else modules.remove(module);
+	}
+
 	public static void loadModule(Module module) {
 		if (modules.containsValue(module)) {
 			BleachLogger.logger.error("Failed to load module %s: a module with this name is already loaded.", module.getName());
 		} else {
 			modules.put(module.getName(), module);
-			// TODO: Setup init system for modules
+			// TODO: Extra arguments for init / base method?
+			for (Module m : modules.values()) m.onInit();
 		}
 	}
 
@@ -95,7 +102,6 @@ public class ModuleManager {
 	}
 
 	private class ModuleListJson {
-
 		@SerializedName("package")
 		private String packageName;
 

@@ -8,9 +8,6 @@
  */
 package bleach.hack;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import bleach.hack.command.CommandManager;
 import bleach.hack.command.CommandSuggestor;
 import bleach.hack.eventbus.BleachEventBus;
@@ -26,13 +23,13 @@ import bleach.hack.util.io.BleachFileHelper;
 import bleach.hack.util.io.BleachFileMang;
 import bleach.hack.util.io.BleachJsonHelper;
 import bleach.hack.util.io.BleachOnlineMang;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.SharedConstants;
-
+import org.apache.logging.log4j.Level;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.concurrent.CompletableFuture;
-
-import org.apache.logging.log4j.Level;
 
 public class BleachHack implements ModInitializer {
 
@@ -94,9 +91,8 @@ public class BleachHack implements ModInitializer {
 		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
 		CommandSuggestor.start();
 
-		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue()) {
+		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
 			playerMang.startPinger();
-		}
 
 		if (Option.GENERAL_CHECK_FOR_UPDATES.getValue()) {
 			updateJson = BleachOnlineMang.getResourceAsync("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json", BodyHandlers.ofString())
