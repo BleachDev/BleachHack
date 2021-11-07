@@ -8,8 +8,6 @@
  */
 package bleach.hack.util.render;
 
-import java.lang.reflect.Field;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -29,7 +27,17 @@ import net.minecraft.util.math.Vec3f;
 public class WorldRenderUtils {
 
 	private static final MinecraftClient mc = MinecraftClient.getInstance();
-	private static Field shaderLightField;
+
+	// A Pointer to RenderSystem.shaderLightDirections
+	private static final Vec3f[] shaderLight;
+
+	static {
+		try {
+			shaderLight = (Vec3f[]) FieldUtils.getField(RenderSystem.class, "shaderLightDirections", true).get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/** Draws text in the world. **/
 	public static void drawText(Text text, double x, double y, double z, double scale, boolean shadow) {
@@ -89,15 +97,13 @@ public class WorldRenderUtils {
 
 		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f));
 
-		//mc.getBufferBuilders().getEntityVertexConsumers().draw();
-
+		mc.getBufferBuilders().getEntityVertexConsumers().draw();
+		
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		Vec3f[] currentLight = getCurrentLight();
+		Vec3f[] currentLight = shaderLight.clone();
 		DiffuseLighting.disableGuiDepthLighting();
-
-		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 
 		mc.getItemRenderer().renderItem(item, ModelTransformation.Mode.GUI, 0xF000F0,
 				OverlayTexture.DEFAULT_UV, matrices, mc.getBufferBuilders().getEntityVertexConsumers(), 0);
@@ -118,17 +124,5 @@ public class WorldRenderUtils {
 		matrices.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
 
 		return matrices;
-	}
-
-	public static Vec3f[] getCurrentLight() {
-		if (shaderLightField == null) {
-			shaderLightField = FieldUtils.getField(RenderSystem.class, "shaderLightDirections", true);
-		}
-
-		try {
-			return (Vec3f[]) shaderLightField.get(null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 }
