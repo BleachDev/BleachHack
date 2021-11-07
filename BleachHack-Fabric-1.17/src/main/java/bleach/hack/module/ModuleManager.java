@@ -72,17 +72,23 @@ public class ModuleManager {
 
 	public static void unloadModule(Module module) {
 		if (!modules.containsValue(module))
-			BleachLogger.logger.error("Failed to unload module %s: a module with this name isn't loaded.", module.getName());
-		else modules.remove(module);
+			BleachLogger.logger.error("Failed to unload module {}: a module with this name isn't loaded.", module.getName());
+		else modules.remove(module.getName());
 	}
 
 	public static void loadModule(Module module) {
 		if (modules.containsValue(module)) {
-			BleachLogger.logger.error("Failed to load module %s: a module with this name is already loaded.", module.getName());
+			BleachLogger.logger.error("Failed to load module {}: a module with this name is already loaded.", module.getName());
 		} else {
 			modules.put(module.getName(), module);
 			// TODO: Extra arguments for init / base method?
-			for (Module m : modules.values()) m.onInit();
+			for (Module m : modules.values()) {
+				try {
+					m.onInit();
+				} catch(Exception e) {
+					BleachLogger.logger.error("Failed to init module {}: {}", module.getName(), e);
+				}
+			}
 		}
 	}
 
