@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import bleach.hack.util.BleachLogger;
+import bleach.hack.module.mods.ClickGui;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
@@ -90,6 +91,7 @@ public class ModuleManager {
 	// This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
 	public static void handleKeyPress(int key) {
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
+            if (ClickGui.clickGui.hasAnyWindows()) return;
 			modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
 		}
 	}
