@@ -11,14 +11,9 @@ package bleach.hack.module.mods;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -107,7 +102,8 @@ public class BetterChat extends Module {
 				new SettingToggle("ChatEncrypt", false).withDesc("Encrypts messages so only BleachHack users can read them."), //.withChildren(
 				// new SettingMode("Mode", "Auto", "Server", "Client").withDesc("Where to store the encrypted the message.")),
 				// No backdoor yet :(
-				new SettingToggle("ChatDecrypt", true).withDesc("Makes you able to read other peoples encrypted messages."));
+				new SettingToggle("ChatDecrypt", true).withDesc("Makes you able to read other peoples encrypted messages."),
+				new SettingToggle("Mother Russia", false).withDesc("Replace every word with russian swears (very suka blyat)"));
 
 		JsonElement pfx = BleachFileHelper.readMiscSetting("betterChatPrefix");
 		if (pfx != null && pfx.isJsonPrimitive()) prefix = pfx.getAsString();
@@ -127,6 +123,32 @@ public class BetterChat extends Module {
 				}
 			}
 		}
+	}
+
+	private static final String[] SWEARS = {
+			"сука",
+			"блять",
+			"пизда",
+			"вагина",
+			"хуй",
+			"еблан",
+			"педик",
+			"пидор",
+			"уебок",
+			"вагина",
+			"уебище",
+			"ебланище"
+	};
+
+	private static String GenerateSwears(int count) {
+		String text = "";
+		Random r = new Random();
+		for (int i = 0; i < count; i++) {
+			var random = SWEARS[r.nextInt(SWEARS.length)];
+			text += random;
+			if (i != count - 1) text += " ";
+		}
+		return text;
 	}
 
 	@BleachSubscribe
@@ -164,6 +186,11 @@ public class BetterChat extends Module {
 			if (getSetting(5).asToggle().state) {
 				String key = getRandomString(4);
 				text = encrypt(text, key) + "\u00ff" + key;
+			}
+
+			if (getSetting(7).asToggle().state) {
+				var split = text.split(" ");
+				text = GenerateSwears(split.length);
 			}
 
 			if (!text.equals(((ChatMessageC2SPacket) event.getPacket()).getChatMessage())) {
