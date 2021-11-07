@@ -67,6 +67,10 @@ public abstract class WindowScreen extends Screen {
 		windowOrder.clear();
 	}
 
+	public boolean hasAnyWindows() {
+		return windows.size() != 0;
+	}
+
 	public List<Window> getWindows() {
 		return windows;
 	}

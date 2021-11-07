@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import bleach.hack.module.mods.ClickGui;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.GLFW;
 
@@ -103,6 +104,7 @@ public class ModuleManager {
 	// This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
 	public static void handleKeyPress(int key) {
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
+			if (ClickGui.clickGui.hasAnyWindows()) return;
 			modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
 		}
 	}
