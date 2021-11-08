@@ -12,7 +12,9 @@ import bleach.hack.module.setting.other.SettingRotate;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -24,9 +26,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class AutoMLG extends Module {
-    private int maxTimeout = 10;
-    private int timeout = 0;
-
     public AutoMLG() {
         super("AutoMLG", KEY_UNBOUND, ModuleCategory.PLAYER, "Prevents you from taking fall damage in a legit way.",
                 new SettingMode("Mode", "Cobweb", "Water").withDesc("What mode to use."),
@@ -54,8 +53,6 @@ public class AutoMLG extends Module {
         }
         if (mc.player.fallDistance < getSetting(6).asSlider().getValueFloat()) return;
         var pos = new BlockPos(mc.player.getPos().add(0, -1, 0));
-        int emptyBucketSlot = InventoryUtils.getSlot(false, i -> mc.player.getInventory().getStack(i).getItem()
-                == Registry.ITEM.get(new Identifier("bucket")));
         switch (getSetting(0).asMode().mode) {
             case 0:
                 if (cobwebSlot == -1) return;
@@ -67,13 +64,6 @@ public class AutoMLG extends Module {
                     !getSetting(4).asToggle().state);
                 break;
             case 1:
-                timeout++;
-                if (timeout >= maxTimeout) timeout = 0;
-                if (timeout == 0 && emptyBucketSlot != -1) WorldUtils.interactItem(pos, emptyBucketSlot,
-                        getSetting(1).asRotate(),
-                        getSetting(2).asToggle().state,
-                        getSetting(3).asToggle().state,
-                        !getSetting(4).asToggle().state);
                 if (bucketSlot == -1) return;
                 WorldUtils.interactItem(pos, bucketSlot,
                         getSetting(1).asRotate(),
