@@ -17,6 +17,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Formatting;
 
+/**
+ * Friends system for KillAura and similar modules
+ */
 public class FriendManager {
 
 	private Set<String> friends = new TreeSet<String>();

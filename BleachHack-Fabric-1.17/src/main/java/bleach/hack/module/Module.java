@@ -18,6 +18,9 @@ import bleach.hack.module.setting.base.SettingBind;
 import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
 
+/**
+ * BleachHack module base class
+ */
 public class Module {
 
 	public static final int KEY_UNBOUND = -1481058891;

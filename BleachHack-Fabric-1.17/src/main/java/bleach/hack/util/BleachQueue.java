@@ -16,6 +16,9 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
+/**
+ * BleachHack's queue, self-explanatory
+ */
 public class BleachQueue {
 
 	private static Map<String, Deque<MutablePair<Runnable, Integer>>> queues = new HashMap<>();

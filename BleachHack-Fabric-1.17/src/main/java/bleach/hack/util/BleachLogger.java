@@ -19,6 +19,9 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+/**
+ * BleachHack logger, uses LogManager
+ */
 public class BleachLogger {
 
 	public static final Logger logger = LogManager.getFormatterLogger("BleachHack");

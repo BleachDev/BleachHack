@@ -4,6 +4,9 @@ import org.apache.logging.log4j.Logger;
 
 import bleach.hack.event.Event;
 
+/**
+ * BleachHack's event bus
+ */
 public class BleachEventBus {
 
 	private final Logger logger;

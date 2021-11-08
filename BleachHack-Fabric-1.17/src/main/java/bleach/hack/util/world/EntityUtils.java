@@ -20,6 +20,9 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
+/**
+ * Utils for Entity recognition
+ */
 public class EntityUtils {
 
 	public static boolean isAnimal(Entity e) {

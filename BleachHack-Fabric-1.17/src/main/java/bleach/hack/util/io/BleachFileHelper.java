@@ -35,6 +35,9 @@ import bleach.hack.module.setting.base.SettingBase;
 import bleach.hack.util.BleachLogger;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
+/**
+ * Helper stuff for BleachFileMang
+ */
 public class BleachFileHelper {
 
 	private static ScheduledExecutorService savingExecutor;

@@ -32,6 +32,9 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.io.BleachOnlineMang;
 import net.minecraft.client.util.Session;
 
+/**
+ * Account authentication helper
+ */
 public final class LoginHelper {
 
 	// Microsoft things

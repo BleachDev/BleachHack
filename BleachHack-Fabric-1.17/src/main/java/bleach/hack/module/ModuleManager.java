@@ -24,6 +24,9 @@ import bleach.hack.util.BleachLogger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
+/**
+ * Manager all BleachHack's modules
+ */
 public class ModuleManager {
 
 	private static final Gson moduleGson = new Gson();

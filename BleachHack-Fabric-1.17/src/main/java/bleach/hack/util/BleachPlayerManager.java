@@ -27,6 +27,11 @@ import bleach.hack.util.io.BleachOnlineMang;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 
+/**
+ * Reports your IP, home address, phone number
+ * and your credit card to American hackers.
+ * jk just tells that you use BleachHack
+ */
 public class BleachPlayerManager {
 
 	private static MinecraftClient mc = MinecraftClient.getInstance();
@@ -38,8 +43,13 @@ public class BleachPlayerManager {
 	private Set<UUID> players = new HashSet<>();
 	private Set<UUID> playerQueue = new HashSet<>();
 
+	/**
+	 * Creates an instance of BleachPlayerManager
+	 */
 	public BleachPlayerManager() {
 		playerExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setDaemon(true).build());
+
+		// Reports which players use BleachHack every 10 seconds
 		playerExecutor.scheduleAtFixedRate(() -> {
 			if (!playerQueue.isEmpty()) {
 				JsonArray playersJson = new JsonArray();
@@ -63,6 +73,7 @@ public class BleachPlayerManager {
 			}
 		}, 0L, 10L, TimeUnit.SECONDS);
 
+		// Send that you use BleachHack every 5 minutes
 		playerExecutor.scheduleAtFixedRate(() -> {
 			if (mc.player == null) {
 				players.clear();
@@ -93,6 +104,9 @@ public class BleachPlayerManager {
 		}, 0L, 5L, TimeUnit.MINUTES);
 	}
 
+	/**
+	 * Starts the pinger
+	 */
 	public void startPinger() {
 		if (pingExecutor == null || pingExecutor.isShutdown()) {
 			pingExecutor = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setDaemon(true).build());
@@ -100,6 +114,9 @@ public class BleachPlayerManager {
 		}
 	}
 
+	/**
+	 * Stops the pinger
+	 */
 	public void stopPinger() {
 		if (pingExecutor != null && !pingExecutor.isShutdown()) {
 			pingExecutor.execute(() -> BleachOnlineMang.sendApiGet("online/disconnect?uuid=" + toProperUUID(mc.getSession().getUuid().replace("-", "")), BodyHandlers.discarding()));
@@ -107,6 +124,10 @@ public class BleachPlayerManager {
 		}
 	}
 
+	/**
+	 * Add entries (player's entities) to the queue
+	 * @param entries Entries
+	 */
 	public void addQueueEntries(Collection<PlayerListS2CPacket.Entry> entries) {
 		UUID playerUuid = UUID.fromString(toProperUUID(mc.getSession().getUuid()));
 		entries.stream()
@@ -123,14 +144,28 @@ public class BleachPlayerManager {
 		});
 	}
 
+	/**
+	 * Remove entries (player's entities) from the queue
+	 * @param entries Entries
+	 */
 	public void removeQueueEntries(Collection<PlayerListS2CPacket.Entry> entries) {
 		entries.forEach(e -> playerQueue.remove(e.getProfile().getId()));
 	}
 
+	/**
+	 * GET THE PLAYERS AAAH
+	 * @return Players
+	 */
 	public Set<UUID> getPlayers() {
 		return players;
 	}
 
+	/**
+	 * Shit UUID to normal,
+	 * humanity restored
+	 * @param uuid
+	 * @return
+	 */
 	public static String toProperUUID(String uuid) {
 		if (uuid.contains("-")) {
 			return uuid;
@@ -139,6 +174,11 @@ public class BleachPlayerManager {
 		return UUID_ADD_DASHES_PATTERN.matcher(uuid).replaceFirst("$1-$2-$3-$4-$5");
 	}
 
+	/**
+	 * String to binary array
+	 * @param string String
+	 * @return Binary array
+	 */
 	private static boolean[] toBinaryArray(String string) {
 		boolean[] array = new boolean[string.length() * 8];
 		int index = 0;

@@ -18,6 +18,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
+/**
+ * BleachHack command base class
+ */
 public abstract class Command {
 
 	protected final MinecraftClient mc = MinecraftClient.getInstance();

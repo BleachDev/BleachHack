@@ -21,6 +21,9 @@ import com.google.common.hash.Hashing;
 
 import bleach.hack.util.BleachLogger;
 
+/**
+ * Decrypter and encrypter (very popbob)
+ */
 public class LoginCrypter {
 
 	public static final String PASS_PHRASE = Hashing.sha256().hashString(

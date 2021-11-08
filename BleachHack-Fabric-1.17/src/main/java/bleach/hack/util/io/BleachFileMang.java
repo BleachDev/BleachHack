@@ -19,6 +19,9 @@ import java.util.List;
 import bleach.hack.util.BleachLogger;
 import net.minecraft.client.MinecraftClient;
 
+/**
+ * BleachHack's file manager
+ */
 public class BleachFileMang {
 
 	private static Path dir;

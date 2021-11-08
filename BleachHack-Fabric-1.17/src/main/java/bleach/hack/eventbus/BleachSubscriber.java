@@ -15,6 +15,9 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 import bleach.hack.event.Event;
 
+/**
+ * BleachHack event subscriber
+ */
 public class BleachSubscriber {
 
 	private final Consumer<Object> subscriberCaller;

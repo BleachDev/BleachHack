@@ -27,6 +27,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.explosion.Explosion;
 
+/**
+ * Utils for damage computation
+ */
 public class DamageUtils {
 
 	private static final MinecraftClient mc = MinecraftClient.getInstance();

@@ -13,6 +13,9 @@ import java.lang.reflect.Field;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
+/**
+ * Fabric reflection, pretty much self-explanatory
+ */
 public class FabricReflect {
 
 	@SuppressWarnings("deprecation")

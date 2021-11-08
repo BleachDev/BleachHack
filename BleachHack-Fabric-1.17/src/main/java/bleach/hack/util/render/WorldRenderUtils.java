@@ -26,6 +26,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3f;
 
+/**
+ * Renderer utils
+ */
 public class WorldRenderUtils {
 
 	private static final MinecraftClient mc = MinecraftClient.getInstance();

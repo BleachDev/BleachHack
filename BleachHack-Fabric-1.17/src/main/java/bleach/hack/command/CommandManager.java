@@ -28,6 +28,9 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 
+/**
+ * Manages all BleachHack's commands
+ */
 public class CommandManager {
 
 	public static boolean allowNextMsg = false;

@@ -19,6 +19,9 @@ import com.google.gson.JsonParser;
 
 import bleach.hack.util.BleachLogger;
 
+/**
+ * JSON stuff
+ */
 public class BleachJsonHelper {
 
 	private static Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();

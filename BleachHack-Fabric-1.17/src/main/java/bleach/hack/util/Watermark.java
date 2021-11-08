@@ -11,6 +11,9 @@ package bleach.hack.util;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 
+/**
+ * BleachHack watermark, cam be changed
+ */
 public class Watermark {
 
 	private String text1;

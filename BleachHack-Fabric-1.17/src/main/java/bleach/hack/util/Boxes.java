@@ -12,6 +12,18 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.Vec3d;
 
+/*
+ * Popbob penis in a box
+ * |-----|
+ * |  *  |
+ * |  *  |
+ * | * * |
+ * |-----|
+ */
+
+/**
+ * Boxes. Nothing more.
+ */
 public class Boxes {
 
 	/** Returns the vector of the min pos of this box. **/

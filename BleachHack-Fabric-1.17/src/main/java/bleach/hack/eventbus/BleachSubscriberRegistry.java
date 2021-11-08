@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 
 import bleach.hack.event.Event;
 
+/**
+ * Processes all event subscribers
+ */
 public class BleachSubscriberRegistry {
 
 	// <Event Class, Subscribers>

@@ -40,11 +40,18 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 
+/**
+ * Steals notes from noteblocks, downloads and plays them (very popbob)
+ */
 public class NotebotUtils {
 
 	private static final String[] NOTE_NAMES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 	private static final int[] NOTE_POSES = { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
 
+	/**
+	 * Download songs
+	 * @param log Should we log actions
+	 */
 	public static void downloadSongs(boolean log) {
 		try {
 			FileUtils.copyURLToFile(
@@ -80,6 +87,11 @@ public class NotebotUtils {
 		}
 	}
 
+	/**
+	 * Plays a note
+	 * @param lines Lines
+	 * @param tick Tick
+	 */
 	public static void playNote(List<String> lines, int tick) {
 		for (String s : lines) {
 			try {
@@ -93,6 +105,11 @@ public class NotebotUtils {
 		}
 	}
 
+	/**
+	 * Play a sound with pitch
+	 * @param sound Sound
+	 * @param pitch Pitch
+	 */
 	private static void play(SoundEvent sound, float pitch) {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		if (mc.world != null && mc.player != null) {
@@ -102,6 +119,11 @@ public class NotebotUtils {
 		}
 	}
 
+	/**
+	 * Convert .midi to a song
+	 * @param path Path to file
+	 * @return Notebot song
+ 	 */
 	public static List<int[]> convertMidi(Path path) {
 		List<int[]> noteList = new ArrayList<>();
 

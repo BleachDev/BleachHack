@@ -14,17 +14,28 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 
-/* Mojang how */
-/* HOW */
+/**
+ * Utils to make Entity interaction easier
+ */
 public class PlayerInteractEntityC2SUtils {
 
+	/**
+	 * Gets the entity
+	 * @param packet Packet
+	 * @return Entity
+	 */
 	public static Entity getEntity(PlayerInteractEntityC2SPacket packet) {
 		PacketByteBuf packetBuf = new PacketByteBuf(Unpooled.buffer());
 		packet.write(packetBuf);
 
 		return MinecraftClient.getInstance().world.getEntityById(packetBuf.readVarInt());
 	}
-	
+
+	/**
+	 * Get interaction type
+	 * @param packet Packet
+	 * @return Interaction Type
+	 */
 	public static InteractType getInteractType(PlayerInteractEntityC2SPacket packet) {
 		PacketByteBuf packetBuf = new PacketByteBuf(Unpooled.buffer());
 		packet.write(packetBuf);
@@ -33,6 +44,9 @@ public class PlayerInteractEntityC2SUtils {
 		return packetBuf.readEnumConstant(InteractType.class);
 	}
 
+	/**
+	 * Interaction Type
+	 */
 	public static enum InteractType {
 		INTERACT,
 		ATTACK,

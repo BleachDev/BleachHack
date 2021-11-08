@@ -29,6 +29,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
+/**
+ * Vector math and rendering.
+ */
 public class Renderer {
 
 	// -------------------- Fill + Outline Boxes --------------------

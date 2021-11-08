@@ -43,6 +43,11 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.chunk.WorldChunk;
 
+// TODO: More comments
+
+/**
+ * World utils. Places, breaks and interacts with items, legit rotation and other stuff
+ */
 public class WorldUtils {
 
 	protected static final MinecraftClient mc = MinecraftClient.getInstance();
@@ -147,6 +152,10 @@ public class WorldUtils {
 	}
 
 	public static boolean placeBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean airPlace, boolean swingHand) {
+		// Rotade mode:
+		// 0 - disabled
+		// 1 - server
+		// 2 - client
 		if (!mc.world.isInBuildLimit(pos) || !isBlockEmpty(pos))
 			return false;
 
