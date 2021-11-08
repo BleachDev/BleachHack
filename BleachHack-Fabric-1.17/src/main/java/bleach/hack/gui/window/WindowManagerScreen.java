@@ -7,12 +7,10 @@
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
 package bleach.hack.gui.window;
-
 import java.util.List;
 import org.apache.commons.lang3.tuple.Triple;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.google.gson.JsonPrimitive;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
@@ -22,11 +20,17 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
+import bleach.hack.gui.BleachTitleScreen;
+import bleach.hack.util.io.BleachFileHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.TitleScreen;
+import bleach.hack.gui.window.WindowManagerScreen;
 
 public class WindowManagerScreen extends Screen {
 
 	/** [Window Screen, Name, Icon] **/
 	public Triple<WindowScreen, String, ItemStack>[] windows;
+	public static WindowManagerScreen instance;
 	private int selected;
 
 	@SafeVarargs
@@ -37,6 +41,7 @@ public class WindowManagerScreen extends Screen {
 
 	public void init() {
 		selectWindow(selected);
+		instance = this;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -118,6 +123,11 @@ public class WindowManagerScreen extends Screen {
 	// Children don't tick brue
 	@Override
 	public void tick() {
+        if (BleachTitleScreen.unload) {
+            BleachTitleScreen.customTitleScreen = !BleachTitleScreen.customTitleScreen;
+			BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(false));
+			client.setScreen(new TitleScreen(false));
+        }
 		getSelectedScreen().tick();
 		super.tick();
 	}

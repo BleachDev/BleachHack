@@ -12,10 +12,8 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import bleach.hack.BleachHack;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.widget.WindowButtonWidget;
@@ -34,6 +32,7 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
@@ -47,6 +46,7 @@ public class BleachTitleScreen extends WindowScreen {
 
 	private ParticleManager particleMang = new ParticleManager();
 	public static boolean customTitleScreen = true;
+	public static boolean unload = false;
 
 	private static String splash;
 	private static int splashTicks;
