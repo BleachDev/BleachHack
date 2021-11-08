@@ -10,6 +10,7 @@ package bleach.hack.mixin;
 
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,8 +24,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventBlockEntityRender;
 import bleach.hack.event.events.EventEntityRender;
+import bleach.hack.event.events.EventRenderBlockOutline;
 import bleach.hack.event.events.EventSkyRender;
 import bleach.hack.event.events.EventWorldRender;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -35,11 +38,14 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.profiler.Profiler;
 
 @Mixin(WorldRenderer.class)
 public class MixinWorldRenderer {
+	
+	@Shadow private void drawBlockOutline(MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState) {}
 
 	/** Fixes that the outline framebuffer only resets if any glowing entities are drawn **/
 	@ModifyConstant(method = "render", require = 1, constant = @Constant(intValue = 0),
@@ -82,6 +88,16 @@ public class MixinWorldRenderer {
 		RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);
 		EventWorldRender.Post event = new EventWorldRender.Post(tickDelta, matrices);
 		BleachHack.eventBus.post(event);
+	}
+	
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/entity/Entity;DDDLnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V"))
+	public void render_drawBlockOutline(WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState) {
+		EventRenderBlockOutline event = new EventRenderBlockOutline(matrices, vertexConsumer, blockPos, blockState);
+		BleachHack.eventBus.post(event);
+
+		if (!event.isCancelled()) {
+			drawBlockOutline(event.getMatrices(), event.getVertexConsumer(), entity, d, e, f, event.getPos(), event.getState());
+		}
 	}
 
 	@Redirect(method = "renderEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;render(Lnet/minecraft/entity/Entity;DDDFFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"))
