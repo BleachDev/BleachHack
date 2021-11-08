@@ -22,6 +22,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.google.common.collect.Lists;
 
 // TODO: Rewrite this entire system because bad
+
+/**
+ * Provides suggestions for commands (not commented because bad)
+ */
 public class CommandSuggestionProvider {
 
 	private List<Suggestion> suggestions = new ArrayList<>();

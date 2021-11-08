@@ -18,6 +18,9 @@ import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
+/**
+ * Suggests commands
+ */
 public class CommandSuggestor {
 
 	private static CommandSuggestor INSTANCE;
@@ -27,6 +30,10 @@ public class CommandSuggestor {
 	private int selected = -1;
 	private int scroll;
 
+	/**
+	 * Gets global CommandSuggestor instance
+	 * @return CommandSuggestor
+	 */
 	public static CommandSuggestor getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new CommandSuggestor();
@@ -35,15 +42,25 @@ public class CommandSuggestor {
 		return INSTANCE;
 	}
 
+	/**
+	 * Starts CommandSuggestor
+	 */
 	public static void start() {
 		BleachHack.eventBus.subscribe(getInstance());
 	}
 
+	/**
+	 * Stops CommandSuggestor
+	 */
 	public static void stop() {
 		getInstance().reset();
 		BleachHack.eventBus.unsubscribe(getInstance());
 	}
 
+	/**
+	 * Draws the overlay
+	 * @param event Event
+	 */
 	@BleachSubscribe
 	public void onDrawOverlay(EventRenderInGameHud event) {
 		if (!Option.CHAT_SHOW_SUGGESTIONS.getValue())
@@ -105,6 +122,10 @@ public class CommandSuggestor {
 		}
 	}
 
+	/**
+	 * Processes global keypresses
+	 * @param event Event
+	 */
 	@BleachSubscribe
 	public void onKeyPressGlobal(EventKeyPress.Global event) {
 		if (event.getAction() != 0 && !suggestions.isEmpty() && !curText.isEmpty()) {
@@ -127,7 +148,11 @@ public class CommandSuggestor {
 			}
 		}
 	}
-	
+
+	/**
+	 * Processes chat keypresses
+	 * @param event Event
+	 */
 	@BleachSubscribe
 	public void onKeyPressChat(EventKeyPress.InChat event) {
 		TextFieldWidget field = ((AccessorChatScreen) MinecraftClient.getInstance().currentScreen).getChatField();
@@ -137,6 +162,9 @@ public class CommandSuggestor {
 		}
 	}
 
+	/**
+	 * Updates scroll
+	 */
 	private void updateScroll() {
 		if (scroll > selected) {
 			scroll = Math.max(selected, 0);
@@ -145,6 +173,10 @@ public class CommandSuggestor {
 		}
 	}
 
+	/**
+	 * Screen opened
+	 * @param event Event
+	 */
 	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (MinecraftClient.getInstance().currentScreen instanceof ChatScreen) {
@@ -152,6 +184,9 @@ public class CommandSuggestor {
 		}
 	}
 
+	/**
+	 * Reset CommandSuggestor
+	 */
 	public void reset() {
 		curText = "";
 		suggestions.clear();

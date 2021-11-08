@@ -8,6 +8,9 @@
  */
 package bleach.hack.command;
 
+/**
+ * Category of the command
+ */
 public enum CommandCategory {
 
 	/** Commands that only works in creative (like giving items with custom nbt). **/
@@ -17,5 +20,5 @@ public enum CommandCategory {
 	MODULES,
 
 	/** Other Commands. **/
-	MISC;
+	MISC
 }

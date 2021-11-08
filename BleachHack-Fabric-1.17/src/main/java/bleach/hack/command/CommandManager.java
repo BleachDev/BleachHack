@@ -28,6 +28,9 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 
+/**
+ * Command manager
+ */
 public class CommandManager {
 
 	public static boolean allowNextMsg = false;
@@ -48,6 +51,10 @@ public class CommandManager {
 		return suggestionProvider;
 	}
 
+	/**
+	 * Loads commands from JSON
+	 * @param jsonInputStream Input JSON
+	 */
 	public static void loadCommands(InputStream jsonInputStream) {
 		InputStreamReader inputReader = new InputStreamReader(jsonInputStream, StandardCharsets.UTF_8);
 
@@ -80,6 +87,10 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Load a specific command
+	 * @param command Command instance
+	 */
 	public static void loadCommand(Command command) {
 		if (commands.containsValue(command)) {
 			BleachLogger.logger.error("Failed to load module %s: a module with this name is already loaded.", command.getAliases()[0]);
@@ -95,6 +106,10 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Call a command
+	 * @param input Input
+	 */
 	public static void callCommand(String input) {
 		String[] split = input.split(" ");
 		BleachLogger.logger.info("Running command: " + Arrays.toString(split));
@@ -135,6 +150,9 @@ public class CommandManager {
 		BleachLogger.error("Command Not Found, Maybe Try " + Command.getPrefix() + "help");
 	}
 
+	/**
+	 * JSON which contains all commands
+	 */
 	private class CommandListJson {
 
 		@SerializedName("package")
