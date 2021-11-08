@@ -30,6 +30,7 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -42,9 +43,15 @@ import net.minecraft.text.Text;
 public class MixinTitleScreen extends Screen {
 
 	@Unique private static boolean firstLoad = true;
+	@Unique private static Element bleachButton;
 
 	protected MixinTitleScreen(Text title) {
 		super(title);
+	}
+
+	@Inject(method = "tick()V", at = @At("HEAD"))
+	public void tick(CallbackInfo info) {
+        if (BleachTitleScreen.unload) remove(bleachButton);
 	}
 
 	@Inject(method = "init()V", at = @At("HEAD"))
@@ -77,8 +84,8 @@ public class MixinTitleScreen extends Screen {
 							return super.keyPressed(keyCode, scanCode, modifiers);
 						}
 					});
-		} else {
-			addDrawableChild(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
+		} else if (!BleachTitleScreen.unload) {
+			bleachButton = addDrawableChild(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
 				BleachTitleScreen.customTitleScreen = !BleachTitleScreen.customTitleScreen;
 				BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(true));
 				client.setScreen(new TitleScreen(false));

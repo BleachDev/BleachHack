@@ -34,6 +34,7 @@ public class Module {
 	private ModuleCategory category;
 	private String desc;
 	private List<SettingBase> settings = new ArrayList<>();
+	public boolean ShouldSaveSettings = true; // Make unloading possible
 
 	public Module(String nm, int k, ModuleCategory c, String d, SettingBase... s) {
 		this(nm, k, c, false, d, s);
@@ -55,18 +56,16 @@ public class Module {
 	}
 
 	public void onEnable(boolean inWorld) {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
-
+		if (ShouldSaveSettings) BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 		subscribed = BleachHack.eventBus.subscribe(this);
 	}
 
 	public void onDisable(boolean inWorld) {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
-
-		if (subscribed) {
-			BleachHack.eventBus.unsubscribe(this);
-		}
+		if (ShouldSaveSettings) BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
+		if (subscribed) BleachHack.eventBus.unsubscribe(this);
 	}
+
+	public void onInit() { }
 
 	public String getName() {
 		return name;

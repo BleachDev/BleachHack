@@ -13,13 +13,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.GLFW;
-
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-
 import bleach.hack.util.BleachLogger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
@@ -27,6 +24,7 @@ import net.minecraft.client.util.InputUtil;
 public class ModuleManager {
 
 	private static final Gson moduleGson = new Gson();
+	public static boolean unload = false;
 
 	private static final Map<String, Module> modules = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
@@ -72,10 +70,17 @@ public class ModuleManager {
 
 	public static void loadModule(Module module) {
 		if (modules.containsValue(module)) {
-			BleachLogger.logger.error("Failed to load module %s: a module with this name is already loaded.", module.getName());
+			BleachLogger.logger.error("Failed to load module {}: a module with this name is already loaded.", module.getName());
 		} else {
 			modules.put(module.getName(), module);
-			// TODO: Setup init system for modules
+			// TODO: Extra arguments for init / base method?
+			for (Module m : modules.values()) {
+				try {
+					m.onInit();
+				} catch(Exception e) {
+					BleachLogger.logger.error("Failed to init module {}: {}", module.getName(), e);
+				}
+			}
 		}
 	}
 
@@ -89,13 +94,13 @@ public class ModuleManager {
 
 	// This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
 	public static void handleKeyPress(int key) {
+        if (unload) return;
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
 			modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
 		}
 	}
 
 	private class ModuleListJson {
-
 		@SerializedName("package")
 		private String packageName;
 

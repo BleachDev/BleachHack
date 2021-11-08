@@ -12,11 +12,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import bleach.hack.gui.ProtocolScreen;
+import bleach.hack.gui.BleachTitleScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.Element;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
@@ -29,8 +30,10 @@ public class MixinServerScreen extends Screen {
 
 	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
-		addDrawableChild(new ButtonWidget(5, 7, 50, 20, new LiteralText("Protocol"), button -> {
-			client.setScreen(new ProtocolScreen((MultiplayerScreen) client.currentScreen));
-		}));
+		if (!BleachTitleScreen.unload) {
+            addDrawableChild(new ButtonWidget(5, 7, 50, 20, new LiteralText("Protocol"), button -> {
+                client.setScreen(new ProtocolScreen((MultiplayerScreen) client.currentScreen));
+            }));
+		}
 	}
 }

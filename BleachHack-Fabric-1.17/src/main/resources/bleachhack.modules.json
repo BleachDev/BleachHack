@@ -94,6 +94,7 @@
     "Trajectories",
     "UI",
     "Xray",
-    "Zoom"
+    "Zoom",
+    "DisableBleach"
   ]
 }
