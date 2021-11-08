@@ -22,8 +22,4 @@ public class SettingRotate extends SettingToggle {
 	public int getRotateMode() {
 		return getChild(0).asMode().mode;
 	}
-
-	public void setMode(int mode) {
-        getChild(0).asMode().mode = mode;
-	}
 }
