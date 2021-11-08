@@ -9,7 +9,7 @@
 package bleach.hack.event;
 
 /**
- *
+ * An event
  * @author sl
  */
 public class Event {
