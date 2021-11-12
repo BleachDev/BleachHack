@@ -53,6 +53,8 @@ public class BleachOptionsScreen extends WindowScreen {
 
 		y = addCategory(0, w / 2, y + 15, "Playerlist Settings",
 				Option.PLAYERLIST_SHOW_FRIENDS,
+				Option.PLAYERLIST_SHOW_SELF,
+				Option.PLAYERLIST_SHOW_PING,
 				Option.PLAYERLIST_SHOW_BH_USERS,
 				Option.PLAYERLIST_SHOW_AS_BH_USER);
 

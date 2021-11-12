@@ -27,6 +27,14 @@ public class MixinPlayerListHud {
 		if (Option.PLAYERLIST_SHOW_FRIENDS.getValue() && BleachHack.friendMang.has(entry.getProfile().getName())) {
 			callback.setReturnValue(((MutableText) callback.getReturnValue()).styled(s -> s.withColor(Formatting.AQUA)));
 		}
+		else if (Option.PLAYERLIST_SHOW_SELF.getValue() && entry.getProfile().getId().toString().equals(MinecraftClient.getInstance().player.getGameProfile().getId().toString())) {
+			callback.setReturnValue(((MutableText) callback.getReturnValue()).styled(s -> s.withColor(Formatting.GOLD)));
+		}
+		else if (Option.PLAYERLIST_SHOW_PING.getValue()) {
+			for (PlayerListEntry f : MinecraftClient.getInstance().player.networkHandler.getPlayerList()) {
+				MinecraftClient.getInstance().player.networkHandler.getPlayerListEntry(f.getProfile().getName()).setDisplayName(Text.of("\u00A7f"+f.getProfile().getName() + " \u00A77[\u00A7f"+f.getLatency()+"ms\u00A77]"));
+			}
+		}
 	}
 
 	@Inject(method = "renderLatencyIcon", at = @At("RETURN"))
