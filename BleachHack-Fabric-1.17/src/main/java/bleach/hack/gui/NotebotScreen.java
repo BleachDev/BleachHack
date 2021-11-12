@@ -142,37 +142,37 @@ public class NotebotScreen extends WindowScreen {
 
 					DiffuseLighting.enableGuiDepthLighting();
 					if (e.getKey() == Instrument.HARP)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.DIRT), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.DIRT), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.BASEDRUM)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.STONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.STONE), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.SNARE)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SAND), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.HAT)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLASS), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLASS), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.BASS)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.OAK_WOOD), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.OAK_WOOD), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.FLUTE)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.CLAY), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.CLAY), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.BELL)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GOLD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GOLD_BLOCK), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.GUITAR)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.WHITE_WOOL), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.WHITE_WOOL), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.CHIME)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PACKED_ICE), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PACKED_ICE), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.XYLOPHONE)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.BONE_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.BONE_BLOCK), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.IRON_XYLOPHONE)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.IRON_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.IRON_BLOCK), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.COW_BELL)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SOUL_SAND), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.SOUL_SAND), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.DIDGERIDOO)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PUMPKIN), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.PUMPKIN), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.BIT)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.EMERALD_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.EMERALD_BLOCK), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.BANJO)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.HAY_BLOCK), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.HAY_BLOCK), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.PLING)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 40, y + 46 + c2 * 10);
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 55, y + 46 + c2 * 10)
 					c2++;
 
 					DiffuseLighting.disableGuiDepthLighting();
