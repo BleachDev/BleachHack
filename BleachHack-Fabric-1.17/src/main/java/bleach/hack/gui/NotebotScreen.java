@@ -172,7 +172,7 @@ public class NotebotScreen extends WindowScreen {
 					else if (e.getKey() == Instrument.BANJO)
 						itemRenderer.renderGuiItemIcon(new ItemStack(Items.HAY_BLOCK), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					else if (e.getKey() == Instrument.PLING)
-						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 55, y + 46 + c2 * 10)
+						itemRenderer.renderGuiItemIcon(new ItemStack(Items.GLOWSTONE), x + w - w / 4 + 55, y + 46 + c2 * 10);
 					c2++;
 
 					DiffuseLighting.disableGuiDepthLighting();
