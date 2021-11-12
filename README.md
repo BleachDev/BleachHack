@@ -56,11 +56,24 @@ Generate the needed files for your preferred IDE.
   Start a new workspace in eclipse.
   Click File > Import... > Gradle > Gradle Project.
   Select the BleachHack-Fabric-(*Version*) folder.
+  
+***IntelliJ***
+
+  On Windows:
+  > gradlew genIdeaWorkspace
+  
+  On Linux:
+  > chmod +x ./gradlew  
+  >./gradlew genIdeaWorkspace
+
+  In idea click File > Open.
+  Select build.gradle in BleachHack-Fabric-(*Version*) folder.
+  Select Open as Project.
 
 ***Other IDE's***
 
   Use [this link](https://fabricmc.net/wiki/tutorial:setup) for more information.
-  It should be pretty similar to the eclipse setup.
+  It should be pretty similar to the eclipse and idea setup.
   
 ###### *Note: Java 16 is required for 1.17+*
 
