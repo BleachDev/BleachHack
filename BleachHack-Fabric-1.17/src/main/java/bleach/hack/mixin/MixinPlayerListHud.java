@@ -31,9 +31,7 @@ public class MixinPlayerListHud {
 			callback.setReturnValue(((MutableText) callback.getReturnValue()).styled(s -> s.withColor(Formatting.GOLD)));
 		}
 		else if (Option.PLAYERLIST_SHOW_PING.getValue()) {
-			for (PlayerListEntry f : MinecraftClient.getInstance().player.networkHandler.getPlayerList()) {
-				MinecraftClient.getInstance().player.networkHandler.getPlayerListEntry(f.getProfile().getName()).setDisplayName(Text.of("\u00A7f"+f.getProfile().getName() + " \u00A77[\u00A7f"+f.getLatency()+"ms\u00A77]"));
-			}
+			MinecraftClient.getInstance().player.networkHandler.getPlayerListEntry(entry.getProfile().getName()).setDisplayName(Text.of("\u00A7f" + entry.getProfile().getName() + " \u00A77[\u00A7f" + entry.getLatency()+"ms\u00A77]"));
 		}
 	}
 
