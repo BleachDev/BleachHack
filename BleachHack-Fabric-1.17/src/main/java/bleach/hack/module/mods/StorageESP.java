@@ -191,7 +191,7 @@ public class StorageESP extends Module {
 		if ((be instanceof ChestBlockEntity || be instanceof BarrelBlockEntity) && getSetting(4).asToggle().state) {
 			return new int[] { 255, 155, 75 };
 		} else if (be instanceof EnderChestBlockEntity && getSetting(5).asToggle().state) {
-			return new int[] { 255, 13, 155 };
+			return new int[] { 255, 13, 255 };
 		} else if (be instanceof AbstractFurnaceBlockEntity && getSetting(6).asToggle().state) {
 			return new int[] { 128, 128, 128 };
 		} else if (be instanceof DispenserBlockEntity && getSetting(7).asToggle().state) {
