@@ -110,7 +110,7 @@ public class BlockHighlight extends Module {
 		} else {
 			Box box = state.getOutlineShape(mc.world, pos).getBoundingBox().offset(pos);
 			float width = getSetting(2).asSlider().getValueFloat();
-			float fill = getSetting(3).asSlider().getValueFloat();
+			int fill = getSetting(3).asSlider().getValueInt();
 
 			if (width != 0)
 				Renderer.drawBoxOutline(box, QuadColor.single(color[0], color[1], color[2], 255), width);
