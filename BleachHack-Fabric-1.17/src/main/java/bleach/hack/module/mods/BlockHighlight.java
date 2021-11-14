@@ -89,14 +89,11 @@ public class BlockHighlight extends Module {
 			MatrixStack matrices = Renderer.matrixFrom(pos.getX() + offset.x, pos.getY() + offset.y, pos.getZ() + offset.z);
 
 			BlockEntity be = mc.world.getBlockEntity(pos);
-			if (be != null) {
-				BlockEntityRenderer<BlockEntity> renderer = mc.getBlockEntityRenderDispatcher().get(be);
-
-				if (renderer != null) {
-					renderer.render(be, mc.getTickDelta(), matrices,
-							colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
-							LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
-				}
+			BlockEntityRenderer<BlockEntity> renderer = be != null ? mc.getBlockEntityRenderDispatcher().get(be) : null;
+			if (renderer != null) {
+				renderer.render(be, mc.getTickDelta(), matrices,
+						colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
+						LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
 			} else {
 				mc.getBlockRenderManager().getModelRenderer().renderFlat(
 						mc.world, mc.getBlockRenderManager().getModel(state), state, pos, matrices,

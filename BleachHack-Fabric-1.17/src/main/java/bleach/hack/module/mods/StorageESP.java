@@ -12,6 +12,7 @@ import bleach.hack.eventbus.BleachSubscribe;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import com.google.gson.JsonSyntaxException;
@@ -28,6 +29,7 @@ import bleach.hack.util.shader.BleachCoreShaders;
 import bleach.hack.util.shader.ColorVertexConsumerProvider;
 import bleach.hack.util.shader.ShaderEffectWrapper;
 import bleach.hack.util.world.WorldUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BarrelBlockEntity;
@@ -42,7 +44,9 @@ import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -102,7 +106,7 @@ public class StorageESP extends Module {
 		shader.prepare();
 		shader.clearFramebuffer("main");
 	}
-	
+
 	@BleachSubscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
 		if (getSetting(0).asMode().mode != 0)
@@ -121,14 +125,20 @@ public class StorageESP extends Module {
 			// Manually render blockentities because of culling
 			for (BlockEntity be: WorldUtils.getBlockEntities()) {
 				int[] color = getColorForBlock(be);
-				
+
 				if (color != null) {
 					BlockEntityRenderer<BlockEntity> renderer = mc.getBlockEntityRenderDispatcher().get(be);
+					MatrixStack matrices = Renderer.matrixFrom(be.getPos().getX(), be.getPos().getY(), be.getPos().getZ());
 					if (renderer != null) {
-						renderer.render(be, mc.getTickDelta(),
-								Renderer.matrixFrom(be.getPos().getX(), be.getPos().getY(), be.getPos().getZ()),
+						renderer.render(be, mc.getTickDelta(), matrices,
 								colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
 								LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+					} else {
+						BlockState state = be.getCachedState();
+						mc.getBlockRenderManager().getModelRenderer().renderFlat(mc.world,
+								mc.getBlockRenderManager().getModel(state), state, be.getPos(), matrices,
+								colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
+								false, new Random(), 0L, OverlayTexture.DEFAULT_UV);
 					}
 				}
 			}
@@ -218,7 +228,7 @@ public class StorageESP extends Module {
 
 		return null;
 	}
-	
+
 	/** returns the direction of the other chest if its linked, otherwise null **/
 	private Direction getChestDirection(BlockEntity entity) {
 		if (entity instanceof ChestBlockEntity && entity.getCachedState().get(ChestBlock.CHEST_TYPE) != ChestType.SINGLE) {
