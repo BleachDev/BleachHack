@@ -61,13 +61,10 @@ public class BleachHack implements ModInitializer {
 		}
 	}
 
+	//TODO: base-rewrite
 	@Override
 	public void onInitialize() {
 		long initStartTime = System.currentTimeMillis();
-
-		if (instance != null) {
-			throw new RuntimeException("BleachHack has already been initialized.");
-		}
 
 		instance = this;
 		watermark = new Watermark();
@@ -76,23 +73,14 @@ public class BleachHack implements ModInitializer {
 		friendMang = new FriendManager();
 		playerMang = new BleachPlayerManager();
 
-		//TODO base-rewrite
 		//this.eventBus = new EventBus();
 		//this.bleachFileManager = new BleachFileMang();
+
 		BleachFileMang.init();
-
-		ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
-		BleachFileHelper.readModules();
-
-		ClickGui.clickGui.initWindows();
-		BleachFileHelper.readClickGui();
-		BleachFileHelper.readOptions();
-		BleachFileHelper.readFriends();
-		BleachFileHelper.readUI();
 		BleachFileHelper.startSavingExecutor();
 
-		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
-		CommandSuggestor.start();
+		BleachFileHelper.readOptions();
+		BleachFileHelper.readFriends();
 
 		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue()) {
 			playerMang.startPinger();
@@ -108,7 +96,25 @@ public class BleachHack implements ModInitializer {
 			BleachTitleScreen.customTitleScreen = false;
 		}
 
-		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack in %d ms.", System.currentTimeMillis() - initStartTime);
+		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack (Phase 1) in %d ms.", System.currentTimeMillis() - initStartTime);
+	}
+
+	// Called after most of the game has been initialized in MixinMinecraftClient so all game resources can be accessed
+	public void postInit() {
+		long initStartTime = System.currentTimeMillis();
+
+		ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
+		BleachFileHelper.readModules();
+
+		// TODO: move ClickGui and UI to phase 1
+		ClickGui.clickGui.initWindows();
+		BleachFileHelper.readClickGui();
+		BleachFileHelper.readUI();
+
+		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
+		CommandSuggestor.start();
+
+		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack (Phase 2) in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 
 	public static JsonObject getUpdateJson() {

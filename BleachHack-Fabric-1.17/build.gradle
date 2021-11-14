@@ -10,11 +10,28 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+loom {
+    accessWidenerPath = file("src/main/resources/bleachhack.accesswidener")
+}
+
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	
+	// Make a collection of all api modules we wish to use
+	Set<String> apiModules = [
+		"fabric-api-base",
+		"fabric-command-api-v1",
+		"fabric-lifecycle-events-v1",
+		"fabric-resource-loader-v0"
+	]
+
+	// Add each module as a dependency
+	apiModules.forEach {
+		include(modImplementation(fabricApi.module(it, "${project.fabric_version}")))
+	}
 
 	modImplementation "com.github.fzakaria:ascii85:1.2"
 	include "com.github.fzakaria:ascii85:1.2"

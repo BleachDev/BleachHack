@@ -19,7 +19,7 @@ public class EventBlockEntityRender extends Event {
 
 		protected BlockEntity blockEntity;
 		protected MatrixStack matrices;
-		protected VertexConsumerProvider vertexConsumers;
+		protected VertexConsumerProvider vertex;
 
 		public BlockEntity getBlockEntity() {
 			return blockEntity;
@@ -29,16 +29,16 @@ public class EventBlockEntityRender extends Event {
 			return matrices;
 		}
 
-		public VertexConsumerProvider getVertexConsumers() {
-			return vertexConsumers;
+		public VertexConsumerProvider getVertex() {
+			return vertex;
 		}
 
 		public static class Pre extends Single {
 
-			public Pre(BlockEntity blockEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+			public Pre(BlockEntity blockEntity, MatrixStack matrices, VertexConsumerProvider vertex) {
 				this.blockEntity = blockEntity;
 				this.matrices = matrices;
-				this.vertexConsumers = vertexConsumers;
+				this.vertex = vertex;
 			}
 
 			public void setBlockEntity(BlockEntity blockEntity) {
@@ -49,8 +49,8 @@ public class EventBlockEntityRender extends Event {
 				this.matrices = matrices;
 			}
 
-			public void setVertexConsumers(VertexConsumerProvider vertexConsumers) {
-				this.vertexConsumers = vertexConsumers;
+			public void setVertex(VertexConsumerProvider vertex) {
+				this.vertex = vertex;
 			}
 		}
 
@@ -58,7 +58,7 @@ public class EventBlockEntityRender extends Event {
 			public Post(BlockEntity blockEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
 				this.blockEntity = blockEntity;
 				this.matrices = matrices;
-				this.vertexConsumers = vertexConsumers;
+				this.vertex = vertexConsumers;
 			}
 		}
 	}

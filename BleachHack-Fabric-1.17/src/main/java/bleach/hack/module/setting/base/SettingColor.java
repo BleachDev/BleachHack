@@ -171,6 +171,11 @@ public class SettingColor extends SettingBase {
 		int col = MathHelper.hsvToRgb(hue, sat, bri);
 		return new float[] { (col >> 16 & 255) / 255f, (col >> 8 & 255) / 255f, (col & 255) / 255f };
 	}
+	
+	public int[] getRGBArray() {
+		int col = MathHelper.hsvToRgb(hue, sat, bri);
+		return new int[] { col >> 16 & 255, col >> 8 & 255, col & 255 };
+	}
 
 	@Override
 	public boolean isDefault() {

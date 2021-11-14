@@ -1,0 +1,15 @@
+accessWidener    v1    named
+
+# RenderLayer
+accessible    class    net/minecraft/client/render/RenderLayer$MultiPhase
+accessible    method    net/minecraft/client/render/RenderLayer$MultiPhase    getPhases    ()Lnet/minecraft/client/render/RenderLayer$MultiPhaseParameters;
+
+accessible    class    net/minecraft/client/render/RenderLayer$MultiPhaseParameters
+accessible    field    net/minecraft/client/render/RenderLayer$MultiPhaseParameters    texture    Lnet/minecraft/client/render/RenderPhase$TextureBase;
+accessible    field    net/minecraft/client/render/RenderLayer$MultiPhaseParameters    outlineMode    Lnet/minecraft/client/render/RenderLayer$OutlineMode;
+
+accessible    class    net/minecraft/client/render/RenderPhase$TextureBase
+accessible    method    net/minecraft/client/render/RenderPhase$TextureBase    getId    ()Ljava/util/Optional;
+
+accessible    class    net/minecraft/client/render/RenderLayer$OutlineMode
+accessible    field    net/minecraft/client/render/RenderLayer$MultiPhaseParameters    outlineMode    Lnet/minecraft/client/render/RenderLayer$OutlineMode;

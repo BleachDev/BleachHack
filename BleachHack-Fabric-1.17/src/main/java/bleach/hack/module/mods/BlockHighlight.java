@@ -1,11 +1,7 @@
 package bleach.hack.module.mods;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.Random;
-
-import org.apache.commons.io.IOUtils;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -19,34 +15,50 @@ import bleach.hack.module.setting.base.SettingColor;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.QuadColor;
-import bleach.hack.util.shader.OutlineShaderManager;
-import bleach.hack.util.shader.OutlineVertexConsumers;
-import bleach.hack.util.shader.ShaderEffectLoader;
+import bleach.hack.util.shader.BleachCoreShaders;
+import bleach.hack.util.shader.ColorVertexConsumerProvider;
+import bleach.hack.util.shader.ShaderEffectWrapper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 
 public class BlockHighlight extends Module {
-	
-	private int lastWidth = -1;
-	private int lastHeight = -1;
-	private double lastShaderWidth;
-	private boolean shaderUnloaded = true;
+
+	private ShaderEffectWrapper shader;
+	private ColorVertexConsumerProvider colorVertexer;
 
 	public BlockHighlight() {
 		super("BlockHighlight", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights blocks that you're looking at.",
-				new SettingMode("Render", "Shader", "Box+Fill", "Box", "Fill").withDesc("The rendering method."),
-				new SettingSlider("Shader", 0, 6, 2, 0).withDesc("The thickness of the shader outline."),
-				new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The width/thickness of the box lines."),
-				new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill."),
+				new SettingMode("Render", "Shader", "Box").withDesc("The Render mode."),
+				new SettingSlider("ShaderFill", 0, 255, 50, 0).withDesc("How opaque the fill on shader mode should be."),
+				new SettingSlider("Box", 0, 5, 2, 1).withDesc("How thick the box outline should be."),
+				new SettingSlider("BoxFill", 0, 255, 50, 0).withDesc("How opaque the fill on box mode should be."),
 				new SettingColor("Color", 0.0f, 0.5f, 0.5f, false).withDesc("The color of the highlight."));
+	}
+
+	@Override
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
+
+		try {
+			shader = new ShaderEffectWrapper(
+					new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), new Identifier("bleachhack", "shaders/post/entity_outline.json")));
+
+			colorVertexer = new ColorVertexConsumerProvider(shader.getFramebuffer("main"), BleachCoreShaders::getColorOverlayShader);
+		} catch (JsonSyntaxException | IOException e) {
+			e.printStackTrace();
+			setEnabled(false);
+		}
 	}
 
 	@BleachSubscribe
@@ -58,38 +70,8 @@ public class BlockHighlight extends Module {
 	public void onWorldRender(EventWorldRender.Post event) {
 		int mode = getSetting(0).asMode().mode;
 
-		// Shader boilerplate
-		if (mode == 0) {
-			if (mc.getWindow().getFramebufferWidth() != lastWidth || mc.getWindow().getFramebufferHeight() != lastHeight
-					|| lastShaderWidth != getSetting(1).asSlider().getValue() || shaderUnloaded) {
-				try {
-					ShaderEffect shader = ShaderEffectLoader.load(mc.getFramebuffer(), "blockhighlight-shader",
-							String.format(
-									Locale.ENGLISH,
-									IOUtils.toString(getClass().getResource("/assets/bleachhack/shaders/mc_outline.ujson"), StandardCharsets.UTF_8), 
-									getSetting(1).asSlider().getValue() / 2,
-									getSetting(1).asSlider().getValue() / 4));
-
-					shader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
-					lastWidth = mc.getWindow().getFramebufferWidth();
-					lastHeight = mc.getWindow().getFramebufferHeight();
-					lastShaderWidth = getSetting(1).asSlider().getValue();
-					shaderUnloaded = false;
-
-					OutlineShaderManager.loadShader(shader);
-				} catch (JsonSyntaxException | IOException e) {
-					e.printStackTrace();
-				}
-			}
-		} else if (!shaderUnloaded) {
-			OutlineShaderManager.loadDefaultShader();
-			shaderUnloaded = true;
-		}
-		
 		if (!(mc.crosshairTarget instanceof BlockHitResult))
 			return;
-
-		float[] rgb = this.getSetting(4).asColor().getRGBFloat();
 
 		BlockPos pos = ((BlockHitResult) mc.crosshairTarget).getBlockPos();
 		BlockState state = mc.world.getBlockState(pos);
@@ -97,32 +79,40 @@ public class BlockHighlight extends Module {
 		if (state.getMaterial() == Material.AIR || !mc.world.getWorldBorder().contains(pos))
 			return;
 
+		int[] color = this.getSetting(4).asColor().getRGBArray();
 		if (mode == 0) {
-			MatrixStack matrices = Renderer.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
+			shader.prepare();
+			shader.clearFramebuffer("main");
+
+			Vec3d offset = state.getModelOffset(mc.world, pos);
+			MatrixStack matrices = Renderer.matrixFrom(pos.getX() + offset.x, pos.getY() + offset.y, pos.getZ() + offset.z);
 
 			BlockEntity be = mc.world.getBlockEntity(pos);
 			if (be != null) {
-				BlockEntityRenderer<BlockEntity> beRenderer = mc.getBlockEntityRenderDispatcher().get(be);
-
-				if (beRenderer != null) {
-					beRenderer.render(
-							be, mc.getTickDelta(), matrices, OutlineVertexConsumers.outlineOnlyProvider(rgb[0], rgb[1], rgb[2], 1f), 0xf000f0, OverlayTexture.DEFAULT_UV);
-				}
+				mc.getBlockEntityRenderDispatcher().get(be).render(
+						be, mc.getTickDelta(), matrices,
+						colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
+						LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
 			} else {
-				mc.getBlockRenderManager().getModelRenderer().render(
-						mc.world, mc.getBlockRenderManager().getModel(state), state, BlockPos.ORIGIN, matrices, OutlineVertexConsumers.outlineOnlyConsumer(rgb[0], rgb[1], rgb[2], 1f), false, new Random(), 0L, OverlayTexture.DEFAULT_UV);
+				mc.getBlockRenderManager().getModelRenderer().renderFlat(
+						mc.world, mc.getBlockRenderManager().getModel(state), state, pos, matrices,
+						colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
+						false, new Random(), 0L, OverlayTexture.DEFAULT_UV);
 			}
+
+			colorVertexer.draw();
+			shader.render();
+			shader.drawFramebufferToMain("main");
 		} else {
 			Box box = state.getOutlineShape(mc.world, pos).getBoundingBox().offset(pos);
-			if (mode == 1 || mode == 2) {
-				float outlineWidth = getSetting(2).asSlider().getValueFloat();
-				Renderer.drawBoxOutline(box, QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
-			}
+			float width = getSetting(2).asSlider().getValueFloat();
+			float fill = getSetting(3).asSlider().getValueFloat();
 
-			if (mode == 1 || mode == 3) {
-				float fillAlpha = getSetting(3).asSlider().getValueFloat();
-				Renderer.drawBoxFill(box, QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
-			}
+			if (width != 0)
+				Renderer.drawBoxOutline(box, QuadColor.single(color[0], color[1], color[2], 255), width);
+
+			if (fill != 0)
+				Renderer.drawBoxFill(box, QuadColor.single(color[0], color[1], color[2], fill));
 		}
 	}
 }

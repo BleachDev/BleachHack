@@ -9,6 +9,7 @@
 package bleach.hack.util;
 
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.Vec3d;
 
@@ -50,5 +51,17 @@ public class Boxes {
 				getAxisLength(box, Axis.X) * (x - 1) / 2d,
 				getAxisLength(box, Axis.Y) * (y - 1) / 2d,
 				getAxisLength(box, Axis.Z) * (z - 1) / 2d);
+	}
+
+	/** Returns a box with one of its sides stretched. **/
+	public static Box stretch(Box box, Direction dir, double length) {
+		return switch (dir) {
+			case DOWN -> new Box(box.minX, box.minY - length, box.minZ, box.maxX, box.maxY, box.maxZ);
+			case UP -> new Box(box.minX, box.minY, box.minZ, box.maxX, box.maxY + length, box.maxZ);
+			case NORTH -> new Box(box.minX, box.minY, box.minZ - length, box.maxX, box.maxY, box.maxZ);
+			case SOUTH -> new Box(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ + length);
+			case WEST -> new Box(box.minX - length, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+			case EAST -> new Box(box.minX, box.minY, box.minZ, box.maxX + length, box.maxY, box.maxZ);
+		};
 	}
 }

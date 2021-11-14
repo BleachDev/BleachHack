@@ -39,6 +39,7 @@
     "MixinGameRenderer",
     "MixinInGameHud",
     "MixinInGameOverlayRenderer",
+    "MixinJsonEffectGlShader",
     "MixinKeyboard",
     "MixinLivingEntity",
     "MixinLlamaPigStriderEntity",

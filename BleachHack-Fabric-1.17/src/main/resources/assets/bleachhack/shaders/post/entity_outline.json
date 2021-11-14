@@ -1,0 +1,18 @@
+{
+	"targets": [
+		"main",
+		"swap"
+	],
+	"passes": [
+		{
+			"name": "bleachhack:entity_outline",
+			"intarget": "main",
+			"outtarget": "swap"
+		},
+		{
+			"name": "blit",
+			"intarget": "swap",
+			"outtarget": "main"
+		}
+	]
+}

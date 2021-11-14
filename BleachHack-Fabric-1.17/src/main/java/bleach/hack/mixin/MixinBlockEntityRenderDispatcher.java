@@ -35,7 +35,7 @@ public class MixinBlockEntityRenderDispatcher {
 		BleachHack.eventBus.post(event);
 
 		if (!event.isCancelled()) {
-			render(renderer, (T) event.getBlockEntity(), tickDelta, event.getMatrices(), event.getVertexConsumers());
+			render(renderer, (T) event.getBlockEntity(), tickDelta, event.getMatrices(), event.getVertex());
 		}
 	}
 	

@@ -12,11 +12,8 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -48,21 +45,18 @@ public class MixinWorldRenderer {
 	@Shadow private void drawBlockOutline(MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState) {}
 
 	/** Fixes that the outline framebuffer only resets if any glowing entities are drawn **/
-	@ModifyConstant(method = "render", require = 1, constant = @Constant(intValue = 0),
+	/*@ModifyConstant(method = "render", require = 1, constant = @Constant(intValue = 0),
 			slice = @Slice(
 					from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;beginWrite(Z)V", ordinal = 1),
 					to = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilderStorage;getEntityVertexConsumers()Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;")))
 	public int render_modifyBoolean(int old) {
 		return 1;
-	}
+	}*/
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
 	private void render_swap(Profiler profiler, String string) {
 		if (string.equals("entities")) {
 			BleachHack.eventBus.post(new EventEntityRender.PreAll());
-		} else if (string.equals("blockentities")) {
-			BleachHack.eventBus.post(new EventEntityRender.PostAll());
-			BleachHack.eventBus.post(new EventBlockEntityRender.PreAll());
 		} else if (string.equals("blockentities")) {
 			BleachHack.eventBus.post(new EventEntityRender.PostAll());
 			BleachHack.eventBus.post(new EventBlockEntityRender.PreAll());
@@ -122,11 +116,5 @@ public class MixinWorldRenderer {
 			return vertexConsumer.color(red, green, blue, alpha);
 		}
 	}
-
-	/*@Redirect(method = "loadEntityOutlineShader", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
-	private Identifier loadEntityOutlineShader_newIdentifier(String id) {
-		nigeria
-		return new Identifier("bleachhack", "shaders/post/bh_entity_outline.json");
-	}*/
 
 }

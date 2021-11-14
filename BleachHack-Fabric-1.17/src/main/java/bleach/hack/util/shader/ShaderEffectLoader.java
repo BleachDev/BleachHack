@@ -15,7 +15,6 @@ import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePack;
@@ -24,12 +23,9 @@ import net.minecraft.util.Identifier;
 
 public class ShaderEffectLoader {
 
-	private static final TextureManager textureManager = MinecraftClient.getInstance().getTextureManager();
-	private static final ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
-
 	public static ShaderEffect load(Framebuffer framebuffer, String name, InputStream input) throws JsonSyntaxException, IOException {
 		Identifier id = new Identifier("bleachhack", name);
-		return new ShaderEffect(textureManager, new OwResourceManager(resourceManager, id, new InputStreamResource(input)), framebuffer, id);
+		return new ShaderEffect(MinecraftClient.getInstance().getTextureManager(), new OwResourceManager(id, new InputStreamResource(input)), framebuffer, id);
 	}
 
 	public static ShaderEffect load(Framebuffer framebuffer, String name, String input) throws JsonSyntaxException, IOException {
@@ -77,44 +73,42 @@ public class ShaderEffectLoader {
 
 	private static class OwResourceManager implements ResourceManager {
 
-		private ResourceManager resourceMang;
 		private Identifier id;
 		private Resource resource;
 
-		public OwResourceManager(ResourceManager resourceMang, Identifier id, Resource resource) {
-			this.resourceMang = resourceMang;
+		public OwResourceManager(Identifier id, Resource resource) {
 			this.id = id;
 			this.resource = resource;
 		}
 
 		@Override
 		public Resource getResource(Identifier id) throws IOException {
-			return id.equals(this.id) ? resource : resourceMang.getResource(id);
+			return id.equals(this.id) ? resource : MinecraftClient.getInstance().getResourceManager().getResource(id);
 		}
 
 		@Override
 		public Set<String> getAllNamespaces() {
-			return resourceMang.getAllNamespaces();
+			return MinecraftClient.getInstance().getResourceManager().getAllNamespaces();
 		}
 
 		@Override
 		public boolean containsResource(Identifier id) {
-			return resourceMang.containsResource(id);
+			return MinecraftClient.getInstance().getResourceManager().containsResource(id);
 		}
 
 		@Override
 		public List<Resource> getAllResources(Identifier id) throws IOException {
-			return resourceMang.getAllResources(id);
+			return MinecraftClient.getInstance().getResourceManager().getAllResources(id);
 		}
 
 		@Override
 		public Collection<Identifier> findResources(String startingPath, Predicate<String> pathPredicate) {
-			return resourceMang.findResources(startingPath, pathPredicate);
+			return MinecraftClient.getInstance().getResourceManager().findResources(startingPath, pathPredicate);
 		}
 
 		@Override
 		public Stream<ResourcePack> streamResourcePacks() {
-			return resourceMang.streamResourcePacks();
+			return MinecraftClient.getInstance().getResourceManager().streamResourcePacks();
 		}
 
 	}
