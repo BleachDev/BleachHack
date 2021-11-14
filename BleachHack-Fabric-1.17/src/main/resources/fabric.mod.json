@@ -25,6 +25,7 @@
   "mixins": [
     "bleachhack.mixins.json"
   ],
+  "accessWidener" : "bleachhack.accesswidener",
   "depends": {
     "minecraft": "~1.17.1"
   }

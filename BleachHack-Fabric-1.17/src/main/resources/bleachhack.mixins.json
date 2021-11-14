@@ -55,6 +55,7 @@
     "MixinRenderTickCounter",
     "MixinScreen",
     "MixinServerScreen",
+    "MixinShader",
     "MixinSharedConstants",
     "MixinSoundSystem",
     "MixinTitleScreen",

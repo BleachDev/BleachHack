@@ -11,20 +11,20 @@ package bleach.hack.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import net.minecraft.client.gl.JsonEffectGlShader;
+import net.minecraft.client.render.Shader;
 import net.minecraft.util.Identifier;
 
-// Tweaks to the json effect shader class to make it compatible with custom identifiers
-@Mixin(JsonEffectGlShader.class)
-public class MixinJsonEffectGlShader {
+// Tweaks to the shader class to make it compatible with custom identifiers
+@Mixin(Shader.class)
+public class MixinShader {
 	
 	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
 	public Identifier init_identifier(String string) {
 		return replaceIdentifier(string);
 	}
 
-	@Redirect(method = "loadEffect", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
-	private static Identifier loadEffect_identifier(String string) {
+	@Redirect(method = "loadProgram", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
+	private static Identifier loadProgram(String string) {
 		return replaceIdentifier(string);
 	}
 	
