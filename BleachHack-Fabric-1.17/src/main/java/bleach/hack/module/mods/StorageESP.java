@@ -42,6 +42,7 @@ import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -122,10 +123,13 @@ public class StorageESP extends Module {
 				int[] color = getColorForBlock(be);
 				
 				if (color != null) {
-					mc.getBlockEntityRenderDispatcher().get(be).render(be, mc.getTickDelta(),
-							Renderer.matrixFrom(be.getPos().getX(), be.getPos().getY(), be.getPos().getZ()),
-							colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
-							LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+					BlockEntityRenderer<BlockEntity> renderer = mc.getBlockEntityRenderDispatcher().get(be);
+					if (renderer != null) {
+						renderer.render(be, mc.getTickDelta(),
+								Renderer.matrixFrom(be.getPos().getX(), be.getPos().getY(), be.getPos().getZ()),
+								colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
+								LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+					}
 				}
 			}
 

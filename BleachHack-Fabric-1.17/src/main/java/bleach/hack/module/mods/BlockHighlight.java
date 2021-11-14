@@ -25,6 +25,7 @@ import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayers;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -89,10 +90,13 @@ public class BlockHighlight extends Module {
 
 			BlockEntity be = mc.world.getBlockEntity(pos);
 			if (be != null) {
-				mc.getBlockEntityRenderDispatcher().get(be).render(
-						be, mc.getTickDelta(), matrices,
-						colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
-						LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+				BlockEntityRenderer<BlockEntity> renderer = mc.getBlockEntityRenderDispatcher().get(be);
+
+				if (renderer != null) {
+					renderer.render(be, mc.getTickDelta(), matrices,
+							colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
+							LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+				}
 			} else {
 				mc.getBlockRenderManager().getModelRenderer().renderFlat(
 						mc.world, mc.getBlockRenderManager().getModel(state), state, pos, matrices,
