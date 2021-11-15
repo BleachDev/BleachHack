@@ -1,14 +1,9 @@
 package bleach.hack.gui.window.widget;
 
-import java.util.function.Function;
-
-import bleach.hack.util.FabricReflect;
-import net.minecraft.client.font.FontStorage;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 
 public class WindowPassTextFieldWidget extends WindowTextFieldWidget {
@@ -20,10 +15,8 @@ public class WindowPassTextFieldWidget extends WindowTextFieldWidget {
 		this.textField.setMaxLength(32767);
 	}
 
-	@SuppressWarnings("unchecked")
 	private TextRenderer createTextRenderer() {
-		Function<Identifier, FontStorage> thing = (Function<Identifier, FontStorage>) FabricReflect.getFieldValue(mc.textRenderer, "field_1997", "fontStorageAccessor");
-		return new TextRenderer(thing) {
+		return new TextRenderer(mc.textRenderer.fontStorageAccessor) {
 			@Override
 			public int draw(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, boolean rightToLeft) {
 				return super.draw(hide(text), x, y, color, shadow, matrix, vertexConsumers, seeThrough, backgroundColor, light, rightToLeft);

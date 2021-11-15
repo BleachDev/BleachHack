@@ -16,10 +16,8 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.DisconnectedScreen;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -28,7 +26,6 @@ import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
 
 public class AutoReconnect extends Module {
 
@@ -64,17 +61,14 @@ public class AutoReconnect extends Module {
 		private ButtonWidget reconnectButton;
 
 		public NewDisconnectScreen(DisconnectedScreen screen) {
-			super((Screen) FabricReflect.getFieldValue(screen, "field_2456", "parent"),
-					screen.getTitle(),
-					(Text) FabricReflect.getFieldValue(screen, "field_2457", "reason"));
+			super(screen.parent, screen.getTitle(), screen.reason);
 		}
 
 		public void init() {
 			super.init();
 
 			reconnectTime = System.currentTimeMillis();
-			int reasonH = (int) FabricReflect.getFieldValue(this, "field_2454", "reasonHeight");
-			int buttonH = Math.min(height / 2 + reasonH / 2 + 9, height - 30);
+			int buttonH = Math.min(height / 2 + this.reasonHeight / 2 + 9, height - 30);
 
 			addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 22, 200, 20, new LiteralText("Reconnect"), button -> {
 				if (server != null)

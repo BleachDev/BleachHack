@@ -45,7 +45,6 @@ import bleach.hack.module.setting.base.SettingButton;
 import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.world.ClientChunkSerializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -252,7 +251,7 @@ public class UI extends Module {
 		}
 
 		// FPS
-		int fps = (int) FabricReflect.getFieldValue(MinecraftClient.getInstance(), "field_1738", "currentFps");
+		int fps = MinecraftClient.currentFps;
 		fpsText = new LiteralText("FPS: ")
 				.append(colorText(Integer.toString(fps), Math.min(fps, 120) / 360f));
 

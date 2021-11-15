@@ -20,7 +20,6 @@ import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
@@ -67,8 +66,8 @@ public class PacketFly extends Module {
 		if (event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
 
-			FabricReflect.writeField(p, mc.player.getYaw(), "field_12391", "yaw");
-			FabricReflect.writeField(p, mc.player.getPitch(), "field_12393", "pitch");
+			p.yaw = mc.player.getYaw();
+			p.pitch = mc.player.getPitch();
 
 			if (getSetting(4).asToggle().state) {
 				event.setCancelled(true);
@@ -100,7 +99,7 @@ public class PacketFly extends Module {
 		double hspeed = getSetting(1).asSlider().getValue();
 		double vspeed = getSetting(2).asSlider().getValue();
 		timer++;
-		
+
 		Vec3d forward = new Vec3d(0, 0, hspeed).rotateY(-(float) Math.toRadians(mc.player.getYaw()));
 		Vec3d moveVec = Vec3d.ZERO;
 

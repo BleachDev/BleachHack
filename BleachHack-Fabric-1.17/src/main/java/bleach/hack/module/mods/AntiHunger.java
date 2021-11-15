@@ -14,7 +14,6 @@ import bleach.hack.event.events.EventSendPacket;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class AntiHunger extends Module {
@@ -34,7 +33,7 @@ public class AntiHunger extends Module {
 				// event.setCancelled(true);
 				boolean onGround = mc.player.fallDistance >= 0.1f;
 				mc.player.setOnGround(onGround);
-				FabricReflect.writeField(event.getPacket(), onGround, "field_29179", "onGround");
+				((PlayerMoveC2SPacket) event.getPacket()).onGround = onGround;
 				bool = true;
 			} else {
 				bool = false;

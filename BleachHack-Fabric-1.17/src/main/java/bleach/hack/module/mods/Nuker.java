@@ -30,7 +30,6 @@ import bleach.hack.module.setting.other.SettingBlockList;
 import bleach.hack.module.setting.other.SettingRotate;
 import bleach.hack.module.Module;
 import bleach.hack.util.Boxes;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.collections.ImmutablePairList;
 import bleach.hack.util.render.Renderer;
 import bleach.hack.util.render.color.LineColor;
@@ -168,7 +167,7 @@ public class Nuker extends Module {
 		if (getSetting(11).asToggle().state) {
 			float[] color = getSetting(11).asToggle().getChild(1).asColor().getRGBFloat();
 
-			float breakingProgress = (float) FabricReflect.getFieldValue(mc.interactionManager, "field_3715", "currentBreakingProgress");
+			float breakingProgress = mc.interactionManager.currentBreakingProgress;
 
 			for (BlockPos pos: renderBlocks) {
 				VoxelShape shape = mc.world.getBlockState(pos).getOutlineShape(mc.world, pos);

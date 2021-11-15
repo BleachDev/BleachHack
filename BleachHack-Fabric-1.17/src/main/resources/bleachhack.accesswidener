@@ -1,6 +1,46 @@
 accessWidener    v1    named
 
+
+## =========== Misc ===========
+
+
+# ClientPlayerInteractionManager
+# - For Nuker to get the current breaking progress
+accessible    field    net/minecraft/client/network/ClientPlayerInteractionManager    currentBreakingProgress    F
+
+
+# MinecraftVersion
+# - For ProtocolScreen to make the version constants accessible
+accessible    field    net/minecraft/MinecraftVersion    name    Ljava/lang/String;
+mutable       field    net/minecraft/MinecraftVersion    name    Ljava/lang/String;
+accessible    field    net/minecraft/MinecraftVersion    releaseTarget    Ljava/lang/String;
+mutable       field    net/minecraft/MinecraftVersion    releaseTarget    Ljava/lang/String;
+accessible    field    net/minecraft/MinecraftVersion    protocolVersion    I
+mutable       field    net/minecraft/MinecraftVersion    protocolVersion    I
+accessible    field    net/minecraft/MinecraftVersion    dataPackVersion    I
+mutable       field    net/minecraft/MinecraftVersion    dataPackVersion    I
+
+
+# MinecraftClient
+# - For AccountManager to change the session
+accessible    field    net/minecraft/client/MinecraftClient    session    Lnet/minecraft/client/util/Session;
+mutable       field    net/minecraft/client/MinecraftClient    session    Lnet/minecraft/client/util/Session;
+# - For FastUse to change the item use cooldown and rightclick the mouse
+accessible    method    net/minecraft/client/MinecraftClient    doItemUse    ()V
+accessible    field    net/minecraft/client/MinecraftClient    itemUseCooldown    I
+# - For UI to get the current FPS
+accessible    field    net/minecraft/client/MinecraftClient    currentFps    I
+
+
+# SoundManager
+# - For NotebotStealer to access soundsystem
+accessible    field    net/minecraft/client/sound/SoundManager    soundSystem    Lnet/minecraft/client/sound/SoundSystem;
+
+accessible    field    net/minecraft/client/sound/SoundSystem    sounds    Lcom/google/common/collect/Multimap;
+
+
 # RenderLayer
+# - Making various classes accessible for ColorVertexConsumerProvider
 accessible    class    net/minecraft/client/render/RenderLayer$MultiPhase
 accessible    method    net/minecraft/client/render/RenderLayer$MultiPhase    getPhases    ()Lnet/minecraft/client/render/RenderLayer$MultiPhaseParameters;
 
@@ -13,3 +53,93 @@ accessible    method    net/minecraft/client/render/RenderPhase$TextureBase    g
 
 accessible    class    net/minecraft/client/render/RenderLayer$OutlineMode
 accessible    field    net/minecraft/client/render/RenderLayer$MultiPhaseParameters    outlineMode    Lnet/minecraft/client/render/RenderLayer$OutlineMode;
+
+
+# TextRenderer
+# - Making the font storage accessible so WindowPassTextFieldWidget can override the text renderer
+accessible    field    net/minecraft/client/font/TextRenderer    fontStorageAccessor    Ljava/util/function/Function;
+
+
+## =========== Screens ===========
+
+
+# DisconnectedScreen
+# - For AutoReconnect to read the various fields of DisconnectedScreen
+accessible    field    net/minecraft/client/gui/screen/DisconnectedScreen    parent    Lnet/minecraft/client/gui/screen/Screen;
+accessible    field    net/minecraft/client/gui/screen/DisconnectedScreen    reason    Lnet/minecraft/text/Text;
+accessible    field    net/minecraft/client/gui/screen/DisconnectedScreen    reasonHeight    I
+
+
+# HandledScreen
+# - For Peek to get the focused slot
+accessible    field    net/minecraft/client/gui/screen/ingame/HandledScreen    focusedSlot    Lnet/minecraft/screen/slot/Slot;
+
+
+# SignEditScreen
+# - For AutoSign to read the sign entity from the sign screen
+accessible    field    net/minecraft/client/gui/screen/ingame/SignEditScreen    sign    Lnet/minecraft/block/entity/SignBlockEntity;
+
+
+## =========== Packets ===========
+
+
+# ChatMessageC2SPacket
+# - For BetterChat to be able to edit the outbound message
+accessible    field    net/minecraft/network/packet/c2s/play/ChatMessageC2SPacket    chatMessage    Ljava/lang/String;
+mutable       field    net/minecraft/network/packet/c2s/play/ChatMessageC2SPacket    chatMessage    Ljava/lang/String;
+
+
+# EntityVelocityUpdateS2CPacket
+# - For NoVelocity to cancel entity velocity
+accessible    field    net/minecraft/network/packet/s2c/play/EntityVelocityUpdateS2CPacket    velocityX    I
+mutable       field    net/minecraft/network/packet/s2c/play/EntityVelocityUpdateS2CPacket    velocityX    I
+accessible    field    net/minecraft/network/packet/s2c/play/EntityVelocityUpdateS2CPacket    velocityY    I
+mutable       field    net/minecraft/network/packet/s2c/play/EntityVelocityUpdateS2CPacket    velocityY    I
+accessible    field    net/minecraft/network/packet/s2c/play/EntityVelocityUpdateS2CPacket    velocityZ    I
+mutable       field    net/minecraft/network/packet/s2c/play/EntityVelocityUpdateS2CPacket    velocityZ    I
+
+
+# ExplosionS2CPacket
+# - For NoVelocity to cancel explosion velocity
+accessible    field    net/minecraft/network/packet/s2c/play/ExplosionS2CPacket    playerVelocityX    F
+mutable       field    net/minecraft/network/packet/s2c/play/ExplosionS2CPacket    playerVelocityX    F
+accessible    field    net/minecraft/network/packet/s2c/play/ExplosionS2CPacket    playerVelocityY    F
+mutable       field    net/minecraft/network/packet/s2c/play/ExplosionS2CPacket    playerVelocityY    F
+accessible    field    net/minecraft/network/packet/s2c/play/ExplosionS2CPacket    playerVelocityZ    F
+mutable       field    net/minecraft/network/packet/s2c/play/ExplosionS2CPacket    playerVelocityZ    F
+
+
+# GameMessageS2CPacket
+# - For BetterChat to be able to edit the inbound message
+accessible    field    net/minecraft/network/packet/s2c/play/GameMessageS2CPacket    message    Lnet/minecraft/text/Text;
+mutable       field    net/minecraft/network/packet/s2c/play/GameMessageS2CPacket    message    Lnet/minecraft/text/Text;
+
+
+# PlayerMoveC2SPacket
+# - For AntiHunger, AntiVoid, EntityControl & Flight to change the values in playermove packets
+accessible    field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    y    D
+mutable       field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    y    D
+accessible    field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    yaw    F
+mutable       field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    yaw    F
+accessible    field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    pitch    F
+mutable       field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    pitch    F
+accessible    field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    onGround    Z
+mutable       field    net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket    onGround    Z
+
+
+# PlayerPositionLookS2CPacket
+# - For ElytraFly & PacketFly to change the yaw and pitch
+accessible    field    net/minecraft/network/packet/s2c/play/PlayerPositionLookS2CPacket    pitch    F
+mutable       field    net/minecraft/network/packet/s2c/play/PlayerPositionLookS2CPacket    pitch    F
+accessible    field    net/minecraft/network/packet/s2c/play/PlayerPositionLookS2CPacket    yaw    F
+mutable       field    net/minecraft/network/packet/s2c/play/PlayerPositionLookS2CPacket    yaw    F
+
+
+# VehicleMoveC2SPacket
+# - For EntityControl to change the pitch and yaw of the vehicle
+accessible    field    net/minecraft/network/packet/c2s/play/VehicleMoveC2SPacket    yaw    F
+mutable       field    net/minecraft/network/packet/c2s/play/VehicleMoveC2SPacket    yaw    F
+accessible    field    net/minecraft/network/packet/c2s/play/VehicleMoveC2SPacket    pitch    F
+mutable       field    net/minecraft/network/packet/c2s/play/VehicleMoveC2SPacket    pitch    F
+
+

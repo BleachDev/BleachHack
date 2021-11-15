@@ -42,7 +42,6 @@ import bleach.hack.module.mods.BetterChat.CustomFont.CharMap;
 import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.Texts;
 import bleach.hack.util.io.BleachFileHelper;
 import net.minecraft.network.MessageType;
@@ -132,8 +131,9 @@ public class BetterChat extends Module {
 	@BleachSubscribe
 	public void onPacketSend(EventSendPacket event) {
 		if (event.getPacket() instanceof ChatMessageC2SPacket) {
+			ChatMessageC2SPacket packet = (ChatMessageC2SPacket) event.getPacket();
 			String prefix = "";
-			String text = ((ChatMessageC2SPacket) event.getPacket()).getChatMessage();
+			String text = packet.getChatMessage();
 
 			if (text.startsWith("/r ") || text.startsWith("/reply ")) {
 				String[] split = text.split(" ");
@@ -166,8 +166,8 @@ public class BetterChat extends Module {
 				text = encrypt(text, key) + "\u00ff" + key;
 			}
 
-			if (!text.equals(((ChatMessageC2SPacket) event.getPacket()).getChatMessage())) {
-				FabricReflect.writeField(event.getPacket(), prefix + text, "field_12764", "chatMessage");
+			if (!text.equals(packet.getChatMessage())) {
+				packet.chatMessage = prefix + text;
 			}
 		}
 	}
@@ -232,7 +232,7 @@ public class BetterChat extends Module {
 			}
 
 			if (!message.equals(packet.getMessage())) {
-				FabricReflect.writeField(packet, message, "field_12112", "message");
+				packet.message = message;
 			}
 		}
 	}

@@ -19,7 +19,6 @@ import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
@@ -42,18 +41,15 @@ public class FastUse extends Module {
 		if (getSetting(2).asToggle().state) {
 			if (!(THROWABLE.contains(mc.player.getMainHandStack().getItem())
 					&& (!getSetting(2).asToggle().getChild(0).asToggle().state 
-						|| mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE))) {
+							|| mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE))) {
 				return;
 			}
 		}
 
-		/* set rightClickDelay to 0 */
-		FabricReflect.writeField(mc, 0, "field_1752", "itemUseCooldown");
-
-		/* call rightClickMouse */
+		mc.itemUseCooldown = 0;
 		if (getSetting(0).asMode().mode == 1 && mc.options.keyUse.isPressed()) {
 			for (int i = 0; i < getSetting(1).asSlider().getValueInt(); i++) {
-				FabricReflect.invokeMethod(mc, "method_1583", "doItemUse");
+				mc.doItemUse();
 			}
 		}
 	}

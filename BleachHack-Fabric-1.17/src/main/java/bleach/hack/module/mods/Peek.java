@@ -20,7 +20,6 @@ import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.ItemContentUtils;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BarrelBlock;
@@ -79,7 +78,7 @@ public class Peek extends Module {
 			return;
 		}
 
-		Slot slot = (Slot) FabricReflect.getFieldValue(event.getScreen(), "field_2787", "focusedSlot");
+		Slot slot = ((HandledScreen<?>) event.getScreen()).focusedSlot;
 		if (slot == null)
 			return;
 

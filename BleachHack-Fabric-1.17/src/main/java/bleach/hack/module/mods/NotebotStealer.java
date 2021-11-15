@@ -20,7 +20,6 @@ import bleach.hack.event.events.EventTick;
 import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.Module;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.io.BleachFileMang;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
@@ -62,11 +61,9 @@ public class NotebotStealer extends Module {
 		super.onDisable(inWorld);
 	}
 
-	@SuppressWarnings("unchecked")
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		Multimap<SoundCategory, SoundInstance> soundMap = (Multimap<SoundCategory, SoundInstance>) FabricReflect.getFieldValue(
-				FabricReflect.getFieldValue(mc.getSoundManager(), "field_5590", "soundSystem"), "field_18951", "sounds");
+		Multimap<SoundCategory, SoundInstance> soundMap =  mc.getSoundManager().soundSystem.sounds;
 
 		for (Entry<SoundCategory, SoundInstance> e : HashMultimap.create(soundMap).entries()) {
 			if (prevSoundMap.containsEntry(e.getKey(), e.getValue()))

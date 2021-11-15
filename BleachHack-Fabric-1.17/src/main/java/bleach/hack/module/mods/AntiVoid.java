@@ -17,7 +17,6 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
@@ -65,7 +64,7 @@ public class AntiVoid extends Module {
 			}
 			
 			if (getSetting(0).asMode().mode == 1 && mc.player.getY() < mc.world.getBottomY() && packet.getY(mc.player.getY()) < mc.player.getY()) {
-				FabricReflect.writeField(packet, mc.player.getY(), "field_12886", "y");
+				packet.y = mc.player.getY();
 			}
 		}
 	}

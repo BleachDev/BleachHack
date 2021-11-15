@@ -16,7 +16,6 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
@@ -108,7 +107,7 @@ public class Flight extends Module {
 			if (!flyTick) {
 				boolean onGround = true;// mc.player.fallDistance >= 0.1f;
 				mc.player.setOnGround(onGround);
-				FabricReflect.writeField(event.getPacket(), onGround, "field_29179", "onGround");
+				((PlayerMoveC2SPacket) event.getPacket()).onGround = onGround;
 
 				flyTick = true;
 			} else {

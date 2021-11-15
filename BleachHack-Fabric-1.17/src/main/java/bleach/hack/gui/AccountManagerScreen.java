@@ -34,7 +34,6 @@ import bleach.hack.gui.window.widget.WindowTextFieldWidget;
 import bleach.hack.gui.window.widget.WindowTextWidget;
 import bleach.hack.gui.window.widget.WindowWidget;
 import bleach.hack.util.BleachLogger;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.auth.LoginCrypter;
 import bleach.hack.util.auth.LoginHelper;
 import bleach.hack.util.io.BleachFileMang;
@@ -427,7 +426,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 		public AuthenticationException login() {
 			try {
-				FabricReflect.writeField(MinecraftClient.getInstance(), getSesson(), "field_1726", "session");
+				MinecraftClient.getInstance().session = getSesson();
 				MinecraftClient.getInstance().getSessionProperties().clear();
 				return null;
 			} catch (AuthenticationException e) {

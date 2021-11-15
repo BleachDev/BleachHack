@@ -18,7 +18,6 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import bleach.hack.util.world.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemSteerable;
@@ -126,13 +125,15 @@ public class EntityControl extends Module {
 	public void onSendPacket(EventSendPacket event) {
 		if (getSetting(6).asToggle().state) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
-				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(0).asSlider().getValueFloat(), "field_12898", "yaw");
-				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(1).asSlider().getValueFloat(), "field_12896", "pitch");
+				VehicleMoveC2SPacket packet = (VehicleMoveC2SPacket) event.getPacket();
+				packet.yaw = getSetting(6).asToggle().getChild(0).asSlider().getValueFloat();
+				packet.pitch = getSetting(6).asToggle().getChild(1).asSlider().getValueFloat();
 			} else if (event.getPacket() instanceof PlayerMoveC2SPacket
 					&& mc.player.hasVehicle()
 					&& getSetting(6).asToggle().getChild(2).asToggle().state) {
-				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(0).asSlider().getValueFloat(), "field_12887", "yaw");
-				FabricReflect.writeField(event.getPacket(), getSetting(6).asToggle().getChild(1).asSlider().getValueFloat(), "field_12885", "pitch");
+				PlayerMoveC2SPacket packet = (PlayerMoveC2SPacket) event.getPacket();
+				packet.yaw = getSetting(6).asToggle().getChild(0).asSlider().getValueFloat();
+				packet.pitch = getSetting(6).asToggle().getChild(1).asSlider().getValueFloat();
 			}
 		}
 

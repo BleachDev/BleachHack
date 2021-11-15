@@ -12,7 +12,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import com.mojang.bridge.game.PackType;
 
-import bleach.hack.util.FabricReflect;
+import net.minecraft.MinecraftVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.gui.screen.Screen;
@@ -44,10 +44,11 @@ public class ProtocolScreen extends Screen {
 			int i = Integer.parseInt(protocolField.getText());
 			int i1 = Integer.parseInt(packVerField.getText());
 
-			FabricReflect.writeField(SharedConstants.getGameVersion(), versionField.getText(), "field_16733", "name");
-			FabricReflect.writeField(SharedConstants.getGameVersion(), versionField.getText(), "field_16740", "releaseTarget");
-			FabricReflect.writeField(SharedConstants.getGameVersion(), i, "field_16735", "protocolVersion");
-			FabricReflect.writeField(SharedConstants.getGameVersion(), i1, "field_16734", "dataPackVersion");
+			MinecraftVersion version = (MinecraftVersion) SharedConstants.getGameVersion();
+			version.name = versionField.getText();
+			version.releaseTarget = versionField.getText();
+			version.protocolVersion =  i;
+			version.dataPackVersion = i1;
 			BRAND = brandField.getText();
 
 			onClose();

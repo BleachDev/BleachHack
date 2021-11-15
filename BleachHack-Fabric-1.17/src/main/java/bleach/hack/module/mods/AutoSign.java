@@ -20,7 +20,6 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
@@ -68,9 +67,7 @@ public class AutoSign extends Module {
 				}
 			}
 
-			SignEditScreen screen = (SignEditScreen) event.getScreen();
-			SignBlockEntity sign = (SignBlockEntity) FabricReflect.getFieldValue(screen, "field_3031", "sign");
-
+			SignBlockEntity sign = ((SignEditScreen) event.getScreen()).sign;
 			mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(sign.getPos(), text[0], text[1], text[2], text[3]));
 		}
 	}

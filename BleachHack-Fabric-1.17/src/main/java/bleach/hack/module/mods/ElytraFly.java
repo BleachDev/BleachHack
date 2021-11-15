@@ -21,7 +21,6 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingMode;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
@@ -154,8 +153,8 @@ public class ElytraFly extends Module {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly() && event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
 
-			FabricReflect.writeField(p, mc.player.getYaw(), "field_12391", "yaw");
-			FabricReflect.writeField(p, mc.player.getPitch(), "field_12393", "pitch");
+			p.yaw = mc.player.getYaw();
+			p.pitch = mc.player.getPitch();
 		}
 	}
 

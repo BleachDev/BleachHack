@@ -16,7 +16,6 @@ import bleach.hack.module.ModuleCategory;
 import bleach.hack.module.setting.base.SettingSlider;
 import bleach.hack.module.setting.base.SettingToggle;
 import bleach.hack.module.Module;
-import bleach.hack.util.FabricReflect;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
 
@@ -60,9 +59,9 @@ public class NoVelocity extends Module {
 				double pvelY = (packet.getVelocityY() / 8000d - mc.player.getVelocity().y) * velY;
 				double pvelZ = (packet.getVelocityZ() / 8000d - mc.player.getVelocity().z) * velXZ;
 
-				FabricReflect.writeField(packet, (int) (pvelX * 8000 + mc.player.getVelocity().x * 8000), "field_12563", "velocityX");
-				FabricReflect.writeField(packet, (int) (pvelY * 8000 + mc.player.getVelocity().y * 8000), "field_12562", "velocityY");
-				FabricReflect.writeField(packet, (int) (pvelZ * 8000 + mc.player.getVelocity().z * 8000), "field_12561", "velocityZ");
+				packet.velocityX = (int) (pvelX * 8000 + mc.player.getVelocity().x * 8000);
+				packet.velocityY = (int) (pvelY * 8000 + mc.player.getVelocity().y * 8000);
+				packet.velocityZ = (int) (pvelZ * 8000 + mc.player.getVelocity().z * 8000);
 			}
 		} else if (event.getPacket() instanceof ExplosionS2CPacket && getSetting(1).asToggle().state) {
 			ExplosionS2CPacket packet = (ExplosionS2CPacket) event.getPacket();
@@ -70,9 +69,9 @@ public class NoVelocity extends Module {
 			double velXZ = getSetting(1).asToggle().getChild(0).asSlider().getValue() / 100;
 			double velY = getSetting(1).asToggle().getChild(1).asSlider().getValue() / 100;
 			
-			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityX() * velXZ), "field_12176", "playerVelocityX");
-			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityY() * velY), "field_12183", "playerVelocityY");
-			FabricReflect.writeField(event.getPacket(), (float) (packet.getPlayerVelocityZ() * velXZ), "field_12182", "playerVelocityZ");
+			packet.playerVelocityX = (float) (packet.getPlayerVelocityX() * velXZ);
+			packet.playerVelocityY = (float) (packet.getPlayerVelocityY() * velY);
+			packet.playerVelocityZ = (float) (packet.getPlayerVelocityZ() * velXZ);
 		}
 	}
 
