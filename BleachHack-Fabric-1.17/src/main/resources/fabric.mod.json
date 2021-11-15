@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "bleach.hack.BleachHack"
+      "org.bleachhack.BleachHack"
     ]
   },
   "mixins": [

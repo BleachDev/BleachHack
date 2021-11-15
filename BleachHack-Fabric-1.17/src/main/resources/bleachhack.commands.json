@@ -1,5 +1,5 @@
 {
-  "package": "bleach.hack.command.commands",
+  "package": "org.bleachhack.command.commands",
   "commands": [
 	"CmdBetterChat",
 	"CmdBind",
