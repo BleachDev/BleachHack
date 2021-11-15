@@ -21,17 +21,15 @@ jobs:
       with:
         java-version: 16
  
-    - name: Build 1.17
+    - name: Build The Bruh
       run: |
-        cd BleachHack-Fabric-1.17
         chmod +x gradlew
         ./gradlew build
-        cd ..
 
-    - name: Upload 1.17
+    - name: Upload The Bruh
       uses: actions/upload-artifact@v2
       with:
         name: BleachHack-1.17.1
         path: |
-          BleachHack-Fabric-1.17/build/libs/bleachhack-*.jar
-          !BleachHack-Fabric-1.17/build/libs/bleachhack-*-*.jar
+          build/libs/bleachhack-*.jar
+          !build/libs/bleachhack-*-*.jar

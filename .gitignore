@@ -23,6 +23,9 @@ bin/
 # fabric
 
 run/
+logs/
+.fabric/
+.mixin.out/
 
 #eclipse
 
