@@ -9,7 +9,6 @@
 package org.bleachhack.util;
 
 import java.net.http.HttpResponse.BodyHandlers;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,7 +46,7 @@ public class BleachPlayerManager {
 				playerQueue.forEach(p -> playersJson.add(p.toString()));
 				playerQueue.clear();
 
-				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString(), BodyHandlers.ofString());
+				byte[] response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString(), BodyHandlers.ofByteArray());
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -76,7 +75,7 @@ public class BleachPlayerManager {
 				JsonArray playersJson = new JsonArray();
 				players.forEach(p -> playersJson.add(p.toString()));
 
-				String response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString(), BodyHandlers.ofString());
+				byte[] response = BleachOnlineMang.sendApiPost("online/inlistbin", playersJson.toString(), BodyHandlers.ofByteArray());
 
 				if (response != null) {
 					boolean[] binary = toBinaryArray(response);
@@ -140,10 +139,10 @@ public class BleachPlayerManager {
 		return UUID_ADD_DASHES_PATTERN.matcher(uuid).replaceFirst("$1-$2-$3-$4-$5");
 	}
 
-	private static boolean[] toBinaryArray(String string) {
-		boolean[] array = new boolean[string.length() * 8];
+	private static boolean[] toBinaryArray(byte[] bytes) {
+		boolean[] array = new boolean[bytes.length * 8];
 		int index = 0;
-		for (byte b: string.getBytes(StandardCharsets.ISO_8859_1)) {
+		for (byte b: bytes) {
 			for (byte bit = 7; bit >= 0; bit--) {
 				array[index] = ((b >> bit) & 1) == 1;
 				index++;
