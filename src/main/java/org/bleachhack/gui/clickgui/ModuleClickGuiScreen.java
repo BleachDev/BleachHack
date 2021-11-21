@@ -54,6 +54,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		int y = 50;
 		for (ModuleCategory c: ModuleCategory.values()) {
 			addWindow(new ModuleWindow(ModuleManager.getModulesInCat(c), 30, y, len, StringUtils.capitalize(c.name().toLowerCase()), c.getItem()));
+			y += 16;
 		}
 
 		for (Window w: getWindows()) {
