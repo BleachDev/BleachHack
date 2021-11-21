@@ -27,12 +27,12 @@ import net.minecraft.util.registry.Registry;
 
 public class SettingBlockList extends SettingList<Block> {
 
-	public SettingBlockList(String text, String windowText, Block... blocks) {
-		this(text, windowText, null, blocks);
+	public SettingBlockList(String text, String windowText, Block... defaultBlocks) {
+		this(text, windowText, null, defaultBlocks);
 	}
 
-	public SettingBlockList(String text, String windowText, Predicate<Block> filter, Block... blocks) {
-		super(text, windowText, getAllBlocks(filter), blocks);
+	public SettingBlockList(String text, String windowText, Predicate<Block> filter, Block... defaultBlocks) {
+		super(text, windowText, getAllBlocks(filter), defaultBlocks);
 	}
 
 	private static Collection<Block> getAllBlocks(Predicate<Block> filter) {

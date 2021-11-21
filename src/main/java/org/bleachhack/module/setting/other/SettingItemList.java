@@ -26,12 +26,12 @@ import net.minecraft.util.registry.Registry;
 
 public class SettingItemList extends SettingList<Item> {
 
-	public SettingItemList(String text, String windowText, Item... items) {
-		this(text, windowText, null, items);
+	public SettingItemList(String text, String windowText, Item... defaultItems) {
+		this(text, windowText, null, defaultItems);
 	}
 
-	public SettingItemList(String text, String windowText, Predicate<Item> filter, Item... items) {
-		super(text, windowText, getAllItems(filter), items);
+	public SettingItemList(String text, String windowText, Predicate<Item> filter, Item... defaultItems) {
+		super(text, windowText, getAllItems(filter), defaultItems);
 	}
 
 	private static Collection<Item> getAllItems(Predicate<Item> filter) {
