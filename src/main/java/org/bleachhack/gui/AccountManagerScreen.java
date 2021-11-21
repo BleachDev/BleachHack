@@ -109,7 +109,7 @@ public class AccountManagerScreen extends WindowScreen {
 				BleachHack.playerMang.startPinger();
 		}));
 
-		mainWindow.getWidgets().forEach(rightsideWidgets::add);
+		rightsideWidgets.addAll(mainWindow.getWidgets());
 		updateRightside();
 
 		// Left side
