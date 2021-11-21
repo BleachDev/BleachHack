@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.tuple.Triple;
+import org.bleachhack.gui.clickgui.window.ClickGuiWindow.Tooltip;
 import org.bleachhack.gui.clickgui.window.ModuleWindow;
 import org.bleachhack.util.io.BleachFileHelper;
 
@@ -123,22 +123,22 @@ public class SettingToggle extends SettingBase {
 		return this;
 	}
 
-	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
+	public Tooltip getGuiDesc(ModuleWindow window, int x, int y, int len) {
 		if (!expanded || window.mouseY - y <= 12)
 			return super.getGuiDesc(window, x, y, len);
 
-		Triple<Integer, Integer, String> triple = null;
+		Tooltip tooltip = null;
 
 		int h = y + 12;
 		for (SettingBase s : children) {
 			if (window.mouseOver(x + 2, h, x + len, h + s.getHeight(len))) {
-				triple = s.getGuiDesc(window, x + 2, h, len - 2);
+				tooltip = s.getGuiDesc(window, x + 2, h, len - 2);
 			}
 
 			h += s.getHeight(len - 2);
 		}
 
-		return triple;
+		return tooltip;
 	}
 
 	public void readSettings(JsonElement settings) {

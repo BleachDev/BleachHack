@@ -12,10 +12,10 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.exception.CmdSyntaxException;
+import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileHelper;
 
@@ -35,7 +35,7 @@ public class CmdClickGui extends Command {
 			if (args.length == 1 || args[1].equalsIgnoreCase("closed")) {
 				int y = 50;
 
-				for (Window m : ClickGui.clickGui.getWindows()) {
+				for (Window m : ModuleClickGuiScreen.INSTANCE.getWindows()) {
 					if (m instanceof ClickGuiWindow) {
 						((ClickGuiWindow) m).hiding = true;
 						m.x1 = 30;
@@ -46,7 +46,7 @@ public class CmdClickGui extends Command {
 			} else if (args[1].equalsIgnoreCase("open")) {
 				int x = 10;
 
-				for (Window m : ClickGui.clickGui.getWindows()) {
+				for (Window m : ModuleClickGuiScreen.INSTANCE.getWindows()) {
 					if (m instanceof ClickGuiWindow) {
 						((ClickGuiWindow) m).hiding = false;
 						m.x1 = x;

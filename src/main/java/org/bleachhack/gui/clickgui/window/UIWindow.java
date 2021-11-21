@@ -43,12 +43,11 @@ public class UIWindow extends ClickGuiWindow {
 	}
 
 	public int[] getSize() {
-		int[] size = sizeSupplier.get();
-		return new int[] { size[0] + 2, size[1] + 2 };
+		return sizeSupplier.get();
 	}
 
 	public void renderUI(MatrixStack matrices) {
-		renderConsumer.accept(matrices, x1 + 1, y1 + 1);
+		renderConsumer.accept(matrices, x1, y1);
 	}
 
 	public boolean shouldClose() {
@@ -97,9 +96,8 @@ public class UIWindow extends ClickGuiWindow {
 				x2 = width;
 			} else if (Math.abs(mouseX - dragOffX + wWidth / 2 - width / 2) < sens) {
 				newPos.addAttachment("c", 1);
-				int w = wWidth;
-				x1 = width / 2 - w / 2;
-				x2 = x1 + w;
+				x1 = width / 2 - wWidth / 2;
+				x2 = x1 + wWidth;
 			} else {
 				for (Entry<String, UIWindow> e: parentContainer.windows.entrySet()) {
 					UIWindow window = e.getValue();
@@ -180,10 +178,11 @@ public class UIWindow extends ClickGuiWindow {
 
 	protected void drawBackground(MatrixStack matrices, int mouseX, int mouseY, TextRenderer textRend) {
 		// background
-		DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
+		/*DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1, 0xff6060b0);
 		horizontalGradient(matrices, x1 + 1, y1, x2 - 1, y1 + 1, 0xff6060b0, 0xff8070b0);
 		DrawableHelper.fill(matrices, x2 - 1, y1 + 1, x2, y2 - 1, 0xff8070b0);
-		horizontalGradient(matrices, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0,  0xff8070b0);
+		horizontalGradient(matrices, x1 + 1, y2 - 1, x2 - 1, y2, 0xff6060b0,  0xff8070b0);*/
+		
 		// limited debug edition
 		/*DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1,
 				position.getAttachments().containsValue(1) ? 0xff60b060 : 0xff6060b0);
@@ -196,7 +195,7 @@ public class UIWindow extends ClickGuiWindow {
 				(position.getAttachments().containsValue(0) ? 0xff60b060 : 0xff6060b0),
 				(position.getAttachments().containsValue(0) ? 0xff80c060 : 0xff8070b0));*/
 
-		DrawableHelper.fill(matrices, x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0x90606090);
+		DrawableHelper.fill(matrices, x1, y1, x2, y2, 0x90606090);
 	}
 
 	public void mouseClicked(double mouseX, double mouseY, int button) {

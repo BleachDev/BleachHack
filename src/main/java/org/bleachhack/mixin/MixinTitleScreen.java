@@ -15,10 +15,10 @@ import org.bleachhack.gui.BleachCreditsScreen;
 import org.bleachhack.gui.BleachOptionsScreen;
 import org.bleachhack.gui.BleachTitleScreen;
 import org.bleachhack.gui.UpdateScreen;
+import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.gui.option.Option;
 import org.bleachhack.gui.window.WindowManagerScreen;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.util.io.BleachFileHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -65,7 +65,7 @@ public class MixinTitleScreen extends Screen {
 					new WindowManagerScreen(
 							Triple.of(new BleachTitleScreen(), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)),
 							Triple.of(new AccountManagerScreen(), "Accounts", new ItemStack(Items.PAPER)),
-							Triple.of(ClickGui.clickGui, "ClickGui", new ItemStack(Items.TOTEM_OF_UNDYING)),
+							Triple.of(ModuleClickGuiScreen.INSTANCE, "ClickGui", new ItemStack(Items.TOTEM_OF_UNDYING)),
 							Triple.of(new BleachOptionsScreen(null), "Options", new ItemStack(Items.REDSTONE)),
 							Triple.of(new BleachCreditsScreen(), "Credits", new ItemStack(Items.DRAGON_HEAD))) {
 

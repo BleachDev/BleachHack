@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.Triple;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
 import org.bleachhack.module.setting.base.SettingBase;
@@ -35,7 +34,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	private Set<Module> searchedModules;
 
-	private Triple<Integer, Integer, String> tooltip = null;
+	private Tooltip tooltip = null;
 
 	public ModuleWindow(List<Module> mods, int x1, int y1, int len, String title, ItemStack icon) {
 		super(x1, y1, x1 + len, 0, title, icon);
@@ -78,7 +77,7 @@ public class ModuleWindow extends ClickGuiWindow {
 
 			// Set which module settings show on
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
-				tooltip = Triple.of(x + len + 2, y + curY, m.getKey().getDesc());
+				tooltip = new Tooltip(x + len + 2, y + curY, m.getKey().getDesc());
 
 				if (lmDown)
 					m.getKey().toggle();
@@ -107,7 +106,7 @@ public class ModuleWindow extends ClickGuiWindow {
 		}
 	}
 
-	public Triple<Integer, Integer, String> getTooltip() {
+	public Tooltip getTooltip() {
 		return tooltip;
 	}
 

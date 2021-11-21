@@ -8,12 +8,25 @@
  */
 package org.bleachhack.module;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+
 public enum ModuleCategory {
-	PLAYER,
-	RENDER,
-	COMBAT,
-	MOVEMENT,
-	EXPLOITS,
-	MISC,
-	WORLD
+	PLAYER(new ItemStack(Items.ARMOR_STAND)),
+	RENDER(new ItemStack(Items.YELLOW_STAINED_GLASS)),
+	COMBAT(new ItemStack(Items.TOTEM_OF_UNDYING)),
+	MOVEMENT(new ItemStack(Items.POTION)),
+	EXPLOITS(new ItemStack(Items.REPEATING_COMMAND_BLOCK)),
+	MISC(new ItemStack(Items.NAUTILUS_SHELL)),
+	WORLD(new ItemStack(Items.GRASS_BLOCK));
+	
+	private final ItemStack item;
+	
+	private ModuleCategory(ItemStack item) {
+		this.item = item;
+	}
+	
+	public ItemStack getItem() {
+		return item;
+	}
 }

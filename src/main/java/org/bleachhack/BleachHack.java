@@ -22,9 +22,9 @@ import org.bleachhack.command.CommandManager;
 import org.bleachhack.command.CommandSuggestor;
 import org.bleachhack.eventbus.BleachEventBus;
 import org.bleachhack.gui.BleachTitleScreen;
+import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.gui.option.Option;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.BleachPlayerManager;
 import org.bleachhack.util.FriendManager;
@@ -107,7 +107,7 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readModules();
 
 		// TODO: move ClickGui and UI to phase 1
-		ClickGui.clickGui.initWindows();
+		ModuleClickGuiScreen.INSTANCE.initWindows();
 		BleachFileHelper.readClickGui();
 		BleachFileHelper.readUI();
 

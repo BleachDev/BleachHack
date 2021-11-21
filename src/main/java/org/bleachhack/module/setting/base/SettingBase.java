@@ -8,7 +8,7 @@
  */
 package org.bleachhack.module.setting.base;
 
-import org.apache.commons.lang3.tuple.Triple;
+import org.bleachhack.gui.clickgui.window.ClickGuiWindow.Tooltip;
 import org.bleachhack.gui.clickgui.window.ModuleWindow;
 import org.bleachhack.module.setting.other.SettingRotate;
 
@@ -91,8 +91,8 @@ public abstract class SettingBase {
 		return description;
 	}
 
-	public Triple<Integer, Integer, String> getGuiDesc(ModuleWindow window, int x, int y, int len) {
-		return Triple.of(x + len + 2, y, description);
+	public Tooltip getGuiDesc(ModuleWindow window, int x, int y, int len) {
+		return new Tooltip(x + len + 2, y, description);
 	}
 
 	public abstract void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len);

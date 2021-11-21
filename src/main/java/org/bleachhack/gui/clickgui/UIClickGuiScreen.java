@@ -16,7 +16,6 @@ import org.bleachhack.gui.clickgui.window.UIWindow;
 import org.bleachhack.module.ModuleManager;
 import org.bleachhack.util.io.BleachFileHelper;
 
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -24,12 +23,16 @@ import net.minecraft.text.LiteralText;
 
 public class UIClickGuiScreen extends ClickGuiScreen {
 
-	private UIContainer uiContainer;
-	private Screen parent;
+	public static UIClickGuiScreen INSTANCE = new UIClickGuiScreen();
 
-	public UIClickGuiScreen(Screen parent, UIContainer uiContainer) {
+	private UIContainer uiContainer;
+
+	public UIClickGuiScreen() {
+		this(new UIContainer());
+	}
+
+	public UIClickGuiScreen(UIContainer uiContainer) {
 		super(new LiteralText("UI Editor"));
-		this.parent = parent;
 		this.uiContainer = uiContainer;
 	}
 
@@ -41,10 +44,6 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 
 		addWindow(new ModuleWindow(Arrays.asList(ModuleManager.getModule("UI")),
 				200, 200, 75, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
-	}
-
-	public void onClose() {
-		client.setScreen(parent);
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -61,5 +60,9 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 		}
 
 		super.render(matrices, mouseX, mouseY, delta);
+	}
+
+	public UIContainer getUIContainer() {
+		return uiContainer;
 	}
 }

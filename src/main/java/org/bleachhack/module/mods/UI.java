@@ -38,7 +38,6 @@ import org.bleachhack.gui.clickgui.window.UIWindow.Position;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.setting.base.SettingButton;
 import org.bleachhack.module.setting.base.SettingMode;
 import org.bleachhack.module.setting.base.SettingSlider;
 import org.bleachhack.module.setting.base.SettingToggle;
@@ -64,8 +63,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 
 public class UI extends Module {
-
-	public static UIContainer uiContainer = new UIContainer();
 
 	private List<Text> moduleListText = new ArrayList<>();
 	private Text fpsText = LiteralText.EMPTY;
@@ -114,101 +111,102 @@ public class UI extends Module {
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 11
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),
 				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren(                      // 12
-						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")),
-				new SettingButton("Edit UI..", () -> MinecraftClient.getInstance().setScreen(new UIClickGuiScreen(ClickGui.clickGui, uiContainer))).withDesc("Edit the position of the UI."));
+						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")));
+
+		UIContainer container = UIClickGuiScreen.INSTANCE.getUIContainer();
 
 		// Modulelist
-		uiContainer.windows.put("modulelist",
-				new UIWindow(new Position("l", 1, "t", 2), uiContainer,
+		container.windows.put("modulelist",
+				new UIWindow(new Position("l", 1, "t", 2), container,
 						() -> getSetting(0).asToggle().state,
 						this::getModuleListSize,
 						this::drawModuleList)
 				);
 
 		// Info
-		uiContainer.windows.put("coords",
-				new UIWindow(new Position("l", 1, "b", 0), uiContainer,
+		container.windows.put("coords",
+				new UIWindow(new Position("l", 1, "b", 0), container,
 						() -> getSetting(3).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(coordsText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, coordsText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(coordsText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, coordsText, x + 1, y + 1, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("fps",
-				new UIWindow(new Position("l", 1, "coords", 0), uiContainer,
+		container.windows.put("fps",
+				new UIWindow(new Position("l", 1, "coords", 0), container,
 						() -> getSetting(1).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(fpsText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, fpsText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(fpsText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, fpsText, x + 1, y + 1, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("ping",
-				new UIWindow(new Position("l", 1, "fps", 0), uiContainer,
+		container.windows.put("ping",
+				new UIWindow(new Position("l", 1, "fps", 0), container,
 						() -> getSetting(2).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(pingText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, pingText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(pingText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, pingText, x + 1, y + 1, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("tps",
-				new UIWindow(new Position("l", 1, "ping", 0), uiContainer,
+		container.windows.put("tps",
+				new UIWindow(new Position("l", 1, "ping", 0), container,
 						() -> getSetting(4).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(tpsText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, tpsText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(tpsText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, tpsText, x + 1, y + 1, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("durability",
-				new UIWindow(new Position(0.2, 0.9), uiContainer,
+		container.windows.put("durability",
+				new UIWindow(new Position(0.2, 0.9), container,
 						() -> getSetting(5).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(durabilityText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, durabilityText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(durabilityText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, durabilityText, x + 1, y + 1, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("server",
-				new UIWindow(new Position(0.2, 0.85, "durability", 0), uiContainer,
+		container.windows.put("server",
+				new UIWindow(new Position(0.2, 0.85, "durability", 0), container,
 						() -> getSetting(6).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(serverText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, serverText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(serverText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, serverText, x + 1, y + 1, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("timestamp",
-				new UIWindow(new Position(0.2, 0.8, "server", 0), uiContainer,
+		container.windows.put("timestamp",
+				new UIWindow(new Position(0.2, 0.8, "server", 0), container,
 						() -> getSetting(7).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(timestampText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, timestampText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(timestampText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, timestampText, x + 1, y + 1, 0xa0a0a0))
 				);
 
-		uiContainer.windows.put("chunksize",
-				new UIWindow(new Position(0.2, 0.75, "timestamp", 0), uiContainer,
+		container.windows.put("chunksize",
+				new UIWindow(new Position(0.2, 0.75, "timestamp", 0), container,
 						() -> getSetting(8).asToggle().state,
-						() -> new int[] { mc.textRenderer.getWidth(chunksizeText), 8 },
-						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, chunksizeText, x, y, 0xa0a0a0))
+						() -> new int[] { mc.textRenderer.getWidth(chunksizeText) + 2, 10 },
+						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, chunksizeText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		// Players
-		uiContainer.windows.put("players",
-				new UIWindow(new Position("l", 1, "modulelist", 2), uiContainer,
+		container.windows.put("players",
+				new UIWindow(new Position("l", 1, "modulelist", 2), container,
 						() -> getSetting(9).asToggle().state,
 						this::getPlayerSize,
 						this::drawPlayerList)
 				);
 
 		// Armor
-		uiContainer.windows.put("armor",
-				new UIWindow(new Position(0.5, 0.85), uiContainer,
+		container.windows.put("armor",
+				new UIWindow(new Position(0.5, 0.85), container,
 						() -> getSetting(10).asToggle().state,
 						this::getArmorSize,
 						this::drawArmor)
 				);
 
 		// Lag-Meter
-		uiContainer.windows.put("lagmeter",
-				new UIWindow(new Position(0, 0.05, "c", 1), uiContainer,
+		container.windows.put("lagmeter",
+				new UIWindow(new Position(0, 0.05, "c", 1), container,
 						() -> getSetting(11).asToggle().state,
 						this::getLagMeterSize,
 						this::drawLagMeter)
 				);
 
 		// Inventory
-		uiContainer.windows.put("inventory",
-				new UIWindow(new Position(0.7, 0.90), uiContainer,
+		container.windows.put("inventory",
+				new UIWindow(new Position(0.7, 0.90), container,
 						() -> getSetting(12).asToggle().state,
 						this::getInventorySize,
 						this::drawInventory)
@@ -342,8 +340,9 @@ public class UI extends Module {
 			return;
 		}
 
-		uiContainer.updatePositions(mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
-		uiContainer.render(event.getMatrix());
+		UIContainer container = UIClickGuiScreen.INSTANCE.getUIContainer();
+		container.updatePositions(mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
+		container.render(event.getMatrix());
 	}
 
 	// --- Module List
@@ -437,7 +436,7 @@ public class UI extends Module {
 	// --- Lag Meter
 
 	public int[] getLagMeterSize() {
-		return new int[] { 144, 11 };
+		return new int[] { 144, 10 };
 	}
 
 	public void drawLagMeter(MatrixStack matrices, int x, int y) {
@@ -464,7 +463,7 @@ public class UI extends Module {
 
 	public int[] getArmorSize() {
 		boolean vertical = getSetting(10).asToggle().getChild(0).asToggle().state;
-		return new int[] { vertical ? 16 : 72, vertical ? 62 : 16 };
+		return new int[] { vertical ? 18 : 74, vertical ? 62 : 16 };
 	}
 
 	public void drawArmor(MatrixStack matrices, int x, int y) {
@@ -485,35 +484,40 @@ public class UI extends Module {
 
 			matrices.push();
 			matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
-			int mode = getSetting(10).asToggle().getChild(1).asMode().mode;
-			if (mode == 0) {
+			
+			if (is.getCount() > 1) {
 				matrices.push();
-				matrices.scale(0.75f, 0.75f, 1f);
-				RenderSystem.disableDepthTest();
+				String s = Integer.toString(is.getCount());
 
-				if (is.getCount() > 1) {
-					String s = "x" + is.getCount();
-					mc.textRenderer.drawWithShadow(matrices, s, (curX + 21 - mc.textRenderer.getWidth(s)) * 1.333f, (curY + 9) * 1.333f, 0xffffff);
-				}
+				matrices.translate(curX + 19 - mc.textRenderer.getWidth(s), curY + 9, 0);
+				matrices.scale(0.85f, 0.85f, 1f);
 
-				if (is.isDamageable()) {
+				mc.textRenderer.drawWithShadow(matrices, s, 0, 0, 0xffffff);
+				matrices.pop();
+			}
+
+			if (is.isDamageable()) {
+				int mode = getSetting(10).asToggle().getChild(1).asMode().mode;
+				if (mode == 0) {
+					matrices.push();
+					matrices.scale(0.75f, 0.75f, 1f);
+
 					String dur = Integer.toString(is.getMaxDamage() - is.getDamage());
 					mc.textRenderer.drawWithShadow(
 							matrices, dur, (curX + 7 - mc.textRenderer.getWidth(dur) * 1.333f / 4) * 1.333f, (curY - (vertical ? 2 : 3)) * 1.333f, durcolor);
+
+					matrices.pop();
+				} else if (mode == 1) {
+					int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
+					DrawableHelper.fill(matrices, curX + 2, curY + 13, curX + 15, curY + 15, 0xff000000);
+					DrawableHelper.fill(matrices, curX + 2, curY + 13, curX + 2 + barLength, curY + 14, durcolor);
+				} else {
+					int barLength = Math.round(12.0F - is.getDamage() * 12.0F / is.getMaxDamage());
+					DrawableHelper.fill(matrices, curX + 15, curY + 2, curX + 17, curY + 14, 0xff000000);
+					DrawableHelper.fill(matrices, curX + 15, curY + 2, curX + 16, curY + 2 + barLength, durcolor);
 				}
-
-				RenderSystem.enableDepthTest();
-				matrices.pop();
-			} else if (mode == 1) {
-				int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
-				DrawableHelper.fill(matrices, curX + 2, curY + 13, curX + 15, curY + 15, 0xff000000);
-				DrawableHelper.fill(matrices, curX + 2, curY + 13, curX + 2 + barLength, curY + 14, durcolor);
-			} else {
-				int barLength = Math.round(12.0F - is.getDamage() * 12.0F / is.getMaxDamage());
-				DrawableHelper.fill(matrices, curX, curY + 2, curX + 2, curY + 14, 0xff000000);
-				DrawableHelper.fill(matrices, curX, curY + 2, curX + 1, curY + 2 + barLength, durcolor);
 			}
-
+			
 			matrices.pop();
 		}
 	}

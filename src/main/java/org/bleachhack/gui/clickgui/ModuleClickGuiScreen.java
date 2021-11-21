@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow;
@@ -25,11 +26,11 @@ import org.bleachhack.util.io.BleachFileHelper;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 
 public class ModuleClickGuiScreen extends ClickGuiScreen {
+	
+	public static ModuleClickGuiScreen INSTANCE = new ModuleClickGuiScreen();
 
 	private TextFieldWidget searchField;
 
@@ -49,37 +50,17 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 
 	public void initWindows() {
 		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.PLAYER),
-				30, 50, len, "Player", new ItemStack(Items.ARMOR_STAND)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.RENDER),
-				30, 66, len, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.COMBAT),
-				30, 82, len, "Combat", new ItemStack(Items.TOTEM_OF_UNDYING)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.MOVEMENT),
-				30, 98, len, "Movement", new ItemStack(Items.POTION)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.EXPLOITS),
-				30, 114, len, "Exploits", new ItemStack(Items.REPEATING_COMMAND_BLOCK)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.MISC),
-				30, 130, len, "Misc", new ItemStack(Items.NAUTILUS_SHELL)));
-
-		addWindow(new ModuleWindow(ModuleManager.getModulesInCat(ModuleCategory.WORLD),
-				30, 146, len, "World", new ItemStack(Items.GRASS_BLOCK)));
+		
+		int y = 50;
+		for (ModuleCategory c: ModuleCategory.values()) {
+			addWindow(new ModuleWindow(ModuleManager.getModulesInCat(c), 30, y, len, StringUtils.capitalize(c.name().toLowerCase()), c.getItem()));
+		}
 
 		for (Window w: getWindows()) {
 			if (w instanceof ClickGuiWindow) {
 				((ClickGuiWindow) w).hiding = true;
 			}
 		}
-	}
-
-	public void onClose() {
-		ModuleManager.getModule("ClickGui").setEnabled(false);
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

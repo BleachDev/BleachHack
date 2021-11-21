@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bleachhack.BleachHack;
+import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
+import org.bleachhack.gui.clickgui.UIClickGuiScreen;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow;
 import org.bleachhack.gui.clickgui.window.UIWindow;
 import org.bleachhack.gui.clickgui.window.UIWindow.Position;
@@ -24,8 +26,6 @@ import org.bleachhack.gui.option.Option;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.ClickGui;
-import org.bleachhack.module.mods.UI;
 import org.bleachhack.module.setting.base.SettingBase;
 import org.bleachhack.util.BleachLogger;
 
@@ -194,7 +194,7 @@ public class BleachFileHelper {
 	public static void saveClickGui() {
 		JsonObject jo = new JsonObject();
 
-		for (Window w : ClickGui.clickGui.getWindows()) {
+		for (Window w : ModuleClickGuiScreen.INSTANCE.getWindows()) {
 			JsonObject jw = new JsonObject();
 			jw.addProperty("x", w.x1);
 			jw.addProperty("y", w.y1);
@@ -219,7 +219,7 @@ public class BleachFileHelper {
 			if (!e.getValue().isJsonObject())
 				continue;
 
-			for (Window w : ClickGui.clickGui.getWindows()) {
+			for (Window w : ModuleClickGuiScreen.INSTANCE.getWindows()) {
 				if (w.title.equals(e.getKey())) {
 					JsonObject jw = e.getValue().getAsJsonObject();
 
@@ -241,7 +241,7 @@ public class BleachFileHelper {
 	public static void saveUI() {
 		JsonObject jo = new JsonObject();
 
-		for (Entry<String, UIWindow> w : UI.uiContainer.windows.entrySet()) {
+		for (Entry<String, UIWindow> w : UIClickGuiScreen.INSTANCE.getUIContainer().windows.entrySet()) {
 			JsonObject jw = new JsonObject();
 			jw.addProperty("x", w.getValue().position.xPercent);
 			jw.addProperty("y", w.getValue().position.yPercent);
@@ -267,7 +267,7 @@ public class BleachFileHelper {
 		if (jo == null)
 			return;
 
-		Map<String, UIWindow> uiWindows = UI.uiContainer.windows;
+		Map<String, UIWindow> uiWindows = UIClickGuiScreen.INSTANCE.getUIContainer().windows;
 		for (Entry<String, JsonElement> e : jo.entrySet()) {
 			if (!e.getValue().isJsonObject() || !uiWindows.containsKey(e.getKey()))
 				continue;

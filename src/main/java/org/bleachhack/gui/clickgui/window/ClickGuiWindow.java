@@ -8,7 +8,6 @@
  */
 package org.bleachhack.gui.clickgui.window;
 
-import org.apache.commons.lang3.tuple.Triple;
 import org.bleachhack.gui.window.Window;
 
 import net.minecraft.client.MinecraftClient;
@@ -68,7 +67,7 @@ public abstract class ClickGuiWindow extends Window {
 		}
 	}
 	
-	public Triple<Integer, Integer, String> getTooltip() {
+	public Tooltip getTooltip() {
 		return null;
 	}
 
@@ -84,5 +83,18 @@ public abstract class ClickGuiWindow extends Window {
 		this.rmDown = rmDown;
 		this.lmHeld = lmHeld;
 		this.mwScroll = mwScroll;
+	}
+	
+	public static class Tooltip {
+		
+		public final int x;
+		public final int y;
+		public final String text;
+		
+		public Tooltip(int x, int y, String text) {
+			this.x = x;
+			this.y = y;
+			this.text = text;
+		}
 	}
 }

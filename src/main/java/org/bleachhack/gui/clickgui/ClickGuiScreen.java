@@ -14,12 +14,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.Triple;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow;
+import org.bleachhack.gui.clickgui.window.ClickGuiWindow.Tooltip;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.gui.window.WindowScreen;
 
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
 public abstract class ClickGuiScreen extends WindowScreen {
@@ -54,12 +56,12 @@ public abstract class ClickGuiScreen extends WindowScreen {
 
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {
-				Triple<Integer, Integer, String> tooltip = ((ClickGuiWindow) w).getTooltip();
+				Tooltip tooltip = ((ClickGuiWindow) w).getTooltip();
 
 				if (tooltip != null) {
-					int tooltipY = tooltip.getMiddle();
+					int tooltipY = tooltip.y;
 
-					String[] split = tooltip.getRight().split("\n", -1 /* Adding -1 makes it keep empty splits */);
+					String[] split = tooltip.text.split("\n", -1 /* Adding -1 makes it keep empty splits */);
 					ArrayUtils.reverse(split);
 					for (String s: split) {
 						/* Match lines to end of words after it reaches 22 characters long */
@@ -75,11 +77,11 @@ public abstract class ClickGuiScreen extends WindowScreen {
 
 						int start = tooltipY - lines.size() * 10;
 						for (int l = 0; l < lines.size(); l++) {
-							fill(matrices, tooltip.getLeft(), start + (l * 10) - 1,
-									tooltip.getLeft() + textRenderer.getWidth(lines.get(l)) + 3,
+							fill(matrices, tooltip.x, start + (l * 10) - 1,
+									tooltip.x + textRenderer.getWidth(lines.get(l)) + 3,
 									start + (l * 10) + 9, 0xff000000);
 
-							textRenderer.drawWithShadow(matrices, lines.get(l), tooltip.getLeft() + 2, start + (l * 10), -1);
+							textRenderer.drawWithShadow(matrices, lines.get(l), tooltip.x + 2, start + (l * 10), -1);
 						}
 
 						tooltipY -= lines.size() * 10;
@@ -87,6 +89,14 @@ public abstract class ClickGuiScreen extends WindowScreen {
 				}
 			}
 		}
+		
+		Window.fill(matrices, width / 2 - 50, -1, width / 2 - 2, 12,
+				mouseX >= width / 2 - 50 && mouseX <= width / 2 - 2 && mouseY >= 0 && mouseY <= 12 ? 0x60b070f0 : 0x60606090);
+		Window.fill(matrices, width / 2 + 2, -1, width / 2 + 50, 12,
+				mouseX >= width / 2 + 2 && mouseX <= width / 2 + 50 && mouseY >= 0 && mouseY <= 12 ? 0x60b070f0 : 0x60606090);
+
+		drawCenteredText(matrices, textRenderer, "Modules", width / 2 - 26, 2, 0xf0f0f0);
+		drawCenteredText(matrices, textRenderer, "UI", width / 2 + 26, 2, 0xf0f0f0);
 
 		matrices.pop();
 
@@ -98,8 +108,16 @@ public abstract class ClickGuiScreen extends WindowScreen {
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (button == 0) {
-			lmDown = true;
-			lmHeld = true;
+			if (mouseX >= width / 2 - 50 && mouseX <= width / 2 - 2 && mouseY >= 0 && mouseY <= 12) {
+				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1f));
+				client.setScreen(ModuleClickGuiScreen.INSTANCE);
+			} else if (mouseX >= width / 2 + 2 && mouseX <= width / 2 + 50 && mouseY >= 0 && mouseY <= 12) {
+				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1f));
+				client.setScreen(UIClickGuiScreen.INSTANCE);
+			} else {
+				lmDown = true;
+				lmHeld = true;
+			}
 		} else if (button == 1) {
 			rmDown = true;
 		}

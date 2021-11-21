@@ -8,6 +8,8 @@
  */
 package org.bleachhack.module.mods;
 
+import org.bleachhack.event.events.EventOpenScreen;
+import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -16,8 +18,6 @@ import org.bleachhack.module.setting.base.SettingToggle;
 import org.lwjgl.glfw.GLFW;
 
 public class ClickGui extends Module {
-
-	public static final ModuleClickGuiScreen clickGui = new ModuleClickGuiScreen();
 
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, ModuleCategory.RENDER, "Draws the clickgui.",
@@ -30,15 +30,21 @@ public class ClickGui extends Module {
 	public void onEnable(boolean inWorld) {
 		super.onEnable(inWorld);
 
-		mc.setScreen(clickGui);
+		mc.setScreen(ModuleClickGuiScreen.INSTANCE);
 	}
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		if (mc.currentScreen instanceof ModuleClickGuiScreen) {
+		if (mc.currentScreen instanceof ModuleClickGuiScreen)
 			mc.setScreen(null);
-		}
 
 		super.onDisable(inWorld);
+	}
+
+	@BleachSubscribe
+	public void onOpenScreen(EventOpenScreen event) {
+		if (event.getScreen() == null) {
+			setEnabled(false);
+		}
 	}
 }
