@@ -9,7 +9,7 @@
 package org.bleachhack.util;
 
 import java.util.Comparator;
-import java.util.function.Predicate;
+import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import net.minecraft.client.MinecraftClient;
@@ -21,28 +21,27 @@ public class InventoryUtils {
 	
 	private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-	/** Returns the slot with the lowest comparator value **/
+	/** Returns the slot with the <b>lowest</b> comparator value **/
 	public static int getSlot(boolean offhand, boolean reverse, Comparator<Integer> comparator) {
 		return IntStream.of(getInventorySlots(offhand))
 				.boxed()
-				.min(comparator.reversed()).orElse(-1);
+				.min(reverse ? comparator.reversed() : comparator).orElse(-1);
 	}
 
-	/** Selects the slot with the lowest comparator value and returns the hand it selected **/
+	/** Selects the slot with the <b>lowest</b> comparator value and returns the hand it selected **/
 	public static Hand selectSlot(boolean offhand, boolean reverse, Comparator<Integer> comparator) {
 		return selectSlot(getSlot(offhand, reverse, comparator));
 	}
 	
 	/** Returns the first slot that matches the Predicate **/
-	public static int getSlot(boolean offhand, Predicate<Integer> filter) {
+	public static int getSlot(boolean offhand, IntPredicate filter) {
 		return IntStream.of(getInventorySlots(offhand))
-				.boxed()
 				.filter(filter)
 				.findFirst().orElse(-1);
 	}
 	
 	/** Selects the first slot that matches the Predicate and returns the hand it selected **/
-	public static Hand selectSlot(boolean offhand, Predicate<Integer> filter) {
+	public static Hand selectSlot(boolean offhand, IntPredicate filter) {
 		return selectSlot(getSlot(offhand, filter));
 	}
 	

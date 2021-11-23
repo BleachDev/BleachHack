@@ -73,7 +73,7 @@ public class AutoFish extends Module {
 	}
 
 	private int getBestRodSlot() {
-		int slot = InventoryUtils.getSlot(true, false, Comparator.comparingInt(i -> {
+		int slot = InventoryUtils.getSlot(true, true, Comparator.comparingInt(i -> {
 			ItemStack is = mc.player.getInventory().getStack(i);
 			if (is.getItem() != Items.FISHING_ROD)
 				return -1;
