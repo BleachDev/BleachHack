@@ -25,7 +25,7 @@ public class InventoryUtils {
 	public static int getSlot(boolean offhand, boolean reverse, Comparator<Integer> comparator) {
 		return IntStream.of(getInventorySlots(offhand))
 				.boxed()
-				.min(reverse ? comparator.reversed() : comparator).orElse(-1);
+				.min(reverse ? comparator.reversed() : comparator).get();
 	}
 
 	/** Selects the slot with the <b>lowest</b> comparator value and returns the hand it selected **/
@@ -80,7 +80,7 @@ public class InventoryUtils {
 		return null;
 	}
 	
-	private static int[] getInventorySlots(boolean offhand) {
+	public static int[] getInventorySlots(boolean offhand) {
 		int[] i = new int[offhand ? 38 : 37];
 		
 		// Add hand slots first
