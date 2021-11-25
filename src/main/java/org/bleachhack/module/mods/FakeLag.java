@@ -11,7 +11,7 @@ package org.bleachhack.module.mods;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -52,7 +52,7 @@ public class FakeLag extends Module {
 	}
 
 	@BleachSubscribe
-	public void sendPacket(EventSendPacket event) {
+	public void sendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {
 			queue.add((PlayerMoveC2SPacket) event.getPacket());
 			event.setCancelled(true);

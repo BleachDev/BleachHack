@@ -8,7 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -34,7 +34,7 @@ public class Criticals extends Module {
 	}
 
 	@BleachSubscribe
-	public void sendPacket(EventSendPacket event) {
+	public void sendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof PlayerInteractEntityC2SPacket) {
 			PlayerInteractEntityC2SPacket packet = (PlayerInteractEntityC2SPacket) event.getPacket();
 			if (PlayerInteractEntityC2SUtils.getInteractType(packet) == InteractType.ATTACK

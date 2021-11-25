@@ -9,7 +9,7 @@
 package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventClientMove;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -178,7 +178,7 @@ public class NoSlow extends Module {
 	}
 
 	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
+	public void onSendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof ClickSlotC2SPacket && getSetting(6).asToggle().asToggle().getChild(1).asToggle().state) {
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 		}

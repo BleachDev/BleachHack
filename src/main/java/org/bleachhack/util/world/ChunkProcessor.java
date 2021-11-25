@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 import org.bleachhack.BleachHack;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 
 import net.minecraft.block.BlockState;
@@ -66,7 +66,7 @@ public class ChunkProcessor {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (updateBlockConsumer != null && event.getPacket() instanceof BlockUpdateS2CPacket) {
 			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
 

@@ -9,7 +9,7 @@
 package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventBiomeColor;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventSkyRender;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -100,7 +100,7 @@ public class Ambience extends Module {
 	}
 
 	@BleachSubscribe
-	public void readPacket(EventReadPacket event) {
+	public void readPacket(EventPacket.Read event) {
 		if (event.getPacket() instanceof GameStateChangeS2CPacket && getSetting(0).asToggle().state) {
 			GameStateChangeS2CPacket packet = (GameStateChangeS2CPacket) event.getPacket();
 			if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STARTED) {

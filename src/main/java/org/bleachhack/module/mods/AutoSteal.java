@@ -15,8 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.commons.lang3.RandomUtils;
 import org.bleachhack.event.events.EventOpenScreen;
-import org.bleachhack.event.events.EventReadPacket;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -216,7 +215,7 @@ public class AutoSteal extends Module {
 	}
 
 	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
+	public void onSendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof CloseHandledScreenC2SPacket) {
 			currentItems = null;
 			currentSyncId = -1;
@@ -232,7 +231,7 @@ public class AutoSteal extends Module {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (event.getPacket() instanceof InventoryS2CPacket) {
 			InventoryS2CPacket packet = (InventoryS2CPacket) event.getPacket();
 

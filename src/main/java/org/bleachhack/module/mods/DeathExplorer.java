@@ -9,7 +9,7 @@
 package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventOpenScreen;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventRenderInGameHud;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -59,7 +59,7 @@ public class DeathExplorer extends Module {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (event.getPacket() instanceof GameJoinS2CPacket) {
 			dead = false;
 		}

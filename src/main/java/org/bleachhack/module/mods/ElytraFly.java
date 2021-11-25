@@ -10,9 +10,8 @@ package org.bleachhack.module.mods;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.bleachhack.event.events.EventClientMove;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventSendMovementPackets;
-import org.bleachhack.event.events.EventSendPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -148,7 +147,7 @@ public class ElytraFly extends Module {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly() && event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
 
@@ -158,7 +157,7 @@ public class ElytraFly extends Module {
 	}
 
 	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
+	public void onSendPacket(EventPacket.Send event) {
 		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
 			if (event.getPacket() instanceof PlayerMoveC2SPacket.LookAndOnGround) {
 				event.setCancelled(true);

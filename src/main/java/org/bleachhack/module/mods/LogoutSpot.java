@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bleachhack.event.events.EventEntityRender;
 import org.bleachhack.event.events.EventOpenScreen;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -71,7 +71,7 @@ public class LogoutSpot extends Module {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (!(event.getPacket() instanceof PlayerListS2CPacket) || mc.world == null) {
 			return;
 		}

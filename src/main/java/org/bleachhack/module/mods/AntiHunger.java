@@ -8,7 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -26,7 +26,7 @@ public class AntiHunger extends Module {
 	}
 
 	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
+	public void onSendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {
 			if (mc.player.getVelocity().y != 0 && !mc.options.keyJump.isPressed() && (!bool || !getSetting(0).asToggle().state)) {
 				// if (((PlayerMoveC2SPacket) event.getPacket()).isOnGround())

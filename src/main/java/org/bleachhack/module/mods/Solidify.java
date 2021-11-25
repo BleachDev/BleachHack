@@ -10,7 +10,7 @@ package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventBlockShape;
 import org.bleachhack.event.events.EventClientMove;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -61,7 +61,7 @@ public class Solidify extends Module {
 	}
 
 	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
+	public void onSendPacket(EventPacket.Send event) {
 		if (getSetting(6).asToggle().state) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
 				VehicleMoveC2SPacket packet = (VehicleMoveC2SPacket) event.getPacket();

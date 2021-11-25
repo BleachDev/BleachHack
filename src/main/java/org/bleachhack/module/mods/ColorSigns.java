@@ -8,7 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -28,7 +28,7 @@ public class ColorSigns extends Module {
 	 * one and remove it to leave "&6" left which is still a valid formatting code.
 	 * Paper has a patch for it to correct it so it doesn't work there */
 	@BleachSubscribe
-	public void onPacketSend(EventSendPacket event) {
+	public void onPacketSend(EventPacket.Send event) {
 		if (event.getPacket() instanceof UpdateSignC2SPacket) {
 			UpdateSignC2SPacket p = (UpdateSignC2SPacket) event.getPacket();
 

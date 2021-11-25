@@ -8,7 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -40,7 +40,7 @@ public class AutoTool extends Module {
 	}
 
 	@BleachSubscribe
-	public void onPacketSend(EventSendPacket event) {
+	public void onPacketSend(EventPacket.Send event) {
 		if (event.getPacket() instanceof PlayerActionC2SPacket) {
 			PlayerActionC2SPacket p = (PlayerActionC2SPacket) event.getPacket();
 

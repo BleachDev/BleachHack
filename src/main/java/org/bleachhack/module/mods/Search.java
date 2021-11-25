@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -165,7 +165,7 @@ public class Search extends Module {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket
 				|| event.getPacket() instanceof GameJoinS2CPacket
 				|| event.getPacket() instanceof PlayerRespawnS2CPacket) {

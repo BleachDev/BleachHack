@@ -27,7 +27,7 @@ import java.util.zip.DeflaterOutputStream;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bleachhack.BleachHack;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventRenderInGameHud;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -549,7 +549,7 @@ public class UI extends Module {
 	}
 
 	@BleachSubscribe
-	public void readPacket(EventReadPacket event) {
+	public void readPacket(EventPacket.Read event) {
 		lastPacket = System.currentTimeMillis();
 
 		if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {

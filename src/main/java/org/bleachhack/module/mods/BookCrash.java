@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -113,7 +113,7 @@ public class BookCrash extends Module {
 	}
 
 	@BleachSubscribe
-	public void EventDisconnect(EventReadPacket event) {
+	public void EventDisconnect(EventPacket.Read event) {
 		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state)
 			setEnabled(false);
 	}

@@ -18,7 +18,7 @@ import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.exception.CmdSyntaxException;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.util.BleachLogger;
 
@@ -89,7 +89,7 @@ public class CmdServer extends Command {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (event.getPacket() instanceof CommandSuggestionsS2CPacket) {
 			BleachHack.eventBus.unsubscribe(this);
 

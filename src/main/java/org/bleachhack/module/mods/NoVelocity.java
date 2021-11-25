@@ -9,7 +9,7 @@
 package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventPlayerPushed;
-import org.bleachhack.event.events.EventReadPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -45,7 +45,7 @@ public class NoVelocity extends Module {
 	}
 
 	@BleachSubscribe
-	public void readPacket(EventReadPacket event) {
+	public void readPacket(EventPacket.Read event) {
 		if (mc.player == null)
 			return;
 

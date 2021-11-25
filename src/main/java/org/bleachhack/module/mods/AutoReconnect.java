@@ -9,7 +9,7 @@
 package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventOpenScreen;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -47,7 +47,7 @@ public class AutoReconnect extends Module {
 	}
 
 	@BleachSubscribe
-	public void sendPacket(EventSendPacket event) {
+	public void sendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof HandshakeC2SPacket) {
 			HandshakeC2SPacket packet = (HandshakeC2SPacket) event.getPacket();
 			server = new ServerInfo("Server", packet.getAddress() + ":" + packet.getPort(), false);

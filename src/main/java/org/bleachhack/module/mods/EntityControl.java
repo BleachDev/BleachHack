@@ -9,8 +9,7 @@
 package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventEntityControl;
-import org.bleachhack.event.events.EventReadPacket;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -122,7 +121,7 @@ public class EntityControl extends Module {
 	}
 
 	@BleachSubscribe
-	public void onSendPacket(EventSendPacket event) {
+	public void onSendPacket(EventPacket.Send event) {
 		if (getSetting(6).asToggle().state) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
 				VehicleMoveC2SPacket packet = (VehicleMoveC2SPacket) event.getPacket();
@@ -143,7 +142,7 @@ public class EntityControl extends Module {
 	}
 
 	@BleachSubscribe
-	public void onReadPacket(EventReadPacket event) {
+	public void onReadPacket(EventPacket.Read event) {
 		if (getSetting(7).asToggle().state && mc.player != null && mc.player.hasVehicle() && !mc.player.input.sneaking
 				&& (event.getPacket() instanceof PlayerPositionLookS2CPacket || event.getPacket() instanceof EntityPassengersSetS2CPacket)) {
 			event.setCancelled(true);

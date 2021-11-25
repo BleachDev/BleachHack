@@ -11,8 +11,7 @@ package org.bleachhack.mixin;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandManager;
-import org.bleachhack.event.events.EventReadPacket;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,7 +37,7 @@ public class MixinClientConnection {
 	@Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
 	public void channelRead0(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo callback) {
 		if (this.channel.isOpen() && packet != null) {
-			EventReadPacket event = new EventReadPacket(packet);
+			EventPacket.Read event = new EventPacket.Read(packet);
 			BleachHack.eventBus.post(event);
 
 			if (event.isCancelled()) {
@@ -63,7 +62,7 @@ public class MixinClientConnection {
 			CommandManager.allowNextMsg = false;
 		}
 
-		EventSendPacket event = new EventSendPacket(packet);
+		EventPacket.Send event = new EventPacket.Send(packet);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {

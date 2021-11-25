@@ -26,8 +26,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
-import org.bleachhack.event.events.EventReadPacket;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -128,7 +127,7 @@ public class BetterChat extends Module {
 	}
 
 	@BleachSubscribe
-	public void onPacketSend(EventSendPacket event) {
+	public void onPacketSend(EventPacket.Send event) {
 		if (event.getPacket() instanceof ChatMessageC2SPacket) {
 			ChatMessageC2SPacket packet = (ChatMessageC2SPacket) event.getPacket();
 			String prefix = "";
@@ -172,7 +171,7 @@ public class BetterChat extends Module {
 	}
 
 	@BleachSubscribe
-	public void onPacketRead(EventReadPacket event) {
+	public void onPacketRead(EventPacket.Read event) {
 		if (event.getPacket() instanceof GameMessageS2CPacket) {
 			GameMessageS2CPacket packet = (GameMessageS2CPacket) event.getPacket();
 

@@ -10,7 +10,7 @@ package org.bleachhack.module.mods;
 
 import org.bleachhack.event.events.EventClientMove;
 import org.bleachhack.event.events.EventOpenScreen;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -95,7 +95,7 @@ public class Freecam extends Module {
 	}
 
 	@BleachSubscribe
-	public void sendPacket(EventSendPacket event) {
+	public void sendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof ClientCommandC2SPacket || event.getPacket() instanceof PlayerMoveC2SPacket) {
 			event.setCancelled(true);
 		}

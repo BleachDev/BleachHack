@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.bleachhack.event.events.EventOpenScreen;
-import org.bleachhack.event.events.EventSendPacket;
+import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
@@ -42,7 +42,7 @@ public class AutoSign extends Module {
 	}
 
 	@BleachSubscribe
-	public void sendPacket(EventSendPacket event) {
+	public void sendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof UpdateSignC2SPacket && text.length < 3) {
 			text = ((UpdateSignC2SPacket) event.getPacket()).getText();
 		}
