@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "0.9.+"
+	id "fabric-loom" version "0.10-SNAPSHOT"
 	id "maven-publish"
 }
 
@@ -15,7 +15,7 @@ loom {
 }
 
 dependencies {
-	//to change the versions see the gradle.properties file
+	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -33,8 +33,7 @@ dependencies {
 		include(modImplementation(fabricApi.module(it, "${project.fabric_version}")))
 	}
 
-	modImplementation "com.github.fzakaria:ascii85:1.2"
-	include "com.github.fzakaria:ascii85:1.2"
+	include(modImplementation("com.github.fzakaria:ascii85:1.2"))
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	//modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -49,12 +48,6 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// ensure that the encoding is set to UTF-8, no matter what the system default is
-	// this fixes some edge cases with special characters not displaying correctly
-	// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-	// If Javadoc is generated, this must be specified in that task too.
-	it.options.encoding = "UTF-8"
-
 	// Minecraft 1.17 (21w19a) upwards uses Java 16.
 	it.options.release = 16
 }
@@ -75,13 +68,7 @@ jar {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
+			from components.java
 		}
 	}
 

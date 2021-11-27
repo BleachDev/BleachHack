@@ -31,8 +31,8 @@ import org.bleachhack.util.collections.ImmutablePairList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.fabricmc.loader.ModContainer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.impl.ModContainerImpl;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -125,7 +125,7 @@ public class UpdateScreen extends WindowScreen {
 							return;
 						}
 
-						File modpath = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginUrl().toURI());
+						File modpath = new File(((ModContainerImpl) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginPath().toUri());
 
 						if (!modpath.isFile()) {
 							updateResult = "Invalid mod path!";
