@@ -8,6 +8,8 @@
  */
 package org.bleachhack.module.mods;
 
+import org.bleachhack.event.events.EventRenderBlock;
+import org.bleachhack.event.events.EventRenderFluid;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -15,9 +17,13 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.setting.base.SettingSlider;
 import org.bleachhack.module.setting.base.SettingToggle;
 import org.bleachhack.module.setting.other.SettingBlockList;
+import org.bleachhack.util.world.WorldUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FernBlock;
+import net.minecraft.block.TallPlantBlock;
+import net.minecraft.client.render.RenderLayer;
 
 public class Xray extends Module {
 
@@ -55,10 +61,6 @@ public class Xray extends Module {
 						Blocks.ANCIENT_DEBRIS).withDesc("Edit the xray blocks."));
 	}
 
-	public boolean isVisible(Block block) {
-		return !isEnabled() || getSetting(2).asList(Block.class).contains(block);
-	}
-
 	@Override
 	public void onEnable(boolean inWorld) {
 		super.onEnable(inWorld);
@@ -82,5 +84,57 @@ public class Xray extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick eventPreUpdate) {
 		mc.options.gamma = 69.420;
+	}
+
+	@BleachSubscribe
+	public void onRenderBlockLight(EventRenderBlock.Light event) {
+		event.setLight(1f);
+	}
+
+	@BleachSubscribe
+	public void onRenderBlockOpaque(EventRenderBlock.Opaque event) {
+		event.setOpaque(true);
+	}
+
+	@BleachSubscribe
+	public void onRenderBlockDrawSide(EventRenderBlock.ShouldDrawSide event) {
+		if (getSetting(2).asList(Block.class).contains(event.getState().getBlock())) {
+			event.setDrawSide(true);
+		} else if (!getSetting(1).asToggle().state) {
+			event.setDrawSide(false);
+		}
+	}
+
+	@BleachSubscribe
+	public void onRenderBlockTesselate(EventRenderBlock.Tesselate event) {
+		if (!getSetting(2).asList(Block.class).contains(event.getState().getBlock())) {
+			if (getSetting(1).asToggle().state) {
+				if (getSetting(1).asToggle().getChild(1).asToggle().state
+						&& (event.getState().getBlock() instanceof FernBlock
+								|| event.getState().getBlock() instanceof TallPlantBlock
+								|| WorldUtils.getTopBlockIgnoreLeaves(event.getPos().getX(), event.getPos().getZ()) == event.getPos().getY())) {
+					event.setCancelled(true);
+					return;
+				}
+
+				event.getVertexConsumer().fixedColor(-1, -1, -1, getSetting(1).asToggle().getChild(0).asSlider().getValueInt());
+			} else {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@BleachSubscribe
+	public void onRenderBlockLayer(EventRenderBlock.Layer event) {
+		if (getSetting(1).asToggle().state && !getSetting(2).asList(Block.class).contains(event.getState().getBlock())) {
+			event.setLayer(RenderLayer.getTranslucent());
+		}
+	}
+
+	@BleachSubscribe
+	public void onRenderFluid(EventRenderFluid event) {
+		if (!getSetting(0).asToggle().state) {
+			event.setCancelled(true);
+		}
 	}
 }

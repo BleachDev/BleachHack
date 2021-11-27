@@ -1,9 +1,10 @@
 package org.bleachhack.mixin;
 
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.BlockState;
 
-import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.Xray;
+import org.bleachhack.BleachHack;
+import org.bleachhack.event.events.EventRenderBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,13 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractBlock.AbstractBlockState.class)
 public class MixinAbstractBlockState {
 
-	//This stops non-opaque blocks from rendering if they're fully covered by other blocks i.e clumps of leaves on trees, glass etc..
 	@Inject(method = "isOpaque", at = @At("HEAD"), cancellable = true)
-	public void isOpaque(CallbackInfoReturnable<Boolean> cir) {
-		Xray xray = (Xray) ModuleManager.getModule("Xray");
+	public void isOpaque(CallbackInfoReturnable<Boolean> callback) {
+		EventRenderBlock.Opaque event = new EventRenderBlock.Opaque((BlockState) (Object) this);
+		BleachHack.eventBus.post(event);
 
-		if(xray.isEnabled() && xray.getSetting(1).asToggle().state) {
-			cir.setReturnValue(true);
-		}
+		if (event.isOpaque() != null)
+			callback.setReturnValue(event.isOpaque());
 	}
 }

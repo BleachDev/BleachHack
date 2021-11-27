@@ -10,17 +10,14 @@ package org.bleachhack.mixin;
 
 import java.util.Random;
 
-import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.Xray;
-import org.bleachhack.util.world.WorldUtils;
+import org.bleachhack.BleachHack;
+import org.bleachhack.event.events.EventRenderBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FernBlock;
-import net.minecraft.block.TallPlantBlock;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.util.math.MatrixStack;
@@ -35,24 +32,12 @@ import net.minecraft.world.BlockRenderView;
 public class MixinBlockRenderManager {
 
 	@Inject(method = "renderBlock", at = @At("HEAD"), cancellable = true)
-	private void renderBlock_head(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> ci) {
-		Xray xray = (Xray) ModuleManager.getModule("Xray");
+	private void renderBlock_head(BlockState state, BlockPos pos, BlockRenderView world, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, CallbackInfoReturnable<Boolean> callback) {
+		EventRenderBlock.Tesselate event = new EventRenderBlock.Tesselate(state, pos, matrices, vertexConsumer);
+		BleachHack.eventBus.post(event);
 
-		if (xray.isEnabled() && !xray.isVisible(state.getBlock())) {
-			if (xray.getSetting(1).asToggle().state) {
-				if (xray.getSetting(1).asToggle().getChild(1).asToggle().state
-						&& (state.getBlock() instanceof FernBlock
-								|| state.getBlock().getClass() == TallPlantBlock.class
-								|| WorldUtils.getTopBlockIgnoreLeaves(pos.getX(), pos.getZ()) == pos.getY())) {
-					ci.setReturnValue(false);
-					return;
-				}
-
-				vertexConsumer.fixedColor(-1, -1, -1, xray.getSetting(1).asToggle().getChild(0).asSlider().getValueInt());
-			} else {
-				ci.setReturnValue(false);
-			}
-		}
+		if (event.isCancelled())
+			callback.cancel();
 	}
 
 	@Inject(method = "renderBlock", at = @At("RETURN"))

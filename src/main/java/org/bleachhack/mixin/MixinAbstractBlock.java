@@ -8,7 +8,8 @@
  */
 package org.bleachhack.mixin;
 
-import org.bleachhack.module.ModuleManager;
+import org.bleachhack.BleachHack;
+import org.bleachhack.event.events.EventRenderBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,8 +25,10 @@ public class MixinAbstractBlock {
 
 	@Inject(method = "getAmbientOcclusionLightLevel", at = @At("HEAD"), cancellable = true)
 	public void getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> callback) {
-		if (ModuleManager.getModule("Xray").isEnabled()) {
-			callback.setReturnValue(1f);
-		}
+		EventRenderBlock.Light event = new EventRenderBlock.Light(state);
+		BleachHack.eventBus.post(event);
+
+		if (event.getLight() != null)
+			callback.setReturnValue(event.getLight());
 	}
 }
