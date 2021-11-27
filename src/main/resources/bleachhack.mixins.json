@@ -2,8 +2,6 @@
   "required": true,
   "package": "org.bleachhack.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
-  ],
   "client": [
     "AccessorChatScreen",
     "AccessorFrustum",
@@ -62,6 +60,7 @@
     "MixinVoxelShapes",
     "MixinWorldRenderer"
   ],
+  "mixinPriority" : 985,
   "injectors": {
     "defaultRequire": 1
   }
