@@ -36,7 +36,7 @@ public class MixinClientPlayerInteractionManager {
 	@Shadow private int blockBreakingCooldown;
 
 	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 3),
-			require = 0 /* TODO: meteor */)
+			require = 0 /* TODO: meteor compatibility */)
 	public void updateBlockBreakingProgress(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
 		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
 		BleachHack.eventBus.post(event);
@@ -45,7 +45,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 4),
-			require = 0 /* TODO: meteor */)
+			require = 0 /* TODO: meteor compatibility */)
 	public void updateBlockBreakingProgress2(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
 		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
 		BleachHack.eventBus.post(event);
@@ -54,7 +54,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Redirect(method = "attackBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I"),
-			require = 0 /* TODO: meteor */)
+			require = 0 /* TODO: meteor compatibility */)
 	public void attackBlock(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
 		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
 		BleachHack.eventBus.post(event);

@@ -60,7 +60,7 @@
     "MixinVoxelShapes",
     "MixinWorldRenderer"
   ],
-  "mixinPriority" : 985,
+  "mixinPriority" : 899,
   "injectors": {
     "defaultRequire": 1
   }

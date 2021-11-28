@@ -48,7 +48,7 @@ public class MixinGameRenderer {
 	}
 
 	@Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0),
-			require = 0 /* TODO: meteor */)
+			require = 0 /* TODO: meteor compatibility */)
 	private float nauseaWobble(float delta, float first, float second) {
 		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(5)) {
 			return 0;
