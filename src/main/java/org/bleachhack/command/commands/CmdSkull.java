@@ -52,11 +52,11 @@ public class CmdSkull extends Command {
 
 		if (args.length < 2) {
 			try {
-				JsonObject json = new JsonParser().parse(
+				JsonObject json = JsonParser.parseString(
 						Resources.toString(new URL("https://api.mojang.com/users/profiles/minecraft/" + args[0]), StandardCharsets.UTF_8))
 						.getAsJsonObject();
 
-				JsonObject json2 = new JsonParser().parse(
+				JsonObject json2 = JsonParser.parseString(
 						Resources.toString(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + json.get("id").getAsString()), StandardCharsets.UTF_8))
 						.getAsJsonObject();
 

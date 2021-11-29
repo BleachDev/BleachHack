@@ -36,7 +36,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
@@ -83,7 +82,7 @@ public class Search extends Module {
 									if (be != null) {
 										logBuilder
 										.append(" BlockEntity")
-										.append(be.writeNbt(new NbtCompound()).asString());
+										.append(be.createNbt().asString());
 									}
 
 									logBuilder.append('\n');

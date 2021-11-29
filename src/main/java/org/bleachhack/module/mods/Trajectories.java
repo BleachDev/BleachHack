@@ -26,6 +26,8 @@ import org.bleachhack.util.render.color.LineColor;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.world.ProjectileSimulator;
 
+import com.google.common.collect.Streams;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -84,7 +86,7 @@ public class Trajectories extends Module {
 						continue;
 					}
 
-					if (!mc.world.getBlockCollisions(e, e.getBoundingBox()).allMatch(VoxelShape::isEmpty))
+					if (!Streams.stream(mc.world.getBlockCollisions(e, e.getBoundingBox())).allMatch(VoxelShape::isEmpty))
 						continue;
 
 					Triple<List<Vec3d>, Entity, BlockPos> p = ProjectileSimulator.simulate(e);

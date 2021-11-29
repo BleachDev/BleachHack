@@ -23,6 +23,7 @@ import org.bleachhack.module.setting.base.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
@@ -100,8 +101,8 @@ public class NewChunks extends Module {
 			ChunkPos pos = new ChunkPos(packet.getX(), packet.getZ());
 			
 			if (!newChunks.contains(pos) && mc.world.getChunkManager().getChunk(packet.getX(), packet.getZ()) == null) {
-				WorldChunk chunk = new WorldChunk(mc.world, pos, null);
-				chunk.loadFromPacket(null, packet.getReadBuffer(), new NbtCompound(), packet.getVerticalStripBitmask());
+				WorldChunk chunk = new WorldChunk(MinecraftClient.getInstance().world, pos);
+				chunk.loadFromPacket(packet.getChunkData().getSectionsDataBuf(), new NbtCompound(), packet.getChunkData().getBlockEntities(packet.getX(), packet.getZ()));
 				
 				for (int x = 0; x < 16; x++) {
 					for (int y = mc.world.getBottomY(); y < mc.world.getTopY(); y++) {

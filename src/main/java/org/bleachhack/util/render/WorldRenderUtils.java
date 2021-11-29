@@ -64,17 +64,17 @@ public class WorldRenderUtils {
 
 		if (fill) {
 			int opacity = (int) (MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F) * 255.0F) << 24;
-			mc.textRenderer.draw(text, -halfWidth, 0f, 553648127, false, matrices.peek().getModel(), immediate, true, opacity, 0xf000f0);
+			mc.textRenderer.draw(text, -halfWidth, 0f, 553648127, false, matrices.peek().getPositionMatrix(), immediate, true, opacity, 0xf000f0);
 			immediate.draw();
 		} else {
 			matrices.push();
 			matrices.translate(1, 1, 0);
-			mc.textRenderer.draw(text.copy(), -halfWidth, 0f, 0x202020, false, matrices.peek().getModel(), immediate, true, 0, 0xf000f0);
+			mc.textRenderer.draw(text.copy(), -halfWidth, 0f, 0x202020, false, matrices.peek().getPositionMatrix(), immediate, true, 0, 0xf000f0);
 			immediate.draw();
 			matrices.pop();
 		}
 
-		mc.textRenderer.draw(text, -halfWidth, 0f, -1, false, matrices.peek().getModel(), immediate, true, 0, 0xf000f0);
+		mc.textRenderer.draw(text, -halfWidth, 0f, -1, false, matrices.peek().getPositionMatrix(), immediate, true, 0, 0xf000f0);
 		immediate.draw();
 
 		RenderSystem.disableBlend();

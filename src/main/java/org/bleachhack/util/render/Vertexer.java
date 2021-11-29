@@ -58,17 +58,17 @@ public class Vertexer {
 		int[] color = quadColor.getAllColors();
 
 		if (cullMode != CULL_FRONT) {
-			vertexConsumer.vertex(matrices.peek().getModel(), x1, y1, z1).color(color[0], color[1], color[2], color[3]).next();
-			vertexConsumer.vertex(matrices.peek().getModel(), x2, y2, z2).color(color[4], color[5], color[6], color[7]).next();
-			vertexConsumer.vertex(matrices.peek().getModel(), x3, y3, z3).color(color[8], color[9], color[10], color[11]).next();
-			vertexConsumer.vertex(matrices.peek().getModel(), x4, y4, z4).color(color[12], color[13], color[14], color[15]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x1, y1, z1).color(color[0], color[1], color[2], color[3]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x2, y2, z2).color(color[4], color[5], color[6], color[7]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x3, y3, z3).color(color[8], color[9], color[10], color[11]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x4, y4, z4).color(color[12], color[13], color[14], color[15]).next();
 		}
 
 		if (cullMode != CULL_BACK) {
-			vertexConsumer.vertex(matrices.peek().getModel(), x4, y4, z4).color(color[0], color[1], color[2], color[3]).next();
-			vertexConsumer.vertex(matrices.peek().getModel(), x3, y3, z3).color(color[4], color[5], color[6], color[7]).next();
-			vertexConsumer.vertex(matrices.peek().getModel(), x2, y2, z2).color(color[8], color[9], color[10], color[11]).next();
-			vertexConsumer.vertex(matrices.peek().getModel(), x1, y1, z1).color(color[12], color[13], color[14], color[15]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x4, y4, z4).color(color[0], color[1], color[2], color[3]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x3, y3, z3).color(color[4], color[5], color[6], color[7]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x2, y2, z2).color(color[8], color[9], color[10], color[11]).next();
+			vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x1, y1, z1).color(color[12], color[13], color[14], color[15]).next();
 		}
 	}
 
@@ -133,8 +133,8 @@ public class Vertexer {
 	}
 
 	public static void vertexLine(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, LineColor lineColor) {
-		Matrix4f model = matrices.peek().getModel();
-		Matrix3f normal = matrices.peek().getNormal();
+		Matrix4f model = matrices.peek().getPositionMatrix();
+		Matrix3f normal = matrices.peek().getNormalMatrix();
 
 		Vec3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
 

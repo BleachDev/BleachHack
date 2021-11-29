@@ -64,7 +64,7 @@ public class WindowTextWidget extends WindowWidget {
 		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation));
 
 		VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-		mc.textRenderer.draw(text, 0, 0, color, shadow, matrices.peek().getModel(), immediate, false, 0, 0xf000f0);
+		mc.textRenderer.draw(text, 0, 0, color, shadow, matrices.peek().getPositionMatrix(), immediate, false, 0, 0xf000f0);
 		immediate.draw();
 
 		if (text.getStyle() != null && mc.currentScreen != null

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -464,16 +465,16 @@ public class AccountManagerScreen extends WindowScreen {
 
 		NO_AUTH((input) -> {
 			try {
-				String id = new JsonParser().parse(
+				String id = JsonParser.parseString(
 						Resources.toString(new URL("https://api.mojang.com/users/profiles/minecraft/" + input[0]), StandardCharsets.UTF_8))
 						.getAsJsonObject().get("id").getAsString();
 
 				if (id.length() == 32)
 					id = id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20);
 
-				return new Session(input[0], id, "", "mojang");
+				return new Session(input[0], id, "", Optional.empty(), Optional.empty(), Session.AccountType.MOJANG);
 			} catch (Exception e) {
-				return new Session(input[0], "00000000-0000-0000-0000-000000000000", "", "mojang");
+				return new Session(input[0], "00000000-0000-0000-0000-000000000000", "", Optional.empty(), Optional.empty(), Session.AccountType.MOJANG);
 			}
 		}, Pair.of("Username", false)),
 		MOJANG((input) -> {

@@ -16,6 +16,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -65,7 +66,8 @@ public final class LoginHelper {
 
 		return new Session(auth.getSelectedProfile().getName(),
 				auth.getSelectedProfile().getId().toString(),
-				auth.getAuthenticatedToken(), "mojang");
+				auth.getAuthenticatedToken(),
+				Optional.empty(), Optional.empty(), Session.AccountType.MOJANG);
 	}
 
 	public static Session createMicrosoftSession(String email, String password) throws AuthenticationException {
@@ -138,7 +140,7 @@ public final class LoginHelper {
 		if (!accessMatcher.find())
 			throw new AuthenticationException("Didn't redirect to access token!");
 
-		return new JsonParser().parse(new String(Base64.getDecoder().decode(accessMatcher.group(1)))).getAsJsonArray();
+		return JsonParser.parseString(new String(Base64.getDecoder().decode(accessMatcher.group(1)))).getAsJsonArray();
 	}
 
 	private static Session getSessionFromXsts(String xstsId, String xstsToken) throws AuthenticationException {
@@ -154,7 +156,7 @@ public final class LoginHelper {
 
 		throwIfInvalid(mcResponse, true, "Failed to get MC token!");
 
-		String mcToken = new JsonParser().parse(mcResponse.body()).getAsJsonObject().get("access_token").getAsString();
+		String mcToken = JsonParser.parseString(mcResponse.body()).getAsJsonObject().get("access_token").getAsString();
 
 		HttpResponse<String> profileResponse = BleachOnlineMang.sendRequest(
 				URI.create("https://api.minecraftservices.com/minecraft/profile"),
@@ -166,7 +168,7 @@ public final class LoginHelper {
 
 		throwIfInvalid(profileResponse, true, "Failed to get MC profile!");
 
-		JsonObject profileJson = new JsonParser().parse(profileResponse.body()).getAsJsonObject();
+		JsonObject profileJson = JsonParser.parseString(profileResponse.body()).getAsJsonObject();
 
 		if (!profileJson.has("id"))
 			throw new AuthenticationException("Got invalid MC profile!");
@@ -176,7 +178,7 @@ public final class LoginHelper {
 		if (id.length() == 32)
 			id = id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20);
 
-		return new Session(profileJson.get("name").getAsString(), id, mcToken, "mojang");
+		return new Session(profileJson.get("name").getAsString(), id, mcToken, Optional.empty(), Optional.empty(), Session.AccountType.MSA);
 	}
 
 	private static void throwIfInvalid(HttpResponse<?> response, boolean checkStatus, String reason) throws AuthenticationException {

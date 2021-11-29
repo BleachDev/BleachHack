@@ -9,7 +9,6 @@
 package org.bleachhack.module.mods;
 
 import java.util.Comparator;
-import java.util.stream.Stream;
 
 import org.bleachhack.event.events.EventClientMove;
 import org.bleachhack.event.events.EventTick;
@@ -66,9 +65,9 @@ public class AutoParkour extends Module {
 			smartPos = null;
 
 			Box box = mc.player.getBoundingBox().offset(0, -0.51, 0);
-			Stream<VoxelShape> blockCollisions = mc.world.getBlockCollisions(mc.player, box);
+			Iterable<VoxelShape> blockCollisions = mc.world.getBlockCollisions(mc.player, box);
 
-			if (!blockCollisions.findAny().isPresent()) {
+			if (!blockCollisions.iterator().hasNext()) {
 				if (getSetting(0).asToggle().state && !mc.player.isSprinting()) {
 					mc.player.setSprinting(true);
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
@@ -79,7 +78,7 @@ public class AutoParkour extends Module {
 
 					BlockPos nearestPos = BlockPos.streamOutwards(mc.player.getBlockPos().down(), 4, 1, 4)
 							.map(BlockPos::toImmutable)
-							.filter(pos -> (mc.world.isTopSolid(pos, mc.player) && !mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 3, 1))).findAny().isPresent())
+							.filter(pos -> (mc.world.isTopSolid(pos, mc.player) && !mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 3, 1))).iterator().hasNext())
 									|| mc.world.getBlockState(pos).getBlock() instanceof LadderBlock
 									|| mc.world.getBlockState(pos.up()).getBlock() instanceof LadderBlock)
 							.filter(pos -> mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) >= 1)

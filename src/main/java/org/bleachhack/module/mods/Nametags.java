@@ -29,7 +29,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.commands.CmdEntityStats;
 import org.bleachhack.event.events.EventEntityRender;
@@ -259,7 +258,7 @@ public class Nametags extends Module {
 			if (text.isEmpty())
 				continue;
 
-			text = WordUtils.capitalizeFully(text.replaceFirst("Curse of (.)", "C$1"));
+			text = text.replaceFirst("Curse of (.)", "C$1");
 
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
@@ -459,7 +458,7 @@ public class Nametags extends Module {
 					String response = Resources.toString(new URL(url), StandardCharsets.UTF_8);
 					BleachLogger.logger.info("bruh uuid time: " + url);
 
-					JsonElement json = new JsonParser().parse(response);
+					JsonElement json = JsonParser.parseString(response);
 
 					if (!json.isJsonArray()) {
 						BleachLogger.logger.error("[Nametags] Invalid Owner UUID: " + uuid.toString());

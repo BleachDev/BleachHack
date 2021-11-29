@@ -93,11 +93,11 @@ public class Dispenser32k extends Module {
 
 		for (int i = 0; i <= 8; i++) {
 			Item item = mc.player.getInventory().getStack(i).getItem();
-			if (item == Item.fromBlock(Blocks.HOPPER))
+			if (item == Blocks.HOPPER.asItem())
 				hopper = i;
-			else if (item == Item.fromBlock(Blocks.DISPENSER))
+			else if (item ==Blocks.DISPENSER.asItem())
 				dispenser = i;
-			else if (item == Item.fromBlock(Blocks.REDSTONE_BLOCK))
+			else if (item == Blocks.REDSTONE_BLOCK.asItem())
 				redstone = i;
 			else if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof ShulkerBoxBlock)
 				shulker = i;

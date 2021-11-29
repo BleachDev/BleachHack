@@ -50,16 +50,16 @@ public class CmdNBT extends Command {
 			NbtCompound nbt = getNbt(args[1]);
 
 			if (nbt != null) {
-				String stringNbt = NbtHelper.toPrettyPrintedString(nbt);
+				Text textNbt = NbtHelper.toPrettyPrintedText(nbt);
 
 				Text copy = new LiteralText("\u00a7e\u00a7l<COPY>")
 						.styled(s ->
 						s.withClickEvent(
-								new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, stringNbt))
+								new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, textNbt.getString()))
 						.withHoverEvent(
 								new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Copy the nbt of this item to your clipboard"))));
 
-				BleachLogger.info(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + stringNbt));
+				BleachLogger.info(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + textNbt));
 			}
 		} else if (args[0].equalsIgnoreCase("copy")) {
 			if (args.length != 2) {
@@ -70,7 +70,7 @@ public class CmdNBT extends Command {
 
 			if (nbt != null) {
 				mc.keyboard.setClipboard(nbt.toString());
-				BleachLogger.info("\u00a76Copied\n\u00a7f" + NbtHelper.toPrettyPrintedString(nbt) + "\n\u00a76to clipboard.");
+				BleachLogger.info("\u00a76Copied\n\u00a7f" + NbtHelper.toPrettyPrintedText(nbt).getString() + "\n\u00a76to clipboard.");
 			}
 		} else if (args[0].equalsIgnoreCase("set")) {
 			if (!mc.interactionManager.getCurrentGameMode().isCreative()) {
@@ -107,7 +107,7 @@ public class CmdNBT extends Command {
 				BlockEntity be = mc.world.getBlockEntity(pos);
 
 				if (be != null) {
-					return be.writeNbt(new NbtCompound());
+					return be.createNbt();
 				} else {
 					return new NbtCompound();
 				}

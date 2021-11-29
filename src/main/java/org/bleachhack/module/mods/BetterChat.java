@@ -175,7 +175,7 @@ public class BetterChat extends Module {
 		if (event.getPacket() instanceof GameMessageS2CPacket) {
 			GameMessageS2CPacket packet = (GameMessageS2CPacket) event.getPacket();
 
-			if (packet.getLocation() == MessageType.GAME_INFO)
+			if (packet.getType() == MessageType.GAME_INFO)
 				return;
 
 			Text message = packet.getMessage().shallowCopy();

@@ -38,7 +38,7 @@ public class BleachJsonHelper {
 				String merged = String.join("\n", lines);
 
 				try {
-					file = new JsonParser().parse(merged).getAsJsonObject();
+					file = JsonParser.parseString(merged).getAsJsonObject();
 				} catch (Exception e) {
 					BleachLogger.logger.error("Error trying to read json file \"" + path + "\", Overwriting file to add element!", e);
 					overwrite = true;
@@ -86,7 +86,7 @@ public class BleachJsonHelper {
 		String merged = String.join("\n", lines);
 
 		try {
-			return new JsonParser().parse(merged).getAsJsonObject();
+			return JsonParser.parseString(merged).getAsJsonObject();
 		} catch (JsonParseException | IllegalStateException e) {
 			BleachLogger.logger.error("Error trying to read json file \"" + path + "\", Deleting file!", e);
 
@@ -98,14 +98,14 @@ public class BleachJsonHelper {
 	@SuppressWarnings("unchecked")
 	public static <T extends JsonElement> T parseOrNull(String json, Class<T> type) {
 		try {
-			return (T) new JsonParser().parse(json);
+			return (T) JsonParser.parseString(json);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	public static String formatJson(String json) {
-		return jsonWriter.toJson(new JsonParser().parse(json));
+		return jsonWriter.toJson(JsonParser.parseString(json));
 	}
 
 	public static String formatJson(JsonElement json) {
