@@ -60,6 +60,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Direction.Axis;
 
 public class StorageESP extends Module {
 
@@ -69,7 +70,7 @@ public class StorageESP extends Module {
 	public StorageESP() {
 		super("StorageESP", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights storage containers in the world.",
 				new SettingMode("Render", "Shader", "Box").withDesc("The Render mode."),
-				new SettingSlider("ShaderFill", 0, 255, 50, 0).withDesc("How opaque the fill on shader mode should be."),
+				new SettingSlider("ShaderFill", 1, 255, 50, 0).withDesc("How opaque the fill on shader mode should be."),
 				new SettingSlider("Box", 0, 5, 2, 1).withDesc("How thick the box outline should be."),
 				new SettingSlider("BoxFill", 0, 255, 50, 0).withDesc("How opaque the fill on box mode should be."),
 
@@ -153,13 +154,19 @@ public class StorageESP extends Module {
 
 			for (Entity e: mc.world.getEntities()) {
 				int[] color = getColorForEntity(e);
+				Box box = e.getBoundingBox();
+
+				if (e instanceof ItemFrameEntity && ((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {
+					Axis axis = ((ItemFrameEntity) e).getHorizontalFacing().getAxis();
+					box = box.expand(axis == Axis.X ? 0 : 0.125, axis == Axis.Y ? 0 : 0.125, axis == Axis.Z ? 0 : 0.125);
+				}
 
 				if (color != null) {
 					if (width != 0)
-						Renderer.drawBoxOutline(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], 255), width);
+						Renderer.drawBoxOutline(box, QuadColor.single(color[0], color[1], color[2], 255), width);
 
 					if (fill != 0)
-						Renderer.drawBoxFill(e.getBoundingBox(), QuadColor.single(color[0], color[1], color[2], fill));
+						Renderer.drawBoxFill(box, QuadColor.single(color[0], color[1], color[2], fill));
 				}
 			}
 

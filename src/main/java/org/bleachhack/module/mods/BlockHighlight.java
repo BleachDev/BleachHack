@@ -42,7 +42,7 @@ public class BlockHighlight extends Module {
 	public BlockHighlight() {
 		super("BlockHighlight", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights blocks that you're looking at.",
 				new SettingMode("Render", "Shader", "Box").withDesc("The Render mode."),
-				new SettingSlider("ShaderFill", 0, 255, 50, 0).withDesc("How opaque the fill on shader mode should be."),
+				new SettingSlider("ShaderFill", 1, 255, 50, 0).withDesc("How opaque the fill on shader mode should be."),
 				new SettingSlider("Box", 0, 5, 2, 1).withDesc("How thick the box outline should be."),
 				new SettingSlider("BoxFill", 0, 255, 50, 0).withDesc("How opaque the fill on box mode should be."),
 				new SettingColor("Color", 0.0f, 0.5f, 0.5f, false).withDesc("The color of the highlight."));
