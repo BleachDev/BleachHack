@@ -5,9 +5,7 @@ name: BleachHack Workflow Builds
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ 1.17.1 ]
 
 jobs:
   build:
@@ -29,7 +27,7 @@ jobs:
     - name: Upload The Bruh
       uses: actions/upload-artifact@v2
       with:
-        name: BleachHack-1.17.1
+        name: BleachHack
         path: |
           build/libs/bleachhack-*.jar
           !build/libs/bleachhack-*-*.jar
