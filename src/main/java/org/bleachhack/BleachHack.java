@@ -123,5 +123,5 @@ public class BleachHack implements ModInitializer {
 		} catch (Exception e) {
 			return null;
 		}
-	}
+	}//
 }
