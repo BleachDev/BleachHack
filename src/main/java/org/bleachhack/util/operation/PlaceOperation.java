@@ -10,6 +10,7 @@ package org.bleachhack.util.operation;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.WorldRenderUtils;
@@ -27,27 +28,24 @@ import net.minecraft.util.math.Vec3d;
 
 public class PlaceOperation extends Operation {
 
-	protected Item item;
+	protected Item[] items;
 
-	public PlaceOperation(BlockPos pos, Item item) {
+	public PlaceOperation(BlockPos pos, Item... items) {
 		this.pos = pos;
-		this.item = item;
+		this.items = items;
 	}
 
 	@Override
 	public boolean canExecute() {
-		for (int i = 0; i < 9; i++) {
-			if (mc.player.getInventory().getStack(i).getItem() == item) {
-				return mc.player.getEyePos().distanceTo(Vec3d.ofCenter(pos)) < 4.5;
-			}
-		}
+		if (mc.player.getEyePos().distanceTo(Vec3d.ofCenter(pos)) > 4.5)
+			return false;
 
-		return false;
+		return InventoryUtils.getSlot(true, i -> ArrayUtils.contains(items, mc.player.getInventory().getStack(i).getItem())) != -1;
 	}
 
 	@Override
 	public boolean execute() {
-		int slot = InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == item);
+		int slot = InventoryUtils.getSlot(true, i -> ArrayUtils.contains(items, mc.player.getInventory().getStack(i).getItem()));
 
 		return WorldUtils.placeBlock(pos, slot, 0, false, false, true);
 	}
@@ -57,16 +55,17 @@ public class PlaceOperation extends Operation {
 		return true;
 	}
 
-	public Item getItem() {
-		return item;
+	public Item[] getItems() {
+		return items;
 	}
 
 	@Override
 	public void render() {
-		if (getItem() instanceof BlockItem) {
+		Item item = getItems()[0];
+		if (item instanceof BlockItem) {
 			MatrixStack matrices = WorldRenderUtils.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
 
-			BlockState state = ((BlockItem) getItem()).getBlock().getDefaultState();
+			BlockState state = ((BlockItem) item).getBlock().getDefaultState();
 
 			mc.getBlockRenderManager().renderBlock(state, pos, mc.world, matrices,
 					mc.getBufferBuilders().getEntityVertexConsumers().getBuffer(RenderLayers.getMovingBlockLayer(state)),

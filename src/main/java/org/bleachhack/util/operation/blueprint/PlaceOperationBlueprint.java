@@ -17,13 +17,13 @@ import net.minecraft.util.math.Direction;
 
 public class PlaceOperationBlueprint extends OperationBlueprint {
 
-	protected Item item;
+	protected Item[] items;
 
-	public PlaceOperationBlueprint(int localX, int localY, int localZ, Item item) {
+	public PlaceOperationBlueprint(int localX, int localY, int localZ, Item... items) {
 		this.localX = localX;
 		this.localY = localY;
 		this.localZ = localZ;
-		this.item = item;
+		this.items = items;
 	}
 
 	@Override
@@ -31,6 +31,7 @@ public class PlaceOperationBlueprint extends OperationBlueprint {
 		return new PlaceOperation(pos.add(
 				(dir == Direction.EAST ? localX : dir == Direction.WEST ? -localX : dir == Direction.SOUTH ? -localZ : localZ),
 				localY,
-				(dir == Direction.EAST ? localZ : dir == Direction.WEST ? -localZ : dir == Direction.SOUTH ? localX : -localX)), item);
+				(dir == Direction.EAST ? localZ : dir == Direction.WEST ? -localZ : dir == Direction.SOUTH ? localX : -localX)),
+				items);
 	}
 }

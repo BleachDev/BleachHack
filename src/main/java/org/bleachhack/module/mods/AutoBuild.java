@@ -40,18 +40,18 @@ public class AutoBuild extends Module {
 
 	private static List<List<OperationBlueprint>> BLUEPRINTS = Arrays.asList(
 			Arrays.asList( // Wither
-					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND),
-					new PlaceOperationBlueprint(0, 1, 0, Items.SOUL_SAND),
-					new PlaceOperationBlueprint(0, 1, -1, Items.SOUL_SAND),
-					new PlaceOperationBlueprint(0, 1, 1, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					new PlaceOperationBlueprint(0, 1, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					new PlaceOperationBlueprint(0, 1, -1, Items.SOUL_SAND, Items.SOUL_SOIL),
+					new PlaceOperationBlueprint(0, 1, 1, Items.SOUL_SAND, Items.SOUL_SOIL),
 					new PlaceOperationBlueprint(0, 2, -1, Items.WITHER_SKELETON_SKULL),
 					new PlaceOperationBlueprint(0, 2, 0, Items.WITHER_SKELETON_SKULL),
 					new PlaceOperationBlueprint(0, 2, 1, Items.WITHER_SKELETON_SKULL)),
 			Arrays.asList( // WitherH
-					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND),
-					new PlaceOperationBlueprint(1, 0, 0, Items.SOUL_SAND),
-					new PlaceOperationBlueprint(1, 0, -1, Items.SOUL_SAND),
-					new PlaceOperationBlueprint(1, 0, 1, Items.SOUL_SAND),
+					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					new PlaceOperationBlueprint(1, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					new PlaceOperationBlueprint(1, 0, -1, Items.SOUL_SAND, Items.SOUL_SOIL),
+					new PlaceOperationBlueprint(1, 0, 1, Items.SOUL_SAND, Items.SOUL_SOIL),
 					new PlaceOperationBlueprint(2, 0, -1, Items.WITHER_SKELETON_SKULL),
 					new PlaceOperationBlueprint(2, 0, 0, Items.WITHER_SKELETON_SKULL),
 					new PlaceOperationBlueprint(2, 0, 1, Items.WITHER_SKELETON_SKULL)),
@@ -124,8 +124,8 @@ public class AutoBuild extends Module {
 					new PlaceOperationBlueprint(3, -2, 0, Items.TUBE_CORAL_FAN),
 					new PlaceOperationBlueprint(2, -2, 0, Items.TNT),
 					new PlaceOperationBlueprint(3, -1, 0, Items.SLIME_BLOCK),
-					new PlaceDirOperationBlueprint(3, 0, 0, Items.OBSERVER, Direction.WEST),
-					new PlaceDirOperationBlueprint(4, 0, 0, Items.PISTON, Direction.WEST)),
+					new PlaceDirOperationBlueprint(3, 0, 0, Direction.WEST, Items.OBSERVER),
+					new PlaceDirOperationBlueprint(4, 0, 0, Direction.WEST, Items.PISTON)),
 			Arrays.asList( // Bomber End
 					new PlaceOperationBlueprint(0, 0, 0, Items.SLIME_BLOCK),
 					new PlaceOperationBlueprint(0, -1, 0, Items.SLIME_BLOCK),

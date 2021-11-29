@@ -8,6 +8,7 @@
  */
 package org.bleachhack.util.operation;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.world.WorldUtils;
 
@@ -25,14 +26,14 @@ public class PlaceDirOperation extends PlaceOperation {
 	private Direction dir;
 	private boolean faced = false;
 
-	public PlaceDirOperation(BlockPos pos, Item item, Direction dir) {
-		super(pos, item);
+	public PlaceDirOperation(BlockPos pos, Direction dir, Item... items) {
+		super(pos, items);
 		this.dir = dir;
 	}
 
 	@Override
 	public boolean execute() {
-		int slot = InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == item);
+		int slot = InventoryUtils.getSlot(true, i -> ArrayUtils.contains(items, mc.player.getInventory().getStack(i).getItem()));
 
 		if (slot != -1 && WorldUtils.canPlaceBlock(pos)) {
 			if (!faced) {
@@ -47,10 +48,5 @@ public class PlaceDirOperation extends PlaceOperation {
 		}
 
 		return false;
-	}
-
-	@Override
-	public boolean verify() {
-		return true;
 	}
 }

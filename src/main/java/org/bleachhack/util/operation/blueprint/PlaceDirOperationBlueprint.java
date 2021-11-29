@@ -20,8 +20,8 @@ public class PlaceDirOperationBlueprint extends PlaceOperationBlueprint {
 
 	private Direction rotDir;
 
-	public PlaceDirOperationBlueprint(int localX, int localY, int localZ, Item item, Direction localDir) {
-		super(localX, localY, localZ, item);
+	public PlaceDirOperationBlueprint(int localX, int localY, int localZ, Direction localDir, Item... items) {
+		super(localX, localY, localZ, items);
 		this.rotDir = localDir;
 	}
 
@@ -30,8 +30,9 @@ public class PlaceDirOperationBlueprint extends PlaceOperationBlueprint {
 		return new PlaceDirOperation(pos.add(
 				(dir == Direction.EAST ? localX : dir == Direction.WEST ? -localX : dir == Direction.SOUTH ? -localZ : localZ),
 				localY,
-				(dir == Direction.EAST ? localZ : dir == Direction.WEST ? -localZ : dir == Direction.SOUTH ? localX : -localX)), item,
-				rotDir.getAxis() == Axis.Y ? rotDir : rotDir == Direction.EAST ? dir : rotDir == Direction.SOUTH ? dir.rotateYClockwise()
-						: rotDir == Direction.WEST ? dir.getOpposite() : dir.rotateYCounterclockwise());
+				(dir == Direction.EAST ? localZ : dir == Direction.WEST ? -localZ : dir == Direction.SOUTH ? localX : -localX)),
+				(rotDir.getAxis() == Axis.Y ? rotDir : rotDir == Direction.EAST ? dir : rotDir == Direction.SOUTH ? dir.rotateYClockwise()
+						: rotDir == Direction.WEST ? dir.getOpposite() : dir.rotateYCounterclockwise()),
+				items);
 	}
 }
