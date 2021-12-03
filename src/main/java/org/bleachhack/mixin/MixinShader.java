@@ -8,32 +8,42 @@
  */
 package org.bleachhack.mixin;
 
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import net.minecraft.client.render.Shader;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 // Tweaks to the shader class to make it compatible with custom identifiers
 @Mixin(Shader.class)
 public class MixinShader {
-	
-	@ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Identifier;<init>(Ljava/lang/String;)V"), index = 0)
-	public String init_identifier(String string) {
+
+	// For optifine compatibility
+	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
+	private static Identifier init_identifier(String string) {
 		return replaceIdentifier(string);
 	}
 
-	@ModifyArg(method = "loadProgram", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Identifier;<init>(Ljava/lang/String;)V"), index = 0)
-	private static String loadProgram_identifier(String string) {
+	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
+	private Identifier init_identifier2(String string) {
+		return replaceIdentifier(string);
+	}
+
+	@Redirect(method = "loadProgram", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
+	private static Identifier loadProgram_identifier(String string) {
 		return replaceIdentifier(string);
 	}
 	
-	private static String replaceIdentifier(String string) {
+	private static Identifier replaceIdentifier(String string) {
 		int idEnd = string.indexOf(':');
 		if (idEnd != -1) {
 			int idStart = string.substring(0, idEnd).lastIndexOf('/') + 1;
-			return idStart == 0 ? string : string.substring(idStart, idEnd) + ":" + string.substring(0, idStart) + string.substring(idEnd + 1);
+			if (idStart != 0) {
+				return new Identifier(string.substring(idStart, idEnd), string.substring(0, idStart) + string.substring(idEnd + 1));
+			}
 		}
 
-		return string;
+		return new Identifier(string);
 	}
 }
