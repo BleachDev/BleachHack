@@ -27,6 +27,6 @@
   ],
   "accessWidener" : "bleachhack.accesswidener",
   "depends": {
-    "minecraft": "1.18-rc.4"
+    "minecraft": "1.18"
   }
 }
