@@ -1,6 +1,5 @@
 package org.bleachhack.eventbus;
 
-import com.google.common.util.concurrent.MoreExecutors;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.bleachhack.event.Event;
 
@@ -10,13 +9,12 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unchecked")
 public class BleachSubscriber {
 
 	private final Consumer<Object> subscriberCaller;
-	private final Executor executor = MoreExecutors.directExecutor();
 	private final Class<? extends Event> eventClass;
 	private final Class<?> targetClass;
 	private final String signature;
@@ -40,18 +38,17 @@ public class BleachSubscriber {
 					//lookup.findVirtual(target.getClass(), methodName, MethodType.methodType(void.class, eventClass)),
 					MethodType.methodType(void.class, eventClass));
 
-			subscriberCaller = (Consumer<Object>) callsite.getTarget().invoke(target);
+			subscriberCaller = (Consumer<Object>) callsite.getTarget().invokeWithArguments(target);
 
 			this.eventClass = eventClass;
 			this.targetClass = target.getClass();
-			signature = target.getClass().getName() + "." + method.getName() + "(" + method.getParameters()[0].getType().getName() + ")";
+			this.signature = targetClass.getName() + "." + method.getName() + "(" + eventClass.getName() + ")";
 		} catch (Throwable t) {
 			// Yea, we got a problem
 			throw new RuntimeException(t);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Class<? extends Event> getEvent(Method method) {
 		Parameter[] parameters = method.getParameters();
 		if (parameters.length == 0 || !Event.class.isAssignableFrom(parameters[0].getType())) {
@@ -62,13 +59,13 @@ public class BleachSubscriber {
 	}
 
 	public void callSubscriber(Event event) {
-		executor.execute(() -> subscriberCaller.accept(event));
+		subscriberCaller.accept(event);
 	}
 
 	public Class<? extends Event> getEventClass() {
 		return eventClass;
 	}
-	
+
 	public Class<?> getTargetClass() {
 		return targetClass;
 	}
