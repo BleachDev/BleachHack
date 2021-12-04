@@ -11,7 +11,6 @@ package org.bleachhack.mixin;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import net.minecraft.client.gl.JsonEffectGlShader;
 import org.spongepowered.asm.mixin.injection.Redirect;
 

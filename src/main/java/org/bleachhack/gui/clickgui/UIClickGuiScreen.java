@@ -8,7 +8,6 @@
  */
 package org.bleachhack.gui.clickgui;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.bleachhack.gui.clickgui.window.ModuleWindow;
