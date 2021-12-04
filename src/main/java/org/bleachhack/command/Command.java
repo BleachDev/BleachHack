@@ -8,15 +8,14 @@
  */
 package org.bleachhack.command;
 
-import java.util.stream.Stream;
-
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.gui.option.Option;
 import org.bleachhack.util.BleachLogger;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
+import java.util.stream.Stream;
 
 public abstract class Command {
 
@@ -34,7 +33,7 @@ public abstract class Command {
 		this.category = category;
 	}
 
-	public static final String getPrefix() {
+	public static String getPrefix() {
 		return Option.CHAT_COMMAND_PREFIX.getValue();
 	}
 

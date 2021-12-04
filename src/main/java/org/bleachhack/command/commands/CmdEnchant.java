@@ -32,7 +32,7 @@ import net.minecraft.util.registry.Registry;
 
 public class CmdEnchant extends Command {
 
-	private static Map<String[], Enchantment> enchantments = new LinkedHashMap<>();
+	private static final Map<String[], Enchantment> enchantments = new LinkedHashMap<>();
 
 	static {
 		enchantments.put(new String[] { "aqua_affinity", "aqua" }, Enchantments.AQUA_AFFINITY);

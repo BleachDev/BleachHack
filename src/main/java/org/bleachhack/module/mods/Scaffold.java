@@ -8,9 +8,12 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+import com.google.common.collect.Sets;
+import net.minecraft.client.util.InputUtil;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -27,13 +30,8 @@ import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.world.WorldUtils;
 
-import com.google.common.collect.Sets;
-
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Scaffold extends Module {
 
@@ -121,7 +119,7 @@ public class Scaffold extends Module {
 		}
 
 		// Don't bother doing anything if there aren't any blocks to place on
-		if (blocks.stream().allMatch(b -> !WorldUtils.isBlockEmpty(b))) {
+		if (blocks.stream().noneMatch(b -> WorldUtils.isBlockEmpty(b))) {
 			return;
 		}
 

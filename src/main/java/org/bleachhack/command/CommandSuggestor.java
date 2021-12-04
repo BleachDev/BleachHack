@@ -85,8 +85,7 @@ public class CommandSuggestor {
 
 				int length = suggestions.stream()
 						.map(s -> MinecraftClient.getInstance().textRenderer.getWidth(s))
-						.sorted(Comparator.reverseOrder())
-						.findFirst().orElse(0);
+						.min(Comparator.reverseOrder()).orElse(0);
 
 				int startX = MinecraftClient.getInstance().textRenderer.getWidth(
 						field.getText().replaceFirst("[^ ]*$", "") + (!field.getText().contains(" ") ? Command.getPrefix() : "")) + 3;

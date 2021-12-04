@@ -8,11 +8,20 @@
  */
 package org.bleachhack.module.mods;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.google.common.collect.Sets;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
@@ -30,21 +39,10 @@ import org.bleachhack.util.render.color.LineColor;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.world.ChunkProcessor;
 
-import com.google.common.collect.Sets;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
-import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -77,7 +75,7 @@ public class Search extends Module {
 									.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")))
 									.append("] {")
 									.append(pos.toShortString()).append("} ")
-									.append(state.toString());
+									.append(state);
 
 									BlockEntity be = mc.world.getBlockEntity(pos);
 									if (be != null) {
@@ -98,13 +96,13 @@ public class Search extends Module {
 					BleachFileMang.appendFile("search/" + logFile, logBuilder.toString());
 				}
 			},
-			(cp, chunk) -> {
+			(cp, chunk) ->
 				foundBlocks.removeIf(pos
 						-> pos.getX() >= cp.getStartX()
 						&& pos.getX() <= cp.getEndX()
 						&& pos.getZ() >= cp.getStartZ()
-						&& pos.getZ() <= cp.getEndZ());
-			},
+						&& pos.getZ() <= cp.getEndZ())
+			,
 			(pos, state) -> {
 				if (getSetting(5).asList(Block.class).contains(state.getBlock())) {
 					foundBlocks.add(pos);

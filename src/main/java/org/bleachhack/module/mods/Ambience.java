@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 
 public class Ambience extends Module {
 
-	private WeatherManager weatherManager = new WeatherManager();
+	private final WeatherManager weatherManager = new WeatherManager();
 
 	public Ambience() {
 		super("Ambience", KEY_UNBOUND, ModuleCategory.WORLD, "Changes the world ambience.",

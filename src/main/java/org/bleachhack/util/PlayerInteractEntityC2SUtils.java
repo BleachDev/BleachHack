@@ -33,7 +33,7 @@ public class PlayerInteractEntityC2SUtils {
 		return packetBuf.readEnumConstant(InteractType.class);
 	}
 
-	public static enum InteractType {
+	public enum InteractType {
 		INTERACT,
 		ATTACK,
 		INTERACT_AT

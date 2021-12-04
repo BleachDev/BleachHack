@@ -8,19 +8,13 @@
  */
 package org.bleachhack.module.mods;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import net.minecraft.block.Blocks;
+import net.minecraft.block.NoteBlock;
+import net.minecraft.block.enums.Instrument;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import org.bleachhack.command.Command;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
@@ -34,13 +28,12 @@ import org.bleachhack.util.io.BleachFileMang;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.NoteBlock;
-import net.minecraft.block.enums.Instrument;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 public class Notebot extends Module {
 
@@ -91,7 +84,7 @@ public class Notebot extends Module {
 		List<BlockPos> noteblocks = BlockPos.streamOutwards(new BlockPos(mc.player.getEyePos()), 4, 4, 4)
 				.filter(this::isNoteblock)
 				.map(BlockPos::toImmutable)
-				.collect(Collectors.toList());
+				.toList();
 
 		for (int[] i : tunes) {
 			for (BlockPos pos: noteblocks) {
@@ -194,7 +187,7 @@ public class Notebot extends Module {
 					setEnabled(false);
 					setEnabled(true);
 					BleachLogger.info("Now Playing: \u00a7a" + filePath);
-				} catch (IOException e) {
+				} catch (IOException ignored) {
 				}
 			} else if (getSetting(1).asToggle().state) {
 				timer = -10;
@@ -255,7 +248,7 @@ public class Notebot extends Module {
 		/* Read the file */
 		BleachFileMang.createFile("notebot/" + fileName);
 		List<String> lines = BleachFileMang.readFileLines("notebot/" + fileName)
-				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).collect(Collectors.toList());
+				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).toList();
 		for (String s : lines)
 			s = s.replaceAll(" ", "");
 

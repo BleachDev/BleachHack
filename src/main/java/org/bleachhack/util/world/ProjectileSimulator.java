@@ -8,12 +8,6 @@
  */
 package org.bleachhack.util.world;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang3.tuple.Triple;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -24,18 +18,7 @@ import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.EggItem;
-import net.minecraft.item.EnderPearlItem;
-import net.minecraft.item.ExperienceBottleItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.item.SnowballItem;
-import net.minecraft.item.ThrowablePotionItem;
-import net.minecraft.item.TridentItem;
+import net.minecraft.item.*;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -44,6 +27,10 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import org.apache.commons.lang3.tuple.Triple;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectileSimulator {
 
@@ -52,9 +39,9 @@ public class ProjectileSimulator {
 	public static Entity summonProjectile(PlayerEntity thrower, boolean allowThrowables, boolean allowXp, boolean allowPotions) {
 		ItemStack hand = (isThrowable(thrower.getInventory().getMainHandStack().getItem(), allowThrowables, allowXp, allowPotions)
 				? thrower.getInventory().getMainHandStack()
-						: isThrowable(thrower.getInventory().offHand.get(0).getItem(), allowThrowables, allowXp, allowPotions)
-						? thrower.getInventory().offHand.get(0)
-								: null);
+				: isThrowable(thrower.getInventory().offHand.get(0).getItem(), allowThrowables, allowXp, allowPotions)
+				? thrower.getInventory().offHand.get(0)
+				: null);
 
 		if (hand == null) {
 			return null;
@@ -126,8 +113,9 @@ public class ProjectileSimulator {
 			Vec3d newVec = spoofE.getPos().add(vel);
 			// EntityHitResult entityHit = ProjectileUtil.raycast(mc.player, e.getPos(),
 			// newVec, e.getBoundingBox(), null, 1f);
-			List<LivingEntity> entities = mc.world.getEntitiesByClass(LivingEntity.class, spoofE.getBoundingBox().expand(0.15), EntityPredicates.VALID_LIVING_ENTITY);
-			entities.removeAll(Arrays.asList(mc.player, e, spoofE));
+			List<LivingEntity> entities = mc.world.getEntitiesByClass(LivingEntity.class, spoofE.getBoundingBox().expand(0.15),
+					EntityPredicates.VALID_LIVING_ENTITY.and(en -> en != mc.player && en != e));
+
 			if (!entities.isEmpty()) {
 				return Triple.of(vecs, entities.get(0), null);
 			}

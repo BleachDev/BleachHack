@@ -8,29 +8,8 @@
  */
 package org.bleachhack.gui;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Files;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.io.FileUtils;
-import org.bleachhack.BleachHack;
-import org.bleachhack.gui.window.Window;
-import org.bleachhack.gui.window.WindowScreen;
-import org.bleachhack.gui.window.widget.WindowBoxWidget;
-import org.bleachhack.gui.window.widget.WindowButtonWidget;
-import org.bleachhack.gui.window.widget.WindowScrollbarWidget;
-import org.bleachhack.gui.window.widget.WindowTextWidget;
-import org.bleachhack.gui.window.widget.WindowWidget;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.collections.ImmutablePairList;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.ModContainerImpl;
 import net.minecraft.client.gui.screen.Screen;
@@ -41,6 +20,21 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Style;
 import net.minecraft.util.Util;
+import org.apache.commons.io.FileUtils;
+import org.bleachhack.BleachHack;
+import org.bleachhack.gui.window.Window;
+import org.bleachhack.gui.window.WindowScreen;
+import org.bleachhack.gui.window.widget.*;
+import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.collections.ImmutablePairList;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class UpdateScreen extends WindowScreen {
 
@@ -108,9 +102,9 @@ public class UpdateScreen extends WindowScreen {
 		scrollbar = getWindow(0).addWidget(new WindowScrollbarWidget(w - 14, 51, 37 + changelog.size() * 10, h - 75, 0));
 
 		getWindow(0).addWidget(
-				new WindowButtonWidget(3, h - 21, w / 2 - 2, h - 3, "Website", () -> {
-					Util.getOperatingSystem().open(URI.create("https://bleachhack.org/"));
-				}));
+				new WindowButtonWidget(3, h - 21, w / 2 - 2, h - 3, "Website", () ->
+					Util.getOperatingSystem().open(URI.create("https://bleachhack.org/"))
+				));
 
 		getWindow(0).addWidget(
 				new WindowButtonWidget(w / 2 + 2, h - 21, w - 3, h - 3, "Update", () -> {
@@ -151,9 +145,9 @@ public class UpdateScreen extends WindowScreen {
 
 						String execCommand = link.endsWith(".jar") ? "java -jar " : "cmd /c start ";
 						Runtime.getRuntime().exec(execCommand
-								+ installerFile.getAbsolutePath().toString()
+								+ installerFile.getAbsolutePath()
 								+ " "
-								+ modpath.toString()
+								+ modpath
 								+ " "
 								+ installerJson.get("url").getAsString());
 

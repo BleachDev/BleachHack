@@ -8,10 +8,15 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
+import net.minecraft.fluid.FluidState;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
+import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.chunk.WorldChunk;
 import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -23,22 +28,16 @@ import org.bleachhack.module.setting.base.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
-import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
-import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.chunk.WorldChunk;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NewChunks extends Module {
 
 	private static final Direction[] skipDirs = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
 
-	private Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
-	private Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
+	private final Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
+	private final Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
 
 	public NewChunks() {
 		super("NewChunks", KEY_UNBOUND, ModuleCategory.WORLD, "Detects completely new chunks using certain traits of them.",

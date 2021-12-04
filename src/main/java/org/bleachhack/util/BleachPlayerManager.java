@@ -8,6 +8,13 @@
  */
 package org.bleachhack.util;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.gson.JsonArray;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
+import org.bleachhack.gui.option.Option;
+import org.bleachhack.util.io.BleachOnlineMang;
+
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,18 +25,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import org.bleachhack.gui.option.Option;
-import org.bleachhack.util.io.BleachOnlineMang;
-
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.gson.JsonArray;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
-
 public class BleachPlayerManager {
 
-	private static MinecraftClient mc = MinecraftClient.getInstance();
+	private static final MinecraftClient mc = MinecraftClient.getInstance();
 	private static final Pattern UUID_ADD_DASHES_PATTERN = Pattern.compile("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)");
 
 	private ScheduledExecutorService pingExecutor;

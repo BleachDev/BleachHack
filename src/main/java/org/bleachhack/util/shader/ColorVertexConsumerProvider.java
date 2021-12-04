@@ -1,25 +1,16 @@
 package org.bleachhack.util.shader;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.render.*;
+import net.minecraft.client.render.RenderPhase.TextureBase;
+import net.minecraft.util.Identifier;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.FixedColorVertexConsumer;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderPhase.TextureBase;
-import net.minecraft.client.render.Shader;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumers;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.util.Identifier;
 
 public class ColorVertexConsumerProvider {
 
@@ -76,7 +67,7 @@ public class ColorVertexConsumerProvider {
 	}
 
 	private Function<TextureBase, RenderLayer> memoizeTexture(Function<TextureBase, RenderLayer> function) {
-		return new Function<TextureBase, RenderLayer>() {
+		return new Function<>() {
 			private final Map<Identifier, RenderLayer> cache = new HashMap<>();
 
 			public RenderLayer apply(TextureBase texture) {
@@ -138,7 +129,7 @@ public class ColorVertexConsumerProvider {
 		}
 
 		public void vertex(float x, float y, float z, float red, float green, float blue, float alpha, float u, float v, int overlay, int light, float normalX, float normalY, float normalZ) {
-			this.delegate.vertex((double)x, (double)y, (double)z).color(this.fixedRed, this.fixedGreen, this.fixedBlue, this.fixedAlpha).texture(u, v).next();
+			this.delegate.vertex(x, y, z).color(this.fixedRed, this.fixedGreen, this.fixedBlue, this.fixedAlpha).texture(u, v).next();
 		}
 
 		public void next() {

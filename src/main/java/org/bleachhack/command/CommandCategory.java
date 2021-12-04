@@ -17,5 +17,5 @@ public enum CommandCategory {
 	MODULES,
 
 	/** Other Commands. **/
-	MISC;
+	MISC
 }

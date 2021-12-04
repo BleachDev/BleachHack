@@ -8,10 +8,9 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
+import net.minecraft.block.entity.SignBlockEntity;
+import net.minecraft.client.gui.screen.ingame.SignEditScreen;
+import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
 import org.bleachhack.event.events.EventOpenScreen;
 import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -20,9 +19,9 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.setting.base.SettingSlider;
 import org.bleachhack.module.setting.base.SettingToggle;
 
-import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.client.gui.screen.ingame.SignEditScreen;
-import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AutoSign extends Module {
 

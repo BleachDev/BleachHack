@@ -8,8 +8,10 @@
  */
 package org.bleachhack.command.commands;
 
-import java.util.Locale;
-
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
@@ -18,10 +20,7 @@ import org.bleachhack.command.exception.CmdSyntaxException;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileHelper;
 
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
+import java.util.Locale;
 
 public class CmdFriends extends Command {
 
@@ -55,8 +54,7 @@ public class CmdFriends extends Command {
 				BleachLogger.info("You don't have any friends :(");
 			} else {
 				int len = BleachHack.friendMang.getFriends().stream()
-						.sorted((f1, f2) -> f2.length() - f1.length())
-						.findFirst()
+						.min((f1, f2) -> f2.length() - f1.length())
 						.get().length() + 3;
 
 				MutableText text = new LiteralText("Friends:");

@@ -8,9 +8,13 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.Comparator;
-import java.util.stream.Stream;
-
+import net.minecraft.block.LadderBlock;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import org.bleachhack.event.events.EventClientMove;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
@@ -22,13 +26,8 @@ import org.bleachhack.module.setting.base.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
-import net.minecraft.block.LadderBlock;
-import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
-import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket.Mode;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 // credit: https://github.com/Wurst-Imperium/Wurst7/blob/21w11a/src/main/java/net/wurstclient/hacks/ParkourHack.java
 // modified by https://github.com/lasnikprogram
@@ -68,7 +67,7 @@ public class AutoParkour extends Module {
 			Box box = mc.player.getBoundingBox().offset(0, -0.51, 0);
 			Stream<VoxelShape> blockCollisions = mc.world.getBlockCollisions(mc.player, box);
 
-			if (!blockCollisions.findAny().isPresent()) {
+			if (blockCollisions.findAny().isEmpty()) {
 				if (getSetting(0).asToggle().state && !mc.player.isSprinting()) {
 					mc.player.setSprinting(true);
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
@@ -79,7 +78,7 @@ public class AutoParkour extends Module {
 
 					BlockPos nearestPos = BlockPos.streamOutwards(mc.player.getBlockPos().down(), 4, 1, 4)
 							.map(BlockPos::toImmutable)
-							.filter(pos -> (mc.world.isTopSolid(pos, mc.player) && !mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 3, 1))).findAny().isPresent())
+							.filter(pos -> (mc.world.isTopSolid(pos, mc.player) && mc.world.getBlockCollisions(mc.player, new Box(pos.up(), pos.add(1, 3, 1))).findAny().isEmpty())
 									|| mc.world.getBlockState(pos).getBlock() instanceof LadderBlock
 									|| mc.world.getBlockState(pos.up()).getBlock() instanceof LadderBlock)
 							.filter(pos -> mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) >= 1)

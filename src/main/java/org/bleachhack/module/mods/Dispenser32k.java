@@ -8,23 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.bleachhack.BleachHack;
-import org.bleachhack.event.events.EventTick;
-import org.bleachhack.eventbus.BleachSubscribe;
-import org.bleachhack.module.Module;
-import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingRotate;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.world.WorldUtils;
-
 import com.google.common.collect.Streams;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.ingame.Generic3x3ContainerScreen;
@@ -43,6 +27,20 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import org.bleachhack.BleachHack;
+import org.bleachhack.event.events.EventTick;
+import org.bleachhack.eventbus.BleachSubscribe;
+import org.bleachhack.module.Module;
+import org.bleachhack.module.ModuleCategory;
+import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.world.WorldUtils;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class Dispenser32k extends Module {
 
@@ -93,11 +91,11 @@ public class Dispenser32k extends Module {
 
 		for (int i = 0; i <= 8; i++) {
 			Item item = mc.player.getInventory().getStack(i).getItem();
-			if (item == Item.fromBlock(Blocks.HOPPER))
+			if (item == Blocks.HOPPER.asItem())
 				hopper = i;
-			else if (item == Item.fromBlock(Blocks.DISPENSER))
+			else if (item == Blocks.DISPENSER.asItem())
 				dispenser = i;
-			else if (item == Item.fromBlock(Blocks.REDSTONE_BLOCK))
+			else if (item == Blocks.REDSTONE_BLOCK.asItem())
 				redstone = i;
 			else if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof ShulkerBoxBlock)
 				shulker = i;
@@ -266,8 +264,8 @@ public class Dispenser32k extends Module {
 
 			List<Entity> players = Streams.stream(mc.world.getEntities())
 					.filter(e -> e instanceof PlayerEntity && e != mc.player && !BleachHack.friendMang.has(e))
-					.sorted((a, b) -> Double.compare(a.squaredDistanceTo(mc.player), b.squaredDistanceTo(mc.player)))
-					.collect(Collectors.toList());
+					.sorted(Comparator.comparingDouble(a -> a.squaredDistanceTo(mc.player)))
+					.toList();
 
 			if (!players.isEmpty() && players.get(0).getPos().distanceTo(mc.player.getPos()) < 8) {
 				target = players.get(0);

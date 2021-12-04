@@ -21,7 +21,7 @@ import com.google.gson.JsonParser;
 
 public class BleachJsonHelper {
 
-	private static Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
+	private static final Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
 
 	public static void addJsonElement(String path, String key, JsonElement element) {
 		JsonObject file = null;

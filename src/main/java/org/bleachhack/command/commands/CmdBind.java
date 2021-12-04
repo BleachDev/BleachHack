@@ -8,8 +8,7 @@
  */
 package org.bleachhack.command.commands;
 
-import java.util.Locale;
-
+import net.minecraft.client.util.InputUtil;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.exception.CmdSyntaxException;
@@ -17,7 +16,7 @@ import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
 import org.bleachhack.util.BleachLogger;
 
-import net.minecraft.client.util.InputUtil;
+import java.util.Locale;
 
 public class CmdBind extends Command {
 
@@ -45,7 +44,7 @@ public class CmdBind extends Command {
 			for (Module m : ModuleManager.getModules()) {
 				if (m.getName().equalsIgnoreCase(args[1])) {
 					if (args[0].equalsIgnoreCase("set")) {
-						int key = -1;
+						int key = Module.KEY_UNBOUND;
 
 						// Special cases for rshift/rcontrol and that shit
 						try {

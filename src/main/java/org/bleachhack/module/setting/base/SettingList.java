@@ -8,26 +8,9 @@
  */
 package org.bleachhack.module.setting.base;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Set;
-
-import org.bleachhack.gui.clickgui.window.ModuleWindow;
-import org.bleachhack.gui.window.Window;
-import org.bleachhack.gui.window.WindowScreen;
-import org.bleachhack.gui.window.widget.WindowButtonWidget;
-import org.bleachhack.gui.window.widget.WindowScrollbarWidget;
-import org.bleachhack.gui.window.widget.WindowTextFieldWidget;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.io.BleachFileHelper;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
@@ -37,6 +20,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
+import org.bleachhack.gui.clickgui.window.ModuleWindow;
+import org.bleachhack.gui.window.Window;
+import org.bleachhack.gui.window.WindowScreen;
+import org.bleachhack.gui.window.widget.WindowButtonWidget;
+import org.bleachhack.gui.window.widget.WindowScrollbarWidget;
+import org.bleachhack.gui.window.widget.WindowTextFieldWidget;
+import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.io.BleachFileHelper;
+
+import java.util.*;
 
 public abstract class SettingList<T> extends SettingBase {
 
@@ -125,7 +118,7 @@ public abstract class SettingList<T> extends SettingBase {
 					itemPool.remove(item);
 					items.add(item);
 				} else {
-					BleachLogger.logger.error("Error Importing item: " + je.toString());
+					BleachLogger.logger.error("Error Importing item: " + je);
 				}
 			}
 		}
@@ -248,7 +241,7 @@ public abstract class SettingList<T> extends SettingBase {
 					}
 
 					int curY = y1 + inputField.y1 - 4 - toDraw.size() * 17;
-					int longest = toDraw.stream().map(e -> textRenderer.getWidth(getStringFromItem(e))).sorted(Comparator.reverseOrder()).findFirst().orElse(0);
+					int longest = toDraw.stream().map(e -> textRenderer.getWidth(getStringFromItem(e))).min(Comparator.reverseOrder()).orElse(0);
 
 					RenderSystem.getModelViewStack().push();
 					RenderSystem.getModelViewStack().translate(0, 0, 150);

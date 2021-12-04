@@ -8,6 +8,8 @@
  */
 package org.bleachhack.util.io;
 
+import org.bleachhack.util.BleachLogger;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,43 +22,41 @@ import java.net.http.HttpResponse.BodyHandler;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
-import org.bleachhack.util.BleachLogger;
-
 /**
  * Utils for online BleachHack Resources.
  */
 public class BleachOnlineMang {
 
 	public static final HttpClient HTTP_CLIENT = HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
-	private static URI resourceUrl = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
-	private static URI apiUrl = URI.create("http://api0.bleachhack.org/"); // using api0 because of compatibility with BH 1.2.1 and under.
+	private static final URI RESOURCE_URL = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
+	private static final URI API_URL = URI.create("http://api0.bleachhack.org/"); // using api0 because of compatibility with BH 1.2.1 and under.
 
 	public static URI getResourceUrl() {
-		return resourceUrl;
+		return RESOURCE_URL;
 	}
 
 	public static URI getApiUrl() {
-		return apiUrl;
+		return API_URL;
 	}
 
 	public static <T> T getResource(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
-		return sendRequest(resourceUrl.resolve(path), "GET", null, null, 5000, handler).body();
+		return sendRequest(RESOURCE_URL.resolve(path), "GET", null, null, 5000, handler).body();
 	}
 
 	public static <T> CompletableFuture<T> getResourceAsync(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
-		return sendAsyncRequest(resourceUrl.resolve(path), "GET", null, null, 5000, handler).thenApply(HttpResponse::body);
+		return sendAsyncRequest(RESOURCE_URL.resolve(path), "GET", null, null, 5000, handler).thenApply(HttpResponse::body);
 	}
 
 	public static <T> T sendApiGet(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Trying to call API (GET, /" + path + ")");
-		return sendRequest(apiUrl.resolve(path), "GET", null, null, 5000, handler).body();
+		return sendRequest(API_URL.resolve(path), "GET", null, null, 5000, handler).body();
 	}
 
 	public static <T> T sendApiPost(String path, String body, BodyHandler<T> handler) {
-		BleachLogger.logger.info("Trying to call API (POST, /" + path + ", " + body.toString() + ")");
-		return sendRequest(apiUrl.resolve(path), "POST", null, body, 5000, handler).body();
+		BleachLogger.logger.info("Trying to call API (POST, /" + path + ", " + body + ")");
+		return sendRequest(API_URL.resolve(path), "POST", null, body, 5000, handler).body();
 	}
 
 	// Raw request methods

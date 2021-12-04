@@ -8,21 +8,21 @@
  */
 package org.bleachhack.module;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.InputUtil;
 import org.apache.commons.io.IOUtils;
 import org.bleachhack.util.BleachLogger;
 import org.lwjgl.glfw.GLFW;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class ModuleManager {
 
@@ -94,7 +94,7 @@ public class ModuleManager {
 		}
 	}
 
-	private class ModuleListJson {
+	private static class ModuleListJson {
 
 		@SerializedName("package")
 		private String packageName;

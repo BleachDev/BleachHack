@@ -59,7 +59,7 @@ public class WindowScrollbarWidget extends WindowWidget {
 
 		if (pos != null && mouseX >= pos[0] && mouseX <= pos[0] + pos[2] && mouseY >= pos[1] && mouseY <= pos[1] + pos[3]) {
 			buttonDown = true;
-			lastY = (int) mouseY;
+			lastY = mouseY;
 		}
 	}
 
@@ -118,6 +118,6 @@ public class WindowScrollbarWidget extends WindowWidget {
 	}
 
 	public void moveScrollbar(int yDiff) {
-		setPageOffset(pageOffset + (int) (yDiff * ((totalHeight - getScrollbarHeight() / 2.2) / (double) (pageHeight - getScrollbarHeight() / 2.2))));
+		setPageOffset(pageOffset + (int) (yDiff * ((totalHeight - getScrollbarHeight() / 2.2) / (pageHeight - getScrollbarHeight() / 2.2))));
 	}
 }

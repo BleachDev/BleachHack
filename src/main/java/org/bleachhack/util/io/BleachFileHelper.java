@@ -8,14 +8,11 @@
  */
 package org.bleachhack.util.io;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.bleachhack.BleachHack;
 import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.gui.clickgui.UIClickGuiScreen;
@@ -29,12 +26,13 @@ import org.bleachhack.module.ModuleManager;
 import org.bleachhack.module.setting.base.SettingBase;
 import org.bleachhack.util.BleachLogger;
 
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BleachFileHelper {
 
@@ -280,7 +278,7 @@ public class BleachFileHelper {
 
 			if (jw.has("attachments")) {
 				for (Entry<String, JsonElement> ja : jw.get("attachments").getAsJsonObject().entrySet()) {
-					if (uiWindows.keySet().contains(ja.getKey()) || ja.getKey().length() == 1) {
+					if (uiWindows.containsKey(ja.getKey()) || ja.getKey().length() == 1) {
 						pos.addAttachment(ja.getKey(), ja.getValue().getAsInt());
 					}
 				}

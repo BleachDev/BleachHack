@@ -8,24 +8,8 @@
  */
 package org.bleachhack.gui;
 
-import java.net.http.HttpResponse.BodyHandlers;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import org.bleachhack.BleachHack;
-import org.bleachhack.gui.effect.ParticleManager;
-import org.bleachhack.gui.window.Window;
-import org.bleachhack.gui.window.WindowScreen;
-import org.bleachhack.gui.window.widget.WindowButtonWidget;
-import org.bleachhack.gui.window.widget.WindowTextWidget;
-import org.bleachhack.module.mods.UI;
-import org.bleachhack.util.io.BleachFileHelper;
-import org.bleachhack.util.io.BleachOnlineMang;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -43,6 +27,19 @@ import net.minecraft.text.TextColor;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import org.bleachhack.BleachHack;
+import org.bleachhack.gui.effect.ParticleManager;
+import org.bleachhack.gui.window.Window;
+import org.bleachhack.gui.window.WindowScreen;
+import org.bleachhack.gui.window.widget.WindowButtonWidget;
+import org.bleachhack.gui.window.widget.WindowTextWidget;
+import org.bleachhack.module.mods.UI;
+import org.bleachhack.util.io.BleachFileHelper;
+import org.bleachhack.util.io.BleachOnlineMang;
+
+import java.net.http.HttpResponse.BodyHandlers;
+import java.util.List;
+import java.util.Random;
 
 public class BleachTitleScreen extends WindowScreen {
 
@@ -55,7 +52,7 @@ public class BleachTitleScreen extends WindowScreen {
 	static {
 		BleachOnlineMang.getResourceAsync("splashes.txt", BodyHandlers.ofLines()).thenAccept(st -> {
 			if (st != null) {
-				List<String> list = st.collect(Collectors.toList());
+				List<String> list = st.toList();
 				splash = list.get(new Random().nextInt(list.size()));
 			}
 		});
@@ -79,17 +76,17 @@ public class BleachTitleScreen extends WindowScreen {
 		int h = getWindow(0).y2 - getWindow(0).y1;
 		int maxY = MathHelper.clamp(h / 4 + 119, 0, h - 22);
 
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
-			client.setScreen(new SelectWorldScreen(client.currentScreen));
-		}));
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () ->
+			client.setScreen(new SelectWorldScreen(client.currentScreen))
+		));
 
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
-			client.setScreen(new MultiplayerScreen(client.currentScreen));
-		}));
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () ->
+			client.setScreen(new MultiplayerScreen(client.currentScreen))
+		));
 
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 86, w / 2 + 100, h / 4 + 106, I18n.translate("menu.online"), () -> {
-			client.setScreen(new RealmsMainScreen(this));
-		}));
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, h / 4 + 86, w / 2 + 100, h / 4 + 106, I18n.translate("menu.online"), () ->
+			client.setScreen(new RealmsMainScreen(this))
+		));
 
 		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
 			customTitleScreen = !customTitleScreen;
@@ -97,13 +94,13 @@ public class BleachTitleScreen extends WindowScreen {
 			client.setScreen(new TitleScreen(false));
 		}));
 
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
-			client.setScreen(new OptionsScreen(client.currentScreen, client.options));
-		}));
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () ->
+			client.setScreen(new OptionsScreen(client.currentScreen, client.options))
+		));
 
-		getWindow(0).addWidget(new WindowButtonWidget(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
-			client.scheduleStop();
-		}));
+		getWindow(0).addWidget(new WindowButtonWidget(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () ->
+			client.scheduleStop()
+		));
 
 		// Main Text
 		getWindow(0).addWidget(new WindowTextWidget(LiteralText.EMPTY, true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, h / 4 - 25, 0)
@@ -141,9 +138,9 @@ public class BleachTitleScreen extends WindowScreen {
 		JsonObject updateJson = BleachHack.getUpdateJson();
 		if (updateJson != null && updateJson.has("version") && updateJson.get("version").getAsInt() > BleachHack.INTVERSION) {
 			getWindow(0).addWidget(new WindowTextWidget("\u00a76\u00a7nUpdate\u00a76", true, 4, h - 12, 0xffffff)
-					.withClickEvent((widget, mx, my, wx, wy) -> {
-						client.setScreen(new UpdateScreen(client.currentScreen, updateJson));
-					}));
+					.withClickEvent((widget, mx, my, wx, wy) ->
+						client.setScreen(new UpdateScreen(client.currentScreen, updateJson))
+					));
 		}
 	}
 

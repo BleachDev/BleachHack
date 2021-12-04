@@ -8,40 +8,10 @@
  */
 package org.bleachhack.module.mods;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
-import org.bleachhack.event.events.EventEntityRender;
-import org.bleachhack.event.events.EventWorldRender;
-import org.bleachhack.eventbus.BleachSubscribe;
-import org.bleachhack.module.Module;
-import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.util.Boxes;
-import org.bleachhack.util.render.Renderer;
-import org.bleachhack.util.render.color.QuadColor;
-import org.bleachhack.util.shader.BleachCoreShaders;
-import org.bleachhack.util.shader.ColorVertexConsumerProvider;
-import org.bleachhack.util.shader.ShaderEffectWrapper;
-import org.bleachhack.util.world.WorldUtils;
-
 import com.google.gson.JsonSyntaxException;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.block.entity.BarrelBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BrewingStandBlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.block.entity.DispenserBlockEntity;
-import net.minecraft.block.entity.EnderChestBlockEntity;
-import net.minecraft.block.entity.HopperBlockEntity;
-import net.minecraft.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.block.entity.*;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -61,6 +31,26 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Direction.Axis;
+import org.bleachhack.event.events.EventEntityRender;
+import org.bleachhack.event.events.EventWorldRender;
+import org.bleachhack.eventbus.BleachSubscribe;
+import org.bleachhack.module.Module;
+import org.bleachhack.module.ModuleCategory;
+import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.util.Boxes;
+import org.bleachhack.util.render.Renderer;
+import org.bleachhack.util.render.color.QuadColor;
+import org.bleachhack.util.shader.BleachCoreShaders;
+import org.bleachhack.util.shader.ColorVertexConsumerProvider;
+import org.bleachhack.util.shader.ShaderEffectWrapper;
+import org.bleachhack.util.world.WorldUtils;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class StorageESP extends Module {
 
@@ -157,7 +147,7 @@ public class StorageESP extends Module {
 				Box box = e.getBoundingBox();
 
 				if (e instanceof ItemFrameEntity && ((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {
-					Axis axis = ((ItemFrameEntity) e).getHorizontalFacing().getAxis();
+					Axis axis = e.getHorizontalFacing().getAxis();
 					box = box.expand(axis == Axis.X ? 0 : 0.125, axis == Axis.Y ? 0 : 0.125, axis == Axis.Z ? 0 : 0.125);
 				}
 
