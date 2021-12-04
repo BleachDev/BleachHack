@@ -34,7 +34,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.commands.CmdEntityStats;
 import org.bleachhack.event.events.EventEntityRender;

@@ -27,7 +27,6 @@ import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
 import java.util.Comparator;
-import java.util.stream.Stream;
 
 // credit: https://github.com/Wurst-Imperium/Wurst7/blob/21w11a/src/main/java/net/wurstclient/hacks/ParkourHack.java
 // modified by https://github.com/lasnikprogram
