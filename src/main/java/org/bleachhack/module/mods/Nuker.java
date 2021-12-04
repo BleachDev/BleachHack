@@ -8,10 +8,13 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
+import net.minecraft.client.particle.BlockDustParticle;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.*;
+import net.minecraft.util.shape.VoxelShape;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bleachhack.event.events.EventBlockBreakCooldown;
@@ -34,17 +37,9 @@ import org.bleachhack.util.render.color.LineColor;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.world.WorldUtils;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.client.particle.BlockDustParticle;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Nuker extends Module {
 
@@ -247,17 +242,12 @@ public class Nuker extends Module {
 		Comparator<BlockPos> distComparator = Comparator.comparingDouble(b -> mc.player.getEyePos().distanceTo(Vec3d.ofCenter(b)));
 		Comparator<BlockPos> hardnessComparator = Comparator.comparing(b -> mc.world.getBlockState(b).getHardness(mc.world, b));
 
-		switch (getSetting(5).asMode().mode) {
-			case 0:
-				return keepBlockUnderComparator.thenComparing(distComparator);
-			case 1:
-				return keepBlockUnderComparator.thenComparing(distComparator.reversed());
-			case 2:
-				return keepBlockUnderComparator.thenComparing(hardnessComparator);
-			case 3:
-				return keepBlockUnderComparator.thenComparing(hardnessComparator.reversed());
-			default:
-				return keepBlockUnderComparator;
-		}
+		return switch (getSetting(5).asMode().mode) {
+			case 0 -> keepBlockUnderComparator.thenComparing(distComparator);
+			case 1 -> keepBlockUnderComparator.thenComparing(distComparator.reversed());
+			case 2 -> keepBlockUnderComparator.thenComparing(hardnessComparator);
+			case 3 -> keepBlockUnderComparator.thenComparing(hardnessComparator.reversed());
+			default -> keepBlockUnderComparator;
+		};
 	}
 }

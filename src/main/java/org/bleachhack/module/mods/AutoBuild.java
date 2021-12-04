@@ -38,7 +38,7 @@ import net.minecraft.util.math.Direction.Axis;
 
 public class AutoBuild extends Module {
 
-	private static List<List<OperationBlueprint>> BLUEPRINTS = Arrays.asList(
+	private static final List<List<OperationBlueprint>> BLUEPRINTS = Arrays.asList(
 			Arrays.asList( // Wither
 					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
 					new PlaceOperationBlueprint(0, 1, 0, Items.SOUL_SAND, Items.SOUL_SOIL),

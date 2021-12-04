@@ -8,40 +8,12 @@
  */
 package org.bleachhack.gui;
 
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.bleachhack.BleachHack;
-import org.bleachhack.gui.option.Option;
-import org.bleachhack.gui.window.Window;
-import org.bleachhack.gui.window.WindowScreen;
-import org.bleachhack.gui.window.widget.WindowButtonWidget;
-import org.bleachhack.gui.window.widget.WindowPassTextFieldWidget;
-import org.bleachhack.gui.window.widget.WindowScrollbarWidget;
-import org.bleachhack.gui.window.widget.WindowTextFieldWidget;
-import org.bleachhack.gui.window.widget.WindowTextWidget;
-import org.bleachhack.gui.window.widget.WindowWidget;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.auth.LoginCrypter;
-import org.bleachhack.util.auth.LoginHelper;
-import org.bleachhack.util.io.BleachFileMang;
-
 import com.google.common.io.Resources;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -55,6 +27,22 @@ import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.tuple.Pair;
+import org.bleachhack.BleachHack;
+import org.bleachhack.gui.option.Option;
+import org.bleachhack.gui.window.Window;
+import org.bleachhack.gui.window.WindowScreen;
+import org.bleachhack.gui.window.widget.*;
+import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.auth.LoginCrypter;
+import org.bleachhack.util.auth.LoginHelper;
+import org.bleachhack.util.io.BleachFileMang;
+
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AccountManagerScreen extends WindowScreen {
 
@@ -66,9 +54,9 @@ public class AccountManagerScreen extends WindowScreen {
 
 	private WindowScrollbarWidget scrollbar;
 
-	private List<WindowWidget> rightsideWidgets = new ArrayList<>();
-	private List<WindowTextFieldWidget> textFieldWidgets = new ArrayList<>();
-	private List<WindowTextWidget> textWidgets = new ArrayList<>();
+	private final List<WindowWidget> rightsideWidgets = new ArrayList<>();
+	private final List<WindowTextFieldWidget> textFieldWidgets = new ArrayList<>();
+	private final List<WindowTextWidget> textWidgets = new ArrayList<>();
 	private WindowTextWidget loginResult;
 
 	public AccountManagerScreen() {
@@ -277,7 +265,7 @@ public class AccountManagerScreen extends WindowScreen {
 						return null;
 					}
 				})
-				.filter(a -> a != null)
+				.filter(Objects::nonNull)
 				.collect(Collectors.joining("\n")));
 	}
 
@@ -362,17 +350,13 @@ public class AccountManagerScreen extends WindowScreen {
 				account.username = session.getUsername();
 
 				account.textures.clear();
-				client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> {
-					account.textures.put(type, identifier);
-				}, true);
+				client.getSkinProvider().loadSkin(session.getProfile(), (type, identifier, minecraftProfileTexture) -> account.textures.put(type, identifier), true);
 			} catch (AuthenticationException ignored) { }
 		} else {
 			GameProfile profile = new GameProfile(UUID.fromString(account.uuid), account.username);
 
 			account.textures.clear();
-			client.getSkinProvider().loadSkin(profile, (type, identifier, minecraftProfileTexture) -> {
-				account.textures.put(type, identifier);
-			}, true);
+			client.getSkinProvider().loadSkin(profile, (type, identifier, minecraftProfileTexture) -> account.textures.put(type, identifier), true);
 		}
 
 		for (int i = 0; i <= accounts.size(); i++) {
@@ -461,7 +445,7 @@ public class AccountManagerScreen extends WindowScreen {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static enum AccountType {
+	private enum AccountType {
 
 		NO_AUTH((input) -> {
 			try {
@@ -484,10 +468,10 @@ public class AccountManagerScreen extends WindowScreen {
 			return LoginHelper.createMicrosoftSession(input[0], input[1]);
 		}, Pair.of("Email", false), Pair.of("Password", true));
 
-		private Pair<String, Boolean>[] fields;
-		private SessionCreator sessionCreator;
+		private final Pair<String, Boolean>[] fields;
+		private final SessionCreator sessionCreator;
 
-		private AccountType(SessionCreator sessionCreator, Pair<String, Boolean>... fields) {
+		AccountType(SessionCreator sessionCreator, Pair<String, Boolean>... fields) {
 			this.fields = fields;
 			this.sessionCreator = sessionCreator;
 		}
@@ -502,7 +486,7 @@ public class AccountManagerScreen extends WindowScreen {
 	}
 
 	@FunctionalInterface
-	private static interface SessionCreator {
+	private interface SessionCreator {
 		Session apply(String[] input) throws AuthenticationException;
 	}
 }

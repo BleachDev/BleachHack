@@ -18,7 +18,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
 
 public class BleachQueue {
 
-	private static Map<String, Deque<MutablePair<Runnable, Integer>>> queues = new HashMap<>();
+	private static final Map<String, Deque<MutablePair<Runnable, Integer>>> queues = new HashMap<>();
 
 	public static void add(Runnable runnable) {
 		add("", runnable);

@@ -8,8 +8,11 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.HashMap;
-import java.util.Map;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
@@ -24,11 +27,8 @@ import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.render.color.QuadColor.CardinalDirection;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -121,45 +121,40 @@ public class HoleESP extends Module {
 			Direction[] excludeDirs = ArrayUtils.remove(Direction.values(), 0);
 
 			if (bottomMode == 0 || bottomMode == 2) {
-				holes.forEach((pos, color) -> {
-					Renderer.drawBoxFill(pos, QuadColor.single(color[0], color[1], color[2], getSetting(1).asToggle().getChild(2).asSlider().getValueFloat()), excludeDirs);
-				});
+				holes.forEach((pos, color) ->
+						Renderer.drawBoxFill(pos, QuadColor.single(color[0], color[1], color[2], getSetting(1).asToggle().getChild(2).asSlider().getValueFloat()), excludeDirs));
 			}
 
 			if (bottomMode == 0 || bottomMode == 1) {
-				holes.forEach((pos, color) -> {
-					Renderer.drawBoxOutline(pos, QuadColor.single(color[0], color[1], color[2], 1f), getSetting(1).asToggle().getChild(1).asSlider().getValueFloat(), excludeDirs);
-				});
+				holes.forEach((pos, color) ->
+						Renderer.drawBoxOutline(pos, QuadColor.single(color[0], color[1], color[2], 1f), getSetting(1).asToggle().getChild(1).asSlider().getValueFloat(), excludeDirs));
 			}
 		}
 
 		if (getSetting(2).asToggle().state) {
 			int sideMode = getSetting(2).asToggle().getChild(0).asMode().mode;
 			float height = getSetting(2).asToggle().getChild(3).asSlider().getValueFloat();
-			Direction[] excludeDirs = new Direction[] { Direction.UP, Direction.DOWN, };
+			Direction[] excludeDirs = new Direction[] {Direction.UP, Direction.DOWN,};
 
 			if (sideMode == 0 || sideMode == 1) {
 				CardinalDirection gradientDir = sideMode == 0 ? CardinalDirection.NORTH : CardinalDirection.SOUTH;
 
-				holes.forEach((pos, color) -> {
-					Renderer.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
-							QuadColor.gradient(
-									color[0], color[1], color[2], getSetting(2).asToggle().getChild(2).asSlider().getValueFloat(),
-									color[0], color[1], color[2], 0f, gradientDir), excludeDirs);
-				});
+				holes.forEach((pos, color) ->
+						Renderer.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
+								QuadColor.gradient(
+										color[0], color[1], color[2], getSetting(2).asToggle().getChild(2).asSlider().getValueFloat(),
+										color[0], color[1], color[2], 0f, gradientDir), excludeDirs));
 			} else {
 				if (sideMode == 2 || sideMode == 4) {
-					holes.forEach((pos, color) -> {
-						Renderer.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
-								QuadColor.single(color[0], color[1], color[2], getSetting(2).asToggle().getChild(2).asSlider().getValueFloat()), excludeDirs);
-					});
+					holes.forEach((pos, color) ->
+							Renderer.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
+									QuadColor.single(color[0], color[1], color[2], getSetting(2).asToggle().getChild(2).asSlider().getValueFloat()), excludeDirs));
 				}
 
 				if (sideMode == 2 || sideMode == 3) {
-					holes.forEach((pos, color) -> {
-						Renderer.drawBoxOutline(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
-								QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asToggle().getChild(1).asSlider().getValueFloat(), excludeDirs);
-					});
+					holes.forEach((pos, color) ->
+							Renderer.drawBoxOutline(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
+									QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asToggle().getChild(1).asSlider().getValueFloat(), excludeDirs));
 				}
 			}
 		}

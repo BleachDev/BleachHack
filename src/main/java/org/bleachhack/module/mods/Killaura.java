@@ -105,7 +105,7 @@ public class Killaura extends Module {
 		if (getSetting(6).asToggle().state) {
 			Optional<Entity> entity = DebugRenderer.getTargetedEntity(mc.player, 7);
 
-			if (!entity.isPresent()) {
+			if (entity.isEmpty()) {
 				return Collections.emptyList();
 			}
 

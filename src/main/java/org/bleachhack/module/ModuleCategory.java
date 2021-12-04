@@ -22,7 +22,7 @@ public enum ModuleCategory {
 	
 	private final ItemStack item;
 	
-	private ModuleCategory(ItemStack item) {
+	ModuleCategory(ItemStack item) {
 		this.item = item;
 	}
 	

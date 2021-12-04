@@ -8,16 +8,19 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.Streams;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -34,20 +37,9 @@ import org.bleachhack.util.world.DamageUtils;
 import org.bleachhack.util.world.EntityUtils;
 import org.bleachhack.util.world.WorldUtils;
 
-import com.google.common.collect.Streams;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 // i am morbidly obese
 public class CrystalAura extends Module {
@@ -107,7 +99,7 @@ public class CrystalAura extends Module {
 						|| (getSetting(1).asToggle().state && EntityUtils.isMob(e))
 						|| (getSetting(2).asToggle().state && EntityUtils.isAnimal(e)))
 				.map(e -> (LivingEntity) e)
-				.collect(Collectors.toList());
+				.toList();
 
 		if (targets.isEmpty()) {
 			return;
@@ -119,7 +111,7 @@ public class CrystalAura extends Module {
 				.filter(e -> e instanceof EndCrystalEntity)
 				.map(e -> (EndCrystalEntity) e)
 				.sorted(Comparator.comparing(mc.player::distanceTo))
-				.collect(Collectors.toList());
+				.toList();
 
 		int breaks = 0;
 		if (explodeToggle.state && !nearestCrystals.isEmpty() && breakCooldown <= 0) {

@@ -8,19 +8,7 @@
  */
 package org.bleachhack.command.commands;
 
-import java.util.List;
-
-import org.bleachhack.command.Command;
-import org.bleachhack.command.CommandCategory;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.BleachQueue;
-import org.bleachhack.util.ItemContentUtils;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.HopperBlock;
-import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.block.*;
 import net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -29,6 +17,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ShulkerBoxScreenHandler;
 import net.minecraft.text.Text;
+import org.bleachhack.command.Command;
+import org.bleachhack.command.CommandCategory;
+import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.BleachQueue;
+import org.bleachhack.util.ItemContentUtils;
+
+import java.util.List;
 
 public class CmdPeek extends Command {
 
@@ -58,15 +53,14 @@ public class CmdPeek extends Command {
 
 		SimpleInventory inv = new SimpleInventory(items.toArray(new ItemStack[27]));
 
-		BleachQueue.add(() -> {
-			mc.setScreen(new PeekShulkerScreen(
-					new ShulkerBoxScreenHandler(420, mc.player.getInventory(), inv),
-					mc.player.getInventory(),
-					item.getName()));
-		});
+		BleachQueue.add(() ->
+				mc.setScreen(new PeekShulkerScreen(
+						new ShulkerBoxScreenHandler(420, mc.player.getInventory(), inv),
+						mc.player.getInventory(),
+						item.getName())));
 	}
 
-	class PeekShulkerScreen extends ShulkerBoxScreen {
+	static class PeekShulkerScreen extends ShulkerBoxScreen {
 
 		public PeekShulkerScreen(ShulkerBoxScreenHandler handler, PlayerInventory inventory, Text title) {
 			super(handler, inventory, title);

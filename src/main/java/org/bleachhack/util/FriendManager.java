@@ -19,7 +19,7 @@ import net.minecraft.util.Formatting;
 
 public class FriendManager {
 
-	private Set<String> friends = new TreeSet<String>();
+	private Set<String> friends = new TreeSet<>();
 
 	public FriendManager() {
 	}

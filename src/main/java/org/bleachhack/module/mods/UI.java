@@ -8,22 +8,23 @@
  */
 package org.bleachhack.module.mods;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-import java.util.zip.DeflaterOutputStream;
-
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bleachhack.BleachHack;
@@ -43,24 +44,21 @@ import org.bleachhack.module.setting.base.SettingSlider;
 import org.bleachhack.module.setting.base.SettingToggle;
 import org.bleachhack.util.world.ClientChunkSerializer;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtIo;
-import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
+import java.util.zip.DeflaterOutputStream;
 
 public class UI extends Module {
 
@@ -398,7 +396,7 @@ public class UI extends Module {
 						e.getDisplayName().getString()
 						+ " | "
 						+ e.getBlockPos().getX() + " " + e.getBlockPos().getY() + " " + e.getBlockPos().getZ()
-						+ " (" + (int) Math.round(mc.player.distanceTo(e)) + "m)"))
+						+ " (" + Math.round(mc.player.distanceTo(e)) + "m)"))
 				.collect(Collectors.toList());
 
 		nameLengths.add(mc.textRenderer.getWidth("Players:"));
@@ -414,8 +412,8 @@ public class UI extends Module {
 		for (Entity e : mc.world.getPlayers().stream()
 				.filter(e -> e != mc.player)
 				.sorted(Comparator.comparing(mc.player::distanceTo))
-				.collect(Collectors.toList())) {
-			int dist = (int) Math.round(mc.player.distanceTo(e));
+				.toList()) {
+			int dist = Math.round(mc.player.distanceTo(e));
 
 			String text =
 					e.getDisplayName().getString()
@@ -446,15 +444,10 @@ public class UI extends Module {
 
 			int xd = x + 72 - mc.textRenderer.getWidth(text) / 2;
 			switch (getSetting(11).asToggle().getChild(0).asMode().mode) {
-				case 0:
-					mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1 + Math.min((time - lastPacket - 1200) / 20, 0), 0xd0d0d0);
-					break;
-				case 1:
-					mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1,
-							(MathHelper.clamp((int) (time - lastPacket - 500) / 3, 5, 255) << 24) | 0xd0d0d0);
-					break;
-				case 2:
-					mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1, 0xd0d0d0);
+				case 0 -> mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1 + Math.min((time - lastPacket - 1200) / 20, 0), 0xd0d0d0);
+				case 1 -> mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1,
+						(MathHelper.clamp((int) (time - lastPacket - 500) / 3, 5, 255) << 24) | 0xd0d0d0);
+				case 2 -> mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1, 0xd0d0d0);
 			}
 		}
 	}

@@ -30,7 +30,7 @@ public class CmdToggle extends Command {
 
 		for (Module m : ModuleManager.getModules()) {
 			if (args[0].equalsIgnoreCase(m.getName())) {
-				BleachQueue.add(() -> m.toggle());
+				BleachQueue.add(m::toggle);
 				BleachLogger.info(m.getName() + " Toggled");
 				return;
 			}

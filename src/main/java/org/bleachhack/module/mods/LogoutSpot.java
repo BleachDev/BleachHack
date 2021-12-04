@@ -83,7 +83,7 @@ public class LogoutSpot extends Module {
 			for (PlayerListS2CPacket.Entry entry : list.getEntries()) {
 				PlayerEntity player = mc.world.getPlayerByUuid(entry.getProfile().getId());
 
-				if (player != null && !mc.player.equals(player) && !players.keySet().contains(player.getUuid())) {
+				if (player != null && !mc.player.equals(player) && !players.containsKey(player.getUuid())) {
 					PlayerCopyEntity copy = new PlayerCopyEntity(player);
 					players.put(player.getUuid(), Pair.of(copy, System.currentTimeMillis()));
 					BleachQueue.add("logoutspot", copy::spawn);

@@ -8,6 +8,9 @@
  */
 package org.bleachhack.util.io;
 
+import net.minecraft.client.MinecraftClient;
+import org.bleachhack.util.BleachLogger;
+
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -15,10 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.bleachhack.util.BleachLogger;
-
-import net.minecraft.client.MinecraftClient;
 
 public class BleachFileMang {
 
@@ -40,7 +39,7 @@ public class BleachFileMang {
 	public static List<String> readFileLines(String path) {
 		try {
 			return Files.readAllLines(getDir().resolve(path));
-		} catch (NoSuchFileException e) {
+		} catch (NoSuchFileException ignored) {
 
 		} catch (Exception e) {
 			BleachLogger.logger.error("Error Reading File: " + path, e);

@@ -6,7 +6,7 @@ import org.bleachhack.event.Event;
 public class BleachEventBus {
 
 	private final Logger logger;
-	private BleachSubscriberRegistry subscriberRegistry = new BleachSubscriberRegistry("default");
+	private final BleachSubscriberRegistry subscriberRegistry = new BleachSubscriberRegistry("default");
 
 	public BleachEventBus(Logger logger) {
 		this.logger = logger;

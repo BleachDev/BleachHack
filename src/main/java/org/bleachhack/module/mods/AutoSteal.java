@@ -8,28 +8,6 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import org.apache.commons.lang3.RandomUtils;
-import org.bleachhack.event.events.EventOpenScreen;
-import org.bleachhack.event.events.EventPacket;
-import org.bleachhack.event.events.EventTick;
-import org.bleachhack.event.events.EventWorldRender;
-import org.bleachhack.eventbus.BleachSubscribe;
-import org.bleachhack.module.Module;
-import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingItemList;
-import org.bleachhack.module.setting.other.SettingRotate;
-import org.bleachhack.util.InventoryUtils;
-import org.bleachhack.util.render.WorldRenderUtils;
-import org.bleachhack.util.world.WorldUtils;
-
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
@@ -49,6 +27,28 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import org.apache.commons.lang3.RandomUtils;
+import org.bleachhack.event.events.EventOpenScreen;
+import org.bleachhack.event.events.EventPacket;
+import org.bleachhack.event.events.EventTick;
+import org.bleachhack.event.events.EventWorldRender;
+import org.bleachhack.eventbus.BleachSubscribe;
+import org.bleachhack.module.Module;
+import org.bleachhack.module.ModuleCategory;
+import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.module.setting.other.SettingItemList;
+import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.util.InventoryUtils;
+import org.bleachhack.util.render.WorldRenderUtils;
+import org.bleachhack.util.world.WorldUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class AutoSteal extends Module {
 
@@ -57,7 +57,7 @@ public class AutoSteal extends Module {
 	private int currentSyncId;
 	private BlockPos currentPos = null;
 
-	private Map<BlockPos, Integer> opened = new HashMap<>();
+	private final Map<BlockPos, Integer> opened = new HashMap<>();
 
 	private int lastSteal = 0;
 	private int currentTime = 0;
@@ -131,7 +131,6 @@ public class AutoSteal extends Module {
 				if (getSetting(0).asMode().mode >= 1 || getSetting(3).asToggle().state) {
 					mc.setScreen(null);
 					mc.player.networkHandler.sendPacket(new CloseHandledScreenC2SPacket(currentSyncId));
-					return;
 				}
 			}
 		} else if (currentItems == null && currentSyncId == -1 && getSetting(3).asToggle().state) {

@@ -8,18 +8,16 @@
  */
 package org.bleachhack.util.auth;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.Arrays;
-import java.util.Base64;
+import com.google.common.hash.Hashing;
+import org.bleachhack.util.BleachLogger;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.bleachhack.util.BleachLogger;
-
-import com.google.common.hash.Hashing;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
 
 public class LoginCrypter {
 
@@ -27,7 +25,7 @@ public class LoginCrypter {
 			System.getProperty("user.home")
 			+ System.getProperty("os.name")
 			+ System.getProperty("os.version")
-			+ Integer.toString(Runtime.getRuntime().availableProcessors())
+			+ Runtime.getRuntime().availableProcessors()
 			+ System.getProperty("os.arch")
 			+ System.getProperty("user.name"),
 			StandardCharsets.UTF_8).toString();

@@ -8,17 +8,7 @@
  */
 package org.bleachhack.command.commands;
 
-import java.util.Locale;
-import java.util.Random;
-
-import org.apache.commons.lang3.math.NumberUtils;
-import org.bleachhack.command.Command;
-import org.bleachhack.command.CommandCategory;
-import org.bleachhack.command.exception.CmdSyntaxException;
-import org.bleachhack.util.BleachLogger;
-
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import net.minecraft.item.AirBlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -26,6 +16,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.bleachhack.command.Command;
+import org.bleachhack.command.CommandCategory;
+import org.bleachhack.command.exception.CmdSyntaxException;
+import org.bleachhack.util.BleachLogger;
+
+import java.util.Locale;
+import java.util.Random;
 
 public class CmdGive extends Command {
 
@@ -226,7 +224,7 @@ public class CmdGive extends Command {
 		if (args.length >= 4)
 			try {
 				item.setNbt(StringNbtReader.parse(args[3]));
-			} catch (CommandSyntaxException e) {
+			} catch (CommandSyntaxException ignored) {
 			}
 
 		mc.player.getInventory().insertStack(item);

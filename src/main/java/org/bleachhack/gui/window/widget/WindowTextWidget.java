@@ -98,14 +98,14 @@ public class WindowTextWidget extends WindowWidget {
 		this.y2 = (int) (y1 + 10 * scale);
 	}
 
-	public static enum TextAlign {
+	public enum TextAlign {
 		LEFT(0f),
 		MIDDLE(0.5f),
 		RIGHT(1f);
 
 		public final float offset;
 
-		private TextAlign(float offset) {
+		TextAlign(float offset) {
 			this.offset = offset;
 		}
 	}

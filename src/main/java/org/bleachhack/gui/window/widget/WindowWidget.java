@@ -89,11 +89,11 @@ public abstract class WindowWidget {
 	
 	@FunctionalInterface
 	public interface RenderEvent {
-		public void accept(WindowWidget widget, MatrixStack matrices, int wx, int wy);
+		void accept(WindowWidget widget, MatrixStack matrices, int wx, int wy);
 	}
 	
 	@FunctionalInterface
 	public interface MouseEvent {
-		public void accept(WindowWidget widget, int mx, int my, int wx, int wy);
+		void accept(WindowWidget widget, int mx, int my, int wx, int wy);
 	}
 }

@@ -36,7 +36,7 @@ public class UIContainer {
 	public String getIdFromWindow(UIWindow window) {
 		return windows.entrySet().stream()
 				.filter(p -> p.getValue() == window)
-				.map(e -> e.getKey())
+				.map(Map.Entry::getKey)
 				.findFirst().orElse(null);
 	}
 

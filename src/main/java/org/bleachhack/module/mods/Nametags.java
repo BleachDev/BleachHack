@@ -8,27 +8,33 @@
  */
 package org.bleachhack.module.mods;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import com.google.common.collect.Lists;
+import com.google.common.io.Resources;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.mojang.authlib.GameProfile;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.passive.FoxEntity;
+import net.minecraft.entity.passive.HorseBaseEntity;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.commands.CmdEntityStats;
 import org.bleachhack.event.events.EventEntityRender;
@@ -45,36 +51,12 @@ import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.WorldRenderUtils;
 import org.bleachhack.util.world.EntityUtils;
 
-import com.google.common.collect.Lists;
-import com.google.common.io.Resources;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.mojang.authlib.GameProfile;
-
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.HorseBaseEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.text.Texts;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.*;
 
 public class Nametags extends Module {
 
@@ -200,7 +182,7 @@ public class Nametags extends Module {
 				drawLines(rPos.x, rPos.y, rPos.z, scale, lines);
 
 				if (getSetting(2).asToggle().getChild(1).asToggle().state && entity instanceof FoxEntity) {
-					drawItems(rPos.x, rPos.y + (lines.size() + 1) * 0.25 * scale, rPos.z, scale, Arrays.asList(((FoxEntity) entity).getMainHandStack()));
+					drawItems(rPos.x, rPos.y + (lines.size() + 1) * 0.25 * scale, rPos.z, scale, List.of(((FoxEntity) entity).getMainHandStack()));
 				}
 			} else if (entity instanceof Monster && getSetting(3).asToggle().state) {
 				double scale = Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
@@ -329,8 +311,9 @@ public class Nametags extends Module {
 				} else {
 					// Try to see if the owner is online on the server before calling the mojang api
 					Optional<GameProfile> owner = mc.player.networkHandler.getPlayerList().stream()
-							.filter(en -> en.getProfile() != null && ownerUUID.equals(en.getProfile().getId()) && en.getProfile().getName() != null)
-							.map(en -> en.getProfile()).findFirst();
+							.map(PlayerListEntry::getProfile)
+							.filter(profile -> profile != null && ownerUUID.equals(profile.getId()) && profile.getName() != null)
+							.findFirst();
 
 					if (owner.isPresent()) {
 						uuidCache.put(ownerUUID, owner.get().getName());
@@ -449,29 +432,25 @@ public class Nametags extends Module {
 
 	// how to download future client 2020 :flushed:
 	private void addUUIDFuture(UUID uuid) {
-		uuidFutures.put(uuid, uuidExecutor.submit(new Callable<String>() {
+		uuidFutures.put(uuid, uuidExecutor.submit(() -> {
+			try {
+				String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
+				String response = Resources.toString(new URL(url), StandardCharsets.UTF_8);
+				BleachLogger.logger.info("bruh uuid time: " + url);
 
-			@Override
-			public String call() throws Exception {
-				try {
-					String url = "https://api.mojang.com/user/profiles/" + uuid.toString().replace("-", "") + "/names";
-					String response = Resources.toString(new URL(url), StandardCharsets.UTF_8);
-					BleachLogger.logger.info("bruh uuid time: " + url);
+				JsonElement json = JsonParser.parseString(response);
 
-					JsonElement json = JsonParser.parseString(response);
-
-					if (!json.isJsonArray()) {
-						BleachLogger.logger.error("[Nametags] Invalid Owner UUID: " + uuid.toString());
-						return "\u00a7c[Invalid]";
-					}
-
-					JsonArray ja = json.getAsJsonArray();
-
-					return ja.get(ja.size() - 1).getAsJsonObject().get("name").getAsString();
-				} catch (IOException e) {
-					BleachLogger.logger.error("[Nametags] Error Getting Owner UUID: " + uuid.toString());
-					return "\u00a7c[Error]";
+				if (!json.isJsonArray()) {
+					BleachLogger.logger.error("[Nametags] Invalid Owner UUID: " + uuid);
+					return "\u00a7c[Invalid]";
 				}
+
+				JsonArray ja = json.getAsJsonArray();
+
+				return ja.get(ja.size() - 1).getAsJsonObject().get("name").getAsString();
+			} catch (IOException e) {
+				BleachLogger.logger.error("[Nametags] Error Getting Owner UUID: " + uuid);
+				return "\u00a7c[Error]";
 			}
 		}));
 	}

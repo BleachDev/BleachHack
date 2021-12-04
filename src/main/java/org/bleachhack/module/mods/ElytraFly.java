@@ -168,7 +168,6 @@ public class ElytraFly extends Module {
 				event.setCancelled(true);
 				PlayerMoveC2SPacket p = (PlayerMoveC2SPacket) event.getPacket();
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.getX(0), p.getY(0), p.getZ(0), p.isOnGround()));
-				return;
 			}
 		}
 	}

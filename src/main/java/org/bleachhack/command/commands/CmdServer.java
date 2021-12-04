@@ -8,20 +8,6 @@
  */
 package org.bleachhack.command.commands;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.bleachhack.BleachHack;
-import org.bleachhack.command.Command;
-import org.bleachhack.command.CommandCategory;
-import org.bleachhack.command.exception.CmdSyntaxException;
-import org.bleachhack.event.events.EventPacket;
-import org.bleachhack.eventbus.BleachSubscribe;
-import org.bleachhack.util.BleachLogger;
-
 import net.minecraft.SharedConstants;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.packet.c2s.play.RequestCommandCompletionsC2SPacket;
@@ -31,6 +17,20 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.apache.commons.lang3.StringUtils;
+import org.bleachhack.BleachHack;
+import org.bleachhack.command.Command;
+import org.bleachhack.command.CommandCategory;
+import org.bleachhack.command.exception.CmdSyntaxException;
+import org.bleachhack.event.events.EventPacket;
+import org.bleachhack.eventbus.BleachSubscribe;
+import org.bleachhack.util.BleachLogger;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CmdServer extends Command {
 
@@ -99,7 +99,7 @@ public class CmdServer extends Command {
 						String[] split = s.getText().split(":");
 						return split.length != 1 ? split[0].replace("/", "") : null;
 					})
-					.filter(s -> s != null)
+					.filter(Objects::nonNull)
 					.distinct()
 					.sorted()
 					.collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class CmdServer extends Command {
 				Thread.sleep(5000);
 				if (BleachHack.eventBus.unsubscribe(this))
 					BleachLogger.noPrefix("\u00a7cPlugin check timed out");
-			} catch (InterruptedException e) {
+			} catch (InterruptedException ignored) {
 			}
 		});
 		timeoutThread.setDaemon(true);
@@ -184,14 +184,14 @@ public class CmdServer extends Command {
 		int p = 0;
 		while (mc.player.hasPermissionLevel(p + 1) && p < 5) p++;
 
-		switch (p) {
-			case 0: return "0 (No Perms)";
-			case 1: return "1 (No Perms)";
-			case 2: return "2 (Player Command Access)";
-			case 3: return "3 (Server Command Access)";
-			case 4: return "4 (Operator)";
-			default: return p + " (Unknown)";
-		}
+		return switch (p) {
+			case 0 -> "0 (No Perms)";
+			case 1 -> "1 (No Perms)";
+			case 2 -> "2 (Player Command Access)";
+			case 3 -> "3 (Server Command Access)";
+			case 4 -> "4 (Operator)";
+			default -> p + " (Unknown)";
+		};
 	}
 
 	public String getProtocol(boolean singleplayer) {

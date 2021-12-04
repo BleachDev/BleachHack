@@ -8,10 +8,16 @@
  */
 package org.bleachhack.module.mods;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
+import net.minecraft.block.*;
+import net.minecraft.item.HoeItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.tag.FluidTags;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.*;
+import net.minecraft.world.gen.feature.TreeFeature;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -22,39 +28,13 @@ import org.bleachhack.module.setting.base.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.world.WorldUtils;
 
-import net.minecraft.block.AzaleaBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CactusBlock;
-import net.minecraft.block.CocoaBlock;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.block.GourdBlock;
-import net.minecraft.block.MushroomPlantBlock;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.SoulSandBlock;
-import net.minecraft.block.StemBlock;
-import net.minecraft.block.SugarCaneBlock;
-import net.minecraft.block.SweetBerryBushBlock;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.gen.feature.TreeFeature;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AutoFarm extends Module {
 	
-	private Map<BlockPos, Integer> mossMap = new HashMap<>();
+	private final Map<BlockPos, Integer> mossMap = new HashMap<>();
 
 	public AutoFarm() {
 		super("AutoFarm", KEY_UNBOUND, ModuleCategory.PLAYER, "Automatically does farming activities for you.",
@@ -110,8 +90,7 @@ public class AutoFarm extends Module {
 						.map(b -> Pair.of(b.toImmutable(), getMossSpots(b)))
 						.filter(p -> p.getRight() > 10)
 						.map(Pair::getLeft)
-						.sorted(Comparator.reverseOrder())
-						.findFirst().orElse(null);
+						.min(Comparator.reverseOrder()).orElse(null);
 
 				if (bestBlock != null) {
 					if (!mc.world.isAir(bestBlock.up())) {

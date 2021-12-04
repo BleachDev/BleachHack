@@ -8,19 +8,14 @@
  */
 package org.bleachhack.gui;
 
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import net.minecraft.block.enums.Instrument;
+import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.gui.window.WindowScreen;
@@ -30,14 +25,14 @@ import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.NotebotUtils;
 import org.bleachhack.util.io.BleachFileMang;
 
-import net.minecraft.block.enums.Instrument;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NotebotScreen extends WindowScreen {
 
@@ -60,7 +55,7 @@ public class NotebotScreen extends WindowScreen {
 			paths.forEach(p -> files.add(p.getFileName().toString()));
 			paths.close();
 			files.remove(0);
-		} catch (IOException e) {
+		} catch (IOException ignored) {
 		}
 
 		clearWindows();
@@ -76,15 +71,12 @@ public class NotebotScreen extends WindowScreen {
 				page--;
 		}));
 
-		getWindow(0).addWidget(new WindowButtonWidget(77, 14, 87, 24, ">", () -> {
-			page++;
-		}));
+		getWindow(0).addWidget(new WindowButtonWidget(77, 14, 87, 24, ">", () -> page++));
 
 		int yEnd = getWindow(0).x2 - getWindow(0).x1;
 
-		getWindow(0).addWidget(new WindowButtonWidget(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () -> {
-			Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"));
-		}));
+		getWindow(0).addWidget(new WindowButtonWidget(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () ->
+				Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"))));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -266,7 +258,7 @@ public class NotebotScreen extends WindowScreen {
 		return "";
 	}
 
-	public class NotebotEntry {
+	public static class NotebotEntry {
 		public String fileName;
 		public List<String> lines = new ArrayList<>();
 		public Map<Instrument, Integer> notes = new HashMap<>();
@@ -287,7 +279,7 @@ public class NotebotScreen extends WindowScreen {
 				try {
 					if (Integer.parseInt(s.split(":")[0]) > maxLeng)
 						maxLeng = Integer.parseInt(s.split(":")[0]);
-				} catch (Exception e) {
+				} catch (Exception ignored) {
 				}
 			}
 			length = maxLeng;

@@ -8,21 +8,8 @@
  */
 package org.bleachhack.gui;
 
-import java.net.URI;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.EntityMenu;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.Boxes;
-import org.bleachhack.util.collections.MutablePairList;
-import org.lwjgl.glfw.GLFW;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -36,6 +23,17 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.MathHelper;
+import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.EntityMenu;
+import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.Boxes;
+import org.bleachhack.util.collections.MutablePairList;
+import org.lwjgl.glfw.GLFW;
+
+import java.net.URI;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="https://github.com/lasnikprogram">Lasnik</a>
@@ -99,13 +97,13 @@ public class EntityMenuScreen extends Screen {
 					BleachLogger.error("Invalid url \"" + message.substring(5) + "\"");
 				}
 
-				client.setScreen((Screen) null);
+				client.setScreen(null);
 			} else {
 				client.player.sendChatMessage(message);
-				client.setScreen((Screen) null);
+				client.setScreen(null);
 			}
 		} else {
-			client.setScreen((Screen) null);
+			client.setScreen(null);
 		}
 	}
 
@@ -283,9 +281,7 @@ class Vector2 {
 		if (obj == null || getClass() != obj.getClass()) return false;
 
 		Vector2 other = (Vector2) obj;
-		if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x)
-				|| Float.floatToIntBits(y) != Float.floatToIntBits(other.y)) return false;
-
-		return true;
+		return Float.floatToIntBits(x) == Float.floatToIntBits(other.x)
+				&& Float.floatToIntBits(y) == Float.floatToIntBits(other.y);
 	}
 }

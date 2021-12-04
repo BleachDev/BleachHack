@@ -10,7 +10,7 @@ package org.bleachhack.util.render.color;
 
 import com.mojang.datafixers.util.Function4;
 
-public class LineColor extends RenderColor {
+public class LineColor extends RenderColor implements Cloneable{
 
 	private Function4<Float, Float, Float, Integer, int[]> getColorFunc;
 

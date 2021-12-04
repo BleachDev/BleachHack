@@ -8,7 +8,7 @@
  */
 package org.bleachhack.util.render.color;
 
-public abstract class RenderColor implements Cloneable {
+public abstract class RenderColor {
 
 	protected Integer[] overwriteColor = new Integer[4];
 

@@ -39,9 +39,7 @@ public class ElytraReplace extends Module {
 			Integer elytraSlot = null;
 			for (int slot = 0; slot < 36; slot++) {
 				ItemStack stack = mc.player.getInventory().getStack(slot);
-				if (stack.isEmpty() || !(stack.getItem() instanceof ElytraItem) || stack.getDamage() == (Items.ELYTRA.getMaxDamage() - 1))
-					continue;
-				else {
+				if (stack.getItem() instanceof ElytraItem && stack.getDamage() != (Items.ELYTRA.getMaxDamage() - 1)) {
 					elytraSlot = slot;
 					break;
 				}

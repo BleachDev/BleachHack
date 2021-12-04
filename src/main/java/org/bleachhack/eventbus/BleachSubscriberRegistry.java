@@ -15,9 +15,9 @@ import org.bleachhack.event.Event;
 public class BleachSubscriberRegistry {
 
 	// <Event Class, Subscribers>
-	private Map<Class<?>, List<BleachSubscriber>> subscribers = new ConcurrentHashMap<>();
+	private final Map<Class<?>, List<BleachSubscriber>> subscribers = new ConcurrentHashMap<>();
 	private final String id;
-	private AtomicLong eventsPosted = new AtomicLong();
+	private final AtomicLong eventsPosted = new AtomicLong();
 
 	public BleachSubscriberRegistry(String id) {
 		this.id = id;

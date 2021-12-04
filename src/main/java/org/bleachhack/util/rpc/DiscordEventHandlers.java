@@ -76,7 +76,7 @@ public class DiscordEventHandlers extends Structure {
 		}
 	}
 	
-	public static interface DiscordCallback extends Callback {
+	public interface DiscordCallback extends Callback {
 		void apply(DiscordUser request);
 	}
 	

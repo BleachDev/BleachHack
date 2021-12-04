@@ -200,7 +200,7 @@ public class Peek extends Module {
 				134, 134,
 				179, 179);
 
-		Text pageIndexText = new TranslatableText("book.pageIndicator", new Object[] {pageCount + 1, pages.size() });
+		Text pageIndexText = new TranslatableText("book.pageIndicator", pageCount + 1, pages.size());
 		int pageIndexLength = mc.textRenderer.getWidth(pageIndexText);
 
 		matrices.push();

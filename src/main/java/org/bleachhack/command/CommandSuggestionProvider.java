@@ -8,18 +8,12 @@
  */
 package org.bleachhack.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.google.common.collect.Lists;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // TODO: Rewrite this entire system because bad
 public class CommandSuggestionProvider {
@@ -64,7 +58,7 @@ public class CommandSuggestionProvider {
 		return suggestions.stream().map(Suggestion::getSuggestionCount).reduce(0, Integer::sum);
 	}
 
-	private class Suggestion {
+	private static class Suggestion {
 
 		private List<Suggestion> children = new ArrayList<>();
 		private String suggestion;
@@ -100,7 +94,7 @@ public class CommandSuggestionProvider {
 					return new ArrayList<>();
 				}
 
-				return Arrays.asList(suggestion);
+				return List.of(suggestion);
 			}
 
 			if (!suggestion.equals(typed[0])) {

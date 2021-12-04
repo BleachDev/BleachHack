@@ -37,7 +37,7 @@ public class CmdSetting extends Command {
 		if (s instanceof SettingSlider) {
 			s.asSlider().setValue(Double.parseDouble(args[2]));
 		} else if (s instanceof SettingToggle) {
-			s.asToggle().state = Boolean.valueOf(args[2]);
+			s.asToggle().state = Boolean.parseBoolean(args[2]);
 		} else if (s instanceof SettingMode) {
 			s.asMode().mode = Integer.parseInt(args[2]);
 		} else {

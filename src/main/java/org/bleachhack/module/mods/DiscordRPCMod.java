@@ -94,27 +94,13 @@ public class DiscordRPCMod extends Module {
 			long start = 0;
 
 			switch (getSetting(0).asMode().mode) {
-				case 0:
-					text1 = "Playing " + (mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address);
-					break;
-				case 1:
-					text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-					break;
-				case 2:
-					text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : "Multiplayer";
-					break;
-				case 3:
-					text1 = mc.player.getEntityName() + " Ontop!";
-					break;
-				case 4:
-					text1 = "Minecraft " + SharedConstants.getGameVersion().getName();
-					break;
-				case 5:
-					text1 = mc.player.getEntityName();
-					break;
-				case 6:
-					text1 = "<- bad client";
-					break;
+				case 0 -> text1 = "Playing " + (mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address);
+				case 1 -> text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
+				case 2 -> text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : "Multiplayer";
+				case 3 -> text1 = mc.player.getEntityName() + " Ontop!";
+				case 4 -> text1 = "Minecraft " + SharedConstants.getGameVersion().getName();
+				case 5 -> text1 = mc.player.getEntityName();
+				case 6 -> text1 = "<- bad client";
 			}
 
 			ItemStack currentItem = mc.player.getInventory().getMainHandStack();
@@ -130,33 +116,17 @@ public class DiscordRPCMod extends Module {
 					+ (currentItem.hasCustomName() ? "\"" + customName + "\" (" + name + ")" : name);
 
 			switch (getSetting(1).asMode().mode) {
-				case 0:
-					text2 = (int) mc.player.getHealth() + " hp - Holding " + itemName;
-					break;
-				case 1:
-					text2 = mc.player.getEntityName() + " - " + (int) mc.player.getHealth() + " hp";
-					break;
-				case 2:
-					text2 = "Holding " + itemName;
-					break;
-				case 3:
-					text2 = (int) mc.player.getHealth() + " hp - At " + mc.player.getBlockPos().toShortString();
-					break;
-				case 4:
-					text2 = "At " + mc.player.getBlockPos().toShortString();
-					break;
+				case 0 -> text2 = (int) mc.player.getHealth() + " hp - Holding " + itemName;
+				case 1 -> text2 = mc.player.getEntityName() + " - " + (int) mc.player.getHealth() + " hp";
+				case 2 -> text2 = "Holding " + itemName;
+				case 3 -> text2 = (int) mc.player.getHealth() + " hp - At " + mc.player.getBlockPos().toShortString();
+				case 4 -> text2 = "At " + mc.player.getBlockPos().toShortString();
 			}
 
 			switch (getSetting(2).asMode().mode) {
-				case 0:
-					start = startTime;
-					break;
-				case 1:
-					start = System.currentTimeMillis() - RandomUtils.nextInt(0, 86400000);
-					break;
-				case 2:
-					start = System.currentTimeMillis() - 86400000L + (long) tick * 50;
-					break;
+				case 0 -> start = startTime;
+				case 1 -> start = System.currentTimeMillis() - RandomUtils.nextInt(0, 86400000);
+				case 2 -> start = System.currentTimeMillis() - 86400000L + (long) tick * 50;
 			}
 
 			DiscordRPCManager.updatePresence(

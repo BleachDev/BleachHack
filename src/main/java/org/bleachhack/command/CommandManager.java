@@ -8,6 +8,16 @@
  */
 package org.bleachhack.command;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.bleachhack.command.exception.CmdSyntaxException;
+import org.bleachhack.util.BleachLogger;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -15,18 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.bleachhack.command.exception.CmdSyntaxException;
-import org.bleachhack.util.BleachLogger;
-
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
 
 public class CommandManager {
 
@@ -104,7 +102,7 @@ public class CommandManager {
 				try {
 					c.onCommand(split[0], ArrayUtils.subarray(split, 1, split.length));
 				} catch (CmdSyntaxException e) {
-					BleachLogger.error((MutableText) e.getTextMessage());
+					BleachLogger.error(e.getTextMessage());
 
 					MutableText text = new LiteralText(Command.getPrefix() + c.getAliases()[0] + ": \u00a7f" + c.getDescription())
 							.styled(s -> s.withColor(BleachLogger.INFO_COLOR));
@@ -135,7 +133,7 @@ public class CommandManager {
 		BleachLogger.error("Command Not Found, Maybe Try " + Command.getPrefix() + "help");
 	}
 
-	private class CommandListJson {
+	private static class CommandListJson {
 
 		@SerializedName("package")
 		private String packageName;

@@ -87,8 +87,7 @@ public class BookCrash extends Module {
 			}
 		} else {
 			for (int i = 0; i < pages; i++) {
-				String siteContent = size;
-				NbtString tString = NbtString.of(siteContent);
+				NbtString tString = NbtString.of(size);
 				list.add(tString);
 			}
 

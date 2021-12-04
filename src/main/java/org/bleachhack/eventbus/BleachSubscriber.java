@@ -1,5 +1,9 @@
 package org.bleachhack.eventbus;
 
+import com.google.common.util.concurrent.MoreExecutors;
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.bleachhack.event.Event;
+
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandles;
@@ -9,15 +13,10 @@ import java.lang.reflect.Parameter;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.reflect.MethodUtils;
-import org.bleachhack.event.Event;
-
-import com.google.common.util.concurrent.MoreExecutors;
-
 public class BleachSubscriber {
 
 	private final Consumer<Object> subscriberCaller;
-	private Executor executor = MoreExecutors.directExecutor();
+	private final Executor executor = MoreExecutors.directExecutor();
 	private final Class<? extends Event> eventClass;
 	private final Class<?> targetClass;
 	private final String signature;

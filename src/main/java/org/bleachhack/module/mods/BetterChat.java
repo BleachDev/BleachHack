@@ -8,20 +8,17 @@
  */
 package org.bleachhack.module.mods;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
+import com.github.fzakaria.ascii85.Ascii85;
+import com.google.common.hash.Hashing;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import net.minecraft.network.MessageType;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
@@ -37,18 +34,14 @@ import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.Texts;
 import org.bleachhack.util.io.BleachFileHelper;
 
-import com.github.fzakaria.ascii85.Ascii85;
-import com.google.common.hash.Hashing;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-
-import net.minecraft.network.MessageType;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class BetterChat extends Module {
 
@@ -119,7 +112,7 @@ public class BetterChat extends Module {
 					try {
 						filterPatterns.add(Pattern.compile(f.getAsString()));
 					} catch (PatternSyntaxException | JsonParseException e) {
-						BleachLogger.logger.error("Error parsing CustomChat filter pattern: " + f.toString());
+						BleachLogger.logger.error("Error parsing CustomChat filter pattern: " + f);
 					}
 				}
 			}
@@ -308,7 +301,7 @@ public class BetterChat extends Module {
 
 	static class CustomFont {
 
-		private Map<Character, Character> allMaps = new HashMap<>();
+		private final Map<Character, Character> allMaps = new HashMap<>();
 
 		public CustomFont(CharMap... maps) {
 			for (CharMap map : maps) {
@@ -326,7 +319,7 @@ public class BetterChat extends Module {
 
 		static class CharMap {
 
-			private Map<Character, Character> map = new HashMap<>();
+			private final Map<Character, Character> map = new HashMap<>();
 
 			private CharMap(char... mappings) {
 				for (int i = 0; i < mappings.length - 1; i += 2) {

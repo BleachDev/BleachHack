@@ -149,7 +149,7 @@ public class Window {
 						w.mouseClicked(x1, y1, (int) mouseX, (int) mouseY, button);
 					}
 				}
-			} catch (ConcurrentModificationException e) {}
+			} catch (ConcurrentModificationException ignored) {}
 		}
 	}
 

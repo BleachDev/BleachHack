@@ -223,7 +223,7 @@ public class Renderer {
 			return Vec3d.ZERO;
 		}
 
-		double tickDelta = (double) MinecraftClient.getInstance().getTickDelta();
+		double tickDelta = MinecraftClient.getInstance().getTickDelta();
 		return new Vec3d(
 				e.getX() - MathHelper.lerp(tickDelta, e.lastRenderX, e.getX()),
 				e.getY() - MathHelper.lerp(tickDelta, e.lastRenderY, e.getY()),

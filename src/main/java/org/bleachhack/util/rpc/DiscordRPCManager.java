@@ -8,17 +8,16 @@
  */
 package org.bleachhack.util.rpc;
 
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import org.apache.commons.lang3.SystemUtils;
+import org.bleachhack.util.BleachLogger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-
-import org.apache.commons.lang3.SystemUtils;
-import org.bleachhack.util.BleachLogger;
-
-import com.sun.jna.Library;
-import com.sun.jna.Native;
 
 /**
  * Baked in discord rpc because MC 1.17-pre1 decided to not launch with it as a library.
@@ -66,8 +65,8 @@ public class DiscordRPCManager {
 	/**
 	 * Method to initialize the Discord-RPC.
 	 *
-	 * @param applicationId ApplicationID/ClientID
-	 * @param handlers      EventHandlers
+	 * @param id       ApplicationID/ClientID
+	 * @param callback EventHandlers
 	 */
 	public static void initialize(String id, DiscordEventHandlers callback) {
 		LIBRARY.Discord_Initialize(id, callback, 1, null);
@@ -115,7 +114,6 @@ public class DiscordRPCManager {
 	 *
 	 * @param userId UserID of the user to respond to.
 	 * @param reply  DiscordReply to request. (0 = No, 1 = Yes, 2 = Ignore)
-	 * @see DiscordReply
 	 */
 	public static void respond(String userId, int reply) {
 		LIBRARY.Discord_Respond(userId, reply);
@@ -126,7 +124,7 @@ public class DiscordRPCManager {
 	}
 
 	//JNA Interface
-	private static interface DiscordLib extends Library {
+	private interface DiscordLib extends Library {
 
 		void Discord_Initialize(String applicationId, DiscordEventHandlers handlers, int autoRegister, String optionalSteamId);
 		void Discord_Register(String applicationId, String command);
