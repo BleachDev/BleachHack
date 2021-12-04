@@ -8,29 +8,27 @@
  */
 package org.bleachhack.mixin;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
 import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventPlayerPushed;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Entity.class)
 public class MixinEntity {
-	
-	@Shadow public void addVelocity(double deltaX, double deltaY, double deltaZ) {}
 
-	@Redirect(method = "pushAwayFrom", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;addVelocity(DDD)V"))
-	private void pushAwayFrom_addVelocity(Entity entity, double deltaX, double deltaY, double deltaZ) {
-		if (entity == MinecraftClient.getInstance().player) {
-			EventPlayerPushed event = new EventPlayerPushed(new Vec3d(deltaX, deltaY, deltaZ));
+	@ModifyArgs(method = "pushAwayFrom", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;addVelocity(DDD)V"))
+	private void pushAwayFrom_addVelocity(Args args) {
+		if ((Object) this == MinecraftClient.getInstance().player) {
+			EventPlayerPushed event = new EventPlayerPushed(args.get(0), args.get(1), args.get(2));
 			BleachHack.eventBus.post(event);
-			
-			addVelocity(event.getPush().x, event.getPush().y, event.getPush().z);
+
+			args.set(0, event.getPushX());
+			args.set(1, event.getPushY());
+			args.set(2, event.getPushZ());
 		}
 	}
 }

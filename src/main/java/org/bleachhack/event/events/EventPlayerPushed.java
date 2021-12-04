@@ -10,21 +10,39 @@ package org.bleachhack.event.events;
 
 import org.bleachhack.event.Event;
 
-import net.minecraft.util.math.Vec3d;
-
 public class EventPlayerPushed extends Event {
 	
-	private Vec3d push;
+	private double pushX;
+	private double pushY;
+	private double pushZ;
 
-	public EventPlayerPushed(Vec3d push) {
-		this.push = push;
+	public EventPlayerPushed(double pushX, double pushY, double pushZ) {
+		this.pushX = pushX;
+		this.pushY = pushY;
+		this.pushZ = pushZ;
 	}
 
-	public Vec3d getPush() {
-		return push;
+	public double getPushX() {
+		return pushX;
 	}
 
-	public void setPush(Vec3d push) {
-		this.push = push;
+	public void setPushX(double pushX) {
+		this.pushX = pushX;
+	}
+
+	public double getPushY() {
+		return pushY;
+	}
+
+	public void setPushY(double pushY) {
+		this.pushY = pushY;
+	}
+
+	public double getPushZ() {
+		return pushZ;
+	}
+
+	public void setPushZ(double pushZ) {
+		this.pushZ = pushZ;
 	}
 }
