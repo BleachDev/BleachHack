@@ -40,7 +40,10 @@ public class NoVelocity extends Module {
 	@BleachSubscribe
 	public void onPlayerPushed(EventPlayerPushed event) {
 		if (getSetting(2).asToggle().state) {
-			event.setPush(event.getPush().multiply(getSetting(2).asToggle().getChild(0).asSlider().getValue() / 100d));
+			double amount = getSetting(2).asToggle().getChild(0).asSlider().getValue() / 100d;
+			event.setPushX(event.getPushX() * amount);
+			event.setPushY(event.getPushY() * amount);
+			event.setPushZ(event.getPushZ() * amount);
 		}
 	}
 
