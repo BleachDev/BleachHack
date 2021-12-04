@@ -26,7 +26,6 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtLongArray;
 import net.minecraft.nbt.NbtShort;
 import net.minecraft.server.world.SimpleTickScheduler;
-import net.minecraft.structure.StructureStart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -65,7 +64,7 @@ public class ClientChunkSerializer {
 		if (!upgradeData.isDone()) {
 			nbtCompound2.put("UpgradeData", upgradeData.toNbt());
 		}
-		
+
 		if (chunk instanceof EmptyChunk)
 			return nbtCompound;
 
@@ -74,18 +73,22 @@ public class ClientChunkSerializer {
 		LightingProvider lightingProvider = world.getChunkManager().getLightingProvider();
 		boolean bl = chunk.isLightOn();
 
-		for(int i = lightingProvider.getBottomY(); i < lightingProvider.getTopY(); ++i) {
+		for (int i = lightingProvider.getBottomY(); i < lightingProvider.getTopY(); ++i) {
 			int fi = i;
-			ChunkSection chunkSection = (ChunkSection) Arrays.stream(chunkSections).filter(chunkSectionx -> {
-				return chunkSectionx != null && ChunkSectionPos.getSectionCoord(chunkSectionx.getYOffset()) == fi;
-			}).findFirst().orElse(WorldChunk.EMPTY_SECTION);
+			ChunkSection chunkSection = Arrays.stream(chunkSections).filter(cs ->
+				cs != null && ChunkSectionPos.getSectionCoord(cs.getYOffset()) == fi
+			).findFirst().orElse(WorldChunk.EMPTY_SECTION);
 			ChunkNibbleArray chunkNibbleArray = lightingProvider.get(LightType.BLOCK).getLightSection(ChunkSectionPos.from(chunkPos, i));
 			ChunkNibbleArray chunkNibbleArray2 = lightingProvider.get(LightType.SKY).getLightSection(ChunkSectionPos.from(chunkPos, i));
 			if (chunkSection != WorldChunk.EMPTY_SECTION || chunkNibbleArray != null || chunkNibbleArray2 != null) {
 				NbtCompound nbtCompound3 = new NbtCompound();
-				nbtCompound3.putByte("Y", (byte)(i & 255));
+				nbtCompound3.putByte("Y", (byte) (i & 255));
+
 				if (chunkSection != WorldChunk.EMPTY_SECTION) {
-					chunkSection.getContainer().write(nbtCompound3, "Palette", "BlockStates");
+					try {
+						chunkSection.getContainer().write(nbtCompound3, "Palette", "BlockStates");
+					} catch (Exception ignore) {
+					}
 				}
 
 				if (chunkNibbleArray != null && !chunkNibbleArray.isUninitialized()) {
@@ -115,7 +118,7 @@ public class ClientChunkSerializer {
 
 		NbtCompound nbtCompound6;
 		while (var21.hasNext()) {
-			BlockPos blockPos = (BlockPos) var21.next();
+			BlockPos blockPos = var21.next();
 			nbtCompound6 = chunk.getPackedBlockEntityNbt(blockPos);
 			if (nbtCompound6 != null) {
 				nbtList2.add(nbtCompound6);
@@ -131,10 +134,8 @@ public class ClientChunkSerializer {
 			nbtCompound2.put("Lights", toNbt(protoChunk.getLightSourcesBySection()));
 			nbtCompound6 = new NbtCompound();
 			GenerationStep.Carver[] var28 = GenerationStep.Carver.values();
-			int var16 = var28.length;
 
-			for(int var17 = 0; var17 < var16; ++var17) {
-				GenerationStep.Carver carver = var28[var17];
+			for (GenerationStep.Carver carver : var28) {
 				BitSet bitSet = protoChunk.getCarvingMask(carver);
 				if (bitSet != null) {
 					nbtCompound6.putByteArray(carver.toString(), bitSet.toByteArray());
@@ -160,31 +161,27 @@ public class ClientChunkSerializer {
 
 		nbtCompound2.put("PostProcessing", toNbt(chunk.getPostProcessingLists()));
 		nbtCompound6 = new NbtCompound();
-		Iterator<Entry<Type, Heightmap>> var29 = chunk.getHeightmaps().iterator();
 
-		while (var29.hasNext()) {
-			Entry<Heightmap.Type, Heightmap> entry = (Entry<Type, Heightmap>) var29.next();
+		for (Entry<Type, Heightmap> entry : chunk.getHeightmaps()) {
 			if (chunk.getStatus().getHeightmapTypes().contains(entry.getKey())) {
-				nbtCompound6.put(((Heightmap.Type) entry.getKey()).getName(), new NbtLongArray(((Heightmap) entry.getValue()).asLongArray()));
+				nbtCompound6.put(entry.getKey().getName(), new NbtLongArray(entry.getValue().asLongArray()));
 			}
 		}
 
 		nbtCompound2.put("Heightmaps", nbtCompound6);
-		nbtCompound2.put("Structures", writeStructures(chunkPos, chunk.getStructureStarts(), chunk.getStructureReferences()));
+		nbtCompound2.put("Structures", writeStructures(chunk.getStructureReferences()));
 		return nbtCompound;
 	}
 
-	private static NbtCompound writeStructures(ChunkPos chunkPos, Map<StructureFeature<?>, StructureStart<?>> map, Map<StructureFeature<?>, LongSet> map2) {
+	private static NbtCompound writeStructures(Map<StructureFeature<?>, LongSet> map2) {
 		NbtCompound nbtCompound = new NbtCompound();
 		NbtCompound nbtCompound2 = new NbtCompound();
 
 		nbtCompound.put("Starts", nbtCompound2);
 		NbtCompound nbtCompound3 = new NbtCompound();
-		Iterator<Entry<StructureFeature<?>, LongSet>> var10 = map2.entrySet().iterator();
 
-		while(var10.hasNext()) {
-			Entry<StructureFeature<?>, LongSet> entry2 = (Entry<StructureFeature<?>, LongSet>) var10.next();
-			nbtCompound3.put(((StructureFeature<?>) entry2.getKey()).getName(), new NbtLongArray((LongSet)entry2.getValue()));
+		for (Entry<StructureFeature<?>, LongSet> entry2 : map2.entrySet()) {
+			nbtCompound3.put(entry2.getKey().getName(), new NbtLongArray(entry2.getValue()));
 		}
 
 		nbtCompound.put("References", nbtCompound3);
@@ -193,18 +190,14 @@ public class ClientChunkSerializer {
 
 	private static NbtList toNbt(ShortList[] lists) {
 		NbtList nbtList = new NbtList();
-		ShortList[] var2 = lists;
-		int var3 = lists.length;
 
-		for(int var4 = 0; var4 < var3; ++var4) {
-			ShortList shortList = var2[var4];
+		for (ShortList shortList : lists) {
 			NbtList nbtList2 = new NbtList();
 			if (shortList != null) {
 				ShortListIterator var7 = shortList.iterator();
 
-				while(var7.hasNext()) {
-					Short short_ = (Short) var7.nextShort();
-					nbtList2.add(NbtShort.of(short_));
+				while (var7.hasNext()) {
+					nbtList2.add(NbtShort.of(var7.nextShort()));
 				}
 			}
 
