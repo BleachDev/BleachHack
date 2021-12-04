@@ -41,8 +41,8 @@ public class MixinClientWorld {
 			info.cancel();
 	}
 
-	@Inject(method = "method_23777", at = @At("HEAD"), cancellable = true)
-	public void method_23777(Vec3d vec, float f, CallbackInfoReturnable<Vec3d> ci) {
+	@Inject(method = "getSkyColor", at = @At("HEAD"), cancellable = true)
+	public void getSkyColor(Vec3d vec, float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyRender.Color.SkyColor event = new EventSkyRender.Color.SkyColor(f);
 		BleachHack.eventBus.post(event);
 

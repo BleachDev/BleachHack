@@ -29,7 +29,7 @@ public class MixinShader {
 		return replaceIdentifier(string);
 	}
 
-	@Redirect(method = "loadProgram", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
+	@Redirect(method = "loadProgram", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
 	private static Identifier loadProgram_identifier(String string) {
 		return replaceIdentifier(string);
 	}

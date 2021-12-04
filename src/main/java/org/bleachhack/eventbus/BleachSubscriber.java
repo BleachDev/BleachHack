@@ -38,7 +38,7 @@ public class BleachSubscriber {
 					//lookup.findVirtual(target.getClass(), methodName, MethodType.methodType(void.class, eventClass)),
 					MethodType.methodType(void.class, eventClass));
 
-			subscriberCaller = (Consumer<Object>) callsite.getTarget().invoke(target);
+			subscriberCaller = (Consumer<Object>) callsite.getTarget().invokeWithArguments(target);
 
 			this.eventClass = eventClass;
 			this.targetClass = target.getClass();

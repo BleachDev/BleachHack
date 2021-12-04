@@ -18,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(JsonEffectGlShader.class)
 public class MixinJsonEffectGlShader {
 
-	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
+	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
 	public Identifier init_identifier(String string) {
 		return replaceIdentifier(string);
 	}
 
-	@Redirect(method = "loadEffect", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
+	@Redirect(method = "loadEffect", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
 	private static Identifier loadEffect_identifier(String string) {
 		return replaceIdentifier(string);
 	}
