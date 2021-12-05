@@ -12,7 +12,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
@@ -29,14 +28,14 @@ public class BleachQueue {
 	}
 
 	public static void add(String id, Runnable runnable, int inTicks) {
-		if (!queues.containsKey(id)) {
+		if (queues.containsKey(id)) {
+			queues.get(id).add(MutablePair.of(runnable, inTicks));
+		} else {
 			Deque<MutablePair<Runnable, Integer>> newQueue = new ArrayDeque<>();
 			newQueue.add(MutablePair.of(runnable, inTicks));
 
 			queues.put(id, newQueue);
 		}
-
-		queues.get(id).add(MutablePair.of(runnable, inTicks));
 	}
 
 	public static void cancelQueue(String id) {
@@ -58,22 +57,19 @@ public class BleachQueue {
 	}
 
 	public static void nextQueue() {
-		for (Entry<String, Deque<MutablePair<Runnable, Integer>>> e : new HashMap<>(queues).entrySet()) {
+		queues.entrySet().removeIf(e -> {
 			Deque<MutablePair<Runnable, Integer>> deque = e.getValue();
-
+			
 			MutablePair<Runnable, Integer> first = deque.peek();
-
+			
 			if (first.right > 0) {
 				first.right--;
-				//System.out.println("sdrbubdu " + deque.peek().getRight() + " | " + first.getRight() + " | " + (deque.peek().getRight() > 0));
 			} else {
 				first.left.run();
 				deque.removeFirst();
 			}
 
-			if (deque.isEmpty()) {
-				queues.remove(e.getKey());
-			}
-		}
+			return deque.isEmpty();
+		});
 	}
 }
