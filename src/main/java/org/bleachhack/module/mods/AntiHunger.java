@@ -21,7 +21,7 @@ public class AntiHunger extends Module {
 	private boolean bool = false;
 
 	public AntiHunger() {
-		super("AntiHunger", KEY_UNBOUND, ModuleCategory.PLAYER, "Minimizes the amount of hunger you use.",
+		super("AntiHunger", KEY_UNBOUND, ModuleCategory.PLAYER, "Minimizes the amount of hunger you use (Also makes you slide).",
 				new SettingToggle("Relaxed", false).withDesc("Only activates every other ticks, might fix getting fly kicked."));
 	}
 
