@@ -19,6 +19,7 @@ import org.bleachhack.gui.clickgui.window.ClickGuiWindow.Tooltip;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.gui.window.WindowScreen;
 
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
@@ -31,9 +32,18 @@ public abstract class ClickGuiScreen extends WindowScreen {
 	protected boolean rmDown = false;
 	protected boolean lmHeld = false;
 	protected int mwScroll = 0;
+	
+	private int warningOpacity;
 
 	public ClickGuiScreen(Text title) {
 		super(title);
+	}
+	
+	@Override
+	public void init() {
+		super.init();
+
+		warningOpacity = 0;
 	}
 
 	public boolean isPauseScreen() {
@@ -97,6 +107,12 @@ public abstract class ClickGuiScreen extends WindowScreen {
 
 		drawCenteredText(matrices, textRenderer, "Modules", width / 2 - 26, 2, 0xf0f0f0);
 		drawCenteredText(matrices, textRenderer, "UI", width / 2 + 26, 2, 0xf0f0f0);
+		
+		if (warningOpacity > 3) {
+			drawCenteredText(matrices, textRenderer, "UI not available on the main menu!", width / 2, 17,
+					warningOpacity > 255 ? 0xd14a3b : (warningOpacity << 24) | 0xd14a3b);
+			warningOpacity -= 3;
+		}
 
 		matrices.pop();
 
@@ -110,10 +126,10 @@ public abstract class ClickGuiScreen extends WindowScreen {
 		if (button == 0) {
 			if (mouseX >= width / 2 - 50 && mouseX <= width / 2 - 2 && mouseY >= 0 && mouseY <= 12) {
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1f));
-				client.setScreen(ModuleClickGuiScreen.INSTANCE);
+				tryOpen(ModuleClickGuiScreen.INSTANCE);
 			} else if (mouseX >= width / 2 + 2 && mouseX <= width / 2 + 50 && mouseY >= 0 && mouseY <= 12) {
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1f));
-				client.setScreen(UIClickGuiScreen.INSTANCE);
+				tryOpen(UIClickGuiScreen.INSTANCE);
 			} else {
 				lmDown = true;
 				lmHeld = true;
@@ -139,5 +155,13 @@ public abstract class ClickGuiScreen extends WindowScreen {
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		mwScroll = (int) amount;
 		return super.mouseScrolled(mouseX, mouseY, amount);
+	}
+	
+	private void tryOpen(Screen screen) {
+		if (client.world != null) {
+			client.setScreen(screen);
+		} else {
+			warningOpacity = 500;
+		}
 	}
 }
