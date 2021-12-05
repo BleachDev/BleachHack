@@ -72,30 +72,31 @@ public class BleachCreditsScreen extends WindowScreen {
 		int h = getWindow(0).y2 - getWindow(0).y1;
 
 		getWindow(0).addWidget(new WindowTextWidget(BleachHack.watermark.getText(), true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, 22, 0xb0b0b0));
+		getWindow(0).addWidget(new WindowTextWidget(BleachHack.VERSION, true, WindowTextWidget.TextAlign.MIDDLE, 1.5f, w / 2, 41, 0xffc050));
 
 		getWindow(0).addWidget(new WindowTextWidget("- Main Developer -", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 65, 0xe0e0e0));
 		getWindow(0).addWidget(new WindowTextWidget(
-				new LiteralText("Bleach").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("arabfunny")))),
-				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 80, 0x00a000));
+				new LiteralText("Bleach").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/BleachDrinker420\n\n\u00a7eMain Developer!")))),
+				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 80, 0x51eff5));
 
 		getWindow(0).addWidget(new WindowTextWidget("- Contributors -", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 100, 0xe0e0e0));
 		getWindow(0).addWidget(new WindowTextWidget(
-				new LiteralText("LasnikProgram").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/lasnikprogram\n\n\u00a7fMade first version of LogoutSpot, AirPlace, EntityMenu, HoleESP, AutoParkour and Search")))),
+				new LiteralText("LasnikProgram").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/lasnikprogram\n\n\u00a7fMade first version of LogoutSpot, AirPlace, EntityMenu, HoleESP, AutoParkour and Search.")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 115, 0x00a0a0));
 		getWindow(0).addWidget(new WindowTextWidget(
-				new LiteralText("slcoolj").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/slcoolj\n\n\u00a7fMade Criticals, Speedmine OG mode and did the module system rewrite")))),
+				new LiteralText("slcoolj").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/slcoolj\n\n\u00a7fMade Criticals, Speedmine OG mode and did the module system rewrite.")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 127, 0x00a0a0));
 		getWindow(0).addWidget(new WindowTextWidget(
-				new LiteralText("DevScyu").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/DevScyu\n\n\u00a7fMade first version of AutoTool, Trajectories, NoRender, AutoWalk, ElytraReplace, HandProgress and added Login manager encryption")))),
+				new LiteralText("DevScyu").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/DevScyu\n\n\u00a7fMade first version of AutoTool, Trajectories, NoRender, AutoWalk, ElytraReplace, HandProgress and added Login manager encryption.")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 139, 0x00a0a0));
 		getWindow(0).addWidget(new WindowTextWidget(
-				new LiteralText("Bunt3rhund").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/Bunt3rhund\n\n\u00a7fMade first version of Zoom")))),
+				new LiteralText("Bunt3rhund").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/Bunt3rhund\n\n\u00a7fMade first version of Zoom.")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 151, 0x00a0a0));
 		getWindow(0).addWidget(new WindowTextWidget(
-				new LiteralText("MorganAnkan").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/MorganAnkan\n\n\u00a7fMade the title screen text Rgb")))),
+				new LiteralText("MorganAnkan").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/MorganAnkan\n\n\u00a7fMade the title screen text Rgb.")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 163, 0x00a0a0));
 		getWindow(0).addWidget(new WindowTextWidget(
-				new LiteralText("ThePapanoob").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/thepapanoob\n\n\u00a7fAdded Projectiles mode in killaura")))),
+				new LiteralText("ThePapanoob").styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("\u00a77https://github.com/thepapanoob\n\n\u00a7fAdded Projectiles mode in Killaura.")))),
 				true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 175, 0x00a0a0));
 
 		getWindow(0).addWidget(new WindowTextWidget("- Donators/Boosters -", true, WindowTextWidget.TextAlign.MIDDLE, w / 2, 195, 0xe0e0e0));
