@@ -35,8 +35,19 @@ accessible    field    net/minecraft/client/MinecraftClient    currentFps    I
 # SoundManager
 # - For NotebotStealer to access soundsystem
 accessible    field    net/minecraft/client/sound/SoundManager    soundSystem    Lnet/minecraft/client/sound/SoundSystem;
-
 accessible    field    net/minecraft/client/sound/SoundSystem    sounds    Lcom/google/common/collect/Multimap;
+
+
+## =========== Render ===========
+
+
+# ChunkBuilder
+# - For MixinChunkRebuildTask to overwrite the chunk building method
+accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    nonEmptyLayers    Ljava/util/Set;
+accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    initializedLayers    Ljava/util/Set;
+accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    empty    Z
+accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    occlusionGraph    Lnet/minecraft/client/render/chunk/ChunkOcclusionData;
+accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    bufferState    Lnet/minecraft/client/render/BufferBuilder$State;
 
 
 # RenderLayer
