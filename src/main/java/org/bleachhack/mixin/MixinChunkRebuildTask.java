@@ -43,7 +43,6 @@ import net.minecraft.client.render.chunk.ChunkRendererRegion;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.WorldChunk;
 
 /**
  * Blocks are still tesselated even if they're transparent because Minecraft's
@@ -87,7 +86,7 @@ public class MixinChunkRebuildTask {
 				}
 
 				if (blockState.hasBlockEntity()) {
-					BlockEntity blockEntityx = chunkRendererRegion.getBlockEntity(blockPos3, WorldChunk.CreationType.CHECK);
+					BlockEntity blockEntityx = chunkRendererRegion.getBlockEntity(blockPos3);
 					if (blockEntityx != null) {
 						this.addBlockEntity(data, set, blockEntityx);
 					}
