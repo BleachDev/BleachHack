@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 public class BleachOnlineMang {
 
 	public static final HttpClient HTTP_CLIENT = HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
-	private static final URI RESOURCE_URL = URI.create("https://raw.githubusercontent.com/BleachDrinker420/BH-resources/main/");
+	private static final URI RESOURCE_URL = URI.create("https://bleachhack.org/resources/");
 	private static final URI API_URL = URI.create("http://api0.bleachhack.org/"); // using api0 because of compatibility with BH 1.2.1 and under.
 
 	public static URI getResourceUrl() {
