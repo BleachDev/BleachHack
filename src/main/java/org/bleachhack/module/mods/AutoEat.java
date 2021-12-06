@@ -32,7 +32,7 @@ public class AutoEat extends Module {
 				new SettingToggle("Health", false).withDesc("Eats when you're bewlow a certain amount of health.").withChildren(
 						new SettingSlider("Health", 0, 19, 14, 0).withDesc("The maximum health to eat at.")),
 				new SettingToggle("Gapples", true).withDesc("Eats golden apples.").withChildren(
-						new SettingToggle("Prefer", false).withDesc("Prefers golden apples avober regular food.")),
+						new SettingToggle("Prefer", false).withDesc("Prefers golden apples avobe regular food.")),
 				new SettingToggle("Chorus", false).withDesc("Eats chorus fruit."),
 				new SettingToggle("Poisonous", false).withDesc("Eats poisonous food."));
 	}
