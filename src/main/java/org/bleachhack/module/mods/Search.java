@@ -178,7 +178,7 @@ public class Search extends Module {
 
 		int i = 0;
 		for (BlockPos pos : foundBlocks) {
-			if (i > 1000)
+			if (i > 3000)
 				return;
 
 			BlockState state = mc.world.getBlockState(pos);
