@@ -70,11 +70,14 @@ Generate the needed files for your preferred IDE.
 
 Here are some nice to have mods that are compatible with BleachHack, none of these require Fabric API.
 
-### [Multiconnect](https://github.com/Earthcomputer/multiconnect)
-Multiconnect allows you to connect to any 1.8-1.17 server from a 1.17 client.
+### [Multiconnect](https://github.com/Earthcomputer/multiconnect) or [ViaFabric](https://github.com/ViaVersion/ViaFabric)
+Mods that allows you to connect to any 1.8-1.18 server from a 1.18 client.
 
 ### [Baritone](https://github.com/cabaletta/baritone)
 Baritone allows you to automate tasks such as walking, mining or building.
+
+### [Sodium](https://www.curseforge.com/minecraft/mc-mods/sodium), [Lithium](https://www.curseforge.com/minecraft/mc-mods/lithium) and [Phosphor](https://www.curseforge.com/minecraft/mc-mods/phosphor)
+Fixes Mojang's spaghet.
 
 ## License
 
