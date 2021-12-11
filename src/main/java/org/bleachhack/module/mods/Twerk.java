@@ -9,7 +9,7 @@ import org.bleachhack.module.setting.base.SettingSlider;
 public class Twerk extends Module {
     private int speed;
     public Twerk() {
-        super("Twerk", KEY_UNBOUND, ModuleCategory.FUN, "Shake dat booty.",
+        super("Twerk", KEY_UNBOUND, ModuleCategory.MISC, "Shake dat booty.",
                 new SettingSlider("Speed", 1, 10, 1, 1).withDesc("Twerk speed."));
     }
 

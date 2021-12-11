@@ -11,7 +11,7 @@ import org.bleachhack.module.setting.base.SettingSlider;
 
 public class Derp extends Module {
     public Derp() {
-        super("Derp", KEY_UNBOUND, ModuleCategory.FUN, "Makes you do weird stuff.",
+        super("Derp", KEY_UNBOUND, ModuleCategory.MISC, "Makes you do weird stuff.",
                 new SettingSlider("Speed", 1, 10, 5, 1).withDesc("Derp speed."));
     }
 
@@ -23,8 +23,7 @@ public class Derp extends Module {
         float yaw = (mc.player.getYaw() + random.nextFloat() * 360F - 180F * getSetting(0).asSlider().getValueFloat() / 10f);
         float pitch = (random.nextFloat() * 180F - 90F * getSetting(0).asSlider().getValueFloat() / 10f);
 
-        mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(
-                yaw, pitch, mc.player.isOnGround()));
+        mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(yaw, pitch, mc.player.isOnGround()));
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.bleachhack.module.ModuleCategory;
 
 public class SkinBlinker extends Module {
     public SkinBlinker() {
-        super("SkinBlinker", KEY_UNBOUND, ModuleCategory.FUN, "Makes ur skins body parts blink.");
+        super("SkinBlinker", KEY_UNBOUND, ModuleCategory.MISC, "Makes ur skins body parts blink.");
     }
 
     private final Random random = new Random();
