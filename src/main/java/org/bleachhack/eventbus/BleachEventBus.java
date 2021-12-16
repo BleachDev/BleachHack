@@ -2,13 +2,15 @@ package org.bleachhack.eventbus;
 
 import org.apache.logging.log4j.Logger;
 import org.bleachhack.event.Event;
+import org.bleachhack.eventbus.registry.BleachSubscriberRegistry;
 
 public class BleachEventBus {
 
 	private final Logger logger;
-	private final BleachSubscriberRegistry subscriberRegistry = new BleachSubscriberRegistry("default");
+	private final BleachSubscriberRegistry subscriberRegistry;
 
-	public BleachEventBus(Logger logger) {
+	public BleachEventBus(BleachSubscriberRegistry registry, Logger logger) {
+		this.subscriberRegistry = registry;
 		this.logger = logger;
 	}
 
