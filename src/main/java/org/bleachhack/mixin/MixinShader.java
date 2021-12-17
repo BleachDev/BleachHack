@@ -18,14 +18,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Shader.class)
 public class MixinShader {
 
-	// For optifine compatibility
-	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
+	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"))
 	private static Identifier init_identifier(String string) {
-		return replaceIdentifier(string);
-	}
-
-	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
-	private Identifier init_identifier2(String string) {
 		return replaceIdentifier(string);
 	}
 

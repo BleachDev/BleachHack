@@ -8,7 +8,6 @@
  */
 package org.bleachhack.mixin;
 
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
@@ -53,14 +52,13 @@ import net.minecraft.util.math.BlockPos;
 @Mixin(targets = "net.minecraft.client.render.chunk.ChunkBuilder$BuiltChunk$RebuildTask")
 public class MixinChunkRebuildTask {
 
-	// <synthetic field> concerned tater
-	@Shadow(remap = false) private ChunkBuilder.BuiltChunk field_20839;
+	@Shadow private /* synthetic */ ChunkBuilder.BuiltChunk field_20839;
 	@Shadow protected ChunkRendererRegion region;
 
 	@Shadow private <E extends BlockEntity> void addBlockEntity(ChunkData data, Set<BlockEntity> blockEntities, E blockEntity) {}
 
 	// i have gone past the point of insanity
-	@Redirect(method = "run", require = 1, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask;render(FFFLnet/minecraft/client/render/chunk/ChunkBuilder$ChunkData;Lnet/minecraft/client/render/chunk/BlockBufferBuilderStorage;)Ljava/util/Set;"))
+	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask;render(FFFLnet/minecraft/client/render/chunk/ChunkBuilder$ChunkData;Lnet/minecraft/client/render/chunk/BlockBufferBuilderStorage;)Ljava/util/Set;"))
 	private Set<BlockEntity> run_render(@Coerce Object thisObject, float cameraX, float cameraY, float cameraZ, ChunkData data, BlockBufferBuilderStorage buffers) {
 		return newRender2(cameraX, cameraY, cameraZ, data, buffers);
 	}
