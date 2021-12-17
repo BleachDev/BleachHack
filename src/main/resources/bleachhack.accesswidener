@@ -91,6 +91,14 @@ accessible    field    net/minecraft/client/gui/screen/ingame/HandledScreen    f
 accessible    field    net/minecraft/client/gui/screen/ingame/SignEditScreen    sign    Lnet/minecraft/block/entity/SignBlockEntity;
 
 
+## =========== Entities ===========
+
+
+# FishingBobberEntity
+# - For AutoFish to read if the player hook has caught a fish
+accessible    field    net/minecraft/entity/projectile/FishingBobberEntity    CAUGHT_FISH    Lnet/minecraft/entity/data/TrackedData;
+
+
 ## =========== Packets ===========
 
 
