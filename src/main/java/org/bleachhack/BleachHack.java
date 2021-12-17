@@ -62,7 +62,8 @@ public class BleachHack implements ModInitializer {
 		}
 	}
 
-	//TODO: base-rewrite
+	// Phase 1
+	// TODO: base-rewrite
 	@Override
 	public void onInitialize() {
 		long initStartTime = System.currentTimeMillis();
@@ -78,7 +79,6 @@ public class BleachHack implements ModInitializer {
 		//this.bleachFileManager = new BleachFileMang();
 
 		BleachFileMang.init();
-		BleachFileHelper.startSavingExecutor();
 
 		BleachFileHelper.readOptions();
 		BleachFileHelper.readFriends();
@@ -100,6 +100,7 @@ public class BleachHack implements ModInitializer {
 		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack (Phase 1) in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 
+	// Phase 2
 	// Called after most of the game has been initialized in MixinMinecraftClient so all game resources can be accessed
 	public void postInit() {
 		long initStartTime = System.currentTimeMillis();
@@ -114,6 +115,8 @@ public class BleachHack implements ModInitializer {
 
 		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
 		CommandSuggestor.start();
+
+		BleachFileHelper.startSavingExecutor();
 
 		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack (Phase 2) in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
