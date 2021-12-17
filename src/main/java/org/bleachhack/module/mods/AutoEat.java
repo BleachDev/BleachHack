@@ -40,6 +40,8 @@ public class AutoEat extends Module {
 	@Override
 	public void onDisable(boolean inWorld) {
 		mc.options.keyUse.setPressed(false);
+
+		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe
