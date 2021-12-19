@@ -15,68 +15,35 @@ import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceImpl;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
 
 public class ShaderEffectLoader {
 
-	public static ShaderEffect load(Framebuffer framebuffer, String name, InputStream input) throws JsonSyntaxException, IOException {
-		Identifier id = new Identifier("bleachhack", name);
-		return new ShaderEffect(MinecraftClient.getInstance().getTextureManager(), new OwResourceManager(id, new InputStreamResource(input)), framebuffer, id);
+	public static ShaderEffect load(Framebuffer framebuffer, Identifier id, String input) throws JsonSyntaxException, IOException {
+		return load(framebuffer, id, new FastByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 	}
 
-	public static ShaderEffect load(Framebuffer framebuffer, String name, String input) throws JsonSyntaxException, IOException {
-		return load(framebuffer, name, new FastByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+	public static ShaderEffect load(Framebuffer framebuffer, Identifier id, InputStream input) throws JsonSyntaxException, IOException {
+		TextureManager texMang = MinecraftClient.getInstance().getTextureManager();
+		ResourceManager resMang = MinecraftClient.getInstance().getResourceManager();
+
+		return new ShaderEffect(texMang, new UnionResourceManager(resMang, id, new ResourceImpl(id.getNamespace(), id, input, null)), framebuffer, id);
 	}
 
-	private static class InputStreamResource implements Resource {
+	private static class UnionResourceManager implements ResourceManager {
 
-		private InputStream input;
-
-		public InputStreamResource(InputStream input) {
-			this.input = input;
-		}
-
-		@Override
-		public void close() throws IOException {
-			input.close();
-		}
-
-		@Override
-		public boolean hasMetadata() {
-			return false;
-		}
-
-		@Override
-		public String getResourcePackName() {
-			return null;
-		}
-
-		@Override
-		public <T> T getMetadata(ResourceMetadataReader<T> metaReader) {
-			return null;
-		}
-
-		@Override
-		public InputStream getInputStream() {
-			return input;
-		}
-
-		@Override
-		public Identifier getId() {
-			return null;
-		}
-	}
-
-	private static class OwResourceManager implements ResourceManager {
+		private ResourceManager parent;
 
 		private Identifier id;
 		private Resource resource;
 
-		public OwResourceManager(Identifier id, Resource resource) {
+		public UnionResourceManager(ResourceManager parent, Identifier id, Resource resource) {
+			this.parent = parent;
 			this.id = id;
 			this.resource = resource;
 		}
@@ -88,27 +55,27 @@ public class ShaderEffectLoader {
 
 		@Override
 		public Set<String> getAllNamespaces() {
-			return MinecraftClient.getInstance().getResourceManager().getAllNamespaces();
+			return parent.getAllNamespaces();
 		}
 
 		@Override
 		public boolean containsResource(Identifier id) {
-			return MinecraftClient.getInstance().getResourceManager().containsResource(id);
+			return parent.containsResource(id);
 		}
 
 		@Override
 		public List<Resource> getAllResources(Identifier id) throws IOException {
-			return MinecraftClient.getInstance().getResourceManager().getAllResources(id);
+			return parent.getAllResources(id);
 		}
 
 		@Override
 		public Collection<Identifier> findResources(String startingPath, Predicate<String> pathPredicate) {
-			return MinecraftClient.getInstance().getResourceManager().findResources(startingPath, pathPredicate);
+			return parent.findResources(startingPath, pathPredicate);
 		}
 
 		@Override
 		public Stream<ResourcePack> streamResourcePacks() {
-			return MinecraftClient.getInstance().getResourceManager().streamResourcePacks();
+			return parent.streamResourcePacks();
 		}
 
 	}
