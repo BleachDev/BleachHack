@@ -80,7 +80,7 @@ public class ESP extends Module {
 
 			colorVertexer = new ColorVertexConsumerProvider(shader.getFramebuffer("main"), BleachCoreShaders::getColorOverlayShader);
 		} catch (JsonSyntaxException | IOException e) {
-			throw new RuntimeException("Failed to initilize ESP Shader! loaded too early?", e);
+			throw new RuntimeException("Failed to initialize ESP Shader! loaded too early?", e);
 		}
 	}
 

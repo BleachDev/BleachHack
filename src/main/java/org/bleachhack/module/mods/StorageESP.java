@@ -81,7 +81,7 @@ public class StorageESP extends Module {
 
 			colorVertexer = new ColorVertexConsumerProvider(shader.getFramebuffer("main"), BleachCoreShaders::getColorOverlayShader);
 		} catch (JsonSyntaxException | IOException e) {
-			throw new RuntimeException("Failed to initilize StorageESP Shader! loaded too early?", e);
+			throw new RuntimeException("Failed to initialize StorageESP Shader! loaded too early?", e);
 		}
 	}
 
