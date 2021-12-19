@@ -41,7 +41,7 @@ public class ShaderEffectWrapper {
 
 	public void clearFramebuffer(String framebuffer) {
 		getFramebuffer(framebuffer).clear(MinecraftClient.IS_SYSTEM_MAC);
-		MinecraftClient.getInstance().getFramebuffer().beginWrite(false);
+		mc.getFramebuffer().beginWrite(false);
 	}
 
 	public void drawFramebufferToMain(String framebuffer) {
