@@ -39,17 +39,17 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
 	@Shadow private float mountJumpStrength;
 
-	@Shadow public ClientPlayNetworkHandler networkHandler;
-	@Shadow protected MinecraftClient client;
+	@Shadow private ClientPlayNetworkHandler networkHandler;
+	@Shadow private MinecraftClient client;
 
-	public MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
+	private MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
 		super(world, profile);
 	}
 
-	@Shadow protected void autoJump(float dx, float dz) {}
+	@Shadow private void autoJump(float dx, float dz) {}
 
 	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
-	public void sendMovementPackets(CallbackInfo info) {
+	private void sendMovementPackets(CallbackInfo info) {
 		EventSendMovementPackets event = new EventSendMovementPackets();
 		BleachHack.eventBus.post(event);
 
@@ -69,7 +69,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 
 	@Inject(method = "move", at = @At("HEAD"), cancellable = true)
-	public void move(MovementType type, Vec3d movement, CallbackInfo info) {
+	private void move(MovementType type, Vec3d movement, CallbackInfo info) {
 		EventClientMove event = new EventClientMove(type, movement);
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled()) {
@@ -84,7 +84,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	}
 
 	@Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
-	protected void pushOutOfBlocks(double x, double d, CallbackInfo ci) {
+	private void pushOutOfBlocks(double x, double d, CallbackInfo ci) {
 		if (ModuleManager.getModule("Freecam").isEnabled()) {
 			ci.cancel();
 		}

@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinJsonEffectGlShader {
 
 	@Redirect(method = "<init>", at = @At(value = "NEW", target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"), require = 0)
-	public Identifier init_identifier(String string) {
+	private Identifier init_identifier(String string) {
 		return replaceIdentifier(string);
 	}
 

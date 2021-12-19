@@ -23,14 +23,14 @@ public class MixinPlayerListHud {
 	@Shadow private MinecraftClient client;
 
 	@Inject(method = "getPlayerName", at = @At("RETURN"), cancellable = true)
-	public void getPlayerName(PlayerListEntry entry, CallbackInfoReturnable<Text> callback) {
+	private void getPlayerName(PlayerListEntry entry, CallbackInfoReturnable<Text> callback) {
 		if (Option.PLAYERLIST_SHOW_FRIENDS.getValue() && BleachHack.friendMang.has(entry.getProfile().getName())) {
 			callback.setReturnValue(((MutableText) callback.getReturnValue()).styled(s -> s.withColor(Formatting.AQUA)));
 		}
 	}
 
 	@Inject(method = "renderLatencyIcon", at = @At("RETURN"))
-	public void renderLatencyIcon(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo callback) {
+	private void renderLatencyIcon(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo callback) {
 		if (Option.PLAYERLIST_SHOW_BH_USERS.getValue() && BleachHack.playerMang.getPlayers().contains(entry.getProfile().getId())) {
 			matrices.push();
 			matrices.translate(x + width - 21, y + 1.5, 0);

@@ -37,7 +37,7 @@ public class MixinClientPlayerInteractionManager {
 
 	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 3),
 			require = 0 /* TODO: meteor compatibility */)
-	public void updateBlockBreakingProgress(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
+	private void updateBlockBreakingProgress(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
 		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
 		BleachHack.eventBus.post(event);
 
@@ -46,7 +46,7 @@ public class MixinClientPlayerInteractionManager {
 
 	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 4),
 			require = 0 /* TODO: meteor compatibility */)
-	public void updateBlockBreakingProgress2(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
+	private void updateBlockBreakingProgress2(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
 		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
 		BleachHack.eventBus.post(event);
 
@@ -55,7 +55,7 @@ public class MixinClientPlayerInteractionManager {
 
 	@Redirect(method = "attackBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I"),
 			require = 0 /* TODO: meteor compatibility */)
-	public void attackBlock(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
+	private void attackBlock(ClientPlayerInteractionManager clientPlayerInteractionManager, int newCooldown) {
 		EventBlockBreakCooldown event = new EventBlockBreakCooldown(newCooldown);
 		BleachHack.eventBus.post(event);
 
@@ -63,7 +63,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Inject(method = "breakBlock", at = @At("HEAD"), cancellable = true)
-	public void breakBlock(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
+	private void breakBlock(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
 		EventInteract.BreakBlock event = new EventInteract.BreakBlock(pos);
 		BleachHack.eventBus.post(event);
 
@@ -73,7 +73,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Inject(method = { "attackBlock", "updateBlockBreakingProgress" }, at = @At("HEAD"), cancellable = true)
-	public void attackBlock(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> callback) {
+	private void attackBlock(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> callback) {
 		EventInteract.AttackBlock event = new EventInteract.AttackBlock(pos, direction);
 		BleachHack.eventBus.post(event);
 
@@ -83,7 +83,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Inject(method = "interactBlock", at = @At("HEAD"), cancellable = true)
-	public void interactBlock(ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> callback) {
+	private void interactBlock(ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> callback) {
 		EventInteract.InteractBlock event = new EventInteract.InteractBlock(hand, hitResult);
 		BleachHack.eventBus.post(event);
 
@@ -93,7 +93,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Inject(method = "interactItem", at = @At("HEAD"), cancellable = true)
-	public void interactItem(PlayerEntity player, World world, Hand hand, CallbackInfoReturnable<ActionResult> callback) {
+	private void interactItem(PlayerEntity player, World world, Hand hand, CallbackInfoReturnable<ActionResult> callback) {
 		EventInteract.InteractItem event = new EventInteract.InteractItem(hand);
 		BleachHack.eventBus.post(event);
 
@@ -103,7 +103,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Inject(method = "getReachDistance", at = @At("RETURN"), cancellable = true)
-	public void getReachDistance(CallbackInfoReturnable<Float> callback) {
+	private void getReachDistance(CallbackInfoReturnable<Float> callback) {
 		EventReach event = new EventReach(callback.getReturnValueF());
 		BleachHack.eventBus.post(event);
 

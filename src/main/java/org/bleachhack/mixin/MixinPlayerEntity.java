@@ -31,14 +31,14 @@ import net.minecraft.world.World;
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity extends LivingEntity {
 
-	@Shadow public PlayerInventory inventory;
+	@Shadow private PlayerInventory inventory;
 
-	protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType, World world) {
+	private MixinPlayerEntity(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
 	}
 
 	@Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
-	public void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> ci) {
+	private void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> ci) {
 		Module speedMine = ModuleManager.getModule("Speedmine");
 
 		if (speedMine.isEnabled()) {

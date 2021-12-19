@@ -19,10 +19,12 @@ import org.bleachhack.event.events.EventRenderBlock;
 import org.bleachhack.event.events.EventRenderFluid;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -46,24 +48,26 @@ import net.minecraft.util.math.BlockPos;
 /**
  * Blocks are still tesselated even if they're transparent because Minecraft's
  * rendering engine is poop.
- * 
- * TODO: check that is actually works when updating
  */
 @Mixin(targets = "net.minecraft.client.render.chunk.ChunkBuilder$BuiltChunk$RebuildTask")
 public class MixinChunkRebuildTask {
 
-	@Shadow private /* synthetic */ ChunkBuilder.BuiltChunk field_20839;
-	@Shadow protected ChunkRendererRegion region;
+	@Unique private static boolean OPTIFABRIC_INSTALLED = FabricLoader.getInstance().isModLoaded("optifabric");
+
+	@Shadow private /* outer */ ChunkBuilder.BuiltChunk field_20839;
+	@Shadow private ChunkRendererRegion region;
 
 	@Shadow private <E extends BlockEntity> void addBlockEntity(ChunkData data, Set<BlockEntity> blockEntities, E blockEntity) {}
+	@Shadow private Set<BlockEntity> render(float cameraX, float cameraY, float cameraZ, ChunkData data, BlockBufferBuilderStorage buffers) { return null; }
 
 	// i have gone past the point of insanity
 	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask;render(FFFLnet/minecraft/client/render/chunk/ChunkBuilder$ChunkData;Lnet/minecraft/client/render/chunk/BlockBufferBuilderStorage;)Ljava/util/Set;"))
 	private Set<BlockEntity> run_render(@Coerce Object thisObject, float cameraX, float cameraY, float cameraZ, ChunkData data, BlockBufferBuilderStorage buffers) {
-		return newRender2(cameraX, cameraY, cameraZ, data, buffers);
+		return OPTIFABRIC_INSTALLED 
+				? render(cameraX, cameraY, cameraZ, data, buffers) : newRender(cameraX, cameraY, cameraZ, data, buffers);
 	}
 
-	private Set<BlockEntity> newRender2(float cameraX, float cameraY, float cameraZ, ChunkData data, BlockBufferBuilderStorage buffers) {
+	private Set<BlockEntity> newRender(float cameraX, float cameraY, float cameraZ, ChunkData data, BlockBufferBuilderStorage buffers) {
 		BlockPos blockPos = field_20839.getOrigin().toImmutable();
 		BlockPos blockPos2 = blockPos.add(15, 15, 15);
 

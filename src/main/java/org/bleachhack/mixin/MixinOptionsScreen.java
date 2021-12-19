@@ -23,12 +23,12 @@ import net.minecraft.text.Text;
 @Mixin(OptionsScreen.class)
 public abstract class MixinOptionsScreen extends Screen {
 
-	protected MixinOptionsScreen(Text title) {
+	private MixinOptionsScreen(Text title) {
 		super(title);
 	}
 
 	@Inject(method = "init", at = @At("RETURN"))
-	protected void init(CallbackInfo callback) {
+	private void init(CallbackInfo callback) {
 		addDrawableChild(new ButtonWidget(this.width / 2 - 180, this.height / 6 + 120 - 6, 20, 20, new LiteralText("BH"), button -> {
 			client.setScreen(new BleachOptionsScreen(this));
 		}));

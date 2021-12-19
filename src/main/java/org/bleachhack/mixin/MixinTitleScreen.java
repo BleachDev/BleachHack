@@ -43,7 +43,7 @@ public class MixinTitleScreen extends Screen {
 
 	@Unique private static boolean firstLoad = true;
 
-	protected MixinTitleScreen(Text title) {
+	private MixinTitleScreen(Text title) {
 		super(title);
 	}
 

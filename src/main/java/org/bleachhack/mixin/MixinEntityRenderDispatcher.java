@@ -24,7 +24,7 @@ import net.minecraft.entity.Entity;
 public class MixinEntityRenderDispatcher {
 	
 	@Inject(method = "render", at = @At("RETURN"))
-	public <E extends Entity> void render_render(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+	private <E extends Entity> void render_render(E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
 		EventEntityRender.Single.Post event = new EventEntityRender.Single.Post(entity, matrices, vertexConsumers);
 		BleachHack.eventBus.post(event);
 	}

@@ -25,12 +25,12 @@ import net.minecraft.world.World;
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity {
 
-	public MixinLivingEntity(EntityType<?> type, World world) {
+	private MixinLivingEntity(EntityType<?> type, World world) {
 		super(type, world);
 	}
 
 	@Redirect(method = "takeKnockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(DDD)V"))
-	public void takeKnockback_setVelocity(LivingEntity entity, double x, double y, double z) {
+	private void takeKnockback_setVelocity(LivingEntity entity, double x, double y, double z) {
 		EventDamage.Knockback event = new EventDamage.Knockback(x - getVelocity().getX(), y - getVelocity().getY(), z - getVelocity().getZ());
 		BleachHack.eventBus.post(event);
 		
@@ -40,7 +40,7 @@ public abstract class MixinLivingEntity extends Entity {
 	}
 	
 	@Inject(method = "damage", at = @At("HEAD"), cancellable = true)
-	public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> callbackInfo) {
+	private void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> callbackInfo) {
 		EventDamage.Normal event = new EventDamage.Normal(source, amount);
 		BleachHack.eventBus.post(event);
 		
