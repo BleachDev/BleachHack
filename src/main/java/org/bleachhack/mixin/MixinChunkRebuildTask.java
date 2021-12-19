@@ -56,7 +56,7 @@ public class MixinChunkRebuildTask {
 	@Unique private static boolean OPTIFABRIC_INSTALLED = FabricLoader.getInstance().isModLoaded("optifabric");
 
 	@Shadow private /* outer */ ChunkBuilder.BuiltChunk field_20839;
-	@Shadow protected ChunkRendererRegion region;
+	@Shadow private ChunkRendererRegion region;
 
 	@Shadow private <E extends BlockEntity> void addBlockEntity(ChunkData data, Set<BlockEntity> blockEntities, E blockEntity) {}
 	@Shadow private Set<BlockEntity> render(float cameraX, float cameraY, float cameraZ, ChunkData data, BlockBufferBuilderStorage buffers) { return null; }

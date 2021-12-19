@@ -24,7 +24,7 @@ import net.minecraft.world.BlockView;
 public class MixinAbstractBlock {
 
 	@Inject(method = "getAmbientOcclusionLightLevel", at = @At("HEAD"), cancellable = true)
-	public void getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> callback) {
+	private void getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> callback) {
 		EventRenderBlock.Light event = new EventRenderBlock.Light(state);
 		BleachHack.eventBus.post(event);
 

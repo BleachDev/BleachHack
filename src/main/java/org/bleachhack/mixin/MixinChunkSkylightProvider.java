@@ -21,7 +21,7 @@ import net.minecraft.world.chunk.light.ChunkSkyLightProvider;
 public class MixinChunkSkylightProvider {
 
 	@Inject(method = "recalculateLevel", at = @At("HEAD"), cancellable = true)
-	protected void recalculateLevel(long id, long excludedId, int maxLevel, CallbackInfoReturnable<Integer> ci) {
+	private void recalculateLevel(long id, long excludedId, int maxLevel, CallbackInfoReturnable<Integer> ci) {
 		if (((NoRender) ModuleManager.getModule("NoRender")).isWorldToggled(4)) {
 			ci.setReturnValue(0);
 		}

@@ -24,7 +24,7 @@ import net.minecraft.client.sound.TickableSoundInstance;
 public class MixinSoundSystem {
 
 	@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
-	public void play(SoundInstance soundInstance, CallbackInfo ci) {
+	private void play(SoundInstance soundInstance, CallbackInfo ci) {
 		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance);
 		BleachHack.eventBus.post(event);
 
@@ -34,7 +34,7 @@ public class MixinSoundSystem {
 	}
 
 	@Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;I)V", at = @At("HEAD"), cancellable = true)
-	public void play(SoundInstance soundInstance, int delay, CallbackInfo ci) {
+	private void play(SoundInstance soundInstance, int delay, CallbackInfo ci) {
 		EventSoundPlay.Normal event = new EventSoundPlay.Normal(soundInstance);
 		BleachHack.eventBus.post(event);
 
@@ -44,7 +44,7 @@ public class MixinSoundSystem {
 	}
 
 	@Inject(method = "playNextTick", at = @At("HEAD"), cancellable = true)
-	public void playNextTick(TickableSoundInstance sound, CallbackInfo ci) {
+	private void playNextTick(TickableSoundInstance sound, CallbackInfo ci) {
 		EventSoundPlay.Normal event = new EventSoundPlay.Normal(sound);
 		BleachHack.eventBus.post(event);
 
@@ -54,7 +54,7 @@ public class MixinSoundSystem {
 	}
 
 	@Inject(method = "addPreloadedSound", at = @At("HEAD"), cancellable = true)
-	public void addPreloadedSound(Sound sound, CallbackInfo ci) {
+	private void addPreloadedSound(Sound sound, CallbackInfo ci) {
 		EventSoundPlay.Preloaded event = new EventSoundPlay.Preloaded(sound);
 		BleachHack.eventBus.post(event);
 

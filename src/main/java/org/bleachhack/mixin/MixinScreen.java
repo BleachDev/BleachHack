@@ -32,16 +32,16 @@ public class MixinScreen {
 
 	@Unique private boolean skipTooltip;
 
-	@Shadow public void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y) {}
+	@Shadow private void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y) {}
 
 	@Inject(method = "render", at = @At("HEAD"))
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo callback) {
+	private void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo callback) {
 		lastMX = mouseX;
 		lastMY = mouseY;
 	}
 
 	@Inject(method = "renderTooltipFromComponents", at = @At("HEAD"), cancellable = true)
-	public void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y, CallbackInfo callback) {
+	private void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y, CallbackInfo callback) {
 		if (skipTooltip) {
 			skipTooltip = false;
 			return;
@@ -60,7 +60,7 @@ public class MixinScreen {
 	}
 
 	@Inject(method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;I)V", at = @At("HEAD"), cancellable = true)
-	public void renderBackground(MatrixStack matrices, int vOffset, CallbackInfo callback) {
+	private void renderBackground(MatrixStack matrices, int vOffset, CallbackInfo callback) {
 		EventRenderScreenBackground event = new EventRenderScreenBackground(matrices, vOffset);
 		BleachHack.eventBus.post(event);
 

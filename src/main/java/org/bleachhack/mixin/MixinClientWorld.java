@@ -32,7 +32,7 @@ public class MixinClientWorld {
 	@Shadow @Final private DimensionEffects dimensionEffects;
 
 	@Inject(method = "tickEntities", at = @At("HEAD"), cancellable = true)
-	public void tickEntities(CallbackInfo info) {
+	private void tickEntities(CallbackInfo info) {
 		BleachQueue.nextQueue();
 
 		EventTick event = new EventTick();
@@ -42,7 +42,7 @@ public class MixinClientWorld {
 	}
 
 	@Inject(method = "getSkyColor", at = @At("HEAD"), cancellable = true)
-	public void getSkyColor(Vec3d vec, float f, CallbackInfoReturnable<Vec3d> ci) {
+	private void getSkyColor(Vec3d vec, float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyRender.Color.SkyColor event = new EventSkyRender.Color.SkyColor(f);
 		BleachHack.eventBus.post(event);
 
@@ -54,7 +54,7 @@ public class MixinClientWorld {
 	}
 
 	@Inject(method = "getCloudsColor", at = @At("HEAD"), cancellable = true)
-	public void getCloudsColor(float f, CallbackInfoReturnable<Vec3d> ci) {
+	private void getCloudsColor(float f, CallbackInfoReturnable<Vec3d> ci) {
 		EventSkyRender.Color.CloudColor event = new EventSkyRender.Color.CloudColor(f);
 		BleachHack.eventBus.post(event);
 

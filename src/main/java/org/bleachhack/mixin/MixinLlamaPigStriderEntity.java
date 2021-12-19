@@ -26,12 +26,12 @@ import net.minecraft.world.World;
 @Mixin({ LlamaEntity.class, PigEntity.class, StriderEntity.class })
 public abstract class MixinLlamaPigStriderEntity extends AnimalEntity {
 
-	protected MixinLlamaPigStriderEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+	private MixinLlamaPigStriderEntity(EntityType<? extends AnimalEntity> entityType, World world) {
 		super(entityType, world);
 	}
 
 	@Inject(method = "canBeControlledByRider", at = @At("HEAD"), cancellable = true)
-	public void canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
+	private void canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
 		if (this.hasPassengers() && this.getPrimaryPassenger() == MinecraftClient.getInstance().player) {
 			EventEntityControl event = new EventEntityControl();
 			BleachHack.eventBus.post(event);

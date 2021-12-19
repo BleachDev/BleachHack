@@ -33,7 +33,7 @@ public class MixinInGameHud {
 	@Shadow private void renderCrosshair(MatrixStack matrices) {}
 
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true)
-	public void render(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
+	private void render(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
 		EventRenderInGameHud event = new EventRenderInGameHud(matrixStack);
 		BleachHack.eventBus.post(event);
 

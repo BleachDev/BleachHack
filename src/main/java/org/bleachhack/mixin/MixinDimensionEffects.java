@@ -21,7 +21,7 @@ import net.minecraft.client.render.DimensionEffects;
 public class MixinDimensionEffects {
 
 	@Inject(method = "getFogColorOverride", at = @At("HEAD"), cancellable = true)
-	public void getFogColorOverride(float skyAngle, float tickDelta, CallbackInfoReturnable<float[]> ci) {
+	private void getFogColorOverride(float skyAngle, float tickDelta, CallbackInfoReturnable<float[]> ci) {
 		EventSkyRender.Color.FogColor  event = new EventSkyRender.Color.FogColor(tickDelta);
 		BleachHack.eventBus.post(event);
 

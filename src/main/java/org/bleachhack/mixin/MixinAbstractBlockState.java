@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinAbstractBlockState {
 
 	@Inject(method = "isOpaque", at = @At("HEAD"), cancellable = true)
-	public void isOpaque(CallbackInfoReturnable<Boolean> callback) {
+	private void isOpaque(CallbackInfoReturnable<Boolean> callback) {
 		EventRenderBlock.Opaque event = new EventRenderBlock.Opaque((BlockState) (Object) this);
 		BleachHack.eventBus.post(event);
 

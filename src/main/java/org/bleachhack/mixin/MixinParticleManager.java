@@ -24,8 +24,7 @@ import net.minecraft.particle.ParticleEffect;
 public class MixinParticleManager {
 
 	@Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
-	public void addParticle(Particle particle, CallbackInfo callback) {
-		// pls send help
+	private void addParticle(Particle particle, CallbackInfo callback) {
 		EventParticle.Normal event = new EventParticle.Normal(particle);
 		BleachHack.eventBus.post(event);
 
@@ -35,7 +34,7 @@ public class MixinParticleManager {
 	}
 
 	@Inject(method = "addEmitter(Lnet/minecraft/entity/Entity;Lnet/minecraft/particle/ParticleEffect;)V", at = @At("HEAD"), cancellable = true)
-	public void addEmitter(Entity entity, ParticleEffect particleEffect, CallbackInfo callback) {
+	private void addEmitter(Entity entity, ParticleEffect particleEffect, CallbackInfo callback) {
 		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect);
 		BleachHack.eventBus.post(event);
 
@@ -45,7 +44,7 @@ public class MixinParticleManager {
 	}
 
 	@Inject(method = "addEmitter(Lnet/minecraft/entity/Entity;Lnet/minecraft/particle/ParticleEffect;I)V", at = @At("HEAD"), cancellable = true)
-	public void addEmitter_(Entity entity, ParticleEffect particleEffect, int maxAge, CallbackInfo callback) {
+	private void addEmitter_(Entity entity, ParticleEffect particleEffect, int maxAge, CallbackInfo callback) {
 		EventParticle.Emitter event = new EventParticle.Emitter(particleEffect);
 		BleachHack.eventBus.post(event);
 

@@ -35,7 +35,7 @@ public class MixinClientConnection {
 	@Shadow private void sendImmediately(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> callback) {}
 
 	@Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
-	public void channelRead0(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo callback) {
+	private void channelRead0(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo callback) {
 		if (this.channel.isOpen() && packet != null) {
 			EventPacket.Read event = new EventPacket.Read(packet);
 			BleachHack.eventBus.post(event);
@@ -49,7 +49,7 @@ public class MixinClientConnection {
 	}
 
 	@Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
-	public void send(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> packetCallback, CallbackInfo callback) {
+	private void send(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> packetCallback, CallbackInfo callback) {
 		if (packet instanceof ChatMessageC2SPacket) {
 			if (!CommandManager.allowNextMsg) {
 				ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet;

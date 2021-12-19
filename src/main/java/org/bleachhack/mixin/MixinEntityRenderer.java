@@ -25,7 +25,7 @@ import net.minecraft.text.Text;
 public abstract class MixinEntityRenderer<T extends Entity> {
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
-	public void renderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
+	private void renderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
 		EventEntityRender.Single.Label event = new EventEntityRender.Single.Label(entity, matrices, vertexConsumers);
 		BleachHack.eventBus.post(event);
 

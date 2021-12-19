@@ -23,7 +23,7 @@ import net.minecraft.text.Text;
 @Mixin(MultiplayerScreen.class)
 public class MixinServerScreen extends Screen {
 
-	protected MixinServerScreen(Text title) {
+	private MixinServerScreen(Text title) {
 		super(title);
 	}
 
