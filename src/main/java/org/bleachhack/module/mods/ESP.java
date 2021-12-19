@@ -32,6 +32,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
@@ -68,7 +69,10 @@ public class ESP extends Module {
 						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals.")),
 
 				new SettingToggle("Vehicles", false).withDesc("Highlights Vehicles.").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats).")));
+						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats).")),
+
+				new SettingToggle("Armorstands", false).withDesc("Highlights armor stands.").withChildren(
+						new SettingColor("Color", 0.66f, 0.6f, 0.2f, false).withDesc("Outline color for armor stands.")));
 	}
 
 	@Override
@@ -144,6 +148,8 @@ public class ESP extends Module {
 			return getSetting(8).asToggle().getChild(0).asColor().getRGBArray();
 		} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(9).asToggle().state) {
 			return getSetting(9).asToggle().getChild(0).asColor().getRGBArray();
+		} else if (e instanceof ArmorStandEntity && getSetting(10).asToggle().state) {
+			return getSetting(10).asToggle().getChild(0).asColor().getRGBArray();
 		}
 
 		return null;

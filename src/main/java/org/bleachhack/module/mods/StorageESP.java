@@ -20,7 +20,6 @@ import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.vehicle.ChestMinecartEntity;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
@@ -74,8 +73,7 @@ public class StorageESP extends Module {
 				new SettingToggle("ChestCarts", true).withDesc("Highlights chests in minecarts."),
 				new SettingToggle("FurnaceCarts", true).withDesc("Highlights furnaces in minecarts."),
 				new SettingToggle("HopperCarts", true).withDesc("Highlights hoppers in minecarts."),
-				new SettingToggle("Itemframes", true).withDesc("Highlights item frames."),
-				new SettingToggle("Armorstands", true).withDesc("Highlights armor stands."));
+				new SettingToggle("Itemframes", true).withDesc("Highlights item frames."));
 	}
 
 	@Override
@@ -220,8 +218,6 @@ public class StorageESP extends Module {
 			} else {
 				return new int[] { 25, 115, 25 };
 			}
-		} else if (e instanceof ArmorStandEntity && getSetting(15).asToggle().state) {
-			return new int[] { 170, 155, 50 };
 		}
 
 		return null;
