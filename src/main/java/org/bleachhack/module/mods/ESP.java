@@ -73,20 +73,14 @@ public class ESP extends Module {
 
 				new SettingToggle("Armorstands", false).withDesc("Highlights armor stands.").withChildren(
 						new SettingColor("Color", 0.66f, 0.6f, 0.2f, false).withDesc("Outline color for armor stands.")));
-	}
-
-	@Override
-	public void onEnable(boolean inWorld) {
-		super.onEnable(inWorld);
-
+		
 		try {
 			shader = new ShaderEffectWrapper(
 					new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), new Identifier("bleachhack", "shaders/post/entity_outline.json")));
 
 			colorVertexer = new ColorVertexConsumerProvider(shader.getFramebuffer("main"), BleachCoreShaders::getColorOverlayShader);
 		} catch (JsonSyntaxException | IOException e) {
-			e.printStackTrace();
-			setEnabled(false);
+			throw new RuntimeException("Failed to initilize ESP Shader! loaded too early?", e);
 		}
 	}
 

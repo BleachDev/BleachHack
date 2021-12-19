@@ -74,20 +74,14 @@ public class StorageESP extends Module {
 				new SettingToggle("FurnaceCarts", true).withDesc("Highlights furnaces in minecarts."),
 				new SettingToggle("HopperCarts", true).withDesc("Highlights hoppers in minecarts."),
 				new SettingToggle("Itemframes", true).withDesc("Highlights item frames."));
-	}
-
-	@Override
-	public void onEnable(boolean inWorld) {
-		super.onEnable(inWorld);
-
+		
 		try {
 			shader = new ShaderEffectWrapper(
 					new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), new Identifier("bleachhack", "shaders/post/entity_outline.json")));
 
 			colorVertexer = new ColorVertexConsumerProvider(shader.getFramebuffer("main"), BleachCoreShaders::getColorOverlayShader);
 		} catch (JsonSyntaxException | IOException e) {
-			e.printStackTrace();
-			setEnabled(false);
+			throw new RuntimeException("Failed to initilize StorageESP Shader! loaded too early?", e);
 		}
 	}
 
