@@ -26,7 +26,7 @@ import org.bleachhack.module.setting.other.SettingRotate;
 import org.bleachhack.util.world.EntityUtils;
 import org.bleachhack.util.world.WorldUtils;
 
-import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.ShulkerBulletEntity;
 
 import com.google.common.collect.Streams;
@@ -143,7 +143,7 @@ public class Killaura extends Module {
 						|| (EntityUtils.isMob(e) && getSetting(2).asToggle().state)
 						|| (EntityUtils.isAnimal(e) && getSetting(3).asToggle().state)
 						|| (e instanceof ArmorStandEntity && getSetting(4).asToggle().state)
-						|| ((e instanceof ShulkerBulletEntity || e instanceof FireballEntity) && getSetting(5).asToggle().state))
+						|| ((e instanceof ShulkerBulletEntity || e instanceof AbstractFireballEntity) && getSetting(5).asToggle().state))
 				.sorted(comparator)
 				.limit(getSetting(7).asToggle().state ? getSetting(7).asToggle().getChild(0).asSlider().getValueLong() : 1L)
 				.collect(Collectors.toList());
