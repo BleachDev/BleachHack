@@ -25,11 +25,11 @@ import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.shader.BleachCoreShaders;
 import org.bleachhack.util.shader.ColorVertexConsumerProvider;
 import org.bleachhack.util.shader.ShaderEffectWrapper;
+import org.bleachhack.util.shader.ShaderLoader;
 import org.bleachhack.util.world.EntityUtils;
 
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -76,8 +76,8 @@ public class ESP extends Module {
 		
 		try {
 			shader = new ShaderEffectWrapper(
-					new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), new Identifier("bleachhack", "shaders/post/entity_outline.json")));
-
+					ShaderLoader.loadEffect(mc.getFramebuffer(), new Identifier("bleachhack", "shaders/post/entity_outline.json")));
+			
 			colorVertexer = new ColorVertexConsumerProvider(shader.getFramebuffer("main"), BleachCoreShaders::getColorOverlayShader);
 		} catch (JsonSyntaxException | IOException e) {
 			throw new RuntimeException("Failed to initialize ESP Shader! loaded too early?", e);
