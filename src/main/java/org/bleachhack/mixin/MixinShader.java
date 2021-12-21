@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-// Tweaks to the shader class to make it compatible with custom identifiers
+// Tweaks to the shader class to make it compatible with OpenResourceManager
 @Mixin(Shader.class)
 public class MixinShader {
 
