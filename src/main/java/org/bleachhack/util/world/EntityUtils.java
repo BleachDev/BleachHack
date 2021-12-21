@@ -20,6 +20,8 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractFireballEntity;
+import net.minecraft.entity.projectile.ShulkerBulletEntity;
 
 public class EntityUtils {
 
@@ -46,7 +48,7 @@ public class EntityUtils {
 	}
 
 	public static boolean isAttackable(Entity e, boolean ignoreFriends) {
-		return e instanceof LivingEntity
+		return (e instanceof LivingEntity || e instanceof ShulkerBulletEntity || e instanceof AbstractFireballEntity)
 				&& e.isAlive()
 				&& e != MinecraftClient.getInstance().player
 				&& !e.isConnectedThroughVehicle(MinecraftClient.getInstance().player)

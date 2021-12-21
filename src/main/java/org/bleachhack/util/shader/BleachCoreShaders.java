@@ -2,9 +2,9 @@ package org.bleachhack.util.shader;
 
 import java.io.IOException;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Shader;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.util.Identifier;
 
 public class BleachCoreShaders {
 	
@@ -16,9 +16,9 @@ public class BleachCoreShaders {
 	
 	static {
 		try {
-			COLOR_OVERLAY_SHADER = new Shader(MinecraftClient.getInstance().getResourceManager(), "bleachhack:color_overlay", VertexFormats.POSITION_COLOR_TEXTURE);
+			COLOR_OVERLAY_SHADER = ShaderLoader.load(VertexFormats.POSITION_COLOR_TEXTURE, new Identifier("bleachhack", "color_overlay"));
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to initilize BleachHack core shaders");
+			throw new RuntimeException("Failed to initilize BleachHack core shaders", e);
 		}
 	}
 
