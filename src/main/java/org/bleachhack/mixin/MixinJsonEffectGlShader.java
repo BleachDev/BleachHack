@@ -25,6 +25,7 @@ public class MixinJsonEffectGlShader {
 	@ModifyArgs(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Identifier;<init>(Ljava/lang/String;)V"))
 	private void init_identifier(Args args, ResourceManager resourceManager, String name) {
 		args.set(0, replaceIdentifier(args.get(0), name));
+		System.out.println("Set to: " + args.get(0));
 	}
 
 	@ModifyArgs(method = "loadEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Identifier;<init>(Ljava/lang/String;)V"))
@@ -35,8 +36,10 @@ public class MixinJsonEffectGlShader {
 	private static String replaceIdentifier(String string, String name) {
 		String[] split = name.split(":");
 		if (split.length > 1) {
-			if ("__url__".equals(split[0]))
+			if ("__url__".equals(split[0])) {
+				System.out.println("Setting: " + name);
 				return name;
+			}
 
 			return split[0] + ":" + string.replace(name, split[1]);
 		}
