@@ -2,6 +2,7 @@ package org.bleachhack.util.shader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -18,7 +20,15 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
+/**
+ * A open resource manager that can get resources from Fabric mods using their namespace
+ * or from a URL with the __url__ namespace and an encoded path.
+ * 
+ * It can also have a resource generator via a Identifier to InputStream function.
+ */
 public class OpenResourceManager implements ResourceManager {
+	
+	private static Pattern DECODE_PATTERN = Pattern.compile("_([0-9]+)_");
 	
 	private ResourceManager parent;
 	private Function<Identifier, InputStream> customResources;
@@ -34,15 +44,18 @@ public class OpenResourceManager implements ResourceManager {
 
 	@Override
 	public Resource getResource(Identifier id) throws IOException {
-		if (id.getNamespace().equals("minecraft"))
-			return parent.getResource(id);
-
 		if (customResources != null) {
 			InputStream input = customResources.apply(id);
 			if (input != null) {
 				return new ResourceImpl(id.getNamespace(), id, input, null);
 			}
 		}
+
+		if ("minecraft".equals(id.getNamespace()))
+			return parent.getResource(id);
+		
+		if ("__url__".equals(id.getNamespace()))
+			return new ResourceImpl(id.getNamespace(), id, parseURL(id.getPath()), null);
 
 		// Scuffed resource loader
 		Path path = FabricLoader.getInstance().getModContainer(id.getNamespace()).get().getPath("assets/" + id.getNamespace() + "/" + id.getPath());
@@ -72,6 +85,11 @@ public class OpenResourceManager implements ResourceManager {
 	@Override
 	public Stream<ResourcePack> streamResourcePacks() {
 		return parent.streamResourcePacks();
+	}
+	
+	private InputStream parseURL(String path) throws IOException {
+		String decoded = DECODE_PATTERN.matcher(path).replaceAll(m -> Character.toString(Integer.parseInt(m.group(0))));
+		return new URL(decoded).openStream();
 	}
 
 }
