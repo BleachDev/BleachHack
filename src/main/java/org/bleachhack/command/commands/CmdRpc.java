@@ -13,7 +13,7 @@ import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.exception.CmdSyntaxException;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.DiscordRPCMod;
+import org.bleachhack.module.mods.DiscordRPC;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileHelper;
 
@@ -32,7 +32,7 @@ public class CmdRpc extends Command {
 			throw new CmdSyntaxException();
 		}
 
-		DiscordRPCMod rpc = (DiscordRPCMod) ModuleManager.getModule("DiscordRPC");
+		DiscordRPC rpc = (DiscordRPC) ModuleManager.getModule("DiscordRPC");
 		String text = StringUtils.join(args, ' ', 1, args.length);
 		
 		if (args[0].equalsIgnoreCase("top")) {
