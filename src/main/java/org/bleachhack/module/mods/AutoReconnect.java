@@ -13,8 +13,8 @@ import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.DisconnectedScreen;
@@ -75,7 +75,7 @@ public class AutoReconnect extends Module {
 					ConnectScreen.connect(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
 			}));
 			reconnectButton = addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 44, 200, 20, LiteralText.EMPTY, button -> {
-				getSetting(0).asToggle().state = !getSetting(0).asToggle().state;
+				getSetting(0).asToggle().setValue(!getSetting(0).asToggle().getState());
 				reconnectTime = System.currentTimeMillis();
 			}));
 		}
@@ -85,11 +85,11 @@ public class AutoReconnect extends Module {
 
 			int startTime = (int) (getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000);
 			reconnectButton.setMessage(new LiteralText(
-					getSetting(0).asToggle().state
+					getSetting(0).asToggle().getState()
 					? "\u00a7aAutoReconnect [" + (reconnectTime + startTime - System.currentTimeMillis()) + "]"
 							: "\u00a7cAutoReconnect [" + startTime + "]"));
 
-			if (reconnectTime + startTime < System.currentTimeMillis() && getSetting(0).asToggle().state) {
+			if (reconnectTime + startTime < System.currentTimeMillis() && getSetting(0).asToggle().getState()) {
 				if (server != null)
 					ConnectScreen.connect(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
 			}

@@ -15,9 +15,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Box;
@@ -46,13 +46,13 @@ public class Step extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		mc.player.stepHeight = getSetting(0).asMode().mode == 1 ? getSetting(1).asSlider().getValueFloat() : 0.5f;
+		mc.player.stepHeight = getSetting(0).asMode().getMode() == 1 ? getSetting(1).asSlider().getValueFloat() : 0.5f;
 
 		if (!mc.player.horizontalCollision) {
 			queue.clear();
 		}
 
-		if (getSetting(2).asToggle().state) {
+		if (getSetting(2).asToggle().getState()) {
 			if (!(mc.player.age < lastStep || mc.player.age >= lastStep + getSetting(2).asToggle().getChild(0).asSlider().getValue() * 20)) {
 				return;
 			}
@@ -69,7 +69,7 @@ public class Step extends Module {
 			return;
 		}
 
-		if (getSetting(0).asMode().mode == 0 && mc.player.horizontalCollision && mc.player.isOnGround()) {
+		if (getSetting(0).asMode().getMode() == 0 && mc.player.horizontalCollision && mc.player.isOnGround()) {
 			if (!isTouchingWall(mc.player.getBoundingBox().offset(0, 1, 0)) || !isTouchingWall(mc.player.getBoundingBox().offset(0, 1.5, 0))) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.42, mc.player.getZ(), false));
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.75, mc.player.getZ(), false));
@@ -87,7 +87,7 @@ public class Step extends Module {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true));
 				lastStep = mc.player.age;
 			}
-		} else if (getSetting(0).asMode().mode == 2) {
+		} else if (getSetting(0).asMode().getMode() == 2) {
 			if (!mc.player.horizontalCollision && flag) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.1, mc.player.getVelocity().z);
 				lastStep = mc.player.age;
@@ -96,7 +96,7 @@ public class Step extends Module {
 				mc.player.setVelocity(mc.player.getVelocity().x, Math.min((mc.player.getY() + 1) - Math.floor(mc.player.getY()), 0.42), mc.player.getVelocity().z);
 				flag = true;
 			}
-		} else if (getSetting(0).asMode().mode == 3) {
+		} else if (getSetting(0).asMode().getMode() == 3) {
 			if (mc.player.horizontalCollision && mc.player.isOnGround()) {
 				mc.player.jump();
 				flag = true;

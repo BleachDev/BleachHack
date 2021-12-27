@@ -13,8 +13,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
 
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -44,19 +44,19 @@ public class Flight extends Module {
 	public void onTick(EventTick event) {
 		float speed = getSetting(1).asSlider().getValueFloat();
 
-		if (mc.player.age % 20 == 0 && getSetting(2).asMode().mode == 3 && !(getSetting(0).asMode().mode == 1)) {
+		if (mc.player.age % 20 == 0 && getSetting(2).asMode().getMode() == 3 && !(getSetting(0).asMode().getMode() == 1)) {
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() - 0.069, mc.player.getZ(), false));
 			mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getZ() + 0.069, mc.player.getZ(), true));
 		}
 
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().getMode() == 0) {
 			Vec3d antiKickVel = Vec3d.ZERO;
 
-			if (getSetting(2).asMode().mode == 1
+			if (getSetting(2).asMode().getMode() == 1
 					&& mc.player.age % 20 == 0
 					&& mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, -0.069, 0)))).getMaterial().isReplaceable()) {
 				antiKickVel = antiKickVel.add(0, -0.069, 0);
-			} else if (getSetting(2).asMode().mode == 2) {
+			} else if (getSetting(2).asMode().getMode() == 2) {
 				if (mc.player.age % 40 == 0) {
 					if (mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, 0.15, 0)))).getMaterial().isReplaceable()) {
 						antiKickVel = antiKickVel.add(0, 0.15, 0);
@@ -86,11 +86,11 @@ public class Flight extends Module {
 			if (mc.options.keyRight.isPressed())
 				mc.player.setVelocity(mc.player.getVelocity().add(-strafe.x, 0, -strafe.z));
 
-		} else if (getSetting(0).asMode().mode == 1) {
+		} else if (getSetting(0).asMode().getMode() == 1) {
 			if (!mc.options.keyJump.isPressed())
 				return;
 			mc.player.setVelocity(mc.player.getVelocity().x, speed / 3, mc.player.getVelocity().z);
-		} else if (getSetting(0).asMode().mode == 2) {
+		} else if (getSetting(0).asMode().getMode() == 2) {
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
 				mc.player.jump();
 			} else {
@@ -103,7 +103,7 @@ public class Flight extends Module {
 
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
-		if (getSetting(0).asMode().mode == 2 && event.getPacket() instanceof PlayerMoveC2SPacket) {
+		if (getSetting(0).asMode().getMode() == 2 && event.getPacket() instanceof PlayerMoveC2SPacket) {
 			if (!flyTick) {
 				boolean onGround = true;// mc.player.fallDistance >= 0.1f;
 				mc.player.setOnGround(onGround);

@@ -22,7 +22,7 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 // Tweaks to the json effect shader class to make it compatible with OpenResourceManager
-@Mixin(value = JsonEffectGlShader.class)
+@Mixin(JsonEffectGlShader.class)
 public class MixinJsonEffectGlShader {
 	
 	// Patch for Architectury

@@ -16,8 +16,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachQueue;
 
 import net.minecraft.enchantment.Enchantment;
@@ -54,7 +54,7 @@ public class AutoArmor extends Module {
 			return;
 		}
 
-		tickDelay = (getSetting(2).asToggle().state ? getSetting(2).asToggle().getChild(0).asSlider().getValueInt() : 0);
+		tickDelay = (getSetting(2).asToggle().getState() ? getSetting(2).asToggle().getChild(0).asSlider().getValueInt() : 0);
 
 		/* [Slot type, [Armor slot, Armor prot, New armor slot, New armor prot]] */
 		Map<EquipmentSlot, int[]> armorMap = new HashMap<>(4);
@@ -64,7 +64,7 @@ public class AutoArmor extends Module {
 		armorMap.put(EquipmentSlot.HEAD, new int[] { 39, getProtection(mc.player.getInventory().getStack(39)), -1, -1 });
 
 		/* Anti Break */
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			for (Entry<EquipmentSlot, int[]> e: armorMap.entrySet()) {
 				ItemStack is = mc.player.getInventory().getStack(e.getValue()[0]);
 				int armorSlot = (e.getValue()[0] - 34) + (39 - e.getValue()[0]) * 2;
@@ -152,12 +152,12 @@ public class AutoArmor extends Module {
 				if (!ElytraItem.isUsable(is))
 					return 0;
 
-				if (getSetting(1).asToggle().state) {
+				if (getSetting(1).asToggle().getState()) {
 					prot = 32767;
 				} else {
 					prot = 1;
 				}
-			} else if (is.getMaxDamage() - is.getDamage() < 7 && getSetting(0).asToggle().state) {
+			} else if (is.getMaxDamage() - is.getDamage() < 7 && getSetting(0).asToggle().getState()) {
 				return 0;
 			}
 

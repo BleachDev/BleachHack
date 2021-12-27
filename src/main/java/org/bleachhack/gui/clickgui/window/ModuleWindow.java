@@ -16,7 +16,7 @@ import java.util.Set;
 
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.setting.base.SettingBase;
+import org.bleachhack.setting.module.ModuleSetting;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -68,7 +68,7 @@ public class ModuleWindow extends ClickGuiWindow {
 			}
 
 			// If they match: Module gets marked red
-			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
+			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule("ClickGui").getSetting(1).asToggle().getState()) {
 				DrawableHelper.fill(matrices, x, y + curY, x + len, y + 12 + curY, 0x50ff0000);
 			}
 
@@ -91,11 +91,11 @@ public class ModuleWindow extends ClickGuiWindow {
 
 			// draw settings
 			if (m.getValue()) {
-				for (SettingBase s : m.getKey().getSettings()) {
+				for (ModuleSetting<?> s : m.getKey().getSettings()) {
 					s.render(this, matrices, x + 1, y + curY, len - 1);
 
-					if (!s.getDesc().isEmpty() && mouseOver(x + 2, y + curY, x + len, y + s.getHeight(len) + curY)) {
-						tooltip = s.getGuiDesc(this, x + 1, y + curY, len - 1);
+					if (!s.getTooltip().isEmpty() && mouseOver(x + 2, y + curY, x + len, y + s.getHeight(len) + curY)) {
+						tooltip = s.getTooltip(this, x + 1, y + curY, len - 1);
 					}
 
 					DrawableHelper.fill(matrices, x + 1, y + curY, x + 2, y + curY + s.getHeight(len), 0xff8070b0);
@@ -124,7 +124,7 @@ public class ModuleWindow extends ClickGuiWindow {
 			h += 12;
 
 			if (e.getValue()) {
-				for (SettingBase s : e.getKey().getSettings()) {
+				for (ModuleSetting<?> s : e.getKey().getSettings()) {
 					h += s.getHeight(len);
 				}
 			}

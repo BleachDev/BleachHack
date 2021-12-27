@@ -13,39 +13,41 @@ import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.exception.CmdSyntaxException;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.setting.base.SettingBase;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.ModuleSetting;
 import org.bleachhack.util.BleachLogger;
 
 public class CmdSetting extends Command {
 
 	public CmdSetting() {
-		super("setting", "Changes a setting in a module.", "setting <module> <setting number (starts at 0)> <value>", CommandCategory.MODULES);
+		super("setting", "Changes a setting in a module.", "setting <module> <setting name> <value>", CommandCategory.MODULES);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (args.length < 2) {
 			throw new CmdSyntaxException();
 		}
 
-		Module m = ModuleManager.getModule(args[0]);
-		SettingBase s = m.getSetting(Integer.parseInt(args[1]));
+		Module module = ModuleManager.getModule(args[0]);
+		ModuleSetting<?> setting = module.getSettings().stream().filter(s -> s.getName().equals(args[1])).findFirst().get();
+		
+		if (setting == null)
+			throw new CmdSyntaxException("Invalid setting \"" + args[1] + "\"");
 
-		if (s instanceof SettingSlider) {
-			s.asSlider().setValue(Double.parseDouble(args[2]));
-		} else if (s instanceof SettingToggle) {
-			s.asToggle().state = Boolean.parseBoolean(args[2]);
-		} else if (s instanceof SettingMode) {
-			s.asMode().mode = Integer.parseInt(args[2]);
+		Object value = setting.getValue();
+		if (value instanceof Double) {
+			((ModuleSetting<Double>) setting).setValue(Double.parseDouble(args[2]));
+		} else if (value instanceof Integer) {
+			((ModuleSetting<Integer>) setting).setValue(Integer.parseInt(args[2]));
+		} else if (value instanceof String) {
+			((ModuleSetting<String>) setting).setValue(args[2]);
 		} else {
-			BleachLogger.error("Invalid Command");
+			BleachLogger.error("Setting \"" + setting.getClass().getSimpleName() + "\" is not supported!");
 			return;
 		}
 
-		BleachLogger.info("Set Setting " + args[1] + " Of " + m.getName() + " To " + args[2]);
+		BleachLogger.info("Set " + args[1] + " in " + module.getName() + " to " + args[2]);
 	}
 
 }

@@ -1,13 +1,10 @@
-package org.bleachhack.gui.option;
+package org.bleachhack.setting.option;
 
 import java.util.function.Function;
 
 import org.bleachhack.gui.window.widget.WindowTextFieldWidget;
 import org.bleachhack.gui.window.widget.WindowWidget;
-import org.bleachhack.util.io.BleachFileHelper;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
+import org.bleachhack.setting.SettingDataHandlers;
 
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -18,11 +15,11 @@ public class OptionString extends Option<String> {
 	protected String lastValidValue;
 
 	public OptionString(String name, String tooltip, String value) {
-		super(name, tooltip, value);
+		super(name, tooltip, value, SettingDataHandlers.STRING);
 	}
 
 	public OptionString(String name, String tooltip, String value, Function<String, Boolean> validator) {
-		super(name, tooltip, value);
+		this(name, tooltip, value);
 		this.lastValidValue = value;
 		this.validator = validator;
 	}
@@ -36,10 +33,6 @@ public class OptionString extends Option<String> {
 				super.charTyped(chr, modifiers);
 
 				setValue(textField.getText());
-				if (validator == null || validator.apply(getRealValue()))
-					lastValidValue = getRealValue();
-
-				BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 			}
 
 			@Override
@@ -47,10 +40,6 @@ public class OptionString extends Option<String> {
 				super.keyPressed(keyCode, scanCode, modifiers);
 
 				setValue(textField.getText());
-				if (validator == null || validator.apply(getRealValue()))
-					lastValidValue = getRealValue();
-
-				BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 			}
 
 		}.withRenderEvent((w, ms, wx, wy) -> {
@@ -70,23 +59,18 @@ public class OptionString extends Option<String> {
 	private String getRealValue() {
 		return super.getValue();
 	}
-	
+
 	// Overridden getValue to avoid getting a invalid value
 	@Override
 	public String getValue() {
 		return lastValidValue;
 	}
-
+	
 	@Override
-	public JsonElement serialize() {
-		return new JsonPrimitive(getValue());
-	}
+	public void setValue(String value) {
+		super.setValue(value);
 
-	@Override
-	public void deserialize(JsonElement json) {
-		if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
-			setValue(json.getAsString());
-			lastValidValue = json.getAsString();
-		}
+		if (validator == null || validator.apply(getRealValue()))
+			lastValidValue = value;
 	}
 }

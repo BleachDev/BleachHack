@@ -13,8 +13,8 @@ import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.mixin.AccessorHeldItemRenderer;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 public class HandProgress extends Module {
 
@@ -35,11 +35,11 @@ public class HandProgress extends Module {
 		accessor.setOffHand(mc.player.getOffHandStack());
 
 		// Set the item render height
-		float mainHand = getSetting(2).asToggle().state 
+		float mainHand = getSetting(2).asToggle().getState() 
 				? getSetting(0).asSlider().getValueFloat()
 						: Math.min(accessor.getEquipProgressMainHand(), getSetting(0).asSlider().getValueFloat());
 
-		float offHand = getSetting(2).asToggle().state 
+		float offHand = getSetting(2).asToggle().getState() 
 				? getSetting(1).asSlider().getValueFloat()
 						: Math.min(accessor.getEquipProgressOffHand(), getSetting(1).asSlider().getValueFloat());
 		

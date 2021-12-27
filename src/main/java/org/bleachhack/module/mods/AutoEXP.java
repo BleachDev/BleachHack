@@ -13,8 +13,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 
 import it.unimi.dsi.fastutil.ints.IntArraySet;
@@ -158,20 +158,20 @@ public class AutoEXP extends Module {
 		}
 
 		IntSet slots = new IntArraySet();
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			slots.add(5);
 			slots.add(6);
 			slots.add(7);
 			slots.add(8);
 		}
 
-		if (getSetting(1).asToggle().state)
+		if (getSetting(1).asToggle().getState())
 			slots.add(36 + mc.player.getInventory().selectedSlot);
 
-		if (getSetting(2).asToggle().state)
+		if (getSetting(2).asToggle().getState())
 			slots.add(45);
 
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			for (int s: slots) {
 				ItemStack item = mc.player.currentScreenHandler.getSlot(s).getStack();
 

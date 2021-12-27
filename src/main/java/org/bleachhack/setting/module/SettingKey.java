@@ -6,14 +6,12 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package org.bleachhack.module.setting.base;
+package org.bleachhack.setting.module;
 
 import org.bleachhack.gui.clickgui.window.ModuleWindow;
 import org.bleachhack.module.Module;
+import org.bleachhack.setting.SettingDataHandlers;
 import org.lwjgl.glfw.GLFW;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -22,16 +20,10 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 
-public class SettingBind extends SettingBase {
+public class SettingKey extends ModuleSetting<Integer> {
 
-	private Module mod;
-
-	public SettingBind(Module mod) {
-		this.mod = mod;
-	}
-
-	public String getName() {
-		return "Bind";
+	public SettingKey(int key) {
+		super("Bind", key, SettingDataHandlers.INTEGER);
 	}
 
 	@Override
@@ -41,14 +33,15 @@ public class SettingBind extends SettingBase {
 		}
 		
 		if (window.keyDown >= 0 && window.keyDown != GLFW.GLFW_KEY_ESCAPE && window.mouseOver(x, y, x + len, y + 12)) {
-			mod.setKey(window.keyDown == GLFW.GLFW_KEY_DELETE ? Module.KEY_UNBOUND : window.keyDown);
+			setValue(window.keyDown == GLFW.GLFW_KEY_DELETE ? Module.KEY_UNBOUND : window.keyDown);
 			MinecraftClient.getInstance().getSoundManager().play(
 					PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
 		}
 
-		String name = mod.getKey() < 0 ? "NONE" : InputUtil.fromKeyCode(mod.getKey(), -1).getLocalizedText().getString();
+		int key = getValue();
+		String name = key < 0 ? "NONE" : InputUtil.fromKeyCode(key, -1).getLocalizedText().getString();
 		if (name == null)
-			name = "KEY" + mod.getKey();
+			name = "KEY" + key;
 		else if (name.isEmpty())
 			name = "NONE";
 
@@ -56,8 +49,8 @@ public class SettingBind extends SettingBase {
 				matrices, "Bind: " + name + (window.mouseOver(x, y, x + len, y + 12) ? "..." : ""), x + 3, y + 2, 0xcfe0cf);
 	}
 
-	public SettingBind withDesc(String desc) {
-		description = desc;
+	public SettingKey withDesc(String desc) {
+		setTooltip(desc);
 		return this;
 	}
 
@@ -65,20 +58,4 @@ public class SettingBind extends SettingBase {
 	public int getHeight(int len) {
 		return 12;
 	}
-
-	@Override
-	public void readSettings(JsonElement settings) {
-
-	}
-
-	@Override
-	public JsonElement saveSettings() {
-		return new JsonPrimitive(mod.getKey());
-	}
-
-	@Override
-	public boolean isDefault() {
-		return mod.getKey() == mod.getDefaultKey() || mod.getDefaultKey() >= 0;
-	}
-
 }

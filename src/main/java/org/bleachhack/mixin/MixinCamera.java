@@ -43,10 +43,10 @@ public class MixinCamera {
 			Module betterCamera = ModuleManager.getModule("BetterCamera");
 
 			if (betterCamera.isEnabled()) {
-				if (betterCamera.getSetting(0).asToggle().state) {
-					info.setReturnValue(betterCamera.getSetting(1).asToggle().state
+				if (betterCamera.getSetting(0).asToggle().getState()) {
+					info.setReturnValue(betterCamera.getSetting(1).asToggle().getState()
 							? betterCamera.getSetting(1).asToggle().getChild(0).asSlider().getValue() : desiredCameraDistance);
-				} else if (betterCamera.getSetting(1).asToggle().state) {
+				} else if (betterCamera.getSetting(1).asToggle().getState()) {
 					bypassCameraClip = true;
 					info.setReturnValue(clipToSpace(betterCamera.getSetting(1).asToggle().getChild(0).asSlider().getValue()));
 				}

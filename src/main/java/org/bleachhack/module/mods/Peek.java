@@ -15,9 +15,9 @@ import org.bleachhack.event.events.EventRenderTooltip;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.ItemContentUtils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -94,7 +94,7 @@ public class Peek extends Module {
 		event.getMatrix().push();
 		event.getMatrix().translate(0, 0, 400);
 
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			List<TooltipComponent> components = drawShulkerToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
 			if (components != null) {
 				if (components.isEmpty()) {
@@ -105,8 +105,8 @@ public class Peek extends Module {
 			}
 		}
 
-		if (getSetting(1).asToggle().state) drawBookToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
-		if (getSetting(2).asToggle().state) drawMapToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
+		if (getSetting(1).asToggle().getState()) drawBookToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
+		if (getSetting(2).asToggle().getState()) drawMapToolTip(event.getMatrix(), slot, event.getMouseX(), event.getMouseY());
 
 		event.getMatrix().pop();
 	}
@@ -133,7 +133,7 @@ public class Peek extends Module {
 			return null;
 		}
 
-		int mode = getSetting(0).asToggle().getChild(0).asMode().mode;
+		int mode = getSetting(0).asToggle().getChild(0).asMode().getMode();
 		int realY = mode == 2 ? mouseY + 24 : mouseY;
 		int tooltipWidth = block instanceof AbstractFurnaceBlock ? 47 : block instanceof HopperBlock ? 82 : 150;
 		int tooltipHeight = block instanceof AbstractFurnaceBlock || block instanceof HopperBlock || block instanceof DispenserBlock ? 13 : 47;

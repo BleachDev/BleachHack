@@ -9,7 +9,7 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.util.InventoryUtils;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -55,8 +55,8 @@ public class AutoFish extends Module {
 			}
 		}
 
-		if (!threwRod && mc.player.fishHook == null && getSetting(0).asMode().mode != 2) {
-			Hand newHand = getSetting(0).asMode().mode == 1 ? InventoryUtils.selectSlot(getBestRodSlot()) : getHandWithRod();
+		if (!threwRod && mc.player.fishHook == null && getSetting(0).asMode().getMode() != 2) {
+			Hand newHand = getSetting(0).asMode().getMode() == 1 ? InventoryUtils.selectSlot(getBestRodSlot()) : getHandWithRod();
 			if (newHand != null) {
 				// throw again
 				mc.interactionManager.interactItem(mc.player, mc.world, newHand);

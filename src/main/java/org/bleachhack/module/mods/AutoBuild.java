@@ -18,8 +18,8 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.operation.Operation;
 import org.bleachhack.util.operation.OperationList;
 import org.bleachhack.util.operation.blueprint.OperationBlueprint;
@@ -171,7 +171,7 @@ public class AutoBuild extends Module {
 								: ray.getBlockPos().getZ() - mc.player.getBlockPos().getZ() > 0 ? Direction.SOUTH : Direction.NORTH;
 			}
 
-			current = OperationList.create(BLUEPRINTS.get(getSetting(0).asMode().mode), ray.getBlockPos().offset(ray.getSide()), dir);
+			current = OperationList.create(BLUEPRINTS.get(getSetting(0).asMode().getMode()), ray.getBlockPos().offset(ray.getSide()), dir);
 
 			if (mc.mouse.wasLeftButtonClicked() || mc.mouse.wasRightButtonClicked()) {
 				active = true;
@@ -180,7 +180,7 @@ public class AutoBuild extends Module {
 			if (current.executeNext() && current.isDone()) {
 				setEnabled(false);
 
-				if (getSetting(1).asToggle().state) {
+				if (getSetting(1).asToggle().getState()) {
 					setEnabled(true);
 				}
 			}

@@ -28,8 +28,8 @@ import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.mods.BetterChat.CustomFont.CharMap;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.Texts;
 import org.bleachhack.util.io.BleachFileHelper;
@@ -140,19 +140,19 @@ public class BetterChat extends Module {
 				return;
 			}
 
-			if (getSetting(0).asToggle().state) {
-				text = fonts.get(getSetting(0).asToggle().getChild(0).asMode().mode).replace(text);
+			if (getSetting(0).asToggle().getState()) {
+				text = fonts.get(getSetting(0).asToggle().getChild(0).asMode().getMode()).replace(text);
 			}
 
-			if (getSetting(1).asToggle().state) {
+			if (getSetting(1).asToggle().getState()) {
 				text = this.prefix + text;
 			}
 
-			if (getSetting(2).asToggle().state) {
+			if (getSetting(2).asToggle().getState()) {
 				text = text + this.suffix;
 			}
 
-			if (getSetting(5).asToggle().state) {
+			if (getSetting(5).asToggle().getState()) {
 				String key = getRandomString(4);
 				text = encrypt(text, key) + "\u00ff" + key;
 			}
@@ -173,7 +173,7 @@ public class BetterChat extends Module {
 
 			Text message = packet.getMessage().shallowCopy();
 
-			if (getSetting(6).asToggle().state) {
+			if (getSetting(6).asToggle().getState()) {
 				message = Texts.forEachWord(message, (string, style) -> {
 					String stripped = Formatting.strip(string);
 					if (stripped.matches("['\u00a1-\u00f5]+\u00ff[0-~]+")) {
@@ -189,8 +189,8 @@ public class BetterChat extends Module {
 				});
 			}
 
-			if (!filterPatterns.isEmpty() && getSetting(4).asToggle().state) {
-				int mode = getSetting(4).asToggle().getChild(0).asMode().mode;
+			if (!filterPatterns.isEmpty() && getSetting(4).asToggle().getState()) {
+				int mode = getSetting(4).asToggle().getChild(0).asMode().getMode();
 				if (mode == 0) {
 					for (Pattern pattern: filterPatterns) {
 						message = Texts.replaceAll(message, pattern,
@@ -216,8 +216,8 @@ public class BetterChat extends Module {
 				}
 			}
 
-			if (getSetting(3).asToggle().state) {
-				DateTimeFormatter formatter = getSetting(3).asToggle().getChild(0).asToggle().state
+			if (getSetting(3).asToggle().getState()) {
+				DateTimeFormatter formatter = getSetting(3).asToggle().getChild(0).asToggle().getState()
 						? DateTimeFormatter.ofPattern("HH:mm:ss") : DateTimeFormatter.ofPattern("HH:mm");
 				message = new LiteralText("\u00a78[\u00a77" + LocalDateTime.now().format(formatter) + "\u00a78] ").append(message);
 			}

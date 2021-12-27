@@ -49,7 +49,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 	}
 
 	public void initWindows() {
-		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
+		int len = ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValueInt();
 		
 		int y = 50;
 		for (ModuleCategory c: ModuleCategory.values()) {
@@ -67,9 +67,9 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI.set(true);
 
-		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state;
+		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().getState();
 
-		if (ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
+		if (ModuleManager.getModule("ClickGui").getSetting(1).asToggle().getState()) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
 
 			Set<Module> seachMods = new HashSet<>();
@@ -88,7 +88,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 			}
 		}
 
-		int len = (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue();
+		int len = ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValueInt();
 		for (Window w : getWindows()) {
 			if (w instanceof ModuleWindow) {
 				((ModuleWindow) w).setLen(len);
@@ -100,7 +100,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		textRenderer.draw(matrices, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x305090);
 		textRenderer.draw(matrices, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6090d0);
 
-		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
+		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().getState()) {
 			textRenderer.drawWithShadow(matrices, "Current prefix is: \"" + Command.getPrefix() + "\" (" + Command.getPrefix() + "help)", 2, height - 20, 0x99ff99);
 			textRenderer.drawWithShadow(matrices, "Use " + Command.getPrefix() + "clickgui to reset the clickgui", 2, height - 10, 0x9999ff);
 		}

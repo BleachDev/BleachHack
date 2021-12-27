@@ -21,8 +21,8 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
@@ -42,7 +42,7 @@ public class AutoParkour extends Module {
 				new SettingToggle("Smart", true).withDesc("Tries to figure out what block you're jumping to then jumps to that block.").withChildren(
 						new SettingToggle("Snap", false).withDesc("Snaps you to the target block to prevent you from overshooting it."),
 						new SettingToggle("Highlight", false).withDesc("Highlights the target block you're jumping to.").withChildren(
-								new SettingColor("Color", 0.85f, 0.44f, 0.57f, false).withDesc("The color of the highlight."))));
+								new SettingColor("Color", 215, 110, 145).withDesc("The color of the highlight."))));
 	}
 
 	@Override
@@ -67,12 +67,12 @@ public class AutoParkour extends Module {
 			Iterable<VoxelShape> blockCollisions = mc.world.getBlockCollisions(mc.player, box);
 
 			if (!blockCollisions.iterator().hasNext()) {
-				if (getSetting(0).asToggle().state && !mc.player.isSprinting()) {
+				if (getSetting(0).asToggle().getState() && !mc.player.isSprinting()) {
 					mc.player.setSprinting(true);
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.START_SPRINTING));
 				}
 
-				if (getSetting(1).asToggle().state) {
+				if (getSetting(1).asToggle().getState()) {
 					Vec3d lookVec = mc.player.getPos().add(new Vec3d(0, 0, 3.5).rotateY(-(float) Math.toRadians(mc.player.getYaw())));
 
 					BlockPos nearestPos = BlockPos.streamOutwards(mc.player.getBlockPos().down(), 4, 1, 4)
@@ -97,16 +97,16 @@ public class AutoParkour extends Module {
 	
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		if (smartPos != null && getSetting(1).asToggle().getChild(1).asToggle().state) {
-			float[] rgb = getSetting(1).asToggle().getChild(1).asToggle().getChild(0).asColor().getRGBFloat();
-			Renderer.drawBoxBoth(smartPos, QuadColor.single(rgb[0], rgb[1], rgb[2], 0.5f), 2.5f);
+		if (smartPos != null && getSetting(1).asToggle().getChild(1).asToggle().getState()) {
+			int[] rgb = getSetting(1).asToggle().getChild(1).asToggle().getChild(0).asColor().getRGBArray();
+			Renderer.drawBoxBoth(smartPos, QuadColor.single(rgb[0], rgb[1], rgb[2], 128), 2.5f);
 		}
 	}
 
 	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
-		if (smartPos != null && getSetting(1).asToggle().state) {
-			if (!getSetting(1).asToggle().getChild(0).asToggle().state
+		if (smartPos != null && getSetting(1).asToggle().getState()) {
+			if (!getSetting(1).asToggle().getChild(0).asToggle().getState()
 					&& (mc.player.getBoundingBox().maxX < smartPos.getX()
 						|| mc.player.getBoundingBox().minX > smartPos.getX() + 1
 						|| mc.player.getBoundingBox().maxZ < smartPos.getZ()

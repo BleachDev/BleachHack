@@ -12,7 +12,7 @@ import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.util.PlayerInteractEntityC2SUtils;
 import org.bleachhack.util.PlayerInteractEntityC2SUtils.InteractType;
 
@@ -60,7 +60,7 @@ public class Criticals extends Module {
 			double x = mc.player.getX();
 			double y = mc.player.getY();
 			double z = mc.player.getZ();
-			if (getSetting(0).asMode().mode == 0) {
+			if (getSetting(0).asMode().getMode() == 0) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y + 0.0633, z, false));
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(x, y, z, false));
 			} else {

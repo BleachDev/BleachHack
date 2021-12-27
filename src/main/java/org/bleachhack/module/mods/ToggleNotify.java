@@ -15,7 +15,7 @@ import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 
 import net.minecraft.text.LiteralText;
@@ -41,7 +41,7 @@ public class ToggleNotify extends Module {
 			}
 		}
 		
-		if (getSetting(2).asToggle().state)
+		if (getSetting(2).asToggle().getState())
 			notify(this);
 	}
 	
@@ -49,7 +49,7 @@ public class ToggleNotify extends Module {
 	public void onDisable(boolean inWorld) {
 		enabledModules.clear();
 		
-		if (getSetting(2).asToggle().state)
+		if (getSetting(2).asToggle().getState())
 			notify(this);
 
 		super.onDisable(inWorld);
@@ -60,7 +60,7 @@ public class ToggleNotify extends Module {
 		for (int i = 0; i < enabledModules.size(); i++) {
 			Module m = enabledModules.get(i);
 			if (!m.isEnabled()) {
-				if (!(m instanceof ClickGui) && getSetting(1).asToggle().state)
+				if (!(m instanceof ClickGui) && getSetting(1).asToggle().getState())
 					notify(m);
 
 				enabledModules.remove(m);
@@ -70,7 +70,7 @@ public class ToggleNotify extends Module {
 		
 		for (Module m: ModuleManager.getModules()) {
 			if (m.isEnabled() && !enabledModules.contains(m)) {
-				if (!(m instanceof ClickGui) && getSetting(0).asToggle().state)
+				if (!(m instanceof ClickGui) && getSetting(0).asToggle().getState())
 					notify(m);
 
 				enabledModules.add(m);

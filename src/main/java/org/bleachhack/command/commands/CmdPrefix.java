@@ -11,7 +11,7 @@ package org.bleachhack.command.commands;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.exception.CmdSyntaxException;
-import org.bleachhack.gui.option.Option;
+import org.bleachhack.setting.option.Option;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileHelper;
 

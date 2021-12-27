@@ -13,12 +13,12 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingItemList;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingItemList;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
@@ -46,8 +46,8 @@ public class LiquidFiller extends Module {
 				new SettingRotate(false).withDesc("Rotates when placing blocks."),
 				new SettingToggle("Highlight", true).withDesc("Highlights liquids to fill.").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2),
-						new SettingColor("Water Color", 0f, 0.5f, 1f, false).withDesc("Color of water."),
-						new SettingColor("Lava Color", 1f, 0.75f, 0f, false).withDesc("Color of lava.")));
+						new SettingColor("Water Color", 0, 128, 255).withDesc("Color of water."),
+						new SettingColor("Lava Color", 255, 190, 0).withDesc("Color of lava.")));
 	}
 
 	private boolean shouldUseItem(Item item) {
@@ -55,11 +55,11 @@ public class LiquidFiller extends Module {
 			return false;
 		}
 
-		if (getSetting(5).asToggle().state) {
+		if (getSetting(5).asToggle().getState()) {
 			boolean contains = getSetting(5).asToggle().getChild(1).asList(Item.class).contains(item);
 
-			return (getSetting(5).asToggle().getChild(0).asMode().mode == 0 && !contains)
-					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && contains);
+			return (getSetting(5).asToggle().getChild(0).asMode().getMode() == 0 && !contains)
+					|| (getSetting(5).asToggle().getChild(0).asMode().getMode() == 1 && contains);
 		}
 
 		return true;
@@ -73,13 +73,13 @@ public class LiquidFiller extends Module {
 			FluidState fluid = mc.world.getFluidState(pos);
 
 			int slot = InventoryUtils.getSlot(true, i -> shouldUseItem(mc.player.getInventory().getStack(i).getItem()));
-			if ((fluid.getFluid() instanceof WaterFluid.Still && getSetting(0).asMode().mode != 0)
-							|| (fluid.getFluid() instanceof LavaFluid.Still && getSetting(0).asMode().mode != 1)) {
+			if ((fluid.getFluid() instanceof WaterFluid.Still && getSetting(0).asMode().getMode() != 0)
+							|| (fluid.getFluid() instanceof LavaFluid.Still && getSetting(0).asMode().getMode() != 1)) {
 					if (WorldUtils.placeBlock(
 							pos, slot,
 							getSetting(6).asRotate(),
-							getSetting(4).asToggle().state,
-							getSetting(3).asToggle().state,
+							getSetting(4).asToggle().getState(),
+							getSetting(3).asToggle().getState(),
 							true)) {
 						cap++;
 
@@ -93,7 +93,7 @@ public class LiquidFiller extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		if (getSetting(7).asToggle().state) {
+		if (getSetting(7).asToggle().getState()) {
 			int opacity = (int) (getSetting(7).asToggle().getChild(0).asSlider().getValue() * 255);
 			QuadColor waterColor = QuadColor.single((opacity << 24) | getSetting(7).asToggle().getChild(1).asColor().getRGB());
 			QuadColor lavaColor = QuadColor.single((opacity << 24) | getSetting(7).asToggle().getChild(2).asColor().getRGB());
@@ -102,9 +102,9 @@ public class LiquidFiller extends Module {
 			for (BlockPos pos: BlockPos.iterateOutwards(mc.player.getBlockPos().up(), ceilRange, ceilRange, ceilRange)) {
 				FluidState fluid = mc.world.getFluidState(pos);
 
-				if (fluid.getFluid() instanceof WaterFluid.Still && getSetting(0).asMode().mode != 0) {
+				if (fluid.getFluid() instanceof WaterFluid.Still && getSetting(0).asMode().getMode() != 0) {
 					Renderer.drawBoxBoth(fluid.getShape(mc.world, pos).getBoundingBox().offset(pos), waterColor, 3f);
-				} else if (fluid.getFluid() instanceof LavaFluid.Still && getSetting(0).asMode().mode != 1) {
+				} else if (fluid.getFluid() instanceof LavaFluid.Still && getSetting(0).asMode().getMode() != 1) {
 					Renderer.drawBoxBoth(fluid.getShape(mc.world, pos).getBoundingBox().offset(pos), lavaColor, 3f);
 				}
 			}

@@ -12,7 +12,7 @@ import org.bleachhack.event.events.EventReach;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.setting.module.SettingSlider;
 
 public class Reach extends Module {
 

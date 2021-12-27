@@ -6,13 +6,13 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package org.bleachhack.module.setting.other;
+package org.bleachhack.setting.module;
 
 import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.bleachhack.module.setting.base.SettingList;
+import org.bleachhack.setting.SettingDataHandlers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -21,7 +21,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.text.Text;
 import net.minecraft.util.registry.Registry;
 
 public class SettingItemList extends SettingList<Item> {
@@ -31,7 +31,7 @@ public class SettingItemList extends SettingList<Item> {
 	}
 
 	public SettingItemList(String text, String windowText, Predicate<Item> filter, Item... defaultItems) {
-		super(text, windowText, getAllItems(filter), defaultItems);
+		super(text, windowText, SettingDataHandlers.ITEM, getAllItems(filter), defaultItems);
 	}
 
 	private static Collection<Item> getAllItems(Predicate<Item> filter) {
@@ -60,13 +60,7 @@ public class SettingItemList extends SettingList<Item> {
 	}
 
 	@Override
-	public Item getItemFromString(String string) {
-		Item item = Registry.ITEM.get(new Identifier(string));
-		return item == Items.AIR ? null : item;
-	}
-
-	@Override
-	public String getStringFromItem(Item item) {
-		return Registry.ITEM.getId(item).toString();
+	public Text getName(Item item) {
+		return item.getName();
 	}
 }

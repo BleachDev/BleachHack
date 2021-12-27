@@ -6,9 +6,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingItemList;
+import org.bleachhack.setting.module.SettingItemList;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 
 import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
@@ -36,7 +36,7 @@ public class AutoCraft extends Module {
 		super.onEnable(inWorld);
 
 		crafted = 0;
-		if (getSetting(0).asList(Item.class).getItems().isEmpty()) {
+		if (getSetting(0).asList(Item.class).getValue().isEmpty()) {
 			BleachLogger.error("AutoCraft items are empty.");
 			setEnabled(false);
 		}
@@ -45,8 +45,8 @@ public class AutoCraft extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		SettingToggle maxItems = getSetting(3).asToggle();
-		if (maxItems.state && crafted >= maxItems.getChild(0).asSlider().getValueInt()) {
-			if (maxItems.getChild(1).asToggle().state)
+		if (maxItems.getState() && crafted >= maxItems.getChild(0).asSlider().getValueInt()) {
+			if (maxItems.getChild(1).asToggle().getState())
 				BleachLogger.info("Disabled AutoCraft after crafting " + crafted + " items.");
 
 			setEnabled(false);
@@ -63,8 +63,8 @@ public class AutoCraft extends Module {
 		CraftingScreenHandler currentScreenHandler = (CraftingScreenHandler) mc.player.currentScreenHandler;
 		List<RecipeResultCollection> recipeResultCollectionList = mc.player.getRecipeBook().getOrderedResults();
 
-		boolean craftAll = getSetting(1).asToggle().state;
-		boolean drop = getSetting(2).asToggle().state;
+		boolean craftAll = getSetting(1).asToggle().getState();
+		boolean drop = getSetting(2).asToggle().getState();
 
 		for (RecipeResultCollection recipeResultCollection : recipeResultCollectionList) {
 			for (Recipe<?> recipe : recipeResultCollection.getRecipes(true)) {

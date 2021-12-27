@@ -17,9 +17,9 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.LineColor;
 
@@ -34,9 +34,9 @@ public class Trail extends Module {
 		super("Trail", KEY_UNBOUND, ModuleCategory.RENDER, "Shows a trail behind you.",
 				new SettingToggle("Trail", true).withDesc("Enable trailing."),
 				new SettingToggle("KeepTrail", false).withDesc("Keep the trail after turning the module off."),
-				new SettingColor("Color", 0.8f, 0.2f, 0.2f, false).withDesc("Main trail color."),
+				new SettingColor("Color", 200, 50, 50).withDesc("Main trail color."),
 				new SettingToggle("BlendColor", true).withDesc("Blends the main color with a second color.").withChildren(
-						new SettingColor("Second Color", 0.2f, 0.8f, 0.2f, false).withDesc("The second color.")),
+						new SettingColor("Second Color", 50, 200, 50).withDesc("The second color.")),
 
 				new SettingSlider("Width", 0.1, 10, 3, 1).withDesc("Thickness of the trail."),
 				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the trail."));
@@ -44,7 +44,7 @@ public class Trail extends Module {
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		if (!getSetting(1).asToggle().state) {
+		if (!getSetting(1).asToggle().getState()) {
 			trails.clear();
 		}
 
@@ -54,7 +54,7 @@ public class Trail extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (!getSetting(0).asToggle().state) {
+		if (!getSetting(0).asToggle().getState()) {
 			return;
 		}
 
@@ -70,18 +70,19 @@ public class Trail extends Module {
 	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		int color = getSetting(2).asColor().getRGB();
+		int secondColor = getSetting(3).asToggle().getChild(0).asColor().getRGB();
 
 		int count = 250;
 		boolean rev = false;
 		for (Entry<Vec3d, Vec3d> e : trails.entrySet()) {
-			if (getSetting(3).asToggle().state) {
-				color = blendColor(getSetting(2).asColor().getRGB(), getSetting(3).asToggle().getChild(0).asColor().getRGB(), count / 255f);
+			if (getSetting(3).asToggle().getState()) {
+				color = blendColor(color, secondColor, count / 255f);
 			}
 
 			Renderer.drawLine(
 					e.getKey().x, e.getKey().y, e.getKey().z,
 					e.getValue().x, e.getValue().y, e.getValue().z,
-					LineColor.single(((color & 0xff0000) >> 16) / 255f, ((color & 0xff00) >> 8) / 255f, (color & 0xff) / 255f, getSetting(5).asSlider().getValueFloat()),
+					LineColor.single((color & 0xff0000) >> 16, (color & 0xff00) >> 8, color & 0xff, (int) (getSetting(5).asSlider().getValueFloat() * 255)),
 					getSetting(4).asSlider().getValueFloat());
 
 			if (count < 5 || count > 250) {
@@ -92,7 +93,7 @@ public class Trail extends Module {
 		}
 	}
 
-	/* https://stackoverflow.com/questions/19398238/how-to-mix-two-int-colors-correctly moment */
+	// https://stackoverflow.com/questions/19398238/how-to-mix-two-int-colors-correctly moment
 	private int blendColor(int color1, int color2, float ratio) {
 		float iRatio = 1.0f - ratio;
 

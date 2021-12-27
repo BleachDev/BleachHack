@@ -14,11 +14,11 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingBlockList;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingBlockList;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.world.WorldUtils;
@@ -57,7 +57,7 @@ public class Surround extends Module {
 		super.onEnable(inWorld);
 
 		if (inWorld) {
-			if (getSetting(3).asToggle().state) {
+			if (getSetting(3).asToggle().getState()) {
 				Vec3d centerPos = Vec3d.ofBottomCenter(mc.player.getBlockPos());
 				mc.player.updatePosition(centerPos.x, centerPos.y, centerPos.z);
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(centerPos.x, centerPos.y, centerPos.z, mc.player.isOnGround()));
@@ -69,7 +69,7 @@ public class Surround extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(5).asToggle().state && mc.options.keyJump.isPressed()) {
+		if (getSetting(5).asToggle().getState() && mc.options.keyJump.isPressed()) {
 			setEnabled(false);
 			return;
 		}
@@ -90,7 +90,7 @@ public class Surround extends Module {
 		int cap = 0;
 
 		Box box = mc.player.getBoundingBox();
-		Set<BlockPos> placePoses = getSetting(0).asMode().mode == 0
+		Set<BlockPos> placePoses = getSetting(0).asMode().getMode() == 0
 				? Sets.newHashSet(
 						mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
 						mc.player.getBlockPos().south(), mc.player.getBlockPos().west())
@@ -105,7 +105,7 @@ public class Surround extends Module {
 			return;
 		}
 
-		int supportMode = getSetting(1).asMode().mode;
+		int supportMode = getSetting(1).asMode().getMode();
 		for (BlockPos pos : placePoses) {
 			if (cap >= getSetting(2).asSlider().getValueInt()) {
 				return;
@@ -132,7 +132,7 @@ public class Surround extends Module {
 			}
 		}
 
-		if (!getSetting(4).asToggle().state) {
+		if (!getSetting(4).asToggle().getState()) {
 			setEnabled(false);
 		}
 	}

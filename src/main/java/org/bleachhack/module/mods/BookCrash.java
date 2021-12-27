@@ -17,9 +17,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -66,19 +66,19 @@ public class BookCrash extends Module {
 		int pages = Math.min(getSetting(4).asSlider().getValueInt(), 100);
 		int pageChars = 210;
 
-		if (getSetting(3).asMode().mode == 2) {
+		if (getSetting(3).asMode().getMode() == 2) {
 			IntStream chars = new Random().ints(0x80, 0x10FFFF - 0x800).map(i -> i < 0xd800 ? i : i + 0x800);
 			size = chars.limit(pageChars * pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
-		} else if (getSetting(3).asMode().mode == 1) {
+		} else if (getSetting(3).asMode().getMode() == 1) {
 			size = repeat(pages * pageChars, String.valueOf(0x10FFFF));
-		} else if (getSetting(3).asMode().mode == 0) {
+		} else if (getSetting(3).asMode().getMode() == 0) {
 			IntStream chars = new Random().ints(0x20, 0x7E);
 			size = chars.limit(pageChars * pages).mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
-		} else if (getSetting(3).asMode().mode == 3) {
+		} else if (getSetting(3).asMode().getMode() == 3) {
 			size = "wveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5vr2c43rc434v432tvt4tvybn4n6n57u6u57m6m6678mi68,867,79o,o97o,978iun7yb65453v4tyv34t4t3c2cc423rc334tcvtvt43tv45tvt5t5v43tv5345tv43tv5355vt5t3tv5t533v5t45tv43vt4355t54fwveb54yn4y6y6hy6hb54yb5436by5346y3b4yb343yb453by45b34y5by34yb543yb54y5 h3y4h97,i567yb64t5";
 		}
 
-		if (getSetting(0).asMode().mode == 2) {
+		if (getSetting(0).asMode().getMode() == 2) {
 			String text = "bh ontop";
 			Random rand = new Random();
 			for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
@@ -99,7 +99,7 @@ public class BookCrash extends Module {
 			bookObj.setNbt(tag);
 
 			for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
-				if (getSetting(0).asMode().mode == 0) {
+				if (getSetting(0).asMode().getMode() == 0) {
 					Int2ObjectMap<ItemStack> map = new Int2ObjectOpenHashMap<>(1);
 					map.put(0, bookObj);
 
@@ -113,7 +113,7 @@ public class BookCrash extends Module {
 
 	@BleachSubscribe
 	public void EventDisconnect(EventPacket.Read event) {
-		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().state)
+		if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(5).asToggle().getState())
 			setEnabled(false);
 	}
 

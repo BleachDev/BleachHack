@@ -34,9 +34,9 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.Boxes;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
@@ -93,7 +93,7 @@ public class StorageESP extends Module {
 
 	@BleachSubscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
-		if (getSetting(0).asMode().mode != 0)
+		if (getSetting(0).asMode().getMode() != 0)
 			return;
 
 		int[] color = getColorForEntity(event.getEntity());
@@ -105,7 +105,7 @@ public class StorageESP extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().getMode() == 0) {
 			// Manually render blockentities because of culling
 			for (BlockEntity be: WorldUtils.getBlockEntities()) {
 				int[] color = getColorForBlock(be);
@@ -178,19 +178,19 @@ public class StorageESP extends Module {
 	}
 
 	private int[] getColorForBlock(BlockEntity be) {
-		if ((be instanceof ChestBlockEntity || be instanceof BarrelBlockEntity) && getSetting(4).asToggle().state) {
+		if ((be instanceof ChestBlockEntity || be instanceof BarrelBlockEntity) && getSetting(4).asToggle().getState()) {
 			return new int[] { 255, 155, 75 };
-		} else if (be instanceof EnderChestBlockEntity && getSetting(5).asToggle().state) {
+		} else if (be instanceof EnderChestBlockEntity && getSetting(5).asToggle().getState()) {
 			return new int[] { 255, 13, 255 };
-		} else if (be instanceof AbstractFurnaceBlockEntity && getSetting(6).asToggle().state) {
+		} else if (be instanceof AbstractFurnaceBlockEntity && getSetting(6).asToggle().getState()) {
 			return new int[] { 128, 128, 128 };
-		} else if (be instanceof DispenserBlockEntity && getSetting(7).asToggle().state) {
+		} else if (be instanceof DispenserBlockEntity && getSetting(7).asToggle().getState()) {
 			return new int[] { 140, 140, 178 };
-		} else if (be instanceof HopperBlockEntity && getSetting(8).asToggle().state) {
+		} else if (be instanceof HopperBlockEntity && getSetting(8).asToggle().getState()) {
 			return new int[] { 115, 115, 155 };
-		} else if (be instanceof ShulkerBoxBlockEntity && getSetting(9).asToggle().state) {
+		} else if (be instanceof ShulkerBoxBlockEntity && getSetting(9).asToggle().getState()) {
 			return new int[] { 128, 50, 255 };
-		} else if (be instanceof BrewingStandBlockEntity && getSetting(10).asToggle().state) {
+		} else if (be instanceof BrewingStandBlockEntity && getSetting(10).asToggle().getState()) {
 			return new int[] { 128, 100, 50 };
 		}
 
@@ -198,13 +198,13 @@ public class StorageESP extends Module {
 	}
 
 	private int[] getColorForEntity(Entity e) {
-		if (e instanceof ChestMinecartEntity && getSetting(11).asToggle().state) {
+		if (e instanceof ChestMinecartEntity && getSetting(11).asToggle().getState()) {
 			return new int[] { 255, 165, 75 };
-		} else if (e instanceof FurnaceMinecartEntity && getSetting(12).asToggle().state) {
+		} else if (e instanceof FurnaceMinecartEntity && getSetting(12).asToggle().getState()) {
 			return new int[] { 128, 128, 128 };
-		} else if (e instanceof HopperMinecartEntity && getSetting(13).asToggle().state) {
+		} else if (e instanceof HopperMinecartEntity && getSetting(13).asToggle().getState()) {
 			return new int[] { 115, 115, 155 };
-		} else if (e instanceof ItemFrameEntity && getSetting(14).asToggle().state) {
+		} else if (e instanceof ItemFrameEntity && getSetting(14).asToggle().getState()) {
 			if (((ItemFrameEntity) e).getHeldItemStack().isEmpty()) {
 				return new int[] { 115, 25, 25 };
 			} else if (((ItemFrameEntity) e).getHeldItemStack().getItem() == Items.FILLED_MAP) {

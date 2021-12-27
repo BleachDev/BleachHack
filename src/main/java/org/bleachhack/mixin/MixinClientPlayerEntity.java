@@ -61,7 +61,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"),
 			require = 0 /* TODO: meteor compatibility */)
 	private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
-		if (ModuleManager.getModule("NoSlow").isEnabled() && ModuleManager.getModule("NoSlow").getSetting(5).asToggle().state) {
+		if (ModuleManager.getModule("NoSlow").isEnabled() && ModuleManager.getModule("NoSlow").getSetting(5).asToggle().getState()) {
 			return false;
 		}
 
@@ -94,7 +94,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 			require = 0 /* TODO: inertia compatibility */)
 	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
 		if (!ModuleManager.getModule("BetterPortal").isEnabled()
-				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().state) {
+				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().getState()) {
 			closeHandledScreen();
 		}
 	}
@@ -103,7 +103,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 			require = 0 /* TODO: inertia compatibility */)
 	private void updateNausea_setScreen(MinecraftClient client, Screen screen) {
 		if (!ModuleManager.getModule("BetterPortal").isEnabled()
-				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().state) {
+				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().getState()) {
 			client.setScreen(screen);
 		}
 	}
@@ -125,12 +125,12 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 		return super.clipAtLedge()
 				|| ModuleManager.getModule("SafeWalk").isEnabled()
 				|| (ModuleManager.getModule("Scaffold").isEnabled()
-						&& ModuleManager.getModule("Scaffold").getSetting(8).asToggle().state);
+						&& ModuleManager.getModule("Scaffold").getSetting(8).asToggle().getState());
 	}
 
 	@Overwrite
 	public float getMountJumpStrength() {
 		return ModuleManager.getModule("EntityControl").isEnabled()
-				&& ModuleManager.getModule("EntityControl").getSetting(2).asToggle().state ? 1F : mountJumpStrength;
+				&& ModuleManager.getModule("EntityControl").getSetting(2).asToggle().getState() ? 1F : mountJumpStrength;
 	}
 }

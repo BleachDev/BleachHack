@@ -5,7 +5,7 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.setting.module.SettingMode;
 
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 
@@ -33,7 +33,7 @@ public class Sneak extends Module {
 	public void onEnable(boolean inWorld) {
 		super.onEnable(inWorld);
 
-		if (getSetting(0).asMode().mode == 1) {
+		if (getSetting(0).asMode().getMode() == 1) {
 			if (inWorld)
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
 
@@ -43,9 +43,9 @@ public class Sneak extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().getMode() == 0) {
 			mc.options.keySneak.setPressed(true);
-		} else if (getSetting(0).asMode().mode == 1 && !packetSent) {
+		} else if (getSetting(0).asMode().getMode() == 1 && !packetSent) {
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
 			packetSent = true;
 		}

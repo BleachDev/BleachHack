@@ -12,8 +12,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingToggle;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.util.InputUtil;
@@ -38,9 +38,9 @@ public class RotationSnap extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		/* yes looks like a good way to do it to me */
-		if (getSetting(2).asToggle().state && mc.currentScreen == null) {
-			int yMode = getSetting(0).asToggle().getChild(0).asMode().mode;
-			int pMode = getSetting(1).asToggle().getChild(0).asMode().mode;
+		if (getSetting(2).asToggle().getState() && mc.currentScreen == null) {
+			int yMode = getSetting(0).asToggle().getChild(0).asMode().getMode();
+			int pMode = getSetting(1).asToggle().getChild(0).asMode().getMode();
 			
 			int yAngle = yMode == 0 ? 45 : yMode == 1 ? 30 : yMode == 2 ? 15 : 90;
 			int pAngle = pMode == 0 ? 45 : pMode == 1 ? 30 : pMode == 2 ? 15 : 90;
@@ -79,8 +79,8 @@ public class RotationSnap extends Module {
 
 	public void snap() {
 		// quic maff
-		if (getSetting(0).asToggle().state) {
-			int mode = getSetting(0).asToggle().getChild(0).asMode().mode;
+		if (getSetting(0).asToggle().getState()) {
+			int mode = getSetting(0).asToggle().getChild(0).asMode().getMode();
 			int interval = mode == 0 ? 45 : mode == 1 ? 30 : mode == 2 ? 15 : 90;
 			int rot = (int) mc.player.getYaw() + (Math.floorMod((int) mc.player.getYaw(), interval) < interval / 2 ?
 					-Math.floorMod((int) mc.player.getYaw(), interval) : interval - Math.floorMod((int) mc.player.getYaw(), interval));
@@ -88,8 +88,8 @@ public class RotationSnap extends Module {
 			mc.player.setYaw(rot);
 		}
 
-		if (getSetting(1).asToggle().state) {
-			int mode = getSetting(1).asToggle().getChild(0).asMode().mode;
+		if (getSetting(1).asToggle().getState()) {
+			int mode = getSetting(1).asToggle().getChild(0).asMode().getMode();
 			int interval = mode == 0 ? 45 : mode == 1 ? 30 : mode == 2 ? 15 : 90;
 			int rot = MathHelper.clamp(((int) mc.player.getPitch() + (Math.floorMod((int) mc.player.getPitch(), interval) < interval / 2 ?
 					-Math.floorMod((int) mc.player.getPitch(), interval) : interval - Math.floorMod((int) mc.player.getPitch(), interval))), -90, 90);

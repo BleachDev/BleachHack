@@ -17,8 +17,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.util.io.BleachFileMang;
 
 public class Spammer extends Module {
@@ -51,9 +51,9 @@ public class Spammer extends Module {
 			return;
 
 		if (tickCount % (getSetting(1).asSlider().getValueInt() * 20) == 0) {
-			if (getSetting(0).asMode().mode == 0) {
+			if (getSetting(0).asMode().getMode() == 0) {
 				mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())));
-			} else if (getSetting(0).asMode().mode == 1) {
+			} else if (getSetting(0).asMode().getMode() == 1) {
 				mc.player.sendChatMessage(lines.get(lineCount));
 			}
 

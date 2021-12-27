@@ -13,7 +13,7 @@ import org.bleachhack.event.events.EventSwingHand;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 
@@ -27,14 +27,14 @@ public class NoSwing extends Module {
 
 	@BleachSubscribe
 	public void onSwingHand(EventSwingHand event) {
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			event.setCancelled(true);
 		}
 	}
 
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
-		if (event.getPacket() instanceof HandSwingC2SPacket && getSetting(1).asToggle().state) {
+		if (event.getPacket() instanceof HandSwingC2SPacket && getSetting(1).asToggle().getState()) {
 			event.setCancelled(true);
 		}
 	}

@@ -15,7 +15,7 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.WorldUtils;
 import org.lwjgl.glfw.GLFW;
 
@@ -66,7 +66,7 @@ public class NoSlow extends Module {
 			return;
 
 		/* Slowness */
-		if (getSetting(0).asToggle().state && (mc.player.getStatusEffect(StatusEffects.SLOWNESS) != null || mc.player.getStatusEffect(StatusEffects.BLINDNESS) != null)) {
+		if (getSetting(0).asToggle().getState() && (mc.player.getStatusEffect(StatusEffects.SLOWNESS) != null || mc.player.getStatusEffect(StatusEffects.BLINDNESS) != null)) {
 			if (mc.options.keyForward.isPressed()
 					&& mc.player.getVelocity().x > -0.15 && mc.player.getVelocity().x < 0.15
 					&& mc.player.getVelocity().z > -0.15 && mc.player.getVelocity().z < 0.15) {
@@ -78,12 +78,12 @@ public class NoSlow extends Module {
 		}
 
 		/* Soul Sand */
-		if (getSetting(1).asToggle().state && mc.world.getBlockState(mc.player.getBlockPos()).getBlock() == Blocks.SOUL_SAND) {
+		if (getSetting(1).asToggle().getState() && mc.world.getBlockState(mc.player.getBlockPos()).getBlock() == Blocks.SOUL_SAND) {
 			mc.player.setVelocity(mc.player.getVelocity().multiply(2.5, 1, 2.5));
 		}
 
 		/* Slime Block */
-		if (getSetting(2).asToggle().state
+		if (getSetting(2).asToggle().getState()
 				&& mc.world.getBlockState(new BlockPos(mc.player.getPos().add(0, -0.01, 0))).getBlock() == Blocks.SLIME_BLOCK && mc.player.isOnGround()) {
 			double d = Math.abs(mc.player.getVelocity().y);
 			if (d < 0.1D && !mc.player.bypassesSteppingEffects()) {
@@ -93,13 +93,13 @@ public class NoSlow extends Module {
 		}
 
 		/* Web */
-		if (getSetting(3).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
+		if (getSetting(3).asToggle().getState() && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.COBWEB)) {
 			// still kinda scuffed until i get an actual mixin
 			mc.player.slowMovement(mc.world.getBlockState(mc.player.getBlockPos()), new Vec3d(1.75, 1.75, 1.75));
 		}
 
 		/* Berry Bush */
-		if (getSetting(4).asToggle().state && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.SWEET_BERRY_BUSH)) {
+		if (getSetting(4).asToggle().getState() && WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.SWEET_BERRY_BUSH)) {
 			// also scuffed
 			mc.player.slowMovement(mc.world.getBlockState(mc.player.getBlockPos()), new Vec3d(1.7, 1.7, 1.7));
 		}
@@ -110,7 +110,7 @@ public class NoSlow extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		/* Inventory */
-		if (getSetting(6).asToggle().state && shouldInvMove(mc.currentScreen)) {
+		if (getSetting(6).asToggle().getState() && shouldInvMove(mc.currentScreen)) {
 
 			for (KeyBinding k : new KeyBinding[] { mc.options.keyForward, mc.options.keyBack,
 					mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump, mc.options.keySprint }) {
@@ -118,7 +118,7 @@ public class NoSlow extends Module {
 						InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
 			}
 
-			if (getSetting(6).asToggle().asToggle().getChild(0).asToggle().state) {
+			if (getSetting(6).asToggle().asToggle().getChild(0).asToggle().getState()) {
 				mc.options.keySneak.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
 						InputUtil.fromTranslationKey(mc.options.keySneak.getBoundKeyTranslationKey()).getCode()));
 			}
@@ -131,8 +131,8 @@ public class NoSlow extends Module {
 	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		/* Inventory */
-		if (getSetting(6).asToggle().state
-				&& getSetting(6).asToggle().asToggle().getChild(2).asToggle().state
+		if (getSetting(6).asToggle().getState()
+				&& getSetting(6).asToggle().asToggle().getChild(2).asToggle().getState()
 				&& shouldInvMove(mc.currentScreen)) {
 
 			float yaw = 0f;
@@ -152,7 +152,7 @@ public class NoSlow extends Module {
 			if (InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_DOWN))
 				pitch += amount;
 
-			if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(1).asToggle().state) {
+			if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(1).asToggle().getState()) {
 				if (yaw == 0f && pitch != 0f) {
 					yaw += -0.1 + Math.random() / 5f;
 				} else {
@@ -169,7 +169,7 @@ public class NoSlow extends Module {
 
 			mc.player.setYaw(mc.player.getYaw() + yaw);
 
-			if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(0).asToggle().state) {
+			if (getSetting(6).asToggle().asToggle().getChild(2).asToggle().asToggle().getChild(0).asToggle().getState()) {
 				mc.player.setPitch(MathHelper.clamp(mc.player.getPitch() + pitch, -90f, 90f));
 			} else {
 				mc.player.setPitch(mc.player.getPitch() + pitch);
@@ -179,7 +179,7 @@ public class NoSlow extends Module {
 
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
-		if (event.getPacket() instanceof ClickSlotC2SPacket && getSetting(6).asToggle().asToggle().getChild(1).asToggle().state) {
+		if (event.getPacket() instanceof ClickSlotC2SPacket && getSetting(6).asToggle().asToggle().getChild(1).asToggle().getState()) {
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.STOP_SPRINTING));
 		}
 	}

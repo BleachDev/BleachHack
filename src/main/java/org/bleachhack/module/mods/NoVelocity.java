@@ -13,8 +13,8 @@ import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
@@ -39,7 +39,7 @@ public class NoVelocity extends Module {
 
 	@BleachSubscribe
 	public void onPlayerPushed(EventPlayerPushed event) {
-		if (getSetting(2).asToggle().state) {
+		if (getSetting(2).asToggle().getState()) {
 			double amount = getSetting(2).asToggle().getChild(0).asSlider().getValue() / 100d;
 			event.setPushX(event.getPushX() * amount);
 			event.setPushY(event.getPushY() * amount);
@@ -52,7 +52,7 @@ public class NoVelocity extends Module {
 		if (mc.player == null)
 			return;
 
-		if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket && getSetting(0).asToggle().state) {
+		if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket && getSetting(0).asToggle().getState()) {
 			EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) event.getPacket();
 			if (packet.getId() == mc.player.getId()) {
 				double velXZ = getSetting(0).asToggle().getChild(0).asSlider().getValue() / 100;
@@ -66,7 +66,7 @@ public class NoVelocity extends Module {
 				packet.velocityY = (int) (pvelY * 8000 + mc.player.getVelocity().y * 8000);
 				packet.velocityZ = (int) (pvelZ * 8000 + mc.player.getVelocity().z * 8000);
 			}
-		} else if (event.getPacket() instanceof ExplosionS2CPacket && getSetting(1).asToggle().state) {
+		} else if (event.getPacket() instanceof ExplosionS2CPacket && getSetting(1).asToggle().getState()) {
 			ExplosionS2CPacket packet = (ExplosionS2CPacket) event.getPacket();
 
 			double velXZ = getSetting(1).asToggle().getChild(0).asSlider().getValue() / 100;

@@ -1,4 +1,4 @@
-package org.bleachhack.gui.option;
+package org.bleachhack.setting.option;
 
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -6,13 +6,14 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.core.util.ReflectionUtil;
 import org.bleachhack.BleachHack;
 import org.bleachhack.gui.window.widget.WindowWidget;
+import org.bleachhack.setting.Setting;
+import org.bleachhack.setting.SettingDataHandler;
 import org.bleachhack.util.BleachPlayerManager;
-
-import com.google.gson.JsonElement;
+import org.bleachhack.util.io.BleachFileHelper;
 
 import net.minecraft.client.MinecraftClient;
 
-public abstract class Option<T> {
+public abstract class Option<T> extends Setting<T> {
 
 	public static Option<Boolean> GENERAL_CHECK_FOR_UPDATES = new OptionBoolean("Check For Updates", "Checks for BleachHack updates on startup.", true);
 	public static Option<Boolean> GENERAL_SHOW_UPDATE_SCREEN = new OptionBoolean("Show Update Screen", "Automatically shows the update screen on startup if an update is found.", true);
@@ -39,45 +40,16 @@ public abstract class Option<T> {
 			.map(ReflectionUtil::getStaticFieldValue)
 			.toArray(Option[]::new);
 
-	private final String name;
-	private final String tooltip;
-
-	private final T defaultValue;
-	private T value;
-
-	public Option(String name, String tooltip, T value) {
-		this.name = name;
-		this.tooltip = tooltip;
-		this.defaultValue = value;
-		this.value = value;
+	public Option(String name, String tooltip, T value, SettingDataHandler<T> handler) {
+		super(name, tooltip, value, handler);
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getTooltip() {
-		return tooltip;
-	}
-
-	public void resetValue() {
-		value = defaultValue;
-	}
-
-	public boolean isDefault() {
-		return value.equals(defaultValue);
-	}
-
-	public T getValue() {
-		return value;
-	}
-
+	@Override
 	public void setValue(T value) {
-		this.value = value;
+		super.setValue(value);
+
+		BleachFileHelper.SCHEDULE_SAVE_OPTIONS.set(true);
 	}
 
 	public abstract WindowWidget getWidget(int x, int y, int width, int height);
-
-	public abstract JsonElement serialize();
-	public abstract void deserialize(JsonElement json);
 }

@@ -27,11 +27,11 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingList;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingBlockList;
+import org.bleachhack.setting.module.SettingBlockList;
+import org.bleachhack.setting.module.SettingList;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.io.BleachFileMang;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.LineColor;
@@ -57,7 +57,7 @@ public class Search extends Module {
 				if (foundBlocks.size() > 1000000)
 					return;
 
-				boolean log = getSetting(4).asToggle().state;
+				boolean log = getSetting(4).asToggle().getState();
 				StringBuilder logBuilder = new StringBuilder();
 
 				SettingList<Block> list = getSetting(5).asList(Block.class);
@@ -149,7 +149,7 @@ public class Search extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		Set<Block> blockList = getSetting(5).asList(Block.class).getItems();
+		Set<Block> blockList = getSetting(5).asList(Block.class).getValue();
 
 		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
 			foundBlocks.clear();
@@ -174,7 +174,7 @@ public class Search extends Module {
 
 	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
-		int mode = getSetting(0).asMode().mode;
+		int mode = getSetting(0).asMode().getMode();
 
 		int i = 0;
 		for (BlockPos pos : foundBlocks) {
@@ -207,7 +207,7 @@ public class Search extends Module {
 			}
 
 			SettingToggle tracers = getSetting(3).asToggle();
-			if (tracers.state) {
+			if (tracers.getState()) {
 				// This is bad when bobbing is enabled!
 				Vec3d lookVec = new Vec3d(0, 0, 75)
 						.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
@@ -218,7 +218,7 @@ public class Search extends Module {
 						lookVec.x, lookVec.y, lookVec.z,
 						pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
 						LineColor.single(color[0], color[1], color[2], (int) (tracers.getChild(1).asSlider().getValue() * 255)),
-						(float) tracers.getChild(0).asSlider().getValue());
+						tracers.getChild(0).asSlider().getValueFloat());
 			}
 
 			i++;

@@ -32,10 +32,10 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.world.WorldUtils;
 
@@ -119,7 +119,7 @@ public class Dispenser32k extends Module {
 			return;
 		}
 
-		if (getSetting(5).asMode().mode == 1) {
+		if (getSetting(5).asMode().getMode() == 1) {
 			HitResult ray = mc.player.raycast(5, mc.getTickDelta(), false);
 			pos = new BlockPos(ray.getPos().x, Math.ceil(ray.getPos().y), ray.getPos().z);
 
@@ -179,7 +179,7 @@ public class Dispenser32k extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if ((getSetting(4).asToggle().state && !active && ticksPassed > 25) || (active && !(mc.currentScreen instanceof HopperScreen))) {
+		if ((getSetting(4).asToggle().getState() && !active && ticksPassed > 25) || (active && !(mc.currentScreen instanceof HopperScreen))) {
 			setEnabled(false);
 			return;
 		}
@@ -196,7 +196,7 @@ public class Dispenser32k extends Module {
 			return;
 		}
 
-		if (active && getSetting(1).asToggle().state && timer == 0)
+		if (active && getSetting(1).asToggle().getState() && timer == 0)
 			killAura();
 
 		if (mc.currentScreen instanceof Generic3x3ContainerScreen) {
@@ -218,11 +218,11 @@ public class Dispenser32k extends Module {
 			active = true;
 
 			if (active) {
-				if (getSetting(3).asMode().mode == 0) {
+				if (getSetting(3).asMode().getMode() == 0) {
 					timer = timer >= Math.round(20 / getSetting(2).asSlider().getValue()) ? 0 : timer + 1;
-				} else if (getSetting(3).asMode().mode == 1) {
+				} else if (getSetting(3).asMode().getMode() == 1) {
 					timer = 0;
-				} else if (getSetting(3).asMode().mode == 2) {
+				} else if (getSetting(3).asMode().getMode() == 2) {
 					timer = timer >= getSetting(2).asSlider().getValue() ? 0 : timer + 1;
 				}
 			}
@@ -259,7 +259,7 @@ public class Dispenser32k extends Module {
 	}
 
 	private void killAura() {
-		for (int i = 0; i < (getSetting(3).asMode().mode == 1 ? getSetting(2).asSlider().getValue() : 1); i++) {
+		for (int i = 0; i < (getSetting(3).asMode().getMode() == 1 ? getSetting(2).asSlider().getValue() : 1); i++) {
 			Entity target = null;
 
 			List<Entity> players = Streams.stream(mc.world.getEntities())

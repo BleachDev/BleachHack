@@ -19,12 +19,12 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingItemList;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingItemList;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
@@ -54,7 +54,7 @@ public class Scaffold extends Module {
 				new SettingToggle("NoSwing", false).withDesc("Doesn't swing your hand clientside."),
 				new SettingToggle("EmptyToggle", false).withDesc("Turns off when you run out of blocks."),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you are placing.").withChildren(
-						new SettingColor("Color", 1f, 0.75f, 0.2f, false).withDesc("Color for the block highlight."),
+						new SettingColor("Color", 255, 190, 50).withDesc("Color for the block highlight."),
 						new SettingToggle("Placed", false).withDesc("Highlights blocks that are already placed.")));
 	}
 
@@ -63,11 +63,11 @@ public class Scaffold extends Module {
 			return false;
 		}
 
-		if (getSetting(5).asToggle().state) {
+		if (getSetting(5).asToggle().getState()) {
 			boolean contains = getSetting(5).asToggle().getChild(1).asList(Item.class).contains(item);
 
-			return (getSetting(5).asToggle().getChild(0).asMode().mode == 0 && !contains)
-					|| (getSetting(5).asToggle().getChild(0).asMode().mode == 1 && contains);
+			return (getSetting(5).asToggle().getChild(0).asMode().getMode() == 0 && !contains)
+					|| (getSetting(5).asToggle().getChild(0).asMode().getMode() == 1 && contains);
 		}
 
 		return true;
@@ -80,7 +80,7 @@ public class Scaffold extends Module {
 		int slot = InventoryUtils.getSlot(false, i -> shouldUseItem(mc.player.getInventory().getStack(i).getItem()));
 
 		if (slot == -1) {
-			if (getSetting(10).asToggle().state) {
+			if (getSetting(10).asToggle().getState()) {
 				setEnabled(false);
 			}
 
@@ -88,7 +88,7 @@ public class Scaffold extends Module {
 		}
 
 		double range = getSetting(2).asSlider().getValue();
-		int mode = getSetting(0).asMode().mode;
+		int mode = getSetting(0).asMode().getMode();
 
 		Vec3d placeVec = mc.player.getPos().add(0, -0.85, 0);
 		Set<BlockPos> blocks = mode == 0
@@ -100,7 +100,7 @@ public class Scaffold extends Module {
 						new BlockPos(placeVec.add(0, 0, -range)))
 						: getSpiral(mode, new BlockPos(placeVec));
 
-		if (getSetting(6).asToggle().state
+		if (getSetting(6).asToggle().getState()
 				&& InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
 
 			if (mc.world.getBlockState(mc.player.getBlockPos().down()).getMaterial().isReplaceable()
@@ -108,12 +108,12 @@ public class Scaffold extends Module {
 					&& mc.player.getVelocity().y > 0) {
 				mc.player.setVelocity(mc.player.getVelocity().x, -0.1, mc.player.getVelocity().z);
 
-				if (!getSetting(6).asToggle().getChild(0).asToggle().state) {
+				if (!getSetting(6).asToggle().getChild(0).asToggle().getState()) {
 					mc.player.jump();
 				}
 			}
 
-			if (getSetting(6).asToggle().getChild(0).asToggle().state && mc.player.isOnGround()) {
+			if (getSetting(6).asToggle().getChild(0).asToggle().getState() && mc.player.isOnGround()) {
 				mc.player.jump();
 			}
 		}
@@ -123,9 +123,9 @@ public class Scaffold extends Module {
 			return;
 		}
 
-		if (getSetting(11).asToggle().state) {
+		if (getSetting(11).asToggle().getState()) {
 			for (BlockPos bp : blocks) {
-				if (getSetting(11).asToggle().getChild(1).asToggle().state || WorldUtils.isBlockEmpty(bp)) {
+				if (getSetting(11).asToggle().getChild(1).asToggle().getState() || WorldUtils.isBlockEmpty(bp)) {
 					renderBlocks.add(bp);
 				}
 			}
@@ -136,9 +136,9 @@ public class Scaffold extends Module {
 			boolean placed = WorldUtils.placeBlock(
 					bp, slot,
 					getSetting(3).asRotate(),
-					getSetting(4).asToggle().state,
-					getSetting(7).asToggle().state,
-					!getSetting(9).asToggle().state);
+					getSetting(4).asToggle().getState(),
+					getSetting(7).asToggle().getState(),
+					!getSetting(9).asToggle().getState());
 
 			if (placed) {
 				cap++;
@@ -152,13 +152,13 @@ public class Scaffold extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		if (getSetting(11).asToggle().state) {
-			float[] col = getSetting(11).asToggle().getChild(0).asColor().getRGBFloat();
+		if (getSetting(11).asToggle().getState()) {
+			int[] col = getSetting(11).asToggle().getChild(0).asColor().getRGBArray();
 			for (BlockPos bp : renderBlocks) {
-				Renderer.drawBoxBoth(bp, QuadColor.single(col[0], col[1], col[2], 0.5f), 2.5f);
+				Renderer.drawBoxBoth(bp, QuadColor.single(col[0], col[1], col[2], 128), 2.5f);
 
-				col[0] = Math.max(0f, col[0] - 0.01f);
-				col[2] = Math.min(1f, col[2] + 0.01f);
+				col[0] = Math.max(0, col[0] - 3);
+				col[2] = Math.min(255, col[2] + 3);
 			}
 		}
 	}

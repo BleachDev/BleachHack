@@ -22,9 +22,9 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
@@ -46,14 +46,14 @@ public class NewChunks extends Module {
 				new SettingToggle("Fill", true).withDesc("Fills in the newchunks.").withChildren(
 						new SettingSlider("Opacity", 0.01, 1, 0.3, 2).withDesc("The opacity of the fill.")),
 				new SettingToggle("NewChunks", true).withDesc("Shows all the chunks that are (most likely) completely new.").withChildren(
-						new SettingColor("Color", 0.8f, 0.6f, 0.85f, false).withDesc("The color of NewChunks.")),
+						new SettingColor("Color", 200, 150, 215).withDesc("The color of NewChunks.")),
 				new SettingToggle("OldChunks", false).withDesc("Shows all the chunks that have (most likely) been loaded before.").withChildren(
-						new SettingColor("Color", 0.9f, 0.2f, 0.2f, false).withDesc("The color of OldChunks.")));
+						new SettingColor("Color", 230, 50, 50).withDesc("The color of OldChunks.")));
 	}
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		if (getSetting(1).asToggle().state) {
+		if (getSetting(1).asToggle().getState()) {
 			newChunks.clear();
 			oldChunks.clear();
 		}
@@ -121,11 +121,12 @@ public class NewChunks extends Module {
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		int renderY = mc.world.getBottomY() + getSetting(0).asSlider().getValueInt();
+		int opacity = (int) (getSetting(2).asToggle().getChild(0).asSlider().getValueFloat() * 255);
 
-		if (getSetting(3).asToggle().state) {
-			int color = getSetting(3).asToggle().getChild(0).asColor().getRGB();
-			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
-			QuadColor fillColor = QuadColor.single(((int) (getSetting(2).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
+		if (getSetting(3).asToggle().getState()) {
+			int[] color = getSetting(3).asToggle().getChild(0).asColor().getRGBArray();
+			QuadColor outlineColor = QuadColor.single(color[0], color[1], color[2], 255);
+			QuadColor fillColor = QuadColor.single(color[0], color[1], color[2], opacity);
 
 			synchronized (newChunks) {
 				for (ChunkPos c: newChunks) {
@@ -134,7 +135,7 @@ public class NewChunks extends Module {
 								c.getStartX(), renderY, c.getStartZ(),
 								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
-						if (getSetting(2).asToggle().state) {
+						if (getSetting(2).asToggle().getState()) {
 							Renderer.drawBoxFill(box, fillColor, skipDirs);
 						}
 	
@@ -144,10 +145,10 @@ public class NewChunks extends Module {
 			}
 		}
 
-		if (getSetting(4).asToggle().state) {
-			int color = getSetting(4).asToggle().getChild(0).asColor().getRGB();
-			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
-			QuadColor fillColor = QuadColor.single(((int) (getSetting(2).asToggle().getChild(0).asSlider().getValueFloat() * 255) << 24) | color);
+		if (getSetting(4).asToggle().getState()) {
+			int[] color = getSetting(4).asToggle().getChild(0).asColor().getRGBArray();
+			QuadColor outlineColor = QuadColor.single(color[0], color[1], color[2], 255);
+			QuadColor fillColor = QuadColor.single(color[0], color[1], color[2], opacity);
 
 			synchronized (oldChunks) {
 				for (ChunkPos c: oldChunks) {
@@ -156,7 +157,7 @@ public class NewChunks extends Module {
 								c.getStartX(), renderY, c.getStartZ(),
 								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
-						if (getSetting(2).asToggle().state) {
+						if (getSetting(2).asToggle().getState()) {
 							Renderer.drawBoxFill(box, fillColor, skipDirs);
 						}
 	

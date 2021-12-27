@@ -39,9 +39,9 @@ import org.bleachhack.gui.clickgui.window.UIWindow.Position;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.ClientChunkSerializer;
 
 import java.io.BufferedOutputStream;
@@ -116,7 +116,7 @@ public class UI extends Module {
 		// Modulelist
 		container.windows.put("modulelist",
 				new UIWindow(new Position("l", 1, "t", 2), container,
-						() -> getSetting(0).asToggle().state,
+						() -> getSetting(0).asToggle().getState(),
 						this::getModuleListSize,
 						this::drawModuleList)
 				);
@@ -124,56 +124,56 @@ public class UI extends Module {
 		// Info
 		container.windows.put("coords",
 				new UIWindow(new Position("l", 1, "b", 0), container,
-						() -> getSetting(3).asToggle().state,
+						() -> getSetting(3).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(coordsText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, coordsText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("fps",
 				new UIWindow(new Position("l", 1, "coords", 0), container,
-						() -> getSetting(1).asToggle().state,
+						() -> getSetting(1).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(fpsText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, fpsText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("ping",
 				new UIWindow(new Position("l", 1, "fps", 0), container,
-						() -> getSetting(2).asToggle().state,
+						() -> getSetting(2).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(pingText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, pingText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("tps",
 				new UIWindow(new Position("l", 1, "ping", 0), container,
-						() -> getSetting(4).asToggle().state,
+						() -> getSetting(4).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(tpsText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, tpsText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("durability",
 				new UIWindow(new Position(0.2, 0.9), container,
-						() -> getSetting(5).asToggle().state,
+						() -> getSetting(5).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(durabilityText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, durabilityText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("server",
 				new UIWindow(new Position(0.2, 0.85, "durability", 0), container,
-						() -> getSetting(6).asToggle().state,
+						() -> getSetting(6).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(serverText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, serverText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("timestamp",
 				new UIWindow(new Position(0.2, 0.8, "server", 0), container,
-						() -> getSetting(7).asToggle().state,
+						() -> getSetting(7).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(timestampText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, timestampText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("chunksize",
 				new UIWindow(new Position(0.2, 0.75, "timestamp", 0), container,
-						() -> getSetting(8).asToggle().state,
+						() -> getSetting(8).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(chunksizeText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, chunksizeText, x + 1, y + 1, 0xa0a0a0))
 				);
@@ -181,7 +181,7 @@ public class UI extends Module {
 		// Players
 		container.windows.put("players",
 				new UIWindow(new Position("l", 1, "modulelist", 2), container,
-						() -> getSetting(9).asToggle().state,
+						() -> getSetting(9).asToggle().getState(),
 						this::getPlayerSize,
 						this::drawPlayerList)
 				);
@@ -189,7 +189,7 @@ public class UI extends Module {
 		// Armor
 		container.windows.put("armor",
 				new UIWindow(new Position(0.5, 0.85), container,
-						() -> getSetting(10).asToggle().state,
+						() -> getSetting(10).asToggle().getState(),
 						this::getArmorSize,
 						this::drawArmor)
 				);
@@ -197,7 +197,7 @@ public class UI extends Module {
 		// Lag-Meter
 		container.windows.put("lagmeter",
 				new UIWindow(new Position(0, 0.05, "c", 1), container,
-						() -> getSetting(11).asToggle().state,
+						() -> getSetting(11).asToggle().getState(),
 						this::getLagMeterSize,
 						this::drawLagMeter)
 				);
@@ -205,7 +205,7 @@ public class UI extends Module {
 		// Inventory
 		container.windows.put("inventory",
 				new UIWindow(new Position(0.7, 0.90), container,
-						() -> getSetting(12).asToggle().state,
+						() -> getSetting(12).asToggle().getState(),
 						this::getInventorySize,
 						this::drawInventory)
 				);
@@ -236,8 +236,8 @@ public class UI extends Module {
 
 		moduleListText.sort(Comparator.comparingInt(t -> -mc.textRenderer.getWidth(t)));
 
-		if (getSetting(0).asToggle().getChild(3).asToggle().state) {
-			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
+		if (getSetting(0).asToggle().getChild(3).asToggle().getState()) {
+			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().getMode();
 
 			if (watermarkMode == 0) {
 				moduleListText.add(0, BleachHack.watermark.getText().append(new LiteralText(" " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)))));
@@ -296,8 +296,8 @@ public class UI extends Module {
 
 		// Timestamp
 		String timeString = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
-				+ (getSetting(7).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-				+ (getSetting(7).asToggle().getChild(1).asToggle().state ? " yyyy" : "")));
+				+ (getSetting(7).asToggle().getChild(0).asToggle().getState() ? " zzz" : "")
+				+ (getSetting(7).asToggle().getChild(1).asToggle().getState() ? " yyyy" : "")));
 
 		timestampText = new LiteralText("Time: ")
 				.append(new LiteralText(timeString).styled(s -> s.withColor(Formatting.YELLOW)));
@@ -350,8 +350,8 @@ public class UI extends Module {
 			return new int[] { 0, 0 };
 		}
 
-		int inner = getSetting(0).asToggle().getChild(0).asToggle().state ? 1 : 0;
-		int outer = getSetting(0).asToggle().getChild(1).asToggle().state ? 4 : 3;
+		int inner = getSetting(0).asToggle().getChild(0).asToggle().getState() ? 1 : 0;
+		int outer = getSetting(0).asToggle().getChild(1).asToggle().getState() ? 4 : 3;
 		return new int[] { mc.textRenderer.getWidth(moduleListText.get(0)) + inner + outer, moduleListText.size() * 10 };
 	}
 
@@ -359,9 +359,9 @@ public class UI extends Module {
 		if (moduleListText.isEmpty()) return;
 
 		int arrayCount = 0;
-		boolean inner = getSetting(0).asToggle().getChild(0).asToggle().state;
-		boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
-		boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
+		boolean inner = getSetting(0).asToggle().getChild(0).asToggle().getState();
+		boolean outer = getSetting(0).asToggle().getChild(1).asToggle().getState();
+		boolean fill = getSetting(0).asToggle().getChild(2).asToggle().getState();
 		boolean rightAlign = x + mc.textRenderer.getWidth(moduleListText.get(0)) / 2 > mc.getWindow().getScaledWidth() / 2;
 
 		int startX = rightAlign ? x + mc.textRenderer.getWidth(moduleListText.get(0)) + 3 + (inner ? 1 : 0) + (outer ? 1 : 0) : x;
@@ -443,7 +443,7 @@ public class UI extends Module {
 			String text = "Server Lagging For: " + String.format(Locale.ENGLISH, "%.2f", (time - lastPacket) / 1000d) + "s";
 
 			int xd = x + 72 - mc.textRenderer.getWidth(text) / 2;
-			switch (getSetting(11).asToggle().getChild(0).asMode().mode) {
+			switch (getSetting(11).asToggle().getChild(0).asMode().getMode()) {
 				case 0 -> mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1 + Math.min((time - lastPacket - 1200) / 20, 0), 0xd0d0d0);
 				case 1 -> mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1,
 						(MathHelper.clamp((int) (time - lastPacket - 500) / 3, 5, 255) << 24) | 0xd0d0d0);
@@ -455,12 +455,12 @@ public class UI extends Module {
 	// --- Armor
 
 	public int[] getArmorSize() {
-		boolean vertical = getSetting(10).asToggle().getChild(0).asToggle().state;
+		boolean vertical = getSetting(10).asToggle().getChild(0).asToggle().getState();
 		return new int[] { vertical ? 18 : 74, vertical ? 62 : 16 };
 	}
 
 	public void drawArmor(MatrixStack matrices, int x, int y) {
-		boolean vertical = getSetting(10).asToggle().getChild(0).asToggle().state;
+		boolean vertical = getSetting(10).asToggle().getChild(0).asToggle().getState();
 
 		for (int count = 0; count < mc.player.getInventory().armor.size(); count++) {
 			ItemStack is = mc.player.getInventory().armor.get(count);
@@ -490,7 +490,7 @@ public class UI extends Module {
 			}
 
 			if (is.isDamageable()) {
-				int mode = getSetting(10).asToggle().getChild(1).asMode().mode;
+				int mode = getSetting(10).asToggle().getChild(1).asMode().getMode();
 				if (mode == 0) {
 					matrices.push();
 					matrices.scale(0.75f, 0.75f, 1f);
@@ -522,7 +522,7 @@ public class UI extends Module {
 	}
 
 	public void drawInventory(MatrixStack matrices, int x, int y) {
-		if (getSetting(12).asToggle().state) {
+		if (getSetting(12).asToggle().getState()) {
 			DrawableHelper.fill(matrices, x + 155, y, x, y + 53,
 					(getSetting(12).asToggle().getChild(0).asSlider().getValueInt() << 24) | 0x212120);
 
@@ -569,8 +569,8 @@ public class UI extends Module {
 			return getRainbow(0.5f, 0.5f, 10, 0);
 
 		return getRainbow(
-				(float) ui.getSetting(0).asToggle().getChild(5).asSlider().getValue(),
-				(float) ui.getSetting(0).asToggle().getChild(4).asSlider().getValue(),
+				ui.getSetting(0).asToggle().getChild(5).asSlider().getValueFloat(),
+				ui.getSetting(0).asToggle().getChild(4).asSlider().getValueFloat(),
 				ui.getSetting(0).asToggle().getChild(6).asSlider().getValue(),
 				offset);
 	}

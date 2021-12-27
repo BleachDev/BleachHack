@@ -15,7 +15,7 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.setting.module.SettingMode;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.render.debug.DebugRenderer;
@@ -33,7 +33,7 @@ public class MouseFriend extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		int setting = getSetting(0).asMode().mode;
+		int setting = getSetting(0).asMode().getMode();
 		int button = setting == 0 ? GLFW.GLFW_MOUSE_BUTTON_MIDDLE : setting == 1 ? GLFW.GLFW_MOUSE_BUTTON_RIGHT : setting + 2;
 
 		if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), button) == GLFW.GLFW_PRESS && !buttonHeld) {

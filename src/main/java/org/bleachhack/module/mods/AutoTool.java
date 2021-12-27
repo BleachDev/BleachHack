@@ -13,7 +13,7 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -68,9 +68,9 @@ public class AutoTool extends Module {
 					}
 				}
 			} else if (p.getAction() == Action.STOP_DESTROY_BLOCK) {
-				if (getSetting(1).asToggle().state) {
+				if (getSetting(1).asToggle().getState()) {
 					ItemStack handSlot = mc.player.getMainHandStack();
-					if (getSetting(0).asToggle().state && handSlot.isDamageable() && handSlot.getMaxDamage() - handSlot.getDamage() < 2
+					if (getSetting(0).asToggle().getState() && handSlot.isDamageable() && handSlot.getMaxDamage() - handSlot.getDamage() < 2
 							&& queueSlot == mc.player.getInventory().selectedSlot) {
 						queueSlot = mc.player.getInventory().selectedSlot == 0 ? 1 : mc.player.getInventory().selectedSlot - 1;
 					} else if (lastSlot >= 0 && lastSlot <= 8 && lastSlot != mc.player.getInventory().selectedSlot) {
@@ -96,7 +96,7 @@ public class AutoTool extends Module {
 		int bestSlot = mc.player.getInventory().selectedSlot;
 
 		ItemStack handSlot = mc.player.getInventory().getStack(bestSlot);
-		if (getSetting(0).asToggle().state && handSlot.isDamageable() && handSlot.getMaxDamage() - handSlot.getDamage() < 2) {
+		if (getSetting(0).asToggle().getState() && handSlot.isDamageable() && handSlot.getMaxDamage() - handSlot.getDamage() < 2) {
 			bestSlot = bestSlot == 0 ? 1 : bestSlot - 1;
 		}
 
@@ -110,13 +110,13 @@ public class AutoTool extends Module {
 				continue;
 
 			ItemStack stack = mc.player.getInventory().getStack(slot);
-			if (getSetting(0).asToggle().state && stack.isDamageable() && stack.getMaxDamage() - stack.getDamage() < 2) {
+			if (getSetting(0).asToggle().getState() && stack.isDamageable() && stack.getMaxDamage() - stack.getDamage() < 2) {
 				continue;
 			}
 
 			float speed = getMiningSpeed(stack, state);
 			if (speed > bestSpeed
-					|| (getSetting(2).asToggle().state
+					|| (getSetting(2).asToggle().getState()
 							&& speed == bestSpeed && !stack.isDamageable()
 							&& mc.player.getInventory().getStack(bestSlot).isDamageable()
 							&& EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, mc.player.getInventory().getStack(bestSlot)) == 0)) {

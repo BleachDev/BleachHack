@@ -1,7 +1,7 @@
 package org.bleachhack.mixin;
 
 import org.bleachhack.BleachHack;
-import org.bleachhack.gui.option.Option;
+import org.bleachhack.setting.option.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

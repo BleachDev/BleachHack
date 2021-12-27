@@ -18,7 +18,7 @@ import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.gui.EntityMenuScreen;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.collections.MutablePairList;
 import org.bleachhack.util.io.BleachFileHelper;
 import org.lwjgl.glfw.GLFW;
@@ -65,7 +65,7 @@ public class EntityMenu extends Module {
 			if (lookingAt.isPresent()) {
 				Entity e = lookingAt.get();
 
-				if (e instanceof LivingEntity && (e instanceof PlayerEntity || !getSetting(0).asToggle().state)) {
+				if (e instanceof LivingEntity && (e instanceof PlayerEntity || !getSetting(0).asToggle().getState())) {
 					mc.setScreen(new EntityMenuScreen((LivingEntity) e));
 				}
 			}

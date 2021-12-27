@@ -15,9 +15,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -68,7 +68,7 @@ public class PacketFly extends Module {
 			p.yaw = mc.player.getYaw();
 			p.pitch = mc.player.getPitch();
 
-			if (getSetting(4).asToggle().state) {
+			if (getSetting(4).asToggle().getState()) {
 				event.setCancelled(true);
 			}
 		}
@@ -121,7 +121,7 @@ public class PacketFly extends Module {
 		}
 
 		Entity target = mc.player.getRootVehicle();
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().getMode() == 0) {
 			if (timer > getSetting(3).asSlider().getValue()) {
 				moveVec = moveVec.add(0, -vspeed, 0);
 				timer = 0;
@@ -137,7 +137,7 @@ public class PacketFly extends Module {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(cachedPos.x, cachedPos.y, cachedPos.z, false));
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(cachedPos.x, cachedPos.y - 0.01, cachedPos.z, true));
 			}
-		} else if (getSetting(0).asMode().mode == 1) {
+		} else if (getSetting(0).asMode().getMode() == 1) {
 			//moveVec = Vec3d.ZERO;
 			/*if (mc.player.headYaw != mc.player.yaw) {
 				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookOnly(

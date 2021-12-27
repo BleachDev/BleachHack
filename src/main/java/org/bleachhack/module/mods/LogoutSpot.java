@@ -14,8 +14,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachQueue;
 import org.bleachhack.util.render.WorldRenderUtils;
 import org.bleachhack.util.world.PlayerCopyEntity;
@@ -54,7 +54,7 @@ public class LogoutSpot extends Module {
 			players.values().forEach(e -> e.getKey().despawn());
 		}
 
-		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(3).asToggle().state) {
+		if (getSetting(0).asToggle().getState() && getSetting(0).asToggle().getChild(3).asToggle().getState()) {
 			players.clear();
 		}
 
@@ -106,7 +106,7 @@ public class LogoutSpot extends Module {
 	// Removes the fake players based on settings
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState() && getSetting(0).asToggle().getChild(0).asToggle().getState()) {
 			players.values().removeIf(pair -> {
 				if (mc.player.distanceTo(pair.getLeft())
 						> getSetting(0).asToggle().getChild(0).asToggle().getChild(0).asSlider().getValue()) {
@@ -118,7 +118,7 @@ public class LogoutSpot extends Module {
 			});
 		}
 
-		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(1).asToggle().state) {
+		if (getSetting(0).asToggle().getState() && getSetting(0).asToggle().getChild(1).asToggle().getState()) {
 			players.values().removeIf(pair -> {
 				if ((System.currentTimeMillis() - pair.getRight()) / 1000L
 						> getSetting(0).asToggle().getChild(1).asToggle().getChild(0).asSlider().getValueLong()) {
@@ -130,13 +130,13 @@ public class LogoutSpot extends Module {
 			});
 		}
 
-		players.values().forEach(e -> e.getLeft().setGhost(getSetting(2).asToggle().state));
+		players.values().forEach(e -> e.getLeft().setGhost(getSetting(2).asToggle().getState()));
 	}
 
 	@BleachSubscribe
 	public void onPostEntityRender(EventEntityRender.PostAll event) {
 		for (Pair<PlayerCopyEntity, Long> playerPair: players.values()) {
-			if (getSetting(1).asToggle().state) {
+			if (getSetting(1).asToggle().getState()) {
 				PlayerCopyEntity player = playerPair.getLeft();
 
 				Vec3d rVec = new Vec3d(player.lastRenderX + (player.getX() - player.lastRenderX) * mc.getTickDelta(),
@@ -149,16 +149,16 @@ public class LogoutSpot extends Module {
 				List<String> lines = new ArrayList<>();
 				lines.add("\u00a74Logout:");
 
-				if (getSetting(1).asToggle().getChild(0).asToggle().state)
+				if (getSetting(1).asToggle().getChild(0).asToggle().getState())
 					lines.add("\u00a7c" + player.getDisplayName().getString());
 
-				if (getSetting(1).asToggle().getChild(1).asToggle().state)
+				if (getSetting(1).asToggle().getChild(1).asToggle().getState())
 					lines.add("\u00a7c" + (int) player.getX() + " " + (int) player.getY() + " " + (int) player.getZ());
 
-				if (getSetting(1).asToggle().getChild(2).asToggle().state)
+				if (getSetting(1).asToggle().getChild(2).asToggle().getState())
 					lines.add("\u00a7c" + (int) Math.ceil(player.getHealth() + player.getAbsorptionAmount()) + "hp");
 
-				if (getSetting(1).asToggle().getChild(3).asToggle().state)
+				if (getSetting(1).asToggle().getChild(3).asToggle().getState())
 					lines.add("\u00a7c" + getTimeElapsed(playerPair.getRight()));
 
 				for (int i = 0; i < lines.size(); i++) {
@@ -170,7 +170,7 @@ public class LogoutSpot extends Module {
 
 	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
-		if (getSetting(0).asToggle().state && getSetting(0).asToggle().getChild(2).asToggle().state
+		if (getSetting(0).asToggle().getState() && getSetting(0).asToggle().getChild(2).asToggle().getState()
 				&& event.getScreen() instanceof DisconnectedScreen) {
 			players.clear();
 		}
