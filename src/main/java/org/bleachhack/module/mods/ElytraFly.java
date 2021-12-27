@@ -16,8 +16,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
 
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
@@ -41,7 +41,7 @@ public class ElytraFly extends Module {
 	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
 		/* Cancel the retarded auto elytra movement */
-		if (getSetting(0).asMode().mode == 2 && mc.player.isFallFlying()) {
+		if (getSetting(0).asMode().getMode() == 2 && mc.player.isFallFlying()) {
 			if (!mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
 				event.setVec(new Vec3d(event.getVec().x, 0, event.getVec().z));
 			}
@@ -62,7 +62,7 @@ public class ElytraFly extends Module {
 		float radianYaw = (float) Math.toRadians(mc.player.getYaw());
 		float boost = getSetting(1).asSlider().getValueFloat();
 
-		switch (getSetting(0).asMode().mode) {
+		switch (getSetting(0).asMode().getMode()) {
 			case 0:
 				if (mc.player.isFallFlying() && currentVel <= getSetting(2).asSlider().getValue()) {
 					if (mc.options.keyBack.isPressed()) {
@@ -133,7 +133,7 @@ public class ElytraFly extends Module {
 
 	@BleachSubscribe
 	public void onMovement(EventSendMovementPackets event) {
-		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
+		if (getSetting(0).asMode().getMode() == 4 && shouldPacketFly()) {
 			mc.player.setVelocity(Vec3d.ZERO);
 			event.setCancelled(true);
 		}
@@ -141,14 +141,14 @@ public class ElytraFly extends Module {
 
 	@BleachSubscribe
 	public void onMovement(EventClientMove event) {
-		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
+		if (getSetting(0).asMode().getMode() == 4 && shouldPacketFly()) {
 			event.setCancelled(true);
 		}
 	}
 
 	@BleachSubscribe
 	public void onReadPacket(EventPacket.Read event) {
-		if (getSetting(0).asMode().mode == 4 && shouldPacketFly() && event.getPacket() instanceof PlayerPositionLookS2CPacket) {
+		if (getSetting(0).asMode().getMode() == 4 && shouldPacketFly() && event.getPacket() instanceof PlayerPositionLookS2CPacket) {
 			PlayerPositionLookS2CPacket p = (PlayerPositionLookS2CPacket) event.getPacket();
 
 			p.yaw = mc.player.getYaw();
@@ -158,7 +158,7 @@ public class ElytraFly extends Module {
 
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
-		if (getSetting(0).asMode().mode == 4 && shouldPacketFly()) {
+		if (getSetting(0).asMode().getMode() == 4 && shouldPacketFly()) {
 			if (event.getPacket() instanceof PlayerMoveC2SPacket.LookAndOnGround) {
 				event.setCancelled(true);
 				return;

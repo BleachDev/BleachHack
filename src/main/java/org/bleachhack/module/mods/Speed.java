@@ -12,8 +12,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
 
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.util.math.Vec3d;
@@ -38,7 +38,7 @@ public class Speed extends Module {
 			return;
 
 			/* Strafe */
-		if (getSetting(0).asMode().mode <= 1) {
+		if (getSetting(0).asMode().getMode() <= 1) {
 			if ((mc.player.forwardSpeed != 0 || mc.player.sidewaysSpeed != 0) /*&& mc.player.isOnGround()*/) {
 				if (!mc.player.isSprinting()) {
 					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
@@ -50,14 +50,14 @@ public class Speed extends Module {
 				
 				double vel = Math.abs(mc.player.getVelocity().getX()) + Math.abs(mc.player.getVelocity().getZ());
 				
-				if (getSetting(0).asMode().mode == 0 && vel >= 0.12 && mc.player.isOnGround()) {
+				if (getSetting(0).asMode().getMode() == 0 && vel >= 0.12 && mc.player.isOnGround()) {
 					mc.player.updateVelocity(vel >= 0.3 ? 0.0f : 0.15f, new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
 					mc.player.jump();
 				}
 			}
 			
 			/* OnGround */
-		} else if (getSetting(0).asMode().mode == 2) {
+		} else if (getSetting(0).asMode().getMode() == 2) {
 			if (mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25)
 				return;
 			
@@ -85,7 +85,7 @@ public class Speed extends Module {
 			}
 
 			/* MiniHop */
-		} else if (getSetting(0).asMode().mode == 3) {
+		} else if (getSetting(0).asMode().getMode() == 3) {
 			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0)
 				return;
 			
@@ -99,7 +99,7 @@ public class Speed extends Module {
 			}
 
 			/* Bhop */
-		} else if (getSetting(0).asMode().mode == 4) {
+		} else if (getSetting(0).asMode().getMode() == 4) {
 			if (mc.player.forwardSpeed > 0 && mc.player.isOnGround()) {
 				double speeds = 0.65 + getSetting(4).asSlider().getValue() / 30;
 				

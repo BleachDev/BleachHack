@@ -21,8 +21,8 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileMang;
 import org.bleachhack.util.render.Renderer;
@@ -91,7 +91,7 @@ public class Notebot extends Module {
 				if (blockTunes.containsKey(pos))
 					continue;
 
-				if (getSetting(2).asToggle().state) {
+				if (getSetting(2).asToggle().getState()) {
 					if (!blockTunes.containsValue(i[0])) {
 						blockTunes.put(pos, i[0]); 
 						break;
@@ -109,7 +109,7 @@ public class Notebot extends Module {
 			}
 		}
 
-		int totalTunes = getSetting(2).asToggle().state ? (int) tunes.stream().map(i -> i[0]).distinct().count() : tunes.size();
+		int totalTunes = getSetting(2).asToggle().getState() ? (int) tunes.stream().map(i -> i[0]).distinct().count() : tunes.size();
 		if (totalTunes > blockTunes.size()) {
 			BleachLogger.warn("Mapping Error: Missing " + (totalTunes - blockTunes.size()) + " Noteblocks");
 		}
@@ -129,9 +129,9 @@ public class Notebot extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		/* Tune Noteblocks */
-		int tuneMode = getSetting(0).asToggle().getChild(0).asMode().mode;
+		int tuneMode = getSetting(0).asToggle().getChild(0).asMode().getMode();
 
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 				int note = getNote(e.getKey());
 				if (note == -1)
@@ -177,7 +177,7 @@ public class Notebot extends Module {
 		}
 
 		if (loopityloop) {
-			if (getSetting(3).asToggle().state) {
+			if (getSetting(3).asToggle().getState()) {
 				try {
 					List<String> files = new ArrayList<>();
 					Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
@@ -189,7 +189,7 @@ public class Notebot extends Module {
 					BleachLogger.info("Now Playing: \u00a7a" + filePath);
 				} catch (IOException ignored) {
 				}
-			} else if (getSetting(1).asToggle().state) {
+			} else if (getSetting(1).asToggle().getState()) {
 				timer = -10;
 			}
 		}
@@ -207,7 +207,7 @@ public class Notebot extends Module {
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
 			for (int[] i : curNotes) {
 				if (isNoteblock(e.getKey()) && (i[1] == (getNote(e.getKey()))
-						&& (getSetting(2).asToggle().state
+						&& (getSetting(2).asToggle().getState()
 								|| i[2] == (getInstrument(e.getKey()).ordinal()))))
 					playBlock(e.getKey());
 			}

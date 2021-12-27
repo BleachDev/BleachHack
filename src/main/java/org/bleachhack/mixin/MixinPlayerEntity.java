@@ -55,7 +55,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				breakingSpeed *= 1.0F + (StatusEffectUtil.getHasteAmplifier(this) + 1) * 0.2F;
 			}
 
-			if (!speedMine.getSetting(4).asToggle().state) {
+			if (!speedMine.getSetting(4).asToggle().getState()) {
 				if (this.hasStatusEffect(StatusEffects.MINING_FATIGUE)) {
 					float fatigueMult;
 					switch (this.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
@@ -77,7 +77,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				}
 			}
 
-			if (!speedMine.getSetting(5).asToggle().state) {
+			if (!speedMine.getSetting(5).asToggle().getState()) {
 				if (this.isSubmergedIn(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
 					breakingSpeed /= 5.0F;
 				}
@@ -87,8 +87,8 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 				}
 			}
 
-			if (speedMine.getSetting(0).asMode().mode == 1)
-				breakingSpeed *= (float) speedMine.getSetting(3).asSlider().getValue();
+			if (speedMine.getSetting(0).asMode().getMode() == 1)
+				breakingSpeed *= speedMine.getSetting(3).asSlider().getValueFloat();
 
 			ci.setReturnValue(breakingSpeed);
 		}

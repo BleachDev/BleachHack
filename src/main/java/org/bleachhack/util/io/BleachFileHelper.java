@@ -19,13 +19,14 @@ import org.bleachhack.gui.clickgui.UIClickGuiScreen;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow;
 import org.bleachhack.gui.clickgui.window.UIWindow;
 import org.bleachhack.gui.clickgui.window.UIWindow.Position;
-import org.bleachhack.gui.option.Option;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.setting.base.SettingBase;
+import org.bleachhack.setting.module.ModuleSetting;
+import org.bleachhack.setting.option.Option;
 import org.bleachhack.util.BleachLogger;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,52 +64,30 @@ public class BleachFileHelper {
 	}
 
 	public static void saveModules() {
-		JsonObject jo = new JsonObject();
+		JsonObject json = new JsonObject();
 
-		for (Module m : ModuleManager.getModules()) {
-			JsonObject mo = new JsonObject();
+		for (Module mod : ModuleManager.getModules()) {
+			JsonObject modjson = new JsonObject();
 
-			if (m.isDefaultEnabled() != m.isEnabled() && !m.getName().equals("ClickGui") && !m.getName().equals("Freecam")) {
-				mo.add("toggled", new JsonPrimitive(m.isEnabled()));
+			if (mod.isEnabled() != mod.isDefaultEnabled() && !mod.getName().equals("ClickGui") && !mod.getName().equals("Freecam")) {
+				modjson.add("toggled", new JsonPrimitive(mod.isEnabled()));
 			}
 
-			if (m.getKey() >= 0 || m.getDefaultKey() >= 0 /* Force saving of modules with a default bind to prevent them reapplying the
-			 * default bind */) {
-				mo.add("bind", new JsonPrimitive(m.getKey()));
+			JsonObject setjson = new JsonObject();
+			Map<String, ModuleSetting<?>> settingMap = getSettingMap(mod.getSettings());
+			for (Entry<String, ModuleSetting<?>> s: settingMap.entrySet()) {
+				if (!s.getValue().isDefault())
+					setjson.add(s.getKey(), s.getValue().write());
 			}
 
-			if (!m.getSettings().isEmpty()) {
-				JsonObject so = new JsonObject();
-				// Seperate JsonObject with all the settings to keep the extra number so when it
-				// reads, it doesn't mess up the order
-				JsonObject fullSo = new JsonObject();
+			if (setjson.size() != 0)
+				modjson.add("settings", setjson);
 
-				for (SettingBase s : m.getSettings()) {
-					String name = s.getName();
-
-					int extra = 0;
-					while (fullSo.has(name)) {
-						extra++;
-						name = s.getName() + extra;
-					}
-
-					fullSo.add(name, s.saveSettings());
-					if (!s.isDefault())
-						so.add(name, s.saveSettings());
-				}
-
-				if (so.size() != 0) {
-					mo.add("settings", so);
-				}
-
-			}
-
-			if (mo.size() != 0) {
-				jo.add(m.getName(), mo);
-			}
+			if (modjson.size() != 0)
+				json.add(mod.getName(), modjson);
 		}
 
-		BleachJsonHelper.setJsonFile("modules.json", jo);
+		BleachJsonHelper.setJsonFile("modules.json", json);
 	}
 
 	public static void readModules() {
@@ -139,27 +118,19 @@ public class BleachFileHelper {
 					}
 				}
 
-				if (mo.has("bind") && mo.get("bind").isJsonPrimitive() && mo.get("bind").getAsJsonPrimitive().isNumber()) {
-					mod.setKey(mo.get("bind").getAsInt());
-				}
-
 				if (mo.has("settings") && mo.get("settings").isJsonObject()) {
+					Map<String, ModuleSetting<?>> settingMap = getSettingMap(mod.getSettings());
+
 					for (Entry<String, JsonElement> se : mo.get("settings").getAsJsonObject().entrySet()) {
-						// Map to keep track if there are multiple settings with the same name
-						Map<String, Integer> sNames = new HashMap<>();
-
-						for (SettingBase sb : mod.getSettings()) {
-							String name = sNames.containsKey(sb.getName()) ? sb.getName() + sNames.get(sb.getName()) : sb.getName();
-
-							if (name.equals(se.getKey())) {
-								try {
-									sb.readSettings(se.getValue());
-								} catch (Exception ignored) {}
-
-								break;
-							} else {
-								sNames.put(sb.getName(), sNames.containsKey(sb.getName()) ? sNames.get(sb.getName()) + 1 : 1);
-							}
+						try {
+							 ModuleSetting<?> s = settingMap.get(se.getKey());
+							 if (s != null) {
+								 s.read(se.getValue());
+							 } else {
+								 BleachLogger.logger.warn("Error reading setting \"" + se.getKey() + "\" in module " + mod.getName() + ", removed?");
+							 }
+						} catch (Exception ex) {
+							BleachLogger.logger.error("Error reading setting \"" + se.getKey() + "\" in module " + mod.getName() + ": " + se.getValue(), ex);
 						}
 					}
 				}
@@ -167,11 +138,25 @@ public class BleachFileHelper {
 		}
 	}
 
+	private static Map<String, ModuleSetting<?>> getSettingMap(Collection<ModuleSetting<?>> settings) {
+		Map<String, ModuleSetting<?>> settingMap = new HashMap<>();
+		for (ModuleSetting<?> s: settings) {
+			String name = s.getName();
+			int i = 1;
+			while (settingMap.containsKey(name))
+				name = s.getName() + "$" + i++;
+
+			settingMap.put(name, s);
+		}
+
+		return settingMap;
+	}
+
 	public static void saveOptions() {
 		JsonObject jo = new JsonObject();
 
 		for (Option<?> o: Option.OPTIONS) {
-			jo.add(o.getName(), o.serialize());
+			jo.add(o.getName(), o.write());
 		}
 
 		BleachJsonHelper.setJsonFile("options.json", jo);
@@ -184,9 +169,9 @@ public class BleachFileHelper {
 			return;
 
 		for (Option<?> o: Option.OPTIONS) {
-			if (jo.has(o.getName())) {
-				o.deserialize(jo.get(o.getName()));
-			}
+			JsonElement je = jo.get(o.getName());
+			if (je != null)
+				o.read(je);
 		}
 	}
 

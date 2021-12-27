@@ -14,9 +14,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingBlockList;
+import org.bleachhack.setting.module.SettingBlockList;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.WorldUtils;
 
 import net.minecraft.block.Block;
@@ -100,7 +100,7 @@ public class Xray extends Module {
 	public void onRenderBlockDrawSide(EventRenderBlock.ShouldDrawSide event) {
 		if (getSetting(2).asList(Block.class).contains(event.getState().getBlock())) {
 			event.setDrawSide(true);
-		} else if (!getSetting(1).asToggle().state) {
+		} else if (!getSetting(1).asToggle().getState()) {
 			event.setDrawSide(false);
 		}
 	}
@@ -108,8 +108,8 @@ public class Xray extends Module {
 	@BleachSubscribe
 	public void onRenderBlockTesselate(EventRenderBlock.Tesselate event) {
 		if (!getSetting(2).asList(Block.class).contains(event.getState().getBlock())) {
-			if (getSetting(1).asToggle().state) {
-				if (getSetting(1).asToggle().getChild(1).asToggle().state
+			if (getSetting(1).asToggle().getState()) {
+				if (getSetting(1).asToggle().getChild(1).asToggle().getState()
 						&& (event.getState().getBlock() instanceof FernBlock
 								|| event.getState().getBlock() instanceof TallPlantBlock
 								|| WorldUtils.getTopBlockIgnoreLeaves(event.getPos().getX(), event.getPos().getZ()) == event.getPos().getY())) {
@@ -126,14 +126,14 @@ public class Xray extends Module {
 
 	@BleachSubscribe
 	public void onRenderBlockLayer(EventRenderBlock.Layer event) {
-		if (getSetting(1).asToggle().state && !getSetting(2).asList(Block.class).contains(event.getState().getBlock())) {
+		if (getSetting(1).asToggle().getState() && !getSetting(2).asList(Block.class).contains(event.getState().getBlock())) {
 			event.setLayer(RenderLayer.getTranslucent());
 		}
 	}
 
 	@BleachSubscribe
 	public void onRenderFluid(EventRenderFluid event) {
-		if (!getSetting(0).asToggle().state) {
+		if (!getSetting(0).asToggle().getState()) {
 			event.setCancelled(true);
 		}
 	}

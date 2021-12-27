@@ -14,10 +14,10 @@ import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.mixin.AccessorMinecraftClient;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
@@ -40,7 +40,7 @@ public class AirPlace extends Module {
 						new SettingMode("Render", "Box+Fill", "Box", "Fill").withDesc("The rendering method."),
 						new SettingSlider("Box", 0.1, 4, 2, 1).withDesc("The width/thickness of the box lines."),
 						new SettingSlider("Fill", 0, 1, 0.3, 2).withDesc("The opacity of the fill."),
-						new SettingColor("Color", 0.5f, 0.5f, 0.5f, false).withDesc("The color of the highlight.")),
+						new SettingColor("Color", 128, 128, 128).withDesc("The color of the highlight.")),
 				new SettingMode("Mode", "Multi", "Single").withDesc("Whether to place a block once per click or multiple blocks if the button is held down."));
 	}
 
@@ -52,11 +52,11 @@ public class AirPlace extends Module {
 			return;
 		}
 
-		if (getSetting(1).asMode().mode == 0) {
+		if (getSetting(1).asMode().getMode() == 0) {
 			if (((AccessorMinecraftClient) mc).getItemUseCooldown() == 4 && isKeyUsePressed) {
 				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget));
 			}
-		} else if (getSetting(1).asMode().mode == 1) {
+		} else if (getSetting(1).asMode().getMode() == 1) {
 			if (!pressed && isKeyUsePressed) {
 				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget));
 				pressed = true;
@@ -74,16 +74,16 @@ public class AirPlace extends Module {
 
 		BlockPos pos = ((BlockHitResult) mc.crosshairTarget).getBlockPos();
 
-		int mode = getSetting(0).asToggle().getChild(0).asMode().mode;
-		float[] rgb = getSetting(0).asToggle().getChild(3).asColor().getRGBFloat();
+		int mode = getSetting(0).asToggle().getChild(0).asMode().getMode();
+		int[] rgb = getSetting(0).asToggle().getChild(3).asColor().getRGBArray();
 
 		if (mode == 0 || mode == 1) {
 			float outlineWidth = getSetting(0).asToggle().getChild(1).asSlider().getValueFloat();
-			Renderer.drawBoxOutline(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
+			Renderer.drawBoxOutline(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], 255), outlineWidth);
 		}
 
 		if (mode == 0 || mode == 2) {
-			float fillAlpha = getSetting(0).asToggle().getChild(2).asSlider().getValueFloat();
+			int fillAlpha = (int) (getSetting(0).asToggle().getChild(2).asSlider().getValueFloat() * 255);
 			Renderer.drawBoxFill(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
 		}
 

@@ -4,7 +4,7 @@ import org.bleachhack.event.events.EventInteract;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.other.SettingBlockList;
+import org.bleachhack.setting.module.SettingBlockList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

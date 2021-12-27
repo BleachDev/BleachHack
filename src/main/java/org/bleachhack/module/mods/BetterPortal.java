@@ -14,7 +14,7 @@ import org.bleachhack.event.events.EventSoundPlay;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.WorldUtils;
 
 import net.minecraft.block.Blocks;
@@ -33,7 +33,7 @@ public class BetterPortal extends Module {
 
 	@BleachSubscribe
 	public void onClientMove(EventClientMove event) {
-		if (getSetting(1).asToggle().state) {
+		if (getSetting(1).asToggle().getState()) {
 			if (WorldUtils.doesBoxTouchBlock(mc.player.getBoundingBox(), Blocks.NETHER_PORTAL)) {
 				mc.player.lastNauseaStrength = -1f;
 				mc.player.nextNauseaStrength = -1f;
@@ -43,16 +43,16 @@ public class BetterPortal extends Module {
 
 	@BleachSubscribe
 	public void onParticle(EventParticle.Normal event) {
-		if (getSetting(2).asToggle().state && event.getParticle() instanceof PortalParticle) {
+		if (getSetting(2).asToggle().getState() && event.getParticle() instanceof PortalParticle) {
 			event.setCancelled(true);
 		}
 	}
 
 	@BleachSubscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
-		if (getSetting(3).asToggle().state) {
+		if (getSetting(3).asToggle().getState()) {
 			String path = event.getInstance().getId().getPath();
-			if (path.equals("block.portal.trigger") || (getSetting(3).asToggle().getChild(0).asToggle().state && path.equals("block.portal.ambient"))) {
+			if (path.equals("block.portal.trigger") || (getSetting(3).asToggle().getChild(0).asToggle().getState() && path.equals("block.portal.ambient"))) {
 				event.setCancelled(true);
 			}
 		}

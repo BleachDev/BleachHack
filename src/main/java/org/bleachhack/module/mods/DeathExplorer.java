@@ -15,7 +15,7 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DisconnectedScreen;
@@ -52,7 +52,7 @@ public class DeathExplorer extends Module {
 
 	@BleachSubscribe
 	public void onRenderInGameHud(EventRenderInGameHud event) {
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			int length = mc.textRenderer.getWidth("You are in dead");
 			mc.textRenderer.drawWithShadow(event.getMatrix(), "You are dead", mc.getWindow().getScaledWidth() / 2 - length / 2, 10, 0xcc4040);
 		}

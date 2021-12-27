@@ -45,8 +45,8 @@ public class EventSkyRender extends Event {
 			return tickDelta;
 		}
 
-		public void setColor(float[] color) {
-			this.color = new Vec3d(color[0], color[1], color[2]);
+		public void setColor(Vec3d color) {
+			this.color = color;
 		}
 
 		public Vec3d getColor() {

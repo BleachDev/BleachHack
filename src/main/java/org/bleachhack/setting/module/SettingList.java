@@ -6,10 +6,8 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package org.bleachhack.module.setting.base;
+package org.bleachhack.setting.module;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -20,40 +18,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 import org.bleachhack.gui.clickgui.window.ModuleWindow;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.gui.window.WindowScreen;
 import org.bleachhack.gui.window.widget.WindowButtonWidget;
 import org.bleachhack.gui.window.widget.WindowScrollbarWidget;
 import org.bleachhack.gui.window.widget.WindowTextFieldWidget;
-import org.bleachhack.util.BleachLogger;
+import org.bleachhack.setting.SettingDataHandler;
+import org.bleachhack.setting.SettingDataHandlers;
 import org.bleachhack.util.io.BleachFileHelper;
 
 import java.util.*;
 
-public abstract class SettingList<T> extends SettingBase {
+public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 
-	protected String text;
 	protected String windowText;
+	protected Set<T> itemPool;
 
-	protected Set<T> itemPool = new LinkedHashSet<>();
-	protected Set<T> items = new LinkedHashSet<>();
-
-	protected Set<T> defaultItems = new LinkedHashSet<>();
-
-	@SafeVarargs // eclipse bruh hours
-	public SettingList(String text, String windowText, Collection<T> itemPool, T... defaultItems) {
-		this.text = text;
+	@SuppressWarnings("unchecked")
+	public SettingList(String text, String windowText, SettingDataHandler<T> itemHandler, Collection<T> itemPool, T... defaultItems) {
+		super(text, new LinkedHashSet<>(Arrays.asList(defaultItems)), v -> (LinkedHashSet<T>) v.clone(), SettingDataHandlers.ofCollection(itemHandler, LinkedHashSet::new));
 		this.windowText = windowText;
-
-		Collections.addAll(this.defaultItems, defaultItems);
-		this.itemPool.addAll(itemPool);
-		this.itemPool.removeAll(this.defaultItems);
-		this.items.addAll(this.defaultItems);
-	}
-
-	public String getName() {
-		return windowText;
+		this.itemPool = new LinkedHashSet<>(itemPool);
 	}
 
 	public void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len) {
@@ -61,7 +49,7 @@ public abstract class SettingList<T> extends SettingBase {
 			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
 		}
 
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x + 3, y + 2, 0xcfe0cf);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, getName(), x + 3, y + 2, 0xcfe0cf);
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, "...", x + len - 7, y + 2, 0xcfd0cf);
 
@@ -74,11 +62,7 @@ public abstract class SettingList<T> extends SettingBase {
 	}
 
 	public boolean contains(T item) {
-		return items.contains(item);
-	}
-
-	public Set<T> getItems() {
-		return items;
+		return getValue().contains(item);
 	}
 
 	public void renderItem(MinecraftClient mc, MatrixStack matrices, T item, int x, int y, int w, int h) {
@@ -94,49 +78,18 @@ public abstract class SettingList<T> extends SettingBase {
 		matrices.pop();
 	}
 
-	public abstract T getItemFromString(String string);
-	public abstract String getStringFromItem(T item);
+	/**
+	 * The human readable name for this item, the internal name is used for read/writing.
+	 */
+	public abstract Text getName(T item);
 
 	public SettingList<T> withDesc(String desc) {
-		description = desc;
+		setTooltip(desc);
 		return this;
 	}
 
 	public int getHeight(int len) {
 		return 12;
-	}
-
-	public void readSettings(JsonElement settings) {
-		JsonArray ja = (JsonArray) settings;
-
-		itemPool.addAll(items);
-		items.clear();
-		for (JsonElement je: ja) {
-			if (je.isJsonPrimitive()) {
-				T item = getItemFromString(je.getAsString());
-				if (item != null) {
-					itemPool.remove(item);
-					items.add(item);
-				} else {
-					BleachLogger.logger.error("Error Importing item: " + je);
-				}
-			}
-		}
-	}
-
-	public JsonElement saveSettings() {
-		JsonArray ja = new JsonArray();
-
-		for (T e: items) {
-			ja.add(getStringFromItem(e));
-		}
-
-		return ja;
-	}
-
-	@Override
-	public boolean isDefault() {
-		return items.equals(defaultItems);
 	}
 
 	private class ListWidowScreen extends WindowScreen {
@@ -169,22 +122,19 @@ public abstract class SettingList<T> extends SettingBase {
 			int y2 = getWindow(0).y2 - getWindow(0).y1;
 
 			getWindow(0).addWidget(new WindowButtonWidget(x2 - 50, y2 - 22, x2 - 5, y2 - 5, "Reset", () -> {
-				itemPool.addAll(items);
-				items.clear();
-				items.addAll(defaultItems);
-				itemPool.removeAll(defaultItems);
+				getValue().clear();
+				getValue().addAll(defaultValue);
 				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}));
 
 			getWindow(0).addWidget(new WindowButtonWidget(x2 - 100, y2 - 22, x2 - 55, y2 - 5, "Clear", () -> {
-				itemPool.addAll(items);
-				items.clear();
+				getValue().clear();
 				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}));
 
 			getWindow(0).addWidget(new WindowButtonWidget(x2 - 150, y2 - 22, x2 - 105, y2 - 5, "Add All", () -> {
-				items.addAll(itemPool);
-				itemPool.clear();
+				getValue().clear();
+				getValue().addAll(itemPool);
 				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}));
 
@@ -214,10 +164,10 @@ public abstract class SettingList<T> extends SettingBase {
 				int renderEntries = 0;
 				int entries = 0;
 
-				scrollbar.setTotalHeight(items.size() * 21);
+				scrollbar.setTotalHeight(getValue().size() * 21);
 				int offset = scrollbar.getPageOffset();
 
-				for (T e: items) {
+				for (T e: getValue()) {
 					if (entries >= offset / 21 && renderEntries < maxEntries) {
 						drawEntry(matrices, e, x1 + 6, y1 + 15 + entries * 21 - offset, x2 - x1 - 19, 20, mouseX, mouseY);
 						renderEntries++;
@@ -233,15 +183,16 @@ public abstract class SettingList<T> extends SettingBase {
 					Set<T> toDraw = new LinkedHashSet<>();
 
 					for (T e: itemPool) {
-						if (toDraw.size() >= 10) break;
+						if (toDraw.size() >= 10)
+							break;
 
-						if (getStringFromItem(e).toLowerCase(Locale.ENGLISH).contains(inputField.textField.getText().toLowerCase(Locale.ENGLISH))) {
+						if (!getValue().contains(e) && getName(e).getString().toLowerCase(Locale.ENGLISH).contains(inputField.textField.getText().toLowerCase(Locale.ENGLISH))) {
 							toDraw.add(e);
 						}
 					}
 
 					int curY = y1 + inputField.y1 - 4 - toDraw.size() * 17;
-					int longest = toDraw.stream().map(e -> textRenderer.getWidth(getStringFromItem(e))).min(Comparator.reverseOrder()).orElse(0);
+					int longest = toDraw.stream().mapToInt(e -> textRenderer.getWidth(getName(e))).max().orElse(0);
 
 					RenderSystem.getModelViewStack().push();
 					RenderSystem.getModelViewStack().translate(0, 0, 150);
@@ -271,7 +222,7 @@ public abstract class SettingList<T> extends SettingBase {
 
 			renderItem(client, matrices, item, x, y, height, height);
 
-			drawStringWithShadow(matrices, textRenderer, getStringFromItem(item), x + height + 4, y + 4, -1);
+			drawTextWithShadow(matrices, textRenderer, getName(item), x + height + 4, y + 4, -1);
 			drawStringWithShadow(matrices, textRenderer, "\u00a7cx", x + width - 10, y + 5, -1);
 		}
 
@@ -285,7 +236,7 @@ public abstract class SettingList<T> extends SettingBase {
 
 			renderItem(client, matrices, item, x, y, height, height);
 
-			drawStringWithShadow(matrices, textRenderer, getStringFromItem(item), x + height + 4, y + 4, -1);
+			drawTextWithShadow(matrices, textRenderer, getName(item), x + height + 4, y + 4, -1);
 		}
 
 		public void onClose() {
@@ -299,15 +250,13 @@ public abstract class SettingList<T> extends SettingBase {
 
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
 			if (toAddItem != null) {
-				items.add(toAddItem);
-				itemPool.remove(toAddItem);
+				getValue().add(toAddItem);
 				inputField.textField.setTextFieldFocused(true);
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
 				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 				return false;
 			} else if (toDeleteItem != null) {
-				itemPool.add(toDeleteItem);
-				items.remove(toDeleteItem);
+				getValue().remove(toDeleteItem);
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
 				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 			}

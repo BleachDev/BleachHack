@@ -14,8 +14,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.EntityUtils;
 import org.bleachhack.util.world.WorldUtils;
 
@@ -51,7 +51,7 @@ public class BowBot extends Module {
 		if (!(mc.player.getMainHandStack().getItem() instanceof RangedWeaponItem) || !mc.player.isUsingItem())
 			return;
 
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			if (mc.player.getMainHandStack().getItem() == Items.CROSSBOW
 					&& (float) mc.player.getItemUseTime() / (float) CrossbowItem.getPullTime(mc.player.getMainHandStack()) >= 1f) {
 				mc.player.stopUsingItem();
@@ -64,15 +64,15 @@ public class BowBot extends Module {
 			}
 		}
 
-		// skidded from wurst no bully pls
+		// Credit: https://github.com/Wurst-Imperium/Wurst7/blob/master/src/main/java/net/wurstclient/hacks/BowAimbotHack.java
 		SettingToggle aimToggle = getSetting(1).asToggle();
-		if (aimToggle.state) {
+		if (aimToggle.getState()) {
 			LivingEntity target = Streams.stream(mc.world.getEntities())
 					.filter(e -> EntityUtils.isAttackable(e, true)
-							&& (!aimToggle.getChild(3).asToggle().state || mc.player.canSee(e)))
-					.filter(e -> (aimToggle.getChild(0).asToggle().state && EntityUtils.isPlayer(e))
-							|| (aimToggle.getChild(1).asToggle().state && EntityUtils.isMob(e))
-							|| (aimToggle.getChild(2).asToggle().state && EntityUtils.isAnimal(e)))
+							&& (!aimToggle.getChild(3).asToggle().getState() || mc.player.canSee(e)))
+					.filter(e -> (aimToggle.getChild(0).asToggle().getState() && EntityUtils.isPlayer(e))
+							|| (aimToggle.getChild(1).asToggle().getState() && EntityUtils.isMob(e))
+							|| (aimToggle.getChild(2).asToggle().getState() && EntityUtils.isAnimal(e)))
 					.sorted(Comparator.comparing(mc.player::distanceTo))
 					.map(e -> (LivingEntity) e)
 					.findFirst().orElse(null);

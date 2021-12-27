@@ -17,7 +17,7 @@ import org.bleachhack.event.events.EventRenderShader;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.setting.module.SettingMode;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -53,8 +53,8 @@ public class ShaderRender extends Module {
 	@BleachSubscribe
 	public void onWorldRender(EventRenderShader event) {
 		if (lastShader == null || lastWidth != mc.getWindow().getFramebufferWidth() || lastHeight != mc.getWindow().getFramebufferHeight()
-				|| !shaders.get(getSetting(0).asMode().mode).equals(lastId)) {
-			lastId = shaders.get(getSetting(0).asMode().mode);
+				|| !shaders.get(getSetting(0).asMode().getMode()).equals(lastId)) {
+			lastId = shaders.get(getSetting(0).asMode().getMode());
 			lastWidth = mc.getWindow().getFramebufferWidth();
 			lastHeight = mc.getWindow().getFramebufferHeight();
 

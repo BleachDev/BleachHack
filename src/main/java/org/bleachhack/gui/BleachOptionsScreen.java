@@ -8,13 +8,13 @@
  */
 package org.bleachhack.gui;
 
-import org.bleachhack.gui.option.Option;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.gui.window.WindowScreen;
 import org.bleachhack.gui.window.widget.WindowButtonWidget;
 import org.bleachhack.gui.window.widget.WindowScrollbarWidget;
 import org.bleachhack.gui.window.widget.WindowTextWidget;
 import org.bleachhack.gui.window.widget.WindowWidget;
+import org.bleachhack.setting.option.Option;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;

@@ -12,7 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import org.apache.commons.lang3.ArrayUtils;
-import org.bleachhack.gui.option.Option;
+import org.bleachhack.setting.option.Option;
 import org.bleachhack.util.BleachLogger;
 
 import java.util.stream.Stream;

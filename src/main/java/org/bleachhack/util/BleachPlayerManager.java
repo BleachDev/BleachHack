@@ -12,7 +12,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonArray;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
-import org.bleachhack.gui.option.Option;
+
+import org.bleachhack.setting.option.Option;
 import org.bleachhack.util.io.BleachOnlineMang;
 
 import java.net.http.HttpResponse.BodyHandlers;

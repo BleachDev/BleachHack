@@ -26,10 +26,10 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
@@ -70,7 +70,7 @@ public class CrystalAura extends Module {
 						new SettingSlider("MinRatio", 0.5, 6, 2, 1).withDesc("Minimum damage ratio to place a crystal at (Target dmg/Player dmg)."),
 						new SettingSlider("CPT", 1, 10, 2, 0).withDesc("How many crystals to place per tick."),
 						new SettingSlider("Cooldown", 0, 10, 0, 0).withDesc("How many ticks to wait before placing the next batch of crystals."),
-						new SettingColor("Place Color", 0.7f, 0.7f, 1f, false).withDesc("The color of the block you're placing crystals on.")),
+						new SettingColor("Place Color", 178, 178, 255).withDesc("The color of the block you're placing crystals on.")),
 				new SettingToggle("SameTick", false).withDesc("Enables exploding and placing crystals at the same tick."),
 				new SettingRotate(false).withDesc("Rotates to crystals."),
 				new SettingSlider("Range", 0, 6, 4.5, 2).withDesc("Range to place and attack crystals."));
@@ -95,9 +95,9 @@ public class CrystalAura extends Module {
 
 		List<LivingEntity> targets = Streams.stream(mc.world.getEntities())
 				.filter(e -> EntityUtils.isAttackable(e, true))
-				.filter(e -> (getSetting(0).asToggle().state && EntityUtils.isPlayer(e))
-						|| (getSetting(1).asToggle().state && EntityUtils.isMob(e))
-						|| (getSetting(2).asToggle().state && EntityUtils.isAnimal(e)))
+				.filter(e -> (getSetting(0).asToggle().getState() && EntityUtils.isPlayer(e))
+						|| (getSetting(1).asToggle().getState() && EntityUtils.isMob(e))
+						|| (getSetting(2).asToggle().getState() && EntityUtils.isAnimal(e)))
 				.map(e -> (LivingEntity) e)
 				.toList();
 
@@ -114,7 +114,7 @@ public class CrystalAura extends Module {
 				.toList();
 
 		int breaks = 0;
-		if (explodeToggle.state && !nearestCrystals.isEmpty() && breakCooldown <= 0) {
+		if (explodeToggle.getState() && !nearestCrystals.isEmpty() && breakCooldown <= 0) {
 			boolean end = false;
 			for (EndCrystalEntity c : nearestCrystals) {
 				if (mc.player.distanceTo(c) > getSetting(7).asSlider().getValue()
@@ -126,11 +126,11 @@ public class CrystalAura extends Module {
 					continue;
 
 				int oldSlot = mc.player.getInventory().selectedSlot;
-				if (explodeToggle.getChild(0).asToggle().state && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
+				if (explodeToggle.getChild(0).asToggle().getState() && mc.player.hasStatusEffect(StatusEffects.WEAKNESS)) {
 					InventoryUtils.selectSlot(false, true, Comparator.comparing(i -> DamageUtils.getItemAttackDamage(mc.player.getInventory().getStack(i))));
 				}
 
-				if (getSetting(6).asRotate().state) {
+				if (getSetting(6).asRotate().getState()) {
 					Vec3d eyeVec = mc.player.getEyePos();
 					Vec3d v = new Vec3d(c.getX(), c.getY() + 0.5, c.getZ());
 					for (Direction d : Direction.values()) {
@@ -158,15 +158,15 @@ public class CrystalAura extends Module {
 
 			breakCooldown = explodeToggle.getChild(3).asSlider().getValueInt() + 1;
 
-			if (!getSetting(5).asToggle().state && end) {
+			if (!getSetting(5).asToggle().getState() && end) {
 				return;
 			}
 		}
 
 		// Place
 		SettingToggle placeToggle = getSetting(4).asToggle();
-		if (placeToggle.state && placeCooldown <= 0) {
-			int crystalSlot = !placeToggle.getChild(0).asToggle().state
+		if (placeToggle.getState() && placeCooldown <= 0) {
+			int crystalSlot = !placeToggle.getChild(0).asToggle().getState()
 					? (mc.player.getMainHandStack().getItem() == Items.END_CRYSTAL ? mc.player.getInventory().selectedSlot
 							: mc.player.getOffHandStack().getItem() == Items.END_CRYSTAL ? 40
 									: -1)
@@ -222,16 +222,16 @@ public class CrystalAura extends Module {
 				}
 
 				if (dir == null) {
-					if (placeToggle.getChild(3).asToggle().state)
+					if (placeToggle.getChild(3).asToggle().getState())
 						continue;
 
 					dir = Direction.UP;
 				}
 
-				if (placeToggle.getChild(2).asToggle().state)
+				if (placeToggle.getChild(2).asToggle().getState())
 					blacklist.put(block, 4);
 
-				if (getSetting(6).asRotate().state) {
+				if (getSetting(6).asRotate().getState()) {
 					WorldUtils.facePosAuto(vec.x, vec.y, vec.z, getSetting(6).asRotate());
 				}
 
@@ -247,8 +247,8 @@ public class CrystalAura extends Module {
 			}
 
 			if (places > 0) {
-				if (placeToggle.getChild(0).asToggle().state
-						&& placeToggle.getChild(0).asToggle().getChild(0).asToggle().state) {
+				if (placeToggle.getChild(0).asToggle().getState()
+						&& placeToggle.getChild(0).asToggle().getChild(0).asToggle().getState()) {
 					InventoryUtils.selectSlot(oldSlot);
 				}
 
@@ -260,8 +260,8 @@ public class CrystalAura extends Module {
 	@BleachSubscribe
 	public void onRenderWorld(EventWorldRender.Post event) {
 		if (this.render != null) {
-			float[] col = getSetting(4).asToggle().getChild(8).asColor().getRGBFloat();
-			Renderer.drawBoxBoth(render, QuadColor.single(col[0], col[1], col[2], 0.4f), 2.5f);
+			int[] col = getSetting(4).asToggle().getChild(8).asColor().getRGBArray();
+			Renderer.drawBoxBoth(render, QuadColor.single(col[0], col[1], col[2], 100), 2.5f);
 		}
 	}
 
@@ -274,10 +274,10 @@ public class CrystalAura extends Module {
 				for (int z = -range; z <= range; z++) {
 					BlockPos basePos = new BlockPos(mc.player.getEyePos()).add(x, y, z);
 
-					if (!canPlace(basePos) || (blacklist.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().state))
+					if (!canPlace(basePos) || (blacklist.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().getState()))
 						continue;
 
-					if (getSetting(4).asToggle().getChild(3).asToggle().state) {
+					if (getSetting(4).asToggle().getChild(3).asToggle().getState()) {
 						boolean allBad = true;
 						for (Direction d : Direction.values()) {
 							if (WorldUtils.getLegitLookPos(basePos, d, true, 5) != null) {
@@ -306,7 +306,7 @@ public class CrystalAura extends Module {
 		if (baseState.getBlock() != Blocks.BEDROCK && baseState.getBlock() != Blocks.OBSIDIAN)
 			return false;
 
-		boolean oldPlace = getSetting(4).asToggle().getChild(1).asToggle().state;
+		boolean oldPlace = getSetting(4).asToggle().getChild(1).asToggle().getState();
 		BlockPos placePos = basePos.up();
 		if (!mc.world.isAir(placePos) || (oldPlace && !mc.world.isAir(placePos.up())))
 			return false;

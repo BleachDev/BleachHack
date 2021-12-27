@@ -19,10 +19,10 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.EntityUtils;
 import org.bleachhack.util.world.WorldUtils;
 
@@ -71,13 +71,13 @@ public class Killaura extends Module {
 		delay++;
 		int reqDelay = (int) Math.rint(20 / getSetting(12).asSlider().getValue());
 
-		boolean cooldownDone = getSetting(10).asToggle().state
+		boolean cooldownDone = getSetting(10).asToggle().getState()
 				? mc.player.getAttackCooldownProgress(mc.getTickDelta()) == 1.0f
 				: (delay > reqDelay || reqDelay == 0);
 
 		if (cooldownDone) {
 			for (Entity e: getEntities()) {
-				boolean shouldRotate = getSetting(8).asRotate().state && DebugRenderer.getTargetedEntity(mc.player, 7).orElse(null) != e;
+				boolean shouldRotate = getSetting(8).asRotate().getState() && DebugRenderer.getTargetedEntity(mc.player, 7).orElse(null) != e;
 
 				if (shouldRotate) {
 					WorldUtils.facePosAuto(e.getX(), e.getY() + e.getHeight() / 2, e.getZ(), getSetting(8).asRotate());
@@ -102,7 +102,7 @@ public class Killaura extends Module {
 	private List<Entity> getEntities() {
 		Stream<Entity> targets;
 
-		if (getSetting(6).asToggle().state) {
+		if (getSetting(6).asToggle().getState()) {
 			Optional<Entity> entity = DebugRenderer.getTargetedEntity(mc.player, 7);
 
 			if (entity.isEmpty()) {
@@ -116,7 +116,7 @@ public class Killaura extends Module {
 
 		Comparator<Entity> comparator;
 
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().getMode() == 0) {
 			comparator = Comparator.comparing(e -> {
 				Vec3d center = e.getBoundingBox().getCenter();
 
@@ -138,14 +138,14 @@ public class Killaura extends Module {
 		return targets
 				.filter(e -> EntityUtils.isAttackable(e, true)
 						&& mc.player.distanceTo(e) <= getSetting(11).asSlider().getValue()
-						&& (mc.player.canSee(e) || !getSetting(9).asToggle().state))
-				.filter(e -> (EntityUtils.isPlayer(e) && getSetting(1).asToggle().state)
-						|| (EntityUtils.isMob(e) && getSetting(2).asToggle().state)
-						|| (EntityUtils.isAnimal(e) && getSetting(3).asToggle().state)
-						|| (e instanceof ArmorStandEntity && getSetting(4).asToggle().state)
-						|| ((e instanceof ShulkerBulletEntity || e instanceof AbstractFireballEntity) && getSetting(5).asToggle().state))
+						&& (mc.player.canSee(e) || !getSetting(9).asToggle().getState()))
+				.filter(e -> (EntityUtils.isPlayer(e) && getSetting(1).asToggle().getState())
+						|| (EntityUtils.isMob(e) && getSetting(2).asToggle().getState())
+						|| (EntityUtils.isAnimal(e) && getSetting(3).asToggle().getState())
+						|| (e instanceof ArmorStandEntity && getSetting(4).asToggle().getState())
+						|| ((e instanceof ShulkerBulletEntity || e instanceof AbstractFireballEntity) && getSetting(5).asToggle().getState()))
 				.sorted(comparator)
-				.limit(getSetting(7).asToggle().state ? getSetting(7).asToggle().getChild(0).asSlider().getValueLong() : 1L)
+				.limit(getSetting(7).asToggle().getState() ? getSetting(7).asToggle().getChild(0).asSlider().getValueLong() : 1L)
 				.collect(Collectors.toList());
 	}
 }

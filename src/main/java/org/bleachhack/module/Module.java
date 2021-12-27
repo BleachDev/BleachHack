@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bleachhack.BleachHack;
-import org.bleachhack.module.setting.base.SettingBase;
-import org.bleachhack.module.setting.base.SettingBind;
+import org.bleachhack.setting.module.ModuleSetting;
+import org.bleachhack.setting.module.SettingKey;
 import org.bleachhack.util.io.BleachFileHelper;
 
 import net.minecraft.client.MinecraftClient;
@@ -25,30 +25,29 @@ public class Module {
 
 	protected static final MinecraftClient mc = MinecraftClient.getInstance();
 	private String name;
-	private int key;
-	private int defaultKey;
-	
+	private SettingKey key;
+
 	private boolean enabled;
 	private final boolean defaultEnabled;
 	private boolean subscribed;
-	
+
 	private ModuleCategory category;
 	private String desc;
-	private List<SettingBase> settings = new ArrayList<>();
+	private List<ModuleSetting<?>> settings;
 
-	public Module(String nm, int k, ModuleCategory c, String d, SettingBase... s) {
-		this(nm, k, c, false, d, s);
+	public Module(String name, int key, ModuleCategory category, String desc, ModuleSetting<?>... settings) {
+		this(name, key, category, false, desc, settings);
 	}
 
-	public Module(String nm, int k, ModuleCategory c, boolean enabled, String d, SettingBase... s) {
-		name = nm;
-		setKey(k);
-		defaultKey = getKey();
-		category = c;
-		desc = d;
-		settings = new ArrayList<>(Arrays.asList(s));
-		settings.add(new SettingBind(this));
-		
+	public Module(String name, int key, ModuleCategory category, boolean enabled, String desc, ModuleSetting<?>... settings) {
+		this.name = name;
+		this.category = category;
+		this.desc = desc;
+		this.settings = new ArrayList<>(Arrays.asList(settings));
+
+		this.key = new SettingKey(key).withDesc("The bind for this module, press [DELETE] to unbind.");
+		this.settings.add(this.key);
+
 		defaultEnabled = enabled;
 		if (enabled) {
 			setEnabled(true);
@@ -62,11 +61,11 @@ public class Module {
 	}
 
 	public void onDisable(boolean inWorld) {
-		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
-
 		if (subscribed) {
 			BleachHack.eventBus.unsubscribe(this);
 		}
+
+		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 	}
 
 	public String getName() {
@@ -86,24 +85,21 @@ public class Module {
 	}
 
 	public int getKey() {
-		return key;
-	}
-
-	public int getDefaultKey() {
-		return defaultKey;
-	}
-
-	public List<SettingBase> getSettings() {
-		return settings;
-	}
-
-	public SettingBase getSetting(int s) {
-		return settings.get(s);
+		return key.getValue();
 	}
 
 	public void setKey(int key) {
+		this.key.setValue(key);
+
 		BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
-		this.key = key;
+	}
+
+	public List<ModuleSetting<?>> getSettings() {
+		return settings;
+	}
+
+	public ModuleSetting<?> getSetting(int s) {
+		return settings.get(s);
 	}
 
 	public boolean isEnabled() {

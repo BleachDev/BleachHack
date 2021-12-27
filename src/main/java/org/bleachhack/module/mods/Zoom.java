@@ -11,7 +11,7 @@ package org.bleachhack.module.mods;
 
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.setting.module.SettingSlider;
 
 public class Zoom extends Module {
 

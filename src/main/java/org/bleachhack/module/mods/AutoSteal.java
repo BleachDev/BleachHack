@@ -35,11 +35,11 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingItemList;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingItemList;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.render.WorldRenderUtils;
 import org.bleachhack.util.world.WorldUtils;
@@ -80,9 +80,9 @@ public class AutoSteal extends Module {
 
 	public boolean isBlacklisted(Item item) {
 		SettingToggle setting = getSetting(4).asToggle();
-		return setting.state
-				&& ((setting.getChild(0).asMode().mode == 0 && setting.getChild(1).asList(Item.class).contains(item))
-						|| (setting.getChild(0).asMode().mode == 1 && !setting.getChild(1).asList(Item.class).contains(item)));
+		return setting.getState()
+				&& ((setting.getChild(0).asMode().getMode() == 0 && setting.getChild(1).asList(Item.class).contains(item))
+						|| (setting.getChild(0).asMode().getMode() == 1 && !setting.getChild(1).asList(Item.class).contains(item)));
 	}
 
 	@Override
@@ -128,19 +128,19 @@ public class AutoSteal extends Module {
 					}
 				}
 
-				if (getSetting(0).asMode().mode >= 1 || getSetting(3).asToggle().state) {
+				if (getSetting(0).asMode().getMode() >= 1 || getSetting(3).asToggle().getState()) {
 					mc.setScreen(null);
 					mc.player.networkHandler.sendPacket(new CloseHandledScreenC2SPacket(currentSyncId));
 				}
 			}
-		} else if (currentItems == null && currentSyncId == -1 && getSetting(3).asToggle().state) {
+		} else if (currentItems == null && currentSyncId == -1 && getSetting(3).asToggle().getState()) {
 			for (BlockEntity be: WorldUtils.getBlockEntities()) {
 				if (!opened.containsKey(be.getPos())
 						&& be instanceof ChestBlockEntity
 						&& mc.player.getEyePos().distanceTo(Vec3d.ofCenter(be.getPos())) <= getSetting(3).asToggle().getChild(0).asSlider().getValue() + 0.25) {
 
 					Vec3d lookVec = Vec3d.ofCenter(be.getPos()).add(0, 0.5, 0);
-					if (getSetting(3).asToggle().getChild(2).asRotate().state) {
+					if (getSetting(3).asToggle().getChild(2).asRotate().getState()) {
 						WorldUtils.facePosAuto(lookVec.x, lookVec.y, lookVec.z, getSetting(3).asToggle().getChild(2).asRotate());
 					}
 
@@ -156,7 +156,7 @@ public class AutoSteal extends Module {
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		if (currentItems != null && currentPos != null) {
-			if (getSetting(0).asMode().mode == 1) {
+			if (getSetting(0).asMode().getMode() == 1) {
 				List<ItemStack> renderItems = new ArrayList<>(currentItems);
 
 				for (int i = 0; i < renderItems.size(); i += 9) {
@@ -179,7 +179,7 @@ public class AutoSteal extends Module {
 								startPos.x, startPos.y - i / 9 * 0.4 - 0.04, startPos.z, (4.5 - i % 9) * 0.3 - w, 0, 0.5, false);
 					}
 				}
-			} else if (getSetting(0).asMode().mode == 2) {
+			} else if (getSetting(0).asMode().getMode() == 2) {
 				WorldRenderUtils.drawText(
 						new LiteralText("[" + currentItems.stream().filter(i -> !i.isEmpty() && !isBlacklisted(i.getItem())).count() + "]"),
 						currentPos.getX() + 0.5, currentPos.getY() + 1.2, currentPos.getZ() + 0.5, 0.8, false);
@@ -199,7 +199,7 @@ public class AutoSteal extends Module {
 					currentSyncId = handler.syncId;
 					lastOpen = currentTime;
 
-					if (getSetting(0).asMode().mode >= 1) {
+					if (getSetting(0).asMode().getMode() >= 1) {
 						event.setCancelled(true);
 					}
 				} else {

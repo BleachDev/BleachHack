@@ -14,9 +14,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import com.google.common.collect.Sets;
 
@@ -39,16 +39,16 @@ public class FastUse extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(2).asToggle().state) {
+		if (getSetting(2).asToggle().getState()) {
 			if (!(THROWABLE.contains(mc.player.getMainHandStack().getItem())
-					&& (!getSetting(2).asToggle().getChild(0).asToggle().state 
+					&& (!getSetting(2).asToggle().getChild(0).asToggle().getState() 
 							|| mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE))) {
 				return;
 			}
 		}
 
 		mc.itemUseCooldown = 0;
-		if (getSetting(0).asMode().mode == 1 && mc.options.keyUse.isPressed()) {
+		if (getSetting(0).asMode().getMode() == 1 && mc.options.keyUse.isPressed()) {
 			for (int i = 0; i < getSetting(1).asSlider().getValueInt(); i++) {
 				mc.doItemUse();
 			}

@@ -12,7 +12,7 @@ import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
@@ -28,7 +28,7 @@ public class AntiHunger extends Module {
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {
-			if (mc.player.getVelocity().y != 0 && !mc.options.keyJump.isPressed() && (!bool || !getSetting(0).asToggle().state)) {
+			if (mc.player.getVelocity().y != 0 && !mc.options.keyJump.isPressed() && (!bool || !getSetting(0).asToggle().getState())) {
 				// if (((PlayerMoveC2SPacket) event.getPacket()).isOnGround())
 				// event.setCancelled(true);
 				boolean onGround = mc.player.fallDistance >= 0.1f;

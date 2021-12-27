@@ -16,10 +16,10 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.shader.BleachCoreShaders;
@@ -53,26 +53,26 @@ public class ESP extends Module {
 				new SettingSlider("BoxFill", 0, 255, 50, 0).withDesc("How opaque the fill on box mode should be."),
 
 				new SettingToggle("Players", true).withDesc("Highlights Players.").withChildren(
-						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Outline color for players."),
-						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Outline color for friends.")),
+						new SettingColor("Player Color", 255, 75, 75).withDesc("Outline color for players."),
+						new SettingColor("Friend Color", 0, 255, 255).withDesc("Outline color for friends.")),
 
 				new SettingToggle("Mobs", false).withDesc("Highlights Mobs.").withChildren(
-						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Outline color for mobs.")),
+						new SettingColor("Color", 128, 25, 128).withDesc("Outline color for mobs.")),
 
 				new SettingToggle("Animals", false).withDesc("Highlights Animals").withChildren(
-						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Outline color for animals.")),
+						new SettingColor("Color", 75, 255, 75).withDesc("Outline color for animals.")),
 
 				new SettingToggle("Items", true).withDesc("Highlights Items.").withChildren(
-						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Outline color for items.")),
+						new SettingColor("Color", 255, 200, 50).withDesc("Outline color for items.")),
 
 				new SettingToggle("Crystals", true).withDesc("Highlights End Crystals.").withChildren(
-						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Outline color for crystals.")),
+						new SettingColor("Color", 255, 50, 255).withDesc("Outline color for crystals.")),
 
 				new SettingToggle("Vehicles", false).withDesc("Highlights Vehicles.").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Outline color for vehicles (minecarts/boats).")),
+						new SettingColor("Color", 150, 150, 150).withDesc("Outline color for vehicles (minecarts/boats).")),
 
 				new SettingToggle("Armorstands", false).withDesc("Highlights armor stands.").withChildren(
-						new SettingColor("Color", 0.66f, 0.6f, 0.2f, false).withDesc("Outline color for armor stands.")));
+						new SettingColor("Color", 160, 150, 50).withDesc("Outline color for armor stands.")));
 		
 		try {
 			shader = new ShaderEffectWrapper(
@@ -92,7 +92,7 @@ public class ESP extends Module {
 
 	@BleachSubscribe
 	public void onEntityRender(EventEntityRender.Single.Pre event) {
-		if (getSetting(0).asMode().mode != 0)
+		if (getSetting(0).asMode().getMode() != 0)
 			return;
 
 		int[] color = getColor(event.getEntity());
@@ -104,7 +104,7 @@ public class ESP extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().getMode() == 0) {
 			colorVertexer.draw();
 			shader.render();
 			shader.drawFramebufferToMain("main");
@@ -130,19 +130,19 @@ public class ESP extends Module {
 		if (e == mc.player)
 			return null;
 
-		if (e instanceof PlayerEntity && getSetting(4).asToggle().state) {
+		if (e instanceof PlayerEntity && getSetting(4).asToggle().getState()) {
 			return getSetting(4).asToggle().getChild(BleachHack.friendMang.has(e) ? 1 : 0).asColor().getRGBArray();
-		} else if (e instanceof Monster && getSetting(5).asToggle().state) {
+		} else if (e instanceof Monster && getSetting(5).asToggle().getState()) {
 			return getSetting(5).asToggle().getChild(0).asColor().getRGBArray();
-		} else if (EntityUtils.isAnimal(e) && getSetting(6).asToggle().state) {
+		} else if (EntityUtils.isAnimal(e) && getSetting(6).asToggle().getState()) {
 			return getSetting(6).asToggle().getChild(0).asColor().getRGBArray();
-		} else if (e instanceof ItemEntity && getSetting(7).asToggle().state) {
+		} else if (e instanceof ItemEntity && getSetting(7).asToggle().getState()) {
 			return getSetting(7).asToggle().getChild(0).asColor().getRGBArray();
-		} else if (e instanceof EndCrystalEntity && getSetting(8).asToggle().state) {
+		} else if (e instanceof EndCrystalEntity && getSetting(8).asToggle().getState()) {
 			return getSetting(8).asToggle().getChild(0).asColor().getRGBArray();
-		} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(9).asToggle().state) {
+		} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(9).asToggle().getState()) {
 			return getSetting(9).asToggle().getChild(0).asColor().getRGBArray();
-		} else if (e instanceof ArmorStandEntity && getSetting(10).asToggle().state) {
+		} else if (e instanceof ArmorStandEntity && getSetting(10).asToggle().getState()) {
 			return getSetting(10).asToggle().getChild(0).asColor().getRGBArray();
 		}
 

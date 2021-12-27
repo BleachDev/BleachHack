@@ -23,8 +23,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.world.WorldUtils;
 
@@ -82,7 +82,7 @@ public class AutoFarm extends Module {
 		SettingToggle bonemealSetting = getSetting(4).asToggle();
 
 		// Special case for moss to maximize efficiency
-		if (bonemealSetting.state && bonemealSetting.getChild(6).asToggle().state) {
+		if (bonemealSetting.getState() && bonemealSetting.getChild(6).asToggle().getState()) {
 			int slot = InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.BONE_MEAL);
 			if (slot != -1) {
 				BlockPos bestBlock = BlockPos.streamOutwards(new BlockPos(mc.player.getEyePos()), ceilRange, ceilRange, ceilRange)
@@ -112,8 +112,8 @@ public class AutoFarm extends Module {
 
 			BlockState state = mc.world.getBlockState(pos);
 			Block block = state.getBlock();
-			if (tillSetting.state && canTill(block) && mc.world.isAir(pos.up())) {
-				if (!tillSetting.getChild(0).asToggle().state
+			if (tillSetting.getState() && canTill(block) && mc.world.isAir(pos.up())) {
+				if (!tillSetting.getChild(0).asToggle().getState()
 						|| BlockPos.stream(pos.getX() - 4, pos.getY(), pos.getZ() - 4, pos.getX() + 4, pos.getY(), pos.getZ() + 4).anyMatch(
 								b -> mc.world.getFluidState(b).isIn(FluidTags.WATER))) {
 					Hand hand = InventoryUtils.selectSlot(true, i -> mc.player.getInventory().getStack(i).getItem() instanceof HoeItem);
@@ -126,29 +126,29 @@ public class AutoFarm extends Module {
 				}
 			}
 
-			if (harvestSetting.state) {
-				if ((harvestSetting.getChild(0).asToggle().state && block instanceof CropBlock && ((CropBlock) block).isMature(state))
-						|| (harvestSetting.getChild(1).asToggle().state && block instanceof GourdBlock)
-						|| (harvestSetting.getChild(2).asToggle().state && block instanceof NetherWartBlock && state.get(NetherWartBlock.AGE) >= 3)
-						|| (harvestSetting.getChild(3).asToggle().state && block instanceof CocoaBlock && state.get(CocoaBlock.AGE) >= 2)
-						|| (harvestSetting.getChild(4).asToggle().state && block instanceof SweetBerryBushBlock && state.get(SweetBerryBushBlock.AGE) >= 3)
-						|| (harvestSetting.getChild(5).asToggle().state && shouldHarvestTallCrop(pos, block, SugarCaneBlock.class))
-						|| (harvestSetting.getChild(6).asToggle().state && shouldHarvestTallCrop(pos, block, CactusBlock.class))) {
+			if (harvestSetting.getState()) {
+				if ((harvestSetting.getChild(0).asToggle().getState() && block instanceof CropBlock && ((CropBlock) block).isMature(state))
+						|| (harvestSetting.getChild(1).asToggle().getState() && block instanceof GourdBlock)
+						|| (harvestSetting.getChild(2).asToggle().getState() && block instanceof NetherWartBlock && state.get(NetherWartBlock.AGE) >= 3)
+						|| (harvestSetting.getChild(3).asToggle().getState() && block instanceof CocoaBlock && state.get(CocoaBlock.AGE) >= 2)
+						|| (harvestSetting.getChild(4).asToggle().getState() && block instanceof SweetBerryBushBlock && state.get(SweetBerryBushBlock.AGE) >= 3)
+						|| (harvestSetting.getChild(5).asToggle().getState() && shouldHarvestTallCrop(pos, block, SugarCaneBlock.class))
+						|| (harvestSetting.getChild(6).asToggle().getState() && shouldHarvestTallCrop(pos, block, CactusBlock.class))) {
 					mc.interactionManager.updateBlockBreakingProgress(pos, Direction.UP);
 					return;
 				}
 			}
 
-			if (plantSetting.state && mc.world.getOtherEntities(null, new Box(pos.up()), EntityPredicates.VALID_LIVING_ENTITY).isEmpty()) {
+			if (plantSetting.getState() && mc.world.getOtherEntities(null, new Box(pos.up()), EntityPredicates.VALID_LIVING_ENTITY).isEmpty()) {
 				if (block instanceof FarmlandBlock && mc.world.isAir(pos.up())) {
 					int slot = InventoryUtils.getSlot(true, i -> {
 						Item item = mc.player.getInventory().getStack(i).getItem();
 
-						if (plantSetting.getChild(0).asToggle().state && (item == Items.WHEAT_SEEDS || item == Items.CARROT || item == Items.POTATO || item == Items.BEETROOT_SEEDS)) {
+						if (plantSetting.getChild(0).asToggle().getState() && (item == Items.WHEAT_SEEDS || item == Items.CARROT || item == Items.POTATO || item == Items.BEETROOT_SEEDS)) {
 							return true;
 						}
 
-						return plantSetting.getChild(1).asToggle().state && (item == Items.PUMPKIN_SEEDS || item == Items.MELON_SEEDS);
+						return plantSetting.getChild(1).asToggle().getState() && (item == Items.PUMPKIN_SEEDS || item == Items.MELON_SEEDS);
 					});
 
 					if (slot != -1) {
@@ -157,7 +157,7 @@ public class AutoFarm extends Module {
 					}
 				}
 
-				if (block instanceof SoulSandBlock && mc.world.isAir(pos.up()) && plantSetting.getChild(2).asToggle().state) {
+				if (block instanceof SoulSandBlock && mc.world.isAir(pos.up()) && plantSetting.getChild(2).asToggle().getState()) {
 					int slot = InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.NETHER_WART);
 
 					if (slot != -1) {
@@ -167,16 +167,16 @@ public class AutoFarm extends Module {
 				}
 			}
 
-			if (bonemealSetting.state) {
+			if (bonemealSetting.getState()) {
 				int slot = InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.BONE_MEAL);
 
 				if (slot != -1) {
-					if ((bonemealSetting.getChild(0).asToggle().state && block instanceof CropBlock && !((CropBlock) block).isMature(state))
-							|| (bonemealSetting.getChild(1).asToggle().state && block instanceof StemBlock && state.get(StemBlock.AGE) < StemBlock.MAX_AGE)
-							|| (bonemealSetting.getChild(2).asToggle().state && block instanceof CocoaBlock && state.get(CocoaBlock.AGE) < 2)
-							|| (bonemealSetting.getChild(3).asToggle().state && block instanceof SweetBerryBushBlock && state.get(SweetBerryBushBlock.AGE) < 3)
-							|| (bonemealSetting.getChild(4).asToggle().state && block instanceof MushroomPlantBlock)
-							|| (bonemealSetting.getChild(5).asToggle().state && (block instanceof SaplingBlock || block instanceof AzaleaBlock) && canPlaceSapling(pos))) {
+					if ((bonemealSetting.getChild(0).asToggle().getState() && block instanceof CropBlock && !((CropBlock) block).isMature(state))
+							|| (bonemealSetting.getChild(1).asToggle().getState() && block instanceof StemBlock && state.get(StemBlock.AGE) < StemBlock.MAX_AGE)
+							|| (bonemealSetting.getChild(2).asToggle().getState() && block instanceof CocoaBlock && state.get(CocoaBlock.AGE) < 2)
+							|| (bonemealSetting.getChild(3).asToggle().getState() && block instanceof SweetBerryBushBlock && state.get(SweetBerryBushBlock.AGE) < 3)
+							|| (bonemealSetting.getChild(4).asToggle().getState() && block instanceof MushroomPlantBlock)
+							|| (bonemealSetting.getChild(5).asToggle().getState() && (block instanceof SaplingBlock || block instanceof AzaleaBlock) && canPlaceSapling(pos))) {
 						Hand hand = InventoryUtils.selectSlot(slot);
 						mc.interactionManager.interactBlock(mc.player, mc.world, hand,
 								new BlockHitResult(Vec3d.ofCenter(pos, 1), Direction.UP, pos, false));

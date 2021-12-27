@@ -14,7 +14,7 @@ import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.block.CactusBlock;
 import net.minecraft.block.CobwebBlock;
@@ -43,13 +43,13 @@ public class Solidify extends Module {
 
 	@BleachSubscribe
 	public void onBlockShape(EventBlockShape event) {
-		if ((getSetting(0).asToggle().state && event.getState().getBlock() instanceof CactusBlock)
-				|| (getSetting(1).asToggle().state && event.getState().getBlock() instanceof FireBlock)
-				|| (getSetting(2).asToggle().state && event.getState().getFluidState().getFluid() instanceof LavaFluid)
-				|| (getSetting(3).asToggle().state && event.getState().getBlock() instanceof CobwebBlock)
-				|| (getSetting(4).asToggle().state && event.getState().getBlock() instanceof SweetBerryBushBlock)
-				|| (getSetting(5).asToggle().state && event.getState().getBlock() instanceof HoneyBlock)
-				|| (getSetting(6).asToggle().state && event.getState().getBlock() instanceof PowderSnowBlock)) {
+		if ((getSetting(0).asToggle().getState() && event.getState().getBlock() instanceof CactusBlock)
+				|| (getSetting(1).asToggle().getState() && event.getState().getBlock() instanceof FireBlock)
+				|| (getSetting(2).asToggle().getState() && event.getState().getFluidState().getFluid() instanceof LavaFluid)
+				|| (getSetting(3).asToggle().getState() && event.getState().getBlock() instanceof CobwebBlock)
+				|| (getSetting(4).asToggle().getState() && event.getState().getBlock() instanceof SweetBerryBushBlock)
+				|| (getSetting(5).asToggle().getState() && event.getState().getBlock() instanceof HoneyBlock)
+				|| (getSetting(6).asToggle().getState() && event.getState().getBlock() instanceof PowderSnowBlock)) {
 			event.setShape(VoxelShapes.fullCube());
 		}
 	}
@@ -58,14 +58,14 @@ public class Solidify extends Module {
 	public void onClientMove(EventClientMove event) {
 		int x = (int) (mc.player.getX() + event.getVec().x) >> 4;
 		int z = (int) (mc.player.getZ() + event.getVec().z) >> 4;
-		if (getSetting(7).asToggle().state && !mc.world.getChunkManager().isChunkLoaded(x, z)) {
+		if (getSetting(7).asToggle().getState() && !mc.world.getChunkManager().isChunkLoaded(x, z)) {
 			event.setCancelled(true);
 		}
 	}
 
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
-		if (getSetting(7).asToggle().state) {
+		if (getSetting(7).asToggle().getState()) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
 				VehicleMoveC2SPacket packet = (VehicleMoveC2SPacket) event.getPacket();
 				if (!mc.world.getChunkManager().isChunkLoaded((int) packet.getX() >> 4, (int) packet.getZ() >> 4)) {

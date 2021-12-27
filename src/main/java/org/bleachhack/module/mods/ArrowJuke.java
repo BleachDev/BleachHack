@@ -17,9 +17,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.WorldUtils;
 
 import net.minecraft.entity.Entity;
@@ -44,7 +44,7 @@ public class ArrowJuke extends Module {
 			if (e.age > 75 || !(e instanceof ArrowEntity) || ((ArrowEntity) e).getOwner() == mc.player)
 				continue;
 
-			int mode = getSetting(0).asMode().mode;
+			int mode = getSetting(0).asMode().getMode();
 			int steps = getSetting(2).asSlider().getValueInt();
 
 			Box playerBox = mc.player.getBoundingBox().expand(0.3);
@@ -94,7 +94,7 @@ public class ArrowJuke extends Module {
 
 		Collections.shuffle(list);
 
-		if (getSetting(3).asToggle().state) {
+		if (getSetting(3).asToggle().getState()) {
 			list.add(new Vec3d(0, 2, 0));
 		}
 

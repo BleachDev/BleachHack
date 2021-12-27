@@ -16,8 +16,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileHelper;
 import org.bleachhack.util.rpc.DiscordEventHandlers;
@@ -60,7 +60,7 @@ public class DiscordRPCMod extends Module {
 
 	@Override
 	public void onEnable(boolean inWorld) {
-		silent = getSetting(3).asToggle().state;
+		silent = getSetting(3).asToggle().getState();
 
 		tick = 0;
 		startTime = System.currentTimeMillis();
@@ -83,7 +83,7 @@ public class DiscordRPCMod extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (silent != getSetting(3).asToggle().state) {
+		if (silent != getSetting(3).asToggle().getState()) {
 			onDisable(false);
 			onEnable(false);
 		}
@@ -93,7 +93,7 @@ public class DiscordRPCMod extends Module {
 			String text2 = customText2;
 			long start = 0;
 
-			switch (getSetting(0).asMode().mode) {
+			switch (getSetting(0).asMode().getMode()) {
 				case 0 -> text1 = "Playing " + (mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address);
 				case 1 -> text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
 				case 2 -> text1 = mc.getCurrentServerEntry() == null ? "Singleplayer" : "Multiplayer";
@@ -115,7 +115,7 @@ public class DiscordRPCMod extends Module {
 					: (currentItem.getCount() > 1 ? currentItem.getCount() + " " : "")
 					+ (currentItem.hasCustomName() ? "\"" + customName + "\" (" + name + ")" : name);
 
-			switch (getSetting(1).asMode().mode) {
+			switch (getSetting(1).asMode().getMode()) {
 				case 0 -> text2 = (int) mc.player.getHealth() + " hp - Holding " + itemName;
 				case 1 -> text2 = mc.player.getEntityName() + " - " + (int) mc.player.getHealth() + " hp";
 				case 2 -> text2 = "Holding " + itemName;
@@ -123,7 +123,7 @@ public class DiscordRPCMod extends Module {
 				case 4 -> text2 = "At " + mc.player.getBlockPos().toShortString();
 			}
 
-			switch (getSetting(2).asMode().mode) {
+			switch (getSetting(2).asMode().getMode()) {
 				case 0 -> start = startTime;
 				case 1 -> start = System.currentTimeMillis() - RandomUtils.nextInt(0, 86400000);
 				case 2 -> start = System.currentTimeMillis() - 86400000L + (long) tick * 50;

@@ -13,9 +13,9 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.LineColor;
 import org.bleachhack.util.world.EntityUtils;
@@ -35,26 +35,26 @@ public class Tracers extends Module {
 	public Tracers() {
 		super("Tracers", KEY_UNBOUND, ModuleCategory.RENDER, "Shows lines to entities you select.",
 				new SettingToggle("Players", true).withDesc("Shows Tracers for Players.").withChildren(
-						new SettingColor("Player Color", 1f, 0.3f, 0.3f, false).withDesc("Tracer color for players."),
-						new SettingColor("Friend Color", 0f, 1f, 1f, false).withDesc("Tracer color for friends.")),
+						new SettingColor("Player Color", 255, 75, 75).withDesc("Tracer color for players."),
+						new SettingColor("Friend Color", 0, 255, 255).withDesc("Tracer color for friends.")),
 
 				new SettingToggle("Mobs", false).withDesc("Shows Tracers for Mobs.").withChildren(
-						new SettingColor("Color", 0.5f, 0.1f, 0.5f, false).withDesc("Tracer color for mobs.")),
+						new SettingColor("Color", 128, 25, 128).withDesc("Tracer color for mobs.")),
 
 				new SettingToggle("Animals", false).withDesc("Shows Tracers for Animals.").withChildren(
-						new SettingColor("Color", 0.3f, 1f, 0.3f, false).withDesc("Tracer color for animals.")),
+						new SettingColor("Color", 75, 255, 75).withDesc("Tracer color for animals.")),
 
 				new SettingToggle("Items", true).withDesc("Shows Tracers for Items.").withChildren(
-						new SettingColor("Color", 1f, 0.8f, 0.2f, false).withDesc("Tracer color for items.")),
+						new SettingColor("Color", 255, 200, 50).withDesc("Tracer color for items.")),
 
 				new SettingToggle("Crystals", true).withDesc("Shows Tracers for End Crystals.").withChildren(
-						new SettingColor("Color", 1f, 0.2f, 1f, false).withDesc("Tracer color for crystals.")),
+						new SettingColor("Color", 255, 50, 255).withDesc("Tracer color for crystals.")),
 
 				new SettingToggle("Vehicles", false).withDesc("Shows Tracers for Vehicles (minecarts/boats).").withChildren(
-						new SettingColor("Color", 0.6f, 0.6f, 0.6f, false).withDesc("Tracer color for vehicles.")),
+						new SettingColor("Color", 150, 150, 150).withDesc("Tracer color for vehicles.")),
 
 				new SettingToggle("Armorstands", false).withDesc("Shows Tracers for armor stands.").withChildren(
-						new SettingColor("Color", 0.66f, 0.6f, 0.2f, false).withDesc("Outline color for armor stands.")),
+						new SettingColor("Color", 160, 150, 50).withDesc("Outline color for armor stands.")),
 
 				new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers."),
 				new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers."));
@@ -66,23 +66,7 @@ public class Tracers extends Module {
 		float opacity = getSetting(8).asSlider().getValueFloat();
 
 		for (Entity e : mc.world.getEntities()) {
-			float[] col = null;
-
-			if (e instanceof PlayerEntity && e != mc.player && e != mc.cameraEntity && getSetting(0).asToggle().state) {
-				col = getSetting(0).asToggle().getChild(BleachHack.friendMang.has(e) ? 1 : 0).asColor().getRGBFloat();
-			} else if (e instanceof Monster && getSetting(1).asToggle().state) {
-				col = getSetting(1).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if (EntityUtils.isAnimal(e) && getSetting(2).asToggle().state) {
-				col = getSetting(2).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if (e instanceof ItemEntity && getSetting(3).asToggle().state) {
-				col = getSetting(3).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if (e instanceof EndCrystalEntity && getSetting(4).asToggle().state) {
-				col = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().state) {
-				col = getSetting(5).asToggle().getChild(0).asColor().getRGBFloat();
-			} else if (e instanceof ArmorStandEntity && getSetting(6).asToggle().state) {
-				col = getSetting(6).asToggle().getChild(0).asColor().getRGBFloat();
-			}
+			int[] col = getColor(e);
 
 			if (col != null) {
 				Vec3d vec = e.getPos().subtract(Renderer.getInterpolationOffset(e));
@@ -96,5 +80,28 @@ public class Tracers extends Module {
 				Renderer.drawLine(vec.x, vec.y, vec.z, vec.x, vec.y + e.getHeight() * 0.9, vec.z, lineColor, width);
 			}
 		}
+	}
+
+	private int[] getColor(Entity e) {
+		if (e == mc.player)
+			return null;
+
+		if (e instanceof PlayerEntity && getSetting(0).asToggle().getState()) {
+			return getSetting(0).asToggle().getChild(BleachHack.friendMang.has(e) ? 1 : 0).asColor().getRGBArray();
+		} else if (e instanceof Monster && getSetting(1).asToggle().getState()) {
+			return getSetting(1).asToggle().getChild(0).asColor().getRGBArray();
+		} else if (EntityUtils.isAnimal(e) && getSetting(2).asToggle().getState()) {
+			return getSetting(2).asToggle().getChild(0).asColor().getRGBArray();
+		} else if (e instanceof ItemEntity && getSetting(3).asToggle().getState()) {
+			return getSetting(3).asToggle().getChild(0).asColor().getRGBArray();
+		} else if (e instanceof EndCrystalEntity && getSetting(4).asToggle().getState()) {
+			return getSetting(4).asToggle().getChild(0).asColor().getRGBArray();
+		} else if ((e instanceof BoatEntity || e instanceof AbstractMinecartEntity) && getSetting(5).asToggle().getState()) {
+			return getSetting(5).asToggle().getChild(0).asColor().getRGBArray();
+		} else if (e instanceof ArmorStandEntity && getSetting(6).asToggle().getState()) {
+			return getSetting(6).asToggle().getChild(0).asColor().getRGBArray();
+		}
+
+		return null;
 	}
 }

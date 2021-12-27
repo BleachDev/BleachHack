@@ -14,8 +14,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.WorldUtils;
 
 import net.minecraft.entity.Entity;
@@ -66,11 +66,11 @@ public class EntityControl extends Module {
 			((LlamaEntity) e).headYaw = mc.player.headYaw;
 		}
 
-		if (getSetting(5).asToggle().state && forward == 0 && strafe == 0) {
+		if (getSetting(5).asToggle().getState() && forward == 0 && strafe == 0) {
 			e.setVelocity(new Vec3d(0, e.getVelocity().y, 0));
 		}
 
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			if (forward != 0.0D) {
 				if (strafe > 0.0D) {
 					yaw += (forward > 0.0D ? -45 : 45);
@@ -92,7 +92,7 @@ public class EntityControl extends Module {
 					forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F)));
 		}
 
-		if (getSetting(1).asToggle().state) {
+		if (getSetting(1).asToggle().getState()) {
 			if (mc.options.keyJump.isPressed()) {
 				e.setVelocity(e.getVelocity().x, getSetting(1).asToggle().getChild(0).asSlider().getValue(), e.getVelocity().z);
 			} else {
@@ -100,14 +100,14 @@ public class EntityControl extends Module {
 			}
 		}
 
-		if (getSetting(3).asToggle().state) {
+		if (getSetting(3).asToggle().getState()) {
 			BlockPos p = new BlockPos(e.getPos());
 			if (!mc.world.getBlockState(p.down()).getMaterial().isReplaceable() && e.fallDistance > 0.01) {
 				e.setVelocity(e.getVelocity().x, -1, e.getVelocity().z);
 			}
 		}
 
-		if (getSetting(4).asToggle().state) {
+		if (getSetting(4).asToggle().getState()) {
 			Vec3d vel = e.getVelocity().multiply(2);
 			if (WorldUtils.doesBoxCollide(e.getBoundingBox().offset(vel.x, 0, vel.z))) {
 				for (int i = 2; i < 10; i++) {
@@ -122,28 +122,28 @@ public class EntityControl extends Module {
 
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
-		if (getSetting(6).asToggle().state) {
+		if (getSetting(6).asToggle().getState()) {
 			if (event.getPacket() instanceof VehicleMoveC2SPacket) {
 				VehicleMoveC2SPacket packet = (VehicleMoveC2SPacket) event.getPacket();
 				packet.yaw = getSetting(6).asToggle().getChild(0).asSlider().getValueFloat();
 				packet.pitch = getSetting(6).asToggle().getChild(1).asSlider().getValueFloat();
 			} else if (event.getPacket() instanceof PlayerMoveC2SPacket
 					&& mc.player.hasVehicle()
-					&& getSetting(6).asToggle().getChild(2).asToggle().state) {
+					&& getSetting(6).asToggle().getChild(2).asToggle().getState()) {
 				PlayerMoveC2SPacket packet = (PlayerMoveC2SPacket) event.getPacket();
 				packet.yaw = getSetting(6).asToggle().getChild(0).asSlider().getValueFloat();
 				packet.pitch = getSetting(6).asToggle().getChild(1).asSlider().getValueFloat();
 			}
 		}
 
-		if (getSetting(7).asToggle().state && event.getPacket() instanceof VehicleMoveC2SPacket && mc.player.hasVehicle()) {
+		if (getSetting(7).asToggle().getState() && event.getPacket() instanceof VehicleMoveC2SPacket && mc.player.hasVehicle()) {
 			mc.interactionManager.interactEntity(mc.player, mc.player.getVehicle(), Hand.MAIN_HAND);
 		}
 	}
 
 	@BleachSubscribe
 	public void onReadPacket(EventPacket.Read event) {
-		if (getSetting(7).asToggle().state && mc.player != null && mc.player.hasVehicle() && !mc.player.input.sneaking
+		if (getSetting(7).asToggle().getState() && mc.player != null && mc.player.hasVehicle() && !mc.player.input.sneaking
 				&& (event.getPacket() instanceof PlayerPositionLookS2CPacket || event.getPacket() instanceof EntityPassengersSetS2CPacket)) {
 			event.setCancelled(true);
 		}

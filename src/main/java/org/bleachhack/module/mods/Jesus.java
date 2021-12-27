@@ -13,7 +13,7 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
+import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.util.world.WorldUtils;
 
 import net.minecraft.entity.Entity;
@@ -48,7 +48,7 @@ public class Jesus extends Module {
 
 	@BleachSubscribe
 	public void onBlockShape(EventBlockShape event) {
-		if (getSetting(0).asMode().mode == 1
+		if (getSetting(0).asMode().getMode() == 1
 				&& WorldUtils.isFluid(event.getPos())
 				&& !mc.player.isSneaking()
 				&& !mc.player.isTouchingWater()

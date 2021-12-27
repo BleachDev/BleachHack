@@ -43,9 +43,9 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.WorldRenderUtils;
@@ -149,11 +149,11 @@ public class Nametags extends Module {
 
 	@BleachSubscribe
 	public void onLivingLabelRender(EventEntityRender.Single.Label event) {
-		if ((event.getEntity() instanceof PlayerEntity && getSetting(1).asToggle().state)
-				|| (EntityUtils.isAnimal(event.getEntity()) && getSetting(2).asToggle().state)
-				|| (event.getEntity() instanceof Monster && getSetting(3).asToggle().state)
-				|| (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().state)
-				|| (event.getEntity() instanceof ArmorStandEntity && getSetting(5).asToggle().state))
+		if ((event.getEntity() instanceof PlayerEntity && getSetting(1).asToggle().getState())
+				|| (EntityUtils.isAnimal(event.getEntity()) && getSetting(2).asToggle().getState())
+				|| (event.getEntity() instanceof Monster && getSetting(3).asToggle().getState())
+				|| (event.getEntity() instanceof ItemEntity && getSetting(4).asToggle().getState())
+				|| (event.getEntity() instanceof ArmorStandEntity && getSetting(5).asToggle().getState()))
 			event.setCancelled(true);
 	}
 
@@ -166,39 +166,39 @@ public class Nametags extends Module {
 
 			Vec3d rPos = entity.getPos().subtract(Renderer.getInterpolationOffset(entity)).add(0, entity.getHeight() + 0.25, 0);
 
-			if (entity instanceof PlayerEntity && getSetting(1).asToggle().state) {
+			if (entity instanceof PlayerEntity && getSetting(1).asToggle().getState()) {
 				double scale = Math.max(getSetting(1).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
 
 				List<Text> lines = getPlayerLines((PlayerEntity) entity);
 				drawLines(rPos.x, rPos.y, rPos.z, scale, lines);
 
-				if (getSetting(1).asToggle().getChild(1).asToggle().state) {
+				if (getSetting(1).asToggle().getChild(1).asToggle().getState()) {
 					drawItems(rPos.x, rPos.y + (lines.size() + 1) * 0.25 * scale, rPos.z, scale, getMainEquipment(entity));
 				}
-			} else if (EntityUtils.isAnimal(entity) && getSetting(2).asToggle().state) {
+			} else if (EntityUtils.isAnimal(entity) && getSetting(2).asToggle().getState()) {
 				double scale = Math.max(getSetting(2).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
 
 				List<Text> lines = getAnimalLines((LivingEntity) entity);
 				drawLines(rPos.x, rPos.y, rPos.z, scale, lines);
 
-				if (getSetting(2).asToggle().getChild(1).asToggle().state && entity instanceof FoxEntity) {
+				if (getSetting(2).asToggle().getChild(1).asToggle().getState() && entity instanceof FoxEntity) {
 					drawItems(rPos.x, rPos.y + (lines.size() + 1) * 0.25 * scale, rPos.z, scale, List.of(((FoxEntity) entity).getMainHandStack()));
 				}
-			} else if (entity instanceof Monster && getSetting(3).asToggle().state) {
+			} else if (entity instanceof Monster && getSetting(3).asToggle().getState()) {
 				double scale = Math.max(getSetting(3).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
 
 				List<Text> lines = getMobLines((LivingEntity) entity);
 				drawLines(rPos.x, rPos.y, rPos.z, scale, lines);
 
-				if (getSetting(3).asToggle().getChild(1).asToggle().state) {
+				if (getSetting(3).asToggle().getChild(1).asToggle().getState()) {
 					drawItems(rPos.x, rPos.y + (lines.size() + 1) * 0.25 * scale, rPos.z, scale, getMainEquipment(entity));
 				}
-			} else if (entity instanceof ItemEntity && getSetting(4).asToggle().state) {
+			} else if (entity instanceof ItemEntity && getSetting(4).asToggle().getState()) {
 				double scale = Math.max(getSetting(4).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
 
 				List<Text> lines = getItemLines((ItemEntity) entity);
 				drawLines(rPos.x, rPos.y, rPos.z, scale, lines);
-			} else if (entity instanceof ArmorStandEntity && getSetting(5).asToggle().state) {
+			} else if (entity instanceof ArmorStandEntity && getSetting(5).asToggle().getState()) {
 				double scale = Math.max(getSetting(5).asToggle().getChild(0).asSlider().getValue() * (mc.cameraEntity.distanceTo(entity) / 20), 1);
 
 				drawItems(rPos.x, rPos.y + 0.25 * scale, rPos.z, scale, getMainEquipment(entity));
@@ -262,23 +262,23 @@ public class Nametags extends Module {
 
 		PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(player.getGameProfile().getId());
 
-		if (getSetting(1).asToggle().getChild(4).asToggle().state && playerEntry != null) { // Ping
+		if (getSetting(1).asToggle().getChild(4).asToggle().getState() && playerEntry != null) { // Ping
 			mainText.add(new LiteralText(playerEntry.getLatency() + "ms").formatted(Formatting.GRAY));
 		}
 
-		if (getSetting(1).asToggle().getChild(2).asToggle().state) { // Name
+		if (getSetting(1).asToggle().getChild(2).asToggle().getState()) { // Name
 			mainText.add(((MutableText) player.getName()).formatted(BleachHack.friendMang.has(player) ? Formatting.AQUA : Formatting.RED));
 		}
 
-		if (getSetting(1).asToggle().getChild(3).asToggle().state) { // Health
-			if (getSetting(0).asMode().mode == 2) {
+		if (getSetting(1).asToggle().getChild(3).asToggle().getState()) { // Health
+			if (getSetting(0).asMode().getMode() == 2) {
 				lines.add(getHealthText(player));
 			} else {
 				mainText.add(getHealthText(player));
 			}
 		}
 
-		if (getSetting(1).asToggle().getChild(5).asToggle().state && playerEntry != null) { // GM
+		if (getSetting(1).asToggle().getChild(5).asToggle().getState() && playerEntry != null) { // GM
 			mainText.add(new LiteralText("[" + playerEntry.getGameMode().toString().substring(0, playerEntry.getGameMode() == GameMode.SPECTATOR ? 2 : 1) + "]").formatted(Formatting.GOLD));
 		}
 
@@ -298,12 +298,12 @@ public class Nametags extends Module {
 			UUID ownerUUID = animal instanceof HorseBaseEntity
 					? ((HorseBaseEntity) animal).getOwnerUuid() : ((TameableEntity) animal).getOwnerUuid();
 
-			if (getSetting(2).asToggle().getChild(4).asToggle().state && !animal.isBaby()
-					&& (getSetting(2).asToggle().getChild(4).asToggle().getChild(0).asMode().mode != 1 || tame)) {
+			if (getSetting(2).asToggle().getChild(4).asToggle().getState() && !animal.isBaby()
+					&& (getSetting(2).asToggle().getChild(4).asToggle().getChild(0).asMode().getMode() != 1 || tame)) {
 				lines.add(0, new LiteralText(tame ? "Tamed: Yes" : "Tamed: No").formatted(tame ? Formatting.GREEN : Formatting.RED));
 			}
 
-			if (getSetting(2).asToggle().getChild(5).asToggle().state && ownerUUID != null) {
+			if (getSetting(2).asToggle().getChild(5).asToggle().getState() && ownerUUID != null) {
 				if (uuidCache.containsKey(ownerUUID)) {
 					lines.add(0, new LiteralText("Owner: " + uuidCache.get(ownerUUID)).formatted(Formatting.GREEN));
 				} else if (failedUUIDs.contains(ownerUUID)) {
@@ -325,7 +325,7 @@ public class Nametags extends Module {
 				}
 			}
 
-			if (getSetting(2).asToggle().getChild(6).asToggle().state && animal instanceof HorseBaseEntity) {
+			if (getSetting(2).asToggle().getChild(6).asToggle().getState() && animal instanceof HorseBaseEntity) {
 				HorseBaseEntity he = (HorseBaseEntity) animal;
 
 				lines.add(0, new LiteralText(
@@ -336,12 +336,12 @@ public class Nametags extends Module {
 		
 		List<Text> mainText = new ArrayList<>();
 
-		if (getSetting(2).asToggle().getChild(2).asToggle().state) { // Name
+		if (getSetting(2).asToggle().getChild(2).asToggle().getState()) { // Name
 			mainText.add(((MutableText) animal.getName()).formatted(Formatting.GREEN));
 		}
 
-		if (getSetting(2).asToggle().getChild(3).asToggle().state) { // Health
-			if (getSetting(0).asMode().mode == 2) {
+		if (getSetting(2).asToggle().getChild(3).asToggle().getState()) { // Health
+			if (getSetting(0).asMode().getMode() == 2) {
 				lines.add(0, getHealthText(animal));
 			} else {
 				mainText.add(getHealthText(animal));
@@ -358,12 +358,12 @@ public class Nametags extends Module {
 		List<Text> lines = new ArrayList<>();
 		List<Text> mainText = new ArrayList<>();
 
-		if (getSetting(3).asToggle().getChild(2).asToggle().state) { // Name
+		if (getSetting(3).asToggle().getChild(2).asToggle().getState()) { // Name
 			mainText.add(((MutableText) mob.getName()).formatted(Formatting.DARK_PURPLE));
 		}
 
-		if (getSetting(3).asToggle().getChild(3).asToggle().state) { // Health
-			if (getSetting(0).asMode().mode == 2) {
+		if (getSetting(3).asToggle().getChild(3).asToggle().getState()) { // Health
+			if (getSetting(0).asMode().getMode() == 2) {
 				lines.add(getHealthText(mob));
 			} else {
 				mainText.add(getHealthText(mob));
@@ -379,14 +379,14 @@ public class Nametags extends Module {
 	public List<Text> getItemLines(ItemEntity item) {
 		List<Text> lines = new ArrayList<>();
 
-		if (!item.getName().getString().equals(item.getStack().getName().getString()) && getSetting(4).asToggle().getChild(1).asToggle().state) {
+		if (!item.getName().getString().equals(item.getStack().getName().getString()) && getSetting(4).asToggle().getChild(1).asToggle().getState()) {
 			lines.add(
 					new LiteralText("\"").formatted(Formatting.GOLD)
 					.append(((MutableText) item.getStack().getName()).formatted(Formatting.YELLOW))
 					.append(new LiteralText("\"").formatted(Formatting.GOLD)));
 		}
 
-		lines.add(((MutableText) item.getName()).formatted(Formatting.GOLD).append(getSetting(4).asToggle().getChild(2).asToggle().state ? Formatting.YELLOW + " [x" + item.getStack().getCount() + "]" : ""));
+		lines.add(((MutableText) item.getName()).formatted(Formatting.GOLD).append(getSetting(4).asToggle().getChild(2).asToggle().getState() ? Formatting.YELLOW + " [x" + item.getStack().getCount() + "]" : ""));
 
 		return lines;
 	}
@@ -394,11 +394,11 @@ public class Nametags extends Module {
 	private Text getHealthText(LivingEntity e) {
 		int totalHealth = (int) (e.getHealth() + e.getAbsorptionAmount());
 
-		if (getSetting(0).asMode().mode == 0) {
+		if (getSetting(0).asMode().getMode() == 0) {
 			return new LiteralText(Integer.toString(totalHealth)).styled(s -> s.withColor(getHealthColor(e)));
-		} else if (getSetting(0).asMode().mode == 1) {
+		} else if (getSetting(0).asMode().getMode() == 1) {
 			return new LiteralText(Integer.toString(totalHealth) + Formatting.GREEN + "/" + (int) e.getMaxHealth()).styled(s -> s.withColor(getHealthColor(e)));
-		} else if (getSetting(0).asMode().mode == 2) {
+		} else if (getSetting(0).asMode().getMode() == 2) {
 			// Health bar
 			String health = "";
 

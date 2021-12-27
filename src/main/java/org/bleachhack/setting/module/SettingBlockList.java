@@ -6,23 +6,22 @@
  * License, version 3. If a copy of the GPL was not distributed with this
  * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
  */
-package org.bleachhack.module.setting.other;
+package org.bleachhack.setting.module;
 
 import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.bleachhack.module.setting.base.SettingList;
+import org.bleachhack.setting.SettingDataHandlers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.minecraft.text.Text;
 import net.minecraft.util.registry.Registry;
 
 public class SettingBlockList extends SettingList<Block> {
@@ -32,7 +31,7 @@ public class SettingBlockList extends SettingList<Block> {
 	}
 
 	public SettingBlockList(String text, String windowText, Predicate<Block> filter, Block... defaultBlocks) {
-		super(text, windowText, getAllBlocks(filter), defaultBlocks);
+		super(text, windowText, SettingDataHandlers.BLOCK, getAllBlocks(filter), defaultBlocks);
 	}
 
 	private static Collection<Block> getAllBlocks(Predicate<Block> filter) {
@@ -61,13 +60,7 @@ public class SettingBlockList extends SettingList<Block> {
 	}
 
 	@Override
-	public Block getItemFromString(String string) {
-		Block bl = Registry.BLOCK.get(new Identifier(string));
-		return bl == Blocks.AIR ? null : bl;
-	}
-
-	@Override
-	public String getStringFromItem(Block item) {
-		return Registry.BLOCK.getId(item).toString();
+	public Text getName(Block item) {
+		return item.getName();
 	}
 }

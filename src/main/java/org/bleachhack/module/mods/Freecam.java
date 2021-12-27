@@ -15,8 +15,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.world.PlayerCopyEntity;
 
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -103,7 +103,7 @@ public class Freecam extends Module {
 
 	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
-		if (getSetting(1).asToggle().state && riding instanceof HorseBaseEntity) {
+		if (getSetting(1).asToggle().getState() && riding instanceof HorseBaseEntity) {
 			if (event.getScreen() instanceof InventoryScreen) {
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.OPEN_INVENTORY));
 				event.setCancelled(true);

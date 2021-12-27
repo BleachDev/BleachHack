@@ -15,10 +15,10 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
@@ -41,27 +41,27 @@ public class Ambience extends Module {
 				new SettingToggle("Overworld", true).withDesc("Changes the overworld ambience-").withChildren(
 						new SettingToggle("Sky Color", true).withDesc("Changes the overworld sky color.").withChildren(
 								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?"),
-								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky.")),
+								new SettingColor("Sky Color", 128, 255, 128).withDesc("Main color of the sky.")),
 						new SettingToggle("Foilage Color", false).withDesc("Changes the foilage color.").withChildren(
-								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("The color of the foilage.")),
+								new SettingColor("Color", 128, 255, 128).withDesc("The color of the foilage.")),
 						new SettingToggle("Water Color", false).withDesc("Changes the water color.").withChildren(
-								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("Color of the water."))),
+								new SettingColor("Color", 128, 255, 128).withDesc("Color of the water."))),
 				new SettingToggle("Nether", true).withDesc("Changes the nether ambience.").withChildren(
 						new SettingToggle("Sky Color", true).withDesc("Changes the nether sky color.").withChildren(
 								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?"),
-								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky.")),
+								new SettingColor("Sky Color", 128, 255, 128).withDesc("Main color of the sky.")),
 						new SettingToggle("Foilage Color", false).withDesc("Changes the foilage color.").withChildren(
-								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("The color of the foilage.")),
+								new SettingColor("Color", 128, 255, 128).withDesc("The color of the foilage.")),
 						new SettingToggle("Water Color", false).withDesc("Changes the water color").withChildren(
-								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("The color of the water."))),
+								new SettingColor("Color", 128, 255, 128).withDesc("The color of the water."))),
 				new SettingToggle("End", true).withDesc("Changes the end ambience.").withChildren(
 						new SettingToggle("Sky Color", true).withDesc("Changes the end sky color.").withChildren(
 								new SettingToggle("End Skybox", false).withDesc("2B2T QUeue SKY=!?!?!?"),
-								new SettingColor("Sky Color", 0.5f, 1f, 0.5f, false).withDesc("Main color of the sky.")),
+								new SettingColor("Sky Color", 128, 255, 128).withDesc("Main color of the sky.")),
 						new SettingToggle("Foilage Color", false).withDesc("Changes the foilage color.").withChildren(
-								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("The color of the foilage.")),
+								new SettingColor("Color", 128, 255, 128).withDesc("The color of the foilage.")),
 						new SettingToggle("Water Color", false).withDesc("Changes the water color.").withChildren(
-								new SettingColor("Color", 0.5f, 1f, 0.5f, false).withDesc("The color of the water."))));
+								new SettingColor("Color", 128, 255, 128).withDesc("The color of the water."))));
 	}
 
 	@Override
@@ -76,13 +76,13 @@ public class Ambience extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(0).asToggle().state) {
+		if (getSetting(0).asToggle().getState()) {
 			if (!weatherManager.isActive()) {
 				weatherManager.setRain(mc.world.getRainGradient(mc.getTickDelta()));
 				weatherManager.setThunder(mc.world.getThunderGradient(mc.getTickDelta()));
 			}
 
-			if (getSetting(0).asToggle().getChild(0).asMode().mode == 0) {
+			if (getSetting(0).asToggle().getChild(0).asMode().getMode() == 0) {
 				mc.world.getLevelProperties().setRaining(false);
 				mc.world.setRainGradient(0f);
 			} else {
@@ -94,14 +94,14 @@ public class Ambience extends Module {
 			weatherManager.reset();
 		}
 
-		if (getSetting(1).asToggle().state) {
+		if (getSetting(1).asToggle().getState()) {
 			mc.world.setTimeOfDay(getSetting(1).asToggle().getChild(0).asSlider().getValueLong());
 		}
 	}
 
 	@BleachSubscribe
 	public void readPacket(EventPacket.Read event) {
-		if (event.getPacket() instanceof GameStateChangeS2CPacket && getSetting(0).asToggle().state) {
+		if (event.getPacket() instanceof GameStateChangeS2CPacket && getSetting(0).asToggle().getState()) {
 			GameStateChangeS2CPacket packet = (GameStateChangeS2CPacket) event.getPacket();
 			if (packet.getReason() == GameStateChangeS2CPacket.RAIN_STARTED) {
 				weatherManager.setRain(1f);
@@ -116,9 +116,9 @@ public class Ambience extends Module {
 			}
 
 			event.setCancelled(true);
-		} else if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(0).asToggle().state) {
+		} else if (event.getPacket() instanceof DisconnectS2CPacket && getSetting(0).asToggle().getState()) {
 			weatherManager.reset();
-		} else if (event.getPacket() instanceof WorldTimeUpdateS2CPacket && getSetting(1).asToggle().state) {
+		} else if (event.getPacket() instanceof WorldTimeUpdateS2CPacket && getSetting(1).asToggle().getState()) {
 			event.setCancelled(true);
 		}
 	}
@@ -127,22 +127,23 @@ public class Ambience extends Module {
 	public void onBiomeColor(EventBiomeColor event) {
 		int type = event instanceof EventBiomeColor.Water ? 2 : 1;
 
-		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(type).asToggle().state) {
+		if (getCurrentDimSetting().getState() && getCurrentDimSetting().getChild(type).asToggle().getState()) {
 			event.setColor(getCurrentDimSetting().getChild(type).asToggle().getChild(0).asColor().getRGB());
 		}
 	}
 
 	@BleachSubscribe
 	public void onSkyColor(EventSkyRender.Color event) {
-		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(0).asToggle().state) {
-			event.setColor(getCurrentDimSetting().getChild(0).asToggle().getChild(1).asColor().getRGBFloat());
+		if (getCurrentDimSetting().getState() && getCurrentDimSetting().getChild(0).asToggle().getState()) {
+			int[] color = getCurrentDimSetting().getChild(0).asToggle().getChild(1).asColor().getRGBArray();
+			event.setColor(new Vec3d(color[0] / 255d, color[1] / 255d, color[2] / 255d));
 		}
 	}
 
 	@BleachSubscribe
 	public void onSkyProperties(EventSkyRender.Properties event) {
-		if (getCurrentDimSetting().state && getCurrentDimSetting().getChild(0).asToggle().state
-				&& getCurrentDimSetting().getChild(0).asToggle().getChild(0).asToggle().state) {
+		if (getCurrentDimSetting().getState() && getCurrentDimSetting().getChild(0).asToggle().getState()
+				&& getCurrentDimSetting().getChild(0).asToggle().getChild(0).asToggle().getState()) {
 			event.setSky(new DimensionEffects(event.getSky().getCloudsHeight(), false, DimensionEffects.SkyType.END, true, false) {
 
 				public Vec3d adjustFogColor(Vec3d color, float sunHeight) {

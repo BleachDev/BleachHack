@@ -8,9 +8,9 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.shader.BleachCoreShaders;
@@ -45,7 +45,7 @@ public class BlockHighlight extends Module {
 				new SettingSlider("ShaderFill", 1, 255, 50, 0).withDesc("How opaque the fill on shader mode should be."),
 				new SettingSlider("Box", 0, 5, 2, 1).withDesc("How thick the box outline should be."),
 				new SettingSlider("BoxFill", 0, 255, 50, 0).withDesc("How opaque the fill on box mode should be."),
-				new SettingColor("Color", 0.0f, 0.5f, 0.5f, false).withDesc("The color of the highlight."));
+				new SettingColor("Color", 0, 128, 128).withDesc("The color of the highlight."));
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class BlockHighlight extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		int mode = getSetting(0).asMode().mode;
+		int mode = getSetting(0).asMode().getMode();
 
 		if (!(mc.crosshairTarget instanceof BlockHitResult))
 			return;

@@ -16,9 +16,9 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
@@ -61,11 +61,11 @@ public class FakeLag extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(0).asMode().mode == 0) {
-			if (getSetting(1).asToggle().state &&
+		if (getSetting(0).asMode().getMode() == 0) {
+			if (getSetting(1).asToggle().getState() &&
 					System.currentTimeMillis() - startTime > getSetting(1).asToggle().getChild(0).asSlider().getValue() * 1000)
 				setEnabled(false);
-		} else if (getSetting(0).asMode().mode == 1) {
+		} else if (getSetting(0).asMode().getMode() == 1) {
 			if (System.currentTimeMillis() - startTime > getSetting(2).asSlider().getValue() * 1000) {
 				setEnabled(false);
 				setEnabled(true);

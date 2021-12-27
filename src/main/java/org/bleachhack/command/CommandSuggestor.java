@@ -9,8 +9,8 @@ import org.bleachhack.event.events.EventKeyPress;
 import org.bleachhack.event.events.EventOpenScreen;
 import org.bleachhack.event.events.EventRenderInGameHud;
 import org.bleachhack.eventbus.BleachSubscribe;
-import org.bleachhack.gui.option.Option;
 import org.bleachhack.mixin.AccessorChatScreen;
+import org.bleachhack.setting.option.Option;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.MinecraftClient;

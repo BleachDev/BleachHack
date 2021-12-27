@@ -13,8 +13,8 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 import org.lwjgl.glfw.GLFW;
@@ -41,7 +41,7 @@ public class ClickTp extends Module {
 				new SettingToggle("Liquids", false).withDesc("Interacts with liquids."),
 				new SettingToggle("YFirst", false).withDesc("Sets you to the correct Y level first, then to your XZ coords, might fix going through walls."),
 				new SettingToggle("AlwaysUp", false).withDesc("Always teleports you to the top of blocks instead of sides."),
-				new SettingColor("Highlight", 1f, 0.2f, 0.8f, false).withDesc("The color of the target block."));
+				new SettingColor("Highlight", 128, 50, 200).withDesc("The color of the target block."));
 	}
 
 	@Override
@@ -55,11 +55,11 @@ public class ClickTp extends Module {
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
 		if (pos != null && dir != null) {
-			float[] col = getSetting(4).asColor().getRGBFloat();
+			int[] col = getSetting(4).asColor().getRGBArray();
 			Renderer.drawBoxBoth(new Box(
 					pos.getX() + (dir == Direction.EAST ? 0.95 : 0), pos.getY() + (dir == Direction.UP ? 0.95 : 0), pos.getZ() + (dir == Direction.SOUTH ? 0.95 : 0),
 					pos.getX() + (dir == Direction.WEST ? 0.05 : 1), pos.getY() + (dir == Direction.DOWN ? 0.05 : 1), pos.getZ() + (dir == Direction.NORTH ? 0.05 : 1)),
-					QuadColor.single(col[0], col[1], col[2], 0.5f), 2.5f);
+					QuadColor.single(col[0], col[1], col[2], 128), 2.5f);
 		}
 	}
 
@@ -71,12 +71,12 @@ public class ClickTp extends Module {
 			return;
 		}
 
-		BlockHitResult hit = (BlockHitResult) mc.player.raycast(100, mc.getTickDelta(), getSetting(1).asToggle().state);
+		BlockHitResult hit = (BlockHitResult) mc.player.raycast(100, mc.getTickDelta(), getSetting(1).asToggle().getState());
 
-		boolean miss = hit.getType() == Type.MISS && !getSetting(0).asToggle().state;
+		boolean miss = hit.getType() == Type.MISS && !getSetting(0).asToggle().getState();
 
 		pos = miss ? null : hit.getBlockPos();
-		dir = miss ? null : getSetting(3).asToggle().state ? Direction.UP : hit.getSide();
+		dir = miss ? null : getSetting(3).asToggle().getState() ? Direction.UP : hit.getSide();
 
 		if (pos != null && dir != null) {
 			if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == 1 && mc.currentScreen == null && !antiSpamClick) {
@@ -84,7 +84,7 @@ public class ClickTp extends Module {
 
 				Vec3d tpPos = Vec3d.ofBottomCenter(pos.offset(dir, dir == Direction.DOWN ? 2 : 1));
 
-				if (getSetting(2).asToggle().state) {
+				if (getSetting(2).asToggle().getState()) {
 					mc.player.updatePosition(mc.player.getX(), tpPos.y, mc.player.getZ());
 					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), tpPos.y, mc.player.getZ(), false));
 				}

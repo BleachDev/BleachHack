@@ -12,8 +12,8 @@ import org.bleachhack.event.events.EventOpenScreen;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachQueue;
 
 import net.minecraft.client.gui.screen.DeathScreen;
@@ -29,7 +29,7 @@ public class AutoRespawn extends Module {
 	@BleachSubscribe
 	public void onOpenScreen(EventOpenScreen event) {
 		if (event.getScreen() instanceof DeathScreen) {
-			if (getSetting(0).asToggle().state) {
+			if (getSetting(0).asToggle().getState()) {
 				for (int i = 0; i <= getSetting(0).asToggle().getChild(0).asSlider().getValueInt(); i++) {
 					BleachQueue.add("autorespawn", () -> {});
 				}

@@ -51,7 +51,7 @@ public class CmdClickGui extends Command {
 						((ClickGuiWindow) m).hiding = false;
 						m.x1 = x;
 						m.y1 = 35;
-						x += (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue() + 5;
+						x += ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValueInt() + 5;
 					}
 				}
 			} else {
@@ -65,7 +65,7 @@ public class CmdClickGui extends Command {
 				throw new CmdSyntaxException("Invalid clickgui length: " + args[1]);
 			}
 
-			ModuleManager.getModule("ClickGui").getSetting(0).asSlider().setValue(NumberUtils.createNumber(args[1]).intValue());
+			ModuleManager.getModule("ClickGui").getSetting(0).asSlider().setValue(NumberUtils.createNumber(args[1]).doubleValue());
 			BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 			BleachLogger.info("Set the clickgui length to: " + args[1]);

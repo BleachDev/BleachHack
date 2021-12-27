@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingRotate;
 import org.bleachhack.util.InventoryUtils;
 
 import com.google.common.collect.Sets;
@@ -144,7 +144,7 @@ public class WorldUtils {
 	}
 
 	public static boolean placeBlock(BlockPos pos, int slot, SettingRotate sr, boolean forceLegit, boolean airPlace, boolean swingHand) {
-		return placeBlock(pos, slot, !sr.state ? 0 : sr.getRotateMode() + 1, forceLegit, airPlace, swingHand);
+		return placeBlock(pos, slot, !sr.getState() ? 0 : sr.getRotateMode() + 1, forceLegit, airPlace, swingHand);
 	}
 
 	public static boolean placeBlock(BlockPos pos, int slot, int rotateMode, boolean forceLegit, boolean airPlace, boolean swingHand) {

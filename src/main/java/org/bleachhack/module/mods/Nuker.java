@@ -24,12 +24,12 @@ import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingColor;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
-import org.bleachhack.module.setting.other.SettingBlockList;
-import org.bleachhack.module.setting.other.SettingRotate;
+import org.bleachhack.setting.module.SettingBlockList;
+import org.bleachhack.setting.module.SettingColor;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingRotate;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.Boxes;
 import org.bleachhack.util.collections.ImmutablePairList;
 import org.bleachhack.util.render.Renderer;
@@ -62,10 +62,10 @@ public class Nuker extends Module {
 				new SettingToggle("NoParticles", false).withDesc("Removes block breaking particles."),
 				new SettingToggle("Highlight", false).withDesc("Highlights the blocks you're currently mining.").withChildren(
 						new SettingMode("Mode", "Opacity", "Expand").withDesc("How to show the mining progress."),
-						new SettingColor("Color", 1f, 0.5f, 0.5f, false).withDesc("The color of the highlight.")),
+						new SettingColor("Color", 255, 128, 128).withDesc("The color of the highlight.")),
 				new SettingToggle("RangeHighlight", false).withDesc("Highlights the range you can mine.").withChildren(
 						new SettingSlider("Width", 0.1, 10, 3, 1).withDesc("The width of the lines."),
-						new SettingColor("Color", 1f, 0f, 0f, false).withDesc("The color of the highlight.")));
+						new SettingColor("Color", 255, 0, 0).withDesc("The color of the highlight.")));
 	}
 
 	@Override
@@ -86,11 +86,11 @@ public class Nuker extends Module {
 		// Add blocks around player
 		SettingToggle filterToggler = getSetting(6).asToggle();
 		for (int x = MathHelper.ceil(range); x >= MathHelper.floor(-range); x--) {
-			for (int y = MathHelper.ceil(range); y >= (getSetting(8).asToggle().state ? -mc.player.getEyeHeight(mc.player.getPose()) + 0.2 : MathHelper.floor(-range)); y--) {
+			for (int y = MathHelper.ceil(range); y >= (getSetting(8).asToggle().getState() ? -mc.player.getEyeHeight(mc.player.getPose()) + 0.2 : MathHelper.floor(-range)); y--) {
 				for (int z = MathHelper.ceil(range); z >= MathHelper.floor(-range); z--) {
 					BlockPos pos = new BlockPos(mc.player.getEyePos().add(x, y, z));
 
-					double distTo = getSetting(3).asMode().mode == 0
+					double distTo = getSetting(3).asMode().getMode() == 0
 							? MathHelper.absMax(MathHelper.absMax(mc.player.getX() - (pos.getX() + 0.5), mc.player.getEyeY() - (pos.getY() + 0.5)), mc.player.getZ() - (pos.getZ() + 0.5))
 									: mc.player.getPos().distanceTo(Vec3d.ofCenter(pos));
 
@@ -98,11 +98,11 @@ public class Nuker extends Module {
 					if (distTo - 0.5 > getSetting(4).asSlider().getValue() || state.isAir() || state.getBlock() instanceof FluidBlock)
 						continue;
 
-					if (filterToggler.state) {
+					if (filterToggler.getState()) {
 						boolean contains = filterToggler.getChild(1).asList(Block.class).contains(state.getBlock());
 
-						if ((filterToggler.getChild(0).asMode().mode == 0 && contains)
-								|| (filterToggler.getChild(0).asMode().mode == 1 && !contains)) {
+						if ((filterToggler.getChild(0).asMode().getMode() == 0 && contains)
+								|| (filterToggler.getChild(0).asMode().getMode() == 1 && !contains)) {
 							continue;
 						}
 					}
@@ -111,7 +111,7 @@ public class Nuker extends Module {
 
 					if (vec != null) {
 						blocks.add(pos, vec);
-					} else if (!getSetting(7).asToggle().state) {
+					} else if (!getSetting(7).asToggle().getState()) {
 						blocks.add(pos, Pair.of(Vec3d.ofCenter(pos), Direction.UP));
 					}
 				}
@@ -132,11 +132,11 @@ public class Nuker extends Module {
 				continue;
 			}
 
-			if (getSetting(0).asMode().mode == 1 && breakingDelta <= 1f && broken > 0) {
+			if (getSetting(0).asMode().getMode() == 1 && breakingDelta <= 1f && broken > 0) {
 				return;
 			}
 
-			if (getSetting(9).asRotate().state) {
+			if (getSetting(9).asRotate().getState()) {
 				Vec3d v = pos.getValue().getLeft();
 				WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(9).asRotate());
 			}
@@ -147,10 +147,10 @@ public class Nuker extends Module {
 			mc.player.swingHand(Hand.MAIN_HAND);
 
 			broken++;
-			if (getSetting(0).asMode().mode == 0
-					|| (getSetting(0).asMode().mode == 1 && breakingDelta <= 1f)
-					|| (getSetting(0).asMode().mode == 1 && broken >= getSetting(1).asSlider().getValueInt())
-					|| (getSetting(0).asMode().mode == 2 && broken >= getSetting(1).asSlider().getValueInt())) {
+			if (getSetting(0).asMode().getMode() == 0
+					|| (getSetting(0).asMode().getMode() == 1 && breakingDelta <= 1f)
+					|| (getSetting(0).asMode().getMode() == 1 && broken >= getSetting(1).asSlider().getValueInt())
+					|| (getSetting(0).asMode().getMode() == 2 && broken >= getSetting(1).asSlider().getValueInt())) {
 				return;
 			}
 		}
@@ -158,8 +158,8 @@ public class Nuker extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
-		if (getSetting(11).asToggle().state) {
-			float[] color = getSetting(11).asToggle().getChild(1).asColor().getRGBFloat();
+		if (getSetting(11).asToggle().getState()) {
+			int[] color = getSetting(11).asToggle().getChild(1).asColor().getRGBArray();
 
 			float breakingProgress = mc.interactionManager.currentBreakingProgress;
 
@@ -167,24 +167,24 @@ public class Nuker extends Module {
 				VoxelShape shape = mc.world.getBlockState(pos).getOutlineShape(mc.world, pos);
 
 				if (!shape.isEmpty()) {
-					if (getSetting(11).asToggle().getChild(0).asMode().mode == 0) {
+					if (getSetting(11).asToggle().getChild(0).asMode().getMode() == 0) {
 						Renderer.drawBoxBoth(shape.getBoundingBox().offset(pos),
-								QuadColor.single(color[0], color[1], color[2], breakingProgress * 0.8f), 2.5f);
+								QuadColor.single(color[0], color[1], color[2], (int) (breakingProgress * 200)), 2.5f);
 					} else {
 						Renderer.drawBoxBoth(Boxes.multiply(shape.getBoundingBox().offset(pos), breakingProgress),
-								QuadColor.single(color[0], color[1], color[2], 0.5f), 2.5f);
+								QuadColor.single(color[0], color[1], color[2], 128), 2.5f);
 					}
 				}
 			}
 		}
 
-		if (getSetting(12).asToggle().state) {
+		if (getSetting(12).asToggle().getState()) {
 			Vec3d pos = mc.player.getPos().subtract(Renderer.getInterpolationOffset(mc.player));
 			double range = getSetting(4).asSlider().getValue();
 			int color = 0xff000000 | getSetting(12).asToggle().getChild(1).asColor().getRGB();
 			float width = getSetting(12).asToggle().getChild(0).asSlider().getValueFloat();
 
-			if (getSetting(3).asMode().mode == 0) {
+			if (getSetting(3).asMode().getMode() == 0) {
 				Renderer.drawBoxOutline(new Box(pos, pos).expand(range, 0, range), QuadColor.single(color), width,
 						Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.EAST, Direction.DOWN);
 			} else {
@@ -210,7 +210,7 @@ public class Nuker extends Module {
 
 	@BleachSubscribe
 	public void onParticle(EventParticle.Normal event) {
-		if (event.getParticle() instanceof BlockDustParticle && getSetting(10).asToggle().state) {
+		if (event.getParticle() instanceof BlockDustParticle && getSetting(10).asToggle().getState()) {
 			event.setCancelled(true);
 		}
 	}
@@ -242,7 +242,7 @@ public class Nuker extends Module {
 		Comparator<BlockPos> distComparator = Comparator.comparingDouble(b -> mc.player.getEyePos().distanceTo(Vec3d.ofCenter(b)));
 		Comparator<BlockPos> hardnessComparator = Comparator.comparing(b -> mc.world.getBlockState(b).getHardness(mc.world, b));
 
-		return switch (getSetting(5).asMode().mode) {
+		return switch (getSetting(5).asMode().getMode()) {
 			case 0 -> keepBlockUnderComparator.thenComparing(distComparator);
 			case 1 -> keepBlockUnderComparator.thenComparing(distComparator.reversed());
 			case 2 -> keepBlockUnderComparator.thenComparing(hardnessComparator);

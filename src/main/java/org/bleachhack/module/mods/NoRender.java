@@ -19,9 +19,9 @@ import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingMode;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.io.BleachFileHelper;
 
 import com.google.gson.JsonElement;
@@ -109,19 +109,19 @@ public class NoRender extends Module {
 	}
 
 	public boolean isOverlayToggled(int overlayChild) {
-		return isEnabled() && getSetting(0).asToggle().state && getOverlayChild(overlayChild).state;
+		return isEnabled() && getSetting(0).asToggle().getState() && getOverlayChild(overlayChild).getState();
 	}
 
 	public boolean isWorldToggled(int worldChild) {
-		return isEnabled() && getSetting(1).asToggle().state && getWorldChild(worldChild).state;
+		return isEnabled() && getSetting(1).asToggle().getState() && getWorldChild(worldChild).getState();
 	}
 
 	public boolean isParticleToggled(int particleChild) {
-		return isEnabled() && getSetting(2).asToggle().state && getParticleChild(particleChild).state;
+		return isEnabled() && getSetting(2).asToggle().getState() && getParticleChild(particleChild).getState();
 	}
 
 	public boolean isEntityToggled(int entityChild) {
-		return isEnabled() && getSetting(3).asToggle().state && getEntityChild(entityChild).state;
+		return isEnabled() && getSetting(3).asToggle().getState() && getEntityChild(entityChild).getState();
 	}
 
 	@BleachSubscribe
@@ -150,13 +150,13 @@ public class NoRender extends Module {
 		if (event.getBlockEntity() instanceof SignBlockEntity && isWorldToggled(0)) {
 			SettingToggle signSetting = getWorldChild(0);
 
-			if (signSetting.getChild(0).asMode().mode == 0) {
+			if (signSetting.getChild(0).asMode().getMode() == 0) {
 				event.setCancelled(true);
 			} else {
 				SignBlockEntity sign = new SignBlockEntity(event.getBlockEntity().getPos(), event.getBlockEntity().getCachedState());
 				sign.setWorld(mc.world);
 
-				if (signSetting.getChild(0).asMode().mode == 2) {
+				if (signSetting.getChild(0).asMode().getMode() == 2) {
 					for (int i = 0; i < 4; i++) {
 						sign.setTextOnRow(i, signText[i]);
 					}
@@ -179,7 +179,7 @@ public class NoRender extends Module {
 
 	@BleachSubscribe
 	public void onParticleEmitter(EventParticle.Emitter event) {
-		if (isWorldToggled(1) && getWorldChild(1).getChild(0).asToggle().state && event.getEffect().getType() == ParticleTypes.TOTEM_OF_UNDYING) {
+		if (isWorldToggled(1) && getWorldChild(1).getChild(0).asToggle().getState() && event.getEffect().getType() == ParticleTypes.TOTEM_OF_UNDYING) {
 			event.setCancelled(true);
 		}
 	}
@@ -187,7 +187,7 @@ public class NoRender extends Module {
 	@BleachSubscribe
 	public void onSoundPlay(EventSoundPlay.Normal event) {
 		String path = event.getInstance().getId().getPath();
-		if (isWorldToggled(1) && getWorldChild(1).getChild(1).asToggle().state && path.equals("item.totem.use")) {
+		if (isWorldToggled(1) && getWorldChild(1).getChild(1).asToggle().getState() && path.equals("item.totem.use")) {
 			event.setCancelled(true);
 		} else if (isWorldToggled(2) && path.equals("entity.elder_guardian.curse")) {
 			event.setCancelled(true);

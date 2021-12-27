@@ -12,8 +12,8 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
 
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -51,18 +51,18 @@ public class AutoEat extends Module {
 			mc.options.keyUse.setPressed(false);
 		}
 
-		if (getSetting(0).asToggle().state && mc.player.getHungerManager().getFoodLevel() <= getSetting(0).asToggle().getChild(0).asSlider().getValueInt()) {
+		if (getSetting(0).asToggle().getState() && mc.player.getHungerManager().getFoodLevel() <= getSetting(0).asToggle().getChild(0).asSlider().getValueInt()) {
 			startEating();
-		} else if (getSetting(1).asToggle().state && (int) mc.player.getHealth() + (int) mc.player.getAbsorptionAmount() <= getSetting(1).asToggle().getChild(0).asSlider().getValueInt()) {
+		} else if (getSetting(1).asToggle().getState() && (int) mc.player.getHealth() + (int) mc.player.getAbsorptionAmount() <= getSetting(1).asToggle().getChild(0).asSlider().getValueInt()) {
 			startEating();
 		}
 	}
 
 	private void startEating() {
-		boolean gapples = getSetting(2).asToggle().state;
-		boolean preferGapples = getSetting(2).asToggle().getChild(0).asToggle().state;
-		boolean chorus = getSetting(3).asToggle().state;
-		boolean poison = getSetting(4).asToggle().state;
+		boolean gapples = getSetting(2).asToggle().getState();
+		boolean preferGapples = getSetting(2).asToggle().getChild(0).asToggle().getState();
+		boolean chorus = getSetting(3).asToggle().getState();
+		boolean poison = getSetting(4).asToggle().getState();
 
 		int slot = -1;
 		int hunger = -1;

@@ -16,8 +16,8 @@ import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
-import org.bleachhack.module.setting.base.SettingSlider;
-import org.bleachhack.module.setting.base.SettingToggle;
+import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.setting.module.SettingToggle;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -55,7 +55,7 @@ public class AutoSign extends Module {
 		if (event.getScreen() instanceof SignEditScreen) {
 			event.setCancelled(true);
 
-			if (getSetting(0).asToggle().state) {
+			if (getSetting(0).asToggle().getState()) {
 				text = new String[] {};
 				while (text.length < 4) {
 					IntStream chars = new Random().ints(0, 0x10FFFF);
