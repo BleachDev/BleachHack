@@ -8,7 +8,6 @@
  */
 package org.bleachhack.module.mods;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.util.Hand;
@@ -28,20 +27,30 @@ import org.bleachhack.util.io.BleachFileMang;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public class Notebot extends Module {
 
 	/* All the lines of the file [tick:pitch:instrument] */
-	private List<int[]> notes = new ArrayList<>();
+	private Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
 
 	/* All unique instruments and pitches [pitch:instrument] */
-	private List<int[]> tunes = new ArrayList<>();
+	private Set<Note> requirements = new HashSet<>();
 
 	/* Map of noteblocks to hit when playing and the pitch of each [blockpos:pitch] */
 	private Map<BlockPos, Integer> blockTunes = new HashMap<>();
@@ -86,32 +95,33 @@ public class Notebot extends Module {
 				.map(BlockPos::toImmutable)
 				.toList();
 
-		for (int[] i : tunes) {
+		for (Note note : requirements) {
 			for (BlockPos pos: noteblocks) {
 				if (blockTunes.containsKey(pos))
 					continue;
 
 				if (getSetting(2).asToggle().getState()) {
-					if (!blockTunes.containsValue(i[0])) {
-						blockTunes.put(pos, i[0]); 
+					if (!blockTunes.containsValue(note.pitch)) {
+						blockTunes.put(pos, note.pitch); 
 						break;
 					}
 				} else {
 					int instrument = getInstrument(pos).ordinal();
-					if (i[1] == instrument
+					if (note.instrument == instrument
 							&& blockTunes.entrySet().stream()
-							.filter(e -> e.getValue() == i[0])
+							.filter(e -> e.getValue() == note.pitch)
 							.noneMatch(e -> getInstrument(e.getKey()).ordinal() == instrument)) {
-						blockTunes.put(pos, i[0]);
+						blockTunes.put(pos, note.pitch);
 						break;
 					}
 				}
 			}
 		}
 
-		int totalTunes = getSetting(2).asToggle().getState() ? (int) tunes.stream().map(i -> i[0]).distinct().count() : tunes.size();
-		if (totalTunes > blockTunes.size()) {
-			BleachLogger.warn("Mapping Error: Missing " + (totalTunes - blockTunes.size()) + " Noteblocks");
+		int required = getSetting(2).asToggle().getState()
+				? (int) requirements.stream().mapToInt(i -> i.instrument).distinct().count() : requirements.size();
+		if (required > blockTunes.size()) {
+			BleachLogger.warn("Mapping Error: Missing " + (required - blockTunes.size()) + " Noteblocks");
 		}
 	}
 
@@ -128,7 +138,7 @@ public class Notebot extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		/* Tune Noteblocks */
+		// Tune Noteblocks
 		int tuneMode = getSetting(0).asToggle().getChild(0).asMode().getMode();
 
 		if (getSetting(0).asToggle().getState()) {
@@ -167,23 +177,15 @@ public class Notebot extends Module {
 			}
 		}
 
-		/* Loop */
-		boolean loopityloop = true;
-		for (int[] n : notes) {
-			if (timer - 10 < n[0]) {
-				loopityloop = false;
-				break;
-			}
-		}
+		// Loop
+		boolean loop = timer - 10 > notes.keySet().stream().max(Comparator.naturalOrder()).get();
 
-		if (loopityloop) {
+		if (loop) {
 			if (getSetting(3).asToggle().getState()) {
-				try {
-					List<String> files = new ArrayList<>();
-					Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"));
-					paths.forEach(p -> files.add(p.getFileName().toString()));
-					paths.close();
-					filePath = files.get(new Random().nextInt(files.size() - 1) + 1);
+				try (Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"))) {
+					List<Path> lst = paths.toList();
+
+					filePath = lst.get(ThreadLocalRandom.current().nextInt(lst.size() - 1) + 1).getFileName().toString();
 					setEnabled(false);
 					setEnabled(true);
 					BleachLogger.info("Now Playing: \u00a7a" + filePath);
@@ -194,21 +196,18 @@ public class Notebot extends Module {
 			}
 		}
 
-		/* Play Noteblocks */
+		// Play Noteblocks
 		timer++;
 
-		List<int[]> curNotes = new ArrayList<>();
-		for (int[] i : notes)
-			if (i[0] == timer)
-				curNotes.add(i);
+		Collection<Note> curNotes = notes.get(timer);
+
 		if (curNotes.isEmpty())
 			return;
 
 		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
-			for (int[] i : curNotes) {
-				if (isNoteblock(e.getKey()) && (i[1] == (getNote(e.getKey()))
-						&& (getSetting(2).asToggle().getState()
-								|| i[2] == (getInstrument(e.getKey()).ordinal()))))
+			for (Note i : curNotes) {
+				if (isNoteblock(e.getKey()) && (i.pitch == (getNote(e.getKey()))
+						&& (getSetting(2).asToggle().getState() || i.instrument == getInstrument(e.getKey()).ordinal())))
 					playBlock(e.getKey());
 			}
 		}
@@ -229,50 +228,66 @@ public class Notebot extends Module {
 	}
 
 	public boolean isNoteblock(BlockPos pos) {
-		/* Checks if this block is a noteblock and the noteblock can be played */
+		// Checks if this block is a noteblock and the noteblock can be played
 		return mc.world.getBlockState(pos).getBlock() instanceof NoteBlock
-				&& mc.world.getBlockState(pos.up()).getBlock() == Blocks.AIR;
+				&& mc.world.getBlockState(pos.up()).isAir();
 	}
 
 	public void playBlock(BlockPos pos) {
 		if (!isNoteblock(pos))
 			return;
+
 		mc.interactionManager.attackBlock(pos, Direction.UP);
 		mc.player.swingHand(Hand.MAIN_HAND);
 	}
 
 	public void readFile(String fileName) {
-		tunes.clear();
+		requirements.clear();
 		notes.clear();
 
-		/* Read the file */
+		// Read the file
 		BleachFileMang.createFile("notebot/" + fileName);
-		List<String> lines = BleachFileMang.readFileLines("notebot/" + fileName)
-				.stream().filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";"))).toList();
-		for (String s : lines)
-			s = s.replaceAll(" ", "");
+		List<String> lines = BleachFileMang.readFileLines("notebot/" + fileName).stream()
+				.filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";")))
+				.map(s -> s.replaceAll(" ", ""))
+				.toList();
 
-		/* Parse note info into "memory" */
+		// Parse notes
 		for (String s : lines) {
 			String[] s1 = s.split(":");
 			try {
-				notes.add(new int[] { Integer.parseInt(s1[0]), Integer.parseInt(s1[1]), Integer.parseInt(s1[2]) });
+				notes.put(Integer.parseInt(s1[0]), new Note(Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
 			} catch (Exception e) {
 				BleachLogger.warn("Error Parsing Note: \u00a7o" + s);
 			}
 		}
 
-		/* Get all unique pitches and instruments */
-		for (String s : lines) {
-			try {
-				List<String> strings = Arrays.asList(s.split(":"));
-				int[] tune = new int[] { Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)) };
-				if (tunes.stream().noneMatch(i -> i[0] == tune[0] && i[1] == tune[1])) {
-					tunes.add(tune);
-				}
-			} catch (Exception e) {
-				BleachLogger.warn("Error trying to parse tune: \u00a7o" + s);
-			}
+		// Get all unique pitches and instruments
+		requirements.addAll(notes.values());
+	}
+
+	public static class Note {
+
+		public int pitch;
+		public int instrument;
+
+		public Note(int pitch, int instrument) {
+			this.pitch = pitch;
+			this.instrument = instrument;
+		}
+
+		@Override
+		public int hashCode() {
+			return pitch * 31 + instrument;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Note))
+				return false;
+
+			Note other = (Note) obj;
+			return instrument == other.instrument && pitch == other.pitch;
 		}
 	}
 
