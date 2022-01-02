@@ -107,7 +107,8 @@ public class EntityMenuScreen extends Screen {
 		}
 	}
 
-	public boolean isPauseScreen() {
+	@Override
+	public boolean shouldPause() {
 		return false;
 	}
 

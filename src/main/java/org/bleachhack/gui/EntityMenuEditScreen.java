@@ -335,7 +335,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 	}
 
 	@Override
-	public boolean isPauseScreen() {
+	public boolean shouldPause() {
 		return false;
 	}
 }

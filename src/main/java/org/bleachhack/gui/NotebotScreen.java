@@ -193,7 +193,8 @@ public class NotebotScreen extends WindowScreen {
 		}
 	}
 
-	public boolean isPauseScreen() {
+	@Override
+	public boolean shouldPause() {
 		return false;
 	}
 

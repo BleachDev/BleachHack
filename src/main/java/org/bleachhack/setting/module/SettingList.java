@@ -244,7 +244,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 		}
 
 		@Override
-		public boolean isPauseScreen() {
+		public boolean shouldPause() {
 			return false;
 		}
 

@@ -46,7 +46,8 @@ public abstract class ClickGuiScreen extends WindowScreen {
 		warningOpacity = 0;
 	}
 
-	public boolean isPauseScreen() {
+	@Override
+	public boolean shouldPause() {
 		return false;
 	}
 
