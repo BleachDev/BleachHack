@@ -24,7 +24,7 @@ import net.minecraft.util.math.Vec3d;
 public class PlaceDirOperation extends PlaceOperation {
 
 	private Direction dir;
-	private boolean faced = false;
+	private boolean faced;
 
 	public PlaceDirOperation(BlockPos pos, Direction dir, Item... items) {
 		super(pos, items);
@@ -33,20 +33,17 @@ public class PlaceDirOperation extends PlaceOperation {
 
 	@Override
 	public boolean execute() {
-		int slot = InventoryUtils.getSlot(true, i -> ArrayUtils.contains(items, mc.player.getInventory().getStack(i).getItem()));
+		if (faced) {
+			int slot = InventoryUtils.getSlot(true, i -> ArrayUtils.contains(items, mc.player.getInventory().getStack(i).getItem()));
 
-		if (slot != -1 && WorldUtils.canPlaceBlock(pos)) {
-			if (!faced) {
-				Vec3d lookPos = mc.player.getEyePos().add(dir.getOffsetX(), dir.getOffsetY(), dir.getOffsetZ());
-				WorldUtils.facePosPacket(lookPos.getX(), lookPos.getY(), lookPos.getZ());
+			faced = false;
+			return slot != -1 && WorldUtils.placeBlock(pos, slot, 0, false, false, true);
+		} else {
+			Vec3d lookPos = mc.player.getEyePos().add(dir.getOffsetX(), dir.getOffsetY(), dir.getOffsetZ());
+			WorldUtils.facePosPacket(lookPos.getX(), lookPos.getY(), lookPos.getZ());
 
-				faced = true;
-				return false;
-			}
-
-			return WorldUtils.placeBlock(pos, slot, 0, false, false, true);
+			faced = true;
+			return false;
 		}
-
-		return false;
 	}
 }
