@@ -261,24 +261,6 @@ public class WorldUtils {
 		return true;
 	}
 
-	public static boolean canPlaceBlock(BlockPos pos) {
-		if (pos.getY() < 0 || pos.getY() > 255 || !isBlockEmpty(pos))
-			return false;
-
-		for (Direction d : Direction.values()) {
-			if ((d == Direction.DOWN && pos.getY() == 0) || (d == Direction.UP && pos.getY() == 255)
-					|| mc.world.getBlockState(pos.offset(d)).getMaterial().isReplaceable()
-					|| mc.player.getPos().add(0, mc.player.getEyeHeight(mc.player.getPose()), 0).distanceTo(
-							new Vec3d(pos.getX() + 0.5 + d.getOffsetX() * 0.5,
-									pos.getY() + 0.5 + d.getOffsetY() * 0.5,
-									pos.getZ() + 0.5 + d.getOffsetZ() * 0.5)) > 4.55)
-				continue;
-
-			return true;
-		}
-		return false;
-	}
-
 	public static void facePosAuto(double x, double y, double z, SettingRotate sr) {
 		if (sr.getRotateMode() == 0) {
 			facePosPacket(x, y, z);
