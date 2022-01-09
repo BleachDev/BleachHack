@@ -41,11 +41,13 @@ import net.minecraft.util.profiler.Profiler;
 
 @Mixin(WorldRenderer.class)
 public class MixinWorldRenderer {
-	
+
 	@Shadow private void drawBlockOutline(MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState) {}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
 	private void render_swap(Profiler profiler, String string) {
+		profiler.swap(string);
+
 		if (string.equals("entities")) {
 			BleachHack.eventBus.post(new EventEntityRender.PreAll());
 		} else if (string.equals("blockentities")) {
@@ -74,7 +76,7 @@ public class MixinWorldRenderer {
 		EventWorldRender.Post event = new EventWorldRender.Post(tickDelta, matrices);
 		BleachHack.eventBus.post(event);
 	}
-	
+
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBlockOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/entity/Entity;DDDLnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V"))
 	private void render_drawBlockOutline(WorldRenderer worldRenderer, MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState) {
 		EventRenderBlockOutline event = new EventRenderBlockOutline(matrices, vertexConsumer, blockPos, blockState);
