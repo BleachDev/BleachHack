@@ -12,16 +12,23 @@ import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
+import org.bleachhack.setting.module.SettingToggle;
 
 public class Sprint extends Module {
 
 	public Sprint() {
-		super("Sprint", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Makes the player automatically sprint.");
+		super("Sprint", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Makes the player automatically sprint.",
+				new SettingToggle("HungerCheck", false).withDesc("Checks that you actually have enough hunger to sprint."));
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		mc.player.setSprinting(mc.player.input.movementForward > 0 && mc.player.input.movementSideways != 0 ||
-				mc.player.input.movementForward > 0 && !mc.player.isSneaking());
+		if (getSetting(0).asToggle().getState() && mc.player.getHungerManager().getFoodLevel() <= 6)
+			return;
+
+		mc.player.setSprinting(
+				mc.player.input.movementForward > 0 && 
+				(mc.player.input.movementSideways != 0 ||mc.player.input.movementForward > 0) &&
+				!mc.player.isSneaking());
 	}
 }

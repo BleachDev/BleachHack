@@ -46,7 +46,7 @@ public class AutoArmor extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (!BleachQueue.isEmpty("autoarmor_equip"))
+		if (mc.player.playerScreenHandler != mc.player.currentScreenHandler || !BleachQueue.isEmpty("autoarmor_equip"))
 			return;
 
 		if (tickDelay > 0) {
