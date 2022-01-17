@@ -32,7 +32,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include(modImplementation("com.github.fzakaria:ascii85:1.2"))
-	include(modImplementation("com.github.jagrosh:DiscordIPC:-SNAPSHOT"))
+	include(modImplementation("com.github.BleachDrinker420:DiscordIPC:-SNAPSHOT"))
 }
 
 processResources {
