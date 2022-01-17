@@ -23,10 +23,6 @@ repositories {
 	maven {
 		url "https://jitpack.io"
 	}
-	
-	maven {
-		url "https://bleachhack.org/maven"
-	}
 }
 
 dependencies {
@@ -36,7 +32,11 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include(modImplementation("com.github.fzakaria:ascii85:1.2"))
-	include(modImplementation("org.bleachhack:discordipc:0.4"))
+
+	include(modImplementation("com.github.jagrosh:DiscordIPC:ff8c5b73ee"))
+	include(modImplementation("org.json:json:20211205"))
+	include(modImplementation("com.kohlschutter.junixsocket:junixsocket-common:2.0.4"))
+	include(modImplementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.0.4"))
 }
 
 processResources {
