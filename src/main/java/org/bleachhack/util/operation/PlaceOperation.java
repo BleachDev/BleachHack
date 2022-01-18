@@ -13,7 +13,7 @@ import java.util.Random;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.util.InventoryUtils;
 import org.bleachhack.util.render.Renderer;
-import org.bleachhack.util.render.WorldRenderUtils;
+import org.bleachhack.util.render.WorldRenderer;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.world.WorldUtils;
 
@@ -63,7 +63,7 @@ public class PlaceOperation extends Operation {
 	public void render() {
 		Item item = getItems()[0];
 		if (item instanceof BlockItem) {
-			MatrixStack matrices = WorldRenderUtils.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
+			MatrixStack matrices = WorldRenderer.matrixFrom(pos.getX(), pos.getY(), pos.getZ());
 
 			BlockState state = ((BlockItem) item).getBlock().getDefaultState();
 
