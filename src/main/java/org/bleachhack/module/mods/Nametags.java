@@ -48,7 +48,7 @@ import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.render.Renderer;
-import org.bleachhack.util.render.WorldRenderUtils;
+import org.bleachhack.util.render.WorldRenderer;
 import org.bleachhack.util.world.EntityUtils;
 
 import java.io.IOException;
@@ -210,7 +210,7 @@ public class Nametags extends Module {
 		double offset = lines.size() * 0.25 * scale;
 
 		for (Text t: lines) {
-			WorldRenderUtils.drawText(t, x, y + offset, z, scale, true);
+			WorldRenderer.drawText(t, x, y + offset, z, scale, true);
 			offset -= 0.25 * scale;
 		}
 	}
@@ -227,10 +227,10 @@ public class Nametags extends Module {
 		if (item.isEmpty())
 			return;
 
-		WorldRenderUtils.drawGuiItem(x, y, z, offX * scale, offY * scale, scale, item);
+		WorldRenderer.drawGuiItem(x, y, z, offX * scale, offY * scale, scale, item);
 
 		double w = mc.textRenderer.getWidth("x" + item.getCount()) / 52d;
-		WorldRenderUtils.drawText(new LiteralText("x" + item.getCount()),
+		WorldRenderer.drawText(new LiteralText("x" + item.getCount()),
 				x, y, z, (offX - w) * scale, (offY - 0.07) * scale, scale * 1.75, false);
 
 		int c = 0;
@@ -244,7 +244,7 @@ public class Nametags extends Module {
 
 			String subText = text.substring(0, Math.min(text.length(), 2)) + m.getValue();
 
-			WorldRenderUtils.drawText(new LiteralText(subText).styled(s -> s.withColor(TextColor.fromRgb(m.getKey().isCursed() ? 0xff5050 : 0xffb0e0))),
+			WorldRenderer.drawText(new LiteralText(subText).styled(s -> s.withColor(TextColor.fromRgb(m.getKey().isCursed() ? 0xff5050 : 0xffb0e0))),
 					x, y, z, (offX + 0.02) * scale, (offY + 0.75 - c * 0.34) * scale, scale * 1.4, false);
 			c--;
 		}

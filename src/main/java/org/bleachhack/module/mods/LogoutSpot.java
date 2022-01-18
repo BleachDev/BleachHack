@@ -17,7 +17,7 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachQueue;
-import org.bleachhack.util.render.WorldRenderUtils;
+import org.bleachhack.util.render.WorldRenderer;
 import org.bleachhack.util.world.PlayerCopyEntity;
 
 import java.util.*;
@@ -162,7 +162,7 @@ public class LogoutSpot extends Module {
 					lines.add("\u00a7c" + getTimeElapsed(playerPair.getRight()));
 
 				for (int i = 0; i < lines.size(); i++) {
-					WorldRenderUtils.drawText(new LiteralText(lines.get(i)), rVec.x + offset.x, rVec.y + 0.1 - i * 0.25, rVec.z + offset.z, 1, true);
+					WorldRenderer.drawText(new LiteralText(lines.get(i)), rVec.x + offset.x, rVec.y + 0.1 - i * 0.25, rVec.z + offset.z, 1, true);
 				}
 			}
 		}

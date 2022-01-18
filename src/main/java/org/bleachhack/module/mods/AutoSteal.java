@@ -41,7 +41,7 @@ import org.bleachhack.setting.module.SettingRotate;
 import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.InventoryUtils;
-import org.bleachhack.util.render.WorldRenderUtils;
+import org.bleachhack.util.render.WorldRenderer;
 import org.bleachhack.util.world.WorldUtils;
 
 import java.util.ArrayList;
@@ -170,17 +170,17 @@ public class AutoSteal extends Module {
 				Vec3d startPos = new Vec3d(currentPos.getX() + 0.5, currentPos.getY() + 1 + (renderItems.size() / 9) * 0.4, currentPos.getZ() + 0.5);
 
 				for (int i = 0; i < renderItems.size(); i++) {
-					WorldRenderUtils.drawGuiItem(startPos.x, startPos.y - i / 9 * 0.4, startPos.z, (4.5 - i % 9) * 0.3, 0, 0.3, renderItems.get(i));
+					WorldRenderer.drawGuiItem(startPos.x, startPos.y - i / 9 * 0.4, startPos.z, (4.5 - i % 9) * 0.3, 0, 0.3, renderItems.get(i));
 
 					if (renderItems.get(i).getCount() > 1) {
 						double w = mc.textRenderer.getWidth(renderItems.get(i).getCount() + "") / 220d;
-						WorldRenderUtils.drawText(
+						WorldRenderer.drawText(
 								new LiteralText(renderItems.get(i).getCount() + ""),
 								startPos.x, startPos.y - i / 9 * 0.4 - 0.04, startPos.z, (4.5 - i % 9) * 0.3 - w, 0, 0.5, false);
 					}
 				}
 			} else if (getSetting(0).asMode().getMode() == 2) {
-				WorldRenderUtils.drawText(
+				WorldRenderer.drawText(
 						new LiteralText("[" + currentItems.stream().filter(i -> !i.isEmpty() && !isBlacklisted(i.getItem())).count() + "]"),
 						currentPos.getX() + 0.5, currentPos.getY() + 1.2, currentPos.getZ() + 0.5, 0.8, false);
 			}
