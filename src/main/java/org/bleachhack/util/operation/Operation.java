@@ -10,6 +10,7 @@ package org.bleachhack.util.operation;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 public abstract class Operation {
 
@@ -19,6 +20,16 @@ public abstract class Operation {
 	public abstract boolean canExecute();
 	public abstract boolean execute();
 	public abstract boolean verify();
-	
+
 	public abstract void render();
+
+	// Rotation helper method to help blueprints
+	protected static BlockPos rotate(int localX, int localY, int localZ, Direction dir) {
+		return switch (dir) {
+			case SOUTH -> new BlockPos(-localZ, localY, localX);
+			case WEST -> new BlockPos(-localX, localY, -localZ);
+			case NORTH -> new BlockPos(localZ, localY, -localX);
+			default -> new BlockPos(localX, localY, localZ);
+		};
+	}
 }

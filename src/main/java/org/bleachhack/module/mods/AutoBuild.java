@@ -21,11 +21,11 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.operation.Operation;
+import org.bleachhack.util.operation.OperationBlueprint;
 import org.bleachhack.util.operation.OperationList;
-import org.bleachhack.util.operation.blueprint.OperationBlueprint;
-import org.bleachhack.util.operation.blueprint.PlaceDirOperationBlueprint;
-import org.bleachhack.util.operation.blueprint.PlaceOperationBlueprint;
-import org.bleachhack.util.operation.blueprint.RemoveOperationBlueprint;
+import org.bleachhack.util.operation.PlaceDirOperation;
+import org.bleachhack.util.operation.PlaceOperation;
+import org.bleachhack.util.operation.RemoveOperation;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
@@ -40,105 +40,105 @@ public class AutoBuild extends Module {
 
 	private static final List<List<OperationBlueprint>> BLUEPRINTS = Arrays.asList(
 			Arrays.asList( // Wither
-					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(0, 1, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(0, 1, -1, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(0, 1, 1, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(0, 2, -1, Items.WITHER_SKELETON_SKULL),
-					new PlaceOperationBlueprint(0, 2, 0, Items.WITHER_SKELETON_SKULL),
-					new PlaceOperationBlueprint(0, 2, 1, Items.WITHER_SKELETON_SKULL)),
+					PlaceOperation.blueprint(0, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(0, 1, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(0, 1, -1, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(0, 1, 1, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(0, 2, -1, Items.WITHER_SKELETON_SKULL),
+					PlaceOperation.blueprint(0, 2, 0, Items.WITHER_SKELETON_SKULL),
+					PlaceOperation.blueprint(0, 2, 1, Items.WITHER_SKELETON_SKULL)),
 			Arrays.asList( // WitherH
-					new PlaceOperationBlueprint(0, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(1, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(1, 0, -1, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(1, 0, 1, Items.SOUL_SAND, Items.SOUL_SOIL),
-					new PlaceOperationBlueprint(2, 0, -1, Items.WITHER_SKELETON_SKULL),
-					new PlaceOperationBlueprint(2, 0, 0, Items.WITHER_SKELETON_SKULL),
-					new PlaceOperationBlueprint(2, 0, 1, Items.WITHER_SKELETON_SKULL)),
+					PlaceOperation.blueprint(0, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(1, 0, 0, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(1, 0, -1, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(1, 0, 1, Items.SOUL_SAND, Items.SOUL_SOIL),
+					PlaceOperation.blueprint(2, 0, -1, Items.WITHER_SKELETON_SKULL),
+					PlaceOperation.blueprint(2, 0, 0, Items.WITHER_SKELETON_SKULL),
+					PlaceOperation.blueprint(2, 0, 1, Items.WITHER_SKELETON_SKULL)),
 			Arrays.asList( // Iron Golem
-					new PlaceOperationBlueprint(0, 0, 0, Items.IRON_BLOCK),
-					new PlaceOperationBlueprint(0, 1, 0, Items.IRON_BLOCK),
-					new PlaceOperationBlueprint(0, 1, -1, Items.IRON_BLOCK),
-					new PlaceOperationBlueprint(0, 1, 1, Items.IRON_BLOCK),
-					new PlaceOperationBlueprint(0, 2, 0, Items.CARVED_PUMPKIN)),
+					PlaceOperation.blueprint(0, 0, 0, Items.IRON_BLOCK),
+					PlaceOperation.blueprint(0, 1, 0, Items.IRON_BLOCK),
+					PlaceOperation.blueprint(0, 1, -1, Items.IRON_BLOCK),
+					PlaceOperation.blueprint(0, 1, 1, Items.IRON_BLOCK),
+					PlaceOperation.blueprint(0, 2, 0, Items.CARVED_PUMPKIN)),
 			Arrays.asList( // Snow Golem
-					new PlaceOperationBlueprint(0, 0, 0, Items.SNOW_BLOCK),
-					new PlaceOperationBlueprint(0, 1, 0, Items.SNOW_BLOCK),
-					new PlaceOperationBlueprint(0, 2, 0, Items.CARVED_PUMPKIN)),
+					PlaceOperation.blueprint(0, 0, 0, Items.SNOW_BLOCK),
+					PlaceOperation.blueprint(0, 1, 0, Items.SNOW_BLOCK),
+					PlaceOperation.blueprint(0, 2, 0, Items.CARVED_PUMPKIN)),
 			Arrays.asList( // Nomad Hut
-					new PlaceOperationBlueprint(-2, 0, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 0, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(0, 0, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 0, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 0, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 0, 0, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 0, 1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 0, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(0, 0, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 0, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-2, 0, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-2, 0, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 0, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(0, 0, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 0, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 0, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 0, 0, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 0, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 0, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(0, 0, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 0, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-2, 0, 1, Items.OBSIDIAN),
 					
-					new PlaceOperationBlueprint(-2, 1, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 1, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 1, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 1, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 1, 1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 1, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 1, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-2, 1, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-2, 1, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 1, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 1, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 1, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 1, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 1, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 1, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-2, 1, 1, Items.OBSIDIAN),
 					
-					new PlaceOperationBlueprint(-2, 2, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 2, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(0, 2, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 2, -2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 2, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 2, 0, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 2, 1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 2, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(0, 2, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 2, 2, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-2, 2, 1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-2, 2, 0, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-2, 2, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 2, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(0, 2, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 2, -2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 2, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 2, 0, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 2, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 2, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(0, 2, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 2, 2, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-2, 2, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-2, 2, 0, Items.OBSIDIAN),
 					
-					new PlaceOperationBlueprint(-2, 3, 0, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 3, 0, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 3, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(-1, 3, 1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(0, 3, 0, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(0, 3, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(0, 3, 1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 3, 0, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 3, -1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(1, 3, 1, Items.OBSIDIAN),
-					new PlaceOperationBlueprint(2, 3, 0, Items.OBSIDIAN)),
+					PlaceOperation.blueprint(-2, 3, 0, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 3, 0, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 3, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(-1, 3, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(0, 3, 0, Items.OBSIDIAN),
+					PlaceOperation.blueprint(0, 3, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(0, 3, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 3, 0, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 3, -1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(1, 3, 1, Items.OBSIDIAN),
+					PlaceOperation.blueprint(2, 3, 0, Items.OBSIDIAN)),
 			Arrays.asList( // Bomber Mid
-					new PlaceOperationBlueprint(0, 0, 0, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(0, -1, 0, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(1, -1, 0, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(1, 0, 0, Items.DETECTOR_RAIL),
-					new PlaceOperationBlueprint(1, -1, 1, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(2, -1, 1, Items.SLIME_BLOCK),
-					new RemoveOperationBlueprint(1, -1, 1),
-					new PlaceOperationBlueprint(2, -2, 1, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(3, -2, 1, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(3, -2, 0, Items.TUBE_CORAL_FAN),
-					new PlaceOperationBlueprint(2, -2, 0, Items.TNT),
-					new PlaceOperationBlueprint(3, -1, 0, Items.SLIME_BLOCK),
-					new PlaceDirOperationBlueprint(3, 0, 0, Direction.WEST, Items.OBSERVER),
-					new PlaceDirOperationBlueprint(4, 0, 0, Direction.WEST, Items.PISTON)),
+					PlaceOperation.blueprint(0, 0, 0, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(0, -1, 0, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(1, -1, 0, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(1, 0, 0, Items.DETECTOR_RAIL),
+					PlaceOperation.blueprint(1, -1, 1, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(2, -1, 1, Items.SLIME_BLOCK),
+					RemoveOperation.blueprint(1, -1, 1),
+					PlaceOperation.blueprint(2, -2, 1, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(3, -2, 1, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(3, -2, 0, Items.TUBE_CORAL_FAN),
+					PlaceOperation.blueprint(2, -2, 0, Items.TNT),
+					PlaceOperation.blueprint(3, -1, 0, Items.SLIME_BLOCK),
+					PlaceDirOperation.blueprint(3, 0, 0, Direction.WEST, Items.OBSERVER),
+					PlaceDirOperation.blueprint(4, 0, 0, Direction.WEST, Items.PISTON)),
 			Arrays.asList( // Bomber End
-					new PlaceOperationBlueprint(0, 0, 0, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(0, -1, 0, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(1, -1, 0, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(1, 0, 0, Items.DETECTOR_RAIL),
-					new PlaceOperationBlueprint(1, -1, 1, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(2, -1, 1, Items.SLIME_BLOCK),
-					new RemoveOperationBlueprint(1, -1, 1),
-					new PlaceOperationBlueprint(2, -2, 1, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(3, -2, 1, Items.SLIME_BLOCK),
-					new PlaceOperationBlueprint(3, -2, 0, Items.TUBE_CORAL_FAN),
-					new PlaceOperationBlueprint(2, -2, 0, Items.TNT),
-					new PlaceOperationBlueprint(3, -1, 0, Items.SANDSTONE_WALL)));
+					PlaceOperation.blueprint(0, 0, 0, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(0, -1, 0, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(1, -1, 0, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(1, 0, 0, Items.DETECTOR_RAIL),
+					PlaceOperation.blueprint(1, -1, 1, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(2, -1, 1, Items.SLIME_BLOCK),
+					RemoveOperation.blueprint(1, -1, 1),
+					PlaceOperation.blueprint(2, -2, 1, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(3, -2, 1, Items.SLIME_BLOCK),
+					PlaceOperation.blueprint(3, -2, 0, Items.TUBE_CORAL_FAN),
+					PlaceOperation.blueprint(2, -2, 0, Items.TNT),
+					PlaceOperation.blueprint(3, -1, 0, Items.SANDSTONE_WALL)));
 
 	private OperationList current = null;
 	private BlockHitResult ray = null;
@@ -163,13 +163,7 @@ public class AutoBuild extends Module {
 	public void onTick(EventTick event) {
 		if (!active) {
 			ray = (BlockHitResult) mc.player.raycast(40, mc.getTickDelta(), false);
-			Direction dir = ray.getSide();
-
-			if (dir.getAxis() == Axis.Y) {
-				dir = Math.abs(ray.getBlockPos().getX() - mc.player.getBlockPos().getX()) > Math.abs(ray.getBlockPos().getZ() - mc.player.getBlockPos().getZ())
-						? ray.getBlockPos().getX() - mc.player.getBlockPos().getX() > 0 ? Direction.EAST : Direction.WEST
-								: ray.getBlockPos().getZ() - mc.player.getBlockPos().getZ() > 0 ? Direction.SOUTH : Direction.NORTH;
-			}
+			Direction dir = ray.getSide().getAxis() == Axis.Y ? Direction.fromRotation(mc.player.getYaw()) : ray.getSide();
 
 			current = OperationList.create(BLUEPRINTS.get(getSetting(0).asMode().getMode()), ray.getBlockPos().offset(ray.getSide()), dir);
 

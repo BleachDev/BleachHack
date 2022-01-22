@@ -30,9 +30,13 @@ public class PlaceOperation extends Operation {
 
 	protected Item[] items;
 
-	public PlaceOperation(BlockPos pos, Item... items) {
+	protected PlaceOperation(BlockPos pos, Item... items) {
 		this.pos = pos;
 		this.items = items;
+	}
+
+	public static OperationBlueprint blueprint(int localX, int localY, int localZ, Item... items) {
+		return (origin, dir) -> new PlaceOperation(origin.add(rotate(localX, localY, localZ, dir)), items);
 	}
 
 	@Override
