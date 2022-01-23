@@ -22,26 +22,23 @@ import org.bleachhack.gui.window.WindowScreen;
 import org.bleachhack.gui.window.widget.WindowButtonWidget;
 import org.bleachhack.module.ModuleManager;
 import org.bleachhack.module.mods.Notebot;
-import org.bleachhack.module.mods.Notebot.Note;
+import org.bleachhack.module.mods.Notebot.Song;
 import org.bleachhack.util.NotebotUtils;
 import org.bleachhack.util.io.BleachFileMang;
 
-import com.google.common.collect.Multimap;
-
 import java.net.URI;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class NotebotScreen extends WindowScreen {
 
-	public Set<String> files = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-	public NotebotEntry entry;
-	public String selected = "";
-	public int page = 0;
+	private Set<String> files = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+	private int page = 0;
+
+	private Song entry;
+	private boolean playing;
+	private int playTick;
 
 	public NotebotScreen() {
 		super(new LiteralText("Notebot Gui"));
@@ -69,9 +66,9 @@ public class NotebotScreen extends WindowScreen {
 		getWindow(0).addWidget(new WindowButtonWidget(22, 14, 32, 24, "<", () -> page = page <= 0 ? 0 : page - 1));
 		getWindow(0).addWidget(new WindowButtonWidget(77, 14, 87, 24, ">", () -> page++));
 
-		int yEnd = getWindow(0).x2 - getWindow(0).x1;
+		int xEnd = getWindow(0).x2 - getWindow(0).x1;
 
-		getWindow(0).addWidget(new WindowButtonWidget(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () ->
+		getWindow(0).addWidget(new WindowButtonWidget(xEnd - 30, 14, xEnd - 3, 24, "Help", () ->
 		Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"))));
 	}
 
@@ -98,17 +95,17 @@ public class NotebotScreen extends WindowScreen {
 			fillButton(matrices, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mouseX, mouseY);
 			drawCenteredText(matrices, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 
-			String nbSelected = ((Notebot) ModuleManager.getModule("Notebot")).getSelectedFile();
+			Song nbSong = ((Notebot) ModuleManager.getModule("Notebot")).song;
 			int c = 0, c1 = -1;
 			for (String s : files) {
 				c1++;
-			 	if (c1 < page * pageEntries)
+				if (c1 < page * pageEntries)
 					continue;
 				if (c1 > (page + 1) * pageEntries)
 					break;
 
 				fillButton(matrices, x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10,
-						s.equals(nbSelected) ? 0xf0408040 : selected.equals(s) ? 0xf0202020 : 0xf0404040, 0xf0303030, mouseX, mouseY);
+						nbSong != null && s.equals(nbSong.filename) ? 0xf0408040 : entry != null && s.equals(entry.filename) ? 0xf0202020 : 0xf0404040, 0xf0303030, mouseX, mouseY);
 
 				drawCenteredText(matrices, textRenderer, textRenderer.trimToWidth(s, 100), x + 55, y + 16 + c * 10, -1);
 
@@ -116,62 +113,50 @@ public class NotebotScreen extends WindowScreen {
 			}
 
 			if (entry != null) {
-				drawCenteredText(matrices, textRenderer, entry.filename, x + w - w / 4, y + 10, 0xa030a0);
-				drawCenteredText(matrices, textRenderer, entry.length / 20 + "s", x + w - w / 4, y + 20, 0xc000c0);
-				drawCenteredText(matrices, textRenderer, "Notes: ", x + w - w / 4, y + 38, 0x80f080);
+				int textX = x + w - w / 4;
+				drawCenteredText(matrices, textRenderer, entry.name, textX, y + 8, 0xffffff);
+				drawCenteredText(matrices, textRenderer, "By: " + entry.author, textX, y + 18, 0xb0b0b0);
+				
+				drawCenteredText(matrices, textRenderer, "Format: \u00a7a" + entry.format, textX, y + 35, 0xb0b0b0);
+				drawCenteredText(matrices, textRenderer, "Length: \u00a7f" +  entry.length / 20 + "s", textX, y + 45, 0xb0b0b0);
+				//drawCenteredText(matrices, textRenderer, "Notes: \u00a7f" + entry.notes.size(), textX, y + 55, 0xb0b0b0);
+				drawCenteredText(matrices, textRenderer, "Noteblocks: ", textX, y + 62, 0x80f080);
 
 				int c2 = 0;
-				for (Entry<Instrument, Integer> e : entry.instruments.entrySet()) {
-					itemRenderer.zOffset = 500 - c2 * 20;
-					drawCenteredText(matrices, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + e.getValue(),
-							x + w - w / 4, y + 50 + c2 * 10, 0x50f050);
+				for (Entry<Instrument, ItemStack> e : NotebotUtils.INSTRUMENT_TO_ITEM.entrySet()) {
+					int count = (int) entry.requirements.stream().filter(n -> n.instrument == e.getKey().ordinal()).count();
 
-					DiffuseLighting.enableGuiDepthLighting();
-					ItemStack stack = switch (e.getKey()) {
-						case HARP -> new ItemStack(Items.DIRT);
-						case BASEDRUM -> new ItemStack(Items.STONE);
-						case SNARE -> new ItemStack(Items.SAND);
-						case HAT -> new ItemStack(Items.GLASS);
-						case BASS -> new ItemStack(Items.OAK_WOOD);
-						case FLUTE -> new ItemStack(Items.CLAY);
-						case BELL -> new ItemStack(Items.GOLD_BLOCK);
-						case GUITAR -> new ItemStack(Items.WHITE_WOOL);
-						case CHIME -> new ItemStack(Items.PACKED_ICE);
-						case XYLOPHONE -> new ItemStack(Items.BONE_BLOCK);
-						case IRON_XYLOPHONE -> new ItemStack(Items.IRON_BLOCK);
-						case COW_BELL -> new ItemStack(Items.SOUL_SAND);
-						case DIDGERIDOO -> new ItemStack(Items.PUMPKIN);
-						case BIT -> new ItemStack(Items.EMERALD_BLOCK);
-						case BANJO -> new ItemStack(Items.HAY_BLOCK);
-						case PLING -> new ItemStack(Items.GLOWSTONE);
-					};
+					if (count != 0) {
+						itemRenderer.zOffset = 500 - c2 * 20;
+						drawCenteredText(matrices, textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + count,
+								textX, y + 74 + c2 * 10, 0x50f050);
 
-					itemRenderer.renderGuiItemIcon(stack, x + w - w / 4 + 55, y + 46 + c2 * 10);
-					c2++;
+						DiffuseLighting.enableGuiDepthLighting();
+						itemRenderer.renderGuiItemIcon(e.getValue(), textX + 55, y + 70 + c2 * 10);
+						DiffuseLighting.disableGuiDepthLighting();
 
-					DiffuseLighting.disableGuiDepthLighting();
+						c2++;
+					}
 				}
 
 				fillButton(matrices, x + w - w / 2 + 10, y + h - 15, x + w - w / 4, y + h - 5, 0xff903030, 0xff802020, mouseX, mouseY);
 				fillButton(matrices, x + w - w / 4 + 5, y + h - 15, x + w - 5, y + h - 5, 0xff308030, 0xff207020, mouseX, mouseY);
 				fillButton(matrices, x + w - w / 4 - w / 8, y + h - 27, x + w - w / 4 + w / 8, y + h - 17, 0xff303080, 0xff202070, mouseX, mouseY);
 
-				int pixels = (int) Math.round(MathHelper.clamp((w / 4d) * ((double) entry.playTick / (double) entry.length), 0, w / 4d));
+				int pixels = (int) Math.round(MathHelper.clamp((w / 4d) * ((double) playTick / (double) entry.length), 0, w / 4d));
 				fill(matrices, x + w - w / 4 - w / 8, y + h - 27, (x + w - w / 4 - w / 8) + pixels, y + h - 17, 0x507050ff);
 
 				drawCenteredText(matrices, textRenderer, "Delete", (int) (x + w - w / 2.8), y + h - 14, 0xff0000);
 				drawCenteredText(matrices, textRenderer, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
-				drawCenteredText(matrices, textRenderer, entry.playing ? "Previewing.." : "Preview", x + w - w / 4, y + h - 26, 0x6060ff);
+				drawCenteredText(matrices, textRenderer, playing ? "Previewing.." : "Preview", x + w - w / 4, y + h - 26, 0x6060ff);
 			}
 		}
 	}
 
 	public void tick() {
-		if (entry != null) {
-			if (entry.playing) {
-				entry.playTick++;
-				NotebotUtils.playNote(entry.song, entry.playTick);
-			}
+		if (entry != null && playing) {
+			playTick++;
+			NotebotUtils.playNote(entry.notes, playTick);
 		}
 	}
 
@@ -198,10 +183,10 @@ public class NotebotScreen extends WindowScreen {
 					client.setScreen(this);
 				}
 				if (mouseX > x + w - w / 4 + 5 && mouseX < x + w - 5 && mouseY > y + h - 15 && mouseY < y + h - 5) {
-					((Notebot) ModuleManager.getModule("Notebot")).loadSong(entry.filename, entry.song);
+					((Notebot) ModuleManager.getModule("Notebot")).song = entry;
 				}
 				if (mouseX > x + w - w / 4 - w / 8 && mouseX < x + w - w / 4 + w / 8 && mouseY > y + h - 27 && mouseY < y + h - 17) {
-					entry.playing = !entry.playing;
+					playing = !playing;
 				}
 			}
 
@@ -215,10 +200,14 @@ public class NotebotScreen extends WindowScreen {
 				c1++;
 				if (c1 < page * pageEntries)
 					continue;
+	
 				if (mouseX > x + 5 && mouseX < x + 105 && mouseY > y + 15 + c * 10 && mouseY < y + 25 + c * 10) {
-					entry = new NotebotEntry(s);
-					selected = s;
+					entry = NotebotUtils.parse(BleachFileMang.getDir().resolve("notebot/" + s));
+					playing = false;
+					playTick = 0;
+					break;
 				}
+
 				c++;
 			}
 		}
@@ -228,23 +217,5 @@ public class NotebotScreen extends WindowScreen {
 
 	private void fillButton(MatrixStack matrices, int x1, int y1, int x2, int y2, int color, int colorHover, int mouseX, int mouseY) {
 		fill(matrices, x1, y1, x2, y2, (mouseX > x1 && mouseX < x2 && mouseY > y1 && mouseY < y2 ? colorHover : color));
-	}
-
-	public static class NotebotEntry {
-		public String filename;
-		public Multimap<Integer, Note> song;
-		public Map<Instrument, Integer> instruments = new HashMap<>();
-		public int length;
-
-		public boolean playing = false;
-		public int playTick = 0;
-
-		public NotebotEntry(String file) {
-			filename = file;
-			song = NotebotUtils.parse(BleachFileMang.getDir().resolve("notebot/" + file));
-
-			length = song.keySet().stream().max(Comparator.naturalOrder()).orElse(0);
-			song.values().stream().distinct().forEach(n -> instruments.merge(Instrument.values()[n.instrument], 1, Integer::sum));
-		}
 	}
 }
