@@ -91,6 +91,17 @@ public class NotebotUtils {
 		mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, vec.x, vec.y, vec.z));
 	}
 
+	public static Multimap<Integer, Note> parse(Path path) {
+		String string = path.toString();
+		if (string.endsWith(".mid") || string.endsWith(".midi")) {
+			return parseMidi(path);
+		} else if (string.endsWith(".nbs")) {
+			return parseNbs(path);
+		} else {
+			return parseNl(path);
+		}
+	}
+
 	public static Multimap<Integer, Note> parseNl(Path path) {
 		Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
@@ -212,7 +223,6 @@ public class NotebotUtils {
 		try (InputStream input = Files.newInputStream(path)) {
 			// Signature
 			int version = readShort(input) != 0 ? 0 : input.read();
-			BleachLogger.info("Loading " + path.getFileName().toString() + ", NBS revision: " + version);
 
 			// Skipping the rest of the headers because we don't need them
 			input.skip(version >= 3 ? 5 : version >= 1 ? 3 : 2);

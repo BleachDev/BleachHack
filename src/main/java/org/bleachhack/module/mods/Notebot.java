@@ -180,7 +180,7 @@ public class Notebot extends Module {
 				File[] files = BleachFileMang.getDir().resolve("notebot/").toFile().listFiles();
 				Path path = files[ThreadLocalRandom.current().nextInt(files.length)].toPath();
 
-				loadSong(path.getFileName().toString(), NotebotUtils.parseNl(path));
+				loadSong(path.getFileName().toString(), NotebotUtils.parse(path));
 
 				setEnabled(false);
 				setEnabled(true);

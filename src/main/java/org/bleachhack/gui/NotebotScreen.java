@@ -241,7 +241,7 @@ public class NotebotScreen extends WindowScreen {
 
 		public NotebotEntry(String file) {
 			filename = file;
-			song = NotebotUtils.parseNl(BleachFileMang.getDir().resolve("notebot/" + file));
+			song = NotebotUtils.parse(BleachFileMang.getDir().resolve("notebot/" + file));
 
 			length = song.keySet().stream().max(Comparator.naturalOrder()).orElse(0);
 			song.values().stream().distinct().forEach(n -> instruments.merge(Instrument.values()[n.instrument], 1, Integer::sum));
