@@ -23,15 +23,14 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.NotebotUtils;
 import org.bleachhack.util.io.BleachFileMang;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
 import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 
-import java.io.IOException;
-import java.nio.file.Files;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Comparator;
@@ -42,22 +41,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
 
 public class Notebot extends Module {
 
 	/* All the lines of the file [tick:note] */
-	private Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
+	private String selectedFile;
+	private Multimap<Integer, Note> song;
 
-	/* All unique notes */
+	/* All unique instruments */
 	private Set<Note> requirements = new HashSet<>();
 
-	/* Map of noteblocks to hit when playing and the pitch of each [blockpos:pitch] */
-	private Map<BlockPos, Integer> blockTunes = new HashMap<>();
+	/* Map of noteblocks and their pitch around the player [blockpos:pitch] */
+	private Map<BlockPos, Integer> blockPitches = new HashMap<>();
 	private int timer = -10;
 	private int tuneDelay = 0;
-
-	public static String filePath = "";
 
 	public Notebot() {
 		super("Notebot", KEY_UNBOUND, ModuleCategory.MISC, "Plays those noteblocks nicely.",
@@ -74,18 +71,16 @@ public class Notebot extends Module {
 			return;
 
 		super.onEnable(inWorld);
-		blockTunes.clear();
+		blockPitches.clear();
 
 		if (!mc.interactionManager.getCurrentGameMode().isSurvivalLike()) {
 			BleachLogger.error("Not In Survival Mode!");
 			setEnabled(false);
 			return;
-		} else if (filePath.isEmpty()) {
+		} else if (song == null) {
 			BleachLogger.error("No Song Loaded!, Use " + Command.getPrefix() + "notebot to select a song.");
 			setEnabled(false);
 			return;
-		} else {
-			readFile(filePath);
 		}
 
 		timer = -10;
@@ -97,21 +92,21 @@ public class Notebot extends Module {
 
 		for (Note note : requirements) {
 			for (BlockPos pos: noteblocks) {
-				if (blockTunes.containsKey(pos))
+				if (blockPitches.containsKey(pos))
 					continue;
 
 				if (getSetting(2).asToggle().getState()) {
-					if (!blockTunes.containsValue(note.pitch)) {
-						blockTunes.put(pos, note.pitch); 
+					if (!blockPitches.containsValue(note.pitch)) {
+						blockPitches.put(pos, note.pitch); 
 						break;
 					}
 				} else {
 					int instrument = getInstrument(pos).ordinal();
 					if (note.instrument == instrument
-							&& blockTunes.entrySet().stream()
+							&& blockPitches.entrySet().stream()
 							.filter(e -> e.getValue() == note.pitch)
 							.noneMatch(e -> getInstrument(e.getKey()).ordinal() == instrument)) {
-						blockTunes.put(pos, note.pitch);
+						blockPitches.put(pos, note.pitch);
 						break;
 					}
 				}
@@ -120,14 +115,14 @@ public class Notebot extends Module {
 
 		int required = getSetting(2).asToggle().getState()
 				? (int) requirements.stream().mapToInt(i -> i.instrument).distinct().count() : requirements.size();
-		if (required > blockTunes.size()) {
-			BleachLogger.warn("Mapping Error: Missing " + (required - blockTunes.size()) + " Noteblocks");
+		if (required > blockPitches.size()) {
+			BleachLogger.warn("Mapping Error: Missing " + (required - blockPitches.size()) + " Noteblocks");
 		}
 	}
 
 	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
-		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
+		for (Entry<BlockPos, Integer> e : blockPitches.entrySet()) {
 			if (getNote(e.getKey()) != e.getValue()) {
 				Renderer.drawBoxBoth(e.getKey(), QuadColor.single(1F, 0F, 0F, 0.4F), 2.5f);
 			} else {
@@ -142,7 +137,7 @@ public class Notebot extends Module {
 		int tuneMode = getSetting(0).asToggle().getChild(0).asMode().getMode();
 
 		if (getSetting(0).asToggle().getState()) {
-			for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
+			for (Entry<BlockPos, Integer> e : blockPitches.entrySet()) {
 				int note = getNote(e.getKey());
 				if (note == -1)
 					continue;
@@ -178,19 +173,18 @@ public class Notebot extends Module {
 		}
 
 		// Loop
-		boolean loop = timer - 10 > notes.keySet().stream().max(Comparator.naturalOrder()).get();
+		boolean loop = timer - 10 > song.keySet().stream().max(Comparator.naturalOrder()).get();
 
 		if (loop) {
 			if (getSetting(3).asToggle().getState()) {
-				try (Stream<Path> paths = Files.walk(BleachFileMang.getDir().resolve("notebot"))) {
-					List<Path> lst = paths.toList();
+				File[] files = BleachFileMang.getDir().resolve("notebot/").toFile().listFiles();
+				Path path = files[ThreadLocalRandom.current().nextInt(files.length)].toPath();
 
-					filePath = lst.get(ThreadLocalRandom.current().nextInt(lst.size() - 1) + 1).getFileName().toString();
-					setEnabled(false);
-					setEnabled(true);
-					BleachLogger.info("Now Playing: \u00a7a" + filePath);
-				} catch (IOException ignored) {
-				}
+				loadSong(path.getFileName().toString(), NotebotUtils.parseNl(path));
+
+				setEnabled(false);
+				setEnabled(true);
+				BleachLogger.info("Now Playing: \u00a7a" + selectedFile);
 			} else if (getSetting(1).asToggle().getState()) {
 				timer = -10;
 			}
@@ -199,12 +193,12 @@ public class Notebot extends Module {
 		// Play Noteblocks
 		timer++;
 
-		Collection<Note> curNotes = notes.get(timer);
+		Collection<Note> curNotes = song.get(timer);
 
 		if (curNotes.isEmpty())
 			return;
 
-		for (Entry<BlockPos, Integer> e : blockTunes.entrySet()) {
+		for (Entry<BlockPos, Integer> e : blockPitches.entrySet()) {
 			for (Note i : curNotes) {
 				if (isNoteblock(e.getKey()) && (i.pitch == (getNote(e.getKey()))
 						&& (getSetting(2).asToggle().getState() || i.instrument == getInstrument(e.getKey()).ordinal())))
@@ -241,29 +235,16 @@ public class Notebot extends Module {
 		mc.player.swingHand(Hand.MAIN_HAND);
 	}
 
-	public void readFile(String fileName) {
+	public void loadSong(String filename, Multimap<Integer, Note> song) {
 		requirements.clear();
-		notes.clear();
+		this.selectedFile = filename;
+		this.song = song;
 
-		// Read the file
-		BleachFileMang.createFile("notebot/" + fileName);
-		List<String> lines = BleachFileMang.readFileLines("notebot/" + fileName).stream()
-				.filter(s -> !(s.isEmpty() || s.startsWith("//") || s.startsWith(";")))
-				.map(s -> s.replaceAll(" ", ""))
-				.toList();
-
-		// Parse notes
-		for (String s : lines) {
-			String[] s1 = s.split(":");
-			try {
-				notes.put(Integer.parseInt(s1[0]), new Note(Integer.parseInt(s1[1]), Integer.parseInt(s1[2])));
-			} catch (Exception e) {
-				BleachLogger.warn("Error Parsing Note: \u00a7o" + s);
-			}
-		}
-
-		// Get all unique pitches and instruments
-		requirements.addAll(notes.values());
+		this.song.values().stream().distinct().forEach(requirements::add);
+	}
+	
+	public String getSelectedFile() {
+		return selectedFile;
 	}
 
 	public static class Note {

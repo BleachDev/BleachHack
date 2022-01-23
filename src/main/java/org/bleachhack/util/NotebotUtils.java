@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -80,18 +79,9 @@ public class NotebotUtils {
 		}
 	}
 
-	public static void playNote(List<String> lines, int tick) {
-		String sTick = Integer.toString(tick);
-		for (String s : lines) {
-			try {
-				String[] split = s.split(":");
-				if (split[0].equals(sTick)) {
-					play(Instrument.values()[Integer.parseInt(split[2])].getSound(),
-							(float) Math.pow(2.0D, (Integer.parseInt(split[1]) - 12) / 12.0D));
-				}
-			} catch (Exception e) {
-				BleachLogger.logger.error("oops");
-			}
+	public static void playNote(Multimap<Integer, Note> song, int tick) {
+		for (Note note: song.get(tick)) {
+			play(Instrument.values()[note.instrument].getSound(), (float) Math.pow(2.0D, (note.pitch - 12) / 12.0D));
 		}
 	}
 
@@ -101,8 +91,30 @@ public class NotebotUtils {
 		mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, vec.x, vec.y, vec.z));
 	}
 
-	public static Multimap<Integer, Note> convertMidi(Path path) {
-		Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
+	public static Multimap<Integer, Note> parseNl(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
+
+		try {
+			Files.readAllLines(path).stream()
+			.filter(s -> !s.isEmpty() && !s.startsWith("//") && !s.startsWith(";"))
+			.forEach(n -> {
+				try {
+					String[] split = n.split(":");
+					notes.put(Integer.parseInt(split[0]), new Note(Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+				} catch (NumberFormatException | IndexOutOfBoundsException e) {
+					BleachLogger.warn("Error trying to parse note: \u00a7o" + n);
+				}
+			});
+		} catch (IOException e) {
+			BleachLogger.error("Error reading NL file!");
+			e.printStackTrace();
+		}
+
+		return notes;
+	}
+
+	public static Multimap<Integer, Note> parseMidi(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
 		try {
 			Sequence seq = MidiSystem.getSequence(path.toFile());
@@ -194,8 +206,8 @@ public class NotebotUtils {
 		return notes;
 	}
 
-	public static Multimap<Integer, Note> convertNbs(Path path) {
-		Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
+	public static Multimap<Integer, Note> parseNbs(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 
 		try (InputStream input = Files.newInputStream(path)) {
 			// Signature
@@ -206,7 +218,7 @@ public class NotebotUtils {
 			input.skip(version >= 3 ? 5 : version >= 1 ? 3 : 2);
 			for (int i = 0; i < 4; i++)
 				readString(input);
-			
+
 			float tempo = readShort(input) / 100f;
 
 			input.skip(23);
@@ -215,10 +227,10 @@ public class NotebotUtils {
 				input.skip(4);
 
 			// Notes
-			int tick = -1;
+			double tick = -1;
 			short jump;
 			while ((jump = readShort(input)) != 0) {
-				tick += jump * tempo;
+				tick += jump * (20f / tempo);
 
 				// Iterate through layers
 				while (readShort(input) != 0) {
@@ -235,14 +247,14 @@ public class NotebotUtils {
 						key = Math.floorMod(key, 12) + 12;
 					}
 
-					notes.put(tick, new Note(key, instrument));
+					notes.put((int) Math.round(tick), new Note(key, instrument));
 
 					if (version >= 4)
 						input.skip(4);
 				}
 			}
 		} catch (IOException e) {
-			BleachLogger.error("Error doing the bruh!");
+			BleachLogger.error("Error reading Nbs file!");
 			e.printStackTrace();
 		}
 

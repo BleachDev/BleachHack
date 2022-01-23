@@ -33,7 +33,7 @@ public class CmdNotebot extends Command {
 		if (args.length >= 2 && args[0].equalsIgnoreCase("convert")) {
 			Path path = BleachFileMang.getDir().resolve(args[1]);
 			Multimap<Integer, Note> notes = args[1].endsWith(".nbs")
-					? NotebotUtils.convertNbs(path) : NotebotUtils.convertMidi(path);
+					? NotebotUtils.parseNbs(path) : NotebotUtils.parseMidi(path);
 
 			int i = 0;
 			while (BleachFileMang.fileExists("notebot/notebot" + i + ".txt"))
