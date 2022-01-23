@@ -33,10 +33,10 @@ public class DamageUtils {
 
 	public static float getItemAttackDamage(ItemStack stack) {
 		float damage = 1f
-				+ stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+				+ (float) stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE)
 				.stream()
-				.map(e -> (float) e.getValue())
-				.findFirst().orElse(0f);
+				.mapToDouble(e -> e.getValue())
+				.findFirst().orElse(0);
 
 		return damage + EnchantmentHelper.getAttackDamage(stack, EntityGroup.DEFAULT);
 	}
@@ -45,10 +45,10 @@ public class DamageUtils {
 		float cooldown = attacker.getAttackCooldownProgress(0.5F);
 
 		float damage = (float) attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
-				+ attacker.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+				+ (float) attacker.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE)
 				.stream()
-				.map(e -> (float) e.getValue())
-				.findFirst().orElse(0f);
+				.mapToDouble(e -> e.getValue())
+				.findFirst().orElse(0);
 
 		damage *= 0.2f + cooldown * cooldown * 0.8f;
 		float enchDamage = EnchantmentHelper.getAttackDamage(

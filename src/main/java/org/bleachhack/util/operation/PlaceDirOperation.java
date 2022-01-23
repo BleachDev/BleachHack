@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Direction.Axis;
 
 /**
  * THIS DOES NOT PLACE A BLOCK ON A SPECIFIC SIDE OF A BLOCK!!
@@ -26,9 +27,15 @@ public class PlaceDirOperation extends PlaceOperation {
 	private Direction dir;
 	private boolean faced;
 
-	public PlaceDirOperation(BlockPos pos, Direction dir, Item... items) {
+	protected PlaceDirOperation(BlockPos pos, Direction dir, Item... items) {
 		super(pos, items);
 		this.dir = dir;
+	}
+
+	public static OperationBlueprint blueprint(int localX, int localY, int localZ, Direction localDir, Item... items) {
+		int horizontal = (localDir.getHorizontal() + 1) % 4;
+		return (origin, dir) -> new PlaceDirOperation(origin.add(rotate(localX, localY, localZ, dir)),
+				localDir.getAxis() == Axis.Y ? localDir : Direction.fromHorizontal(Math.floorMod(dir.getHorizontal() - horizontal, 4)), items);
 	}
 
 	@Override

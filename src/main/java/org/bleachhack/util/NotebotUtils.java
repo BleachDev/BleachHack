@@ -8,12 +8,10 @@
  */
 package org.bleachhack.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
@@ -26,19 +24,21 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import org.bleachhack.module.mods.Notebot.Note;
 import org.bleachhack.util.io.BleachFileMang;
 import org.bleachhack.util.io.BleachOnlineMang;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 
 public class NotebotUtils {
 
@@ -56,18 +56,18 @@ public class NotebotUtils {
 			while (files.hasMoreElements()) {
 				count++;
 				ZipEntry file = files.nextElement();
-				File outFile = BleachFileMang.getDir().resolve("notebot").resolve(file.getName()).toFile();
+				Path outFile = BleachFileMang.getDir().resolve("notebot").resolve(file.getName());
 				if (file.isDirectory()) {
-					outFile.mkdirs();
+					outFile.toFile().mkdirs();
 				} else {
-					outFile.getParentFile().mkdirs();
-					InputStream in = zip.getInputStream(file);
-					FileOutputStream out = new FileOutputStream(outFile);
-					IOUtils.copy(in, out);
-					IOUtils.closeQuietly(in);
-					out.close();
+					outFile.toFile().getParentFile().mkdirs();
+
+					try (InputStream zipStream = zip.getInputStream(file)){
+						Files.copy(zipStream, outFile);
+					}
 				}
 			}
+
 			zip.close();
 			Files.deleteIfExists(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip"));
 
@@ -81,12 +81,14 @@ public class NotebotUtils {
 	}
 
 	public static void playNote(List<String> lines, int tick) {
+		String sTick = Integer.toString(tick);
 		for (String s : lines) {
 			try {
 				String[] split = s.split(":");
-				if (split[0].equals(tick + ""))
+				if (split[0].equals(sTick)) {
 					play(Instrument.values()[Integer.parseInt(split[2])].getSound(),
 							(float) Math.pow(2.0D, (Integer.parseInt(split[1]) - 12) / 12.0D));
+				}
 			} catch (Exception e) {
 				BleachLogger.logger.error("oops");
 			}
@@ -95,15 +97,12 @@ public class NotebotUtils {
 
 	private static void play(SoundEvent sound, float pitch) {
 		MinecraftClient mc = MinecraftClient.getInstance();
-		if (mc.world != null && mc.player != null) {
-			mc.world.playSound(mc.player, mc.player.getBlockPos(), sound, SoundCategory.RECORDS, 3.0F, pitch);
-		} else {
-			mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, 0F, 0F, 0F));
-		}
+		Vec3d vec = mc.player == null ? Vec3d.ZERO : mc.player.getPos();
+		mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, vec.x, vec.y, vec.z));
 	}
 
-	public static List<int[]> convertMidi(Path path) {
-		List<int[]> noteList = new ArrayList<>();
+	public static Multimap<Integer, Note> convertMidi(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
 
 		try {
 			Sequence seq = MidiSystem.getSequence(path.toFile());
@@ -145,7 +144,7 @@ public class NotebotUtils {
 									+ noteName + octave + " key=" + key + " velocity: " + velocity;
 
 							if (!skipNote) {
-								noteList.add(new int[] { (int) Math.round(time / 50d), NOTE_POSES[note], instrument });
+								notes.put((int) Math.round(time / 50d), new Note(NOTE_POSES[note], instrument));
 								skipNote = true;
 							} else {
 								skipNote = false;
@@ -187,18 +186,80 @@ public class NotebotUtils {
 
 				trackCount++;
 			}
-			Synthesizer synthesizer = MidiSystem.getSynthesizer();
-			synthesizer.open();
-			javax.sound.midi.Instrument[] instruments = synthesizer.getDefaultSoundbank().getInstruments();
-			for (javax.sound.midi.Instrument i : instruments)
-				BleachLogger.logger.info(i);
-
-			synthesizer.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return noteList;
+		return notes;
+	}
+
+	public static Multimap<Integer, Note> convertNbs(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
+
+		try (InputStream input = Files.newInputStream(path)) {
+			// Signature
+			int version = readShort(input) != 0 ? 0 : input.read();
+			BleachLogger.info("Loading " + path.getFileName().toString() + ", NBS revision: " + version);
+
+			// Skipping the rest of the headers because we don't need them
+			input.skip(version >= 3 ? 5 : version >= 1 ? 3 : 2);
+			for (int i = 0; i < 4; i++)
+				readString(input);
+			
+			float tempo = readShort(input) / 100f;
+
+			input.skip(23);
+			readString(input);
+			if (version >= 4)
+				input.skip(4);
+
+			// Notes
+			int tick = -1;
+			short jump;
+			while ((jump = readShort(input)) != 0) {
+				tick += jump * tempo;
+
+				// Iterate through layers
+				while (readShort(input) != 0) {
+					int instrument = input.read();
+					if (instrument > 15)
+						instrument = 0;
+
+					int key = input.read() - 33;
+					if (key < 0) {
+						BleachLogger.info("Note @" + tick + " Key: " + key + " is below the 2-octave range!");
+						key = Math.floorMod(key, 12);
+					} else if (key > 25) {
+						BleachLogger.info("Note @" + tick + " Key: " + key + " is above the 2-octave range!");
+						key = Math.floorMod(key, 12) + 12;
+					}
+
+					notes.put(tick, new Note(key, instrument));
+
+					if (version >= 4)
+						input.skip(4);
+				}
+			}
+		} catch (IOException e) {
+			BleachLogger.error("Error doing the bruh!");
+			e.printStackTrace();
+		}
+
+		return notes;
+	}
+
+	private static short readShort(InputStream input) throws IOException {
+		//return (short) (input.read() << 8 | input.read() & 0xFF);
+		return (short) (input.read() & 0xFF | input.read() << 8);
+	}
+
+	private static int readInt(InputStream input) throws IOException {
+		//return input.read() << 24 | input.read() << 16 | input.read() << 8 | input.read();
+		return input.read() | input.read() << 8 | input.read() << 16 | input.read() << 24;
+	}
+
+	private static String readString(InputStream input) throws IOException {
+		return new String(input.readNBytes(readInt(input)));
 	}
 }

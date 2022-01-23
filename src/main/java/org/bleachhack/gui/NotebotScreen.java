@@ -179,7 +179,7 @@ public class NotebotScreen extends WindowScreen {
 
 				drawCenteredText(matrices, textRenderer, "Delete", (int) (x + w - w / 2.8), y + h - 14, 0xff0000);
 				drawCenteredText(matrices, textRenderer, "Select", x + w - w / 8, y + h - 14, 0x00ff00);
-				drawCenteredText(matrices, textRenderer, (entry.playing ? "Playing" : "Play") + " (scuffed)", x + w - w / 4, y + h - 26, 0x6060ff);
+				drawCenteredText(matrices, textRenderer, entry.playing ? "Previewing.." : "Preview", x + w - w / 4, y + h - 26, 0x6060ff);
 			}
 		}
 	}

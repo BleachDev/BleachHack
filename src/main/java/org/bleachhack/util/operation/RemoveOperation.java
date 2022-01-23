@@ -18,8 +18,12 @@ import net.minecraft.util.math.Vec3d;
 
 public class RemoveOperation extends Operation {
 
-	public RemoveOperation(BlockPos pos) {
+	protected RemoveOperation(BlockPos pos) {
 		this.pos = pos;
+	}
+
+	public static OperationBlueprint blueprint(int localX, int localY, int localZ) {
+		return (origin, dir) -> new RemoveOperation(origin.add(rotate(localX, localY, localZ, dir)));
 	}
 
 	@Override
