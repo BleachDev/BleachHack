@@ -46,10 +46,10 @@ import java.util.stream.Stream;
 
 public class Notebot extends Module {
 
-	/* All the lines of the file [tick:pitch:instrument] */
+	/* All the lines of the file [tick:note] */
 	private Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
 
-	/* All unique instruments and pitches [pitch:instrument] */
+	/* All unique notes */
 	private Set<Note> requirements = new HashSet<>();
 
 	/* Map of noteblocks to hit when playing and the pitch of each [blockpos:pitch] */
