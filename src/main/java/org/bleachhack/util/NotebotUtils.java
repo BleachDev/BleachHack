@@ -294,8 +294,21 @@ public class NotebotUtils {
 				// Iterate through layers
 				while (readShort(input) != 0) {
 					int instrument = input.read();
-					if (instrument > 15)
+					if (instrument == 1) {
+						instrument = 4;
+					} else if (instrument == 2) {
+						instrument = 1;
+					} else if (instrument == 3) {
+						instrument = 2;
+					} else if (instrument == 5) {
+						instrument = 7;
+					} else if (instrument == 6) {
+						instrument = 5;
+					} else if (instrument == 7) {
+						instrument = 6;
+					} else if (instrument > 15) {
 						instrument = 0;
+					}
 
 					int key = input.read() - 33;
 					if (key < 0) {
