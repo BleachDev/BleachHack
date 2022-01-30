@@ -33,7 +33,7 @@ public class UIWindow extends ClickGuiWindow {
 	private UIContainer parentContainer;
 
 	public UIWindow(Position pos, UIContainer parentContainer, BooleanSupplier enabledSupplier, Supplier<int[]> sizeSupplier, TriConsumer<MatrixStack, Integer, Integer> renderConsumer) {
-		super(0, 0, 0, 0, "", null);
+		super(0, 0, 0, 0, "");
 
 		this.position = pos;
 		this.parentContainer = parentContainer;

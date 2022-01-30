@@ -59,7 +59,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 				height / 6,
 				width - width / 4,
 				height - height / 6,
-				"Edit Interactions", new ItemStack(Items.OAK_SIGN)));
+				"Edit Interactions"));
 
 		if (editNameField == null) {
 			editNameField = new TextFieldWidget(textRenderer, 0, 0, 1000, 16, LiteralText.EMPTY);

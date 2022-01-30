@@ -49,17 +49,16 @@ public class Window {
 	protected int dragOffX;
 	protected int dragOffY;
 
-	public Window(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
-		this(x1, y1, x2, y2, title, icon, false);
+	public Window(int x1, int y1, int x2, int y2, String title) {
+		this(x1, y1, x2, y2, title, false);
 	}
 
-	public Window(int x1, int y1, int x2, int y2, String title, ItemStack icon, boolean closed) {
+	public Window(int x1, int y1, int x2, int y2, String title, boolean closed) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
 		this.title = title;
-		this.icon = icon;
 		this.closed = closed;
 	}
 

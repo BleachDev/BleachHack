@@ -24,7 +24,7 @@ public class BleachFileMang {
 	private static Path dir;
 
 	public static void init() {
-		dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "bleach/");
+		dir = Paths.get(MinecraftClient.getInstance().runDirectory.getPath(), "darkhack/");
 		if (!dir.toFile().exists()) {
 			dir.toFile().mkdirs();
 		}

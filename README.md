@@ -1,31 +1,29 @@
 
-# BleachHack
-![](https://img.shields.io/github/downloads/bleachdrinker420/BleachHack/total?style=flat-square)
-![](https://img.shields.io/tokei/lines/github/BleachDrinker420/BleachHack?style=flat-square)
-![](https://img.shields.io/github/languages/code-size/bleachdrinker420/BleachHack?style=flat-square)
-![](https://img.shields.io/github/last-commit/bleachdrinker420/BleachHack?style=flat-square)
-![](https://img.shields.io/badge/daily%20commit-yes-blue?style=flat-square)
-![](https://img.shields.io/discord/620600892718055434?style=flat-square)
+# BleachHack DarkReaper edition
 
-Obama approved Minecraft utility mod for Fabric 1.17.
-
-> Website: https://bleachhack.org/  
-> Discord: https://bleachhack.org/discord
+My own skid of BleachHack for 1.18.1
+I made this to make Bleach compatible with meteor and even gone so far as changing prefix to + and ClickGui bind to right control  
+I also gave it own visual flavour
 
 ## Showcase
-<details>
- <summary>Images</summary>
 
- ![](https://res.bleachhack.org/images/ClickguiShowcase.jpg)
-
- ![](https://res.bleachhack.org/images/RenderShowcase.jpg)
-
-</details>
+![](https://i.imgur.com/yktU6CE.png)
 
 ## Installation
 ### For normal people
 
-Follow the Instructions on the [download page](https://bleachhack.org/downloads.html).
+Download [Fabric for Minecraft 1.16/1.17](https://fabricmc.net/use/).
+Download the latest version of DarkHack for your Minecraft version from releases.
+
+
+On Windows: Type %appdata% into the Windows search bar; open the folder that comes up and then open '.minecraft'.
+
+On Mac: Click on the desktop, press Command+Shift+G, type ~/Library and press enter; then open 'Application Support' and finally '.minecraft'.
+
+On Linux: in a terminal window, type 'xdg-open ~/.minecraft'... or if you like working at the commandline, 'cd ~/.minecraft'.
+
+Then inside that folder, you should see a folder named 'mods'. (If you don't see one, make sure you've installed Fabric already and started Minecraft again once).
+That's where you'll put any mods you want to install.
 
 ### For (200 IQ) developers
 
@@ -64,7 +62,7 @@ Generate the needed files for your preferred IDE.
   Use [this link](https://fabricmc.net/wiki/tutorial:setup) for more information.
   It should be pretty similar to the eclipse and idea setup.
   
-###### *To get the source code of Pre-1.17 versions, use [this](https://github.com/BleachDrinker420/BleachHack/tree/de55562e94) commit and select the folder of the version you want.*
+###### *Note: Java 17 is required for 1.18+*
 
 ## Recommended Mods
 
@@ -77,7 +75,7 @@ Mods that allows you to connect to any 1.8-1.18 server from a 1.18 client.
 Baritone allows you to automate tasks such as walking, mining or building.
 
 ### [Sodium](https://www.curseforge.com/minecraft/mc-mods/sodium), [Lithium](https://www.curseforge.com/minecraft/mc-mods/lithium) and [Phosphor](https://www.curseforge.com/minecraft/mc-mods/phosphor)
-Fixes Mojang's spaghet.
+Fixes Mojang's spaghetti.
 
 ## License
 

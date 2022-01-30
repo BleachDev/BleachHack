@@ -64,7 +64,7 @@ public class NotebotScreen extends WindowScreen {
 				height / 4 - 10,
 				width / 4 + width / 2,
 				height / 4 + height / 2,
-				"Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
+				"Notebot Gui"));
 
 		getWindow(0).addWidget(new WindowButtonWidget(22, 14, 32, 24, "<", () -> {
 			if (page > 0)
@@ -72,11 +72,6 @@ public class NotebotScreen extends WindowScreen {
 		}));
 
 		getWindow(0).addWidget(new WindowButtonWidget(77, 14, 87, 24, ">", () -> page++));
-
-		int yEnd = getWindow(0).x2 - getWindow(0).x1;
-
-		getWindow(0).addWidget(new WindowButtonWidget(yEnd - 44, 14, yEnd - 3, 24, "Tutorial", () ->
-				Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"))));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

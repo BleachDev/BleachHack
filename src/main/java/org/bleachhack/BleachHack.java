@@ -8,13 +8,10 @@
  */
 package org.bleachhack;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.SharedConstants;
 
-import java.net.http.HttpResponse.BodyHandlers;
 import java.util.concurrent.CompletableFuture;
 
 import org.apache.logging.log4j.Level;
@@ -22,18 +19,13 @@ import org.bleachhack.command.CommandManager;
 import org.bleachhack.command.CommandSuggestor;
 import org.bleachhack.eventbus.BleachEventBus;
 import org.bleachhack.eventbus.registry.InexactSubscriberRegistry;
-import org.bleachhack.gui.BleachTitleScreen;
 import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.module.ModuleManager;
-import org.bleachhack.setting.option.Option;
 import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.BleachPlayerManager;
 import org.bleachhack.util.FriendManager;
 import org.bleachhack.util.Watermark;
 import org.bleachhack.util.io.BleachFileHelper;
 import org.bleachhack.util.io.BleachFileMang;
-import org.bleachhack.util.io.BleachJsonHelper;
-import org.bleachhack.util.io.BleachOnlineMang;
 
 public class BleachHack implements ModInitializer {
 
@@ -46,7 +38,6 @@ public class BleachHack implements ModInitializer {
 	public static BleachEventBus eventBus;
 
 	public static FriendManager friendMang;
-	public static BleachPlayerManager playerMang;
 
 	private static CompletableFuture<JsonObject> updateJson;
 
@@ -58,7 +49,7 @@ public class BleachHack implements ModInitializer {
 
 	public BleachHack() {
 		if (instance != null) {
-			throw new RuntimeException("A BleachHack instance already exists.");
+			throw new RuntimeException("A DarkHack instance already exists.");
 		}
 	}
 
@@ -73,7 +64,6 @@ public class BleachHack implements ModInitializer {
 		eventBus = new BleachEventBus(new InexactSubscriberRegistry("bleachhack"), BleachLogger.logger);
 
 		friendMang = new FriendManager();
-		playerMang = new BleachPlayerManager();
 
 		//this.eventBus = new EventBus();
 		//this.bleachFileManager = new BleachFileMang();
@@ -83,21 +73,7 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readOptions();
 		BleachFileHelper.readFriends();
 
-		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue()) {
-			playerMang.startPinger();
-		}
-
-		if (Option.GENERAL_CHECK_FOR_UPDATES.getValue()) {
-			updateJson = BleachOnlineMang.getResourceAsync("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json", BodyHandlers.ofString())
-					.thenApply(s -> BleachJsonHelper.parseOrNull(s, JsonObject.class));
-		}
-
-		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
-		if (mainMenu != null && !mainMenu.getAsBoolean()) {
-			BleachTitleScreen.customTitleScreen = false;
-		}
-
-		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack (Phase 1) in %d ms.", System.currentTimeMillis() - initStartTime);
+		BleachLogger.logger.log(Level.INFO, "Loaded DarkHack (Phase 1) in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 
 	// Phase 2
@@ -118,7 +94,7 @@ public class BleachHack implements ModInitializer {
 
 		BleachFileHelper.startSavingExecutor();
 
-		BleachLogger.logger.log(Level.INFO, "Loaded BleachHack (Phase 2) in %d ms.", System.currentTimeMillis() - initStartTime);
+		BleachLogger.logger.log(Level.INFO, "Loaded DarkHack (Phase 2) in %d ms.", System.currentTimeMillis() - initStartTime);
 	}
 
 	public static JsonObject getUpdateJson() {

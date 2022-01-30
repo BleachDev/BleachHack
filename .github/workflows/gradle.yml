@@ -1,14 +1,14 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: BleachHack Workflow Builds
+name: DarkHack Workflow
 
 on:
   push:
     branches: [ 1.18.1 ]
 
 jobs:
-  build:
+  build-linux:
 
     runs-on: ubuntu-latest
 
@@ -19,15 +19,35 @@ jobs:
       with:
         java-version: 17
  
-    - name: Build The Bruh
+    - name: Linux Build
       run: |
         chmod +x gradlew
         ./gradlew build
-
+        cd ..
     - name: Upload The Bruh
       uses: actions/upload-artifact@v2
       with:
-        name: BleachHack
-        path: |
-          build/libs/bleachhack-*.jar
-          !build/libs/bleachhack-*-*.jar
+        name: DarkHack-Linux
+        path: build/libs/
+
+  build-windows:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Linux Build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+          cd ..
+      - name: Upload The Bruh
+        uses: actions/upload-artifact@v2
+        with:
+          name: DarkHack-Windows
+          path: build/libs/

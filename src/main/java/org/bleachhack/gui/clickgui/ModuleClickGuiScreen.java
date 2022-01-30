@@ -51,15 +51,15 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 	public void initWindows() {
 		int len = ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValueInt();
 		
-		int y = 50;
+		int x = 30;
 		for (ModuleCategory c: ModuleCategory.values()) {
-			addWindow(new ModuleWindow(ModuleManager.getModulesInCat(c), 30, y, len, StringUtils.capitalize(c.name().toLowerCase()), c.getItem()));
-			y += 16;
+			addWindow(new ModuleWindow(ModuleManager.getModulesInCat(c), x, 50, len, StringUtils.capitalize(c.name().toLowerCase())));
+			x += 78;
 		}
 
 		for (Window w: getWindows()) {
 			if (w instanceof ClickGuiWindow) {
-				((ClickGuiWindow) w).hiding = true;
+				((ClickGuiWindow) w).hiding = false;
 			}
 		}
 	}
@@ -97,8 +97,8 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 
 		super.render(matrices, mouseX, mouseY, delta);
 
-		textRenderer.draw(matrices, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x305090);
-		textRenderer.draw(matrices, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6090d0);
+		textRenderer.draw(matrices, "DarkHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x305090);
+		textRenderer.draw(matrices, "DarkHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6090d0);
 
 		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().getState()) {
 			textRenderer.drawWithShadow(matrices, "Current prefix is: \"" + Command.getPrefix() + "\" (" + Command.getPrefix() + "help)", 2, height - 20, 0x99ff99);

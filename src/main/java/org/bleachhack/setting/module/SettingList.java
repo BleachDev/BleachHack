@@ -116,7 +116,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 					height / 12,
 					(int) (width - width / 3.25),
 					height - height / 12,
-					windowText, new ItemStack(Items.OAK_SIGN)));
+					windowText));
 
 			int x2 = getWindow(0).x2 - getWindow(0).x1;
 			int y2 = getWindow(0).y2 - getWindow(0).y1;

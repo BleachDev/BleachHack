@@ -59,8 +59,8 @@ public class BookCrash extends Module {
 		ItemStack bookObj = new ItemStack(Items.WRITABLE_BOOK);
 		NbtList list = new NbtList();
 		NbtCompound tag = new NbtCompound();
-		String author = "Bleach";
-		String title = "\n Bleachhack Owns All \n";
+		String author = "Dark";
+		String title = "\n Darkhack Owns All \n";
 
 		String size = "";
 		int pages = Math.min(getSetting(4).asSlider().getValueInt(), 100);
@@ -79,7 +79,7 @@ public class BookCrash extends Module {
 		}
 
 		if (getSetting(0).asMode().getMode() == 2) {
-			String text = "bh ontop";
+			String text = "dh ontop";
 			Random rand = new Random();
 			for (int i = 0; i < getSetting(1).asSlider().getValue(); i++) {
 				mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(

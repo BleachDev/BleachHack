@@ -24,13 +24,13 @@ public class Watermark {
 
 	public void reset(boolean strings, boolean colors) {
 		if (strings) {
-			text1 = "Bleach";
+			text1 = "Dark";
 			text2 = "Hack";
 		}
 
 		if (colors) {
-			color1 = 0xffbf30;
-			color2 = 0xffafcc;
+			color1 = 0xffffff;
+			color2 = 0x6cc312;
 		}
 	}
 

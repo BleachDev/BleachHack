@@ -28,15 +28,10 @@ import java.util.concurrent.CompletableFuture;
 public class BleachOnlineMang {
 
 	public static final HttpClient HTTP_CLIENT = HttpClient.newBuilder().followRedirects(Redirect.ALWAYS).build();
-	private static final URI RESOURCE_URL = URI.create("https://bleachhack.org/resources/");
-	private static final URI API_URL = URI.create("http://api0.bleachhack.org/"); // using api0 because of compatibility with BH 1.2.1 and under.
+	private static final URI RESOURCE_URL = URI.create("https://raw.githubusercontent.com/DarkReaper231/darkhack-resources/main/");
 
 	public static URI getResourceUrl() {
 		return RESOURCE_URL;
-	}
-
-	public static URI getApiUrl() {
-		return API_URL;
 	}
 
 	public static <T> T getResource(String path, BodyHandler<T> handler) {
@@ -47,16 +42,6 @@ public class BleachOnlineMang {
 	public static <T> CompletableFuture<T> getResourceAsync(String path, BodyHandler<T> handler) {
 		BleachLogger.logger.info("Getting Resource (/" + path + ")");
 		return sendAsyncRequest(RESOURCE_URL.resolve(path), "GET", null, null, 5000, handler).thenApply(HttpResponse::body);
-	}
-
-	public static <T> T sendApiGet(String path, BodyHandler<T> handler) {
-		BleachLogger.logger.info("Trying to call API (GET, /" + path + ")");
-		return sendRequest(API_URL.resolve(path), "GET", null, null, 5000, handler).body();
-	}
-
-	public static <T> T sendApiPost(String path, String body, BodyHandler<T> handler) {
-		BleachLogger.logger.info("Trying to call API (POST, /" + path + ", " + body + ")");
-		return sendRequest(API_URL.resolve(path), "POST", null, body, 5000, handler).body();
 	}
 
 	// Raw request methods

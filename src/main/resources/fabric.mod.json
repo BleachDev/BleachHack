@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "bleachhack",
+  "id": "darkhack",
   "version": "${version}",
 
-  "name": "BleachHack",
-  "description": "gamer obama utility mod",
+  "name": "DarkHack",
+  "description": "A skidded wanna be game sense",
   "authors": [
-    "Bleach"
+    "Bleach",
+    "DarkReaper231"
   ],
   "contact": {
     "homepage": "https://bleachhack.org/",

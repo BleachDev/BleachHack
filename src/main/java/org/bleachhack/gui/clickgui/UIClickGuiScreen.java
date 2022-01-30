@@ -43,7 +43,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 		uiContainer.windows.values().forEach(this::addWindow);
 
 		addWindow(new ModuleWindow(List.of(ModuleManager.getModule("UI")),
-				200, 200, 75, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
+				30, 50, 75, "Render"));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

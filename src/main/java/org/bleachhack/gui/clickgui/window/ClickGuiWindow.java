@@ -33,8 +33,8 @@ public abstract class ClickGuiWindow extends Window {
 	public boolean lmHeld = false;
 	public int mwScroll = 0;
 
-	public ClickGuiWindow(int x1, int y1, int x2, int y2, String title, ItemStack icon) {
-		super(x1, y1, x2, y2, title, icon);
+	public ClickGuiWindow(int x1, int y1, int x2, int y2, String title) {
+		super(x1, y1, x2, y2, title);
 	}
 
 	public boolean shouldClose(int mouseX, int mouseY) {

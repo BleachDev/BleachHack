@@ -36,8 +36,8 @@ public class ModuleWindow extends ClickGuiWindow {
 
 	private Tooltip tooltip = null;
 
-	public ModuleWindow(List<Module> mods, int x1, int y1, int len, String title, ItemStack icon) {
-		super(x1, y1, x1 + len, 0, title, icon);
+	public ModuleWindow(List<Module> mods, int x1, int y1, int len, String title) {
+		super(x1, y1, x1 + len, 0, title);
 
 		this.len = len;
 		modList = mods;

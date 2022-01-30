@@ -21,7 +21,7 @@ import net.minecraft.util.Formatting;
 
 public class BleachLogger {
 
-	public static final Logger logger = LogManager.getFormatterLogger("BleachHack");
+	public static final Logger logger = LogManager.getFormatterLogger("DarkHack");
 
 	public static int INFO_COLOR = 0x64b9fa;
 	public static int WARN_COLOR = Formatting.YELLOW.getColorValue();
