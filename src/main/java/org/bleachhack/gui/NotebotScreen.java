@@ -61,15 +61,12 @@ public class NotebotScreen extends WindowScreen {
 				height / 2 - wh / 2,
 				width / 2 + ww / 2,
 				height / 2 + wh / 2,
-				"Notebot Gui", new ItemStack(Items.NOTE_BLOCK)));
+				"Notebot Gui"));
 
 		getWindow(0).addWidget(new WindowButtonWidget(22, 14, 32, 24, "<", () -> page = page <= 0 ? 0 : page - 1));
 		getWindow(0).addWidget(new WindowButtonWidget(77, 14, 87, 24, ">", () -> page++));
 
 		int xEnd = getWindow(0).x2 - getWindow(0).x1;
-
-		getWindow(0).addWidget(new WindowButtonWidget(xEnd - 30, 14, xEnd - 3, 24, "Help", () ->
-		Util.getOperatingSystem().open(URI.create("https://www.youtube.com/watch?v=Z6O80jItoAk"))));
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
