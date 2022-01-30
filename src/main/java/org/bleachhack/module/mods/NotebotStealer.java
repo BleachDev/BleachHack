@@ -24,7 +24,7 @@ import com.google.common.collect.MultimapBuilder;
 
 public class NotebotStealer extends Module {
 
-	private Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
+	private Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
 	private int ticks = 0;
 
 	public NotebotStealer() {

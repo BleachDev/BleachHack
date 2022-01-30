@@ -12,14 +12,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.EnumMap;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiFileFormat;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
@@ -27,7 +28,9 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.bleachhack.module.mods.Notebot.Note;
+import org.bleachhack.module.mods.Notebot.Song;
 import org.bleachhack.util.io.BleachFileMang;
 import org.bleachhack.util.io.BleachOnlineMang;
 import com.google.common.collect.Multimap;
@@ -36,14 +39,36 @@ import com.google.common.collect.MultimapBuilder;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
 
 public class NotebotUtils {
 
-	private static final String[] NOTE_NAMES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+	public static final String[] NOTE_NAMES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 	private static final int[] NOTE_POSES = { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
+
+	public static final EnumMap<Instrument, ItemStack> INSTRUMENT_TO_ITEM = Util.make(new EnumMap<>(Instrument.class), it -> {
+		it.put(Instrument.HARP, new ItemStack(Items.DIRT));
+		it.put(Instrument.BASEDRUM, new ItemStack(Items.STONE));
+		it.put(Instrument.SNARE, new ItemStack(Items.SAND));
+		it.put(Instrument.HAT, new ItemStack(Items.GLASS));
+		it.put(Instrument.BASS, new ItemStack(Items.OAK_WOOD));
+		it.put(Instrument.FLUTE, new ItemStack(Items.CLAY));
+		it.put(Instrument.BELL, new ItemStack(Items.GOLD_BLOCK));
+		it.put(Instrument.GUITAR, new ItemStack(Items.WHITE_WOOL));
+		it.put(Instrument.CHIME, new ItemStack(Items.PACKED_ICE));
+		it.put(Instrument.XYLOPHONE, new ItemStack(Items.BONE_BLOCK));
+		it.put(Instrument.IRON_XYLOPHONE, new ItemStack(Items.IRON_BLOCK));
+		it.put(Instrument.COW_BELL, new ItemStack(Items.SOUL_SAND));
+		it.put(Instrument.DIDGERIDOO, new ItemStack(Items.PUMPKIN));
+		it.put(Instrument.BIT, new ItemStack(Items.EMERALD_BLOCK));
+		it.put(Instrument.BANJO, new ItemStack(Items.HAY_BLOCK));
+		it.put(Instrument.PLING, new ItemStack(Items.GLOWSTONE));
+	});
 
 	public static void downloadSongs(boolean log) {
 		try {
@@ -80,18 +105,9 @@ public class NotebotUtils {
 		}
 	}
 
-	public static void playNote(List<String> lines, int tick) {
-		String sTick = Integer.toString(tick);
-		for (String s : lines) {
-			try {
-				String[] split = s.split(":");
-				if (split[0].equals(sTick)) {
-					play(Instrument.values()[Integer.parseInt(split[2])].getSound(),
-							(float) Math.pow(2.0D, (Integer.parseInt(split[1]) - 12) / 12.0D));
-				}
-			} catch (Exception e) {
-				BleachLogger.logger.error("oops");
-			}
+	public static void playNote(Multimap<Integer, Note> song, int tick) {
+		for (Note note: song.get(tick)) {
+			play(Instrument.values()[note.instrument].getSound(), (float) Math.pow(2.0D, (note.pitch - 12) / 12.0D));
 		}
 	}
 
@@ -101,15 +117,57 @@ public class NotebotUtils {
 		mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, vec.x, vec.y, vec.z));
 	}
 
-	public static Multimap<Integer, Note> convertMidi(Path path) {
-		Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
+	public static Song parse(Path path) {
+		String string = path.toString();
+		if (string.endsWith(".mid") || string.endsWith(".midi")) {
+			return parseMidi(path);
+		} else if (string.endsWith(".nbs")) {
+			return parseNbs(path);
+		} else {
+			return parseNl(path);
+		}
+	}
+
+	public static Song parseNl(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
+		String name = FilenameUtils.getBaseName(path.toString());
+		String author = "Unknown";
 
 		try {
+			for (String s: Files.readAllLines(path)) {
+				if (s.startsWith("// Name: ")) {
+					name = name.substring(9);
+				} else if (s.startsWith("// Author: ")) {
+					author = name.substring(11);
+				} else if (!s.isEmpty()) {
+					try {
+						String[] split = s.split(":");
+						notes.put(Integer.parseInt(split[0]), new Note(Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+					} catch (NumberFormatException | IndexOutOfBoundsException e) {
+						BleachLogger.warn("Error trying to parse note: \u00a7o" + s);
+					}
+				}
+			}
+		} catch (IOException e) {
+			BleachLogger.error("Error reading NL file!");
+			e.printStackTrace();
+		}
+
+		return new Song(path.getFileName().toString(), name, author, "Notelist", notes);
+	}
+
+	public static Song parseMidi(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
+		String name = FilenameUtils.getBaseName(path.toString());
+		String author = "Unknown";
+
+		try {
+			MidiFileFormat midiFormat = MidiSystem.getMidiFileFormat(path.toFile());
+			BleachLogger.info(midiFormat.properties().toString());
+
 			Sequence seq = MidiSystem.getSequence(path.toFile());
 
 			int res = seq.getResolution();
-
-			BleachLogger.logger.info("Tracks: " + seq.getTracks().length + " | " + seq.getDivisionType());
 			int trackCount = 0;
 			for (Track track : seq.getTracks()) {
 				// Track track = seq.getTracks()[0]
@@ -191,22 +249,35 @@ public class NotebotUtils {
 			e.printStackTrace();
 		}
 
-		return notes;
+		return new Song(path.getFileName().toString(), name, author, "MIDI", notes);
 	}
 
-	public static Multimap<Integer, Note> convertNbs(Path path) {
-		Multimap<Integer, Note> notes = MultimapBuilder.hashKeys().arrayListValues().build();
+	public static Song parseNbs(Path path) {
+		Multimap<Integer, Note> notes = MultimapBuilder.linkedHashKeys().arrayListValues().build();
+		String name = FilenameUtils.getBaseName(path.toString());
+		String author = "Unknown";
+		int version = 0;
 
 		try (InputStream input = Files.newInputStream(path)) {
 			// Signature
-			int version = readShort(input) != 0 ? 0 : input.read();
-			BleachLogger.info("Loading " + path.getFileName().toString() + ", NBS revision: " + version);
+			version = readShort(input) != 0 ? 0 : input.read();
 
-			// Skipping the rest of the headers because we don't need them
+			// Skipping most of the headers because we don't need them
 			input.skip(version >= 3 ? 5 : version >= 1 ? 3 : 2);
-			for (int i = 0; i < 4; i++)
-				readString(input);
-			
+			String iname = readString(input);
+			String iauthor = readString(input);
+			String ioauthor = readString(input);
+			if (!iname.isEmpty())
+				name = iname;
+
+			if (!ioauthor.isEmpty()) {
+				author = ioauthor;
+			} else if (!iauthor.isEmpty()) {
+				author = iauthor;
+			}
+
+			readString(input);
+
 			float tempo = readShort(input) / 100f;
 
 			input.skip(23);
@@ -215,16 +286,29 @@ public class NotebotUtils {
 				input.skip(4);
 
 			// Notes
-			int tick = -1;
+			double tick = -1;
 			short jump;
 			while ((jump = readShort(input)) != 0) {
-				tick += jump * tempo;
+				tick += jump * (20f / tempo);
 
 				// Iterate through layers
 				while (readShort(input) != 0) {
 					int instrument = input.read();
-					if (instrument > 15)
+					if (instrument == 1) {
+						instrument = 4;
+					} else if (instrument == 2) {
+						instrument = 1;
+					} else if (instrument == 3) {
+						instrument = 2;
+					} else if (instrument == 5) {
+						instrument = 7;
+					} else if (instrument == 6) {
+						instrument = 5;
+					} else if (instrument == 7) {
+						instrument = 6;
+					} else if (instrument > 15) {
 						instrument = 0;
+					}
 
 					int key = input.read() - 33;
 					if (key < 0) {
@@ -235,27 +319,27 @@ public class NotebotUtils {
 						key = Math.floorMod(key, 12) + 12;
 					}
 
-					notes.put(tick, new Note(key, instrument));
+					notes.put((int) Math.round(tick), new Note(key, instrument));
 
 					if (version >= 4)
 						input.skip(4);
 				}
 			}
 		} catch (IOException e) {
-			BleachLogger.error("Error doing the bruh!");
+			BleachLogger.error("Error reading Nbs file!");
 			e.printStackTrace();
 		}
 
-		return notes;
+		return new Song(path.getFileName().toString(), name, author, "NBS v" + version, notes);
 	}
 
+	// Reads a little endian short
 	private static short readShort(InputStream input) throws IOException {
-		//return (short) (input.read() << 8 | input.read() & 0xFF);
 		return (short) (input.read() & 0xFF | input.read() << 8);
 	}
 
+	// Reads a little endian int
 	private static int readInt(InputStream input) throws IOException {
-		//return input.read() << 24 | input.read() << 16 | input.read() << 8 | input.read();
 		return input.read() | input.read() << 8 | input.read() << 16 | input.read() << 24;
 	}
 
