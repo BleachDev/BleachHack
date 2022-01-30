@@ -23,7 +23,6 @@ jobs:
       run: |
         chmod +x gradlew
         ./gradlew build
-        cd ..
     - name: Upload The Bruh
       uses: actions/upload-artifact@v2
       with:
@@ -45,7 +44,6 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
-          cd ..
       - name: Upload The Bruh
         uses: actions/upload-artifact@v2
         with:

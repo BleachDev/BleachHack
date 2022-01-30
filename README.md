@@ -3,7 +3,7 @@
 
 My own skid of BleachHack for 1.18.1
 I made this to make Bleach compatible with meteor and even gone so far as changing prefix to + and ClickGui bind to right control  
-I also gave it own visual flavour
+I also gave it own visual flavour  
 
 ## Showcase
 
