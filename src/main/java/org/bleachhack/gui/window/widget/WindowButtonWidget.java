@@ -18,11 +18,11 @@ public class WindowButtonWidget extends WindowWidget {
 	public Runnable action;
 
 	public WindowButtonWidget(int x1, int y1, int x2, int y2, String text, Runnable action) {
-		this(x1, y1, x2, y2, 0x60606090, 0x4fb070f0, text, action);
+		this(x1, y1, x2, y2, 0x606cc312, 0x606cc312, text, action);
 	}
 
 	public WindowButtonWidget(int x1, int y1, int x2, int y2, int colorFill, int colorHoverFill, String text, Runnable action) {
-		this(x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, colorFill, colorHoverFill, text, action);
+		this(x1, y1, x2, y2, 0x606cc312, 0x606cc312, colorFill, colorHoverFill, text, action);
 	}
 
 	public WindowButtonWidget(int x1, int y1, int x2, int y2, int colorTop, int colorBottom, int colorFill, int colorHoverFill, String text, Runnable action) {

@@ -33,7 +33,7 @@ public class WindowCheckboxWidget extends WindowWidget {
 
 		int x = windowX + x1;
 		int y = windowY + y1;
-		int color = mouseX >= x && mouseX <= x + 10 && mouseY >= y && mouseY <= y + 10 ? 0x906060ff : 0x9040409f;
+		int color = mouseX >= x && mouseX <= x + 10 && mouseY >= y && mouseY <= y + 10 ? 0x9025e635 : 0x9025e635;
 
 		Window.fill(matrices, x, y, x + 11, y + 11, color);
 

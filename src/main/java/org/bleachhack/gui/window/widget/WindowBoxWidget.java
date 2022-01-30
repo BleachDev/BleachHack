@@ -16,7 +16,7 @@ public class WindowBoxWidget extends WindowWidget {
 	}
 
 	public WindowBoxWidget(int x1, int y1, int x2, int y2, int fill) {
-		this(x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, fill);
+		this(x1, y1, x2, y2, 0xff6cc312, 0xff6cc312, fill);
 	}
 
 	public WindowBoxWidget(int x1, int y1, int x2, int y2, int top, int bottom, int fill) {

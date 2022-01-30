@@ -42,7 +42,7 @@ public class SettingToggle extends ModuleSetting<Boolean> {
 		String color2 = getValue() ? "\u00a7a" : "\u00a7c";
 
 		if (window.mouseOver(x, y, x + len, y + 12)) {
-			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
+			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x703f700c);
 		}
 
 		if (!children.isEmpty()) {

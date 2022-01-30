@@ -87,9 +87,9 @@ public class NotebotScreen extends WindowScreen {
 			for (int i = y + 20; i < y + h - 27; i += 10)
 				pageEntries++;
 
-			drawCenteredText(matrices, textRenderer, "Page " + (page + 1), x + 55, y + 5, 0xc0c0ff);
+			drawCenteredText(matrices, textRenderer, "Page " + (page + 1), x + 55, y + 5, 0x6cc312);
 
-			fillButton(matrices, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mouseX, mouseY);
+			fillButton(matrices, x + 10, y + h - 13, x + 99, y + h - 3, 0xf040700c, 0xf0528f17, mouseX, mouseY);
 			drawCenteredText(matrices, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 
 			Song nbSong = ((Notebot) ModuleManager.getModule("Notebot")).song;
@@ -102,7 +102,7 @@ public class NotebotScreen extends WindowScreen {
 					break;
 
 				fillButton(matrices, x + 5, y + 15 + c * 10, x + 105, y + 25 + c * 10,
-						nbSong != null && s.equals(nbSong.filename) ? 0xf0408040 : entry != null && s.equals(entry.filename) ? 0xf0202020 : 0xf0404040, 0xf0303030, mouseX, mouseY);
+						nbSong != null && s.equals(nbSong.filename) ? 0xf078ad40 : entry != null && s.equals(entry.filename) ? 0xf067b01c : 0xf040700c, 0xf0528f17, mouseX, mouseY);
 
 				drawCenteredText(matrices, textRenderer, textRenderer.trimToWidth(s, 100), x + 55, y + 16 + c * 10, -1);
 
@@ -114,8 +114,8 @@ public class NotebotScreen extends WindowScreen {
 				drawCenteredText(matrices, textRenderer, entry.name, textX, y + 8, 0xffffff);
 				drawCenteredText(matrices, textRenderer, "By: " + entry.author, textX, y + 18, 0xb0b0b0);
 				
-				drawCenteredText(matrices, textRenderer, "Format: \u00a7a" + entry.format, textX, y + 35, 0xb0b0b0);
-				drawCenteredText(matrices, textRenderer, "Length: \u00a7f" +  entry.length / 20 + "s", textX, y + 45, 0xb0b0b0);
+				drawCenteredText(matrices, textRenderer, "Format: \u00a7a" + entry.format, textX, y + 35, 0xa030a0);
+				drawCenteredText(matrices, textRenderer, "Length: \u00a7f" +  entry.length / 20 + "s", textX, y + 45, 0xc000c0);
 				//drawCenteredText(matrices, textRenderer, "Notes: \u00a7f" + entry.notes.size(), textX, y + 55, 0xb0b0b0);
 				drawCenteredText(matrices, textRenderer, "Noteblocks: ", textX, y + 62, 0x80f080);
 

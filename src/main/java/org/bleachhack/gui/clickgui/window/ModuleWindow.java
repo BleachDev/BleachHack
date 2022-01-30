@@ -64,7 +64,7 @@ public class ModuleWindow extends ClickGuiWindow {
 		int curY = 0;
 		for (Entry<Module, Boolean> m : mods.entrySet()) {
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
-				DrawableHelper.fill(matrices, x, y + curY, x + len, y + 12 + curY, 0x70303070);
+				DrawableHelper.fill(matrices, x, y + curY, x + len, y + 12 + curY, 0x703f700c);
 			}
 
 			// If they match: Module gets marked red
@@ -98,7 +98,7 @@ public class ModuleWindow extends ClickGuiWindow {
 						tooltip = s.getTooltip(this, x + 1, y + curY, len - 1);
 					}
 
-					DrawableHelper.fill(matrices, x + 1, y + curY, x + 2, y + curY + s.getHeight(len), 0xff8070b0);
+					DrawableHelper.fill(matrices, x + 1, y + curY, x + 2, y + curY + s.getHeight(len), 0xff6cc312);
 
 					curY += s.getHeight(len);
 				}

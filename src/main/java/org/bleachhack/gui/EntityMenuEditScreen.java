@@ -95,13 +95,13 @@ public class EntityMenuEditScreen extends WindowScreen {
 			insertStartString = null;
 
 			int seperator = (int) (x + w / 3.25);
-			fill(matrices, seperator, y, seperator + 1, y + h, 0xff606090);
+			fill(matrices, seperator, y, seperator + 1, y + h, 0xff6cc312);
 
 			textRenderer.drawWithShadow(matrices, "Interactions:", x + 6, y + 5, 0xffffff);
 
 			boolean mouseOverAdd = mouseX >= seperator - 16 && mouseX <= seperator - 3 && mouseY >= y + 3 && mouseY <= y + 15;
 			Window.fill(matrices, seperator - 16, y + 3, seperator - 3, y + 15,
-					mouseOverAdd ? 0x4fb070f0 : 0x60606090);
+					mouseOverAdd ? 0x4f90f090 : 0x50428a42);
 			textRenderer.drawWithShadow(matrices, "\u00a7a+", seperator - 12, y + 5, 0xffffff);
 
 			if (mouseOverAdd) {
@@ -117,7 +117,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 				boolean mouseOver = mouseX >= x + 2 && mouseX <= seperator - 1 && mouseY >= y + 17 && mouseY <= y + 33;
 
 				Window.fill(matrices, x + 3, y + 17, seperator - 2, y + 33,
-						mouseOver ? 0x4fb070f0 : 0x50606090);
+						mouseOver ? 0x4f90f090 : 0x50428a42);
 				drawCenteredText(matrices, textRenderer,
 						"\u00a7a\u00a7l^", x + (seperator - x) / 2, y + 21, 0xffffff);
 
@@ -152,7 +152,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 				boolean mouseOver = mouseX >= x + 2 && mouseX <= seperator - 1 && mouseY >= curY && mouseY <= curY + 16;
 
 				Window.fill(matrices, x + 3, curY, seperator - 2, curY + 16,
-						entry.equals(selectedEntry) ? 0x4f90f090 : mouseOver ? 0x4fb070f0 : 0x50606090);
+						entry.equals(selectedEntry) ? 0x4f90f090 : mouseOver ? 0x4f62bd62 : 0x50428a42);
 				drawCenteredText(matrices, textRenderer,
 						textRenderer.trimToWidth(entry, seperator - x - 6), x + (seperator - x) / 2, curY + 4, 0xffffff);
 
@@ -204,7 +204,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 					}
 
 					boolean mouseOverInsert = mouseX >= seperator + 7 + curX && mouseX <= seperator + 10 + curX + textLen && mouseY >= y + 97 + line * 14 && mouseY <= y + 108 + line * 14;
-					fill(matrices, seperator + 7 + curX, y + 97 + line * 14, seperator + 10 + curX + textLen, y + 108 + line * 14, mouseOverInsert ? 0x9f6060b0 : 0x9f8070b0);
+					fill(matrices, seperator + 7 + curX, y + 97 + line * 14, seperator + 10 + curX + textLen, y + 108 + line * 14, mouseOverInsert ? 0x4f90f090 : 0x4f90f090);
 					textRenderer.drawWithShadow(matrices, insert, seperator + 9 + curX, y + 99 + line * 14, 0xffffff);
 					
 					if (mouseOverInsert) {
@@ -228,7 +228,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 					}
 
 					boolean mouseOverInsert = mouseX >= seperator + 7 + curX && mouseX <= seperator + 10 + curX + textLen && mouseY >= startY + line * 14 && mouseY <= startY + 11 + line * 14;
-					fill(matrices, seperator + 7 + curX, startY + line * 14, seperator + 10 + curX + textLen, startY + 11 + line * 14, mouseOverInsert ? 0x9f6060b0 : 0x9f8070b0);
+					fill(matrices, seperator + 7 + curX, startY + line * 14, seperator + 10 + curX + textLen, startY + 11 + line * 14, mouseOverInsert ? 0x4f90f090 : 0x4f90f090);
 					textRenderer.drawWithShadow(matrices, pair.getLeft(), seperator + 9 + curX, startY + 2 + line * 14, 0xffffff);
 					
 					if (mouseOverInsert) {

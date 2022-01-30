@@ -102,12 +102,12 @@ public abstract class ClickGuiScreen extends WindowScreen {
 		}
 		
 		Window.fill(matrices, width / 2 - 50, -1, width / 2 - 2, 12,
-				mouseX >= width / 2 - 50 && mouseX <= width / 2 - 2 && mouseY >= 0 && mouseY <= 12 ? 0x60b070f0 : 0x60606090);
+				mouseX >= width / 2 - 50 && mouseX <= width / 2 - 2 && mouseY >= 0 && mouseY <= 12 ? 0x4f90f090 : 0x50428a42);
 		Window.fill(matrices, width / 2 + 2, -1, width / 2 + 50, 12,
-				mouseX >= width / 2 + 2 && mouseX <= width / 2 + 50 && mouseY >= 0 && mouseY <= 12 ? 0x60b070f0 : 0x60606090);
+				mouseX >= width / 2 + 2 && mouseX <= width / 2 + 50 && mouseY >= 0 && mouseY <= 12 ? 0x4f90f090 : 0x50428a42);
 
-		drawCenteredText(matrices, textRenderer, "Modules", width / 2 - 26, 2, 0xf0f0f0);
-		drawCenteredText(matrices, textRenderer, "UI", width / 2 + 26, 2, 0xf0f0f0);
+		drawCenteredText(matrices, textRenderer, "Modules", width / 2 - 26, 2, 0xffffff);
+		drawCenteredText(matrices, textRenderer, "UI", width / 2 + 26, 2, 0xffffff);
 		
 		if (warningOpacity > 3) {
 			drawCenteredText(matrices, textRenderer, "UI not available on the main menu!", width / 2, 17,

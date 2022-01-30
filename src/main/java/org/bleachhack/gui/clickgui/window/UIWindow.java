@@ -195,7 +195,7 @@ public class UIWindow extends ClickGuiWindow {
 				(position.getAttachments().containsValue(0) ? 0xff60b060 : 0xff6060b0),
 				(position.getAttachments().containsValue(0) ? 0xff80c060 : 0xff8070b0));*/
 
-		DrawableHelper.fill(matrices, x1, y1, x2, y2, 0x90606090);
+		DrawableHelper.fill(matrices, x1, y1, x2, y2, 0x906cc312);
 	}
 
 	public void mouseClicked(double mouseX, double mouseY, int button) {
