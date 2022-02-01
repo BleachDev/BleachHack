@@ -9,6 +9,7 @@
 package org.bleachhack.setting.module;
 
 import org.bleachhack.gui.clickgui.window.ModuleWindow;
+import org.bleachhack.setting.SettingDataHandlers;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -21,7 +22,7 @@ public class SettingButton extends ModuleSetting<Void> {
 	public Runnable action;
 
 	public SettingButton(String text, Runnable action) {
-		super(text, null, null);
+		super(text, null, SettingDataHandlers.NULL);
 		this.action = action;
 	}
 
