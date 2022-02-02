@@ -1,32 +1,37 @@
 package org.bleachhack.eventbus;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.logging.log4j.Logger;
 import org.bleachhack.event.Event;
-import org.bleachhack.eventbus.registry.BleachSubscriberRegistry;
+import org.bleachhack.eventbus.handler.EventHandler;
 
 public class BleachEventBus {
 
+	private final EventHandler handler;
+	private final AtomicLong eventsPosted = new AtomicLong();
+	
 	private final Logger logger;
-	private final BleachSubscriberRegistry registry;
 
-	public BleachEventBus(BleachSubscriberRegistry registry, Logger logger) {
-		this.registry = registry;
+	public BleachEventBus(EventHandler handler, Logger logger) {
+		this.handler = handler;
 		this.logger = logger;
 	}
 
 	public boolean subscribe(Object object) {
-		return registry.subscribe(object);
+		return handler.subscribe(object);
 	}
 
 	public boolean unsubscribe(Object object) {
-		return registry.unsubscribe(object);
+		return handler.unsubscribe(object);
 	}
 
 	public void post(Event event) {
-		registry.post(event, logger);
+		handler.post(event, logger);
+		eventsPosted.getAndIncrement();
 	}
 
 	public long getEventsPosted() {
-		return registry.getEventsPosted();
+		return eventsPosted.get();
 	}
 }
