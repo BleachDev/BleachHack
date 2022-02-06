@@ -39,7 +39,7 @@ public class CmdBetterChat extends Command {
 			throw new CmdSyntaxException();
 		}
 
-		BetterChat chat = (BetterChat) ModuleManager.getModule("BetterChat");
+		BetterChat chat = ModuleManager.getModule(BetterChat.class);
 
 		if (args[0].equalsIgnoreCase("filter")) {
 			if (args[1].equalsIgnoreCase("list")) {

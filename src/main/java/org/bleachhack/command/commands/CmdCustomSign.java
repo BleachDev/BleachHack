@@ -36,7 +36,7 @@ public class CmdCustomSign extends Command {
 			throw new CmdSyntaxException();
 		}
 
-		NoRender noRender = (NoRender) ModuleManager.getModule("NoRender");
+		NoRender noRender = ModuleManager.getModule(NoRender.class);
 
 		if (args[0].equalsIgnoreCase("list")) {
 			String s = "Sign Text:";

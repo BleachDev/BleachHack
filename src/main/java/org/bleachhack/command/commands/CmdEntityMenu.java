@@ -28,7 +28,7 @@ public class CmdEntityMenu extends Command {
 
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
-		MutablePairList<String, String> interactions = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
+		MutablePairList<String, String> interactions = ModuleManager.getModule(EntityMenu.class).interactions;
 
 		BleachQueue.add(() -> mc.setScreen(new EntityMenuEditScreen(interactions)));
 	}

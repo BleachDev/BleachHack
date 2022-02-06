@@ -11,6 +11,7 @@ package org.bleachhack.mixin;
 import java.util.Iterator;
 
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.NoVelocity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -24,8 +25,8 @@ public class MixinFlowableFluid {
 	/** Yeet the first iterator which handles the horizontal fluid movement **/
 	@Redirect(method = "getVelocity", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", ordinal = 0))
 	private boolean getVelocity_hasNext(Iterator<Direction> var9) {
-		if (ModuleManager.getModule("NoVelocity").isEnabled()
-				&& ModuleManager.getModule("NoVelocity").getSetting(3).asToggle().getState()) {
+		if (ModuleManager.getModule(NoVelocity.class).isEnabled()
+				&& ModuleManager.getModule(NoVelocity.class).getSetting(3).asToggle().getState()) {
 			return false;
 		}
 

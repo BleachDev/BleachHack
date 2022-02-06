@@ -21,7 +21,7 @@ import com.google.gson.JsonParser;
 
 public class BleachJsonHelper {
 
-	private static final Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
+	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	public static void addJsonElement(String path, String key, JsonElement element) {
 		JsonObject file = null;
@@ -51,17 +51,17 @@ public class BleachJsonHelper {
 			JsonObject mainJO = new JsonObject();
 			mainJO.add(key, element);
 
-			BleachFileMang.appendFile(path, jsonWriter.toJson(mainJO));
+			BleachFileMang.appendFile(path, GSON.toJson(mainJO));
 		} else {
 			file.add(key, element);
 
-			BleachFileMang.appendFile(path, jsonWriter.toJson(file));
+			BleachFileMang.appendFile(path, GSON.toJson(file));
 		}
 	}
 
 	public static void setJsonFile(String path, JsonObject element) {
 		BleachFileMang.createEmptyFile(path);
-		BleachFileMang.appendFile(path, jsonWriter.toJson(element));
+		BleachFileMang.appendFile(path, GSON.toJson(element));
 	}
 
 	public static JsonElement readJsonElement(String path, String key) {
@@ -78,15 +78,13 @@ public class BleachJsonHelper {
 	}
 
 	public static JsonObject readJsonFile(String path) {
-		List<String> lines = BleachFileMang.readFileLines(path);
+		String content = BleachFileMang.readFile(path);
 
-		if (lines.isEmpty())
+		if (content.isEmpty())
 			return null;
 
-		String merged = String.join("\n", lines);
-
 		try {
-			return new JsonParser().parse(merged).getAsJsonObject();
+			return new JsonParser().parse(content).getAsJsonObject();
 		} catch (JsonParseException | IllegalStateException e) {
 			BleachLogger.logger.error("Error trying to read json file \"" + path + "\", Deleting file!", e);
 
@@ -105,10 +103,10 @@ public class BleachJsonHelper {
 	}
 
 	public static String formatJson(String json) {
-		return jsonWriter.toJson(new JsonParser().parse(json));
+		return GSON.toJson(new JsonParser().parse(json));
 	}
 
 	public static String formatJson(JsonElement json) {
-		return jsonWriter.toJson(json);
+		return GSON.toJson(json);
 	}
 }

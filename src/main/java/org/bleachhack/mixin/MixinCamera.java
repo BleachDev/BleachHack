@@ -10,6 +10,7 @@ package org.bleachhack.mixin;
 
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.BetterCamera;
 import org.bleachhack.module.mods.NoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +31,7 @@ public class MixinCamera {
 
 	@Inject(method = "getSubmersionType", at = @At("HEAD"), cancellable = true)
 	private void getSubmergedFluidState(CallbackInfoReturnable<CameraSubmersionType> ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(3)) {
+		if (ModuleManager.getModule(NoRender.class).isOverlayToggled(3)) {
 			ci.setReturnValue(CameraSubmersionType.NONE);
 		}
 	}
@@ -40,7 +41,7 @@ public class MixinCamera {
 		if (bypassCameraClip) {
 			bypassCameraClip = false;
 		} else {
-			Module betterCamera = ModuleManager.getModule("BetterCamera");
+			Module betterCamera = ModuleManager.getModule(BetterCamera.class);
 
 			if (betterCamera.isEnabled()) {
 				if (betterCamera.getSetting(0).asToggle().getState()) {

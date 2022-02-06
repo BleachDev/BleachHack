@@ -10,6 +10,7 @@ package org.bleachhack.mixin;
 
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.NoKeyBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -20,7 +21,7 @@ public class MixinSharedConstants {
 
 	@Overwrite
 	public static boolean isValidChar(char chr) {
-		Module noKeyBlock = ModuleManager.getModule("NoKeyBlock");
+		Module noKeyBlock = ModuleManager.getModule(NoKeyBlock.class);
 
 		if (!noKeyBlock.isEnabled()) {
 			return chr != 167 && chr >= ' ' && chr != 127;

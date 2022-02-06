@@ -8,41 +8,30 @@
  */
 package org.bleachhack.module;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import org.apache.commons.io.IOUtils;
 import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.collections.NameableStorage;
+import org.bleachhack.util.io.BleachJsonHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class ModuleManager {
 
-	private static final Gson moduleGson = new Gson();
-
-	private static final Map<String, Module> modules = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-	public static Map<String, Module> getModuleMap() {
-		return modules;
-	}
-
-	public static Iterable<Module> getModules() {
-		return modules.values();
-	}
+	private static final NameableStorage<Module> MODULES = new NameableStorage<>(Module::getName);
 
 	public static void loadModules(InputStream jsonInputStream) {
 		InputStreamReader inputReader = new InputStreamReader(jsonInputStream, StandardCharsets.UTF_8);
 
 		try {
-			ModuleListJson json = moduleGson.fromJson(inputReader, ModuleListJson.class);
+			ModuleListJson json = BleachJsonHelper.GSON.fromJson(inputReader, ModuleListJson.class);
 
 			for (String moduleString : json.getModules()) {
 				try {
@@ -71,26 +60,33 @@ public class ModuleManager {
 	}
 
 	public static void loadModule(Module module) {
-		if (modules.containsValue(module)) {
+		if (!MODULES.add(module))
 			BleachLogger.logger.error("Failed to load module %s: a module with this name is already loaded.", module.getName());
-		} else {
-			modules.put(module.getName(), module);
-			// TODO: Setup init system for modules
-		}
+	}
+
+	public static Iterable<Module> getModules() {
+		return MODULES.values();
 	}
 
 	public static Module getModule(String name) {
-		return modules.get(name);
+		return MODULES.get(name);
+	}
+	
+	public static <M extends Module> M getModule(Class<M> class_) {
+		return MODULES.get(class_);
 	}
 
 	public static List<Module> getModulesInCat(ModuleCategory cat) {
-		return modules.values().stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
+		return MODULES.stream().filter(m -> m.getCategory().equals(cat)).collect(Collectors.toList());
 	}
 
-	// This is slightly improved, but still need to setup an input handler with a map of keys to modules/commands/whatever else
-	public static void handleKeyPress(int key) {
+	public static void handleKey(int key) {
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
-			modules.values().stream().filter(m -> m.getKey() == key).forEach(Module::toggle);
+			for (Module m: getModules()) {
+				if (m.getKey() == key) {
+					m.toggle();
+				}
+			}
 		}
 	}
 

@@ -19,7 +19,7 @@ import org.bleachhack.util.io.BleachFileHelper;
 
 import net.minecraft.client.MinecraftClient;
 
-public class Module {
+public class Module implements Comparable<Module> {
 
 	public static final int KEY_UNBOUND = -1481058891;
 
@@ -122,5 +122,26 @@ public class Module {
 		} else {
 			onDisable(mc.world != null);
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+
+		if (!(obj instanceof Module))
+			return false;
+
+		return name.equals(((Module) obj).name);
+	}
+
+	@Override
+	public int compareTo(Module o) {
+		return String.CASE_INSENSITIVE_ORDER.compare(this.name, o.name);
 	}
 }

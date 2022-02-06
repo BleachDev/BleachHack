@@ -95,7 +95,7 @@ public class NotebotScreen extends WindowScreen {
 			fillButton(matrices, x + 10, y + h - 13, x + 99, y + h - 3, 0xff3a3a3a, 0xff353535, mouseX, mouseY);
 			drawCenteredText(matrices, textRenderer, "Download Songs..", x + 55, y + h - 12, 0xc0dfdf);
 
-			Song nbSong = ((Notebot) ModuleManager.getModule("Notebot")).song;
+			Song nbSong = ModuleManager.getModule(Notebot.class).song;
 			int c = 0, c1 = -1;
 			for (String s : files) {
 				c1++;
@@ -183,7 +183,7 @@ public class NotebotScreen extends WindowScreen {
 					client.setScreen(this);
 				}
 				if (mouseX > x + w - w / 4 + 5 && mouseX < x + w - 5 && mouseY > y + h - 15 && mouseY < y + h - 5) {
-					((Notebot) ModuleManager.getModule("Notebot")).song = entry;
+					ModuleManager.getModule(Notebot.class).song = entry;
 				}
 				if (mouseX > x + w - w / 4 - w / 8 && mouseX < x + w - w / 4 + w / 8 && mouseY > y + h - 27 && mouseY < y + h - 17) {
 					playing = !playing;

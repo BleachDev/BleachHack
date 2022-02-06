@@ -181,10 +181,10 @@ public final class LoginHelper {
 
 	private static void throwIfInvalid(HttpResponse<?> response, boolean checkStatus, String reason) throws AuthenticationException {
 		if (response == null || (checkStatus && (response.statusCode() < 200 || response.statusCode() >= 300))) {
-			BleachLogger.logger.error("> " + response);
+			BleachLogger.logger.error("> Response: " + response);
 			if (response != null) {
-				System.out.println("> Headers: " + response.headers());
-				System.out.println("> Body: " + response.body());
+				BleachLogger.logger.error("> Headers: " + response.headers());
+				BleachLogger.logger.error("> Body: " + response.body());
 			}
 
 			AuthenticationException authEx = new AuthenticationException(reason);
