@@ -16,6 +16,7 @@ import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow;
 import org.bleachhack.gui.window.Window;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileHelper;
 
@@ -51,7 +52,7 @@ public class CmdClickGui extends Command {
 						((ClickGuiWindow) m).hiding = false;
 						m.x1 = x;
 						m.y1 = 35;
-						x += ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValueInt() + 5;
+						x += ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValueInt() + 5;
 					}
 				}
 			} else {
@@ -65,7 +66,7 @@ public class CmdClickGui extends Command {
 				throw new CmdSyntaxException("Invalid clickgui length: " + args[1]);
 			}
 
-			ModuleManager.getModule("ClickGui").getSetting(0).asSlider().setValue(NumberUtils.createNumber(args[1]).doubleValue());
+			ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().setValue(NumberUtils.createNumber(args[1]).doubleValue());
 			BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 
 			BleachLogger.info("Set the clickgui length to: " + args[1]);

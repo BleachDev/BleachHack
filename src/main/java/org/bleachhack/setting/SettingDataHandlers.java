@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
 
 import net.minecraft.block.Block;
@@ -15,6 +16,16 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class SettingDataHandlers {
+	
+	public static final SettingDataHandler<Void> NULL = new SettingDataHandler<>() {
+		public JsonElement write(Void value) {
+			return JsonNull.INSTANCE;
+		}
+
+		public Void read(JsonElement json) {
+			return null;
+		}
+	};
 
 	public static final SettingDataHandler<Boolean> BOOLEAN = new SettingDataHandler<>() {
 		public JsonElement write(Boolean value) {

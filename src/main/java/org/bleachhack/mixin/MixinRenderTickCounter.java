@@ -9,6 +9,7 @@
 package org.bleachhack.mixin;
 
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.Timer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,9 +28,9 @@ public class MixinRenderTickCounter {
 
 	@Inject(method = "beginRenderTick", at = @At("HEAD"), cancellable = true)
 	private void beginRenderTick(long timeMillis, CallbackInfoReturnable<Integer> ci) {
-		if (ModuleManager.getModule("Timer").isEnabled()) {
+		if (ModuleManager.getModule(Timer.class).isEnabled()) {
 			this.lastFrameDuration = (float) (((timeMillis - this.prevTimeMillis) / this.tickTime)
-					* ModuleManager.getModule("Timer").getSetting(0).asSlider().getValue());
+					* ModuleManager.getModule(Timer.class).getSetting(0).asSlider().getValue());
 			this.prevTimeMillis = timeMillis;
 			this.tickDelta += this.lastFrameDuration;
 			int i = (int) this.tickDelta;

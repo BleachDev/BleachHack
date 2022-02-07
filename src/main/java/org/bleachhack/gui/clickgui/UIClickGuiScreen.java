@@ -14,6 +14,7 @@ import org.bleachhack.gui.clickgui.window.ModuleWindow;
 import org.bleachhack.gui.clickgui.window.UIContainer;
 import org.bleachhack.gui.clickgui.window.UIWindow;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.UI;
 import org.bleachhack.util.io.BleachFileHelper;
 
 import net.minecraft.client.util.math.MatrixStack;
@@ -42,7 +43,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 		clearWindows();
 		uiContainer.windows.values().forEach(this::addWindow);
 
-		addWindow(new ModuleWindow(List.of(ModuleManager.getModule("UI")),
+		addWindow(new ModuleWindow(List.of(ModuleManager.getModule(UI.class)),
 				200, 200, 75, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
 	}
 

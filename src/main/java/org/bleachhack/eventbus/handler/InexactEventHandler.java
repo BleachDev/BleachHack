@@ -1,4 +1,4 @@
-package org.bleachhack.eventbus.registry;
+package org.bleachhack.eventbus.handler;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -12,14 +12,14 @@ import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.eventbus.BleachSubscriber;
 
 /**
- * Slower subscriber registry that allows events to the posted to children of a event class.
+ * Slower event handler that allows events to the posted to children of a event class.
  */
-public class InexactSubscriberRegistry extends BleachSubscriberRegistry {
+public class InexactEventHandler extends EventHandler {
 
 	// <Event Class, Subscribers>
 	private final Map<Class<?>, List<BleachSubscriber>> subscribers = new ConcurrentHashMap<>();
 
-	public InexactSubscriberRegistry(String id) {
+	public InexactEventHandler(String id) {
 		super(id);
 	}
 
@@ -50,7 +50,6 @@ public class InexactSubscriberRegistry extends BleachSubscriberRegistry {
 			if (entry.getKey().isAssignableFrom(event.getClass())) {
 				for (BleachSubscriber s: entry.getValue()) {
 					try {
-						eventsPosted.incrementAndGet();
 						s.callSubscriber(event);
 					} catch (Throwable t) {
 						logger.error("Exception thrown by subscriber method " + s.getSignature() + " when dispatching event: " + s.getEventClass().getName(), t);

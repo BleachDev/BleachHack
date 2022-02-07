@@ -13,6 +13,12 @@ import org.bleachhack.event.events.EventClientMove;
 import org.bleachhack.event.events.EventSendMovementPackets;
 import org.bleachhack.event.events.EventSwingHand;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.BetterPortal;
+import org.bleachhack.module.mods.EntityControl;
+import org.bleachhack.module.mods.Freecam;
+import org.bleachhack.module.mods.NoSlow;
+import org.bleachhack.module.mods.SafeWalk;
+import org.bleachhack.module.mods.Scaffold;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -61,9 +67,9 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"),
 			require = 0 /* TODO: meteor compatibility */)
 	private boolean tickMovement_isUsingItem(ClientPlayerEntity player) {
-		if (ModuleManager.getModule("NoSlow").isEnabled() && ModuleManager.getModule("NoSlow").getSetting(5).asToggle().getState()) {
+		NoSlow noSlow = ModuleManager.getModule(NoSlow.class);
+		if (noSlow.isEnabled() && noSlow.getSetting(5).asToggle().getState())
 			return false;
-		}
 
 		return player.isUsingItem();
 	}
@@ -85,7 +91,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 
 	@Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
 	private void pushOutOfBlocks(double x, double d, CallbackInfo ci) {
-		if (ModuleManager.getModule("Freecam").isEnabled()) {
+		if (ModuleManager.getModule(Freecam.class).isEnabled()) {
 			ci.cancel();
 		}
 	}
@@ -93,8 +99,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0),
 			require = 0 /* TODO: inertia compatibility */)
 	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
-		if (!ModuleManager.getModule("BetterPortal").isEnabled()
-				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().getState()) {
+		if (!ModuleManager.getModule(BetterPortal.class).isEnabled()
+				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().getState()) {
 			closeHandledScreen();
 		}
 	}
@@ -102,8 +108,8 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0),
 			require = 0 /* TODO: inertia compatibility */)
 	private void updateNausea_setScreen(MinecraftClient client, Screen screen) {
-		if (!ModuleManager.getModule("BetterPortal").isEnabled()
-				|| !ModuleManager.getModule("BetterPortal").getSetting(0).asToggle().getState()) {
+		if (!ModuleManager.getModule(BetterPortal.class).isEnabled()
+				|| !ModuleManager.getModule(BetterPortal.class).getSetting(0).asToggle().getState()) {
 			client.setScreen(screen);
 		}
 	}
@@ -123,14 +129,14 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Override
 	protected boolean clipAtLedge() {
 		return super.clipAtLedge()
-				|| ModuleManager.getModule("SafeWalk").isEnabled()
-				|| (ModuleManager.getModule("Scaffold").isEnabled()
-						&& ModuleManager.getModule("Scaffold").getSetting(8).asToggle().getState());
+				|| ModuleManager.getModule(SafeWalk.class).isEnabled()
+				|| (ModuleManager.getModule(Scaffold.class).isEnabled()
+						&& ModuleManager.getModule(Scaffold.class).getSetting(8).asToggle().getState());
 	}
 
 	@Overwrite
 	public float getMountJumpStrength() {
-		return ModuleManager.getModule("EntityControl").isEnabled()
-				&& ModuleManager.getModule("EntityControl").getSetting(2).asToggle().getState() ? 1F : mountJumpStrength;
+		return ModuleManager.getModule(EntityControl.class).isEnabled()
+				&& ModuleManager.getModule(EntityControl.class).getSetting(2).asToggle().getState() ? 1F : mountJumpStrength;
 	}
 }

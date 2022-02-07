@@ -32,7 +32,7 @@ public class CmdRpc extends Command {
 			throw new CmdSyntaxException();
 		}
 
-		DiscordRPC rpc = (DiscordRPC) ModuleManager.getModule("DiscordRPC");
+		DiscordRPC rpc = ModuleManager.getModule(DiscordRPC.class);
 		String text = StringUtils.join(args, ' ', 1, args.length);
 		
 		if (args[0].equalsIgnoreCase("top")) {

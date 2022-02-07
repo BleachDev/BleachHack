@@ -8,7 +8,6 @@
  */
 package org.bleachhack.command;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
@@ -17,30 +16,21 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.command.exception.CmdSyntaxException;
 import org.bleachhack.util.BleachLogger;
+import org.bleachhack.util.collections.NameableStorage;
+import org.bleachhack.util.io.BleachJsonHelper;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class CommandManager {
 
 	public static boolean allowNextMsg = false;
 
-	private static final Gson commandGson = new Gson();
-	private static final Map<String, Command> commands = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	private static final NameableStorage<Command> COMMANDS = new NameableStorage<Command>(c -> c.getAliases()[0]);
 	private static CommandSuggestionProvider suggestionProvider = new CommandSuggestionProvider();
-
-	public static Map<String, Command> getCommandMap() {
-		return commands;
-	}
-
-	public static Iterable<Command> getCommands() {
-		return commands.values();
-	}
 
 	public static CommandSuggestionProvider getSuggestionProvider() {
 		return suggestionProvider;
@@ -50,7 +40,7 @@ public class CommandManager {
 		InputStreamReader inputReader = new InputStreamReader(jsonInputStream, StandardCharsets.UTF_8);
 
 		try {
-			CommandListJson json = commandGson.fromJson(inputReader, CommandListJson.class);
+			CommandListJson json = BleachJsonHelper.GSON.fromJson(inputReader, CommandListJson.class);
 
 			for (String commandString : json.getCommands()) {
 				try {
@@ -79,18 +69,31 @@ public class CommandManager {
 	}
 
 	public static void loadCommand(Command command) {
-		if (commands.containsValue(command)) {
+		if (!COMMANDS.add(command)) {
 			BleachLogger.logger.error("Failed to load module %s: a module with this name is already loaded.", command.getAliases()[0]);
-		} else {
-			commands.put(command.getAliases()[0], command);
-
-			try {
-				suggestionProvider.addSuggestion(command.getSyntax());
-			} catch (Exception e) {
-				BleachLogger.logger.error(String.format("Error trying to load suggestsions for $%s (Syntax: %s)", command.getAliases()[0], command.getSyntax()) , e);
-				suggestionProvider.addSuggestion(command.getAliases()[0]);
-			}
+			return;
 		}
+
+		COMMANDS.add(command);
+
+		try {
+			suggestionProvider.addSuggestion(command.getSyntax());
+		} catch (Exception e) {
+			BleachLogger.logger.error(String.format("Error trying to load suggestsions for $%s (Syntax: %s)", command.getAliases()[0], command.getSyntax()) , e);
+			suggestionProvider.addSuggestion(command.getAliases()[0]);
+		}
+	}
+	
+	public static Iterable<Command> getCommands() {
+		return COMMANDS.values();
+	}
+
+	/*public static Command getCommand(String name) {
+		return COMMANDS.get(name);
+	}*/
+	
+	public static <C extends Command> C getCommand(Class<C> class_) {
+		return COMMANDS.get(class_);
 	}
 
 	public static void callCommand(String input) {
