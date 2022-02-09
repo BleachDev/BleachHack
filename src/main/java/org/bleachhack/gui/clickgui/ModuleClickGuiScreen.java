@@ -21,6 +21,7 @@ import org.bleachhack.gui.window.Window;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.util.io.BleachFileHelper;
 
 import net.minecraft.SharedConstants;
@@ -49,7 +50,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 	}
 
 	public void initWindows() {
-		int len = ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValueInt();
+		int len = ModuleManager.getModule(ClickGui.class).getSetting(0).asSlider().getValueInt();
 		
 		int x = 30;
 		for (ModuleCategory c: ModuleCategory.values()) {
@@ -66,10 +67,11 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		BleachFileHelper.SCHEDULE_SAVE_CLICKGUI.set(true);
+		ClickGui clickGui = ModuleManager.getModule(ClickGui.class);
 
-		searchField.visible = ModuleManager.getModule("ClickGui").getSetting(1).asToggle().getState();
+		searchField.visible = clickGui.getSetting(1).asToggle().getState();
 
-		if (ModuleManager.getModule("ClickGui").getSetting(1).asToggle().getState()) {
+		if (clickGui.getSetting(1).asToggle().getState()) {
 			searchField.setSuggestion(searchField.getText().isEmpty() ? "Search here" : "");
 
 			Set<Module> seachMods = new HashSet<>();
@@ -88,7 +90,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 			}
 		}
 
-		int len = ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValueInt();
+		int len = clickGui.getSetting(0).asSlider().getValueInt();
 		for (Window w : getWindows()) {
 			if (w instanceof ModuleWindow) {
 				((ModuleWindow) w).setLen(len);
@@ -100,7 +102,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		textRenderer.draw(matrices, "DarkHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x122103);
 		textRenderer.draw(matrices, "DarkHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6cc312);
 
-		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().getState()) {
+		if (clickGui.getSetting(2).asToggle().getState()) {
 			textRenderer.drawWithShadow(matrices, "Current prefix is: \"" + Command.getPrefix() + "\" (" + Command.getPrefix() + "help)", 2, height - 20, 0x99ff99);
 			textRenderer.drawWithShadow(matrices, "Use " + Command.getPrefix() + "clickgui to reset the clickgui", 2, height - 10, 0x6cc312);
 		}

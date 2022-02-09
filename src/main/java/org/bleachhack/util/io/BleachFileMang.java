@@ -35,6 +35,19 @@ public class BleachFileMang {
 		return dir;
 	}
 
+	/** Reads a file and returns a string of its contents. **/
+	public static String readFile(String path) {
+		try {
+			return Files.readString(getDir().resolve(path));
+		} catch (NoSuchFileException ignored) {
+
+		} catch (Exception e) {
+			BleachLogger.logger.error("Error Reading File: " + path, e);
+		}
+
+		return "";
+	}
+
 	/** Reads a file and returns a list of the lines. **/
 	public static List<String> readFileLines(String path) {
 		try {

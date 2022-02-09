@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.setting.module.ModuleSetting;
 
 import net.minecraft.client.font.TextRenderer;
@@ -68,7 +69,7 @@ public class ModuleWindow extends ClickGuiWindow {
 			}
 
 			// If they match: Module gets marked red
-			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule("ClickGui").getSetting(1).asToggle().getState()) {
+			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule(ClickGui.class).getSetting(1).asToggle().getState()) {
 				DrawableHelper.fill(matrices, x, y + curY, x + len, y + 12 + curY, 0x50ff0000);
 			}
 

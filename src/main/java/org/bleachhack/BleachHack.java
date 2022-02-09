@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Level;
 import org.bleachhack.command.CommandManager;
 import org.bleachhack.command.CommandSuggestor;
 import org.bleachhack.eventbus.BleachEventBus;
-import org.bleachhack.eventbus.registry.InexactSubscriberRegistry;
+import org.bleachhack.eventbus.handler.InexactEventHandler;
 import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.module.ModuleManager;
 import org.bleachhack.util.BleachLogger;
@@ -61,7 +61,7 @@ public class BleachHack implements ModInitializer {
 
 		instance = this;
 		watermark = new Watermark();
-		eventBus = new BleachEventBus(new InexactSubscriberRegistry("bleachhack"), BleachLogger.logger);
+		eventBus = new BleachEventBus(new InexactEventHandler("bleachhack"), BleachLogger.logger);
 
 		friendMang = new FriendManager();
 

@@ -1,6 +1,7 @@
 package org.bleachhack.mixin;
 
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.AntiChunkBan;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -13,6 +14,6 @@ public class MixinPacketByteBuf {
 
 	@ModifyArg(method = "readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;readNbt(Lnet/minecraft/nbt/NbtTagSizeTracker;)Lnet/minecraft/nbt/NbtCompound;"))
     private NbtTagSizeTracker increaseLimit(NbtTagSizeTracker in) {
-        return ModuleManager.getModule("AntiChunkBan").isEnabled() ? NbtTagSizeTracker.EMPTY : in;
+        return ModuleManager.getModule(AntiChunkBan.class).isEnabled() ? NbtTagSizeTracker.EMPTY : in;
     }
 }

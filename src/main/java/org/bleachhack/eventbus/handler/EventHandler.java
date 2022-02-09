@@ -1,16 +1,13 @@
-package org.bleachhack.eventbus.registry;
-
-import java.util.concurrent.atomic.AtomicLong;
+package org.bleachhack.eventbus.handler;
 
 import org.apache.logging.log4j.Logger;
 import org.bleachhack.event.Event;
 
-public abstract class BleachSubscriberRegistry {
+public abstract class EventHandler {
 
 	private final String id;
-	protected final AtomicLong eventsPosted = new AtomicLong();
 
-	public BleachSubscriberRegistry(String id) {
+	public EventHandler(String id) {
 		this.id = id;
 	}
 
@@ -22,9 +19,5 @@ public abstract class BleachSubscriberRegistry {
 
 	public String getId() {
 		return id;
-	}
-
-	public long getEventsPosted() {
-		return eventsPosted.get();
 	}
 }

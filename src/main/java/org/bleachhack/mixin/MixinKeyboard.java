@@ -43,7 +43,7 @@ public class MixinKeyboard {
 			MinecraftClient.getInstance().setScreen(new ChatScreen(Command.getPrefix()));
 		}
 
-		ModuleManager.handleKeyPress(key);
+		ModuleManager.handleKey(key);
 
 		if (key >= 0) {
 			EventKeyPress.InWorld event = new EventKeyPress.InWorld(key, scanCode);

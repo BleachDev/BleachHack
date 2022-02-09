@@ -22,7 +22,7 @@ public class MixinChunkSkylightProvider {
 
 	@Inject(method = "recalculateLevel", at = @At("HEAD"), cancellable = true)
 	private void recalculateLevel(long id, long excludedId, int maxLevel, CallbackInfoReturnable<Integer> ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).isWorldToggled(4)) {
+		if (ModuleManager.getModule(NoRender.class).isWorldToggled(4)) {
 			ci.setReturnValue(0);
 		}
 	}

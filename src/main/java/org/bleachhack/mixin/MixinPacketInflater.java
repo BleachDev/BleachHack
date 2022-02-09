@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.zip.Inflater;
 
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.AntiChunkBan;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +25,7 @@ public class MixinPacketInflater {
 
 	@Inject(method = "decode", at = @At("HEAD"), cancellable = true)
 	private void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list, CallbackInfo info) throws Exception {
-		if (ModuleManager.getModule("AntiChunkBan").isEnabled()) {
+		if (ModuleManager.getModule(AntiChunkBan.class).isEnabled()) {
 			info.cancel();
 			if (byteBuf.readableBytes() != 0) {
 				PacketByteBuf packetByteBuf_1 = new PacketByteBuf(byteBuf);
