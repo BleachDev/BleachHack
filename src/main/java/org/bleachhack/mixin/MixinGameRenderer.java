@@ -35,14 +35,14 @@ public class MixinGameRenderer {
 
 	@Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(2)) {
+		if (ModuleManager.getModule(NoRender.class).isOverlayToggled(2)) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "showFloatingItem", at = @At("HEAD"), cancellable = true)
 	private void showFloatingItem(ItemStack floatingItem, CallbackInfo ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).isWorldToggled(1) && floatingItem.getItem() == Items.TOTEM_OF_UNDYING) {
+		if (ModuleManager.getModule(NoRender.class).isWorldToggled(1) && floatingItem.getItem() == Items.TOTEM_OF_UNDYING) {
 			ci.cancel();
 		}
 	}
@@ -50,7 +50,7 @@ public class MixinGameRenderer {
 	@Redirect(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0),
 			require = 0 /* TODO: meteor compatibility */)
 	private float nauseaWobble(float delta, float first, float second) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(5)) {
+		if (ModuleManager.getModule(NoRender.class).isOverlayToggled(5)) {
 			return 0;
 		}
 
@@ -64,10 +64,10 @@ public class MixinGameRenderer {
 
 		if (event.getEffect() != null) {
 			RenderSystem.disableBlend();
-            RenderSystem.disableDepthTest();
-            RenderSystem.enableTexture();
-            RenderSystem.resetTextureMatrix();
-            event.getEffect().render(tickDelta);
+			RenderSystem.disableDepthTest();
+			RenderSystem.enableTexture();
+			RenderSystem.resetTextureMatrix();
+			event.getEffect().render(tickDelta);
 		}
 
 		return null;

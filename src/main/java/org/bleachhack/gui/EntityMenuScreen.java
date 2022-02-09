@@ -79,7 +79,7 @@ public class EntityMenuScreen extends Screen {
 		if (focusedString != null) {
 			DecimalFormat coordFormat = new DecimalFormat("#.##");
 
-			String message = ((EntityMenu) ModuleManager.getModule("EntityMenu"))
+			String message = ModuleManager.getModule(EntityMenu.class)
 					.interactions.getValue(focusedString)
 					.replaceAll("%name%", entity.getDisplayName().getString())
 					.replaceAll("%uuid%", entity.getEntityName())
@@ -158,7 +158,7 @@ public class EntityMenuScreen extends Screen {
 	}
 
 	private void drawDots(MatrixStack matrices, int radius, int mouseX, int mouseY) {
-		MutablePairList<String, String> map = ((EntityMenu) ModuleManager.getModule("EntityMenu")).interactions;
+		MutablePairList<String, String> map = ModuleManager.getModule(EntityMenu.class).interactions;
 		List<Vector2> pointList = new ArrayList<>();
 		String[] cache = new String[map.size()];
 

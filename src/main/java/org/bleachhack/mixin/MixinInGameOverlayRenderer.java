@@ -24,14 +24,14 @@ public class MixinInGameOverlayRenderer {
 
 	@Inject(method = "renderFireOverlay", at = @At("HEAD"), cancellable = true)
 	private static void onRenderFireOverlay(MinecraftClient minecraftClient, MatrixStack matrixStack, CallbackInfo ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(1)) {
+		if (ModuleManager.getModule(NoRender.class).isOverlayToggled(1)) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "renderUnderwaterOverlay", at = @At("HEAD"), cancellable = true)
 	private static void onRenderUnderwaterOverlay(MinecraftClient minecraftClient, MatrixStack matrixStack, CallbackInfo ci) {
-		if (((NoRender) ModuleManager.getModule("NoRender")).isOverlayToggled(3)) {
+		if (ModuleManager.getModule(NoRender.class).isOverlayToggled(3)) {
 			ci.cancel();
 		}
 	}

@@ -256,7 +256,7 @@ public class AccountManagerScreen extends WindowScreen {
 								+ a.uuid + ":" + a.username + ":"
 								+ IntStream.range(0, a.input.length).mapToObj(i -> {
 									try {
-										return a.type.fields[i].getRight() ? crypter.encrypt(a.input[i]) : a.input[i];
+										return a.type.inputs[i].getRight() ? crypter.encrypt(a.input[i]) : a.input[i];
 									} catch (Exception e) {
 										throw new RuntimeException();
 									}
@@ -272,7 +272,7 @@ public class AccountManagerScreen extends WindowScreen {
 	private void openAddAccWindow(AccountType type, String name, ItemStack item) {
 		getWindow(1).closed = true;
 
-		int h = 40 + type.fields.length * 40;
+		int h = 40 + type.inputs.length * 40;
 		Window addWindow = addWindow(new Window(
 				width / 2 - 80,
 				height / 2 - h / 2,
@@ -281,10 +281,10 @@ public class AccountManagerScreen extends WindowScreen {
 
 		WindowTextWidget result = addWindow.addWidget(new WindowTextWidget("", true, 10, h - 16, -1));
 		List<WindowTextFieldWidget> tf = new ArrayList<>();
-		for (int i = 0; i < type.fields.length; i++) {
-			addWindow.addWidget(new WindowTextWidget(type.getFields()[i].getLeft(), true, 10, 20 + i * 40, 0xf0f0f0));
+		for (int i = 0; i < type.inputs.length; i++) {
+			addWindow.addWidget(new WindowTextWidget(type.getInputs()[i].getLeft(), true, 10, 20 + i * 40, 0xf0f0f0));
 
-			if (type.getFields()[i].getRight()) {
+			if (type.getInputs()[i].getRight()) {
 				tf.add(addWindow.addWidget(new WindowPassTextFieldWidget(10, 33 + i * 40, 140, 18, "")));
 			} else {
 				tf.add(addWindow.addWidget(new WindowTextFieldWidget(10, 33 + i * 40, 140, 18, "")));
@@ -292,7 +292,7 @@ public class AccountManagerScreen extends WindowScreen {
 		}
 
 		addWindow.addWidget(new WindowButtonWidget(100, h - 20, 157, h - 3, "Add", () -> {
-			Account account = new Account(type.ordinal(), 0, null, null, tf.stream().map(t -> t.textField.getText()).toArray(String[]::new));
+			Account account = new Account(type, 0, null, null, tf.stream().map(t -> t.textField.getText()).toArray(String[]::new));
 			try {
 				Session session = account.getSesson();
 				account.uuid = session.getUuid();
@@ -319,9 +319,9 @@ public class AccountManagerScreen extends WindowScreen {
 
 			for (int i = 0; i < a.input.length; i++) {
 				textWidgets.add(getWindow(0).addWidget(
-						new WindowTextWidget(a.type.getFields()[i].getLeft(), true, listW + 10, 20 + i * 40, 0xf0f0f0)));
+						new WindowTextWidget(a.type.getInputs()[i].getLeft(), true, listW + 10, 20 + i * 40, 0xf0f0f0)));
 
-				if (a.type.getFields()[i].getRight()) {
+				if (a.type.getInputs()[i].getRight()) {
 					textFieldWidgets.add(getWindow(0).addWidget(
 							new WindowPassTextFieldWidget(listW + 10, 33 + i * 40, w - listW - 20, 18, a.input[i])));
 				} else {
@@ -375,6 +375,7 @@ public class AccountManagerScreen extends WindowScreen {
 		public String uuid;
 		public String username;
 		public AccountType type;
+		// 0 = ?, 1 = no, 2 = yes
 		public int success;
 
 		public Map<Type, Identifier> textures = new EnumMap<>(Type.class);
@@ -382,16 +383,18 @@ public class AccountManagerScreen extends WindowScreen {
 		public static Account deserialize(String[] data) {
 			try {
 				if (data.length == 4) { // Old 4-part accounts
-					return new Account(1, 0, data[1], data[2], data[0], crypter.decrypt(data[3]));
+					return new Account(AccountType.MOJANG, 0, data[1], data[2], data[0], crypter.decrypt(data[3]));
 				} else if (data.length > 4) {
 					AccountType type = AccountType.values()[Integer.parseInt(data[0])];
+					int success = Integer.parseInt(data[1]);
+
 					return new Account(
-							Integer.parseInt(data[0]), Integer.parseInt(data[1]), data[2], data[3],
-							IntStream.range(0, data.length - 4).mapToObj(i -> {
+							type, success, data[2], data[3],
+							IntStream.range(4, data.length).mapToObj(i -> {
 								try {
-									return type.fields[i].getRight() ? crypter.decrypt(data[i + 4]) : data[i + 4];
+									return type.inputs[i].getRight() ? crypter.decrypt(data[i]) : data[i];
 								} catch (Exception e) {
-									throw new RuntimeException();
+									throw new RuntimeException(e);
 								}
 							}).toArray(String[]::new));
 				}
@@ -402,8 +405,8 @@ public class AccountManagerScreen extends WindowScreen {
 			return null;
 		}
 
-		public Account(int type, int success, String uuid, String username, String... input) {
-			this.type = AccountType.values()[type];
+		public Account(AccountType type, int success, String uuid, String username, String... input) {
+			this.type = type;
 			this.success = success;
 			this.uuid = uuid;
 			this.username = username;
@@ -447,7 +450,7 @@ public class AccountManagerScreen extends WindowScreen {
 	@SuppressWarnings("unchecked")
 	private enum AccountType {
 
-		NO_AUTH((input) -> {
+		NO_AUTH(input -> {
 			try {
 				String id = new JsonParser().parse(
 						Resources.toString(new URL("https://api.mojang.com/users/profiles/minecraft/" + input[0]), StandardCharsets.UTF_8))
@@ -461,23 +464,24 @@ public class AccountManagerScreen extends WindowScreen {
 				return new Session(input[0], "00000000-0000-0000-0000-000000000000", "", "mojang");
 			}
 		}, Pair.of("Username", false)),
-		MOJANG((input) -> {
+		MOJANG(input -> {
 			return LoginHelper.createMojangSession(input[0], input[1]);
 		}, Pair.of("Email", false), Pair.of("Password", true)),
-		MICROSOFT((input) -> {
+		MICROSOFT(input -> {
 			return LoginHelper.createMicrosoftSession(input[0], input[1]);
 		}, Pair.of("Email", false), Pair.of("Password", true));
 
-		private final Pair<String, Boolean>[] fields;
+		// Input name, Encrypted?
+		private final Pair<String, Boolean>[] inputs;
 		private final SessionCreator sessionCreator;
 
-		AccountType(SessionCreator sessionCreator, Pair<String, Boolean>... fields) {
-			this.fields = fields;
+		AccountType(SessionCreator sessionCreator, Pair<String, Boolean>... inputs) {
+			this.inputs = inputs;
 			this.sessionCreator = sessionCreator;
 		}
 
-		public Pair<String, Boolean>[] getFields() {
-			return fields;
+		public Pair<String, Boolean>[] getInputs() {
+			return inputs;
 		}
 
 		public Session createSession(String... input) throws AuthenticationException {

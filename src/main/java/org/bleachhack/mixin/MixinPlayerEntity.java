@@ -10,6 +10,7 @@ package org.bleachhack.mixin;
 
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.SpeedMine;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,7 +40,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
 	@Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
 	private void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> ci) {
-		Module speedMine = ModuleManager.getModule("Speedmine");
+		Module speedMine = ModuleManager.getModule(SpeedMine.class);
 
 		if (speedMine.isEnabled()) {
 			float breakingSpeed = inventory.getBlockBreakingSpeed(block);
