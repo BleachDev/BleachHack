@@ -57,7 +57,8 @@ public class NoRender extends Module {
 						new SettingToggle("BossBar", false).withDesc("Removes bossbars."),                                         // 0-6
 						new SettingToggle("Gui", false).withDesc("Makes the gui background more transparent.").withChildren(       // 0-7
 								new SettingSlider("Opacity", 0, 1, 0, 2).withDesc("The opacity of the gui background.")),
-						new SettingToggle("Frostbite", true).withDesc("Removes the frostbite overlay when you walk in powdered snow.")), // 0-8
+						new SettingToggle("Frostbite", true).withDesc("Removes the frostbite overlay when you walk in powdered snow."), // 0-8
+						new SettingToggle("Scoreboard", true).withDesc("Removes the scoreboard.")), 								 // 0-9
 				
 				new SettingToggle("World", true).withDesc("Removes miscellaneous things in the world.").withChildren(              // 1
 						new SettingToggle("Signs", false).withDesc("Doesn't render signs.").withChildren(                          // 1-0

@@ -12,6 +12,8 @@ import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventRenderCrosshair;
 import org.bleachhack.event.events.EventRenderInGameHud;
 import org.bleachhack.event.events.EventRenderOverlay;
+import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.NoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -71,6 +74,14 @@ public class MixinInGameHud {
 				bypassRenderCrosshair = false;
 			}
 
+			callback.cancel();
+		}
+	}
+
+
+	@Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
+	public void renderScoreboardSidebar(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo callback) {
+		if (ModuleManager.getModule(NoRender.class).isOverlayToggled(9)) {
 			callback.cancel();
 		}
 	}
