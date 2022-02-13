@@ -28,7 +28,8 @@ public abstract class MixinEntityRenderer<T extends Entity> {
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
 	private void renderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
-		if (ModuleManager.getModule(Nametags.class).getSetting(6).asToggle().getState()) {
+		Nametags nametags = ModuleManager.getModule(Nametags.class);
+		if (nametags.isEnabled() && nametags.getSetting(6).asToggle().getState()) {
 			info.cancel();
 		}
 
