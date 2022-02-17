@@ -387,16 +387,13 @@ public class AccountManagerScreen extends WindowScreen {
 				} else if (data.length > 4) {
 					AccountType type = AccountType.values()[Integer.parseInt(data[0])];
 					int success = Integer.parseInt(data[1]);
+					
+					String[] inputs = new String[data.length - 4];
+					for (int i = 4; i < data.length; i++) {
+						inputs[i - 4] = type.inputs[i - 4].getRight() ? crypter.decrypt(data[i]) : data[i];
+					}
 
-					return new Account(
-							type, success, data[2], data[3],
-							IntStream.range(4, data.length).mapToObj(i -> {
-								try {
-									return type.inputs[i].getRight() ? crypter.decrypt(data[i]) : data[i];
-								} catch (Exception e) {
-									throw new RuntimeException(e);
-								}
-							}).toArray(String[]::new));
+					return new Account(type, success, data[2], data[3], inputs);
 				}
 			} catch (Exception e) {
 				BleachLogger.logger.error("Unable to deserialize account " + data[0], e);
