@@ -42,7 +42,7 @@ public class SettingBlockList extends SettingList<Block> {
 
 	@Override
 	public void renderItem(MinecraftClient mc, MatrixStack matrices, Block item, int x, int y, int w, int h) {
-		if (item.asItem() == Items.AIR) {
+		if (item == null || item.asItem() == Items.AIR) {
 			super.renderItem(mc, matrices, item, x, y, w, h);
 		} else {
 			RenderSystem.getModelViewStack().push();
