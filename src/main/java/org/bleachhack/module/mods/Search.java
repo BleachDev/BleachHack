@@ -100,8 +100,7 @@ public class Search extends Module {
 						-> pos.getX() >= cp.getStartX()
 						&& pos.getX() <= cp.getEndX()
 						&& pos.getZ() >= cp.getStartZ()
-						&& pos.getZ() <= cp.getEndZ())
-			,
+						&& pos.getZ() <= cp.getEndZ()),
 			(pos, state) -> {
 				if (getSetting(5).asList(Block.class).contains(state.getBlock())) {
 					foundBlocks.add(pos);
