@@ -42,7 +42,7 @@ public class SettingItemList extends SettingList<Item> {
 
 	@Override
 	public void renderItem(MinecraftClient mc, MatrixStack matrices, Item item, int x, int y, int w, int h) {
-		if (item == Items.AIR) {
+		if (item == null || item == Items.AIR) {
 			super.renderItem(mc, matrices, item, x, y, w, h);
 		} else {
 			RenderSystem.getModelViewStack().push();
