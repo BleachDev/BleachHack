@@ -46,7 +46,7 @@ public class AirPlace extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		boolean isKeyUsePressed = mc.options.keyUse.isPressed();
+		boolean isKeyUsePressed = mc.options.useKey.isPressed();
 
 		if (!canPlaceAtCrosshair()) {
 			return;

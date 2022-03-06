@@ -34,7 +34,7 @@ public class Speed extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		//System.out.println(mc.player.forwardSpeed + " | " + mc.player.sidewaysSpeed);
-		if (mc.options.keySneak.isPressed())
+		if (mc.options.sneakKey.isPressed())
 			return;
 
 			/* Strafe */
@@ -58,7 +58,7 @@ public class Speed extends Module {
 			
 			/* OnGround */
 		} else if (getSetting(0).asMode().getMode() == 2) {
-			if (mc.options.keyJump.isPressed() || mc.player.fallDistance > 0.25)
+			if (mc.options.jumpKey.isPressed() || mc.player.fallDistance > 0.25)
 				return;
 			
 			double speeds = 0.85 + getSetting(2).asSlider().getValue() / 30;
@@ -86,7 +86,7 @@ public class Speed extends Module {
 
 			/* MiniHop */
 		} else if (getSetting(0).asMode().getMode() == 3) {
-			if (mc.player.horizontalCollision || mc.options.keyJump.isPressed() || mc.player.forwardSpeed == 0)
+			if (mc.player.horizontalCollision || mc.options.jumpKey.isPressed() || mc.player.forwardSpeed == 0)
 				return;
 			
 			double speeds = 0.9 + getSetting(3).asSlider().getValue() / 30;

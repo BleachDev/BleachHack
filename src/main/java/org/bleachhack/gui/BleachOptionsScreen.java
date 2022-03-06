@@ -119,7 +119,7 @@ public class BleachOptionsScreen extends WindowScreen {
 	}
 
 	@Override
-	public void onClose() {
+	public void close() {
 		client.setScreen(parent);
 	}
 }

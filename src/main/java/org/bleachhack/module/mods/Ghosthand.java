@@ -32,7 +32,7 @@ public class Ghosthand extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (!mc.options.keyUse.isPressed() || mc.player.isSneaking())
+		if (!mc.options.useKey.isPressed() || mc.player.isSneaking())
 			return;
 
 		// Return if we are looking at any block entities

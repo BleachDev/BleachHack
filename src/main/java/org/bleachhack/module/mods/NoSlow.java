@@ -67,7 +67,7 @@ public class NoSlow extends Module {
 
 		/* Slowness */
 		if (getSetting(0).asToggle().getState() && (mc.player.getStatusEffect(StatusEffects.SLOWNESS) != null || mc.player.getStatusEffect(StatusEffects.BLINDNESS) != null)) {
-			if (mc.options.keyForward.isPressed()
+			if (mc.options.forwardKey.isPressed()
 					&& mc.player.getVelocity().x > -0.15 && mc.player.getVelocity().x < 0.15
 					&& mc.player.getVelocity().z > -0.15 && mc.player.getVelocity().z < 0.15) {
 				mc.player.setVelocity(mc.player.getVelocity().add(addVelocity));
@@ -112,15 +112,15 @@ public class NoSlow extends Module {
 		/* Inventory */
 		if (getSetting(6).asToggle().getState() && shouldInvMove(mc.currentScreen)) {
 
-			for (KeyBinding k : new KeyBinding[] { mc.options.keyForward, mc.options.keyBack,
-					mc.options.keyLeft, mc.options.keyRight, mc.options.keyJump, mc.options.keySprint }) {
+			for (KeyBinding k : new KeyBinding[] { mc.options.forwardKey, mc.options.backKey,
+					mc.options.leftKey, mc.options.rightKey, mc.options.jumpKey, mc.options.sprintKey }) {
 				k.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
 						InputUtil.fromTranslationKey(k.getBoundKeyTranslationKey()).getCode()));
 			}
 
 			if (getSetting(6).asToggle().asToggle().getChild(0).asToggle().getState()) {
-				mc.options.keySneak.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
-						InputUtil.fromTranslationKey(mc.options.keySneak.getBoundKeyTranslationKey()).getCode()));
+				mc.options.sneakKey.setPressed(InputUtil.isKeyPressed(mc.getWindow().getHandle(),
+						InputUtil.fromTranslationKey(mc.options.sneakKey.getBoundKeyTranslationKey()).getCode()));
 			}
 
 

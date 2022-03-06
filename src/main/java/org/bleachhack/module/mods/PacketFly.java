@@ -145,9 +145,9 @@ public class PacketFly extends Module {
 				return;
 			}*/
 
-			/*if (mc.options.keyJump.isPressed())
+			/*if (mc.options.jumpKey.isPressed())
 				mouseY = 0.062;
-			if (mc.options.keySneak.isPressed())
+			if (mc.options.sneakKey.isPressed())
 				mouseY = -0.062;*/
 
 			if (timer > getSetting(3).asSlider().getValue()) {

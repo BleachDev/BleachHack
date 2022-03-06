@@ -101,7 +101,7 @@ public class Scaffold extends Module {
 						: getSpiral(mode, new BlockPos(placeVec));
 
 		if (getSetting(6).asToggle().getState()
-				&& InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.keyJump.getBoundKeyTranslationKey()).getCode())) {
+				&& InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.jumpKey.getBoundKeyTranslationKey()).getCode())) {
 
 			if (mc.world.getBlockState(mc.player.getBlockPos().down()).getMaterial().isReplaceable()
 					&& !mc.world.getBlockState(mc.player.getBlockPos().down(2)).getMaterial().isReplaceable()

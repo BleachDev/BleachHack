@@ -94,6 +94,7 @@ public class MixinChunkRebuildTask {
 					}
 				}
 
+				BlockState blockEntity = chunkRendererRegion.getBlockState(blockPos3);
 				FluidState fluid = chunkRendererRegion.getFluidState(blockPos3);
 				if (!fluid.isEmpty()) {
 					RenderLayer renderLayer = RenderLayers.getFluidLayer(fluid);
@@ -108,7 +109,7 @@ public class MixinChunkRebuildTask {
 					if (event.isCancelled())
 						continue;
 
-					if (blockRenderManager.renderFluid(blockPos3, chunkRendererRegion, bufferBuilder, fluid)) {
+					if (blockRenderManager.renderFluid(blockPos3, chunkRendererRegion, bufferBuilder, blockEntity, fluid)) {
 						data.empty = false;
 						data.nonEmptyLayers.add(renderLayer);
 					}
@@ -142,7 +143,7 @@ public class MixinChunkRebuildTask {
 
 			if (data.nonEmptyLayers.contains(RenderLayer.getTranslucent())) {
 				BufferBuilder bufferBuilder2 = buffers.get(RenderLayer.getTranslucent());
-				bufferBuilder2.setCameraPosition(cameraX - (float)blockPos.getX(), cameraY - (float)blockPos.getY(), cameraZ - (float)blockPos.getZ());
+				bufferBuilder2.sortFrom(cameraX - (float)blockPos.getX(), cameraY - (float)blockPos.getY(), cameraZ - (float)blockPos.getZ());
 				data.bufferState = bufferBuilder2.popState();
 			}
 

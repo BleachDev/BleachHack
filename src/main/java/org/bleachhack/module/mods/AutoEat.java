@@ -39,16 +39,16 @@ public class AutoEat extends Module {
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		mc.options.keyUse.setPressed(false);
+		mc.options.useKey.setPressed(false);
 
 		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (eating && mc.options.keyUse.isPressed() && !mc.player.isUsingItem()) {
+		if (eating && mc.options.useKey.isPressed() && !mc.player.isUsingItem()) {
 			eating = false;
-			mc.options.keyUse.setPressed(false);
+			mc.options.useKey.setPressed(false);
 		}
 
 		if (getSetting(0).asToggle().getState() && mc.player.getHungerManager().getFoodLevel() <= getSetting(0).asToggle().getChild(0).asSlider().getValueInt()) {
@@ -87,7 +87,7 @@ public class AutoEat extends Module {
 
 		if (hunger != -1) {
 			if (slot == mc.player.getInventory().selectedSlot || slot == 40) {
-				mc.options.keyUse.setPressed(true);
+				mc.options.useKey.setPressed(true);
 				mc.interactionManager.interactItem(mc.player, mc.world, slot == 40 ? Hand.OFF_HAND : Hand.MAIN_HAND);
 				eating = true;
 			} else {

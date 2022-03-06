@@ -48,7 +48,7 @@ public class FastUse extends Module {
 		}
 
 		mc.itemUseCooldown = 0;
-		if (getSetting(0).asMode().getMode() == 1 && mc.options.keyUse.isPressed()) {
+		if (getSetting(0).asMode().getMode() == 1 && mc.options.useKey.isPressed()) {
 			for (int i = 0; i < getSetting(1).asSlider().getValueInt(); i++) {
 				mc.doItemUse();
 			}

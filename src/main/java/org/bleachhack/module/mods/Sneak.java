@@ -21,7 +21,7 @@ public class Sneak extends Module {
 	@Override
 	public void onDisable(boolean inWorld) {
 		packetSent = false;
-		mc.options.keySneak.setPressed(false);
+		mc.options.sneakKey.setPressed(false);
 
 		if (inWorld)
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
@@ -44,7 +44,7 @@ public class Sneak extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asMode().getMode() == 0) {
-			mc.options.keySneak.setPressed(true);
+			mc.options.sneakKey.setPressed(true);
 		} else if (getSetting(0).asMode().getMode() == 1 && !packetSent) {
 			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
 			packetSent = true;

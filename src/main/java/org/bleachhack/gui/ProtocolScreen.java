@@ -51,11 +51,11 @@ public class ProtocolScreen extends Screen {
 			version.dataPackVersion = i1;
 			BRAND = brandField.getText();
 
-			onClose();
+			close();
 		}));
 
 		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 73, 196, 20, new LiteralText("Cancel"),
-				button -> onClose()));
+				button -> close()));
 
 		versionField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, LiteralText.EMPTY));
 		versionField.setText(SharedConstants.getGameVersion().getName());
@@ -92,7 +92,7 @@ public class ProtocolScreen extends Screen {
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 
-	public void onClose() {
+	public void close() {
 		client.setScreen(parent);
 	}
 

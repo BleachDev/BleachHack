@@ -239,7 +239,8 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 			drawTextWithShadow(matrices, textRenderer, getName(item), x + height + 4, y + 4, -1);
 		}
 
-		public void onClose() {
+		@Override
+		public void close() {
 			this.client.setScreen(parent);
 		}
 
