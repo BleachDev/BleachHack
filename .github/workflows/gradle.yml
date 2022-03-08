@@ -5,7 +5,7 @@ name: BleachHack Workflow Builds
 
 on:
   push:
-    branches: [ 1.18.1 ]
+    branches: [ 1.18.2 ]
 
 jobs:
   build:
