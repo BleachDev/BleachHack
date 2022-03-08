@@ -42,12 +42,12 @@ public class ElytraFly extends Module {
 	public void onClientMove(EventClientMove event) {
 		/* Cancel the retarded auto elytra movement */
 		if (getSetting(0).asMode().getMode() == 2 && mc.player.isFallFlying()) {
-			if (!mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
+			if (!mc.options.jumpKey.isPressed() && !mc.options.sneakKey.isPressed()) {
 				event.setVec(new Vec3d(event.getVec().x, 0, event.getVec().z));
 			}
 
-			if (!mc.options.keyBack.isPressed() && !mc.options.keyLeft.isPressed()
-					&& !mc.options.keyRight.isPressed() && !mc.options.keyForward.isPressed()) {
+			if (!mc.options.backKey.isPressed() && !mc.options.leftKey.isPressed()
+					&& !mc.options.rightKey.isPressed() && !mc.options.forwardKey.isPressed()) {
 				event.setVec(new Vec3d(0, event.getVec().y, 0));
 			}
 		}
@@ -65,7 +65,7 @@ public class ElytraFly extends Module {
 		switch (getSetting(0).asMode().getMode()) {
 			case 0:
 				if (mc.player.isFallFlying() && currentVel <= getSetting(2).asSlider().getValue()) {
-					if (mc.options.keyBack.isPressed()) {
+					if (mc.options.backKey.isPressed()) {
 						mc.player.addVelocity(MathHelper.sin(radianYaw) * boost, 0, MathHelper.cos(radianYaw) * -boost);
 					} else if (mc.player.getPitch() > 0) {
 						mc.player.addVelocity(MathHelper.sin(radianYaw) * -boost, 0, MathHelper.cos(radianYaw) * boost);
@@ -75,9 +75,9 @@ public class ElytraFly extends Module {
 				break;
 			case 1:
 				if (mc.player.isFallFlying() && currentVel <= getSetting(2).asSlider().getValue()) {
-					if (mc.options.keyForward.isPressed()) {
+					if (mc.options.forwardKey.isPressed()) {
 						mc.player.addVelocity(MathHelper.sin(radianYaw) * -boost, 0, MathHelper.cos(radianYaw) * boost);
-					} else if (mc.options.keyBack.isPressed()) {
+					} else if (mc.options.backKey.isPressed()) {
 						mc.player.addVelocity(MathHelper.sin(radianYaw) * boost, 0, MathHelper.cos(radianYaw) * -boost);
 					}
 				}
@@ -85,11 +85,11 @@ public class ElytraFly extends Module {
 				break;
 			case 2:
 				if (mc.player.isFallFlying()) {
-					if (mc.options.keyBack.isPressed()) vec3d = vec3d.negate();
-					if (mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
-					else if (mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
-					if (mc.options.keyJump.isPressed()) vec3d = vec3d.add(0, getSetting(3).asSlider().getValue(), 0);
-					if (mc.options.keySneak.isPressed()) vec3d = vec3d.add(0, -getSetting(3).asSlider().getValue(), 0);
+					if (mc.options.backKey.isPressed()) vec3d = vec3d.negate();
+					if (mc.options.leftKey.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
+					else if (mc.options.rightKey.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
+					if (mc.options.jumpKey.isPressed()) vec3d = vec3d.add(0, getSetting(3).asSlider().getValue(), 0);
+					if (mc.options.sneakKey.isPressed()) vec3d = vec3d.add(0, -getSetting(3).asSlider().getValue(), 0);
 
 					mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
 							mc.player.getX() + vec3d.x, mc.player.getY() - 0.01, mc.player.getZ() + vec3d.z, false));
@@ -174,7 +174,7 @@ public class ElytraFly extends Module {
 
 	private boolean shouldPacketFly() {
 		return !mc.player.isOnGround()
-				&& !mc.options.keySneak.isPressed()
+				&& !mc.options.sneakKey.isPressed()
 				&& mc.player.getInventory().getArmorStack(2).getItem() == Items.ELYTRA;
 	}
 }

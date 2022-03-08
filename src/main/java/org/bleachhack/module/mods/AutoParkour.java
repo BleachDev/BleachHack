@@ -82,7 +82,7 @@ public class AutoParkour extends Module {
 									|| mc.world.getBlockState(pos.up()).getBlock() instanceof LadderBlock)
 							.filter(pos -> mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) >= 1)
 							.filter(pos -> mc.player.getPos().distanceTo(Vec3d.of(pos).add(0.5, 1, 0.5)) <= 4.5 /* ? */)
-							.sorted(Comparator.comparing(pos -> pos.getSquaredDistance(lookVec, false)))
+							.sorted(Comparator.comparing(pos -> pos.getSquaredDistance(lookVec)))
 							.findFirst().orElse(null);
 
 					if (nearestPos != null) {

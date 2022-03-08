@@ -93,7 +93,7 @@ public class EntityControl extends Module {
 		}
 
 		if (getSetting(1).asToggle().getState()) {
-			if (mc.options.keyJump.isPressed()) {
+			if (mc.options.jumpKey.isPressed()) {
 				e.setVelocity(e.getVelocity().x, getSetting(1).asToggle().getChild(0).asSlider().getValue(), e.getVelocity().z);
 			} else {
 				e.setVelocity(e.getVelocity().x, -getSetting(1).asToggle().getChild(1).asSlider().getValue(), e.getVelocity().z);

@@ -28,7 +28,7 @@ public class AntiHunger extends Module {
 	@BleachSubscribe
 	public void onSendPacket(EventPacket.Send event) {
 		if (event.getPacket() instanceof PlayerMoveC2SPacket) {
-			if (mc.player.getVelocity().y != 0 && !mc.options.keyJump.isPressed() && (!bool || !getSetting(0).asToggle().getState())) {
+			if (mc.player.getVelocity().y != 0 && !mc.options.jumpKey.isPressed() && (!bool || !getSetting(0).asToggle().getState())) {
 				// if (((PlayerMoveC2SPacket) event.getPacket()).isOnGround())
 				// event.setCancelled(true);
 				boolean onGround = mc.player.fallDistance >= 0.1f;

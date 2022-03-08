@@ -69,7 +69,7 @@ public class Surround extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(5).asToggle().getState() && mc.options.keyJump.isPressed()) {
+		if (getSetting(5).asToggle().getState() && mc.options.jumpKey.isPressed()) {
 			setEnabled(false);
 			return;
 		}

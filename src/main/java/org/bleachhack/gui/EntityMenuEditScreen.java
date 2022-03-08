@@ -250,7 +250,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 	}
 
 	@Override
-	public void onClose() {
+	public void close() {
 		JsonObject json = new JsonObject();
 		for (MutablePair<String, String> entry: interactions) {
 			json.add(entry.getLeft(), new JsonPrimitive(entry.getRight()));
@@ -258,7 +258,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 
 		BleachFileHelper.saveMiscSetting("entityMenu", json);
 
-		super.onClose();
+		super.close();
 	}
 
 	@Override

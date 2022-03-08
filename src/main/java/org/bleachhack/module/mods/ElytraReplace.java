@@ -54,10 +54,10 @@ public class ElytraReplace extends Module {
 					mc.player);
 			mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
 
-			mc.options.keyJump.setPressed(true); // Make them fly again
+			mc.options.jumpKey.setPressed(true); // Make them fly again
 			jump = true;
 		} else if (jump) {
-			mc.options.keyJump.setPressed(false); // Make them fly again
+			mc.options.jumpKey.setPressed(false); // Make them fly again
 			jump = false;
 		}
 	}

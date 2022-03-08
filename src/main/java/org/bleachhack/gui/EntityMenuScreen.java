@@ -68,11 +68,11 @@ public class EntityMenuScreen extends Screen {
 	public void tick() {
 		if (GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(),
 				GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_RELEASE) {
-			onClose();
+			close();
 		}
 	}
 
-	public void onClose() {
+	public void close() {
 		cursorMode(GLFW.GLFW_CURSOR_NORMAL);
 
 		// This makes the magic

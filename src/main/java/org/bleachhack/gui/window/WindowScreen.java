@@ -116,7 +116,7 @@ public abstract class WindowScreen extends Screen {
 			}
 		}
 
-		if (close) this.onClose();
+		if (close) this.close();
 
 		super.render(matrices, mouseX, mouseY, delta);
 	}
