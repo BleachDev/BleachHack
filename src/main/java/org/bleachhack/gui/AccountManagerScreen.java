@@ -46,6 +46,7 @@ import java.util.stream.IntStream;
 
 public class AccountManagerScreen extends WindowScreen {
 
+	private static final String NO_UUID = "00000000-0000-0000-0000-000000000000";
 	private static final LoginCrypter crypter = new LoginCrypter(LoginCrypter.PASS_PHRASE);
 
 	private static List<Account> accounts;
@@ -412,8 +413,12 @@ public class AccountManagerScreen extends WindowScreen {
 
 		public AuthenticationException login() {
 			try {
-				MinecraftClient.getInstance().session = getSesson();
-				MinecraftClient.getInstance().getSessionProperties().clear();
+				Session session = getSesson();
+				MinecraftClient.getInstance().session = session;
+
+				if (!session.getUuid().equals(NO_UUID))
+					MinecraftClient.getInstance().getSessionProperties().clear();
+
 				return null;
 			} catch (AuthenticationException e) {
 				return e;
@@ -458,7 +463,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 				return new Session(input[0], id, "", Optional.empty(), Optional.empty(), Session.AccountType.MOJANG);
 			} catch (Exception e) {
-				return new Session(input[0], "00000000-0000-0000-0000-000000000000", "", Optional.empty(), Optional.empty(), Session.AccountType.MOJANG);
+				return new Session(input[0], NO_UUID, "", Optional.empty(), Optional.empty(), Session.AccountType.MOJANG);
 			}
 		}, Pair.of("Username", false)),
 		MOJANG(input -> {
