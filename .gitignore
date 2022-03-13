@@ -5,6 +5,10 @@ build/
 out/
 classes/
 
+# eclipse
+
+*.launch
+
 # idea
 
 .idea/
@@ -20,18 +24,10 @@ bin/
 .classpath
 .project
 
+# macos
+
+*.DS_Store
+
 # fabric
 
 run/
-logs/
-.fabric/
-.mixin.out/
-
-#eclipse
-
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
