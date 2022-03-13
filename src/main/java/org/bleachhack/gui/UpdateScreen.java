@@ -42,7 +42,7 @@ public class UpdateScreen extends WindowScreen {
 
 	private WindowScrollbarWidget scrollbar;
 	private Set<WindowWidget> changelogWidgets = new HashSet<>();
-	
+
 	private String updateResult = "";
 
 	public UpdateScreen(Screen parent, JsonObject updateJson) {
@@ -102,8 +102,8 @@ public class UpdateScreen extends WindowScreen {
 
 		getWindow(0).addWidget(
 				new WindowButtonWidget(3, h - 21, w / 2 - 2, h - 3, "Website", () ->
-					Util.getOperatingSystem().open(URI.create("https://bleachhack.org/"))
-				));
+				Util.getOperatingSystem().open(URI.create("https://bleachhack.org/"))
+						));
 
 		getWindow(0).addWidget(
 				new WindowButtonWidget(w / 2 + 2, h - 21, w - 3, h - 3, "Update", () -> {
