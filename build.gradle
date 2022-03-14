@@ -33,8 +33,7 @@ dependencies {
 
 	include(modImplementation("com.github.fzakaria:ascii85:1.2"))
 
-	include(modImplementation("com.github.BleachDrinker420:DiscordIPC:4cbff62584"))
-	include(modImplementation("org.json:json:20211205"))
+	include(modImplementation("com.github.BleachDrinker420:DiscordIPC:798440a868"))
 	include(modImplementation("com.kohlschutter.junixsocket:junixsocket-common:2.1.2"))
 	include(modImplementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.1.2"))
 }
