@@ -54,7 +54,6 @@ public class UpdateScreen extends WindowScreen {
 	public void init() {
 		super.init();
 
-		clearWindows();
 		int wd = Math.min(width / 2 - 30, 175);
 		addWindow(new Window(width / 2 - wd,
 				height / 16,

@@ -10,20 +10,15 @@ package org.bleachhack.gui.window;
 
 import java.util.List;
 import org.apache.commons.lang3.tuple.Triple;
-
+import org.bleachhack.gui.window.widget.WindowButtonWidget;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 
-public class WindowManagerScreen extends Screen {
+public class WindowManagerScreen extends WindowScreen {
 
 	/** [Window Screen, Name, Icon] **/
 	public Triple<WindowScreen, String, ItemStack>[] windows;
@@ -31,12 +26,23 @@ public class WindowManagerScreen extends Screen {
 
 	@SafeVarargs
 	public WindowManagerScreen(Triple<WindowScreen, String, ItemStack>... windows) {
-		super(LiteralText.EMPTY);
+		super(LiteralText.EMPTY, false);
 		this.windows = windows;
 	}
 
+	@Override
 	public void init() {
+		super.init();
 		selectWindow(selected);
+
+		int x = 1;
+		int size = Math.min(width / windows.length - 1, 90);
+		for (int i = 0; i < windows.length; i++) {
+			int fi = i;
+			addGlobalWidget(new WindowTabButtonWidget(x, height - 15, x + size, height - 1,
+					windows[i].getMiddle(), windows[i].getRight(), () -> selectWindow(fi)));
+			x += size + 1;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -46,7 +52,7 @@ public class WindowManagerScreen extends Screen {
 			remove(t.getLeft());
 		}
 
-		getSelectedScreen().init(client, width, height - 14);
+		getSelectedScreen().init(client, width, height - 16);
 		addDrawable(getSelectedScreen());
 		((List<Element>) children()).add(getSelectedScreen());
 	}
@@ -61,58 +67,6 @@ public class WindowManagerScreen extends Screen {
 
 	public ItemStack getSelectedIcon() {
 		return windows[selected].getRight();
-	}
-
-	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		super.render(matrices, mouseX, mouseY, delta);
-
-		DrawableHelper.fill(matrices, 0, height - 13, 19, height - 12, 0xff6060b0);
-		DrawableHelper.fill(matrices, 0, height - 13, 1, height, 0xff6060b0);
-		DrawableHelper.fill(matrices, 19, height - 12, 20, height, 0xff6060b0);
-		textRenderer.draw(matrices, "\u00a7cX", 7, height - 10, -1);
-
-		int wid = 20;
-		int size = Math.min((width - wid) / windows.length, 90);
-		for (int i = 0; i < windows.length; i++) {
-			DrawableHelper.fill(matrices, wid, height - 13, wid + size - 1, height - 12, 0xff6060b0);
-			DrawableHelper.fill(matrices, wid, height - 13, wid + 1, height, 0xff6060b0);
-			DrawableHelper.fill(matrices, wid + size - 1, height - 12, wid + size, height, 0xff6060b0);
-
-			RenderSystem.getModelViewStack().push();
-			RenderSystem.getModelViewStack().scale(0.7f, 0.7f, 1f);
-
-			itemRenderer.renderGuiItemIcon(windows[i].getRight(), (int) ((wid + 2) * (1 / 0.7)), (int) ((height - 12) * (1 / 0.7)));
-
-			RenderSystem.getModelViewStack().pop();
-			RenderSystem.applyModelViewMatrix();
-
-			textRenderer.draw(matrices, windows[i].getMiddle(), wid + 16, height - 10, selected == i ? 0xffccff : 0xffffff);
-			wid += size;
-		}
-	}
-
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (mouseX > 0 && mouseX < 20 && mouseY > height - 14 && mouseY < height) {
-			selectWindow(0);
-
-			MinecraftClient.getInstance().getSoundManager().play(
-					PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
-		}
-
-		if (mouseY > height - 14 && mouseY < height && mouseX > 20) {
-			int sel = ((int) mouseX - 20) / Math.min((width - 20) / windows.length, 90);
-
-			if (sel >= 0 && sel < windows.length) {
-				selectWindow(sel);
-
-				MinecraftClient.getInstance().getSoundManager().play(
-						PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
-			}
-		}
-
-		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
 	// Children don't tick brue
@@ -139,5 +93,38 @@ public class WindowManagerScreen extends Screen {
 	public boolean charTyped(char chr, int modifiers) {
 		getSelectedScreen().charTyped(chr, modifiers);
 		return super.charTyped(chr, modifiers);
+	}
+
+	private static class WindowTabButtonWidget extends WindowButtonWidget {
+
+		private ItemStack item;
+
+		public WindowTabButtonWidget(int x1, int y1, int x2, int y2, String text, ItemStack item, Runnable action) {
+			super(x1, y1, x2, y2, 0xff6060b0, 0xff8070b0, 0x40606090, 0x4fb070f0, text, action);
+			this.item = item;
+		}
+
+		@Override
+		public void render(MatrixStack matrices, int windowX, int windowY, int mouseX, int mouseY) {
+			int bx1 = windowX + x1;
+			int by1 = windowY + y1;
+			int bx2 = windowX + x2;
+			int by2 = windowY + y2;
+
+			Window.fill(matrices,
+					bx1, by1, bx2, by2,
+					colorTop, colorBottom,
+					isInBounds(windowX, windowY, mouseX, mouseY) ? colorHoverFill : colorFill);
+
+			RenderSystem.getModelViewStack().push();
+			RenderSystem.getModelViewStack().scale(0.7f, 0.7f, 1f);
+
+			mc.getItemRenderer().renderGuiItemIcon(item, (int) ((bx1 + 2) / 0.7), (int) ((by1 - 6 + (by2 - by1) / 2.0) / 0.7));
+
+			RenderSystem.getModelViewStack().pop();
+			RenderSystem.applyModelViewMatrix();
+
+			mc.textRenderer.drawWithShadow(matrices, text, bx1 + 16, by1 + (by2 - by1) / 2 - 4, -1);
+		}
 	}
 }

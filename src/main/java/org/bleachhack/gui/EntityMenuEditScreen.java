@@ -53,7 +53,6 @@ public class EntityMenuEditScreen extends WindowScreen {
 	public void init() {
 		super.init();
 
-		clearWindows();
 		addWindow(new Window(
 				width / 4,
 				height / 6,
