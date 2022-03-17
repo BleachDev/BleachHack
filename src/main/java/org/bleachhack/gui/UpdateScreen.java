@@ -11,7 +11,6 @@ package org.bleachhack.gui;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.impl.ModContainerImpl;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -43,7 +42,7 @@ public class UpdateScreen extends WindowScreen {
 
 	private WindowScrollbarWidget scrollbar;
 	private Set<WindowWidget> changelogWidgets = new HashSet<>();
-	
+
 	private String updateResult = "";
 
 	public UpdateScreen(Screen parent, JsonObject updateJson) {
@@ -55,7 +54,6 @@ public class UpdateScreen extends WindowScreen {
 	public void init() {
 		super.init();
 
-		clearWindows();
 		int wd = Math.min(width / 2 - 30, 175);
 		addWindow(new Window(width / 2 - wd,
 				height / 16,
@@ -103,8 +101,8 @@ public class UpdateScreen extends WindowScreen {
 
 		getWindow(0).addWidget(
 				new WindowButtonWidget(3, h - 21, w / 2 - 2, h - 3, "Website", () ->
-					Util.getOperatingSystem().open(URI.create("https://bleachhack.org/"))
-				));
+				Util.getOperatingSystem().open(URI.create("https://bleachhack.org/"))
+						));
 
 		getWindow(0).addWidget(
 				new WindowButtonWidget(w / 2 + 2, h - 21, w - 3, h - 3, "Update", () -> {
@@ -119,7 +117,7 @@ public class UpdateScreen extends WindowScreen {
 							return;
 						}
 
-						File modpath = new File(((ModContainerImpl) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginPath().toUri());
+						File modpath = new File(FabricLoader.getInstance().getModContainer("bleachhack").get().getOrigin().getPaths().get(0).toUri());
 
 						if (!modpath.isFile()) {
 							updateResult = "Invalid mod path!";

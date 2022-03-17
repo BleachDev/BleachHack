@@ -62,7 +62,6 @@ public class BleachCreditsScreen extends WindowScreen {
 	public void init() {
 		super.init();
 
-		clearWindows();
 		addWindow(new Window(width / 8,
 				height / 8,
 				width - width / 8,

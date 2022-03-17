@@ -10,13 +10,19 @@ package org.bleachhack.gui.window;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.List;
+
+import org.bleachhack.gui.window.widget.WindowWidget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap.Entry;
 import it.unimi.dsi.fastutil.ints.Int2IntRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2IntSortedMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntCollection;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
@@ -33,8 +39,16 @@ public abstract class WindowScreen extends Screen {
 	// <Layer, Window Index>
 	private Int2IntSortedMap windowOrder = new Int2IntRBTreeMap(); 
 
+	private List<WindowWidget> globalWidgets = new ArrayList<>();
+	private boolean autoClose;
+
 	public WindowScreen(Text title) {
+		this(title, true);
+	}
+
+	public WindowScreen(Text title, boolean autoClose) {
 		super(title);
+		this.autoClose = autoClose;
 	}
 
 	public Window addWindow(Window window) {
@@ -71,16 +85,16 @@ public abstract class WindowScreen extends Screen {
 		return windows;
 	}
 
-	protected List<Integer> getWindowsBackToFront() {
-		return new ArrayList<>(windowOrder.values());
+	protected IntCollection getWindowsBackToFront() {
+		return windowOrder.values();
 	}
 
-	protected List<Integer> getWindowsFrontToBack() {
-		List<Integer> w = getWindowsBackToFront();
+	protected IntCollection getWindowsFrontToBack() {
+		IntList w = new IntArrayList(getWindowsBackToFront());
 		Collections.reverse(w);
 		return w;
 	}
-	
+
 	protected int getWindowLayer(int index) {
 		return windowOrder.int2IntEntrySet().stream().filter(i -> i.getIntValue() == index).findFirst().get().getIntKey();
 	}
@@ -95,7 +109,31 @@ public abstract class WindowScreen extends Screen {
 		return -1;
 	}
 
+	public <T extends WindowWidget> T addGlobalWidget(T widget) {
+		globalWidgets.add(widget);
+		return widget;
+	}
+
+	public List<WindowWidget> getGlobalWidgets() {
+		return globalWidgets;
+	}
+	
+	@Override
+	public void init() {
+		super.init();
+		
+		globalWidgets.clear();
+		clearWindows();
+	}
+
+	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		super.render(matrices, mouseX, mouseY, delta);
+		
+		for (WindowWidget w : globalWidgets) {
+			w.render(matrices, 0, 0, mouseX, mouseY);
+		}
+
 		int sel = getSelectedWindow();
 
 		if (sel == -1) {
@@ -116,9 +154,7 @@ public abstract class WindowScreen extends Screen {
 			}
 		}
 
-		if (close) this.onClose();
-
-		super.render(matrices, mouseX, mouseY, delta);
+		if (autoClose && close) this.onClose();
 	}
 
 	public void onRenderWindow(MatrixStack matrices, int window, int mouseX, int mouseY) {
@@ -151,6 +187,7 @@ public abstract class WindowScreen extends Screen {
 		}
 	}
 
+	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		/* Handle what window will be selected when clicking */
 		for (int wi: getWindowsFrontToBack()) {
@@ -161,7 +198,7 @@ public abstract class WindowScreen extends Screen {
 					w.closed = true;
 					break;
 				}
-				
+
 				if (!w.selected)
 					selectWindow(wi);
 
@@ -170,37 +207,43 @@ public abstract class WindowScreen extends Screen {
 			}
 		}
 
+		try {
+			for (WindowWidget w : globalWidgets) {
+				w.mouseClicked(0, 0, (int) mouseX, (int) mouseY, button);
+			}
+		} catch (ConcurrentModificationException ignored) {}
+
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
+	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		for (Window w : windows) {
+		for (Window w : windows)
 			w.mouseReleased(mouseX, mouseY, button);
-		}
 
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
 
+	@Override
 	public void tick() {
-		for (Window w : windows) {
+		for (Window w : windows)
 			w.tick();
-		}
 
 		super.tick();
 	}
 
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		for (Window w : windows) {
+		for (Window w : windows)
 			w.keyPressed(keyCode, scanCode, modifiers);
-		}
 
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
+	@Override
 	public boolean charTyped(char chr, int modifiers) {
-		for (Window w : windows) {
+		for (Window w : windows)
 			w.charTyped(chr, modifiers);
-		}
 
 		return super.charTyped(chr, modifiers);
 	}
@@ -223,8 +266,8 @@ public abstract class WindowScreen extends Screen {
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 		bufferBuilder.vertex(width, 0, 0).color(30, 20, 80, 255).next();
 		bufferBuilder.vertex(0, 0, 0).color(30 + colorOffset / 3, 20, 80, 255).next();
-		bufferBuilder.vertex(0, height + 14, 0).color(90, 54, 159, 255).next();
-		bufferBuilder.vertex(width, height + 14, 0).color(105 + colorOffset, 54, 189, 255).next();
+		bufferBuilder.vertex(0, height + 16, 0).color(90, 54, 159, 255).next();
+		bufferBuilder.vertex(width, height + 16, 0).color(105 + colorOffset, 54, 189, 255).next();
 		tessellator.draw();
 
 		RenderSystem.disableBlend();

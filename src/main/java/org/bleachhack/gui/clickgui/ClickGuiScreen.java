@@ -41,7 +41,7 @@ public abstract class ClickGuiScreen extends WindowScreen {
 	
 	@Override
 	public void init() {
-		super.init();
+		// super.init(); Don't call super because it clears the windows
 
 		warningOpacity = 0;
 	}
