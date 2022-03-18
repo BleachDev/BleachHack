@@ -46,7 +46,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 
 	public void render(ModuleWindow window, MatrixStack matrices, int x, int y, int len) {
 		if (window.mouseOver(x, y, x + len, y + 12)) {
-			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x70303070);
+			DrawableHelper.fill(matrices, x + 1, y, x + len, y + 12, 0x703f700c);
 		}
 
 		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, getName(), x + 3, y + 2, 0xcfe0cf);
@@ -177,7 +177,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 				}
 
 				//Window.horizontalGradient(matrix, x1 + 1, y2 - 25, x2 - 1, y2 - 1, 0x70606090, 0x00606090);
-				Window.horizontalGradient(matrices, x1 + 1, y2 - 27, x2 - 1, y2 - 26, 0xff606090, 0x50606090);
+				Window.horizontalGradient(matrices, x1 + 1, y2 - 27, x2 - 1, y2 - 26, 0xff6cc312, 0xff6cc312);
 
 				if (inputField.textField.isFocused()) {
 					Set<T> toDraw = new LinkedHashSet<>();
@@ -214,7 +214,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 
 		private void drawEntry(MatrixStack matrices, T item, int x, int y, int width, int height, int mouseX, int mouseY) {
 			boolean mouseOverDelete = mouseX >= x + width - 14 && mouseX <= x + width - 1 && mouseY >= y + 2 && mouseY <= y + height - 2;
-			Window.fill(matrices, x + width - 14, y + 2, x + width - 1, y + height - 2, mouseOverDelete ? 0x4fb070f0 : 0x60606090);
+			Window.fill(matrices, x + width - 14, y + 2, x + width - 1, y + height - 2, mouseOverDelete ? 0x4f90f090 : 0x6090f090);
 
 			if (mouseOverDelete) {
 				toDeleteItem = item;
@@ -228,7 +228,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 
 		private void drawSearchEntry(MatrixStack matrices, T item, int x, int y, int width, int height, int mouseX, int mouseY) {
 			boolean mouseOver = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
-			DrawableHelper.fill(matrices, x, y - 1, x + width, y + height, mouseOver ? 0xdf8070d0 : 0xb0606090);
+			DrawableHelper.fill(matrices, x, y - 1, x + width, y + height, mouseOver ? 0xdf528f17 : 0xb040700c);
 
 			if (mouseOver) {
 				toAddItem = item;
