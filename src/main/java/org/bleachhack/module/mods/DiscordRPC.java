@@ -8,10 +8,6 @@
  */
 package org.bleachhack.module.mods;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
@@ -156,7 +152,7 @@ public class DiscordRPC extends Module {
 					default -> startTime;
 				};
 
-				builder.setStartTimestamp(OffsetDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneOffset.systemDefault()));
+				builder.setStartTimestamp(time);
 			}
 
 			// Build

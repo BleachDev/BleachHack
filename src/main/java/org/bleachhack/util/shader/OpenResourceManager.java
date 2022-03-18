@@ -49,8 +49,7 @@ public class OpenResourceManager implements ResourceManager {
 			return new ResourceImpl(id.getNamespace(), id, parseURL(id.getPath()), null);
 
 		// Scuffed resource loader
-		@SuppressWarnings("deprecation")
-		Path path = FabricLoader.getInstance().getModContainer(id.getNamespace()).get().getPath("assets/" + id.getNamespace() + "/" + id.getPath());
+		Path path = FabricLoader.getInstance().getModContainer(id.getNamespace()).get().findPath("assets/" + id.getNamespace() + "/" + id.getPath()).get();
 		return new ResourceImpl(id.getNamespace(), id, Files.newInputStream(path), null);
 	}
 
