@@ -67,7 +67,6 @@ public class AccountManagerScreen extends WindowScreen {
 	public void init() {
 		super.init();
 
-		clearWindows();
 		Window mainWindow = addWindow(new Window(
 				width / 8,
 				height / 8,

@@ -55,7 +55,6 @@ public class NotebotScreen extends WindowScreen {
 
 		int ww = Math.max(width / 2, 360);
 		int wh = Math.max(height / 2, 200);
-		clearWindows();
 		addWindow(new Window(
 				width / 2 - ww / 2,
 				height / 2 - wh / 2,
