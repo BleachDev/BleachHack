@@ -8,6 +8,8 @@
  */
 package org.bleachhack.module.mods;
 
+import java.util.concurrent.Future;
+
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
@@ -24,9 +26,8 @@ import org.bleachhack.util.io.BleachFileHelper;
 import com.google.gson.JsonElement;
 import com.jagrosh.discordipc.IPCClient;
 import com.jagrosh.discordipc.IPCListener;
+import com.jagrosh.discordipc.entities.DiscordBuild;
 import com.jagrosh.discordipc.entities.RichPresence;
-import com.jagrosh.discordipc.entities.pipe.PipeStatus;
-import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.item.ItemStack;
@@ -34,7 +35,7 @@ import net.minecraft.item.ItemStack;
 public class DiscordRPC extends Module {
 
 	private IPCClient client;
-	private Thread startThread;
+	private Future<DiscordBuild> connectFuture;
 
 	private String customText1 = "top text";
 	private String customText2 = "bottom text";
@@ -69,7 +70,6 @@ public class DiscordRPC extends Module {
 		startTime = System.currentTimeMillis();
 
 		if (client == null) {
-			BleachLogger.logger.info("Initing Discord IPC...");
 			client = new IPCClient(740928841433743370L);
 			client.setListener(new IPCListener() {
 				@Override
@@ -79,31 +79,35 @@ public class DiscordRPC extends Module {
 			});
 		}
 
-		startThread = new Thread(() -> {
-			try {
-				client.connect();
-			} catch (NoDiscordClientException e) {
-				BleachLogger.error("Failed to connect to Discord!");
-				setEnabled(false);
-			}
-		});
-		startThread.start();
+		BleachLogger.logger.info("Connecting to Discord..");
+		connectFuture = client.connectAsync();
 	}
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		try {
-			startThread.join();
-			disconnect();
-		} catch (InterruptedException ignored) {}
+		if (!connectFuture.cancel(true))
+			client.close();
 
 		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (client.getStatus() != PipeStatus.CONNECTED)
-			return;
+		// Futures are wack
+		if (connectFuture != null) {
+			if (!connectFuture.isDone())
+				return;
+			
+			try {
+				connectFuture.get();
+			} catch (Exception e) {
+				BleachLogger.error("Failed to connect to Discord!\n" + e.getMessage());
+				e.printStackTrace();
+				setEnabled(false);
+			}
+			
+			connectFuture = null;
+		}
 
 		if (tick % 40 == 0) {
 			boolean silent = getSetting(3).asToggle().getState();
@@ -160,11 +164,6 @@ public class DiscordRPC extends Module {
 		}
 
 		tick++;
-	}
-
-	private void disconnect() {
-		if (client.getStatus() == PipeStatus.CONNECTED || client.getStatus() == PipeStatus.CONNECTING)
-			client.close();
 	}
 
 	public void setTopText(String text) {
