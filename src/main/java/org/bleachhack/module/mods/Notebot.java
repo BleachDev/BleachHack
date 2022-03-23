@@ -53,6 +53,7 @@ public class Notebot extends Module {
 	private int timer = -10;
 	private int tuneDelay = 0;
 
+	// Thanks to wagyourtail for figuring this out
 	private static Vec3d toVec(BlockPos pos) {
 		return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
 	}
