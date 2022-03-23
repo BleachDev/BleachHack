@@ -14,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.bleachhack.command.Command;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
@@ -51,6 +52,10 @@ public class Notebot extends Module {
 	private Map<BlockPos, Integer> blockPitches = new HashMap<>();
 	private int timer = -10;
 	private int tuneDelay = 0;
+
+	private static Vec3d toVec(BlockPos pos) {
+		return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+	}
 
 	public Notebot() {
 		super("Notebot", KEY_UNBOUND, ModuleCategory.MISC, "Plays those noteblocks nicely.",
@@ -147,7 +152,7 @@ public class Notebot extends Module {
 						}
 
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
-								new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
+								new BlockHitResult(toVec(e.getKey()), Direction.UP, e.getKey(), true));
 					} else if (tuneMode >= 3) {
 						if (tuneDelay < (tuneMode == 3 ? 3 : 5)) {
 							tuneDelay++;
@@ -158,7 +163,7 @@ public class Notebot extends Module {
 						int reqTunes = Math.min(tuneMode == 3 ? 5 : 25, neededNote - note);
 						for (int i = 0; i < reqTunes; i++)
 							mc.interactionManager.interactBlock(mc.player, mc.world,
-									Hand.MAIN_HAND, new BlockHitResult(mc.player.getPos(), Direction.UP, e.getKey(), true));
+									Hand.MAIN_HAND, new BlockHitResult(toVec(e.getKey()), Direction.UP, e.getKey(), true));
 
 						tuneDelay = 0;
 					}
