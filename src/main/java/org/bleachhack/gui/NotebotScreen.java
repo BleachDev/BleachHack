@@ -12,9 +12,7 @@ import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.gui.window.Window;
@@ -26,12 +24,13 @@ import org.bleachhack.module.mods.Notebot.Song;
 import org.bleachhack.util.NotebotUtils;
 import org.bleachhack.util.io.BleachFileMang;
 
-import java.net.URI;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class NotebotScreen extends WindowScreen {
+
+	public static Song lastEntry;
 
 	private Set<String> files = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 	private int page = 0;
@@ -200,6 +199,7 @@ public class NotebotScreen extends WindowScreen {
 	
 				if (mouseX > x + 5 && mouseX < x + 105 && mouseY > y + 15 + c * 10 && mouseY < y + 25 + c * 10) {
 					entry = NotebotUtils.parse(BleachFileMang.getDir().resolve("notebot/" + s));
+					lastEntry = entry;
 					playing = false;
 					playTick = 0;
 					break;

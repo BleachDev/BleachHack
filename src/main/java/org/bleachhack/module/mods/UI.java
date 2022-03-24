@@ -9,9 +9,11 @@
 package org.bleachhack.module.mods;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -22,12 +24,14 @@ import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventRenderInGameHud;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
+import org.bleachhack.gui.NotebotScreen;
 import org.bleachhack.gui.clickgui.UIClickGuiScreen;
 import org.bleachhack.gui.clickgui.window.UIContainer;
 import org.bleachhack.gui.clickgui.window.UIWindow;
@@ -38,14 +42,14 @@ import org.bleachhack.module.ModuleManager;
 import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.setting.module.SettingToggle;
+import org.bleachhack.util.NotebotUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static net.minecraft.client.gui.DrawableHelper.drawCenteredText;
 
 public class UI extends Module {
 
@@ -89,7 +93,8 @@ public class UI extends Module {
 				new SettingToggle("Lag-Meter", true).withDesc("Shows when the server isn't responding.").withChildren(                 // 10
 						new SettingMode("Animation", "Fall", "Fade", "None").withDesc("How to animate the lag meter when appearing.")),
 				new SettingToggle("Inventory", false).withDesc("Renders your inventory on screen.").withChildren(                      // 11
-						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")));
+						new SettingSlider("Background", 0, 255, 140, 0).withDesc("How opaque the background should be.")),
+				new SettingToggle("Notebot", true).withDesc("Shows Notebot blocks."));                                                            // 12
 
 		UIContainer container = UIClickGuiScreen.INSTANCE.getUIContainer();
 
@@ -131,21 +136,21 @@ public class UI extends Module {
 				);
 
 		container.windows.put("durability",
-				new UIWindow(new Position(0.2, 0.9), container,
+				new UIWindow(new Position("l", 1, "tps", 0), container,
 						() -> getSetting(5).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(durabilityText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, durabilityText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("server",
-				new UIWindow(new Position(0.2, 0.85, "durability", 0), container,
+				new UIWindow(new Position("l", 1, "durability", 0), container,
 						() -> getSetting(6).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(serverText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, serverText, x + 1, y + 1, 0xa0a0a0))
 				);
 
 		container.windows.put("timestamp",
-				new UIWindow(new Position(0.2, 0.8, "server", 0), container,
+				new UIWindow(new Position("l", 1, "server", 0), container,
 						() -> getSetting(7).asToggle().getState(),
 						() -> new int[] { mc.textRenderer.getWidth(timestampText) + 2, 10 },
 						(ms, x, y) -> mc.textRenderer.drawWithShadow(ms, timestampText, x + 1, y + 1, 0xa0a0a0))
@@ -182,6 +187,40 @@ public class UI extends Module {
 						this::getInventorySize,
 						this::drawInventory)
 				);
+
+		// Notebot
+		container.windows.put("notebot",
+				new UIWindow(new Position("r", 1, "t", 0), container,
+						() -> getSetting(12).asToggle().getState(),
+						this::getNotebotSize,
+						this::drawNotebotList)
+		);
+	}
+
+	private void drawNotebotList(MatrixStack matrixStack, Integer x, Integer y) {
+		if (NotebotScreen.lastEntry == null)
+				return;
+
+		int c2 = 0;
+		for (Map.Entry<Instrument, ItemStack> e : NotebotUtils.INSTRUMENT_TO_ITEM.entrySet()) {
+			int count = (int) NotebotScreen.lastEntry.requirements.stream().filter(n -> n.instrument == e.getKey().ordinal()).count();
+
+			if (count != 0) {
+				mc.getItemRenderer().zOffset = 500 - c2 * 25;
+				drawCenteredText(matrixStack, mc.textRenderer, StringUtils.capitalize(e.getKey().asString()) + " x" + count,
+						x, 1 + y + 4 + c2 * 15, 0x50f050);
+
+				DiffuseLighting.enableGuiDepthLighting();
+				mc.getItemRenderer().renderGuiItemIcon(e.getValue(), x + 55, 1 + y + c2 * 15);
+				DiffuseLighting.disableGuiDepthLighting();
+
+				c2++;
+			}
+		}
+	}
+
+	private int[] getNotebotSize() {
+		return new int[] {75, NotebotUtils.INSTRUMENT_TO_ITEM.size() * 25 };
 	}
 
 	@BleachSubscribe

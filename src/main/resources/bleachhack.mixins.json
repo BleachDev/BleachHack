@@ -3,6 +3,7 @@
   "package": "org.bleachhack.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
+    "AccessorAbstractSoundInstance",
     "AccessorChatScreen",
     "AccessorFrustum",
     "AccessorHeldItemRenderer",

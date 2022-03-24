@@ -95,6 +95,8 @@ public class NotebotUtils {
 
 			zip.close();
 			Files.deleteIfExists(BleachFileMang.getDir().resolve("notebot").resolve("songs.zip"));
+			if (!BleachFileMang.fileExists("notebot/--> Disable UI <--"))
+				BleachFileMang.createEmptyFile("notebot/--> Disable UI <--");
 
 			if (log)
 				BleachLogger.info("Downloaded " + count + " Songs");

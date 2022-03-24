@@ -15,6 +15,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.command.Command;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
@@ -53,11 +54,6 @@ public class Notebot extends Module {
 	private int timer = -10;
 	private int tuneDelay = 0;
 
-	// Thanks to wagyourtail for figuring this out
-	private static Vec3d toVec(BlockPos pos) {
-		return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
-	}
-
 	public Notebot() {
 		super("Notebot", KEY_UNBOUND, ModuleCategory.MISC, "Plays those noteblocks nicely.",
 				new SettingToggle("Tune", true).withDesc("Tunes the noteblocks before and while playing.").withChildren(
@@ -92,6 +88,9 @@ public class Notebot extends Module {
 				.map(BlockPos::toImmutable)
 				.toList();
 
+		int[] noteCount = new int[16];
+		song.requirements.forEach(note -> noteCount[note.instrument]++);
+
 		for (Note note : song.requirements) {
 			for (BlockPos pos: noteblocks) {
 				if (blockPitches.containsKey(pos))
@@ -109,16 +108,25 @@ public class Notebot extends Module {
 							.filter(e -> e.getValue() == note.pitch)
 							.noneMatch(e -> getInstrument(e.getKey()).ordinal() == instrument)) {
 						blockPitches.put(pos, note.pitch);
+						noteCount[instrument]--;
 						break;
 					}
 				}
 			}
 		}
 
-		int required = getSetting(2).asToggle().getState()
-				? (int) song.requirements.stream().mapToInt(i -> i.instrument).distinct().count() : song.requirements.size();
-		if (required > blockPitches.size()) {
-			BleachLogger.warn("Mapping Error: Missing " + (required - blockPitches.size()) + " Noteblocks");
+		if (!getSetting(2).asToggle().getState()) {
+			for (int instrumentId = 0; instrumentId < 16; instrumentId++) {
+				if (noteCount[instrumentId] > 0) {
+					Instrument instrument = Instrument.values()[instrumentId];
+					BleachLogger.warn("Mapping Error: Missing " + noteCount[instrumentId] + "x " + StringUtils.capitalize(NotebotUtils.INSTRUMENT_TO_ITEM.get(instrument).getItem().getName().getString()));
+				}
+			}
+		} else {
+			int required = (int) song.requirements.stream().mapToInt(i -> i.instrument).distinct().count();
+			if (required > blockPitches.size()) {
+				BleachLogger.warn("Mapping Error: Missing " + (required - blockPitches.size()) + " Noteblocks");
+			}
 		}
 	}
 
@@ -153,7 +161,7 @@ public class Notebot extends Module {
 						}
 
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
-								new BlockHitResult(toVec(e.getKey()), Direction.UP, e.getKey(), true));
+								new BlockHitResult(Vec3d.ofCenter(e.getKey(), 1), Direction.UP, e.getKey(), true));
 					} else if (tuneMode >= 3) {
 						if (tuneDelay < (tuneMode == 3 ? 3 : 5)) {
 							tuneDelay++;
@@ -164,7 +172,7 @@ public class Notebot extends Module {
 						int reqTunes = Math.min(tuneMode == 3 ? 5 : 25, neededNote - note);
 						for (int i = 0; i < reqTunes; i++)
 							mc.interactionManager.interactBlock(mc.player, mc.world,
-									Hand.MAIN_HAND, new BlockHitResult(toVec(e.getKey()), Direction.UP, e.getKey(), true));
+									Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(e.getKey(), 1), Direction.UP, e.getKey(), true));
 
 						tuneDelay = 0;
 					}

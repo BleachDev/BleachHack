@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import org.bleachhack.event.events.EventSoundPlay;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
+import org.bleachhack.mixin.AccessorAbstractSoundInstance;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.module.mods.Notebot.Note;
@@ -50,6 +51,9 @@ public class NotebotStealer extends Module {
 		for (Entry<Integer, Note> note : notes.entries())
 			s.append(note.getKey()).append(":").append(note.getValue().pitch).append(":").append(note.getValue().instrument).append("\n");
 
+		if (!BleachFileMang.fileExists("notebot/--> Disable UI <--"))
+			BleachFileMang.createEmptyFile("notebot/--> Disable UI <--");
+
 		BleachFileMang.createEmptyFile("notebot/notebot" + i + ".txt");
 		BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s.toString());
 		BleachLogger.info("Saved Song As: notebot" + i + ".txt [" + notes.size() + " Notes]");
@@ -68,10 +72,10 @@ public class NotebotStealer extends Module {
 		if (event.getInstance().getId().getPath().contains("note_block")) {
 			int type = 0;
 			int note = 0;
-
+			
 			for (int n = 0; n < 25; n++) {
-				if ((float) Math.pow(2.0D, (n - 12) / 12.0D) - 0.01 < event.getInstance().getPitch() &&
-						(float) Math.pow(2.0D, (n - 12) / 12.0D) + 0.01 > event.getInstance().getPitch()) {
+				if ((float) Math.pow(2.0D, (n - 12) / 12.0D) - 0.01 < ((AccessorAbstractSoundInstance) event.getInstance()).getPitch() &&
+						(float) Math.pow(2.0D, (n - 12) / 12.0D) + 0.01 > ((AccessorAbstractSoundInstance) event.getInstance()).getPitch()) {
 					note = n;
 					break;
 				}
