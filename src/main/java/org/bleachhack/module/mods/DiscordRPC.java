@@ -70,7 +70,7 @@ public class DiscordRPC extends Module {
 		startTime = System.currentTimeMillis();
 
 		if (client == null) {
-			client = new IPCClient(740928841433743370L);
+			client = new IPCClient(956641956019187782L);
 			client.setListener(new IPCListener() {
 				@Override
 				public void onReady(IPCClient client) {
@@ -112,7 +112,7 @@ public class DiscordRPC extends Module {
 		if (tick % 40 == 0) {
 			boolean silent = getSetting(3).asToggle().getState();
 			RichPresence.Builder builder = new RichPresence.Builder()
-					.setLargeImage(silent ? "mc" : "bh", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "DarkHack " + BleachHack.VERSION);
+					.setLargeImage(silent ? "mc" : "dh", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "DarkHack " + BleachHack.VERSION);
 
 			// Top text
 			builder.setDetails(switch (getSetting(0).asMode().getMode()) {
