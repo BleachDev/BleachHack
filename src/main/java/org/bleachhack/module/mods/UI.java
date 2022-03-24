@@ -198,12 +198,12 @@ public class UI extends Module {
 	}
 
 	private void drawNotebotList(MatrixStack matrixStack, Integer x, Integer y) {
-		if (NotebotScreen.lastEntry == null)
+		if (ModuleManager.getModule(Notebot.class).song == null)
 				return;
 
 		int c2 = 0;
 		for (Map.Entry<Instrument, ItemStack> e : NotebotUtils.INSTRUMENT_TO_ITEM.entrySet()) {
-			int count = (int) NotebotScreen.lastEntry.requirements.stream().filter(n -> n.instrument == e.getKey().ordinal()).count();
+			int count = (int) ModuleManager.getModule(Notebot.class).song.requirements.stream().filter(n -> n.instrument == e.getKey().ordinal()).count();
 
 			if (count != 0) {
 				mc.getItemRenderer().zOffset = 500 - c2 * 25;
