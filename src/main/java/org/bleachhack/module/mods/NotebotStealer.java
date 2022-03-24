@@ -51,8 +51,8 @@ public class NotebotStealer extends Module {
 		for (Entry<Integer, Note> note : notes.entries())
 			s.append(note.getKey()).append(":").append(note.getValue().pitch).append(":").append(note.getValue().instrument).append("\n");
 
-		if (!BleachFileMang.fileExists("notebot/--> Disable UI <--"))
-			BleachFileMang.createEmptyFile("notebot/--> Disable UI <--");
+		if (!BleachFileMang.fileExists("notebot/-- Disable UI --"))
+			BleachFileMang.createEmptyFile("notebot/-- Disable UI --");
 
 		BleachFileMang.createEmptyFile("notebot/notebot" + i + ".txt");
 		BleachFileMang.appendFile("notebot/notebot" + i + ".txt", s.toString());
