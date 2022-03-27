@@ -21,7 +21,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.Material;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -81,9 +80,6 @@ public class WorldUtils {
 			Blocks.CARTOGRAPHY_TABLE, Blocks.GRINDSTONE, Blocks.LECTERN, Blocks.LOOM,
 			Blocks.STONECUTTER, Blocks.SMITHING_TABLE);
 
-	public static final Set<Material> FLUIDS = Sets.newHashSet(
-			Material.WATER, Material.LAVA, Material.UNDERWATER_PLANT, Material.REPLACEABLE_UNDERWATER_PLANT);
-
 	public static List<WorldChunk> getLoadedChunks() {
 		List<WorldChunk> chunks = new ArrayList<>();
 
@@ -104,13 +100,10 @@ public class WorldUtils {
 
 	public static List<BlockEntity> getBlockEntities() {
 		List<BlockEntity> list = new ArrayList<>();
-		getLoadedChunks().forEach(c -> list.addAll(c.getBlockEntities().values()));
+		for (WorldChunk chunk: getLoadedChunks())
+			list.addAll(chunk.getBlockEntities().values());
 
 		return list;
-	}
-
-	public static boolean isFluid(BlockPos pos) {
-		return FLUIDS.contains(mc.world.getBlockState(pos).getMaterial());
 	}
 
 	public static boolean doesBoxTouchBlock(Box box, Block block) {
@@ -270,39 +263,37 @@ public class WorldUtils {
 	}
 
 	public static void facePos(double x, double y, double z) {
-		double diffX = x - mc.player.getX();
-		double diffY = y - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
-		double diffZ = z - mc.player.getZ();
+		float[] rot = getViewingRotation(mc.player, x, y, z);
 
-		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-		float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
-		float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
-
-		mc.player.setYaw(mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw()));
-		mc.player.setPitch(mc.player.getPitch() + MathHelper.wrapDegrees(pitch - mc.player.getPitch()));
+		mc.player.setYaw(mc.player.getYaw() + MathHelper.wrapDegrees(rot[0] - mc.player.getYaw()));
+		mc.player.setPitch(mc.player.getPitch() + MathHelper.wrapDegrees(rot[1] - mc.player.getPitch()));
 	}
 
 	public static void facePosPacket(double x, double y, double z) {
-		double diffX = x - mc.player.getX();
-		double diffY = y - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
-		double diffZ = z - mc.player.getZ();
-
-		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-		float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
-		float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
+		float[] rot = getViewingRotation(mc.player, x, y, z);
 
 		if (!mc.player.hasVehicle()) {
-			mc.player.headYaw = mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw());
-			mc.player.bodyYaw = mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw());
-			mc.player.renderPitch = mc.player.getPitch() + MathHelper.wrapDegrees(pitch - mc.player.getPitch());
+			mc.player.headYaw = mc.player.getYaw() + MathHelper.wrapDegrees(rot[0] - mc.player.getYaw());
+			mc.player.bodyYaw = mc.player.headYaw;
+			mc.player.renderPitch = mc.player.getPitch() + MathHelper.wrapDegrees(rot[1] - mc.player.getPitch());
 		}
 
 		mc.player.networkHandler.sendPacket(
 				new PlayerMoveC2SPacket.LookAndOnGround(
-						mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw()),
-						mc.player.getPitch() + MathHelper.wrapDegrees(pitch - mc.player.getPitch()), mc.player.isOnGround()));
+						mc.player.getYaw() + MathHelper.wrapDegrees(rot[0] - mc.player.getYaw()),
+						mc.player.getPitch() + MathHelper.wrapDegrees(rot[1] - mc.player.getPitch()), mc.player.isOnGround()));
+	}
+	
+	public static float[] getViewingRotation(Entity entity, double x, double y, double z) {
+		double diffX = x - entity.getX();
+		double diffY = y - entity.getEyeY();
+		double diffZ = z - entity.getZ();
+
+		double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+		return new float[] {
+				(float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90f,
+				(float) -Math.toDegrees(Math.atan2(diffY, diffXZ)) };
 	}
 
 	public static int getTopBlockIgnoreLeaves(int x, int z) {
