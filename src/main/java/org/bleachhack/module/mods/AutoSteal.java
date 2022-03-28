@@ -139,7 +139,7 @@ public class AutoSteal extends Module {
 						&& be instanceof ChestBlockEntity
 						&& mc.player.getEyePos().distanceTo(Vec3d.ofCenter(be.getPos())) <= getSetting(3).asToggle().getChild(0).asSlider().getValue() + 0.25) {
 
-					Vec3d lookVec = Vec3d.ofCenter(be.getPos()).add(0, 0.5, 0);
+					Vec3d lookVec = Vec3d.ofCenter(be.getPos(), 1);
 					if (getSetting(3).asToggle().getChild(2).asRotate().getState()) {
 						WorldUtils.facePosAuto(lookVec.x, lookVec.y, lookVec.z, getSetting(3).asToggle().getChild(2).asRotate());
 					}
