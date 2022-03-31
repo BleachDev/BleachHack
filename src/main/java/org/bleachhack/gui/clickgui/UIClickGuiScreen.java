@@ -40,9 +40,9 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 	public void init() {
 		super.init();
 
+		clearWindows();
 		uiContainer.windows.values().forEach(this::addWindow);
 
-		clearWindows();
 		addWindow(new ModuleWindow(List.of(ModuleManager.getModule(UI.class)),
 				200, 200, 75, "Render", new ItemStack(Items.YELLOW_STAINED_GLASS)));
 	}
