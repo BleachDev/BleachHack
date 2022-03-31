@@ -57,7 +57,7 @@ public class Ghosthand extends Module {
 				for (BlockEntity b : WorldUtils.getBlockEntities()) {
 					if (b.getPos().equals(curPos)) {
 						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
-								new BlockHitResult(mc.player.getPos(), Direction.UP, curPos, true));
+								new BlockHitResult(Vec3d.ofCenter(curPos, 1), Direction.UP, curPos, true));
 						return;
 					}
 				}
