@@ -63,7 +63,7 @@ public class Tracers extends Module {
 	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
 		float width = getSetting(7).asSlider().getValueFloat();
-		float opacity = getSetting(8).asSlider().getValueFloat();
+		int opacity = (int) (getSetting(8).asSlider().getValueFloat() * 255);
 
 		for (Entity e : mc.world.getEntities()) {
 			int[] col = getColor(e);
