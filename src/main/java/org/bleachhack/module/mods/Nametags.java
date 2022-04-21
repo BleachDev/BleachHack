@@ -98,7 +98,8 @@ public class Nametags extends Module {
 						new SettingToggle("CustomName", true).withDesc("Shows the items custom name if it has it."),
 						new SettingToggle("ItemCount", true).withDesc("Shows how many items are in the stack.")),
 				new SettingToggle("ArmorStands", false).withDesc("Shows nametags over armor stands of their eqipment.").withChildren(
-						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("The size of the nametags.")));
+						new SettingSlider("Size", 0.5, 5, 1, 1).withDesc("The size of the nametags.")),
+				new SettingToggle("Disable", false).withDesc("Disables all nametags."));
 	}
 
 	@Override
@@ -159,6 +160,10 @@ public class Nametags extends Module {
 
 	@BleachSubscribe
 	public void onWorldRender(EventWorldRender.Post event) {
+		if (getSetting(6).asToggle().getState()) {
+			return;
+		}
+
 		for (Entity entity: mc.world.getEntities()) {
 			if (entity == mc.player || entity.hasPassenger(mc.player) || mc.player.hasPassenger(entity)) {
 				continue;

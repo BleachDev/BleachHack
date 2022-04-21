@@ -10,6 +10,8 @@ package org.bleachhack.mixin;
 
 import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventEntityRender;
+import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.Nametags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,6 +28,11 @@ public abstract class MixinEntityRenderer<T extends Entity> {
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
 	private void renderLabelIfPresent(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
+		Nametags nametags = ModuleManager.getModule(Nametags.class);
+		if (nametags.isEnabled() && nametags.getSetting(6).asToggle().getState()) {
+			info.cancel();
+		}
+
 		EventEntityRender.Single.Label event = new EventEntityRender.Single.Label(entity, matrices, vertexConsumers);
 		BleachHack.eventBus.post(event);
 
