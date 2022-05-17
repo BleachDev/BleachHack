@@ -19,7 +19,6 @@ import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
 import net.minecraft.network.packet.s2c.play.UnloadChunkS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.WorldChunk;
 
 public class ChunkProcessor {
@@ -27,13 +26,13 @@ public class ChunkProcessor {
 	private ExecutorService executor;
 
 	private int threads;
-	private BiConsumer<ChunkPos, Chunk> loadChunkConsumer;
-	private BiConsumer<ChunkPos, Chunk> unloadChunkConsumer;
+	private BiConsumer<ChunkPos, WorldChunk> loadChunkConsumer;
+	private BiConsumer<ChunkPos, WorldChunk> unloadChunkConsumer;
 	private BiConsumer<BlockPos, BlockState> updateBlockConsumer;
 
 	public ChunkProcessor(int threads,
-			BiConsumer<ChunkPos, Chunk> loadChunkConsumer,
-			BiConsumer<ChunkPos, Chunk> unloadChunkConsumer,
+			BiConsumer<ChunkPos, WorldChunk> loadChunkConsumer,
+			BiConsumer<ChunkPos, WorldChunk> unloadChunkConsumer,
 			BiConsumer<BlockPos, BlockState> updateBlockConsumer) {
 		this.threads = threads;
 		this.loadChunkConsumer = loadChunkConsumer;
@@ -59,7 +58,7 @@ public class ChunkProcessor {
 
 	public void submitAllLoadedChunks() {
 		if (loadChunkConsumer != null) {
-			for (Chunk chunk: WorldUtils.getLoadedChunks()) {
+			for (WorldChunk chunk: WorldUtils.getLoadedChunks()) {
 				executor.execute(() -> loadChunkConsumer.accept(chunk.getPos(), chunk));
 			}
 		}
@@ -67,6 +66,9 @@ public class ChunkProcessor {
 
 	@BleachSubscribe
 	public void onReadPacket(EventPacket.Read event) {
+		if (MinecraftClient.getInstance().world == null)
+			return;
+		
 		if (updateBlockConsumer != null && event.getPacket() instanceof BlockUpdateS2CPacket) {
 			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
 
@@ -81,7 +83,6 @@ public class ChunkProcessor {
 			ChunkDeltaUpdateS2CPacket packet = (ChunkDeltaUpdateS2CPacket) event.getPacket();
 
 			packet.visitUpdates((pos, state) -> {
-				// java bruh moment lambda bruh to prevent it from not becoming immutable
 				BlockPos impos/*ter*/ = pos.toImmutable();
 				executor.execute(() -> updateBlockConsumer.accept(impos, state));
 			});

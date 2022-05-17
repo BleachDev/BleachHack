@@ -9,15 +9,9 @@
 package org.bleachhack.module.mods;
 
 import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
-import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.chunk.WorldChunk;
-import org.bleachhack.event.events.EventPacket;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -27,6 +21,7 @@ import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
+import org.bleachhack.util.world.ChunkProcessor;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,10 +29,41 @@ import java.util.Set;
 
 public class NewChunks extends Module {
 
-	private static final Direction[] skipDirs = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
-
+	private static final Direction[] SKIP_DIRS = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
+	private static final Direction[] SEARCH_DIRS = new Direction[] { Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.UP };
+	
 	private final Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
 	private final Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());
+	
+	private ChunkProcessor processor = new ChunkProcessor(1,
+			(cp, chunk) -> {
+				if (!newChunks.contains(cp) && mc.world.getChunkManager().getChunk(cp.x, cp.z) == null) {
+					for (int x = 0; x < 16; x++) {
+						for (int y = mc.world.getBottomY(); y < mc.world.getTopY(); y++) {
+							for (int z = 0; z < 16; z++) {
+								FluidState fluid = chunk.getFluidState(x, y, z);
+								
+								if (!fluid.isEmpty() && !fluid.isStill()) {
+									oldChunks.add(cp);
+									return;
+								}
+							}
+						}
+					}
+				}
+			},
+			null,
+			(pos, state) -> {
+				if (!state.getFluidState().isEmpty() && !state.getFluidState().isStill()) {
+					ChunkPos cpos = new ChunkPos(pos);
+					for (Direction dir: SEARCH_DIRS) {
+						if (mc.world.getBlockState(pos.offset(dir)).getFluidState().isStill() && !oldChunks.contains(cpos)) {
+							newChunks.add(cpos);
+							return;
+						}
+					}
+				}
+			});
 
 	public NewChunks() {
 		super("NewChunks", KEY_UNBOUND, ModuleCategory.WORLD, "Detects completely new chunks using certain traits of them.",
@@ -50,7 +76,7 @@ public class NewChunks extends Module {
 				new SettingToggle("OldChunks", false).withDesc("Shows all the chunks that have (most likely) been loaded before.").withChildren(
 						new SettingColor("Color", 230, 50, 50).withDesc("The color of OldChunks.")));
 	}
-
+	
 	@Override
 	public void onDisable(boolean inWorld) {
 		if (getSetting(1).asToggle().getState()) {
@@ -58,64 +84,14 @@ public class NewChunks extends Module {
 			oldChunks.clear();
 		}
 
+		processor.stop();
 		super.onDisable(inWorld);
 	}
 
-	@BleachSubscribe
-	public void onReadPacket(EventPacket.Read event) {
-		Direction[] searchDirs = new Direction[] { Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.UP };
-
-		if (event.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
-			ChunkDeltaUpdateS2CPacket packet = (ChunkDeltaUpdateS2CPacket) event.getPacket();
-
-			packet.visitUpdates((pos, state) -> {
-				if (!state.getFluidState().isEmpty() && !state.getFluidState().isStill()) {
-					ChunkPos chunkPos = new ChunkPos(pos);
-
-					for (Direction dir: searchDirs) {
-						if (mc.world.getBlockState(pos.offset(dir)).getFluidState().isStill() && !oldChunks.contains(chunkPos)) {
-							newChunks.add(chunkPos);
-							return;
-						}
-					}
-				}
-			});
-		} else if (event.getPacket() instanceof BlockUpdateS2CPacket) {
-			BlockUpdateS2CPacket packet = (BlockUpdateS2CPacket) event.getPacket();
-
-			if (!packet.getState().getFluidState().isEmpty() && !packet.getState().getFluidState().isStill()) {
-				ChunkPos chunkPos = new ChunkPos(packet.getPos());
-
-				for (Direction dir: searchDirs) {
-					if (mc.world.getBlockState(packet.getPos().offset(dir)).getFluidState().isStill() && !oldChunks.contains(chunkPos)) {
-						newChunks.add(chunkPos);
-						return;
-					}
-				}
-			}
-		} else if (event.getPacket() instanceof ChunkDataS2CPacket && mc.world != null) {
-			ChunkDataS2CPacket packet = (ChunkDataS2CPacket) event.getPacket();
-
-			ChunkPos pos = new ChunkPos(packet.getX(), packet.getZ());
-			
-			if (!newChunks.contains(pos) && mc.world.getChunkManager().getChunk(packet.getX(), packet.getZ()) == null) {
-				WorldChunk chunk = new WorldChunk(mc.world, pos);
-				chunk.loadFromPacket(packet.getChunkData().getSectionsDataBuf(), new NbtCompound(), packet.getChunkData().getBlockEntities(packet.getX(), packet.getZ()));
-				
-				for (int x = 0; x < 16; x++) {
-					for (int y = mc.world.getBottomY(); y < mc.world.getTopY(); y++) {
-						for (int z = 0; z < 16; z++) {
-							FluidState fluid = chunk.getFluidState(x, y, z);
-							
-							if (!fluid.isEmpty() && !fluid.isStill()) {
-								oldChunks.add(pos);
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
+	@Override
+	public void onEnable(boolean inWorld) {
+		super.onEnable(inWorld);
+		processor.start();
 	}
 
 	@BleachSubscribe
@@ -136,10 +112,10 @@ public class NewChunks extends Module {
 								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
 						if (getSetting(2).asToggle().getState()) {
-							Renderer.drawBoxFill(box, fillColor, skipDirs);
+							Renderer.drawBoxFill(box, fillColor, SKIP_DIRS);
 						}
 	
-						Renderer.drawBoxOutline(box, outlineColor, 2f, skipDirs);
+						Renderer.drawBoxOutline(box, outlineColor, 2f, SKIP_DIRS);
 					}
 				}
 			}
@@ -158,10 +134,10 @@ public class NewChunks extends Module {
 								c.getStartX() + 16, renderY, c.getStartZ() + 16);
 
 						if (getSetting(2).asToggle().getState()) {
-							Renderer.drawBoxFill(box, fillColor, skipDirs);
+							Renderer.drawBoxFill(box, fillColor, SKIP_DIRS);
 						}
 	
-						Renderer.drawBoxOutline(box, outlineColor, 2f, skipDirs);
+						Renderer.drawBoxOutline(box, outlineColor, 2f, SKIP_DIRS);
 					}
 				}
 			}
