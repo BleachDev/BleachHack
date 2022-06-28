@@ -27,7 +27,8 @@ import org.bleachhack.util.io.BleachFileHelper;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class ModuleClickGuiScreen extends ClickGuiScreen {
 	
@@ -36,13 +37,13 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 	private TextFieldWidget searchField;
 
 	public ModuleClickGuiScreen() {
-		super(new LiteralText("ClickGui"));
+		super(Text.literal("ClickGui"));
 	}
 
 	public void init() {
 		super.init();
 
-		searchField = new TextFieldWidget(textRenderer, 2, 14, 100, 12, LiteralText.EMPTY /* @LasnikProgram is author lol */);
+		searchField = new TextFieldWidget(textRenderer, 2, 14, 100, 12, Text.empty() /* @LasnikProgram is author lol */);
 		searchField.visible = false;
 		searchField.setMaxLength(20);
 		searchField.setSuggestion("Search here");

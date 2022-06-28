@@ -1,7 +1,6 @@
 {
   "package": "org.bleachhack.command.commands",
   "commands": [
-	"CmdBetterChat",
 	"CmdBind",
 	"CmdCI",
 	"CmdClickGui",

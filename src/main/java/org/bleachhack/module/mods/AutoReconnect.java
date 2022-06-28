@@ -25,7 +25,8 @@ import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class AutoReconnect extends Module {
 
@@ -70,11 +71,11 @@ public class AutoReconnect extends Module {
 			reconnectTime = System.currentTimeMillis();
 			int buttonH = Math.min(height / 2 + this.reasonHeight / 2 + 9, height - 30);
 
-			addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 22, 200, 20, new LiteralText("Reconnect"), button -> {
+			addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 22, 200, 20, Text.literal("Reconnect"), button -> {
 				if (server != null)
 					ConnectScreen.connect(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
 			}));
-			reconnectButton = addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 44, 200, 20, LiteralText.EMPTY, button -> {
+			reconnectButton = addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 44, 200, 20, Text.empty(), button -> {
 				getSetting(0).asToggle().setValue(!getSetting(0).asToggle().getState());
 				reconnectTime = System.currentTimeMillis();
 			}));
@@ -84,7 +85,7 @@ public class AutoReconnect extends Module {
 			super.render(matrices, mouseX, mouseY, delta);
 
 			int startTime = (int) (getSetting(0).asToggle().getChild(0).asSlider().getValue() * 1000);
-			reconnectButton.setMessage(new LiteralText(
+			reconnectButton.setMessage(Text.literal(
 					getSetting(0).asToggle().getState()
 					? "\u00a7aAutoReconnect [" + (reconnectTime + startTime - System.currentTimeMillis()) + "]"
 							: "\u00a7cAutoReconnect [" + startTime + "]"));

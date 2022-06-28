@@ -56,7 +56,7 @@ public class BowBot extends Module {
 					&& (float) mc.player.getItemUseTime() / (float) CrossbowItem.getPullTime(mc.player.getMainHandStack()) >= 1f) {
 				mc.player.stopUsingItem();
 				mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.UP));
-				mc.interactionManager.interactItem(mc.player, mc.world, Hand.MAIN_HAND);
+				mc.interactionManager.interactItem(mc.player, Hand.MAIN_HAND);
 			} else if (mc.player.getMainHandStack().getItem() == Items.BOW
 					&& BowItem.getPullProgress(mc.player.getItemUseTime()) >= getSetting(0).asToggle().getChild(0).asSlider().getValueFloat()) {
 				mc.player.stopUsingItem();

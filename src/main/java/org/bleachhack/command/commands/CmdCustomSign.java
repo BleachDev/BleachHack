@@ -21,7 +21,6 @@ import org.bleachhack.util.io.BleachFileHelper;
 
 import com.google.gson.JsonArray;
 
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 public class CmdCustomSign extends Command {
@@ -51,7 +50,7 @@ public class CmdCustomSign extends Command {
 		String arg = args[0].toLowerCase(Locale.ENGLISH);
 		boolean all = arg.equals("all");
 
-		Text text = new LiteralText(String.join(" ", Arrays.asList(args).subList(1, args.length)));
+		Text text = Text.literal(String.join(" ", Arrays.asList(args).subList(1, args.length)));
 
 		boolean[] linesToChange = new boolean[] {
 				arg.equals("line1") || all,

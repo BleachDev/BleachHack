@@ -54,11 +54,11 @@ public class AirPlace extends Module {
 
 		if (getSetting(1).asMode().getMode() == 0) {
 			if (((AccessorMinecraftClient) mc).getItemUseCooldown() == 4 && isKeyUsePressed) {
-				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget));
+				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget, 0));
 			}
 		} else if (getSetting(1).asMode().getMode() == 1) {
 			if (!pressed && isKeyUsePressed) {
-				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget));
+				mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, (BlockHitResult) mc.crosshairTarget, 0));
 				pressed = true;
 			} else if (!isKeyUsePressed) {
 				pressed = false;

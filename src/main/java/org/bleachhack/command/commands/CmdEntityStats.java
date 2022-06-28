@@ -17,7 +17,7 @@ import org.bleachhack.util.BleachLogger;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.passive.HorseBaseEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 
 public class CmdEntityStats extends Command {
 
@@ -29,8 +29,8 @@ public class CmdEntityStats extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		if (mc.player.getVehicle() != null) {
-			if (mc.player.getVehicle() instanceof HorseBaseEntity) {
-				HorseBaseEntity h = (HorseBaseEntity) mc.player.getVehicle();
+			if (mc.player.getVehicle() instanceof AbstractHorseEntity) {
+				AbstractHorseEntity h = (AbstractHorseEntity) mc.player.getVehicle();
 
 				BleachLogger.info("Entity Stats:");
 				BleachLogger.info("\u00a7cMax Health: \u00a7r" + (int) h.getMaxHealth() + " HP");
@@ -59,7 +59,7 @@ public class CmdEntityStats extends Command {
 		return bd.doubleValue();
 	}
 
-	public static double getSpeed(HorseBaseEntity horse) {
+	public static double getSpeed(AbstractHorseEntity horse) {
 		return round(20 * horse.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED), 2);
 	}
 
@@ -67,7 +67,7 @@ public class CmdEntityStats extends Command {
 		return round(43.17 * entity.getMovementSpeed(), 2);
 	}
 
-	public static double getJumpHeight(HorseBaseEntity horse) {
+	public static double getJumpHeight(AbstractHorseEntity horse) {
 		return round(-0.1817584952 * Math.pow(horse.getJumpStrength(), 3) + 3.689713992 * Math.pow(horse.getJumpStrength(), 2) + 2.128599134 * horse.getJumpStrength() - 0.343930367, 3);
 	}
 }

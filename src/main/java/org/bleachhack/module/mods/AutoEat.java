@@ -88,7 +88,7 @@ public class AutoEat extends Module {
 		if (hunger != -1) {
 			if (slot == mc.player.getInventory().selectedSlot || slot == 40) {
 				mc.options.useKey.setPressed(true);
-				mc.interactionManager.interactItem(mc.player, mc.world, slot == 40 ? Hand.OFF_HAND : Hand.MAIN_HAND);
+				mc.interactionManager.interactItem(mc.player, slot == 40 ? Hand.OFF_HAND : Hand.MAIN_HAND);
 				eating = true;
 			} else {
 				InventoryUtils.selectSlot(slot);

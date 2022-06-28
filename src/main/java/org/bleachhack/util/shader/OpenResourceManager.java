@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -15,7 +17,6 @@ import java.util.stream.Stream;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceImpl;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
@@ -41,16 +42,16 @@ public class OpenResourceManager implements ResourceManager {
 	}
 
 	@Override
-	public Resource getResource(Identifier id) throws IOException {
+	public Optional<Resource> getResource(Identifier id) {
 		if ("minecraft".equals(id.getNamespace()))
 			return parent.getResource(id);
 
 		if ("__url__".equals(id.getNamespace()))
-			return new ResourceImpl(id.getNamespace(), id, parseURL(id.getPath()), null);
+			return Optional.of(new Resource(id.getNamespace(), () -> parseURL(id.getPath())));
 
 		// Scuffed resource loader
 		Path path = FabricLoader.getInstance().getModContainer(id.getNamespace()).get().findPath("assets/" + id.getNamespace() + "/" + id.getPath()).get();
-		return new ResourceImpl(id.getNamespace(), id, Files.newInputStream(path), null);
+		return Optional.of(new Resource(id.getNamespace(), () -> Files.newInputStream(path)));
 	}
 
 	@Override
@@ -59,18 +60,13 @@ public class OpenResourceManager implements ResourceManager {
 	}
 
 	@Override
-	public boolean containsResource(Identifier id) {
-		return parent.containsResource(id);
-	}
-
-	@Override
-	public List<Resource> getAllResources(Identifier id) throws IOException {
+	public List<Resource> getAllResources(Identifier id) {
 		return parent.getAllResources(id);
 	}
 
 	@Override
-	public Collection<Identifier> findResources(String startingPath, Predicate<String> pathPredicate) {
-		return parent.findResources(startingPath, pathPredicate);
+	public Map<Identifier, Resource> findResources(String startingPath, Predicate<Identifier> allowedPathPredicate) {
+		return parent.findResources(startingPath, allowedPathPredicate);
 	}
 
 	@Override
@@ -81,6 +77,12 @@ public class OpenResourceManager implements ResourceManager {
 	private InputStream parseURL(String path) throws IOException {
 		String decoded = DECODE_PATTERN.matcher(path).replaceAll(m -> Character.toString(Integer.parseInt(m.group(1))));
 		return new URL(decoded).openStream();
+	}
+
+	@Override
+	public Map<Identifier, List<Resource>> findAllResources(String startingPath,
+			Predicate<Identifier> allowedPathPredicate) {
+		return null;
 	}
 
 }

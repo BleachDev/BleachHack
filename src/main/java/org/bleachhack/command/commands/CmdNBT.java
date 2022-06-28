@@ -23,7 +23,7 @@ import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -52,14 +52,14 @@ public class CmdNBT extends Command {
 			if (nbt != null) {
 				Text textNbt = NbtHelper.toPrettyPrintedText(nbt);
 
-				Text copy = new LiteralText("\u00a7e\u00a7l<COPY>")
+				Text copy = Text.literal("\u00a7e\u00a7l<COPY>")
 						.styled(s ->
 						s.withClickEvent(
 								new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, textNbt.getString()))
 						.withHoverEvent(
-								new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Copy the nbt of this item to your clipboard"))));
+								new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy the nbt of this item to your clipboard"))));
 
-				BleachLogger.info(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + textNbt));
+				BleachLogger.info(Text.literal("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + textNbt));
 			}
 		} else if (args[0].equalsIgnoreCase("copy")) {
 			if (args.length != 2) {

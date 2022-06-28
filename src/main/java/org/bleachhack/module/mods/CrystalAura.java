@@ -238,7 +238,7 @@ public class CrystalAura extends Module {
 				Hand hand = InventoryUtils.selectSlot(crystalSlot);
 
 				render = block;
-				mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(vec, dir, block, false));
+				mc.interactionManager.interactBlock(mc.player, hand, new BlockHitResult(vec, dir, block, false));
 
 				places++;
 				if (places >= placeToggle.getChild(6).asSlider().getValueInt()) {

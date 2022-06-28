@@ -50,7 +50,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 
@@ -200,7 +199,7 @@ public class Peek extends Module {
 				134, 134,
 				179, 179);
 
-		Text pageIndexText = new TranslatableText("book.pageIndicator", pageCount + 1, pages.size());
+		Text pageIndexText = Text.translatable("book.pageIndicator", pageCount + 1, pages.size());
 		int pageIndexLength = mc.textRenderer.getWidth(pageIndexText);
 
 		matrices.push();
@@ -292,8 +291,7 @@ public class Peek extends Module {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
-		bufferBuilder.end();
-		BufferRenderer.draw(bufferBuilder);
+		BufferRenderer.drawWithShader(bufferBuilder.end());
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
 	}

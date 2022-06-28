@@ -150,13 +150,13 @@ public class Search extends Module {
 	public void onTick(EventTick event) {
 		Set<Block> blockList = getSetting(5).asList(Block.class).getValue();
 
-		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
+		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.getViewDistance().getValue()) {
 			foundBlocks.clear();
 
 			processor.submitAllLoadedChunks();
 
 			prevBlockList = new HashSet<>(blockList);
-			oldViewDistance = mc.options.viewDistance;
+			oldViewDistance = mc.options.getViewDistance().getValue();
 		}
 	}
 

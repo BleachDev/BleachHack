@@ -18,7 +18,9 @@ import org.bleachhack.util.io.BleachFileHelper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
+
 
 public class CmdWatermark extends Command {
 
@@ -83,7 +85,7 @@ public class CmdWatermark extends Command {
 				BleachHack.watermark.setStrings(args[1], args.length == 3 ? args[2] : "");
 				saveText();
 
-				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
+				BleachLogger.info(Text.literal("Set the watermark to ").append(BleachHack.watermark.getText()));
 			} else if (args[0].equalsIgnoreCase("color")) {
 				if (args.length > 3) {
 					throw new CmdSyntaxException("The watermark can't contain more than 2 colors.");
@@ -94,7 +96,7 @@ public class CmdWatermark extends Command {
 						args.length == 3 ? Integer.parseInt(args[2].replace("x", "").replace("#", ""), 16) : BleachHack.watermark.getColor2());
 				saveColor();
 				
-				BleachLogger.info(new LiteralText("Set the watermark to ").append(BleachHack.watermark.getText()));
+				BleachLogger.info(Text.literal("Set the watermark to ").append(BleachHack.watermark.getText()));
 			} else {
 				throw new CmdSyntaxException();
 			}

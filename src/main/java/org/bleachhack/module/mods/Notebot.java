@@ -160,7 +160,7 @@ public class Notebot extends Module {
 								return;
 						}
 
-						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
+						mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND,
 								new BlockHitResult(Vec3d.ofCenter(e.getKey(), 1), Direction.UP, e.getKey(), true));
 					} else if (tuneMode >= 3) {
 						if (tuneDelay < (tuneMode == 3 ? 3 : 5)) {
@@ -171,7 +171,7 @@ public class Notebot extends Module {
 						int neededNote = e.getValue() < note ? e.getValue() + 25 : e.getValue();
 						int reqTunes = Math.min(tuneMode == 3 ? 5 : 25, neededNote - note);
 						for (int i = 0; i < reqTunes; i++)
-							mc.interactionManager.interactBlock(mc.player, mc.world,
+							mc.interactionManager.interactBlock(mc.player,
 									Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(e.getKey(), 1), Direction.UP, e.getKey(), true));
 
 						tuneDelay = 0;

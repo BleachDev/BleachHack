@@ -5,7 +5,7 @@ import org.bleachhack.mixin.AccessorScreen;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3f;
 
@@ -35,7 +35,7 @@ public class WindowTextWidget extends WindowWidget {
 	}
 
 	public WindowTextWidget(String text, boolean shadow, TextAlign align, float scale, int x, int y, int color) {
-		this(new LiteralText(text), shadow, align, scale, x, y, color);
+		this(Text.literal(text), shadow, align, scale, x, y, color);
 	}
 
 	public WindowTextWidget(Text text, boolean shadow, TextAlign align, float scale, int x, int y, int color) {

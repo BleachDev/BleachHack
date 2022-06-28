@@ -8,8 +8,9 @@
  */
 package org.bleachhack.util;
 
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 public class Watermark {
 
@@ -61,15 +62,15 @@ public class Watermark {
 	}
 
 	public MutableText getText() {
-		MutableText t1 = new LiteralText(text1).styled(s -> s.withColor(color1));
-		return text2 == null ? t1 : t1.append(new LiteralText(text2).styled(s -> s.withColor(color2)));
+		MutableText t1 = Text.literal(text1).styled(s -> s.withColor(color1));
+		return text2 == null ? t1 : t1.append(Text.literal(text2).styled(s -> s.withColor(color2)));
 	}
 
 	public MutableText getShortText() {
 		if (text2.isEmpty()) {
-			return new LiteralText(text1.substring(0, 2)).styled(s -> s.withColor(color1));
+			return Text.literal(text1.substring(0, 2)).styled(s -> s.withColor(color1));
 		} else {
-			return new LiteralText(text1.substring(0, 1)).styled(s -> s.withColor(color1)).append(new LiteralText(text2.substring(0, 1)).styled(s -> s.withColor(color2)));
+			return Text.literal(text1.substring(0, 1)).styled(s -> s.withColor(color1)).append(Text.literal(text2.substring(0, 1)).styled(s -> s.withColor(color2)));
 		}
 	}
 }

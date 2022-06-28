@@ -18,7 +18,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
@@ -54,13 +54,13 @@ import static net.minecraft.client.gui.DrawableHelper.drawCenteredText;
 public class UI extends Module {
 
 	private List<Text> moduleListText = new ArrayList<>();
-	private Text fpsText = LiteralText.EMPTY;
-	private Text pingText = LiteralText.EMPTY;
-	private Text coordsText = LiteralText.EMPTY;
-	private Text tpsText = LiteralText.EMPTY;
-	private Text durabilityText = LiteralText.EMPTY;
-	private Text serverText = LiteralText.EMPTY;
-	private Text timestampText = LiteralText.EMPTY;
+	private Text fpsText = Text.empty();
+	private Text pingText = Text.empty();
+	private Text coordsText = Text.empty();
+	private Text tpsText = Text.empty();
+	private Text durabilityText = Text.empty();
+	private Text serverText = Text.empty();
+	private Text timestampText = Text.empty();
 
 	private long prevTime = 0;
 	private double tps = 20;
@@ -230,7 +230,7 @@ public class UI extends Module {
 
 		for (Module m : ModuleManager.getModules())
 			if (m.isEnabled())
-				moduleListText.add(new LiteralText(m.getName()));
+				moduleListText.add(Text.literal(m.getName()));
 
 		moduleListText.sort(Comparator.comparingInt(t -> -mc.textRenderer.getWidth(t)));
 
@@ -238,21 +238,21 @@ public class UI extends Module {
 			int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().getMode();
 
 			if (watermarkMode == 0) {
-				moduleListText.add(0, BleachHack.watermark.getText().append(new LiteralText(" " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)))));
+				moduleListText.add(0, BleachHack.watermark.getText().append(Text.literal(" " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xf0f0f0)))));
 			} else {
-				moduleListText.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
+				moduleListText.add(0, Text.literal("\u00a7a> BleachHack " + BleachHack.VERSION));
 			}
 		}
 
 		// FPS
 		int fps = MinecraftClient.currentFps;
-		fpsText = new LiteralText("FPS: ")
+		fpsText = Text.literal("FPS: ")
 				.append(colorText(Integer.toString(fps), Math.min(fps, 120) / 360f));
 
 		// Ping
 		PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
 		int ping = playerEntry == null ? 0 : playerEntry.getLatency();
-		pingText = new LiteralText("Ping: ")
+		pingText = Text.literal("Ping: ")
 				.append(colorText(Integer.toString(ping), (800 - MathHelper.clamp(ping, 0, 800)) / 2400f));
 
 		// Coords
@@ -261,17 +261,17 @@ public class UI extends Module {
 		BlockPos pos2 = nether ? new BlockPos(mc.player.getPos().multiply(8, 1, 8))
 				: new BlockPos(mc.player.getPos().multiply(0.125, 1, 0.125));
 
-		coordsText = new LiteralText("XYZ: ")
-				.append(new LiteralText(pos.getX() + " " + pos.getY() + " " + pos.getZ()).styled(s -> s.withColor(nether ? 0xb02020 : 0x40f0f0)))
+		coordsText = Text.literal("XYZ: ")
+				.append(Text.literal(pos.getX() + " " + pos.getY() + " " + pos.getZ()).styled(s -> s.withColor(nether ? 0xb02020 : 0x40f0f0)))
 				.append(" [")
-				.append(new LiteralText(pos2.getX() + " " + pos2.getY() + " " + pos2.getZ()).styled(s -> s.withColor(nether ? 0x40f0f0 : 0xb02020)))
+				.append(Text.literal(pos2.getX() + " " + pos2.getY() + " " + pos2.getZ()).styled(s -> s.withColor(nether ? 0x40f0f0 : 0xb02020)))
 				.append("]");
 
 		// TPS
 		int time = (int) (System.currentTimeMillis() - lastPacket);
 		String suffix = time >= 7500 ? "...." : time >= 5000 ? "..." : time >= 2500 ? ".." : time >= 1200 ? ".." : "";
 
-		tpsText = new LiteralText("TPS: ")
+		tpsText = Text.literal("TPS: ")
 				.append(colorText(Double.toString(tps), (float) MathHelper.clamp(tps - 2, 0, 16) / 48))
 				.append(suffix);
 
@@ -281,24 +281,24 @@ public class UI extends Module {
 			int durability = mainhand.getOrCreateNbt().contains("dmg")
 					? NumberUtils.toInt(mainhand.getOrCreateNbt().get("dmg").asString()) : mainhand.getMaxDamage() - mainhand.getDamage();
 
-			durabilityText = new LiteralText("Durability: ")
+			durabilityText = Text.literal("Durability: ")
 					.append(colorText(Integer.toString(durability), (float) durability / mainhand.getMaxDamage() / 3f % 1f));
 		} else {
-			durabilityText = new LiteralText("Durability: --");
+			durabilityText = Text.literal("Durability: --");
 		}
 
 		// Server
 		String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
-		serverText = new LiteralText("Server: ")
-				.append(new LiteralText(server).styled(s -> s.withColor(Formatting.LIGHT_PURPLE)));
+		serverText = Text.literal("Server: ")
+				.append(Text.literal(server).styled(s -> s.withColor(Formatting.LIGHT_PURPLE)));
 
 		// Timestamp
 		String timeString = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd HH:mm:ss"
 				+ (getSetting(7).asToggle().getChild(0).asToggle().getState() ? " zzz" : "")
 				+ (getSetting(7).asToggle().getChild(1).asToggle().getState() ? " yyyy" : "")));
 
-		timestampText = new LiteralText("Time: ")
-				.append(new LiteralText(timeString).styled(s -> s.withColor(Formatting.YELLOW)));
+		timestampText = Text.literal("Time: ")
+				.append(Text.literal(timeString).styled(s -> s.withColor(Formatting.YELLOW)));
 	}
 
 	@BleachSubscribe
@@ -523,7 +523,7 @@ public class UI extends Module {
 	}
 
 	private static Text colorText(String text, float hue) {
-		return new LiteralText(text).styled(s -> s.withColor(MathHelper.hsvToRgb(hue, 1f, 1f)));
+		return Text.literal(text).styled(s -> s.withColor(MathHelper.hsvToRgb(hue, 1f, 1f)));
 	}
 
 	public static int getRainbow(float sat, float bri, double speed, int offset) {

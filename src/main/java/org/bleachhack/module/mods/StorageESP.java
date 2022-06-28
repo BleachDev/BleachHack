@@ -29,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Direction.Axis;
+import net.minecraft.util.math.random.Random;
+
 import org.bleachhack.event.events.EventEntityRender;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -48,7 +50,6 @@ import org.bleachhack.util.world.WorldUtils;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 public class StorageESP extends Module {
@@ -122,7 +123,7 @@ public class StorageESP extends Module {
 						mc.getBlockRenderManager().getModelRenderer().renderFlat(mc.world,
 								mc.getBlockRenderManager().getModel(state), state, be.getPos(), matrices,
 								colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
-								false, new Random(), 0L, OverlayTexture.DEFAULT_UV);
+								false, Random.create(0L), 0L, OverlayTexture.DEFAULT_UV);
 					}
 				}
 			}

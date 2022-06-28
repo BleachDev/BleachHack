@@ -46,7 +46,7 @@ public class AutoFish extends Module {
 				Hand hand = getHandWithRod();
 				if (hand != null) {
 					// reel back
-					mc.interactionManager.interactItem(mc.player, mc.world, hand);
+					mc.interactionManager.interactItem(mc.player, hand);
 					reeledFish = true;
 					return;
 				}
@@ -59,7 +59,7 @@ public class AutoFish extends Module {
 			Hand newHand = getSetting(0).asMode().getMode() == 1 ? InventoryUtils.selectSlot(getBestRodSlot()) : getHandWithRod();
 			if (newHand != null) {
 				// throw again
-				mc.interactionManager.interactItem(mc.player, mc.world, newHand);
+				mc.interactionManager.interactItem(mc.player, newHand);
 				threwRod = true;
 				reeledFish = false;
 			}

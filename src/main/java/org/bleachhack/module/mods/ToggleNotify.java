@@ -18,7 +18,9 @@ import org.bleachhack.module.ModuleManager;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
+
 
 public class ToggleNotify extends Module {
 	
@@ -79,7 +81,7 @@ public class ToggleNotify extends Module {
 	}
 	
 	private void notify(Module module) {
-		BleachLogger.info(new LiteralText(
+		BleachLogger.info(Text.literal(
 				module.getName() + ": " + (module.isEnabled() ? "\u00a7aEnabled" : "\u00a7cDisabled")));
 	}
 }

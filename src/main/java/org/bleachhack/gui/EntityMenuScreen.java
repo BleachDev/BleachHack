@@ -19,7 +19,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Direction.Axis;
 import net.minecraft.util.math.MathHelper;
@@ -46,7 +46,7 @@ public class EntityMenuScreen extends Screen {
 	private float yaw, pitch;
 
 	public EntityMenuScreen(LivingEntity entity) {
-		super(new LiteralText("Interaction Screen"));
+		super(Text.literal("Interaction Screen"));
 		this.entity = entity;
 	}
 
@@ -144,7 +144,7 @@ public class EntityMenuScreen extends Screen {
 		Vector2 center = new Vector2(width / 2, height / 2);
 		Vector2 mouse = new Vector2(mouseX, mouseY).subtract(center).normalize();
 
-		int scale = Math.max(1, client.options.guiScale);
+		int scale = Math.max(1, client.options.getGuiScale().getValue());
 
 		// Move crossHair based on distance between mouse and center. But with limit
 		float hypot = (float) Math.hypot(width / 2 - mouseX, height / 2 - mouseY);

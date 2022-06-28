@@ -1,7 +1,7 @@
 
 # BleachHack DarkReaper edition
 
-My own skid of BleachHack for 1.18.2
+My own skid of BleachHack for 1.19
 I made this to make Bleach compatible with meteor and even gone so far as changing prefix to + and ClickGui bind to right control  
 I also gave it own visual flavour  
 
@@ -12,7 +12,7 @@ I also gave it own visual flavour
 ## Installation
 ### For normal people
 
-Download [Fabric for Minecraft 1.18](https://fabricmc.net/use/).
+Download [Fabric for Minecraft 1.19](https://fabricmc.net/use/).
 Download the latest version of DarkHack for your Minecraft version from releases.
 
 
@@ -69,7 +69,7 @@ Generate the needed files for your preferred IDE.
 Here are some nice to have mods that are compatible with BleachHack, none of these require Fabric API.
 
 ### [Multiconnect](https://github.com/Earthcomputer/multiconnect) or [ViaFabric](https://github.com/ViaVersion/ViaFabric)
-Mods that allows you to connect to any 1.8-1.18 server from a 1.18 client.
+Mods that allows you to connect to any 1.12-1.19 server from a 1.19 client.
 
 ### [Baritone](https://github.com/cabaletta/baritone)
 Baritone allows you to automate tasks such as walking, mining or building.
