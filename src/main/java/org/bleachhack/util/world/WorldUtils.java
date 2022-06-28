@@ -191,7 +191,7 @@ public class WorldUtils {
 			}
 
 			mc.interactionManager.interactBlock(mc.player, hand,
-					new BlockHitResult(Vec3d.of(pos), airPlace ? d : d.getOpposite(), airPlace ? pos : pos.offset(d), false));
+					new BlockHitResult(Vec3d.ofCenter(pos), airPlace ? d : d.getOpposite(), airPlace ? pos : pos.offset(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))
 				mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, Mode.RELEASE_SHIFT_KEY));
