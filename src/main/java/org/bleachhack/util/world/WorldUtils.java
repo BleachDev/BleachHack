@@ -83,7 +83,7 @@ public class WorldUtils {
 	public static List<WorldChunk> getLoadedChunks() {
 		List<WorldChunk> chunks = new ArrayList<>();
 
-		int viewDist = mc.options.viewDistance;
+		int viewDist = mc.options.getViewDistance().getValue();
 
 		for (int x = -viewDist; x <= viewDist; x++) {
 			for (int z = -viewDist; z <= viewDist; z++) {
@@ -190,7 +190,7 @@ public class WorldUtils {
 				mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(hand));
 			}
 
-			mc.interactionManager.interactBlock(mc.player, mc.world, hand,
+			mc.interactionManager.interactBlock(mc.player, hand,
 					new BlockHitResult(Vec3d.of(pos), airPlace ? d : d.getOpposite(), airPlace ? pos : pos.offset(d), false));
 
 			if (RIGHTCLICKABLE_BLOCKS.contains(neighborBlock))

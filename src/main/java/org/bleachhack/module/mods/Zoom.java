@@ -15,7 +15,7 @@ import org.bleachhack.setting.module.SettingSlider;
 
 public class Zoom extends Module {
 
-	public double prevFov;
+	public int prevFov;
 	public double prevSens;
 
 	public Zoom() {
@@ -27,17 +27,17 @@ public class Zoom extends Module {
 	public void onEnable(boolean inWorld) {
 		super.onEnable(inWorld);
 
-		prevFov = mc.options.fov;
-		prevSens = mc.options.mouseSensitivity;
+		prevFov = mc.options.getFov().getValue();
+		prevSens = mc.options.getMouseSensitivity().getValue();
 
-		mc.options.fov = prevFov / getSetting(0).asSlider().getValue();
-		mc.options.mouseSensitivity = prevSens / getSetting(0).asSlider().getValue();
+		mc.options.getFov().setValue((int) (prevFov / getSetting(0).asSlider().getValue()));
+		mc.options.getMouseSensitivity().setValue(prevSens / getSetting(0).asSlider().getValue());
 	}
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		mc.options.fov = prevFov;
-		mc.options.mouseSensitivity = prevSens;
+		mc.options.getFov().setValue(prevFov);
+		mc.options.getMouseSensitivity().setValue(prevSens);
 
 		super.onDisable(inWorld);
 	}

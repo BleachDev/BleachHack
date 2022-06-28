@@ -16,7 +16,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class WindowManagerScreen extends WindowScreen {
 
@@ -26,7 +27,7 @@ public class WindowManagerScreen extends WindowScreen {
 
 	@SafeVarargs
 	public WindowManagerScreen(Triple<WindowScreen, String, ItemStack>... windows) {
-		super(LiteralText.EMPTY, false);
+		super(Text.empty(), false);
 		this.windows = windows;
 	}
 

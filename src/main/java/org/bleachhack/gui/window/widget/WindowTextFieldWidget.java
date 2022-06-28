@@ -3,7 +3,8 @@ package org.bleachhack.gui.window.widget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class WindowTextFieldWidget extends WindowWidget {
 
@@ -11,7 +12,7 @@ public class WindowTextFieldWidget extends WindowWidget {
 
 	public WindowTextFieldWidget(int x, int y, int width, int height, String text) {
 		super(x, y, x + width, y + height);
-		this.textField = new TextFieldWidget(mc.textRenderer, x, y, width, height, LiteralText.EMPTY);
+		this.textField = new TextFieldWidget(mc.textRenderer, x, y, width, height, Text.empty());
 		this.textField.setText(text);
 		this.textField.setMaxLength(32767);
 	}

@@ -17,8 +17,9 @@ import org.bleachhack.command.CommandManager;
 import org.bleachhack.util.BleachLogger;
 
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 public class CmdHelp extends Command {
 
@@ -40,7 +41,7 @@ public class CmdHelp extends Command {
 			if (!cmd.isEmpty() && Stream.of(c.getAliases()).noneMatch(cmd::equalsIgnoreCase))
 				continue;
 
-			MutableText text = new LiteralText(getPrefix() + c.getAliases()[0] + ": \u00a7f" + c.getDescription())
+			MutableText text = Text.literal(getPrefix() + c.getAliases()[0] + ": \u00a7f" + c.getDescription())
 					.styled(s -> s.withColor(BleachLogger.INFO_COLOR));
 
 			BleachLogger.noPrefix(

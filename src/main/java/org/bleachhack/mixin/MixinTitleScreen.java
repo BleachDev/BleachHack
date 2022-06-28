@@ -36,7 +36,7 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 
 @Mixin(TitleScreen.class)
@@ -79,7 +79,7 @@ public class MixinTitleScreen extends Screen {
 						}
 					});
 		} else {
-			addDrawableChild(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, new LiteralText("BH"), button -> {
+			addDrawableChild(new ButtonWidget(width / 2 - 124, height / 4 + 96, 20, 20, Text.literal("BH"), button -> {
 				BleachTitleScreen.customTitleScreen = !BleachTitleScreen.customTitleScreen;
 				BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(true));
 				client.setScreen(new TitleScreen(false));

@@ -7,7 +7,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 
 public class WindowCheckboxWidget extends WindowWidget {
@@ -16,7 +16,7 @@ public class WindowCheckboxWidget extends WindowWidget {
 	public Text text;
 	
 	public WindowCheckboxWidget(int x, int y, String text, boolean pressed) {
-		this(x, y, new LiteralText(text), pressed);
+		this(x, y, Text.literal(text), pressed);
 	}
 
 	public WindowCheckboxWidget(int x, int y, Text text, boolean pressed) {

@@ -24,7 +24,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 
 public class AutoLog extends Module {
@@ -81,7 +81,7 @@ public class AutoLog extends Module {
 			int health = getSetting(0).asToggle().getChild(0).asSlider().getValueInt();
 
 			if ((getSetting(0).asToggle().getChild(1).asToggle().getState() || !hasTotem) && playerHealth <= health) {
-				return new LiteralText("[AutoLog] Your health (" + playerHealth + " HP) was lower than " + health + " HP.");
+				return Text.literal("[AutoLog] Your health (" + playerHealth + " HP) was lower than " + health + " HP.");
 			}
 
 			if (getSetting(0).asToggle().getChild(2).asToggle().getState() &&  mc.player.getVehicle() instanceof LivingEntity) {
@@ -89,7 +89,7 @@ public class AutoLog extends Module {
 				int vehicleHealth = (int) (vehicle.getHealth() + vehicle.getAbsorptionAmount());
 
 				if (vehicleHealth < health) {
-					return new LiteralText("[AutoLog] Your vehicle health (" + vehicleHealth + " HP) was lower than " + health + " HP.");
+					return Text.literal("[AutoLog] Your vehicle health (" + vehicleHealth + " HP) was lower than " + health + " HP.");
 				}
 			}
 		}
@@ -104,7 +104,7 @@ public class AutoLog extends Module {
 				int attackDamage = (int) DamageUtils.getAttackDamage(player, mc.player);
 
 				if (player.distanceTo(mc.player) <= 6 && attackDamage >= playerHealth) {
-					return new LiteralText("[AutoLog] " + player.getDisplayName().getString() + " could kill you (dealing " + attackDamage + " damage).");
+					return Text.literal("[AutoLog] " + player.getDisplayName().getString() + " could kill you (dealing " + attackDamage + " damage).");
 				}
 			}
 		}
@@ -112,7 +112,7 @@ public class AutoLog extends Module {
 		if (getSetting(2).asToggle().getState()) {
 			for (Entity e: mc.world.getEntities()) {
 				if (e instanceof EndCrystalEntity && mc.player.distanceTo(e) <= getSetting(2).asToggle().getChild(0).asSlider().getValue()) {
-					return new LiteralText("[AutoLog] End crystal appeared within range.");
+					return Text.literal("[AutoLog] End crystal appeared within range.");
 				}
 			}
 		}
@@ -129,7 +129,7 @@ public class AutoLog extends Module {
 				}
 
 				if (player.distanceTo(mc.player) <= range) {
-					return new LiteralText("[AutoLog] " + player.getDisplayName().getString() + " appeared " + (int) player.distanceTo(mc.player) + " blocks away.");
+					return Text.literal("[AutoLog] " + player.getDisplayName().getString() + " appeared " + (int) player.distanceTo(mc.player) + " blocks away.");
 				}
 			}
 		}

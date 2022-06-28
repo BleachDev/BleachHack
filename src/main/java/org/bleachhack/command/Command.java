@@ -9,7 +9,7 @@
 package org.bleachhack.command;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.setting.option.Option;
@@ -58,7 +58,7 @@ public abstract class Command {
 	}
 
 	public Text getHelpTooltip() {
-		return new LiteralText("\u00a77Category: " + getCategory() + "\n")
+		return Text.literal("\u00a77Category: " + getCategory() + "\n")
 				.append("Aliases: \u00a7f" + getPrefix() + String.join(" \u00a77/\u00a7f " + getPrefix(), getAliases()) + "\n").styled(s -> s.withColor(BleachLogger.INFO_COLOR))
 				.append("Usage: \u00a7f" + getSyntax() + "\n").styled(s -> s.withColor(BleachLogger.INFO_COLOR))
 				.append("Description: \u00a7f" + getDescription()).styled(s -> s.withColor(BleachLogger.INFO_COLOR));

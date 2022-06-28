@@ -22,7 +22,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 public class EntityMenuEditScreen extends WindowScreen {
@@ -44,7 +44,7 @@ public class EntityMenuEditScreen extends WindowScreen {
 	private TextFieldWidget editValueField;
 
 	public EntityMenuEditScreen(MutablePairList<String, String> interactions) {
-		super(new LiteralText("Interaction Edit Screen"));
+		super(Text.literal("Interaction Edit Screen"));
 
 		this.interactions = interactions;
 	}
@@ -61,11 +61,11 @@ public class EntityMenuEditScreen extends WindowScreen {
 				"Edit Interactions", new ItemStack(Items.OAK_SIGN)));
 
 		if (editNameField == null) {
-			editNameField = new TextFieldWidget(textRenderer, 0, 0, 1000, 16, LiteralText.EMPTY);
+			editNameField = new TextFieldWidget(textRenderer, 0, 0, 1000, 16, Text.empty());
 		}
 
 		if (editValueField == null) {
-			editValueField = new TextFieldWidget(textRenderer, 0, 0, 1000, 16, LiteralText.EMPTY);
+			editValueField = new TextFieldWidget(textRenderer, 0, 0, 1000, 16, Text.empty());
 		}
 	}
 

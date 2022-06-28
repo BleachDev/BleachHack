@@ -31,12 +31,12 @@ public class Fullbright extends Module {
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		if (mc.options.gamma > 1) {
-			double g = mc.options.gamma;
+		if (mc.options.getGamma().getValue() > 1) {
+			double g = mc.options.getGamma().getValue();
 
 			while (g > 1) {
 				double nextStep = Math.max(g - 1.6, 1);
-				BleachQueue.add("fullbright", () -> mc.options.gamma = nextStep);
+				BleachQueue.add("fullbright", () -> mc.options.getGamma().setValue(nextStep));
 				g -= 1.6;
 			}
 		}
@@ -61,10 +61,10 @@ public class Fullbright extends Module {
 	@BleachSubscribe
 	public void onTick(EventTick event) {
 		if (getSetting(0).asMode().getMode() == 0) {
-			if (mc.options.gamma < getSetting(1).asSlider().getValue()) {
-				mc.options.gamma = Math.min(mc.options.gamma + 1, getSetting(1).asSlider().getValue());
-			} else if (mc.options.gamma > getSetting(1).asSlider().getValue()) {
-				mc.options.gamma = Math.max(mc.options.gamma - 1, getSetting(1).asSlider().getValue());
+			if (mc.options.getGamma().getValue() < getSetting(1).asSlider().getValue()) {
+				mc.options.getGamma().setValue(Math.min(mc.options.getGamma().getValue() + 1, getSetting(1).asSlider().getValue()));
+			} else if (mc.options.getGamma().getValue() > getSetting(1).asSlider().getValue()) {
+				mc.options.getGamma().setValue(Math.max(mc.options.getGamma().getValue() - 1, getSetting(1).asSlider().getValue()));
 			}
 		} else if (getSetting(0).asMode().getMode() == 1) {
 			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 500, 0));

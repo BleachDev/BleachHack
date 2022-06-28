@@ -43,11 +43,12 @@ accessible    field    net/minecraft/client/sound/SoundSystem    sounds    Lcom/
 
 # ChunkBuilder
 # - For MixinChunkRebuildTask to overwrite the chunk building method
+accessible    class    net/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask
+accessible    class    net/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask$RenderData
 accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    nonEmptyLayers    Ljava/util/Set;
-accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    initializedLayers    Ljava/util/Set;
-accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    empty    Z
 accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    occlusionGraph    Lnet/minecraft/client/render/chunk/ChunkOcclusionData;
 accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    bufferState    Lnet/minecraft/client/render/BufferBuilder$State;
+accessible    method    net/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask$RenderData    <init>    ()V
 
 
 # RenderLayer
@@ -130,8 +131,8 @@ mutable       field    net/minecraft/network/packet/s2c/play/ExplosionS2CPacket 
 
 # GameMessageS2CPacket
 # - For BetterChat to be able to edit the inbound message
-accessible    field    net/minecraft/network/packet/s2c/play/GameMessageS2CPacket    message    Lnet/minecraft/text/Text;
-mutable       field    net/minecraft/network/packet/s2c/play/GameMessageS2CPacket    message    Lnet/minecraft/text/Text;
+# accessible    field    net/minecraft/network/packet/s2c/play/GameMessageS2CPacket    message    Lnet/minecraft/text/Text;
+# mutable       field    net/minecraft/network/packet/s2c/play/GameMessageS2CPacket    message    Lnet/minecraft/text/Text;
 
 
 # PlayerMoveC2SPacket

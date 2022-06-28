@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.bleachhack.BleachHack;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -30,7 +30,7 @@ public class BleachLogger {
 	// Info
 	
 	public static void info(String s) {
-		info(new LiteralText(s));
+		info(Text.literal(s));
 	}
 
 	public static void info(Text t) {
@@ -40,14 +40,14 @@ public class BleachLogger {
 					//.append("\u00a73\u00a7lINFO: \u00a73")
 					.append(((MutableText) t).styled(s -> s.withColor(INFO_COLOR))));
 		} catch (Exception e) {
-			logger.log(Level.INFO, t.asString());
+			logger.log(Level.INFO, t.getString());
 		}
 	}
 	
 	// Warn
 	
 	public static void warn(String s) {
-		warn(new LiteralText(s));
+		warn(Text.literal(s));
 	}
 
 	public static void warn(Text t) {
@@ -57,14 +57,14 @@ public class BleachLogger {
 					//.append("\u00a7e\u00a7lWARN: \u00a7e")
 					.append(((MutableText) t).styled(s -> s.withColor(WARN_COLOR))));
 		} catch (Exception e) {
-			logger.log(Level.WARN, t.asString());
+			logger.log(Level.WARN, t.getString());
 		}
 	}
 	
 	// Error
 	
 	public static void error(String s) {
-		error(new LiteralText(s));
+		error(Text.literal(s));
 	}
 
 	public static void error(Text t) {
@@ -74,12 +74,12 @@ public class BleachLogger {
 					//.append("\u00a7c\u00a7lERROR: \u00a7c")
 					.append(((MutableText) t).styled(s -> s.withColor(ERROR_COLOR))));
 		} catch (Exception e) {
-			logger.log(Level.ERROR, t.asString());
+			logger.log(Level.ERROR, t.getString());
 		}
 	}
 
 	public static void noPrefix(String s) {
-		noPrefix(new LiteralText(s));
+		noPrefix(Text.literal(s));
 	}
 
 	public static void noPrefix(Text text) {
@@ -91,8 +91,8 @@ public class BleachLogger {
 	}
 
 	private static MutableText getBHText(int color) {
-		return new LiteralText("[").styled(s -> s.withColor(color))
+		return Text.literal("[").styled(s -> s.withColor(color))
 				.append(BleachHack.watermark.getText())
-				.append(new LiteralText("] ").styled(s -> s.withColor(color)));
+				.append(Text.literal("] ").styled(s -> s.withColor(color)));
 	}
 }

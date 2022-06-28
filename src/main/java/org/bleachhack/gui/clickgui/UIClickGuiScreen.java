@@ -20,7 +20,8 @@ import org.bleachhack.util.io.BleachFileHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class UIClickGuiScreen extends ClickGuiScreen {
 
@@ -33,7 +34,7 @@ public class UIClickGuiScreen extends ClickGuiScreen {
 	}
 
 	public UIClickGuiScreen(UIContainer uiContainer) {
-		super(new LiteralText("UI Editor"));
+		super(Text.literal("UI Editor"));
 		this.uiContainer = uiContainer;
 	}
 

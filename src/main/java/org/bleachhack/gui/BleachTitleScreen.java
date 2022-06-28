@@ -21,10 +21,10 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import org.bleachhack.BleachHack;
@@ -59,7 +59,7 @@ public class BleachTitleScreen extends WindowScreen {
 	}
 
 	public BleachTitleScreen() {
-		super(new TranslatableText("narrator.screen.title"));
+		super(Text.translatable("narrator.screen.title"));
 	}
 
 	@Override
@@ -102,15 +102,15 @@ public class BleachTitleScreen extends WindowScreen {
 		));
 
 		// Main Text
-		getWindow(0).addWidget(new WindowTextWidget(LiteralText.EMPTY, true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, h / 4 - 25, 0)
+		getWindow(0).addWidget(new WindowTextWidget(Text.empty(), true, WindowTextWidget.TextAlign.MIDDLE, 3f, w / 2, h / 4 - 25, 0)
 				.withRenderEvent((widget, ms, wx, wy) -> {
-					MutableText bhText = new LiteralText("");
+					MutableText bhText = Text.literal("");
 
 					int i = 0;
 					for (char c: "BleachHack".toCharArray()) {
 						int fi = i++;
 						bhText.append(
-								new LiteralText(String.valueOf(c)).styled(s -> s.withColor(TextColor.fromRgb(UI.getRainbowFromSettings(fi)))));
+								Text.literal(String.valueOf(c)).styled(s -> s.withColor(TextColor.fromRgb(UI.getRainbowFromSettings(fi)))));
 					}
 
 					((WindowTextWidget) widget).setText(bhText);
@@ -120,11 +120,11 @@ public class BleachTitleScreen extends WindowScreen {
 		getWindow(0).addWidget(new WindowTextWidget(BleachHack.VERSION, true, WindowTextWidget.TextAlign.MIDDLE, 1.5f, w / 2, h / 4 - 6, 0xffc050));
 
 		// Splash
-		getWindow(0).addWidget(new WindowTextWidget(LiteralText.EMPTY, true, WindowTextWidget.TextAlign.MIDDLE, 2f, -20f, w / 2 + 80, h / 4 + 6, 0xffff00)
+		getWindow(0).addWidget(new WindowTextWidget(Text.empty(), true, WindowTextWidget.TextAlign.MIDDLE, 2f, -20f, w / 2 + 80, h / 4 + 6, 0xffff00)
 				.withRenderEvent((widget, ms, wx, wy) -> {
 					if (splash != null) {
 						WindowTextWidget windgetText = (WindowTextWidget) widget;
-						windgetText.setText(new LiteralText(splash));
+						windgetText.setText(Text.literal(splash));
 						windgetText.color = (windgetText.color & 0x00ffffff) | ((splashTicks * 17) << 24);
 
 						float scale = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);

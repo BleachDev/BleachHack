@@ -21,7 +21,7 @@ import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -144,7 +144,7 @@ public class AutoSteal extends Module {
 						WorldUtils.facePosAuto(lookVec.x, lookVec.y, lookVec.z, getSetting(3).asToggle().getChild(2).asRotate());
 					}
 
-					mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND,
+					mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND,
 							new BlockHitResult(lookVec, Direction.UP, be.getPos(), false));
 					opened.put(be.getPos(), getSetting(3).asToggle().getChild(1).asSlider().getValueInt() * 20);
 					return;
@@ -175,13 +175,13 @@ public class AutoSteal extends Module {
 					if (renderItems.get(i).getCount() > 1) {
 						double w = mc.textRenderer.getWidth(renderItems.get(i).getCount() + "") / 220d;
 						WorldRenderer.drawText(
-								new LiteralText(renderItems.get(i).getCount() + ""),
+								Text.literal(renderItems.get(i).getCount() + ""),
 								startPos.x, startPos.y - i / 9 * 0.4 - 0.04, startPos.z, (4.5 - i % 9) * 0.3 - w, 0, 0.5, false);
 					}
 				}
 			} else if (getSetting(0).asMode().getMode() == 2) {
 				WorldRenderer.drawText(
-						new LiteralText("[" + currentItems.stream().filter(i -> !i.isEmpty() && !isBlacklisted(i.getItem())).count() + "]"),
+						Text.literal("[" + currentItems.stream().filter(i -> !i.isEmpty() && !isBlacklisted(i.getItem())).count() + "]"),
 						currentPos.getX() + 0.5, currentPos.getY() + 1.2, currentPos.getZ() + 0.5, 0.8, false);
 			}
 		}

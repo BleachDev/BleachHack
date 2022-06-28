@@ -1,7 +1,7 @@
 package org.bleachhack.command.exception;
 
 import net.minecraft.command.CommandException;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 
 import java.io.Serial;
@@ -16,7 +16,7 @@ public class CmdSyntaxException extends CommandException {
     }
 
     public CmdSyntaxException(String message) {
-        this(new LiteralText(message));
+        this(Text.literal(message));
     }
     
     public CmdSyntaxException(Text message) {

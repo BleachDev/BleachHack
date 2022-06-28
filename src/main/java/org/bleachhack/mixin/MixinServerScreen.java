@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 
 @Mixin(MultiplayerScreen.class)
@@ -29,7 +29,7 @@ public class MixinServerScreen extends Screen {
 
 	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
-		addDrawableChild(new ButtonWidget(5, 7, 50, 20, new LiteralText("Protocol"), button -> {
+		addDrawableChild(new ButtonWidget(5, 7, 50, 20, Text.literal("Protocol"), button -> {
 			client.setScreen(new ProtocolScreen((MultiplayerScreen) client.currentScreen));
 		}));
 	}

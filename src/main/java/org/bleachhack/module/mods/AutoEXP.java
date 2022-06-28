@@ -142,7 +142,7 @@ public class AutoEXP extends Module {
 					for (int t = 0; t < toThrow; t++) {
 						if (InventoryUtils.selectSlot(false, i -> mc.player.getInventory().getStack(i).getItem() == Items.EXPERIENCE_BOTTLE) == Hand.MAIN_HAND) {
 							// Trying to use without bruh
-							mc.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND));
+							mc.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, 0));
 							ItemStack itemStack2 = mc.player.getMainHandStack().use(mc.world, mc.player, Hand.MAIN_HAND).getValue();
 							if (itemStack2 != mc.player.getMainHandStack()) {
 								mc.player.setStackInHand(Hand.MAIN_HAND, itemStack2);

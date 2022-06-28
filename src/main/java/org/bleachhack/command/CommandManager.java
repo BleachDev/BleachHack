@@ -10,8 +10,10 @@ package org.bleachhack.command;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.command.exception.CmdSyntaxException;
@@ -107,7 +109,7 @@ public class CommandManager {
 				} catch (CmdSyntaxException e) {
 					BleachLogger.error(e.getTextMessage());
 
-					MutableText text = new LiteralText(Command.getPrefix() + c.getAliases()[0] + ": \u00a7f" + c.getDescription())
+					MutableText text = Text.literal(Command.getPrefix() + c.getAliases()[0] + ": \u00a7f" + c.getDescription())
 							.styled(s -> s.withColor(BleachLogger.INFO_COLOR));
 
 					BleachLogger.info(

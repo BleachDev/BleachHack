@@ -19,7 +19,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class ProtocolScreen extends Screen {
 	
@@ -33,14 +34,14 @@ public class ProtocolScreen extends Screen {
 	private Screen parent;
 
 	public ProtocolScreen(Screen parent) {
-		super(new LiteralText("Protocol Screen"));
+		super(Text.literal("Protocol Screen"));
 		this.parent = parent;
 	}
 
 	public void init() {
 		super.init();
 
-		addButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 50, 196, 20, new LiteralText("Done"), button -> {
+		addButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 50, 196, 20, Text.literal("Done"), button -> {
 			int i = Integer.parseInt(protocolField.getText());
 			int i1 = Integer.parseInt(packVerField.getText());
 
@@ -54,28 +55,28 @@ public class ProtocolScreen extends Screen {
 			close();
 		}));
 
-		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 73, 196, 20, new LiteralText("Cancel"),
+		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 73, 196, 20, Text.literal("Cancel"),
 				button -> close()));
 
-		versionField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, LiteralText.EMPTY));
+		versionField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, Text.empty()));
 		versionField.setText(SharedConstants.getGameVersion().getName());
 
-		protocolField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 35, 196, 18, LiteralText.EMPTY));
+		protocolField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 35, 196, 18, Text.empty()));
 		protocolField.setText(Integer.toString(SharedConstants.getGameVersion().getProtocolVersion()));
 		protocolField.setChangedListener(text -> updateAddButton());
 
-		packVerField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 10, 196, 18, LiteralText.EMPTY));
+		packVerField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 10, 196, 18, Text.empty()));
 		packVerField.setText(Integer.toString(SharedConstants.getGameVersion().getPackVersion(PackType.DATA)));
 		packVerField.setChangedListener(text -> updateAddButton());
 		
-		brandField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 128, 18, LiteralText.EMPTY));
+		brandField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 128, 18, Text.empty()));
 		brandField.setText(ClientBrandRetriever.getClientModName());
 		
-		addDrawableChild(new ButtonWidget(width / 2 + 33, height / 2 + 14, 20, 20, new LiteralText("V"),
+		addDrawableChild(new ButtonWidget(width / 2 + 33, height / 2 + 14, 20, 20, Text.literal("V"),
 				button -> brandField.setText("vanilla")));
-		addDrawableChild(new ButtonWidget(width / 2 + 56, height / 2 + 14, 20, 20, new LiteralText("Fa"),
+		addDrawableChild(new ButtonWidget(width / 2 + 56, height / 2 + 14, 20, 20, Text.literal("Fa"),
 				button -> brandField.setText("fabric")));
-		addDrawableChild(new ButtonWidget(width / 2 + 79, height / 2 + 14, 20, 20, new LiteralText("Fo"),
+		addDrawableChild(new ButtonWidget(width / 2 + 79, height / 2 + 14, 20, 20, Text.literal("Fo"),
 				button -> brandField.setText("forge")));
 	}
 

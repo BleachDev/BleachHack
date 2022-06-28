@@ -8,10 +8,13 @@
  */
 package org.bleachhack.command.commands;
 
+import net.minecraft.network.encryption.Signer;
+import net.minecraft.network.message.MessageSignature;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.CommandManager;
 
+import net.minecraft.network.message.ChatMessageSigner;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 public class CmdSay extends Command {
@@ -23,7 +26,19 @@ public class CmdSay extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		CommandManager.allowNextMsg = true;
-		mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket(String.join(" ", args)));
+
+		String message = String.join(" ", args);
+		MessageSignature sig = MessageSignature.none();
+		try {
+			Signer signer2 = mc.getProfileKeys().getSigner();
+			if (signer2 != null) {
+				sig = ChatMessageSigner.create(mc.player.getUuid()).sign(signer2, message);
+			}
+		}
+		catch (Exception exception) {
+		}
+
+		mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket(String.join(" ", args), sig, true));
 	}
 
 }

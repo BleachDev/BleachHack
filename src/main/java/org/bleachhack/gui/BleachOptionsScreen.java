@@ -21,7 +21,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class BleachOptionsScreen extends WindowScreen {
 
@@ -30,7 +31,7 @@ public class BleachOptionsScreen extends WindowScreen {
 	private WindowScrollbarWidget scrollbar;
 
 	public BleachOptionsScreen(Screen parent) {
-		super(new LiteralText("BleachHack Options"));
+		super(Text.literal("BleachHack Options"));
 		this.parent = parent;
 	}
 
@@ -85,7 +86,7 @@ public class BleachOptionsScreen extends WindowScreen {
 
 			// Name text (at the end because of... reasons)
 			getWindow(window).addWidget(new WindowTextWidget(
-					new LiteralText(entry.getName()).styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(entry.getTooltip())))),
+					Text.literal(entry.getName()).styled(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(entry.getTooltip())))),
 					true, x - 107, y, 0xffffff));
 
 

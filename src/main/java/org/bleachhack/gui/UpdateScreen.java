@@ -15,9 +15,10 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import org.apache.commons.io.FileUtils;
 import org.bleachhack.BleachHack;
@@ -46,7 +47,7 @@ public class UpdateScreen extends WindowScreen {
 	private String updateResult = "";
 
 	public UpdateScreen(Screen parent, JsonObject updateJson) {
-		super(new LiteralText("BleachHack Update Available"));
+		super(Text.literal("BleachHack Update Available"));
 		this.parent = parent;
 		this.updateJson = updateJson;
 	}
@@ -165,7 +166,7 @@ public class UpdateScreen extends WindowScreen {
 
 		getWindow(1).addWidget(new WindowTextWidget("", true, WindowTextWidget.TextAlign.MIDDLE, wd, 16, 0xc05050)
 				.withRenderEvent((wg, ms, wx, wy)
-						-> ((WindowTextWidget) wg).setText(new LiteralText(updateResult))));
+						-> ((WindowTextWidget) wg).setText(Text.literal(updateResult))));
 	}
 
 	@Override

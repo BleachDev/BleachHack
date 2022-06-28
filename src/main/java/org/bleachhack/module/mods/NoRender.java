@@ -38,12 +38,12 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.Text;
 
 public class NoRender extends Module {
 
-	public Text[] signText = new Text[] { LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY, LiteralText.EMPTY };
+	public Text[] signText = new Text[] { Text.empty(), Text.empty(), Text.empty(), Text.empty() };
 
 	public NoRender() {
 		super("NoRender", KEY_UNBOUND, ModuleCategory.RENDER, "Blocks certain elements from rendering.",
@@ -87,7 +87,7 @@ public class NoRender extends Module {
 
 		if (signText != null) {
 			for (int i = 0; i < Math.min(4, signText.getAsJsonArray().size()); i++) {
-				this.signText[i] = new LiteralText(signText.getAsJsonArray().get(i).getAsString());
+				this.signText[i] = Text.literal(signText.getAsJsonArray().get(i).getAsString());
 			}
 		}
 	}

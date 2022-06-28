@@ -24,9 +24,10 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 
@@ -91,11 +92,11 @@ public class CmdEnchant extends Command {
 		}
 
 		if (args[0].equalsIgnoreCase("list")) {
-			MutableText text = new LiteralText("");
+			MutableText text = Text.literal("");
 			int i = 0;
 			for (String[] s: enchantments.keySet()) {
 				int color = i % 2 == 0 ? BleachLogger.INFO_COLOR : Formatting.AQUA.getColorValue();
-				text.append(new LiteralText("\u00a77[\u00a7r" + String.join("\u00a77/\u00a7r", s) + "\u00a77] ").setStyle(Style.EMPTY.withColor(color)));
+				text.append(Text.literal("\u00a77[\u00a7r" + String.join("\u00a77/\u00a7r", s) + "\u00a77] ").setStyle(Style.EMPTY.withColor(color)));
 				i++;
 			}
 

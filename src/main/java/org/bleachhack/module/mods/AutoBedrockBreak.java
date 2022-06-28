@@ -100,7 +100,7 @@ public class AutoBedrockBreak extends Module {
 				case 6:
 					Vec3d leverCenter = Vec3d.ofCenter(pos.up(6));
 					if (mc.player.getEyePos().distanceTo(leverCenter) <= 4.75) {
-						mc.interactionManager.interactBlock(mc.player, mc.world, Hand.MAIN_HAND, new BlockHitResult(leverCenter, Direction.DOWN, pos.up(6), false));
+						mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, new BlockHitResult(leverCenter, Direction.DOWN, pos.up(6), false));
 						step++;
 					}
 
@@ -123,7 +123,7 @@ public class AutoBedrockBreak extends Module {
 						Hand hand = InventoryUtils.selectSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON);
 						if (hand != null) {
 							mc.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(hand,
-									new BlockHitResult(Vec3d.ofBottomCenter(pos.up()), Direction.DOWN, pos.up(), false)));
+									new BlockHitResult(Vec3d.ofBottomCenter(pos.up()), Direction.DOWN, pos.up(), false), 0));
 						}
 					}
 
@@ -161,7 +161,7 @@ public class AutoBedrockBreak extends Module {
 
 		Hand hand = InventoryUtils.selectSlot(slot);
 		if (hand != null) {
-			mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(hitPos, dir, pos, false));
+			mc.interactionManager.interactBlock(mc.player, hand, new BlockHitResult(hitPos, dir, pos, false));
 			return true;
 		}
 

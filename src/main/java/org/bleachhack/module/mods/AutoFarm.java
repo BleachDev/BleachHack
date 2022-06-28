@@ -98,7 +98,7 @@ public class AutoFarm extends Module {
 					}
 
 					Hand hand = InventoryUtils.selectSlot(slot);
-					mc.interactionManager.interactBlock(mc.player, mc.world, hand,
+					mc.interactionManager.interactBlock(mc.player, hand,
 							new BlockHitResult(Vec3d.ofCenter(bestBlock, 1), Direction.UP, bestBlock, false));
 					mossMap.put(bestBlock, 100);
 					return;
@@ -119,7 +119,7 @@ public class AutoFarm extends Module {
 					Hand hand = InventoryUtils.selectSlot(true, i -> mc.player.getInventory().getStack(i).getItem() instanceof HoeItem);
 					
 					if (hand != null) {
-						mc.interactionManager.interactBlock(mc.player, mc.world, hand,
+						mc.interactionManager.interactBlock(mc.player, hand,
 								new BlockHitResult(Vec3d.ofCenter(pos, 1), Direction.UP, pos, false));
 						return;
 					}
@@ -178,7 +178,7 @@ public class AutoFarm extends Module {
 							|| (bonemealSetting.getChild(4).asToggle().getState() && block instanceof MushroomPlantBlock)
 							|| (bonemealSetting.getChild(5).asToggle().getState() && (block instanceof SaplingBlock || block instanceof AzaleaBlock) && canPlaceSapling(pos))) {
 						Hand hand = InventoryUtils.selectSlot(slot);
-						mc.interactionManager.interactBlock(mc.player, mc.world, hand,
+						mc.interactionManager.interactBlock(mc.player, hand,
 								new BlockHitResult(Vec3d.ofCenter(pos, 1), Direction.UP, pos, false));
 						return;
 					}
@@ -212,7 +212,7 @@ public class AutoFarm extends Module {
 	
 	private boolean canPlaceSapling(BlockPos pos) {
 		return BlockPos.stream(pos.getX() - 1, pos.getY() + 1, pos.getZ() - 1, pos.getX() + 1, pos.getY() + 5, pos.getZ() + 1)
-				.allMatch(b -> TreeFeature.canTreeReplace(mc.world, b));
+				.allMatch(b -> TreeFeature.canReplace(mc.world, b));
 	}
 	
 	private boolean canTill(Block block) {

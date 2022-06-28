@@ -1,7 +1,6 @@
 package org.bleachhack.module.mods;
 
 import java.io.IOException;
-import java.util.Random;
 
 import org.bleachhack.event.events.EventRenderBlockOutline;
 import org.bleachhack.event.events.EventWorldRender;
@@ -33,6 +32,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 
 public class BlockHighlight extends Module {
 
@@ -99,7 +99,7 @@ public class BlockHighlight extends Module {
 				mc.getBlockRenderManager().getModelRenderer().renderFlat(
 						mc.world, mc.getBlockRenderManager().getModel(state), state, pos, matrices,
 						colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
-						false, new Random(), 0L, OverlayTexture.DEFAULT_UV);
+						false, Random.create(0), 0L, OverlayTexture.DEFAULT_UV);
 			}
 
 			colorVertexer.draw();

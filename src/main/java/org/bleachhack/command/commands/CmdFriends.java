@@ -10,8 +10,10 @@ package org.bleachhack.command.commands;
 
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
@@ -57,23 +59,23 @@ public class CmdFriends extends Command {
 						.min((f1, f2) -> f2.length() - f1.length())
 						.get().length() + 3;
 
-				MutableText text = new LiteralText("Friends:");
+				MutableText text = Text.literal("Friends:");
 
 				for (String f : BleachHack.friendMang.getFriends()) {
 					String spaces = StringUtils.repeat(' ', len - f.length());
 
 					text
-					.append(new LiteralText("\n> " + f + spaces)
+					.append(Text.literal("\n> " + f + spaces)
 							.styled(style -> style
 									.withColor(BleachLogger.INFO_COLOR)))
-					.append(new LiteralText("\u00a7c[Del]")
+					.append(Text.literal("\u00a7c[Del]")
 							.styled(style -> style
-									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Remove " + f + " from your friendlist")))
+									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Remove " + f + " from your friendlist")))
 									.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getPrefix() + "friends remove " + f))))
 					.append("   ")
-					.append(new LiteralText("\u00a73[NameMC]")
+					.append(Text.literal("\u00a73[NameMC]")
 							.styled(style -> style
-									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Open NameMC page of " + f)))
+									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Open NameMC page of " + f)))
 									.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + f))));
 				}
 

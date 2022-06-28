@@ -8,6 +8,8 @@
  */
 package org.bleachhack.mixin;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventEntityControl;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,22 +25,20 @@ import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.world.World;
 
-@Mixin({ LlamaEntity.class, PigEntity.class, StriderEntity.class })
+@Mixin({AbstractHorseEntity.class, PigEntity.class, StriderEntity.class})
 public abstract class MixinLlamaPigStriderEntity extends AnimalEntity {
 
 	private MixinLlamaPigStriderEntity(EntityType<? extends AnimalEntity> entityType, World world) {
 		super(entityType, world);
 	}
 
-	@Inject(method = "canBeControlledByRider", at = @At("HEAD"), cancellable = true)
-	private void canBeControlledByRider(CallbackInfoReturnable<Boolean> info) {
-		if (this.hasPassengers() && this.getPrimaryPassenger() == MinecraftClient.getInstance().player) {
-			EventEntityControl event = new EventEntityControl();
-			BleachHack.eventBus.post(event);
+	@Inject(method = "isSaddled", at = @At("HEAD"), cancellable = true)
+	private void isSaddled(CallbackInfoReturnable<Boolean> info) {
+		EventEntityControl event = new EventEntityControl();
+		BleachHack.eventBus.post(event);
 
-			if (event.canBeControlled() != null) {
-				info.setReturnValue(event.canBeControlled());
-			}
+		if (event.canBeControlled() != null) {
+			info.setReturnValue(event.canBeControlled());
 		}
 	}
 }

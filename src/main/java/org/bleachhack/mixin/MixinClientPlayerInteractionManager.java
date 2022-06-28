@@ -21,14 +21,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 
 @Mixin(ClientPlayerInteractionManager.class)
 public class MixinClientPlayerInteractionManager {
@@ -83,7 +81,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Inject(method = "interactBlock", at = @At("HEAD"), cancellable = true)
-	private void interactBlock(ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> callback) {
+	private void interactBlock(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> callback) {
 		EventInteract.InteractBlock event = new EventInteract.InteractBlock(hand, hitResult);
 		BleachHack.eventBus.post(event);
 
@@ -93,7 +91,7 @@ public class MixinClientPlayerInteractionManager {
 	}
 
 	@Inject(method = "interactItem", at = @At("HEAD"), cancellable = true)
-	private void interactItem(PlayerEntity player, World world, Hand hand, CallbackInfoReturnable<ActionResult> callback) {
+	private void interactItem(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> callback) {
 		EventInteract.InteractItem event = new EventInteract.InteractItem(hand);
 		BleachHack.eventBus.post(event);
 

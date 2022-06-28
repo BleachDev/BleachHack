@@ -45,6 +45,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 
 public class NotebotUtils {
 
@@ -114,7 +115,7 @@ public class NotebotUtils {
 	private static void play(SoundEvent sound, float pitch) {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		Vec3d vec = mc.player == null ? Vec3d.ZERO : mc.player.getPos();
-		mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, vec.x, vec.y, vec.z));
+		mc.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.RECORDS, 3.0F, pitch, Random.create(0L), vec.x, vec.y, vec.z));
 	}
 
 	public static Song parse(Path path) {

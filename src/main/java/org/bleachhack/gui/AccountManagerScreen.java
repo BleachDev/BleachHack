@@ -25,7 +25,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bleachhack.BleachHack;
@@ -61,7 +61,7 @@ public class AccountManagerScreen extends WindowScreen {
 	private WindowTextWidget loginResult;
 
 	public AccountManagerScreen() {
-		super(new LiteralText("Account Manager"));
+		super(Text.literal("Account Manager"));
 	}
 
 	public void init() {
@@ -78,7 +78,7 @@ public class AccountManagerScreen extends WindowScreen {
 		int listW = Math.max(140, w / 3);
 
 		// Right side
-		loginResult = mainWindow.addWidget(new WindowTextWidget(loginResult != null ? loginResult.getText() : LiteralText.EMPTY, true, listW + 11, 96, 0xc0c0c0));
+		loginResult = mainWindow.addWidget(new WindowTextWidget(loginResult != null ? loginResult.getText() : Text.empty(), true, listW + 11, 96, 0xc0c0c0));
 
 		mainWindow.addWidget(new WindowButtonWidget(w - 70, h - 22, w - 3, h - 3, "Login", () -> {
 			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
@@ -90,7 +90,7 @@ public class AccountManagerScreen extends WindowScreen {
 			}
 
 			AuthenticationException exception = account.login();
-			loginResult.setText(new LiteralText(exception == null ? "\u00a7aLogin Successful!" : "\u00a7c" + exception.getMessage()));
+			loginResult.setText(Text.literal(exception == null ? "\u00a7aLogin Successful!" : "\u00a7c" + exception.getMessage()));
 			account.success = exception == null ? 2 : 1;
 			saveAccounts();
 
@@ -300,7 +300,7 @@ public class AccountManagerScreen extends WindowScreen {
 				addAccount(account);
 				getWindow(2).closed = true;
 			} catch (AuthenticationException e) {
-				result.setText(new LiteralText("\u00a7c" + e.getMessage()));
+				result.setText(Text.literal("\u00a7c" + e.getMessage()));
 			}
 		}));
 	}
@@ -310,7 +310,7 @@ public class AccountManagerScreen extends WindowScreen {
 		getWindow(0).getWidgets().removeAll(textWidgets);
 		textFieldWidgets.clear();
 		textWidgets.clear();
-		loginResult.setText(LiteralText.EMPTY);
+		loginResult.setText(Text.empty());
 
 		if (selected != -1) {
 			Account a = accounts.get(selected);

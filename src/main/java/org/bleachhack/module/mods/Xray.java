@@ -68,12 +68,12 @@ public class Xray extends Module {
 		mc.chunkCullingEnabled = false;
 		mc.worldRenderer.reload();
 
-		gamma = mc.options.gamma;
+		gamma = mc.options.getGamma().getValue();
 	}
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		mc.options.gamma = gamma;
+		mc.options.getGamma().setValue(gamma);
 
 		mc.chunkCullingEnabled = true;
 		mc.worldRenderer.reload();
@@ -83,7 +83,7 @@ public class Xray extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick eventPreUpdate) {
-		mc.options.gamma = 69.420;
+		mc.options.getGamma().setValue(69.420);
 	}
 
 	@BleachSubscribe

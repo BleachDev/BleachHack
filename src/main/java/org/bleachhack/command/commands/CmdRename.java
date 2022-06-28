@@ -14,7 +14,8 @@ import org.bleachhack.command.CommandCategory;
 import org.bleachhack.util.BleachLogger;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
 
 public class CmdRename extends Command {
 
@@ -31,7 +32,7 @@ public class CmdRename extends Command {
 
 		ItemStack i = mc.player.getInventory().getMainHandStack();
 
-		i.setCustomName(new LiteralText(StringUtils.join(args, ' ').replace("&", "\u00a7").replace("\u00a7\u00a7", "&")));
+		i.setCustomName(Text.literal(StringUtils.join(args, ' ').replace("&", "\u00a7").replace("\u00a7\u00a7", "&")));
 		BleachLogger.info("Renamed Item");
 	}
 
