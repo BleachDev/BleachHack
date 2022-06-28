@@ -48,7 +48,7 @@ public class AutoEZ extends Module {
     @BleachSubscribe
     public void onPacketRead(EventPacket event) {
         if (event.getPacket() instanceof GameMessageS2CPacket) {
-            String msg = ((GameMessageS2CPacket) event.getPacket()).getMessage().getString();
+            String msg = ((GameMessageS2CPacket) event.getPacket()).content().getString();
             if (msg.contains(mc.player.getName().getString()) && msg.contains("by")) {
                 for (PlayerEntity e : mc.world.getPlayers()) {
                     if (e == mc.player)
@@ -59,7 +59,7 @@ public class AutoEZ extends Module {
                     if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().getString())
                             && !msg.contains("<" + e.getName().getString() + ">") && !msg.contains("<" + mc.player.getName().getString() + ">") && (list.get(index + 1).equals(mc.player.getName().getString()))) {
                         if (getSetting(0).asMode().getMode() == 0) {
-                            mc.player.sendChatMessage(e.getName().getString() + " Just got EZed with the muscles of DarkHack");
+                            mc.player.sendChatMessage(e.getName().getString() + " just got EZed with the muscles of DarkHack");
                         } else if (getSetting(0).asMode().getMode() == 2) {
                             mc.player.sendChatMessage("GG, " + e.getName().getString() + ", but DarkHack is ontop!");
                         } else if (getSetting(0).asMode().getMode() == 1) {

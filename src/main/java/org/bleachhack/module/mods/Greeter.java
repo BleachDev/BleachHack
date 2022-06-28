@@ -69,7 +69,7 @@ public class Greeter extends Module {
             if (lines.isEmpty()) return;
             if (player == null) return;
             if (mc.player == null) return;
-            if (player.equals(mc.player.getDisplayName().asString())) return;
+            if (player.equals(mc.player.getDisplayName().toString())) return;
             if (getSetting(0).asMode().getMode() == 0) {
                 message_queue.add(lines.get(lineCount).replace("$p", player));
             } else if (getSetting(0).asMode().getMode() == 1) {

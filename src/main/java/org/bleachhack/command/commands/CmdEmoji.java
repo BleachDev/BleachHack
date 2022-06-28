@@ -34,39 +34,39 @@ public class CmdEmoji extends Command {
         }
 
         if (args[0].equalsIgnoreCase("shrug")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("¯\\_(ツ)_/¯"));
+            mc.player.sendChatMessage("¯\\_(ツ)_/¯");
         } else if (args[0].equalsIgnoreCase("angry")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(ಠ益ಠ)"));
+            mc.player.sendChatMessage("(ಠ益ಠ)");
         } else if (args[0].equalsIgnoreCase("wtf")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(゜-゜)"));
+            mc.player.sendChatMessage("(゜-゜)");
         } else if (args[0].equalsIgnoreCase("bruh")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(¬_¬)"));
+            mc.player.sendChatMessage("(¬_¬)");
         } else if (args[0].equalsIgnoreCase("dealwithit")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(▀ˉL▀ˉ)"));
+            mc.player.sendChatMessage("(▀ˉL▀ˉ)");
         } else if (args[0].equalsIgnoreCase("scared")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(ಠ_ಠ)"));
+            mc.player.sendChatMessage("(ಠ_ಠ)");
         } else if (args[0].equalsIgnoreCase("happy")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(ᵔ ‿ʖ ᵔ)"));
+            mc.player.sendChatMessage("(ᵔ ‿ʖ ᵔ)");
         } else if (args[0].equalsIgnoreCase("yay")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(｡◕‿◕｡)"));
+            mc.player.sendChatMessage("(｡◕‿◕｡)");
         } else if (args[0].equalsIgnoreCase("blush")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(✿◠‿◠)"));
+            mc.player.sendChatMessage("(✿◠‿◠)");
         } else if (args[0].equalsIgnoreCase("vibe")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("~(˘▾˘~)"));
+            mc.player.sendChatMessage("~(˘▾˘~)");
         } else if (args[0].equalsIgnoreCase("doggo")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(ᵔᴥᵔ)"));
+            mc.player.sendChatMessage("(ᵔᴥᵔ)");
         } else if (args[0].equalsIgnoreCase("kitty")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(^•ﻌ•^)"));
+            mc.player.sendChatMessage("(^•ﻌ•^)");
         } else if (args[0].equalsIgnoreCase("party")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("♪ ┗( ･o･)┓ ♪"));
+            mc.player.sendChatMessage("♪ ┗( ･o･)┓ ♪");
         } else if (args[0].equalsIgnoreCase("tableflip")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("(╯°□°）╯︵ ┻━┻"));
+            mc.player.sendChatMessage("(╯°□°）╯︵ ┻━┻");
         } else if (args[0].equalsIgnoreCase("angryflip")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻"));
+            mc.player.sendChatMessage("┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻");
         } else if (args[0].equalsIgnoreCase("dontflip")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("┳━┳ ¯\\_(ツ)"));
+            mc.player.sendChatMessage("┳━┳ ¯\\_(ツ)");
         } else if (args[0].equalsIgnoreCase("unflip")) {
-            mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket("┳━┳ ノ(°-°ノ)"));
+            mc.player.sendChatMessage("┳━┳ ノ(°-°ノ)");
         } else {
             throw new CmdSyntaxException();
         }
