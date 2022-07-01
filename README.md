@@ -1,13 +1,13 @@
 
 # BleachHack
-![](https://img.shields.io/github/downloads/bleachdrinker420/BleachHack/total?style=flat-square)
-![](https://img.shields.io/tokei/lines/github/BleachDrinker420/BleachHack?style=flat-square)
-![](https://img.shields.io/github/languages/code-size/bleachdrinker420/BleachHack?style=flat-square)
-![](https://img.shields.io/github/last-commit/bleachdrinker420/BleachHack?style=flat-square)
+![](https://img.shields.io/github/downloads/bleachdev/BleachHack/total?style=flat-square)
+![](https://img.shields.io/tokei/lines/github/bleachdev/BleachHack?style=flat-square)
+![](https://img.shields.io/github/languages/code-size/bleachdev/BleachHack?style=flat-square)
+![](https://img.shields.io/github/last-commit/bleachdev/BleachHack?style=flat-square)
 ![](https://img.shields.io/badge/daily%20commit-yes-blue?style=flat-square)
 ![](https://img.shields.io/discord/620600892718055434?style=flat-square)
 
-Obama approved Minecraft utility mod for Fabric 1.17 and 1.18.
+Obama approved Minecraft utility mod for Fabric 1.18 and 1.19.
 
 > Website: https://bleachhack.org/  
 > Discord: https://bleachhack.org/discord
