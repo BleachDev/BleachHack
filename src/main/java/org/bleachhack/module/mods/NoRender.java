@@ -81,8 +81,9 @@ public class NoRender extends Module {
 						new SettingToggle("Falling Blocks", false).withDesc("Removes falling blocks."),                            // 3-1
 						new SettingToggle("Minecarts", false).withDesc("Removes minecarts."),                                      // 3-2
 						new SettingToggle("Snowballs", false).withDesc("Removes snowballs."),                                      // 3-3
-						new SettingToggle("Xp Orbs", false).withDesc("Removes experience orbs."),
-						new SettingToggle("Items", false).withDesc("Removes items.")));
+						new SettingToggle("Xp Orbs", false).withDesc("Removes experience orbs."),                                  // 3-4
+						new SettingToggle("Items", false).withDesc("Removes items."),                                              // 3-5
+						new SettingToggle("Glowing", false).withDesc("Removes glow effect.")));                                    // 3-6
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 

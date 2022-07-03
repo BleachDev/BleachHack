@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -33,6 +34,7 @@ public class Trail extends Module {
 	public Trail() {
 		super("Trail", KEY_UNBOUND, ModuleCategory.RENDER, "Shows a trail behind you.",
 				new SettingToggle("Trail", true).withDesc("Enable trailing."),
+				new SettingToggle("Spectator Trail", false).withDesc("Enable trailing when spectating."),
 				new SettingToggle("KeepTrail", false).withDesc("Keep the trail after turning the module off."),
 				new SettingColor("Color", 200, 50, 50).withDesc("Main trail color."),
 				new SettingToggle("BlendColor", true).withDesc("Blends the main color with a second color.").withChildren(
@@ -44,7 +46,7 @@ public class Trail extends Module {
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		if (!getSetting(1).asToggle().getState()) {
+		if (!getSetting(2).asToggle().getState()) {
 			trails.clear();
 		}
 
@@ -54,36 +56,44 @@ public class Trail extends Module {
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (!getSetting(0).asToggle().getState()) {
-			return;
+		if (getSetting(0).asToggle().getState()) {
+			if (trails.isEmpty() || lastVec == null) {
+				lastVec = mc.player.getPos().add(0, 0.1, 0);
+				trails.put(mc.player.getPos(), lastVec);
+			} else if (mc.player.getPos().add(0, 0.1, 0).distanceTo(lastVec) > 0.15) {
+				trails.put(lastVec, mc.player.getPos().add(0, 0.1, 0));
+				lastVec = mc.player.getPos().add(0, 0.1, 0);
+			}
 		}
 
-		if (trails.isEmpty() || lastVec == null) {
-			lastVec = mc.player.getPos().add(0, 0.1, 0);
-			trails.put(mc.player.getPos(), lastVec);
-		} else if (mc.player.getPos().add(0, 0.1, 0).distanceTo(lastVec) > 0.15) {
-			trails.put(lastVec, mc.player.getPos().add(0, 0.1, 0));
-			lastVec = mc.player.getPos().add(0, 0.1, 0);
+		if (getSetting(1).asToggle().getState() && mc.player.isSpectator()) {
+			if (trails.isEmpty() || lastVec == null) {
+				lastVec = mc.cameraEntity.getPos().add(0, 0.1, 0);
+				trails.put(mc.cameraEntity.getPos(), lastVec);
+			} else if (mc.cameraEntity.getPos().add(0, 0.1, 0).distanceTo(lastVec) > 0.15) {
+				trails.put(lastVec, mc.cameraEntity.getPos().add(0, 0.1, 0));
+				lastVec = mc.cameraEntity.getPos().add(0, 0.1, 0);
+			}
 		}
 	}
 
 	@BleachSubscribe
 	public void onRender(EventWorldRender.Post event) {
-		int color = getSetting(2).asColor().getRGB();
-		int secondColor = getSetting(3).asToggle().getChild(0).asColor().getRGB();
+		int color = getSetting(3).asColor().getRGB();
+		int secondColor = getSetting(4).asToggle().getChild(0).asColor().getRGB();
 
 		int count = 250;
 		boolean rev = false;
 		for (Entry<Vec3d, Vec3d> e : trails.entrySet()) {
-			if (getSetting(3).asToggle().getState()) {
+			if (getSetting(4).asToggle().getState()) {
 				color = blendColor(color, secondColor, count / 255f);
 			}
 
 			Renderer.drawLine(
 					e.getKey().x, e.getKey().y, e.getKey().z,
 					e.getValue().x, e.getValue().y, e.getValue().z,
-					LineColor.single((color & 0xff0000) >> 16, (color & 0xff00) >> 8, color & 0xff, (int) (getSetting(5).asSlider().getValueFloat() * 255)),
-					getSetting(4).asSlider().getValueFloat());
+					LineColor.single((color & 0xff0000) >> 16, (color & 0xff00) >> 8, color & 0xff, (int) (getSetting(6).asSlider().getValueFloat() * 255)),
+					getSetting(5).asSlider().getValueFloat());
 
 			if (count < 5 || count > 250) {
 				rev = !rev;
