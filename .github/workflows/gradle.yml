@@ -3,7 +3,9 @@
 
 name: DarkHack Workflow
 
-on: push
+on:
+  push:
+    branches: [ 1.19 ]
 
 jobs:
   build-linux:
