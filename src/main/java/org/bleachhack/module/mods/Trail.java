@@ -66,7 +66,7 @@ public class Trail extends Module {
 			}
 		}
 
-		if (getSetting(1).asToggle().getState() && mc.player.isSpectator()) {
+		if (getSetting(1).asToggle().getState() && mc.player.isSpectator() && mc.cameraEntity != mc.player) {
 			if (trails.isEmpty() || lastVec == null) {
 				lastVec = mc.cameraEntity.getPos().add(0, 0.1, 0);
 				trails.put(mc.cameraEntity.getPos(), lastVec);
