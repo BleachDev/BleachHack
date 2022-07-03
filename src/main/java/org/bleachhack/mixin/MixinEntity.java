@@ -12,9 +12,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventPlayerPushed;
+import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.NoRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Entity.class)
@@ -29,6 +33,13 @@ public class MixinEntity {
 			args.set(0, event.getPushX());
 			args.set(1, event.getPushY());
 			args.set(2, event.getPushZ());
+		}
+	}
+
+	@Inject(method = "isGlowing", at = @At("HEAD"), cancellable=true)
+	private void onIsGlowing(CallbackInfoReturnable<Boolean> callback) {
+		if (ModuleManager.getModule(NoRender.class).isEntityToggled(6)) {
+			callback.setReturnValue(false);
 		}
 	}
 }
