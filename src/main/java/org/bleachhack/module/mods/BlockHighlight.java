@@ -33,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import org.bleachhack.util.shader.ShaderLoader;
 
 public class BlockHighlight extends Module {
 
@@ -54,7 +55,7 @@ public class BlockHighlight extends Module {
 
 		try {
 			shader = new ShaderEffectWrapper(
-					new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), new Identifier("bleachhack", "shaders/post/entity_outline.json")));
+					ShaderLoader.loadEffect(mc.getFramebuffer(), new Identifier("bleachhack", "shaders/post/entity_outline.json")));
 
 			colorVertexer = new ColorVertexConsumerProvider(shader.getFramebuffer("main"), BleachCoreShaders::getColorOverlayShader);
 		} catch (JsonSyntaxException | IOException e) {
