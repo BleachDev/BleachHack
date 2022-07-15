@@ -48,7 +48,7 @@ public class NoRender extends Module {
 	public NoRender() {
 		super("NoRender", KEY_UNBOUND, ModuleCategory.RENDER, "Blocks certain elements from rendering.",
 				new SettingToggle("Overlays", true).withDesc("Removes certain overlays.").withChildren(                            // 0
-						new SettingToggle("Blindness", true).withDesc("Removes the blindness effect."),                            // 0-0
+						new SettingToggle("Fog", true).withDesc("Removes fog, darkness effect and blindness."),                    // 0-0
 						new SettingToggle("Fire", true).withDesc("Removes the fire overlay."),                                     // 0-1
 						new SettingToggle("Hurtcam", true).withDesc("Removes shaking when you get hurt."),                         // 0-2
 						new SettingToggle("Liquid", true).withDesc("Removes the underwater overlay when you're in water."),        // 0-3
@@ -68,7 +68,7 @@ public class NoRender extends Module {
 								new SettingToggle("Sound", false).withDesc("Removes the totem sound when a totem is used.")),
 						new SettingToggle("EG Curse", true).withDesc("Removes the elder guardian curse."),                         // 1-2
 						new SettingToggle("Maps", false).withDesc("Blocks mapart (useful if you're streaming)."),                  // 1-3
-						new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag.")),       // 1-4
+						new SettingToggle("Skylight", false).withDesc("Disables skylight updates to reduce skylight lag.")),        // 1-4
 				
 				new SettingToggle("Particles", true).withDesc("Removes certain particles from the world.").withChildren(           // 2
 						new SettingToggle("Campfires", true).withDesc("Removes campfire smoke particles."),                        // 2-0

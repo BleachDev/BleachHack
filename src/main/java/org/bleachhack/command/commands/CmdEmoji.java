@@ -8,23 +8,16 @@
  */
 package org.bleachhack.command.commands;
 
-import com.google.gson.JsonPrimitive;
-import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
-import org.bleachhack.command.CommandManager;
 
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import org.bleachhack.command.exception.CmdSyntaxException;
-import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.DiscordRPC;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.io.BleachFileHelper;
 
 public class CmdEmoji extends Command {
 
     public CmdEmoji() {
-        super("emoji", "Sends emoji to chat.", "emoji shrug | emoji angry | emoji wtf | emoji bruh | emoji dealwithit | emoji scared | emoji happy | emoji yay | emoji blush | emoji vibe | emoji doggo | emoji kitty | emoji party | emoji tableflip | emoji angryflip | emoji dontflip | emoji unflip", CommandCategory.MISC);
+        super("emoji", "Sends emoji to chat.", "emoji shrug | emoji smirk | emoji angry | emoji wtf | emoji bruh | emoji dealwithit | emoji scared | emoji happy | emoji yay | emoji blush | emoji vibe | emoji wink |  emoji doggo | emoji kitty | emoji kiss |  emoji party | emoji tableflip | emoji angryflip | emoji dontflip | emoji unflip | emoji zombie", CommandCategory.MISC,
+                "e");
     }
 
     @Override
@@ -35,6 +28,8 @@ public class CmdEmoji extends Command {
 
         if (args[0].equalsIgnoreCase("shrug")) {
             mc.player.sendChatMessage("¯\\_(ツ)_/¯");
+        } else if (args[0].equalsIgnoreCase("smirk")) {
+            mc.player.sendChatMessage("(´°‿ʖ´°)");
         } else if (args[0].equalsIgnoreCase("angry")) {
             mc.player.sendChatMessage("(ಠ益ಠ)");
         } else if (args[0].equalsIgnoreCase("wtf")) {
@@ -53,10 +48,14 @@ public class CmdEmoji extends Command {
             mc.player.sendChatMessage("(✿◠‿◠)");
         } else if (args[0].equalsIgnoreCase("vibe")) {
             mc.player.sendChatMessage("~(˘▾˘~)");
+        } else if (args[0].equalsIgnoreCase("wink")) {
+            mc.player.sendChatMessage("(◕‿↼)");
         } else if (args[0].equalsIgnoreCase("doggo")) {
             mc.player.sendChatMessage("(ᵔᴥᵔ)");
         } else if (args[0].equalsIgnoreCase("kitty")) {
             mc.player.sendChatMessage("(^•ﻌ•^)");
+        } else if (args[0].equalsIgnoreCase("kiss")) {
+            mc.player.sendChatMessage("(￣3￣)");
         } else if (args[0].equalsIgnoreCase("party")) {
             mc.player.sendChatMessage("♪ ┗( ･o･)┓ ♪");
         } else if (args[0].equalsIgnoreCase("tableflip")) {
@@ -67,6 +66,8 @@ public class CmdEmoji extends Command {
             mc.player.sendChatMessage("┳━┳ ¯\\_(ツ)");
         } else if (args[0].equalsIgnoreCase("unflip")) {
             mc.player.sendChatMessage("┳━┳ ノ(°-°ノ)");
+        } else if (args[0].equalsIgnoreCase("zombie")) {
+            mc.player.sendChatMessage("[¬°-°]¬");
         } else {
             throw new CmdSyntaxException();
         }
