@@ -48,7 +48,7 @@ public class NoRender extends Module {
 	public NoRender() {
 		super("NoRender", KEY_UNBOUND, ModuleCategory.RENDER, "Blocks certain elements from rendering.",
 				new SettingToggle("Overlays", true).withDesc("Removes certain overlays.").withChildren(                            // 0
-						new SettingToggle("Fog", true).withDesc("Removes fog,  darkness effect and blindness."),                   // 0-0
+						new SettingToggle("Fog", true).withDesc("Removes fog, darkness effect and blindness."),                    // 0-0
 						new SettingToggle("Fire", true).withDesc("Removes the fire overlay."),                                     // 0-1
 						new SettingToggle("Hurtcam", true).withDesc("Removes shaking when you get hurt."),                         // 0-2
 						new SettingToggle("Liquid", true).withDesc("Removes the underwater overlay when you're in water."),        // 0-3
