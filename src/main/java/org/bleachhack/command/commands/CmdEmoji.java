@@ -8,18 +8,10 @@
  */
 package org.bleachhack.command.commands;
 
-import com.google.gson.JsonPrimitive;
-import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
-import org.bleachhack.command.CommandManager;
 
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import org.bleachhack.command.exception.CmdSyntaxException;
-import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.DiscordRPC;
-import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.io.BleachFileHelper;
 
 public class CmdEmoji extends Command {
 
