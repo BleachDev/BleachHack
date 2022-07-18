@@ -24,7 +24,7 @@ repositories {
 		url "https://jitpack.io"
 	}
 	maven {
-		url "https://maven.meteordev.org"
+		url "https://maven.meteordev.org/releases"
 	}
 }
 
