@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -103,7 +105,6 @@ public class SculkESP extends Module {
             Blocks.POTTED_JUNGLE_SAPLING,
             Blocks.POTTED_SPRUCE_SAPLING,
             Blocks.SWEET_BERRY_BUSH,
-            Blocks.SEAGRASS,
             Blocks.SEA_PICKLE,
             Blocks.FERN,
             Blocks.LARGE_FERN,
@@ -279,7 +280,82 @@ public class SculkESP extends Module {
             Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE,
             Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE,
             Blocks.STONE_BUTTON,
-            Blocks.POLISHED_BLACKSTONE_BUTTON));
+            Blocks.POLISHED_BLACKSTONE_BUTTON,
+            Blocks.ANDESITE_WALL,
+            Blocks.BLACKSTONE_WALL,
+            Blocks.BRICK_WALL,
+            Blocks.COBBLED_DEEPSLATE_WALL,
+            Blocks.DEEPSLATE_BRICK_WALL,
+            Blocks.DEEPSLATE_TILE_WALL,
+            Blocks.COBBLESTONE_WALL,
+            Blocks.DIORITE_WALL,
+            Blocks.END_STONE_BRICK_WALL,
+            Blocks.GRANITE_WALL,
+            Blocks.MOSSY_COBBLESTONE_WALL,
+            Blocks.MOSSY_STONE_BRICK_WALL,
+            Blocks.MUD_BRICK_WALL,
+            Blocks.PRISMARINE_WALL,
+            Blocks.STONE_BRICK_WALL,
+            Blocks.SANDSTONE_WALL,
+            Blocks.RED_SANDSTONE_WALL,
+            Blocks.NETHER_BRICK_WALL,
+            Blocks.RED_NETHER_BRICK_WALL,
+            Blocks.POLISHED_BLACKSTONE_WALL,
+            Blocks.POLISHED_BLACKSTONE_BRICK_WALL,
+            Blocks.POLISHED_DEEPSLATE_WALL,
+            Blocks.ANDESITE_SLAB,
+            Blocks.BLACKSTONE_SLAB,
+            Blocks.BRICK_SLAB,
+            Blocks.COBBLED_DEEPSLATE_SLAB,
+            Blocks.DEEPSLATE_BRICK_SLAB,
+            Blocks.DEEPSLATE_TILE_SLAB,
+            Blocks.COBBLESTONE_SLAB,
+            Blocks.DIORITE_SLAB,
+            Blocks.END_STONE_BRICK_SLAB,
+            Blocks.GRANITE_SLAB,
+            Blocks.MOSSY_COBBLESTONE_SLAB,
+            Blocks.MOSSY_STONE_BRICK_SLAB,
+            Blocks.MUD_BRICK_SLAB,
+            Blocks.PRISMARINE_SLAB,
+            Blocks.PRISMARINE_BRICK_SLAB,
+            Blocks.STONE_BRICK_SLAB,
+            Blocks.SANDSTONE_SLAB,
+            Blocks.RED_SANDSTONE_SLAB,
+            Blocks.NETHER_BRICK_SLAB,
+            Blocks.RED_NETHER_BRICK_SLAB,
+            Blocks.POLISHED_BLACKSTONE_SLAB,
+            Blocks.POLISHED_BLACKSTONE_BRICK_SLAB,
+            Blocks.POLISHED_DEEPSLATE_SLAB,
+            Blocks.POLISHED_ANDESITE_SLAB,
+            Blocks.POLISHED_GRANITE_SLAB,
+            Blocks.POLISHED_DIORITE_SLAB,
+            Blocks.SMOOTH_STONE_SLAB,
+            Blocks.SMOOTH_QUARTZ_SLAB,
+            Blocks.SMOOTH_SANDSTONE_SLAB,
+            Blocks.SMOOTH_RED_SANDSTONE_SLAB,
+            Blocks.DARK_PRISMARINE_SLAB,
+            Blocks.PURPUR_SLAB,
+            Blocks.QUARTZ_SLAB,
+            Blocks.STONE_SLAB,
+            Blocks.OAK_SLAB,
+            Blocks.ACACIA_SLAB,
+            Blocks.BIRCH_SLAB,
+            Blocks.MANGROVE_SLAB,
+            Blocks.DARK_OAK_SLAB,
+            Blocks.JUNGLE_SLAB,
+            Blocks.CRIMSON_SLAB,
+            Blocks.WARPED_SLAB,
+            Blocks.SPRUCE_SLAB,
+            Blocks.CUT_COPPER_SLAB,
+            Blocks.EXPOSED_CUT_COPPER_SLAB,
+            Blocks.WEATHERED_CUT_COPPER_SLAB,
+            Blocks.OXIDIZED_CUT_COPPER_SLAB,
+            Blocks.CUT_RED_SANDSTONE_SLAB,
+            Blocks.CUT_SANDSTONE_SLAB,
+            Blocks.WAXED_CUT_COPPER_SLAB,
+            Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB,
+            Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB,
+            Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB));
 
     public SculkESP() {
         super("SculkESP", KEY_UNBOUND, ModuleCategory.RENDER, "Highlights certain blocks.",
@@ -306,29 +382,25 @@ public class SculkESP extends Module {
             int radius = 9;
 
             for (BlockPos shriekerPos : BlockPos.iterateOutwards(mc.player.getBlockPos(), dist, dist, dist)) {
-                if (!mc.world.isInBuildLimit(shriekerPos.down())
-                        || mc.world.getBlockState(shriekerPos).getBlock() != Blocks.SCULK_SHRIEKER)
-                    continue;
+                if (!mc.world.isInBuildLimit(shriekerPos.down()) || mc.world.getBlockState(shriekerPos).getBlock() != Blocks.SCULK_SHRIEKER) continue;
 
                 for (BlockPos sensorPos : BlockPos.iterateOutwards(shriekerPos, radius, radius, radius)) {
-                    if (mc.world.getBlockState(sensorPos).getBlock() == Blocks.SCULK_SENSOR) {
-                        for (BlockPos dangerSpot : BlockPos.iterateOutwards(sensorPos, radius, radius, radius)) {
-                            if (dangerSpot.isWithinDistance(sensorPos, radius)) {
-                                Block dangerBlock = mc.world.getBlockState(dangerSpot).getBlock();
-                                if (!mc.world.getBlockState(dangerSpot).isAir()
-                                        && mc.world.getBlockState(dangerSpot.up(1)).isAir()
-                                        && mc.world.getBlockState(dangerSpot.up(2)).isAir()
-                                        && mc.world.getBlockState(dangerSpot).getMaterial() != Material.WOOL
-                                        && mc.world.getBlockState(dangerSpot).getMaterial() != Material.CARPET
-                                        && !blocks.contains(dangerBlock)) {
-                                    sculks.add(dangerSpot.toImmutable());
-                                }
+                    if (!sensorPos.isWithinDistance(shriekerPos, radius)) continue;
+                    if (mc.world.getBlockState(sensorPos).getBlock() != Blocks.SCULK_SENSOR) continue;
 
-                                if (!mc.world.getBlockState(dangerSpot.down()).isAir()
-                                        && blocks.contains(dangerBlock)) {
-                                    sculks.add(dangerSpot.down().toImmutable());
-                                }
-                            }
+                    for (BlockPos dangerSpot : BlockPos.iterateOutwards(sensorPos, radius, radius, radius)) {
+                        if (!dangerSpot.isWithinDistance(sensorPos, radius)) continue;
+                        Block dangerBlock = mc.world.getBlockState(dangerSpot).getBlock();
+
+                        if (!mc.world.getBlockState(dangerSpot).isAir()
+                                && mc.world.getBlockState(dangerSpot.up(1)).isAir()
+                                && mc.world.getBlockState(dangerSpot.up(2)).isAir()
+                                && mc.world.getBlockState(dangerSpot).getMaterial() != Material.WOOL
+                                && mc.world.getBlockState(dangerSpot).getMaterial() != Material.CARPET
+                                && mc.world.getBlockState(dangerSpot).getBlock() != Blocks.SCULK_SHRIEKER
+                                && mc.world.getBlockState(dangerSpot).getBlock() != Blocks.SCULK_SENSOR
+                                && !blocks.contains(dangerBlock)) {
+                            sculks.add(dangerSpot.toImmutable());
                         }
                     }
                 }
@@ -341,11 +413,13 @@ public class SculkESP extends Module {
         int alpha1 = (int) (getSetting(3).asSlider().getValueFloat() * 255);
         int alpha2 = (int) (getSetting(4).asSlider().getValueFloat() * 255);
 
+        Direction[] excludeDirs = ArrayUtils.remove(Direction.values(), 1);
+
         int[] color = getSetting(1).asColor().getRGBArray();
 
         sculks.forEach((pos) ->
-                Renderer.drawBoxFill(pos, QuadColor.single(color[0], color[1], color[2], alpha1)));
+                Renderer.drawBoxFill(pos, QuadColor.single(color[0], color[1], color[2], alpha1), excludeDirs));
         sculks.forEach((pos) ->
-                Renderer.drawBoxOutline(pos, QuadColor.single(color[0], color[1], color[2], alpha2), getSetting(2).asSlider().getValueFloat()));
+                Renderer.drawBoxOutline(pos, QuadColor.single(color[0], color[1], color[2], alpha2), getSetting(2).asSlider().getValueFloat(), excludeDirs));
     }
 }
