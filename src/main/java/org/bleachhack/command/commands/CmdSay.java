@@ -26,19 +26,7 @@ public class CmdSay extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		CommandManager.allowNextMsg = true;
-
-		String message = String.join(" ", args);
-		MessageSignature sig = MessageSignature.none();
-		try {
-			Signer signer2 = mc.getProfileKeys().getSigner();
-			if (signer2 != null) {
-				sig = ChatMessageSigner.create(mc.player.getUuid()).sign(signer2, message);
-			}
-		}
-		catch (Exception exception) {
-		}
-
-		mc.player.networkHandler.sendPacket(new ChatMessageC2SPacket(String.join(" ", args), sig, true));
+		mc.player.sendChatMessage(String.join(" ", args), null);
 	}
 
 }

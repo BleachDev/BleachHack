@@ -99,7 +99,7 @@ public class EntityMenuScreen extends Screen {
 
 				client.setScreen(null);
 			} else {
-				client.player.sendChatMessage(message);
+				client.player.sendChatMessage(message, null);
 				client.setScreen(null);
 			}
 		} else {

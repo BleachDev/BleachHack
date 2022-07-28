@@ -52,9 +52,9 @@ public class Spammer extends Module {
 
 		if (tickCount % (getSetting(1).asSlider().getValueInt() * 20) == 0) {
 			if (getSetting(0).asMode().getMode() == 0) {
-				mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())));
+				mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())), null);
 			} else if (getSetting(0).asMode().getMode() == 1) {
-				mc.player.sendChatMessage(lines.get(lineCount));
+				mc.player.sendChatMessage(lines.get(lineCount), null);
 			}
 
 			if (lineCount >= lines.size() - 1) {

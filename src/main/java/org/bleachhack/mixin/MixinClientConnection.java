@@ -8,6 +8,7 @@
  */
 package org.bleachhack.mixin;
 
+import net.minecraft.class_7648;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandManager;
@@ -32,8 +33,6 @@ public class MixinClientConnection {
 
 	@Shadow private Channel channel;
 
-	@Shadow private void sendImmediately(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> callback) {}
-
 	@Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
 	private void channelRead0(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo callback) {
 		if (this.channel.isOpen() && packet != null) {
@@ -48,13 +47,13 @@ public class MixinClientConnection {
 		}
 	}
 
-	@Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
-	private void send(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> packetCallback, CallbackInfo callback) {
+	@Inject(method = "method_10752(Lnet/minecraft/network/Packet;Lnet/minecraft/class_7648;)V", at = @At("HEAD"), cancellable = true)
+	private void send(Packet<?> packet, class_7648 packetCallback, CallbackInfo callback) {
 		if (packet instanceof ChatMessageC2SPacket) {
 			if (!CommandManager.allowNextMsg) {
 				ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet;
-				if (pack.getChatMessage().startsWith(Command.getPrefix())) {
-					CommandManager.callCommand(pack.getChatMessage().substring(Command.getPrefix().length()));
+				if (pack.comp_945().startsWith(Command.getPrefix())) {
+					CommandManager.callCommand(pack.comp_945().substring(Command.getPrefix().length()));
 					callback.cancel();
 				}
 			}
