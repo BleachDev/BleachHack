@@ -103,12 +103,6 @@ accessible    field    net/minecraft/entity/projectile/FishingBobberEntity    CA
 ## =========== Packets ===========
 
 
-# ChatMessageC2SPacket
-# - For BetterChat to be able to edit the outbound message
-accessible    field    net/minecraft/network/packet/c2s/play/ChatMessageC2SPacket    chatMessage    Ljava/lang/String;
-mutable       field    net/minecraft/network/packet/c2s/play/ChatMessageC2SPacket    chatMessage    Ljava/lang/String;
-
-
 # EntityVelocityUpdateS2CPacket
 # - For NoVelocity to cancel entity velocity
 accessible    field    net/minecraft/network/packet/s2c/play/EntityVelocityUpdateS2CPacket    velocityX    I
