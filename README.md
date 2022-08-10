@@ -1,7 +1,7 @@
 
 # BleachHack DarkReaper edition
 
-My own skid of BleachHack for 1.19
+My own skid of BleachHack for 1.19.1
 I made this to make Bleach compatible with meteor and even gone so far as changing prefix to + and ClickGui bind to right control  
 I also gave it own visual flavour  
 
