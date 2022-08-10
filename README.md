@@ -12,7 +12,7 @@ I also gave it own visual flavour
 ## Installation
 ### For normal people
 
-Download [Fabric for Minecraft 1.19](https://fabricmc.net/use/).
+Download [Fabric for Minecraft 1.19.1](https://fabricmc.net/use/).
 Download the latest version of DarkHack for your Minecraft version from releases.
 
 
