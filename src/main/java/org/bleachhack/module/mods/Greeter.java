@@ -43,7 +43,7 @@ public class Greeter extends Module {
         if (mc.player.age % (this.getSettings().get(1).asSlider().getValue() * 20) == 0 && this.isEnabled()) {
             if (message_queue.size() > 0) {
                 message = message_queue.get(0);
-                mc.player.sendChatMessage(message);
+                mc.player.sendChatMessage(message, null);
                 message_queue.remove(0);
             }
         }

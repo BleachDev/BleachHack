@@ -59,14 +59,14 @@ public class AutoEZ extends Module {
                     if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().getString())
                             && !msg.contains("<" + e.getName().getString() + ">") && !msg.contains("<" + mc.player.getName().getString() + ">") && (list.get(index + 1).equals(mc.player.getName().getString()))) {
                         if (getSetting(0).asMode().getMode() == 0) {
-                            mc.player.sendChatMessage(e.getName().getString() + " just got EZed with the muscles of DarkHack");
+                            mc.player.sendChatMessage(e.getName().getString() + " just got EZed with the muscles of DarkHack", null);
                         } else if (getSetting(0).asMode().getMode() == 2) {
-                            mc.player.sendChatMessage("GG, " + e.getName().getString() + ", but DarkHack is ontop!");
+                            mc.player.sendChatMessage("GG, " + e.getName().getString() + ", but DarkHack is ontop!", null);
                         } else if (getSetting(0).asMode().getMode() == 1) {
                             if (getSetting(1).asMode().getMode() == 0) {
-                                mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())).replace("$p", e.getName().getString()));
+                                mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())).replace("$p", e.getName().getString()), null);
                             } else if (getSetting(1).asMode().getMode() == 1) {
-                                mc.player.sendChatMessage(lines.get(lineCount).replace("$p", e.getName().getString()));
+                                mc.player.sendChatMessage(lines.get(lineCount).replace("$p", e.getName().getString()), null);
                             }
 
                             if (lineCount >= lines.size() - 1) {

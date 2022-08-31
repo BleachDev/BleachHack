@@ -27,47 +27,47 @@ public class CmdEmoji extends Command {
         }
 
         if (args[0].equalsIgnoreCase("shrug")) {
-            mc.player.sendChatMessage("¯\\_(ツ)_/¯");
+            mc.player.sendChatMessage("¯\\_(ツ)_/¯", null);
         } else if (args[0].equalsIgnoreCase("smirk")) {
-            mc.player.sendChatMessage("(´°‿ʖ´°)");
+            mc.player.sendChatMessage("(´°‿ʖ´°)", null);
         } else if (args[0].equalsIgnoreCase("angry")) {
-            mc.player.sendChatMessage("(ಠ益ಠ)");
+            mc.player.sendChatMessage("(ಠ益ಠ)", null);
         } else if (args[0].equalsIgnoreCase("wtf")) {
-            mc.player.sendChatMessage("(゜-゜)");
+            mc.player.sendChatMessage("(゜-゜)", null);
         } else if (args[0].equalsIgnoreCase("bruh")) {
-            mc.player.sendChatMessage("(¬_¬)");
+            mc.player.sendChatMessage("(¬_¬)", null);
         } else if (args[0].equalsIgnoreCase("dealwithit")) {
-            mc.player.sendChatMessage("(▀ˉL▀ˉ)");
+            mc.player.sendChatMessage("(▀ˉL▀ˉ)", null);
         } else if (args[0].equalsIgnoreCase("scared")) {
-            mc.player.sendChatMessage("(ಠ_ಠ)");
+            mc.player.sendChatMessage("(ಠ_ಠ)", null);
         } else if (args[0].equalsIgnoreCase("happy")) {
-            mc.player.sendChatMessage("(ᵔ ‿ʖ ᵔ)");
+            mc.player.sendChatMessage("(ᵔ ‿ʖ ᵔ)", null);
         } else if (args[0].equalsIgnoreCase("yay")) {
-            mc.player.sendChatMessage("(｡◕‿◕｡)");
+            mc.player.sendChatMessage("(｡◕‿◕｡)", null);
         } else if (args[0].equalsIgnoreCase("blush")) {
-            mc.player.sendChatMessage("(✿◠‿◠)");
+            mc.player.sendChatMessage("(✿◠‿◠)", null);
         } else if (args[0].equalsIgnoreCase("vibe")) {
-            mc.player.sendChatMessage("~(˘▾˘~)");
+            mc.player.sendChatMessage("~(˘▾˘~)", null);
         } else if (args[0].equalsIgnoreCase("wink")) {
-            mc.player.sendChatMessage("(◕‿↼)");
+            mc.player.sendChatMessage("(◕‿↼)", null);
         } else if (args[0].equalsIgnoreCase("doggo")) {
-            mc.player.sendChatMessage("(ᵔᴥᵔ)");
+            mc.player.sendChatMessage("(ᵔᴥᵔ)", null);
         } else if (args[0].equalsIgnoreCase("kitty")) {
-            mc.player.sendChatMessage("(^•ﻌ•^)");
+            mc.player.sendChatMessage("(^•ﻌ•^)", null);
         } else if (args[0].equalsIgnoreCase("kiss")) {
-            mc.player.sendChatMessage("(￣3￣)");
+            mc.player.sendChatMessage("(￣3￣)", null);
         } else if (args[0].equalsIgnoreCase("party")) {
-            mc.player.sendChatMessage("♪ ┗( ･o･)┓ ♪");
+            mc.player.sendChatMessage("♪ ┗( ･o･)┓ ♪", null);
         } else if (args[0].equalsIgnoreCase("tableflip")) {
-            mc.player.sendChatMessage("(╯°□°）╯︵ ┻━┻");
+            mc.player.sendChatMessage("(╯°□°）╯︵ ┻━┻", null);
         } else if (args[0].equalsIgnoreCase("angryflip")) {
-            mc.player.sendChatMessage("┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻");
+            mc.player.sendChatMessage("┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻", null);
         } else if (args[0].equalsIgnoreCase("dontflip")) {
-            mc.player.sendChatMessage("┳━┳ ¯\\_(ツ)");
+            mc.player.sendChatMessage("┳━┳ ¯\\_(ツ)", null);
         } else if (args[0].equalsIgnoreCase("unflip")) {
-            mc.player.sendChatMessage("┳━┳ ノ(°-°ノ)");
+            mc.player.sendChatMessage("┳━┳ ノ(°-°ノ)", null);
         } else if (args[0].equalsIgnoreCase("zombie")) {
-            mc.player.sendChatMessage("[¬°-°]¬");
+            mc.player.sendChatMessage("[¬°-°]¬", null);
         } else {
             throw new CmdSyntaxException();
         }
