@@ -8,6 +8,7 @@
  */
 package org.bleachhack.mixin;
 
+import net.minecraft.network.PacketCallbacks;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandManager;
@@ -41,8 +42,8 @@ public class MixinClientConnection {
 		}
 	}
 
-	@Inject(method = "send(Lnet/minecraft/network/Packet;)V", at = @At("HEAD"), cancellable = true)
-	private void send(Packet<?> packet, CallbackInfo callback) {
+	@Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
+	private void send(Packet<?> packet, PacketCallbacks ci, CallbackInfo callback) {
 		if (packet instanceof ChatMessageC2SPacket) {
 			if (!CommandManager.allowNextMsg) {
 				ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet;
