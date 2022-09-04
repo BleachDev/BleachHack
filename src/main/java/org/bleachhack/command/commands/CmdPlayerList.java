@@ -8,35 +8,34 @@
  */
 package org.bleachhack.command.commands;
 
-import net.minecraft.item.Item;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.client.network.PlayerListEntry;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.io.BleachFileMang;
 
-public class CmdItemList extends Command {
+public class CmdPlayerList extends Command {
 
-    public CmdItemList() {
-        super("itemlist", "Makes a txt file with all item IDs", "itemlist", CommandCategory.MISC,
-                "itemids");
+    public CmdPlayerList() {
+        super("playerlist", "Makes a txt file with all players", "playerlist", CommandCategory.MISC,
+                "players");
     }
 
     @Override
     public void onCommand(String command, String[] args) {
         StringBuilder builder = new StringBuilder();
-        for (Item item : Registry.ITEM) {
-            builder.append(Registry.ITEM.getId(item).getPath());
+        for (PlayerListEntry player : mc.player.networkHandler.getPlayerList()) {
+            builder.append(player.getProfile().getName());
             builder.append('\n');
         }
 
-        if (BleachFileMang.fileExists("itemlist.txt")) {
-            BleachFileMang.deleteFile("itemlist.txt");
+        if (BleachFileMang.fileExists("playerlist.txt")) {
+            BleachFileMang.deleteFile("playerlist.txt");
         }
-        BleachFileMang.createEmptyFile("itemlist.txt");
-        BleachFileMang.appendFile("itemlist.txt", builder.toString());
+        BleachFileMang.createEmptyFile("playerlist.txt");
+        BleachFileMang.appendFile("playerlist.txt", builder.toString());
 
-        BleachLogger.info("Saved item list as: itemlist.txt");
+        BleachLogger.info("Saved player list as: playerlist.txt");
 
     }
 }

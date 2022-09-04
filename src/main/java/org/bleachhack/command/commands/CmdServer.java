@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class CmdServer extends Command {
 
 	public CmdServer() {
-		super("server", "Server things.", "server address | server brand | server day | server difficulty | server ip | server motd | server ping | server permissions | server plugins | server protocol | server version", CommandCategory.MISC);
+		super("server", "Server things.", "server address | server brand | server day | server difficulty | server ip | server motd | server ping | server permissions | server playercount | server plugins | server protocol | server version", CommandCategory.MISC);
 	}
 
 	@Override
@@ -58,6 +58,7 @@ public class CmdServer extends Command {
 			BleachLogger.noPrefix(createText("Motd", getMotd(sp)));
 			BleachLogger.noPrefix(createText("Ping", getPing(sp)));
 			BleachLogger.noPrefix(createText("Permission Level", getPerms(sp)));
+			BleachLogger.noPrefix(createText("Player Count", getPerms(sp)));
 			BleachLogger.noPrefix(createText("Protocol", getProtocol(sp)));
 			BleachLogger.noPrefix(createText("Version", getVersion(sp)));
 			checkForPlugins();
@@ -77,6 +78,8 @@ public class CmdServer extends Command {
 			BleachLogger.noPrefix(createText("Ping", getPing(sp)));
 		} else if (args[0].equalsIgnoreCase("permissions")) {
 			BleachLogger.noPrefix(createText("Permission Level", getPerms(sp)));
+		} else if (args[0].equalsIgnoreCase("playercount")) {
+			BleachLogger.noPrefix(createText("Player Count", getCount(sp)));
 		} else if (args[0].equalsIgnoreCase("plugins")) {
 			checkForPlugins();
 		} else if (args[0].equalsIgnoreCase("protocol")) {
@@ -192,6 +195,13 @@ public class CmdServer extends Command {
 			case 4 -> "4 (Operator)";
 			default -> p + " (Unknown)";
 		};
+	}
+
+	public String getCount(boolean singleplayer) {
+		if (singleplayer)
+			return "-";
+
+		return Integer.toString(mc.player.networkHandler.getPlayerList().size());
 	}
 
 	public String getProtocol(boolean singleplayer) {

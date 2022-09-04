@@ -20,6 +20,7 @@
 	"CmdNotebot",
 	"CmdOpenFolder",
 	"CmdPeek",
+	"CmdPlayerList",
 	"CmdPrefix",
 	"CmdRbook",
 	"CmdRename",
