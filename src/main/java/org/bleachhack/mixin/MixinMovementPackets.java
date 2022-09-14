@@ -1,5 +1,7 @@
 package org.bleachhack.mixin;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
@@ -13,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin({PlayerMoveC2SPacket.class})
-public class MixinMovementPacket {
+public class MixinMovementPackets {
     @Shadow
     @Mutable
     @Final
@@ -35,15 +37,26 @@ public class MixinMovementPacket {
             }
 
             if (iamBot.getSetting(0).asMode().getMode() == 1) {
+                PlayerEntity player = MinecraftClient.getInstance().player;
+                double prevX = player.prevX;
+                double prevZ = player.prevZ;
                 if (changePosition) {
-                    long xMod = (long) (x * 1000.0) % 10L;
-                    long zMod = (long) (z * 1000.0) % 10L;
+                    long xMod = (long)(x * 1000.0) % 10L;
+                    long zMod = (long)(z * 1000.0) % 10L;
                     if (xMod != 0L) {
-                        this.x += (double) (xMod > 5L ? 10L - xMod : -xMod) / 1000.0;
+                        if (prevX > x) {
+                            this.x += (double)(10L - xMod) / 1000.0;
+                        } else {
+                            this.x += (double)(-xMod) / 1000.0;
+                        }
                     }
 
                     if (zMod != 0L) {
-                        this.z += (double) (zMod > 5L ? 10L - zMod : -zMod) / 1000.0;
+                        if (prevZ > z) {
+                            this.z += (double)(10L - zMod) / 1000.0;
+                        } else {
+                            this.z += (double)(-zMod) / 1000.0;
+                        }
                     }
                 }
             }

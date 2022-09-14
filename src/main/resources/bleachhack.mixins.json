@@ -42,7 +42,7 @@
     "MixinLlamaPigStriderEntity",
     "MixinMapRenderer",
     "MixinMinecraftClient",
-    "MixinMovementPacket",
+    "MixinMovementPackets",
     "MixinPacketByteBuf",
     "MixinPacketInflater",
     "MixinParticleManager",
@@ -54,6 +54,7 @@
     "MixinShader",
     "MixinSharedConstants",
     "MixinSoundSystem",
+    "MixinVehiclePackets",
     "MixinWorldRenderer"
   ],
   "mixinPriority" : 899,
