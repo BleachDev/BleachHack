@@ -12,6 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import org.apache.commons.io.IOUtils;
+import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.collections.NameableStorage;
 import org.bleachhack.util.io.BleachJsonHelper;
@@ -83,8 +84,10 @@ public class ModuleManager {
 	public static void handleKey(int key) {
 		if (!InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) {
 			for (Module m: getModules()) {
-				if (m.getKey() == key) {
-					m.toggle();
+				if (!m.getClass().equals(ClickGui.class)) {
+					if (m.getKey() == key) {
+						m.toggle();
+					}
 				}
 			}
 		}

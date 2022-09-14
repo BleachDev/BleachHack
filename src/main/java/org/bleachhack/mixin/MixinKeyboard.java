@@ -11,7 +11,9 @@ package org.bleachhack.mixin;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.event.events.EventKeyPress;
+import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.ClickGui;
 import org.bleachhack.setting.option.Option;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,11 +24,21 @@ import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 
+import static org.bleachhack.module.ModuleManager.getModules;
+
 @Mixin(Keyboard.class)
 public class MixinKeyboard {
 
 	@Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
 	private void onKeyEvent(long windowPointer, int key, int scanCode, int action, int modifiers, CallbackInfo callbackInfo) {
+		for (Module m: getModules()) {
+			if (m.getClass().equals(ClickGui.class)) {
+				if (m.getKey() == key && action == 1) {
+					m.toggle();
+				}
+			}
+		}
+
 		if (key >= 0) {
 			EventKeyPress.Global event = new EventKeyPress.Global(key, scanCode, action, modifiers);
 			BleachHack.eventBus.post(event);

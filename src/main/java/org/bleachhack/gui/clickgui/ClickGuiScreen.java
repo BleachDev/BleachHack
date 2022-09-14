@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.client.MinecraftClient;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow;
 import org.bleachhack.gui.clickgui.window.ClickGuiWindow.Tooltip;
@@ -52,7 +53,11 @@ public abstract class ClickGuiScreen extends WindowScreen {
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrices);
+		if (MinecraftClient.getInstance().world != null) {
+			this.renderBackground(matrices);
+		} else {
+			fill(matrices, 0, 0, this.width, this.height, 0xff010a00);
+		}
 
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {

@@ -8,6 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
+import net.minecraft.client.gui.screen.Screen;
 import org.bleachhack.event.events.EventOpenScreen;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
@@ -18,33 +19,39 @@ import org.bleachhack.setting.module.SettingToggle;
 import org.lwjgl.glfw.GLFW;
 
 public class ClickGui extends Module {
+    private Screen previousScreen;
 
-	public ClickGui() {
-		super("ClickGui", GLFW.GLFW_KEY_RIGHT_CONTROL, ModuleCategory.RENDER, "Draws the clickgui.",
-				new SettingSlider("Length", 70, 85, 75, 0).withDesc("The length of each window."),
-				new SettingToggle("Search bar", true).withDesc("Shows a search bar."),
-				new SettingToggle("Help", true).withDesc("Shows the help text."));
-	}
+    public ClickGui() {
+        super("ClickGui", GLFW.GLFW_KEY_RIGHT_CONTROL, ModuleCategory.RENDER, "Draws the clickgui.",
+                new SettingSlider("Length", 70, 85, 75, 0).withDesc("The length of each window."),
+                new SettingToggle("Search bar", true).withDesc("Shows a search bar."),
+                new SettingToggle("Help", true).withDesc("Shows the help text."));
+    }
 
-	@Override
-	public void onEnable(boolean inWorld) {
-		super.onEnable(inWorld);
+    @Override
+    public void onEnable(boolean inWorld) {
+        super.onEnable(inWorld);
 
-		mc.setScreen(ModuleClickGuiScreen.INSTANCE);
-	}
+        previousScreen = mc.currentScreen;
+        mc.setScreen(ModuleClickGuiScreen.INSTANCE);
+    }
 
-	@Override
-	public void onDisable(boolean inWorld) {
-		if (mc.currentScreen instanceof ModuleClickGuiScreen)
-			mc.setScreen(null);
+    @Override
+    public void onDisable(boolean inWorld) {
+        if (mc.currentScreen instanceof ModuleClickGuiScreen)
+            if (inWorld) {
+                mc.setScreen(null);
+            } else {
+                mc.setScreen(previousScreen);
+            }
 
-		super.onDisable(inWorld);
-	}
+        super.onDisable(inWorld);
+    }
 
-	@BleachSubscribe
-	public void onOpenScreen(EventOpenScreen event) {
-		if (event.getScreen() == null) {
-			setEnabled(false);
-		}
-	}
+    @BleachSubscribe
+    public void onOpenScreen(EventOpenScreen event) {
+        if (event.getScreen() == null) {
+            setEnabled(false);
+        }
+    }
 }
