@@ -17,7 +17,7 @@ public class WGBypass extends Module {
 
     public WGBypass() {
         super("WGBypass", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Bypasses Worldguard movement restriction.",
-                new SettingSlider("Fall", 1, 40, 12, 0).withDesc("How often to fall (antikick)."));
+                new SettingSlider("Fall", 1, 40, 10, 0).withDesc("Ticks between falls (anticheat)."));
     }
 
     @Override
@@ -77,21 +77,22 @@ public class WGBypass extends Module {
         Vec3d moveVec = Vec3d.ZERO;
 
         if (mc.player.input.pressingForward) {
-            moveVec = moveVec.add(forward);
-        }
-        if (mc.player.input.pressingBack) {
+            if (!mc.player.input.pressingBack){
+                moveVec = moveVec.add(forward);
+            }
+        } else if (mc.player.input.pressingBack){
             moveVec = moveVec.add(forward.negate());
-        }
-        if (mc.player.input.jumping) {
-            moveVec = moveVec.add(0, vspeed, 0);
-        }
-        if (mc.player.input.sneaking) {
+        } else if (mc.player.input.jumping) {
+            if (!mc.player.input.sneaking){
+                moveVec = moveVec.add(0, vspeed, 0);
+            }
+        } else if (mc.player.input.sneaking){
             moveVec = moveVec.add(0, -vspeed, 0);
-        }
-        if (mc.player.input.pressingLeft) {
-            moveVec = moveVec.add(forward.rotateY((float) Math.toRadians(90)));
-        }
-        if (mc.player.input.pressingRight) {
+        } else if (mc.player.input.pressingLeft) {
+            if (!mc.player.input.pressingRight){
+                moveVec = moveVec.add(forward.rotateY((float) Math.toRadians(90)));
+            }
+        } else if (mc.player.input.pressingRight){
             moveVec = moveVec.add(forward.rotateY((float) -Math.toRadians(90)));
         }
 
