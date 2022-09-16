@@ -53,6 +53,7 @@
     "MixinScreen",
     "MixinShader",
     "MixinSharedConstants",
+    "MixinSignEditScreen",
     "MixinSoundSystem",
     "MixinVehiclePackets",
     "MixinWorldRenderer"
