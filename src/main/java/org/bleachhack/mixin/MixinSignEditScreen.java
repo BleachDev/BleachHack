@@ -30,14 +30,7 @@ public class MixinSignEditScreen {
 
         if (signRestorer.isEnabled()) {
             BlockPos pos = sign.getPos();
-            SignData data = null;
-            SignData tempData = null;
-            for (int i = 0; i < SignRestorer.signData.size(); i++) {
-                tempData = SignRestorer.signData.get(i).get(pos.getX() + " " + pos.getY() + " " + pos.getZ());
-                if (tempData != null) {
-                    data = tempData;
-                }
-            }
+            SignData data = SignRestorer.signData.get(pos.getX() + " " + pos.getY() + " " + pos.getZ());
             if (data == null) return;
 
 

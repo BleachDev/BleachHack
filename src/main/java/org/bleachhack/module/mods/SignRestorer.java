@@ -1,12 +1,9 @@
 package org.bleachhack.module.mods;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
@@ -15,14 +12,12 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingColor;
 import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.SignData;
 import org.bleachhack.util.io.BleachFileMang;
+import org.bleachhack.util.io.BleachJsonHelper;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
-import org.bleachhack.util.shader.BleachCoreShaders;
-import org.bleachhack.util.shader.ColorVertexConsumerProvider;
-import org.bleachhack.util.shader.ShaderEffectWrapper;
-import org.bleachhack.util.shader.ShaderLoader;
 
 import java.io.IOException;
 import java.util.*;
@@ -48,7 +43,7 @@ public class SignRestorer extends Module {
             Blocks.WARPED_WALL_SIGN,
             Blocks.CRIMSON_WALL_SIGN));
 
-    public static List<Map<String, SignData>> signData = null;
+    public static Map<String, SignData> signData = null;
 
     public SignRestorer() {
         super("SignRestorer", KEY_UNBOUND, ModuleCategory.PLAYER, "Restores signs from signdata.json.",
@@ -75,8 +70,14 @@ public class SignRestorer extends Module {
         try {
             Gson gson = new Gson();
             fileData = fetchFile();
-            signData = gson.fromJson(fileData, new TypeToken<ArrayList<Map<String, SignData>>>() {
-            }.getType());
+            SignData[] signDataJson = gson.fromJson(fileData, SignData[].class);
+
+            signData = new HashMap<>();
+
+            for (SignData s : signDataJson) {
+                if (s == null) continue;
+                signData.put(s.coordinates, s);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,7 +86,11 @@ public class SignRestorer extends Module {
     public static String fetchFile() {
         if (!BleachFileMang.fileExists("signdata.json")) {
             BleachFileMang.createEmptyFile("signdata.json");
-            BleachFileMang.appendFile("signdata.json", "[\n" + "  {\"0 68 0\":{\"text\":[\"DarkHack\",\"on\",\"top\",\"since 2019\"],\"flags\":{}}}\n" + "  ]");
+            BleachFileMang.appendFile("signdata.json", "[\n" + "  {\"coordinates\":\"0 64 0\",\"text\":[\"DarkHack\",\"has been on top\",\"\",\"since 2021\"]}\n" + "]");
+        }
+
+        if (BleachFileMang.readFile("signdata.json").isEmpty()) {
+            BleachFileMang.appendFile("signdata.json", "[\n" + "  {\"coordinates\":\"0 64 0\",\"text\":[\"DarkHack\",\"has been on top\",\"\",\"since 2021\"]}\n" + "]");
         }
 
         String output = "";
@@ -107,24 +112,22 @@ public class SignRestorer extends Module {
 
     @BleachSubscribe
     public void onWorldRender(EventWorldRender.Post event) {
-        for (int i = 0; i < signData.size(); i++) {
-            for (String key : signData.get(i).keySet()) {
-                BlockPos pos = this.stringToBlockPos(key);
-                BlockState state = mc.world.getBlockState(pos);
+        for (String key : signData.keySet()) {
+            BlockPos pos = this.stringToBlockPos(key);
+            BlockState state = mc.world.getBlockState(pos);
 
-                if (!signs.contains(state.getBlock())) {
-                    int mode = getSetting(0).asMode().getMode();
-                    int[] rgb = getSetting(3).asColor().getRGBArray();
+            if (!signs.contains(state.getBlock())) {
+                int mode = getSetting(0).asMode().getMode();
+                int[] rgb = getSetting(3).asColor().getRGBArray();
 
-                    if (mode == 0 || mode == 1) {
-                        float outlineWidth = getSetting(1).asSlider().getValueFloat();
-                        Renderer.drawBoxOutline(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], 255), outlineWidth);
-                    }
+                if (mode == 0 || mode == 1) {
+                    float outlineWidth = getSetting(1).asSlider().getValueFloat();
+                    Renderer.drawBoxOutline(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], 255), outlineWidth);
+                }
 
-                    if (mode == 0 || mode == 2) {
-                        int fillAlpha = (int) (getSetting(2).asSlider().getValueFloat() * 255);
-                        Renderer.drawBoxFill(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
-                    }
+                if (mode == 0 || mode == 2) {
+                    int fillAlpha = (int) (getSetting(2).asSlider().getValueFloat() * 255);
+                    Renderer.drawBoxFill(pos, QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
                 }
             }
         }
