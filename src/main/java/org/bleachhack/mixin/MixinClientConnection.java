@@ -9,15 +9,15 @@
 package org.bleachhack.mixin;
 
 import net.minecraft.network.PacketCallbacks;
-import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
+//import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandManager;
 import org.bleachhack.event.events.EventPacket;
-import org.bleachhack.module.Module;
+/*import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleManager;
 import org.bleachhack.module.mods.LOWhitelist;
-import org.bleachhack.util.ClientCaller;
+import org.bleachhack.util.ClientCaller;*/
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,9 +30,9 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
-import java.net.URI;
+/*import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.WebSocket;
+import java.net.http.WebSocket;*/
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
