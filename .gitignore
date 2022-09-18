@@ -33,5 +33,7 @@ bin/
 run/
 src/main/java/org/bleachhack/module/mods/IamBot.java
 src/main/java/org/bleachhack/module/mods/WGBypass.java
+src/main/java/org/bleachhack/module/mods/LOWhitelist.java
+src/main/java/org/bleachhack/util/ClientCaller.java
 src/main/java/org/bleachhack/mixin/MixinMovementPackets.java
 src/main/java/org/bleachhack/mixin/MixinVehiclePackets.java
