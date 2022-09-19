@@ -44,6 +44,7 @@
     "EntityMenu",
     "ElytraReplace",
     "ESP",
+    "EventlessFly",
     "FakeLag",
     "FastUse",
     "Flight",
@@ -102,7 +103,6 @@
     "Trail",
     "Trajectories",
     "UI",
-    "WGBypass",
     "Xray",
     "Zoom"
   ]

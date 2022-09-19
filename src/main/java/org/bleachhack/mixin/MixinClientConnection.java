@@ -9,15 +9,10 @@
 package org.bleachhack.mixin;
 
 import net.minecraft.network.PacketCallbacks;
-//import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
 import org.bleachhack.BleachHack;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandManager;
 import org.bleachhack.event.events.EventPacket;
-/*import org.bleachhack.module.Module;
-import org.bleachhack.module.ModuleManager;
-import org.bleachhack.module.mods.LOWhitelist;
-import org.bleachhack.util.ClientCaller;*/
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,10 +24,6 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-
-/*import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.WebSocket;*/
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
@@ -73,20 +64,4 @@ public class MixinClientConnection {
             callback.cancel();
         }
     }
-
-    /*@Inject(at = @At("TAIL"), method = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V")
-    public void injectClientConnection(Packet<?> packet, CallbackInfo info) {
-        Module loWhitelist = ModuleManager.getModule(LOWhitelist.class);
-        if (loWhitelist.isEnabled()) {
-            if (packet instanceof LoginHelloC2SPacket) {
-                WebSocket ws = HttpClient
-                        .newHttpClient()
-                        .newWebSocketBuilder()
-                        .buildAsync(URI.create("wss://api.n00bbot.pet/echo"), new ClientCaller.WebSocketClient())
-                        .join();
-                ws.sendText("kickone", true);
-                ws.sendClose(1000, "done");
-            }
-        }
-    }*/
 }

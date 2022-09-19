@@ -12,10 +12,8 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingColor;
 import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.setting.module.SettingSlider;
-import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.SignData;
 import org.bleachhack.util.io.BleachFileMang;
-import org.bleachhack.util.io.BleachJsonHelper;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 
