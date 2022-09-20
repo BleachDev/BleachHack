@@ -27,6 +27,7 @@
     "MixinClientConnection",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
+    "MixinClientPlayNetworkHandler",
     "MixinClientWorld",
     "MixinDimensionEffects",
     "MixinEntity",

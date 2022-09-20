@@ -34,6 +34,9 @@ run/
 src/main/java/org/bleachhack/module/mods/IamBot.java
 src/main/java/org/bleachhack/module/mods/EventlessFly.java
 src/main/java/org/bleachhack/module/mods/LOWhitelist.java
+src/main/java/org/bleachhack/module/mods/WhisperReveal.java
 src/main/java/org/bleachhack/util/ClientCaller.java
+src/main/java/org/bleachhack/util/SignatureTracker.java
 src/main/java/org/bleachhack/mixin/MixinMovementPackets.java
 src/main/java/org/bleachhack/mixin/MixinVehiclePackets.java
+src/main/java/org/bleachhack/mixin/MixinClientPlayNetworkHandler.java
