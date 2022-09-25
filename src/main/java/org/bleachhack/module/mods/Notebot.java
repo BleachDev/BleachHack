@@ -17,12 +17,14 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.command.Command;
+import org.bleachhack.event.events.EventReach;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingMode;
+import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.NotebotUtils;
@@ -60,7 +62,13 @@ public class Notebot extends Module {
 						new SettingMode("Tune", "Normal", "Wait-1", "Wait-2", "Batch-5", "All").withDesc("How to tune the noteblocks.")),
 				new SettingToggle("Loop", false).withDesc("Loop the song you're playing."),
 				new SettingToggle("NoInstruments", false).withDesc("Ignores instruments."),
-				new SettingToggle("AutoPlay", false).withDesc("Auto plays a random song after one is finished."));
+				new SettingToggle("AutoPlay", false).withDesc("Auto plays a random song after one is finished."),
+				new SettingSlider("Reach", 1, 8, 4, 0).withDesc("How far to reach for noteblocks."));
+	}
+
+	@BleachSubscribe
+	public void onReach(EventReach event) {
+		event.setReach(event.getReach() + getSetting(4).asSlider().getValueFloat());
 	}
 
 	@Override
@@ -82,8 +90,10 @@ public class Notebot extends Module {
 		}
 
 		timer = -10;
+		
+		int reach = getSetting(4).asSlider().getValueInt();
 
-		List<BlockPos> noteblocks = BlockPos.streamOutwards(new BlockPos(mc.player.getEyePos()), 4, 4, 4)
+		List<BlockPos> noteblocks = BlockPos.streamOutwards(new BlockPos(mc.player.getEyePos()), reach, reach, reach)
 				.filter(this::isNoteblock)
 				.map(BlockPos::toImmutable)
 				.toList();
@@ -161,7 +171,7 @@ public class Notebot extends Module {
 						}
 
 						mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND,
-								new BlockHitResult(Vec3d.ofCenter(e.getKey(), 1), Direction.UP, e.getKey(), true));
+								new BlockHitResult(Vec3d.ofCenter(e.getKey()), Direction.UP, e.getKey(), true));
 					} else if (tuneMode >= 3) {
 						if (tuneDelay < (tuneMode == 3 ? 3 : 5)) {
 							tuneDelay++;
@@ -172,7 +182,7 @@ public class Notebot extends Module {
 						int reqTunes = Math.min(tuneMode == 3 ? 5 : 25, neededNote - note);
 						for (int i = 0; i < reqTunes; i++)
 							mc.interactionManager.interactBlock(mc.player,
-									Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(e.getKey(), 1), Direction.UP, e.getKey(), true));
+									Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(e.getKey()), Direction.UP, e.getKey(), true));
 
 						tuneDelay = 0;
 					}
