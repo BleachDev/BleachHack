@@ -35,7 +35,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include(modImplementation("com.github.fzakaria:ascii85:1.2"))
-	
+
 	include(modImplementation("com.kohlschutter.junixsocket:junixsocket-common:2.2.1"))
 	include(modImplementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.2.1"))
 

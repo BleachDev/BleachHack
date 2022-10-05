@@ -21,6 +21,7 @@ import org.bleachhack.eventbus.BleachEventBus;
 import org.bleachhack.eventbus.handler.InexactEventHandler;
 import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.module.ModuleManager;
+import org.bleachhack.module.mods.Doom;
 import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.FriendManager;
 import org.bleachhack.util.Watermark;
@@ -83,6 +84,8 @@ public class BleachHack implements ModInitializer {
 
 		ModuleManager.loadModules(this.getClass().getClassLoader().getResourceAsStream("bleachhack.modules.json"));
 		BleachFileHelper.readModules();
+
+		ModuleManager.getModule(Doom.class).setEnabled(false);
 
 		// TODO: move ClickGui and UI to phase 1
 		ModuleClickGuiScreen.INSTANCE.initWindows();
