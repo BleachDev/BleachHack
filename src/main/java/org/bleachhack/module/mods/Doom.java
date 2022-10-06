@@ -19,7 +19,6 @@ public class Doom extends Module {
     public static ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     public static ScheduledFuture<?> future;
 
-    // TODO: Add WAD selection
     public Doom() {
         super("Doom", KEY_UNBOUND, ModuleCategory.MISC, "Let's you play DOOM from Minecraft",
                 new SettingMode("Wad", "DOOM", "DOOM2", "PLUTONIA", "TNT").withDesc("Switches between different versions"));
