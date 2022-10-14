@@ -1,7 +1,7 @@
 
 # BleachHack DarkReaper edition
 
-My own skid of BleachHack for 1.19.1
+My own skid of BleachHack for 1.19.2
 I made this to make Bleach compatible with meteor and even gone so far as changing prefix to + and ClickGui bind to right control  
 I also gave it own visual flavour  
 
@@ -12,7 +12,7 @@ I also gave it own visual flavour
 ## Installation
 ### For normal people
 
-Download [Fabric for Minecraft 1.19.1](https://fabricmc.net/use/).
+Download [Fabric for Minecraft 1.19.2](https://fabricmc.net/use/).
 Download the latest version of DarkHack for your Minecraft version from releases.
 
 
