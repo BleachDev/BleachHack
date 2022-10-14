@@ -27,7 +27,6 @@
     "MixinClientConnection",
     "MixinClientPlayerEntity",
     "MixinClientPlayerInteractionManager",
-    "MixinClientPlayNetworkHandler",
     "MixinClientWorld",
     "MixinDimensionEffects",
     "MixinEntity",
@@ -44,7 +43,6 @@
     "MixinMapRenderer",
     "MixinMinecraftClient",
     "MixinMinecraftClientMain",
-    "MixinMovementPackets",
     "MixinPacketByteBuf",
     "MixinPacketInflater",
     "MixinParticleManager",
@@ -57,7 +55,6 @@
     "MixinSharedConstants",
     "MixinSignEditScreen",
     "MixinSoundSystem",
-    "MixinVehiclePackets",
     "MixinWorldRenderer"
   ],
   "mixinPriority" : 899,

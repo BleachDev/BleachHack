@@ -45,7 +45,6 @@
     "EntityMenu",
     "ElytraReplace",
     "ESP",
-    "EventlessFly",
     "FakeLag",
     "FastUse",
     "Flight",
@@ -55,12 +54,10 @@
     "Greeter",
     "HandProgress",
     "HoleESP",
-    "IamBot",
     "Jesus",
     "Killaura",
     "LiquidFiller",
     "LogoutSpot",
-    "LOWhitelist",
     "MouseFriend",
     "Nametags",
     "NewChunks",
@@ -105,7 +102,6 @@
     "Trajectories",
     "UI",
     "Xray",
-    "WhisperReveal",
     "Zoom"
   ]
 }
