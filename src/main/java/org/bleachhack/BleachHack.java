@@ -32,15 +32,12 @@ public class BleachHack implements ModInitializer {
 
 	private static BleachHack instance = null;
 
-	public static final String VERSION = "5.3";
-	public static final int INTVERSION = 39;
+	public static final String VERSION = "5.4";
 	public static Watermark watermark;
 
 	public static BleachEventBus eventBus;
 
 	public static FriendManager friendMang;
-
-	private static CompletableFuture<JsonObject> updateJson;
 
 	//private BleachFileMang bleachFileManager;
 
@@ -98,13 +95,5 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.startSavingExecutor();
 
 		BleachLogger.logger.log(Level.INFO, "Loaded DarkHack (Phase 2) in %d ms.", System.currentTimeMillis() - initStartTime);
-	}
-
-	public static JsonObject getUpdateJson() {
-		try {
-			return updateJson.get();
-		} catch (Exception e) {
-			return null;
-		}
 	}
 }
