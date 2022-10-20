@@ -1,14 +1,10 @@
 package org.bleachhack.module.mods;
 
-import java.util.List;
-
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
 import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingItemList;
-import org.bleachhack.setting.module.SettingSlider;
-import org.bleachhack.setting.module.SettingToggle;
 import org.bleachhack.util.BleachLogger;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,8 +15,6 @@ import net.minecraft.screen.slot.SlotActionType;
 
 public class AutoGrind extends Module {
 
-	private int crafted;
-
 	public AutoGrind() {
 		super("AutoGrind", KEY_UNBOUND, ModuleCategory.MISC, "Automatically grind enchants off items.",
 				new SettingItemList("Edit Items", "Items you want to grind.").withDesc("Edit items to grind."));
@@ -30,7 +24,6 @@ public class AutoGrind extends Module {
 	public void onEnable(boolean inWorld) {
 		super.onEnable(inWorld);
 
-		crafted = 0;
 		if (getSetting(0).asList(Item.class).getValue().isEmpty()) {
 			BleachLogger.error("AutoGrind items are empty.");
 			setEnabled(false);
