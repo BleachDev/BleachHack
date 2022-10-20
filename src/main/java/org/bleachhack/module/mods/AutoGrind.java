@@ -48,7 +48,11 @@ public class AutoGrind extends Module {
 			ItemStack stack = handler.getSlot(slot).getStack();
 			if (getSetting(0).asList(Item.class).contains(stack.getItem())) {
 				// if item has grindable enchants
-				if (EnchantmentHelper.get(stack).values().stream().mapToInt(Integer::intValue).sum() - (EnchantmentHelper.hasVanishingCurse(stack) ? 0 : 1) - (EnchantmentHelper.hasBindingCurse(stack) ? 0 : 1) > 0) {
+				int enchants = EnchantmentHelper.get(stack).values().stream().mapToInt(Integer::intValue).sum();
+				int curses = (EnchantmentHelper.hasVanishingCurse(stack) ? 1 : 0)
+						+ (EnchantmentHelper.hasBindingCurse(stack) ? 1 : 0);
+
+				if (enchants - curses > 0) {
 					// shift-click item into gridstone slot
 					mc.interactionManager.clickSlot(handler.syncId, slot, 0, SlotActionType.QUICK_MOVE, mc.player);
 					// pick up from grindstone output slot (2)
