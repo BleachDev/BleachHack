@@ -28,7 +28,7 @@ public class Flight extends Module {
 	public Flight() {
 		super("Flight", KEY_UNBOUND, ModuleCategory.MOVEMENT, "Allows you to fly.",
 				new SettingMode("Mode", "Static", "Jetpack", "ec.me").withDesc("Flight mode."),
-				new SettingSlider("Speed", 0, 5, 1, 1).withDesc("Flight speed."),
+				new SettingSlider("Speed", 0, 50, 1, 1).withDesc("Flight speed."),
 				new SettingMode("AntiKick", "Off", "Fall", "Bob", "Packet").withDesc("How to bypass \"you have been kicked for flying\" kicks."));
 	}
 

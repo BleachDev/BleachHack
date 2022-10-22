@@ -1,6 +1,8 @@
 {
   "package": "org.bleachhack.module.mods",
   "modules": [
+    "AntiHuman",
+    "PacketBypass",
     "AirPlace",
     "Ambience",
     "AntiChunkBan",
