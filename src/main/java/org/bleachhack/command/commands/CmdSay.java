@@ -8,14 +8,9 @@
  */
 package org.bleachhack.command.commands;
 
-import net.minecraft.network.encryption.Signer;
-import net.minecraft.network.message.MessageSignature;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.CommandManager;
-
-import net.minecraft.network.message.ChatMessageSigner;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 public class CmdSay extends Command {
 
