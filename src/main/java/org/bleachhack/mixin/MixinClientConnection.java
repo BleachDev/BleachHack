@@ -43,16 +43,16 @@ public class MixinClientConnection {
         }
     }
 
-    @Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
-    private void send(Packet<?> packet, PacketCallbacks ci, CallbackInfo callback) {
-        if (packet instanceof ChatMessageC2SPacket) {
-            if (!CommandManager.allowNextMsg) {
-                ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet;
-                if (pack.chatMessage().startsWith(Command.getPrefix())) {
-                    CommandManager.callCommand(pack.chatMessage().substring(Command.getPrefix().length()));
-                    callback.cancel();
-                }
-            }
+	@Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
+	private void send(Packet<?> packet, PacketCallbacks packetCallback, CallbackInfo callback) {
+		if (packet instanceof ChatMessageC2SPacket) {
+			if (!CommandManager.allowNextMsg) {
+				ChatMessageC2SPacket pack = (ChatMessageC2SPacket) packet;
+				if (pack.chatMessage().startsWith(Command.getPrefix())) {
+					CommandManager.callCommand(pack.chatMessage().substring(Command.getPrefix().length()));
+					callback.cancel();
+				}
+			}
 
             CommandManager.allowNextMsg = false;
         }
