@@ -27,6 +27,7 @@
 	"CmdRename",
 	"CmdRpc",
 	"CmdSay",
+	"CmdSeedRay",
 	"CmdServer",
 	"CmdSetting",
 	"CmdSkull",
