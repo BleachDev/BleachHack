@@ -1,12 +1,10 @@
 package org.bleachhack.module.mods;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.random.ChunkRandom;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.event.events.EventWorldRender;
@@ -39,23 +37,77 @@ public class SeedRay extends Module {
     public Long worldSeed = null;
     public List<Ore> oreConfig;
     private ChunkPos prevOffset = new ChunkPos(0, 0);
-	
-	public SeedRay() {
-		super("SeedRay", KEY_UNBOUND, ModuleCategory.RENDER,
-				"Attempts to simulate ore positions given a seed, use " + Option.CHAT_COMMAND_PREFIX.getValue() + "seedray to set seed",
-	            new SettingToggle("Coal", false), // 0
-	            new SettingToggle("Iron", false), // 1
-	            new SettingToggle("Gold", false), // 2
-	            new SettingToggle("Redstone", false), // 3
-	            new SettingToggle("Diamond", false), // 4
-	            new SettingToggle("Lapis", false), // 5
-	            new SettingToggle("Emerald", false), // 6
-	            new SettingToggle("Copper", false), // 7
-	            new SettingToggle("Quartz", false), // 8
-	            new SettingToggle("Debris", false), // 9
-	            new SettingSlider("Range", 1, 10, 5, 0).withDesc("Chunks to simulate"));
-	}
-	
+    private HashSet<Block> blocks = new HashSet<>(Arrays.asList(
+            Blocks.GRASS_BLOCK,
+            Blocks.DIRT,
+            Blocks.COARSE_DIRT,
+            Blocks.ROOTED_DIRT,
+            Blocks.DIRT_PATH,
+            Blocks.CLAY,
+            Blocks.LAVA,
+            Blocks.WATER,
+            Blocks.MUD,
+            Blocks.MYCELIUM,
+            Blocks.PODZOL,
+            Blocks.SAND,
+            Blocks.RED_SAND,
+            Blocks.FARMLAND,
+            Blocks.WHITE_TERRACOTTA,
+            Blocks.BROWN_TERRACOTTA,
+            Blocks.LIGHT_GRAY_TERRACOTTA,
+            Blocks.ORANGE_TERRACOTTA,
+            Blocks.RED_TERRACOTTA,
+            Blocks.YELLOW_TERRACOTTA,
+            Blocks.OAK_LOG,
+            Blocks.ACACIA_LOG,
+            Blocks.BIRCH_LOG,
+            Blocks.JUNGLE_LOG,
+            Blocks.MANGROVE_LOG,
+            Blocks.DARK_OAK_LOG,
+            Blocks.SPRUCE_LOG,
+            Blocks.CRIMSON_STEM,
+            Blocks.WARPED_STEM,
+            Blocks.OAK_LEAVES,
+            Blocks.ACACIA_LEAVES,
+            Blocks.BIRCH_LEAVES,
+            Blocks.JUNGLE_LEAVES,
+            Blocks.MANGROVE_LEAVES,
+            Blocks.DARK_OAK_LEAVES,
+            Blocks.SPRUCE_LEAVES,
+            Blocks.STRIPPED_OAK_LOG,
+            Blocks.STRIPPED_ACACIA_LOG,
+            Blocks.STRIPPED_BIRCH_LOG,
+            Blocks.STRIPPED_JUNGLE_LOG,
+            Blocks.STRIPPED_MANGROVE_LOG,
+            Blocks.STRIPPED_DARK_OAK_LOG,
+            Blocks.STRIPPED_SPRUCE_LOG,
+            Blocks.STRIPPED_CRIMSON_STEM,
+            Blocks.STRIPPED_WARPED_STEM,
+            Blocks.BAMBOO,
+            Blocks.CACTUS,
+            Blocks.BONE_BLOCK,
+            Blocks.CRIMSON_NYLIUM,
+            Blocks.WARPED_NYLIUM,
+            Blocks.SNOW_BLOCK,
+            Blocks.SNOW,
+            Blocks.POWDER_SNOW));
+
+    public SeedRay() {
+        super("SeedRay", KEY_UNBOUND, ModuleCategory.RENDER,
+                "Attempts to simulate ore positions given a seed, use " + Option.CHAT_COMMAND_PREFIX.getValue() + "seedray to set seed",
+                new SettingToggle("Coal", false), // 0
+                new SettingToggle("Iron", false), // 1
+                new SettingToggle("Gold", false), // 2
+                new SettingToggle("Redstone", false), // 3
+                new SettingToggle("Diamond", false), // 4
+                new SettingToggle("Lapis", false), // 5
+                new SettingToggle("Emerald", false), // 6
+                new SettingToggle("Copper", false), // 7
+                new SettingToggle("Quartz", false), // 8
+                new SettingToggle("Debris", false), // 9
+                new SettingSlider("Range", 1, 10, 5, 0).withDesc("Chunks to simulate"));
+    }
+
     @BleachSubscribe
     @AllowConcurrentEvents
     public void onWorldRender(EventWorldRender.Post event) {
@@ -74,7 +126,7 @@ public class SeedRay extends Module {
             }
         }
     }
-    
+
     private void renderChunk(int x, int z, MatrixStack ms) {
         long chunkKey = (long) x + ((long) z << 32);
 
@@ -86,15 +138,19 @@ public class SeedRay extends Module {
                     }
 
                     for (Vec3d pos : chunkRenderers.get(chunkKey).get(ore)) {
-                        Box box = new Box(new BlockPos(pos));
-                        Color color = ore.color;
-                        Renderer.drawBoxOutline(box, QuadColor.single(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()), 1);
+                        BlockPos blockPos = new BlockPos(pos);
+                        Block exclude = mc.world.getBlockState(blockPos).getBlock();
+                        if (!blocks.contains(exclude)) {
+                            Box box = new Box(new BlockPos(pos));
+                            Color color = ore.color;
+                            Renderer.drawBoxOutline(box, QuadColor.single(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()), 1);
+                        }
                     }
                 }
             }
         }
     }
-    
+
     @BleachSubscribe
     @AllowConcurrentEvents
     public void onTick(EventTick event) {
@@ -105,7 +161,7 @@ public class SeedRay extends Module {
         long chunkZ = mc.player.getChunkPos().z;
         ClientWorld world = mc.world;
         @SuppressWarnings("resource")
-		int renderdistance = MinecraftClient.getInstance().options.getViewDistance().getValue();
+        int renderdistance = MinecraftClient.getInstance().options.getViewDistance().getValue();
 
         int chunkCounter = 5;
 
@@ -129,7 +185,7 @@ public class SeedRay extends Module {
             prevOffset = new ChunkPos(-renderdistance, -renderdistance);
         }
     }
-    
+
     @Override
     public void onEnable(boolean inWorld) {
         super.onEnable(inWorld);
@@ -408,5 +464,5 @@ public class SeedRay extends Module {
         return Math.round((random.nextFloat() - random.nextFloat()) * (float) size);
     }
 
-    
+
 }
