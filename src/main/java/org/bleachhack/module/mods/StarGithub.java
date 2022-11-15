@@ -1,5 +1,5 @@
 /*
- * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/BleachHack/).
+ * This file is part of the BleachHack distribution (https://github.com/BleachDev/BleachHack/).
  * Copyright (c) 2021 Bleach and contributors.
  *
  * This source code is subject to the terms of the GNU General Public
@@ -21,7 +21,7 @@ public class StarGithub extends Module {
 
 	public void onEnable(boolean inWorld) {
 		try {
-			Util.getOperatingSystem().open("https://github.com/BleachDrinker420/BleachHack");
+			Util.getOperatingSystem().open("https://github.com/BleachDev/BleachHack");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

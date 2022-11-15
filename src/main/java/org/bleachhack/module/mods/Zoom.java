@@ -1,6 +1,6 @@
 
 /*
- * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/BleachHack/).
+ * This file is part of the BleachHack distribution (https://github.com/BleachDev/BleachHack/).
  * Copyright (c) 2021 Bleach and contributors.
  *
  * This source code is subject to the terms of the GNU General Public

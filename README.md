@@ -64,7 +64,7 @@ Generate the needed files for your preferred IDE.
   Use [this link](https://fabricmc.net/wiki/tutorial:setup) for more information.
   It should be pretty similar to the eclipse and idea setup.
   
-###### *To get the source code of Pre-1.17 versions, use [this](https://github.com/BleachDrinker420/BleachHack/tree/de55562e94) commit and select the folder of the version you want.*
+###### *To get the source code of Pre-1.17 versions, use [this](https://github.com/BleachDev/BleachHack/tree/de55562e94) commit and select the folder of the version you want.*
 
 ## Recommended Mods
 
@@ -81,4 +81,4 @@ Fixes Mojang's spaghet.
 
 ## License
 
-If you are distributing a custom version of BleachHack or a mod with ported features of BleachHack, you are **required** to disclose the source code, state changes, use a compatible license, and follow the [license terms](https://github.com/BleachDrinker420/BleachHack/blob/master/LICENSE).
+If you are distributing a custom version of BleachHack or a mod with ported features of BleachHack, you are **required** to disclose the source code, state changes, use a compatible license, and follow the [license terms](https://github.com/BleachDev/BleachHack/blob/master/LICENSE).
