@@ -1,5 +1,5 @@
 /*
- * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/BleachHack/).
+ * This file is part of the BleachHack distribution (https://github.com/BleachDev/BleachHack/).
  * Copyright (c) 2021 Bleach and contributors.
  *
  * This source code is subject to the terms of the GNU General Public
@@ -30,7 +30,7 @@ import java.util.Comparator;
 
 // credit: https://github.com/Wurst-Imperium/Wurst7/blob/21w11a/src/main/java/net/wurstclient/hacks/ParkourHack.java
 // modified by https://github.com/lasnikprogram
-// modified by https://github.com/BleachDrinker420
+// modified by https://github.com/BleachDev
 
 public class AutoParkour extends Module {
 
