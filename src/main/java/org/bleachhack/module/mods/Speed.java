@@ -8,6 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
+import org.bleachhack.event.events.EventClientMove;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -17,6 +18,7 @@ import org.bleachhack.setting.module.SettingSlider;
 
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.util.math.Vec3d;
+import org.bleachhack.setting.module.SettingToggle;
 
 public class Speed extends Module {
 
@@ -28,7 +30,8 @@ public class Speed extends Module {
 				new SettingSlider("Strafe", 0.15, 0.55, 0.27, 2).withDesc("Strafe speed."),
 				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround speed."),
 				new SettingSlider("MiniHop", 0.1, 10, 2, 1).withDesc("MiniHop speed."),
-				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop speed."));
+				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop speed."),
+				new SettingToggle("NoInertia", false).withDesc("Prevents you from moving forcefully."));
 	}
 
 	@BleachSubscribe
@@ -111,4 +114,12 @@ public class Speed extends Module {
 			}
 		}
 	}
+
+	@BleachSubscribe
+	public void onMove(EventClientMove event) {
+		if (mc.player.forwardSpeed == 0 && mc.player.sidewaysSpeed == 0 && getSetting(5).asToggle().getState()) {
+			event.setVec(new Vec3d(0, event.getVec().y, 0));
+		}
+	}
+
 }
