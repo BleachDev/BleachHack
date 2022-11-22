@@ -66,7 +66,9 @@ public class UI extends Module {
 		super("UI", KEY_UNBOUND, ModuleCategory.RENDER, true, "Shows stuff onscreen.",
 				new SettingToggle("Modulelist", true).withDesc("Shows the module list.").withChildren(                                 // 0
 						new SettingToggle("InnerLine", true).withDesc("Adds an extra line to the front of the module list."),
-						new SettingToggle("OuterLine", false).withDesc("Adds an outer line to the module list."),
+						new SettingToggle("OuterLine", false).withDesc("Adds an outer line to the module list.").withChildren(
+								new SettingToggle("VerticalLine", true)
+						),
 						new SettingToggle("Fill", true).withDesc("Adds a black fill behind the module list."),
 						new SettingToggle("Watermark", true).withDesc("Adds the BleachHack watermark to the module list.").withChildren(
 								new SettingMode("Mode", "New", "Old").withDesc("The watermark type.")),
@@ -291,6 +293,7 @@ public class UI extends Module {
 		int arrayCount = 0;
 		boolean inner = getSetting(0).asToggle().getChild(0).asToggle().getState();
 		boolean outer = getSetting(0).asToggle().getChild(1).asToggle().getState();
+		boolean vertical = getSetting(0).asToggle().getChild(1).asToggle().getChild(0).asToggle().getState() && outer;
 		boolean fill = getSetting(0).asToggle().getChild(2).asToggle().getState();
 		boolean rightAlign = x + mc.textRenderer.getWidth(moduleListText.get(0)) / 2 > mc.getWindow().getScaledWidth() / 2;
 
@@ -313,6 +316,18 @@ public class UI extends Module {
 			}
 
 			mc.textRenderer.drawWithShadow(matrices, t, textStart, y + 1 + arrayCount * 10, color);
+
+			if (vertical) {
+				if(arrayCount == 0) {
+					DrawableHelper.fill(matrices, rightAlign ? textStart - 3 : startX, y - 1, rightAlign ? startX : outerX + 1, y, color);
+				}
+
+				if (arrayCount == moduleListText.size() - 1) {
+					DrawableHelper.fill(matrices, rightAlign ? textStart - 2 : startX, y + 9 + arrayCount * 10, rightAlign ? startX : outerX + 1, y + 10 + arrayCount * 10, color);
+				} else {
+					DrawableHelper.fill(matrices, rightAlign ? textStart - 2 : startX + mc.textRenderer.getWidth(moduleListText.get(arrayCount + 1)) + 4, y + 9 + arrayCount * 10, rightAlign ? startX - mc.textRenderer.getWidth(moduleListText.get(arrayCount + 1)) - 4 : outerX + 1, y + 10 + arrayCount * 10, color);
+				}
+			}
 			arrayCount++;
 		}
 	}
