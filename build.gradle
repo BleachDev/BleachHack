@@ -26,13 +26,13 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include(modImplementation("com.github.fzakaria:ascii85:1.2"))
+	// include(modImplementation("com.github.fzakaria:ascii85:1.2"))
 
-	// include(modImplementation("com.github.BleachDrinker420:DiscordIPC:9957fc8114")) {
-    //    exclude group: 'com.google.code.gson', module: 'gson'
-	// }
-	// include(modImplementation("com.kohlschutter.junixsocket:junixsocket-common:2.2.1"))
-	// include(modImplementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.2.1"))
+	 include(modImplementation("com.github.BleachDev:DiscordIPC:1dca11fce3")) {
+        exclude group: 'com.google.code.gson', module: 'gson'
+	 }
+	 include(modImplementation("com.kohlschutter.junixsocket:junixsocket-common:2.2.1"))
+	 include(modImplementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.2.1"))
 }
 
 processResources {

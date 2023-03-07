@@ -20,6 +20,7 @@
 	"CmdPrefix",
 	"CmdRbook",
 	"CmdRename",
+	"CmdRpc",
 	"CmdSay",
 	"CmdServer",
 	"CmdSetting",
