@@ -2,15 +2,15 @@ package org.bleachhack.util.shader;
 
 import java.io.IOException;
 
-import net.minecraft.client.render.Shader;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
 
 public class BleachCoreShaders {
 	
-	private static final Shader COLOR_OVERLAY_SHADER;
+	private static final ShaderProgram COLOR_OVERLAY_SHADER;
 	
-	public static Shader getColorOverlayShader() {
+	public static ShaderProgram getColorOverlayShader() {
 		return COLOR_OVERLAY_SHADER;
 	}
 	

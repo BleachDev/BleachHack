@@ -41,9 +41,9 @@ public class BleachHack implements ModInitializer {
 
 	public static final String VERSION = "1.2.6";
 	public static final int INTVERSION = 40;
-	public static Watermark watermark;
+	public static Watermark watermark = new Watermark();
 
-	public static BleachEventBus eventBus;
+	public static BleachEventBus eventBus = new BleachEventBus(new InexactEventHandler("bleachhack"), BleachLogger.logger);
 
 	public static FriendManager friendMang;
 	public static BleachPlayerManager playerMang;
@@ -67,10 +67,9 @@ public class BleachHack implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		long initStartTime = System.currentTimeMillis();
+		System.out.println("Hihihihii");
 
 		instance = this;
-		watermark = new Watermark();
-		eventBus = new BleachEventBus(new InexactEventHandler("bleachhack"), BleachLogger.logger);
 
 		friendMang = new FriendManager();
 		playerMang = new BleachPlayerManager();

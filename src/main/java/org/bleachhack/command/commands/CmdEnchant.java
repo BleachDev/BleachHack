@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.registry.Registries;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bleachhack.command.Command;
@@ -29,7 +30,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.registry.Registry;
 
 public class CmdEnchant extends Command {
 
@@ -108,7 +108,7 @@ public class CmdEnchant extends Command {
 		ItemStack item = mc.player.getInventory().getMainHandStack();
 
 		if (args[0].equalsIgnoreCase("all")) {
-			for (Enchantment e : Registry.ENCHANTMENT) {
+			for (Enchantment e : Registries.ENCHANTMENT) {
 				enchant(item, e, level);
 			}
 
@@ -140,7 +140,7 @@ public class CmdEnchant extends Command {
 
 		NbtList listnbt = item.getNbt().getList("Enchantments", 10);
 		NbtCompound compoundnbt = new NbtCompound();
-		compoundnbt.putString("id", String.valueOf(Registry.ENCHANTMENT.getId(e)));
+		compoundnbt.putString("id", String.valueOf(Registries.ENCHANTMENT.getId(e)));
 		compoundnbt.putInt("lvl", level);
 		listnbt.add(compoundnbt);
 	}

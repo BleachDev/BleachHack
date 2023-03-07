@@ -8,22 +8,22 @@
  */
 package org.bleachhack.mixin;
 
+import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.ShaderStage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.client.gl.JsonEffectGlShader;
-import net.minecraft.client.gl.Program;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 // Tweaks to the json effect shader class to make it compatible with OpenResourceManager
-@Mixin(JsonEffectGlShader.class)
-public class MixinJsonEffectGlShader {
+@Mixin(JsonEffectShaderProgram.class)
+public class MixinJsonEffectShaderProgram {
 	
 	// Patch for Architectury
 	@Inject(method = "mojangPls(Lnet/minecraft/util/Identifier;Ljava/lang/String;)Lnet/minecraft/util/Identifier;", at = @At("HEAD"), cancellable = true, require = 0)
@@ -38,7 +38,7 @@ public class MixinJsonEffectGlShader {
 	}
 
 	@ModifyArgs(method = "loadEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Identifier;<init>(Ljava/lang/String;)V"))
-	private static void loadEffect_identifier(Args args, ResourceManager resourceManager, Program.Type type, String name) {
+	private static void loadEffect_identifier(Args args, ResourceManager resourceManager, ShaderStage.Type type, String name) {
 		args.set(0, replaceIdentifier(args.get(0), name));
 	}
 

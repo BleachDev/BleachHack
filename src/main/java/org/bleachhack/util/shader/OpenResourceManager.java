@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePack;
@@ -47,11 +48,11 @@ public class OpenResourceManager implements ResourceManager {
 			return parent.getResource(id);
 
 		if ("__url__".equals(id.getNamespace()))
-			return Optional.of(new Resource(id.getNamespace(), () -> parseURL(id.getPath())));
+			return Optional.of(new Resource(MinecraftClient.getInstance().getDefaultResourcePack(), () -> parseURL(id.getPath())));
 
 		// Scuffed resource loader
 		Path path = FabricLoader.getInstance().getModContainer(id.getNamespace()).get().findPath("assets/" + id.getNamespace() + "/" + id.getPath()).get();
-		return Optional.of(new Resource(id.getNamespace(), () -> Files.newInputStream(path)));
+		return Optional.of(new Resource(MinecraftClient.getInstance().getDefaultResourcePack(), () -> Files.newInputStream(path)));
 	}
 
 	@Override

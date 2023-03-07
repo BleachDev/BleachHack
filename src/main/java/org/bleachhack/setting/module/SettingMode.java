@@ -42,7 +42,7 @@ public class SettingMode extends ModuleSetting<Integer> {
 
 		if (window.mouseOver(x, y, x + len, y + 12) && window.lmDown) {
 			setValue(getValue() >= modes.length - 1 ? 0 : getValue() + 1);
-			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 0.3F));
 		}
 	}
 

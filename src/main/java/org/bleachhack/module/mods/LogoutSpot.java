@@ -76,7 +76,7 @@ public class LogoutSpot extends Module {
 			return;
 		}
 
-		PlayerListS2CPacket list = (PlayerListS2CPacket) event.getPacket();
+		/*PlayerListS2CPacket list = (PlayerListS2CPacket) event.getPacket();
 
 		// Spawns fake player when player leaves
 		if (list.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
@@ -100,7 +100,7 @@ public class LogoutSpot extends Module {
 					BleachQueue.add("logoutspot", fakePlayer.getLeft()::despawn);
 				}
 			}
-		}
+		}*/
 	}
 
 	// Removes the fake players based on settings

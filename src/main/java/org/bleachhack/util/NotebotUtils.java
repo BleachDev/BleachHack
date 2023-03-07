@@ -108,7 +108,7 @@ public class NotebotUtils {
 
 	public static void playNote(Multimap<Integer, Note> song, int tick) {
 		for (Note note: song.get(tick)) {
-			play(Instrument.values()[note.instrument].getSound(), (float) Math.pow(2.0D, (note.pitch - 12) / 12.0D));
+			play(Instrument.values()[note.instrument].getSound().value(), (float) Math.pow(2.0D, (note.pitch - 12) / 12.0D));
 		}
 	}
 

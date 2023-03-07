@@ -21,7 +21,7 @@ public class CmdSay extends Command {
 	@Override
 	public void onCommand(String alias, String[] args) throws Exception {
 		CommandManager.allowNextMsg = true;
-		mc.player.sendChatMessage(String.join(" ", args), null);
+		mc.player.networkHandler.sendChatMessage(String.join(" ", args));
 	}
 
 }

@@ -29,8 +29,8 @@ public class MixinServerScreen extends Screen {
 
 	@Inject(method = "init()V", at = @At("HEAD"))
 	private void init(CallbackInfo info) {
-		addDrawableChild(new ButtonWidget(5, 7, 50, 20, Text.literal("Protocol"), button -> {
+		addDrawableChild(ButtonWidget.builder(Text.literal("Protocol"), button -> {
 			client.setScreen(new ProtocolScreen((MultiplayerScreen) client.currentScreen));
-		}));
+		}).position(5, 7).size(50, 20).build());
 	}
 }

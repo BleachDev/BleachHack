@@ -1,5 +1,6 @@
 package org.bleachhack.gui.window.widget;
 
+import net.minecraft.util.math.RotationAxis;
 import org.bleachhack.mixin.AccessorScreen;
 
 import net.minecraft.client.render.Tessellator;
@@ -7,7 +8,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3f;
 
 public class WindowTextWidget extends WindowWidget {
 
@@ -61,7 +61,7 @@ public class WindowTextWidget extends WindowWidget {
 		matrices.push();
 		matrices.scale(scale, scale, 1f);
 		matrices.translate((windowX + x1 - offset) / scale, (windowY + y1) / scale, 0);
-		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation));
 
 		VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
 		mc.textRenderer.draw(text, 0, 0, color, shadow, matrices.peek().getPositionMatrix(), immediate, false, 0, 0xf000f0);

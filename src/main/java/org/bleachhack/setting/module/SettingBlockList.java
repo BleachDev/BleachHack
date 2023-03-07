@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import net.minecraft.registry.Registries;
 import org.bleachhack.setting.SettingDataHandlers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,7 +23,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
-import net.minecraft.util.registry.Registry;
 
 public class SettingBlockList extends SettingList<Block> {
 
@@ -36,8 +36,8 @@ public class SettingBlockList extends SettingList<Block> {
 
 	private static Collection<Block> getAllBlocks(Predicate<Block> filter) {
 		return filter == null
-				? Registry.BLOCK.stream().collect(Collectors.toList())
-						: Registry.BLOCK.stream().filter(filter).collect(Collectors.toList());
+				? Registries.BLOCK.stream().collect(Collectors.toList())
+						: Registries.BLOCK.stream().filter(filter).collect(Collectors.toList());
 	}
 
 	@Override

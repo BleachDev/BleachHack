@@ -23,8 +23,8 @@ public class WindowTextFieldWidget extends WindowWidget {
 
 	@Override
 	public void render(MatrixStack matrices, int windowX, int windowY, int mouseX, int mouseY) {
-		textField.x = windowX + x1;
-		textField.y = windowY + y1;
+		textField.setX(windowX + x1);
+		textField.setY(windowY + y1);
 		textField.render(matrices, mouseX, mouseY, MinecraftClient.getInstance().getTickDelta());
 
 		super.render(matrices, windowX, windowY, mouseX, mouseY);

@@ -44,7 +44,7 @@ public class SettingColor extends ModuleSetting<float[]> {
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
 		// Color square
 		Tessellator tessellator = Tessellator.getInstance();

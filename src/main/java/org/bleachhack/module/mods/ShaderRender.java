@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.client.gl.PostEffectProcessor;
 import org.bleachhack.event.events.EventRenderShader;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -21,13 +22,12 @@ import org.bleachhack.setting.module.SettingMode;
 
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.util.Identifier;
 
 public class ShaderRender extends Module {
 
 	private Identifier lastId = null;
-	private ShaderEffect lastShader = null;
+	private PostEffectProcessor lastShader = null;
 	private int lastWidth;
 	private int lastHeight;
 
@@ -63,7 +63,7 @@ public class ShaderRender extends Module {
 					lastShader.close();
 				}
 
-				lastShader = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), lastId);
+				lastShader = new PostEffectProcessor(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), lastId);
 				lastShader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
 			} catch (JsonSyntaxException | IOException e) {
 				e.printStackTrace();

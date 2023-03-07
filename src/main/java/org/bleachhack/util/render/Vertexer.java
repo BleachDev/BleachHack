@@ -9,9 +9,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix3f;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class Vertexer {
 	
@@ -136,22 +136,22 @@ public class Vertexer {
 		Matrix4f model = matrices.peek().getPositionMatrix();
 		Matrix3f normal = matrices.peek().getNormalMatrix();
 
-		Vec3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
+		Vector3f normalVec = getNormal(x1, y1, z1, x2, y2, z2);
 
 		int[] color1 = lineColor.getColor(x1, y1, z1, 0);
 		int[] color2 = lineColor.getColor(x2, y2, z2, 1);
 
-		vertexConsumer.vertex(model, x1, y1, z1).color(color1[0], color1[1], color1[2], color1[3]).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
-		vertexConsumer.vertex(model, x2, y2, z2).color(color2[0], color2[1], color2[2], color2[3]).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+		vertexConsumer.vertex(model, x1, y1, z1).color(color1[0], color1[1], color1[2], color1[3]).normal(normal, normalVec.x(), normalVec.y(), normalVec.z()).next();
+		vertexConsumer.vertex(model, x2, y2, z2).color(color2[0], color2[1], color2[2], color2[3]).normal(normal, normalVec.x(), normalVec.y(), normalVec.z()).next();
 	}
 
-	public static Vec3f getNormal(Matrix3f normal, float x1, float y1, float z1, float x2, float y2, float z2) {
+	public static Vector3f getNormal(float x1, float y1, float z1, float x2, float y2, float z2) {
 		float xNormal = x2 - x1;
 		float yNormal = y2 - y1;
 		float zNormal = z2 - z1;
 		float normalSqrt = MathHelper.sqrt(xNormal * xNormal + yNormal * yNormal + zNormal * zNormal);
 
-		return new Vec3f(xNormal / normalSqrt, yNormal / normalSqrt, zNormal / normalSqrt);
+		return new Vector3f(xNormal / normalSqrt, yNormal / normalSqrt, zNormal / normalSqrt);
 	}
 
 }

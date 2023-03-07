@@ -13,8 +13,8 @@ accessible    field    net/minecraft/client/network/ClientPlayerInteractionManag
 # - For ProtocolScreen to make the version constants accessible
 accessible    field    net/minecraft/MinecraftVersion    name    Ljava/lang/String;
 mutable       field    net/minecraft/MinecraftVersion    name    Ljava/lang/String;
-accessible    field    net/minecraft/MinecraftVersion    releaseTarget    Ljava/lang/String;
-mutable       field    net/minecraft/MinecraftVersion    releaseTarget    Ljava/lang/String;
+# accessible    field    net/minecraft/MinecraftVersion    releaseTarget    Ljava/lang/String;
+# mutable       field    net/minecraft/MinecraftVersion    releaseTarget    Ljava/lang/String;
 accessible    field    net/minecraft/MinecraftVersion    protocolVersion    I
 mutable       field    net/minecraft/MinecraftVersion    protocolVersion    I
 accessible    field    net/minecraft/MinecraftVersion    dataPackVersion    I
@@ -47,7 +47,7 @@ accessible    class    net/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk
 accessible    class    net/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask$RenderData
 accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    nonEmptyLayers    Ljava/util/Set;
 accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    occlusionGraph    Lnet/minecraft/client/render/chunk/ChunkOcclusionData;
-accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    bufferState    Lnet/minecraft/client/render/BufferBuilder$State;
+# accessible    field    net/minecraft/client/render/chunk/ChunkBuilder$ChunkData    bufferState    Lnet/minecraft/client/render/BufferBuilder$State;
 accessible    method    net/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask$RenderData    <init>    ()V
 
 
@@ -89,7 +89,7 @@ accessible    field    net/minecraft/client/gui/screen/ingame/HandledScreen    f
 
 # SignEditScreen
 # - For AutoSign to read the sign entity from the sign screen
-accessible    field    net/minecraft/client/gui/screen/ingame/SignEditScreen    sign    Lnet/minecraft/block/entity/SignBlockEntity;
+accessible    field    net/minecraft/client/gui/screen/ingame/AbstractSignEditScreen    blockEntity    Lnet/minecraft/block/entity/SignBlockEntity;
 
 
 ## =========== Entities ===========

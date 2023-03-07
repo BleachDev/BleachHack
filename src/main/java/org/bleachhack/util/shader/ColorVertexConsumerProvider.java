@@ -3,6 +3,7 @@ package org.bleachhack.util.shader;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.RenderPhase.TextureBase;
 import net.minecraft.util.Identifier;
@@ -16,10 +17,10 @@ public class ColorVertexConsumerProvider {
 
 	private final VertexConsumerProvider.Immediate plainDrawer = VertexConsumerProvider.immediate(new BufferBuilder(256));
 
-	private Supplier<Shader> shader;
+	private Supplier<ShaderProgram> shader;
 	private Function<TextureBase, RenderLayer> layerCreator;
 
-	public ColorVertexConsumerProvider(Framebuffer framebuffer, Supplier<Shader> shader) {
+	public ColorVertexConsumerProvider(Framebuffer framebuffer, Supplier<ShaderProgram> shader) {
 		this.shader = shader;
 		setFramebuffer(framebuffer);
 	}

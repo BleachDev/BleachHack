@@ -29,8 +29,8 @@ public abstract class MixinOptionsScreen extends Screen {
 
 	@Inject(method = "init", at = @At("RETURN"))
 	private void init(CallbackInfo callback) {
-		addDrawableChild(new ButtonWidget(this.width / 2 - 180, this.height / 6 + 120 - 6, 20, 20, Text.literal("BH"), button -> {
+		addDrawableChild(ButtonWidget.builder(Text.literal("BH"), button -> {
 			client.setScreen(new BleachOptionsScreen(this));
-		}));
+		}).position(this.width / 2 - 180, this.height / 6 + 120 - 6).size(20, 20).build());
 	}
 }

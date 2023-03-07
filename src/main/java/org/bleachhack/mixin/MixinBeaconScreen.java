@@ -36,7 +36,8 @@ public abstract class MixinBeaconScreen extends HandledScreen<BeaconScreenHandle
 
 	@Inject(method = "init", at = @At("RETURN"))
 	private void init(CallbackInfo callback) {
-		addDrawableChild(new ButtonWidget((width - backgroundWidth) / 2 + 2, (height - backgroundHeight) / 2 - 15, 46, 14, Text.literal("Unlock"), button -> unlocked = true));
+		addDrawableChild(ButtonWidget.builder(Text.literal("Unlock"), button -> unlocked = true)
+				.position((width - backgroundWidth) / 2 + 2, (height - backgroundHeight) / 2 - 15).size(46, 14).build());
 	}
 
 	@Inject(method = "render", at = @At("HEAD"))

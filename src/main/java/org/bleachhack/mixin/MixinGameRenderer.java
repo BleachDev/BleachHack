@@ -8,6 +8,7 @@
  */
 package org.bleachhack.mixin;
 
+import net.minecraft.client.gl.PostEffectProcessor;
 import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventRenderShader;
 import org.bleachhack.module.ModuleManager;
@@ -21,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -31,7 +31,7 @@ import net.minecraft.util.math.MathHelper;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-	@Shadow private ShaderEffect shader;
+	@Shadow private PostEffectProcessor postProcessor;
 
 	@Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
 	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
@@ -57,9 +57,9 @@ public class MixinGameRenderer {
 		return MathHelper.lerp(delta, first, second);
 	}
 
-	@Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;shader:Lnet/minecraft/client/gl/ShaderEffect;", ordinal = 0))
-	private ShaderEffect render_Shader(GameRenderer renderer, float tickDelta) {
-		EventRenderShader event = new EventRenderShader(shader);
+	@Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;postProcessor:Lnet/minecraft/client/gl/PostEffectProcessor;", ordinal = 0))
+	private PostEffectProcessor render_Shader(GameRenderer renderer, float tickDelta) {
+		EventRenderShader event = new EventRenderShader(postProcessor);
 		BleachHack.eventBus.post(event);
 
 		if (event.getEffect() != null) {

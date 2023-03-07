@@ -72,7 +72,7 @@ public class SettingSlider extends ModuleSetting<Double> {
 				double units = 1 / (Math.pow(10, decimals));
 
 				setValue(MathHelper.clamp(getValue() + units * window.mwScroll, min, max));
-				MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F, 0.3F));
+				MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 0.3F));
 			}
 		}
 	}

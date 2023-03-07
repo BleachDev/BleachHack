@@ -99,7 +99,7 @@ public class EntityMenuScreen extends Screen {
 
 				client.setScreen(null);
 			} else {
-				client.player.sendChatMessage(message, null);
+				client.player.networkHandler.sendChatMessage(message);
 				client.setScreen(null);
 			}
 		} else {
@@ -114,7 +114,7 @@ public class EntityMenuScreen extends Screen {
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		// Draw entity
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, InventoryScreen.BACKGROUND_TEXTURE);
 

@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
@@ -212,7 +212,7 @@ public class CmdGive extends Command {
 		}
 
 		ItemStack item = new ItemStack(
-				Registry.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase(Locale.ENGLISH))));
+				Registries.ITEM.get(new Identifier("minecraft:" + args[0].toLowerCase(Locale.ENGLISH))));
 
 		if (item.getItem() instanceof AirBlockItem)
 			throw new CmdSyntaxException();

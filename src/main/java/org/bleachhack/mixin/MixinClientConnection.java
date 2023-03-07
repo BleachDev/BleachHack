@@ -41,9 +41,9 @@ public class MixinClientConnection {
 
 			if (event.isCancelled()) {
 				callback.cancel();
-			} else if (packet instanceof PlayerListS2CPacket) {
+			}/* else if (packet instanceof PlayerListS2CPacket) {
 				handlePlayerList((PlayerListS2CPacket) packet);
-			}
+			}*/
 		}
 	}
 
@@ -69,11 +69,12 @@ public class MixinClientConnection {
 		}
 	}
 
-	private void handlePlayerList(PlayerListS2CPacket packet) {
-		if (packet.getAction() == PlayerListS2CPacket.Action.ADD_PLAYER) {
+	/*private void handlePlayerList(PlayerListS2CPacket packet) {
+		if (packet.getActions().contains(PlayerListS2CPacket.Action.ADD_PLAYER)) {
 			BleachHack.playerMang.addQueueEntries(packet.getEntries());
-		} else if (packet.getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER) {
+		}
+		if (packet.getActions().contains(PlayerListS2CPacket.Action.REMOVE_PLAYER)) {
 			BleachHack.playerMang.removeQueueEntries(packet.getEntries());
 		}
-	}
+	}*/
 }

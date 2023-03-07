@@ -168,15 +168,15 @@ public class EntityMenuEditScreen extends WindowScreen {
 			if (selectedEntry != null) {
 				textRenderer.drawWithShadow(matrices, "Name:", seperator + 8, y + 5, 0xffffff);
 
-				editNameField.x = seperator + 8;
-				editNameField.y = y + 18;
+				editNameField.setX(seperator + 8);
+				editNameField.setY(y + 18);
 				editNameField.setWidth(w - (seperator - x) - 16);
 				editNameField.render(matrices, mouseX, mouseY, client.getTickDelta());
 
 				textRenderer.drawWithShadow(matrices, "Value:", seperator + 8, y + 45, 0xffffff);
 
-				editValueField.x = seperator + 8;
-				editValueField.y = y + 57;
+				editValueField.setX(seperator + 8);
+				editValueField.setY(y + 57);
 				editValueField.setWidth(w - (seperator - x) - 16);
 				editValueField.render(matrices, mouseX, mouseY, client.getTickDelta());
 

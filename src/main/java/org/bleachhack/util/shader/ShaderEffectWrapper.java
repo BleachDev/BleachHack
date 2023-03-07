@@ -5,10 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.Shader;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
@@ -17,11 +17,11 @@ public class ShaderEffectWrapper {
 
 	private static MinecraftClient mc = MinecraftClient.getInstance();
 
-	private ShaderEffect shader;
+	private PostEffectProcessor shader;
 	private int lastWidth = -1;
 	private int lastHeight = -1;
 
-	public ShaderEffectWrapper(ShaderEffect effect) {
+	public ShaderEffectWrapper(PostEffectProcessor effect) {
 		this.shader = effect;
 	}
 
@@ -46,7 +46,7 @@ public class ShaderEffectWrapper {
 
 	public void drawFramebufferToMain(String framebuffer) {
 		Framebuffer buffer = getFramebuffer(framebuffer);
-		Shader blitshader = mc.gameRenderer.blitScreenShader;
+		ShaderProgram blitshader = mc.gameRenderer.blitScreenProgram;
 		blitshader.addSampler("DiffuseSampler", buffer.getColorAttachment());
 
 		double w = mc.getWindow().getFramebufferWidth();
@@ -70,7 +70,7 @@ public class ShaderEffectWrapper {
 		bufferBuilder.vertex(w, h, 0).texture(ws, 0f).color(255, 255, 255, 255).next();
 		bufferBuilder.vertex(w, 0, 0).texture(ws, hs).color(255, 255, 255, 255).next();
 		bufferBuilder.vertex(0, 0, 0).texture(0f, hs).color(255, 255, 255, 255).next();
-		BufferRenderer.drawWithoutShader(bufferBuilder.end());
+		BufferRenderer.draw(bufferBuilder.end());
 		blitshader.unbind();
 
 		GlStateManager._depthMask(true);
@@ -85,11 +85,11 @@ public class ShaderEffectWrapper {
 		lastHeight = mc.getWindow().getFramebufferHeight();
 	}
 	
-	public ShaderEffect getShader() {
+	public PostEffectProcessor getShader() {
 		return shader;
 	}
 
-	public void setShader(ShaderEffect shader) {
+	public void setShader(PostEffectProcessor shader) {
 		this.shader = shader;
 	}
 }

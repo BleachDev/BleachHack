@@ -21,6 +21,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
+import java.util.function.Supplier;
+
 
 public class ProtocolScreen extends Screen {
 	
@@ -41,22 +43,22 @@ public class ProtocolScreen extends Screen {
 	public void init() {
 		super.init();
 
-		addButton = addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 50, 196, 20, Text.literal("Done"), button -> {
+		addButton = addDrawableChild(ButtonWidget.builder(Text.literal("Done"), button -> {
 			int i = Integer.parseInt(protocolField.getText());
 			int i1 = Integer.parseInt(packVerField.getText());
 
 			MinecraftVersion version = (MinecraftVersion) SharedConstants.getGameVersion();
 			version.name = versionField.getText();
-			version.releaseTarget = versionField.getText();
+			// version.releaseTarget = versionField.getText();
 			version.protocolVersion =  i;
 			version.dataPackVersion = i1;
 			BRAND = brandField.getText();
 
 			close();
-		}));
+		}).position(width / 2 - 100, height / 2 + 50).size(196, 20).build());
 
-		addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 73, 196, 20, Text.literal("Cancel"),
-				button -> close()));
+		addDrawableChild(ButtonWidget.builder(Text.literal("Cancel"),
+				button -> close()).position(width / 2 - 100, height / 2 + 73).size(196, 20).build());
 
 		versionField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 60, 196, 18, Text.empty()));
 		versionField.setText(SharedConstants.getGameVersion().getName());
@@ -72,12 +74,12 @@ public class ProtocolScreen extends Screen {
 		brandField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 128, 18, Text.empty()));
 		brandField.setText(ClientBrandRetriever.getClientModName());
 		
-		addDrawableChild(new ButtonWidget(width / 2 + 33, height / 2 + 14, 20, 20, Text.literal("V"),
-				button -> brandField.setText("vanilla")));
-		addDrawableChild(new ButtonWidget(width / 2 + 56, height / 2 + 14, 20, 20, Text.literal("Fa"),
-				button -> brandField.setText("fabric")));
-		addDrawableChild(new ButtonWidget(width / 2 + 79, height / 2 + 14, 20, 20, Text.literal("Fo"),
-				button -> brandField.setText("forge")));
+		addDrawableChild(ButtonWidget.builder(Text.literal("V"),
+				button -> brandField.setText("vanilla")).position(width / 2 + 33, height / 2 + 14).size(20, 20).build());
+		addDrawableChild(ButtonWidget.builder(Text.literal("Fa"),
+				button -> brandField.setText("fabric")).position(width / 2 + 56, height / 2 + 14).size(20, 20).build());
+		addDrawableChild(ButtonWidget.builder(Text.literal("Fo"),
+				button -> brandField.setText("forge")).position(width / 2 + 79, height / 2 + 14).size(20, 20).build());
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

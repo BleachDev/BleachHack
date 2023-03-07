@@ -109,7 +109,7 @@ public class BleachPlayerManager {
 	public void addQueueEntries(Collection<PlayerListS2CPacket.Entry> entries) {
 		UUID playerUuid = UUID.fromString(toProperUUID(mc.getSession().getUuid()));
 		entries.stream()
-		.map(e -> e.getProfile().getId())
+		.map(e -> e.profile().getId())
 		.filter(e -> !players.contains(e))
 		.forEach(e -> {
 			if (playerUuid.equals(e)) {
@@ -123,7 +123,7 @@ public class BleachPlayerManager {
 	}
 
 	public void removeQueueEntries(Collection<PlayerListS2CPacket.Entry> entries) {
-		entries.forEach(e -> playerQueue.remove(e.getProfile().getId()));
+		entries.forEach(e -> playerQueue.remove(e.profile().getId()));
 	}
 
 	public Set<UUID> getPlayers() {

@@ -149,7 +149,7 @@ public class DamageUtils {
 					if (toDamage <= 0f) {
 						toDamage = 0f;
 					} else {
-						int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), DamageSource.explosion((LivingEntity) null));
+						int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), DamageSource.explosion(null, null));
 						if (protAmount > 0) {
 							toDamage = DamageUtil.getInflictedDamage(toDamage, protAmount);
 						}

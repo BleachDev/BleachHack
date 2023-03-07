@@ -49,7 +49,7 @@ public class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
 	@Shadow private MinecraftClient client;
 
 	private MixinClientPlayerEntity(ClientWorld world, GameProfile profile) {
-		super(world, profile, null);
+		super(world, profile);
 	}
 
 	@Shadow private void autoJump(float dx, float dz) {}

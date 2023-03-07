@@ -8,20 +8,21 @@
  */
 package org.bleachhack.mixin;
 
+import org.joml.FrustumIntersection;
+import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import net.minecraft.client.render.Frustum;
-import net.minecraft.util.math.Vector4f;
 
 @Mixin(Frustum.class)
 public interface AccessorFrustum {
 	
 	@Accessor
-	public abstract Vector4f[] getHomogeneousCoordinates();
+	public abstract FrustumIntersection getFrustumIntersection();
 	
 	@Accessor
-	public abstract void setHomogeneousCoordinates(Vector4f[] vector4f);
+	public abstract void setFrustumIntersection(FrustumIntersection vector4f);
 	
 	@Accessor
 	public abstract double getX();

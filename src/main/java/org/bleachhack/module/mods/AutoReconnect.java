@@ -71,14 +71,14 @@ public class AutoReconnect extends Module {
 			reconnectTime = System.currentTimeMillis();
 			int buttonH = Math.min(height / 2 + this.reasonHeight / 2 + 9, height - 30);
 
-			addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 22, 200, 20, Text.literal("Reconnect"), button -> {
+			addDrawableChild(ButtonWidget.builder(Text.literal("Reconnect"), button -> {
 				if (server != null)
 					ConnectScreen.connect(new MultiplayerScreen(new TitleScreen()), client, ServerAddress.parse(server.address), server);
-			}));
-			reconnectButton = addDrawableChild(new ButtonWidget(width / 2 - 100, buttonH + 44, 200, 20, Text.empty(), button -> {
+			}).position(width / 2 - 100, buttonH + 22).size(200, 20).build());
+			reconnectButton = addDrawableChild(ButtonWidget.builder(Text.empty(), button -> {
 				getSetting(0).asToggle().setValue(!getSetting(0).asToggle().getState());
 				reconnectTime = System.currentTimeMillis();
-			}));
+			}).position(width / 2 - 100, buttonH + 44).size(200, 20).build());
 		}
 
 		public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

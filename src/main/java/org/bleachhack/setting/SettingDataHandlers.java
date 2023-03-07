@@ -12,8 +12,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class SettingDataHandlers {
 	
@@ -88,22 +88,22 @@ public class SettingDataHandlers {
 	
 	public static final SettingDataHandler<Block> BLOCK = new SettingDataHandler<>() {
 		public JsonElement write(Block value) {
-			return new JsonPrimitive(Registry.BLOCK.getId(value).toString());
+			return new JsonPrimitive(Registries.BLOCK.getId(value).toString());
 		}
 
 		public Block read(JsonElement json) {
-			Block bl = Registry.BLOCK.get(new Identifier(json.getAsString()));
+			Block bl = Registries.BLOCK.get(new Identifier(json.getAsString()));
 			return bl != Blocks.AIR ? bl : null;
 		}
 	};
 	
 	public static final SettingDataHandler<Item> ITEM = new SettingDataHandler<>() {
 		public JsonElement write(Item value) {
-			return new JsonPrimitive(Registry.ITEM.getId(value).toString());
+			return new JsonPrimitive(Registries.ITEM.getId(value).toString());
 		}
 
 		public Item read(JsonElement json) {
-			Item item = Registry.ITEM.get(new Identifier(json.getAsString()));
+			Item item = Registries.ITEM.get(new Identifier(json.getAsString()));
 			return item != Items.AIR ? item : null;
 		}
 	};
