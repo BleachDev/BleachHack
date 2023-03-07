@@ -81,9 +81,6 @@ public class AccountManagerScreen extends WindowScreen {
 		loginResult = mainWindow.addWidget(new WindowTextWidget(loginResult != null ? loginResult.getText() : Text.empty(), true, listW + 11, 96, 0xc0c0c0));
 
 		mainWindow.addWidget(new WindowButtonWidget(w - 70, h - 22, w - 3, h - 3, "Login", () -> {
-			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
-				BleachHack.playerMang.stopPinger();
-
 			Account account = accounts.get(selected);
 			for (int i = 0; i < textFieldWidgets.size(); i++) {
 				account.input[i] = textFieldWidgets.get(i).textField.getText();
@@ -93,9 +90,6 @@ public class AccountManagerScreen extends WindowScreen {
 			loginResult.setText(Text.literal(exception == null ? "\u00a7aLogin Successful!" : "\u00a7c" + exception.getMessage()));
 			account.success = exception == null ? 2 : 1;
 			saveAccounts();
-
-			if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue())
-				BleachHack.playerMang.startPinger();
 		}));
 
 		rightsideWidgets.addAll(mainWindow.getWidgets());

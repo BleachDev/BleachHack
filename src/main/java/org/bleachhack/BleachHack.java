@@ -27,7 +27,6 @@ import org.bleachhack.gui.clickgui.ModuleClickGuiScreen;
 import org.bleachhack.module.ModuleManager;
 import org.bleachhack.setting.option.Option;
 import org.bleachhack.util.BleachLogger;
-import org.bleachhack.util.BleachPlayerManager;
 import org.bleachhack.util.FriendManager;
 import org.bleachhack.util.Watermark;
 import org.bleachhack.util.io.BleachFileHelper;
@@ -46,7 +45,6 @@ public class BleachHack implements ModInitializer {
 	public static BleachEventBus eventBus = new BleachEventBus(new InexactEventHandler("bleachhack"), BleachLogger.logger);
 
 	public static FriendManager friendMang;
-	public static BleachPlayerManager playerMang;
 
 	private static CompletableFuture<JsonObject> updateJson;
 
@@ -67,12 +65,10 @@ public class BleachHack implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		long initStartTime = System.currentTimeMillis();
-		System.out.println("Hihihihii");
 
 		instance = this;
 
 		friendMang = new FriendManager();
-		playerMang = new BleachPlayerManager();
 
 		//this.eventBus = new EventBus();
 		//this.bleachFileManager = new BleachFileMang();
@@ -81,10 +77,6 @@ public class BleachHack implements ModInitializer {
 
 		BleachFileHelper.readOptions();
 		BleachFileHelper.readFriends();
-
-		if (Option.PLAYERLIST_SHOW_AS_BH_USER.getValue()) {
-			playerMang.startPinger();
-		}
 
 		if (Option.GENERAL_CHECK_FOR_UPDATES.getValue()) {
 			updateJson = BleachOnlineMang.getResourceAsync("update/" + SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json", BodyHandlers.ofString())

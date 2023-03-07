@@ -53,9 +53,7 @@ public class BleachOptionsScreen extends WindowScreen {
 				Option.GENERAL_SHOW_UPDATE_SCREEN);
 
 		y = addCategory(0, w / 2, y + 15, "Playerlist Settings",
-				Option.PLAYERLIST_SHOW_FRIENDS,
-				Option.PLAYERLIST_SHOW_BH_USERS,
-				Option.PLAYERLIST_SHOW_AS_BH_USER);
+				Option.PLAYERLIST_SHOW_FRIENDS);
 
 		y = addCategory(0, w / 2, y + 15, "Chat Settings",
 				Option.CHAT_COMMAND_PREFIX,
