@@ -24,7 +24,7 @@ import net.minecraft.world.BlockRenderView;
 @Mixin(BiomeColors.class)
 public class MixinBiomeColors {
 
-	@Inject(method = "getColor(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/level/ColorResolver;)I", at = @At("RETURN"), cancellable = true)
+	@Inject(method = "getColor(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/biome/ColorResolver;)I", at = @At("RETURN"), cancellable = true)
 	private static void getColor(BlockRenderView world, BlockPos pos, ColorResolver resolver, CallbackInfoReturnable<Integer> callback) {
 		if (MinecraftClient.getInstance().world != null) {
 			EventBiomeColor event = 

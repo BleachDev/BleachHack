@@ -85,8 +85,11 @@ public class DiscordRPC extends Module {
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		if (!connectFuture.cancel(true))
+		try {
 			client.close();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
 
 		super.onDisable(inWorld);
 	}
