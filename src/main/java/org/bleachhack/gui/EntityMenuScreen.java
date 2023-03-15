@@ -120,7 +120,7 @@ public class EntityMenuScreen extends Screen {
 
 		int entitySize = (int) (120 / Boxes.getCornerLength(entity.getBoundingBox()));
 		int entityHeight = entitySize / 2 - (int) (10 / Boxes.getAxisLength(entity.getBoundingBox(), Axis.Y));
-		InventoryScreen.drawEntity(
+		InventoryScreen.drawEntity(matrices,
 				width / 2, height / 2 + entityHeight,
 				entitySize,
 				(float) (width / 2) - mouseX, (float) (height / 2 + entityHeight - 45) - mouseY,
@@ -138,7 +138,7 @@ public class EntityMenuScreen extends Screen {
 
 		matrices.push();
 		matrices.scale(2.5f, 2.5f, 1f);
-		drawCenteredText(matrices, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
+		drawCenteredTextWithShadow(matrices, textRenderer, entity.getDisplayName().getString() /*"Interaction Screen"*/, width / 5, 5, 0xFFFFFFFF);
 		matrices.pop();
 
 		Vector2 center = new Vector2(width / 2, height / 2);
@@ -205,10 +205,10 @@ public class EntityMenuScreen extends Screen {
 	private void drawTextField(MatrixStack matrices, int x, int y, String text) {
 		if (x >= width / 2) {
 			drawRect(matrices, x + 10, y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
-			drawStringWithShadow(matrices, textRenderer, text, x + 12, y - 4, 0xFFFFFFFF);
+			drawTextWithShadow(matrices, textRenderer, text, x + 12, y - 4, 0xFFFFFFFF);
 		} else {
 			drawRect(matrices, x - 14 - textRenderer.getWidth(text), y - 8, textRenderer.getWidth(text) + 3, 15, 0x80808080, 0xFF000000);
-			drawStringWithShadow(matrices, textRenderer, text, x - 12 - textRenderer.getWidth(text), y - 4, 0xFFFFFFFF);
+			drawTextWithShadow(matrices, textRenderer, text, x - 12 - textRenderer.getWidth(text), y - 4, 0xFFFFFFFF);
 		}
 	}
 

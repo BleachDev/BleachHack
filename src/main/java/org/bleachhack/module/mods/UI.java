@@ -219,8 +219,8 @@ public class UI extends Module {
 		// Coords
 		boolean nether = mc.world.getRegistryKey().getValue().getPath().contains("nether");
 		BlockPos pos = mc.player.getBlockPos();
-		BlockPos pos2 = nether ? new BlockPos(mc.player.getPos().multiply(8, 1, 8))
-				: new BlockPos(mc.player.getPos().multiply(0.125, 1, 0.125));
+		BlockPos pos2 = nether ? BlockPos.ofFloored(mc.player.getPos().multiply(8, 1, 8))
+				: BlockPos.ofFloored(mc.player.getPos().multiply(0.125, 1, 0.125));
 
 		coordsText = Text.literal("XYZ: ")
 				.append(Text.literal(pos.getX() + " " + pos.getY() + " " + pos.getZ()).styled(s -> s.withColor(nether ? 0xb02020 : 0x40f0f0)))
@@ -401,12 +401,12 @@ public class UI extends Module {
 			int curX = vertical ? x : x + count * 19;
 			int curY = vertical ? y + 47 - count * 16 : y;
 			RenderSystem.enableDepthTest();
-			mc.getItemRenderer().renderGuiItemIcon(is, curX, curY);
+			mc.getItemRenderer().renderInGuiWithOverrides(matrices, is, curX, curY);
 
 			int durcolor = is.isDamageable() ? 0xff000000 | MathHelper.hsvToRgb((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage() / 3.0F, 1.0F, 1.0F) : 0;
 
 			matrices.push();
-			matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
+			matrices.translate(0, 0, /*mc.getItemRenderer().zOffset +*/ 200);
 			
 			if (is.getCount() > 1) {
 				matrices.push();
@@ -461,11 +461,11 @@ public class UI extends Module {
 				ItemStack itemStack = mc.player.getInventory().getStack(i + 9);
 				int offsetX = x + 1 + (i % 9) * 17;
 				int offsetY = y + 1 + (i / 9) * 17;
-				mc.getItemRenderer().renderGuiItemIcon(itemStack, offsetX, offsetY);
-				mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, itemStack, offsetX, offsetY);
+				mc.getItemRenderer().renderInGuiWithOverrides(matrices, itemStack, offsetX, offsetY);
+				mc.getItemRenderer().renderGuiItemOverlay(matrices, mc.textRenderer, itemStack, offsetX, offsetY);
 			}
 
-			mc.getItemRenderer().zOffset = 0.0F;
+			//mc.getItemRenderer().zOffset = 0.0F;
 			RenderSystem.enableDepthTest();
 			matrices.pop();
 		}

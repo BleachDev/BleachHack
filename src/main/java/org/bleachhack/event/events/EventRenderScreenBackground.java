@@ -15,18 +15,12 @@ import net.minecraft.client.util.math.MatrixStack;
 public class EventRenderScreenBackground extends Event {
 	
 	private MatrixStack matrices;
-	private int vOffset;
 
-	public EventRenderScreenBackground(MatrixStack matrices, int vOffset) {
+	public EventRenderScreenBackground(MatrixStack matrices) {
 		this.matrices = matrices;
-		this.vOffset = vOffset;
 	}
 
 	public MatrixStack getMatrices() {
 		return matrices;
-	}
-
-	public int getvOffset() {
-		return vOffset;
 	}
 }

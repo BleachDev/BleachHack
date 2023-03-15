@@ -90,7 +90,7 @@ public class DamageUtils {
 		if (damage <= 0f) {
 			damage = 0f;
 		} else {
-			int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), DamageSource.player(attacker));
+			int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), mc.world.getDamageSources().playerAttack(attacker));
 			if (protAmount > 0) {
 				damage = DamageUtil.getInflictedDamage(damage, protAmount);
 			}
@@ -149,7 +149,7 @@ public class DamageUtils {
 					if (toDamage <= 0f) {
 						toDamage = 0f;
 					} else {
-						int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), DamageSource.explosion(null, null));
+						int protAmount = EnchantmentHelper.getProtectionAmount(target.getArmorItems(), mc.world.getDamageSources().explosion(null, null));
 						if (protAmount > 0) {
 							toDamage = DamageUtil.getInflictedDamage(toDamage, protAmount);
 						}

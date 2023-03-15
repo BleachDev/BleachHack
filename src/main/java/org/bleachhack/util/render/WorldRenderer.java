@@ -8,6 +8,7 @@
  */
 package org.bleachhack.util.render;
 
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.math.RotationAxis;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -20,6 +21,7 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -65,17 +67,17 @@ public class WorldRenderer {
 
 		if (fill) {
 			int opacity = (int) (MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F) * 255.0F) << 24;
-			mc.textRenderer.draw(text, -halfWidth, 0f, 553648127, false, matrices.peek().getPositionMatrix(), immediate, true, opacity, 0xf000f0);
+			mc.textRenderer.draw(text, -halfWidth, 0f, 553648127, false, matrices.peek().getPositionMatrix(), immediate, TextRenderer.TextLayerType.NORMAL, opacity, 0xf000f0);
 			immediate.draw();
 		} else {
 			matrices.push();
 			matrices.translate(1, 1, 0);
-			mc.textRenderer.draw(text.copy(), -halfWidth, 0f, 0x202020, false, matrices.peek().getPositionMatrix(), immediate, true, 0, 0xf000f0);
+			mc.textRenderer.draw(text.copy(), -halfWidth, 0f, 0x202020, false, matrices.peek().getPositionMatrix(), immediate, TextRenderer.TextLayerType.NORMAL, 0, 0xf000f0);
 			immediate.draw();
 			matrices.pop();
 		}
 
-		mc.textRenderer.draw(text, -halfWidth, 0f, -1, false, matrices.peek().getPositionMatrix(), immediate, true, 0, 0xf000f0);
+		mc.textRenderer.draw(text, -halfWidth, 0f, -1, false, matrices.peek().getPositionMatrix(), immediate, TextRenderer.TextLayerType.NORMAL, 0, 0xf000f0);
 		immediate.draw();
 
 		RenderSystem.disableBlend();
@@ -106,8 +108,8 @@ public class WorldRenderer {
 		Vector3f[] currentLight = shaderLight.clone();
 		DiffuseLighting.disableGuiDepthLighting();
 
-		mc.getItemRenderer().renderItem(item, ModelTransformation.Mode.GUI, 0xF000F0,
-				OverlayTexture.DEFAULT_UV, matrices, mc.getBufferBuilders().getEntityVertexConsumers(), 0);
+		mc.getItemRenderer().renderItem(item, ModelTransformationMode.GUI, 0xF000F0,
+				OverlayTexture.DEFAULT_UV, matrices, mc.getBufferBuilders().getEntityVertexConsumers(), mc.world, 0);
 
 		mc.getBufferBuilders().getEntityVertexConsumers().draw();
 

@@ -41,7 +41,6 @@ public class SettingColor extends ModuleSetting<float[]> {
 
 		DrawableHelper.fill(matrices, sx, sy, ex, ey, -1);
 
-		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
@@ -62,7 +61,6 @@ public class SettingColor extends ModuleSetting<float[]> {
 		tessellator.draw();
 
 		RenderSystem.disableBlend();
-		RenderSystem.enableTexture();
 
 		// Color square input handler
 		if (window.mouseOver(sx, sy, ex, ey) && window.lmHeld) {

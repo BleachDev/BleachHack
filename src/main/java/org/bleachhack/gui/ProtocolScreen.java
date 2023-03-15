@@ -8,9 +8,8 @@
  */
 package org.bleachhack.gui;
 
+import net.minecraft.resource.ResourceType;
 import org.apache.commons.lang3.math.NumberUtils;
-
-import com.mojang.bridge.game.PackType;
 
 import net.minecraft.MinecraftVersion;
 import net.minecraft.SharedConstants;
@@ -20,8 +19,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-
-import java.util.function.Supplier;
 
 
 public class ProtocolScreen extends Screen {
@@ -64,11 +61,11 @@ public class ProtocolScreen extends Screen {
 		versionField.setText(SharedConstants.getGameVersion().getName());
 
 		protocolField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 35, 196, 18, Text.empty()));
-		protocolField.setText(Integer.toString(SharedConstants.getGameVersion().getProtocolVersion()));
+		protocolField.setText(Integer.toString(SharedConstants.getProtocolVersion()));
 		protocolField.setChangedListener(text -> updateAddButton());
 
 		packVerField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 - 10, 196, 18, Text.empty()));
-		packVerField.setText(Integer.toString(SharedConstants.getGameVersion().getPackVersion(PackType.DATA)));
+		packVerField.setText(Integer.toString(SharedConstants.getGameVersion().getResourceVersion(ResourceType.CLIENT_RESOURCES)));
 		packVerField.setChangedListener(text -> updateAddButton());
 		
 		brandField = addDrawableChild(new TextFieldWidget(textRenderer, width / 2 - 98, height / 2 + 15, 128, 18, Text.empty()));
@@ -84,13 +81,13 @@ public class ProtocolScreen extends Screen {
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		renderBackground(matrices);
-		drawCenteredText(matrices, textRenderer, "NOTE: This will not make the game compatible with other versions", width / 2, 5, 0xaaaaaa);
-		drawCenteredText(matrices, textRenderer, "It will only change what the client says it is to servers.", width / 2, 15, 0xaaaaaa);
+		drawCenteredTextWithShadow(matrices, textRenderer, "NOTE: This will not make the game compatible with other versions", width / 2, 5, 0xaaaaaa);
+		drawCenteredTextWithShadow(matrices, textRenderer, "It will only change what the client says it is to servers.", width / 2, 15, 0xaaaaaa);
 
-		drawStringWithShadow(matrices, textRenderer, "Version:", width / 2 - 103 - textRenderer.getWidth("Version:"), height / 2 - 55, 0xaaaaaa);
-		drawStringWithShadow(matrices, textRenderer, "Protocol:", width / 2 - 103 - textRenderer.getWidth("Protocol:"), height / 2 - 30, 0xaaaaaa);
-		drawStringWithShadow(matrices, textRenderer, "Pack Ver:", width / 2 - 103 - textRenderer.getWidth("Pack Ver:"), height / 2 - 5, 0xaaaaaa);
-		drawStringWithShadow(matrices, textRenderer, "Brand:", width / 2 - 103 - textRenderer.getWidth("Brand:"), height / 2 + 20, 0xaaaaaa);
+		drawTextWithShadow(matrices, textRenderer, "Version:", width / 2 - 103 - textRenderer.getWidth("Version:"), height / 2 - 55, 0xaaaaaa);
+		drawTextWithShadow(matrices, textRenderer, "Protocol:", width / 2 - 103 - textRenderer.getWidth("Protocol:"), height / 2 - 30, 0xaaaaaa);
+		drawTextWithShadow(matrices, textRenderer, "Pack Ver:", width / 2 - 103 - textRenderer.getWidth("Pack Ver:"), height / 2 - 5, 0xaaaaaa);
+		drawTextWithShadow(matrices, textRenderer, "Brand:", width / 2 - 103 - textRenderer.getWidth("Brand:"), height / 2 + 20, 0xaaaaaa);
 
 		super.render(matrices, mouseX, mouseY, delta);
 	}

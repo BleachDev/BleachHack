@@ -59,7 +59,7 @@ public class Jesus extends Module {
 	}
 	
 	private boolean isSubmerged(Vec3d pos) {
-		BlockPos bp = new BlockPos(pos);
+		BlockPos bp = BlockPos.ofFloored(pos);
 		FluidState state = mc.world.getFluidState(bp);
 
 		return !state.isEmpty() && pos.y - bp.getY() <= state.getHeight();

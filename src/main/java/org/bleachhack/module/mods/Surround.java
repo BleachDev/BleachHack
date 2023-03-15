@@ -95,10 +95,10 @@ public class Surround extends Module {
 						mc.player.getBlockPos().north(), mc.player.getBlockPos().east(),
 						mc.player.getBlockPos().south(), mc.player.getBlockPos().west())
 						: Sets.newHashSet(
-								new BlockPos(box.minX - 1, box.minY, box.minZ), new BlockPos(box.minX, box.minY, box.minZ - 1),
-								new BlockPos(box.maxX + 1, box.minY, box.minZ), new BlockPos(box.maxX, box.minY, box.minZ - 1),
-								new BlockPos(box.minX - 1, box.minY, box.maxZ), new BlockPos(box.minX, box.minY, box.maxZ + 1),
-								new BlockPos(box.maxX + 1, box.minY, box.maxZ), new BlockPos(box.maxX, box.minY, box.maxZ + 1));
+								BlockPos.ofFloored(box.minX - 1, box.minY, box.minZ), BlockPos.ofFloored(box.minX, box.minY, box.minZ - 1),
+								BlockPos.ofFloored(box.maxX + 1, box.minY, box.minZ), BlockPos.ofFloored(box.maxX, box.minY, box.minZ - 1),
+								BlockPos.ofFloored(box.minX - 1, box.minY, box.maxZ), BlockPos.ofFloored(box.minX, box.minY, box.maxZ + 1),
+								BlockPos.ofFloored(box.maxX + 1, box.minY, box.maxZ), BlockPos.ofFloored(box.maxX, box.minY, box.maxZ + 1));
 		placePoses.removeIf(pos -> !mc.world.getBlockState(pos).getMaterial().isReplaceable());
 
 		if (placePoses.isEmpty()) {

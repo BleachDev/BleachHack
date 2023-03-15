@@ -18,8 +18,8 @@ public class WindowPassTextFieldWidget extends WindowTextFieldWidget {
 	private TextRenderer createTextRenderer() {
 		return new TextRenderer(mc.textRenderer.fontStorageAccessor, false) {
 			@Override
-			public int draw(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, boolean rightToLeft) {
-				return super.draw(hide(text), x, y, color, shadow, matrix, vertexConsumers, seeThrough, backgroundColor, light, rightToLeft);
+			public int draw(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, TextLayerType textLayerType, int backgroundColor, int light, boolean rightToLeft) {
+				return super.draw(hide(text), x, y, color, shadow, matrix, vertexConsumers, textLayerType, backgroundColor, light, rightToLeft);
 			}
 
 			@Override

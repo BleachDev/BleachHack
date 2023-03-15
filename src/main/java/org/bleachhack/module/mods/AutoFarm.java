@@ -85,7 +85,7 @@ public class AutoFarm extends Module {
 		if (bonemealSetting.getState() && bonemealSetting.getChild(6).asToggle().getState()) {
 			int slot = InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.BONE_MEAL);
 			if (slot != -1) {
-				BlockPos bestBlock = BlockPos.streamOutwards(new BlockPos(mc.player.getEyePos()), ceilRange, ceilRange, ceilRange)
+				BlockPos bestBlock = BlockPos.streamOutwards(BlockPos.ofFloored(mc.player.getEyePos()), ceilRange, ceilRange, ceilRange)
 						.filter(b -> mc.player.getEyePos().distanceTo(Vec3d.ofCenter(b)) <= range && !mossMap.containsKey(b))
 						.map(b -> Pair.of(b.toImmutable(), getMossSpots(b)))
 						.filter(p -> p.getRight() > 10)
@@ -106,7 +106,7 @@ public class AutoFarm extends Module {
 			}
 		}
 
-		for (BlockPos pos: BlockPos.iterateOutwards(new BlockPos(mc.player.getEyePos()), ceilRange, ceilRange, ceilRange)) {
+		for (BlockPos pos: BlockPos.iterateOutwards(BlockPos.ofFloored(mc.player.getEyePos()), ceilRange, ceilRange, ceilRange)) {
 			if (mc.player.getEyePos().distanceTo(Vec3d.ofCenter(pos)) > range)
 				continue;
 

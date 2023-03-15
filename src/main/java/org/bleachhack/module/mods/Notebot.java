@@ -83,7 +83,7 @@ public class Notebot extends Module {
 
 		timer = -10;
 
-		List<BlockPos> noteblocks = BlockPos.streamOutwards(new BlockPos(mc.player.getEyePos()), 4, 4, 4)
+		List<BlockPos> noteblocks = BlockPos.streamOutwards(BlockPos.ofFloored(mc.player.getEyePos()), 4, 4, 4)
 				.filter(this::isNoteblock)
 				.map(BlockPos::toImmutable)
 				.toList();

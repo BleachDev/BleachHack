@@ -33,8 +33,8 @@ public class MixinGameRenderer {
 
 	@Shadow private PostEffectProcessor postProcessor;
 
-	@Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
-	private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
+	@Inject(method = "tiltViewWhenHurt", at = @At("HEAD"), cancellable = true)
+	private void onTiltViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo ci) {
 		if (ModuleManager.getModule(NoRender.class).isOverlayToggled(2)) {
 			ci.cancel();
 		}
@@ -65,7 +65,6 @@ public class MixinGameRenderer {
 		if (event.getEffect() != null) {
 			RenderSystem.disableBlend();
 			RenderSystem.disableDepthTest();
-			RenderSystem.enableTexture();
 			RenderSystem.resetTextureMatrix();
 			event.getEffect().render(tickDelta);
 		}

@@ -60,9 +60,9 @@ public class MixinScreen {
 		renderTooltipFromComponents(event.getMatrix(), event.getComponents(), event.getX(), event.getY(), positioner);
 	}
 
-	@Inject(method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;I)V", at = @At("HEAD"), cancellable = true)
-	private void renderBackground(MatrixStack matrices, int vOffset, CallbackInfo callback) {
-		EventRenderScreenBackground event = new EventRenderScreenBackground(matrices, vOffset);
+	@Inject(method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;)V", at = @At("HEAD"), cancellable = true)
+	private void renderBackground(MatrixStack matrices, CallbackInfo callback) {
+		EventRenderScreenBackground event = new EventRenderScreenBackground(matrices);
 		BleachHack.eventBus.post(event);
 
 		if (event.isCancelled()) {

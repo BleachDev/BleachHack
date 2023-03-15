@@ -194,7 +194,7 @@ public class CrystalAura extends Module {
 						float ratio = playerDamg == 0 ? targetDamg : targetDamg / playerDamg;
 
 						if (ratio > placeToggle.getChild(5).asSlider().getValue()) {
-							placeBlocks.put(new BlockPos(v).down(), ratio);
+							placeBlocks.put(BlockPos.ofFloored(v).down(), ratio);
 						}
 					}
 				}
@@ -272,7 +272,7 @@ public class CrystalAura extends Module {
 		for (int x = -range; x <= range; x++) {
 			for (int y = -range; y <= range; y++) {
 				for (int z = -range; z <= range; z++) {
-					BlockPos basePos = new BlockPos(mc.player.getEyePos()).add(x, y, z);
+					BlockPos basePos = BlockPos.ofFloored(mc.player.getEyePos()).add(x, y, z);
 
 					if (!canPlace(basePos) || (blacklist.containsKey(basePos) && getSetting(4).asToggle().getChild(2).asToggle().getState()))
 						continue;

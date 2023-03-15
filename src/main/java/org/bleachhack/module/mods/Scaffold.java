@@ -93,12 +93,12 @@ public class Scaffold extends Module {
 		Vec3d placeVec = mc.player.getPos().add(0, -0.85, 0);
 		Set<BlockPos> blocks = mode == 0
 				? Sets.newHashSet(
-						new BlockPos(placeVec),
-						new BlockPos(placeVec.add(range, 0, 0)),
-						new BlockPos(placeVec.add(-range, 0, 0)),
-						new BlockPos(placeVec.add(0, 0, range)),
-						new BlockPos(placeVec.add(0, 0, -range)))
-						: getSpiral(mode, new BlockPos(placeVec));
+						BlockPos.ofFloored(placeVec),
+						BlockPos.ofFloored(placeVec.add(range, 0, 0)),
+						BlockPos.ofFloored(placeVec.add(-range, 0, 0)),
+						BlockPos.ofFloored(placeVec.add(0, 0, range)),
+						BlockPos.ofFloored(placeVec.add(0, 0, -range)))
+						: getSpiral(mode, BlockPos.ofFloored(placeVec));
 
 		if (getSetting(6).asToggle().getState()
 				&& InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.jumpKey.getBoundKeyTranslationKey()).getCode())) {

@@ -120,7 +120,7 @@ public class WindowManagerScreen extends WindowScreen {
 			RenderSystem.getModelViewStack().push();
 			RenderSystem.getModelViewStack().scale(0.7f, 0.7f, 1f);
 
-			mc.getItemRenderer().renderGuiItemIcon(item, (int) ((bx1 + 2) / 0.7), (int) ((by1 - 6 + (by2 - by1) / 2.0) / 0.7));
+			mc.getItemRenderer().renderGuiItemIcon(matrices, item, (int) ((bx1 + 2) / 0.7), (int) ((by1 - 6 + (by2 - by1) / 2.0) / 0.7));
 
 			RenderSystem.getModelViewStack().pop();
 			RenderSystem.applyModelViewMatrix();

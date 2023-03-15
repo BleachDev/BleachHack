@@ -54,15 +54,15 @@ public class Flight extends Module {
 
 			if (getSetting(2).asMode().getMode() == 1
 					&& mc.player.age % 20 == 0
-					&& mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, -0.069, 0)))).getMaterial().isReplaceable()) {
+					&& mc.world.getBlockState(BlockPos.ofFloored(mc.player.getPos().add(0, -0.069, 0))).getMaterial().isReplaceable()) {
 				antiKickVel = antiKickVel.add(0, -0.069, 0);
 			} else if (getSetting(2).asMode().getMode() == 2) {
 				if (mc.player.age % 40 == 0) {
-					if (mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, 0.15, 0)))).getMaterial().isReplaceable()) {
+					if (mc.world.getBlockState(BlockPos.ofFloored(mc.player.getPos().add(0, 0.15, 0))).getMaterial().isReplaceable()) {
 						antiKickVel = antiKickVel.add(0, 0.15, 0);
 					}
 				} else if (mc.player.age % 20 == 0) {
-					if (mc.world.getBlockState(new BlockPos(new BlockPos(mc.player.getPos().add(0, -0.15, 0)))).getMaterial().isReplaceable()) {
+					if (mc.world.getBlockState(BlockPos.ofFloored(mc.player.getPos().add(0, -0.15, 0))).getMaterial().isReplaceable()) {
 						antiKickVel = antiKickVel.add(0, -0.15, 0);
 					}
 				}

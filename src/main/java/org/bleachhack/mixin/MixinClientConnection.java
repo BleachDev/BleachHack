@@ -24,7 +24,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 
@@ -45,7 +45,7 @@ public class MixinClientConnection {
 		}
 	}
 
-	@Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
 	private void send(Packet<?> packet, PacketCallbacks packetCallback, CallbackInfo callback) {
 		if (packet instanceof ChatMessageC2SPacket) {
 			if (!CommandManager.allowNextMsg) {

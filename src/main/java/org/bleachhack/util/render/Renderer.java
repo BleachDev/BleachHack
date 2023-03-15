@@ -233,11 +233,9 @@ public class Renderer {
 	public static void setup() {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.disableTexture();
 	}
 
 	public static void cleanup() {
 		RenderSystem.disableBlend();
-		RenderSystem.enableTexture();
 	}
 }

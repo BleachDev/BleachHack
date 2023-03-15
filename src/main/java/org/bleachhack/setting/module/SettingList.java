@@ -223,7 +223,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 			renderItem(client, matrices, item, x, y, height, height);
 
 			drawTextWithShadow(matrices, textRenderer, getName(item), x + height + 4, y + 4, -1);
-			drawStringWithShadow(matrices, textRenderer, "\u00a7cx", x + width - 10, y + 5, -1);
+			drawTextWithShadow(matrices, textRenderer, "\u00a7cx", x + width - 10, y + 5, -1);
 		}
 
 		private void drawSearchEntry(MatrixStack matrices, T item, int x, int y, int width, int height, int mouseX, int mouseY) {
@@ -252,7 +252,7 @@ public abstract class SettingList<T> extends ModuleSetting<LinkedHashSet<T>> {
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
 			if (toAddItem != null) {
 				getValue().add(toAddItem);
-				inputField.textField.setTextFieldFocused(true);
+				inputField.textField.setFocused(true);
 				client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 0.3F));
 				BleachFileHelper.SCHEDULE_SAVE_MODULES.set(true);
 				return false;

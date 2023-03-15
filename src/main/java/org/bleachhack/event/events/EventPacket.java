@@ -8,9 +8,8 @@
  */
 package org.bleachhack.event.events;
 
+import net.minecraft.network.packet.Packet;
 import org.bleachhack.event.Event;
-
-import net.minecraft.network.Packet;
 
 /**
  * @author sl

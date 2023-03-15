@@ -149,10 +149,10 @@ public class Peek extends Module {
 			int x = mouseX + 11 + 17 * (count % 9);
 			int y = realY - 67 + 17 * (count / 9);
 
-			mc.getItemRenderer().zOffset = 400;
-			mc.getItemRenderer().renderGuiItemIcon(i, x, y);
-			mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, i, x, y, null);
-			mc.getItemRenderer().zOffset = 300;
+			// mc.getItemRenderer().zOffset = 400;
+			mc.getItemRenderer().renderInGuiWithOverrides(matrices, i, x, y);
+			mc.getItemRenderer().renderGuiItemOverlay(matrices, mc.textRenderer, i, x, y, null);
+			// mc.getItemRenderer().zOffset = 300;
 			count++;
 		}
 
@@ -287,13 +287,11 @@ public class Peek extends Module {
 		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart - 3, xStart + x2 + 3, yStart - 3 + 1, 1347420415, 1347420415);
 		fillGradient(matrix4f, bufferBuilder, xStart - 3, yStart + y2 + 2, xStart + x2 + 3, yStart + y2 + 3, 1344798847, 1344798847);
 
-		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 		BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
 		RenderSystem.disableBlend();
-		RenderSystem.enableTexture();
 	}
 
 	private void fillGradient(Matrix4f matrices, BufferBuilder bufferBuilder, int xStart, int yStart, int xEnd, int yEnd, int colorStart, int colorEnd) {

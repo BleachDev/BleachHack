@@ -248,7 +248,8 @@ public abstract class WindowScreen extends Screen {
 		return super.charTyped(chr, modifiers);
 	}
 
-	public void renderBackgroundTexture(int vOffset) {
+	@Override
+	public void renderBackgroundTexture(MatrixStack matrices) {
 		int colorOffset = (int) ((System.currentTimeMillis() / 75) % 100);
 		if (colorOffset > 50)
 			colorOffset = 50 - (colorOffset - 50);
@@ -256,7 +257,6 @@ public abstract class WindowScreen extends Screen {
 		// smooth
 		colorOffset = (int) (-(Math.cos(Math.PI * (colorOffset / 50d)) - 1) / 2 * 50);
 
-		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
@@ -271,6 +271,5 @@ public abstract class WindowScreen extends Screen {
 		tessellator.draw();
 
 		RenderSystem.disableBlend();
-		RenderSystem.enableTexture();
 	}
 }

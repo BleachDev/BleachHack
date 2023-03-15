@@ -8,6 +8,7 @@
  */
 package org.bleachhack.command.commands;
 
+import net.minecraft.client.gui.DrawableHelper;
 import org.bleachhack.command.Command;
 import org.bleachhack.command.CommandCategory;
 import org.bleachhack.command.exception.CmdSyntaxException;
@@ -48,8 +49,8 @@ public class CmdInvPeek extends Command {
 							RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 							RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 							RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-							this.drawTexture(matrices, x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
-							drawEntity(x + 51, y + 75, 30, (float) (x + 51) - mouseX, (float) (y + 75 - 50) - mouseY, this.client.player);
+							drawTexture(matrices, x, y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+							drawEntity(matrices, x + 51, y + 75, 30, (float) (x + 51) - mouseX, (float) (y + 75 - 50) - mouseY, this.client.player);
 						}
 					});
 				});

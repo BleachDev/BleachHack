@@ -39,14 +39,14 @@ public class Step extends Module {
 	@Override
 	public void onDisable(boolean inWorld) {
 		if (inWorld)
-			mc.player.stepHeight = 0.5F;
+			mc.player.setStepHeight(0.5F);
 
 		super.onDisable(inWorld);
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		mc.player.stepHeight = getSetting(0).asMode().getMode() == 1 ? getSetting(1).asSlider().getValueFloat() : 0.5f;
+		mc.player.setStepHeight(getSetting(0).asMode().getMode() == 1 ? getSetting(1).asSlider().getValueFloat() : 0.5f);
 
 		if (!mc.player.horizontalCollision) {
 			queue.clear();
@@ -58,7 +58,7 @@ public class Step extends Module {
 			}
 		}
 
-		if (!mc.world.getBlockState(mc.player.getBlockPos().add(0, mc.player.getHeight() + 1, 0)).getMaterial().isReplaceable()
+		if (!mc.world.getBlockState(mc.player.getBlockPos().add(0, (int) (mc.player.getHeight() + 1), 0)).getMaterial().isReplaceable()
 				|| mc.player.input.jumping
 				|| !(mc.player.input.pressingForward || mc.player.input.pressingBack || mc.player.input.pressingLeft || mc.player.input.pressingRight)) {
 			return;

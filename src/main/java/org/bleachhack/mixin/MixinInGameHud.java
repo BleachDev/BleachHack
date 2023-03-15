@@ -29,7 +29,7 @@ public class MixinInGameHud {
 	@Unique private boolean bypassRenderOverlay = false;
 	@Unique private boolean bypassRenderCrosshair = false;
 
-	@Shadow private void renderOverlay(Identifier texture, float opacity) {}
+	@Shadow private void renderOverlay(MatrixStack matrices, Identifier texture, float opacity) {}
 	@Shadow private void renderCrosshair(MatrixStack matrices) {}
 
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true)
@@ -43,14 +43,14 @@ public class MixinInGameHud {
 	}
 
 	@Inject(method = "renderOverlay", at = @At("HEAD"), cancellable = true)
-	private void renderOverlay(Identifier texture, float opacity, CallbackInfo ci) {
+	private void renderOverlay(MatrixStack matrices, Identifier texture, float opacity, CallbackInfo ci) {
 		if (!bypassRenderOverlay) {
-			EventRenderOverlay event = new EventRenderOverlay(texture, opacity);
+			EventRenderOverlay event = new EventRenderOverlay(matrices, texture, opacity);
 			BleachHack.eventBus.post(event);
 
 			if (!event.isCancelled()) {
 				bypassRenderOverlay = true;
-				renderOverlay(event.getTexture(), event.getOpacity());
+				renderOverlay(matrices, event.getTexture(), event.getOpacity());
 				bypassRenderOverlay = false;
 			}
 

@@ -52,7 +52,7 @@ public class SettingBlockList extends SettingList<Block> {
 
 			RenderSystem.getModelViewStack().scale(scale, scale, 1f);
 
-			mc.getItemRenderer().renderInGui(new ItemStack(item.asItem()), (int) ((x + 1) * offset), (int) ((y + 1) * offset));
+			mc.getItemRenderer().renderInGuiWithOverrides(matrices, new ItemStack(item.asItem()), (int) ((x + 1) * offset), (int) ((y + 1) * offset));
 
 			RenderSystem.getModelViewStack().pop();
 			RenderSystem.applyModelViewMatrix();

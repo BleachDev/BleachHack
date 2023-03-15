@@ -84,7 +84,7 @@ public class NoSlow extends Module {
 
 		/* Slime Block */
 		if (getSetting(2).asToggle().getState()
-				&& mc.world.getBlockState(new BlockPos(mc.player.getPos().add(0, -0.01, 0))).getBlock() == Blocks.SLIME_BLOCK && mc.player.isOnGround()) {
+				&& mc.world.getBlockState(BlockPos.ofFloored(mc.player.getPos().add(0, -0.01, 0))).getBlock() == Blocks.SLIME_BLOCK && mc.player.isOnGround()) {
 			double d = Math.abs(mc.player.getVelocity().y);
 			if (d < 0.1D && !mc.player.bypassesSteppingEffects()) {
 				double e = 1 / (0.4D + d * 0.2D);
