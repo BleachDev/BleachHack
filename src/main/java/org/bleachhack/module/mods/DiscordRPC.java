@@ -10,6 +10,7 @@ package org.bleachhack.module.mods;
 
 import java.util.concurrent.Future;
 
+import com.jagrosh.discordipc.entities.pipe.PipeStatus;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bleachhack.BleachHack;
@@ -34,8 +35,12 @@ import net.minecraft.item.ItemStack;
 
 public class DiscordRPC extends Module {
 
+	private static final long BLEACHHACK_ID = 740928841433743370L;
+	private static final long MINECRAFT_ID = 727434331089272903L;
+
 	private IPCClient client;
 	private Future<DiscordBuild> connectFuture;
+	private boolean lastSilent;
 
 	private String customText1 = "top text";
 	private String customText2 = "bottom text";
@@ -69,28 +74,13 @@ public class DiscordRPC extends Module {
 		tick = 0;
 		startTime = System.currentTimeMillis();
 
-		if (client == null) {
-			client = new IPCClient(740928841433743370L);
-			client.setListener(new IPCListener() {
-				@Override
-				public void onReady(IPCClient client) {
-					BleachLogger.logger.info("Connected to Discord!");
-				}
-			});
-		}
-
-		BleachLogger.logger.info("Connecting to Discord..");
-		connectFuture = client.connectAsync();
+		lastSilent = getSetting(3).asToggle().getState();
+		connect(lastSilent ? MINECRAFT_ID : BLEACHHACK_ID);
 	}
 
 	@Override
 	public void onDisable(boolean inWorld) {
-		try {
-			client.close();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
-
+		disconnect();
 		super.onDisable(inWorld);
 	}
 
@@ -112,8 +102,15 @@ public class DiscordRPC extends Module {
 			connectFuture = null;
 		}
 
+		boolean silent = getSetting(3).asToggle().getState();
+		if (silent != lastSilent) {
+			disconnect();
+			connect(silent ? MINECRAFT_ID : BLEACHHACK_ID);
+			lastSilent = silent;
+			return;
+		}
+
 		if (tick % 40 == 0) {
-			boolean silent = getSetting(3).asToggle().getState();
 			RichPresence.Builder builder = new RichPresence.Builder()
 					.setLargeImage(silent ? "mc" : "bh", silent ? "Minecraft " + SharedConstants.getGameVersion().getName() : "BleachHack " + BleachHack.VERSION);
 
@@ -167,6 +164,29 @@ public class DiscordRPC extends Module {
 		}
 
 		tick++;
+	}
+
+	private void disconnect() {
+		try {
+			if (client.getStatus() == PipeStatus.CONNECTED) {
+				client.close();
+			}
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void connect(long id) {
+		client = new IPCClient(id);
+		client.setListener(new IPCListener() {
+			@Override
+			public void onReady(IPCClient client) {
+				BleachLogger.logger.info("Connected to Discord!");
+			}
+		});
+
+		BleachLogger.logger.info("Connecting to Discord..");
+		connectFuture = client.connectAsync();
 	}
 
 	public void setTopText(String text) {
