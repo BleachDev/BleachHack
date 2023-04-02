@@ -9,9 +9,9 @@
     "AccessorMinecraftClient",
     "AccessorScreen",
     "AccessorWorldRenderer",
-    "MixinBackgroundRenderer",
     "MixinAbstractBlock",
     "MixinAbstractBlockState",
+    "MixinBackgroundRenderer",
     "MixinBeaconScreen",
     "MixinBiomeColors",
     "MixinBlock",
@@ -38,6 +38,7 @@
     "MixinInGameOverlayRenderer",
     "MixinJsonEffectShaderProgram",
     "MixinKeyboard",
+    "MixinLightmapTextureManager",
     "MixinLivingEntity",
     "MixinLlamaPigStriderEntity",
     "MixinMapRenderer",
@@ -58,7 +59,7 @@
     "MixinTitleScreen",
     "MixinWorldRenderer"
   ],
-  "mixinPriority" : 899,
+  "mixinPriority": 899,
   "injectors": {
     "defaultRequire": 1
   }

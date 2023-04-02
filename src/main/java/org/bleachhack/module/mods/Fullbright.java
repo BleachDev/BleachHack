@@ -8,6 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
+import org.bleachhack.event.events.EventLightTex;
 import org.bleachhack.event.events.EventTick;
 import org.bleachhack.eventbus.BleachSubscribe;
 import org.bleachhack.module.Module;
@@ -21,55 +22,63 @@ import net.minecraft.entity.effect.StatusEffects;
 
 public class Fullbright extends Module {
 
+	private float smooth;
+
 	public Fullbright() {
 		super("Fullbright", KEY_UNBOUND, ModuleCategory.RENDER, "Makes the world brighter.",
-				new SettingMode("Mode", "Gamma", "Potion").withDesc("Fullbright mode."),
+				new SettingMode("Mode", "Table", "Gamma", "Potion").withDesc("Fullbright mode."),
 				new SettingSlider("Gamma", 1, 12, 9, 1).withDesc("How much to turn the gamma up when using gamma mode."));
 	}
 
-	// table setting [B]roke
-
 	@Override
 	public void onDisable(boolean inWorld) {
-		if (mc.options.getGamma().getValue() > 1) {
-			double g = mc.options.getGamma().getValue();
-
-			while (g > 1) {
-				double nextStep = Math.max(g - 1.6, 1);
-				BleachQueue.add("fullbright", () -> mc.options.getGamma().setValue(nextStep));
-				g -= 1.6;
-			}
+		float g = smooth;
+		while (g > 1f) {
+			g = Math.max(g - 1.6f, 1);
+			float nextStep = g;
+			BleachQueue.add("fullbright", () -> {
+				smooth = nextStep;
+				System.out.println(nextStep + " > " + smooth);
+				if (nextStep <= 1) {
+					super.onDisable(inWorld);
+				}
+			});
 		}
 
 		if (inWorld)
 			mc.player.removeStatusEffect(StatusEffects.NIGHT_VISION);
-		// Vanilla code to remap light level table.
-		/* for (int i = 0; i <= 15; ++i) { float float_2 = 1.0F - (float)i / 15.0F;
-		 * mc.world.dimension.getLightLevelToBrightness()[i] = (1.0F - float_2) /
-		 * (float_2 * 3.0F + 1.0F) * 1.0F + 0.0F; } */
-
-		super.onDisable(inWorld);
 	}
 
 	@Override
 	public void onEnable(boolean inWorld) {
+		BleachQueue.runAllInQueue("fullbright");
 		super.onEnable(inWorld);
-
-		BleachQueue.cancelQueue("fullbright");
 	}
 
 	@BleachSubscribe
 	public void onTick(EventTick event) {
-		if (getSetting(0).asMode().getMode() == 0) {
-			if (mc.options.getGamma().getValue() < getSetting(1).asSlider().getValue()) {
-				mc.options.getGamma().setValue(Math.min(mc.options.getGamma().getValue() + 1, getSetting(1).asSlider().getValue()));
-			} else if (mc.options.getGamma().getValue() > getSetting(1).asSlider().getValue()) {
-				mc.options.getGamma().setValue(Math.max(mc.options.getGamma().getValue() - 1, getSetting(1).asSlider().getValue()));
-			}
-		} else if (getSetting(0).asMode().getMode() == 1) {
+		if (smooth < getSetting(1).asSlider().getValueFloat()) {
+			smooth = Math.min(smooth + 1.6f, getSetting(1).asSlider().getValueFloat());
+		} else if (smooth > getSetting(1).asSlider().getValueFloat()) {
+			smooth = Math.max(smooth - 1.6f, getSetting(1).asSlider().getValueFloat());
+		}
+
+		if (getSetting(0).asMode().getMode() == 2) {
 			mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 500, 0));
-		} /* else if (getSetting(0).toMode().mode == 2) { for (int i = 0; i < 16; i++) {
-		 * if (mc.world.dimension.getLightLevelToBrightness()[i] != 1) {
-		 * mc.world.dimension.getLightLevelToBrightness()[i] = 1; } } } */
+		}
+	}
+
+	@BleachSubscribe
+	public void onBrightness(EventLightTex.Brightness event) {
+		if (getSetting(0).asMode().getValue() == 0) {
+			event.setBrightness((0.01f + event.getBrightness()) * smooth);
+		}
+	}
+
+	@BleachSubscribe
+	public void onGamma(EventLightTex.Gamma event) {
+		if (getSetting(0).asMode().getValue() == 1) {
+			event.setGamma(smooth);
+		}
 	}
 }

@@ -8,6 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
+import org.bleachhack.event.events.EventLightTex;
 import org.bleachhack.event.events.EventRenderBlock;
 import org.bleachhack.event.events.EventRenderFluid;
 import org.bleachhack.event.events.EventTick;
@@ -82,8 +83,8 @@ public class Xray extends Module {
 	}
 
 	@BleachSubscribe
-	public void onTick(EventTick eventPreUpdate) {
-		mc.options.getGamma().setValue(69.420);
+	public void onBrightness(EventLightTex.Brightness event) {
+		event.setBrightness(1f);
 	}
 
 	@BleachSubscribe
