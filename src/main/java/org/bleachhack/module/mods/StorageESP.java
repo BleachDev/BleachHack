@@ -39,6 +39,7 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.setting.module.SettingSlider;
 import org.bleachhack.setting.module.SettingToggle;
+import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.Boxes;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
@@ -114,16 +115,23 @@ public class StorageESP extends Module {
 				if (color != null) {
 					BlockEntityRenderer<BlockEntity> renderer = mc.getBlockEntityRenderDispatcher().get(be);
 					MatrixStack matrices = Renderer.matrixFrom(be.getPos().getX(), be.getPos().getY(), be.getPos().getZ());
-					if (renderer != null) {
-						renderer.render(be, mc.getTickDelta(), matrices,
-								colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
-								LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
-					} else {
-						BlockState state = be.getCachedState();
-						mc.getBlockRenderManager().getModelRenderer().renderFlat(mc.world,
-								mc.getBlockRenderManager().getModel(state), state, be.getPos(), matrices,
-								colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
-								false, Random.create(0L), 0L, OverlayTexture.DEFAULT_UV);
+					try {
+						if (renderer != null) {
+							renderer.render(be, mc.getTickDelta(), matrices,
+									colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
+									LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+						} else {
+							BlockState state = be.getCachedState();
+							mc.getBlockRenderManager().getModelRenderer().renderFlat(mc.world,
+									mc.getBlockRenderManager().getModel(state), state, be.getPos(), matrices,
+									colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
+									false, Random.create(0L), 0L, OverlayTexture.DEFAULT_UV);
+						}
+					} catch (Exception e) {
+						BleachLogger.error("Disabling StorageESP, another mod conflicting with shader mode?");
+						e.printStackTrace();
+						setEnabled(false);
+						return;
 					}
 				}
 			}

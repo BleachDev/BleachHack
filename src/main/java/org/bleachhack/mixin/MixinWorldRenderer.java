@@ -8,16 +8,19 @@
  */
 package org.bleachhack.mixin;
 
+import net.fabricmc.loader.api.FabricLoader;
 import org.bleachhack.BleachHack;
 import org.bleachhack.event.events.EventBlockEntityRender;
 import org.bleachhack.event.events.EventEntityRender;
 import org.bleachhack.event.events.EventRenderBlockOutline;
 import org.bleachhack.event.events.EventSkyRender;
 import org.bleachhack.event.events.EventWorldRender;
+import org.bleachhack.util.BleachLogger;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -87,13 +90,22 @@ public class MixinWorldRenderer {
 		}
 	}
 
+	@Unique
+	private static boolean SODIUM_INSTALLED = FabricLoader.getInstance().isModLoaded("sodium");
+
 	@Redirect(method = "renderEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;render(Lnet/minecraft/entity/Entity;DDDFFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"))
 	private <E extends Entity> void renderEntity_render(EntityRenderDispatcher dispatcher, E entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
 		EventEntityRender.Single.Pre event = new EventEntityRender.Single.Pre(entity, matrices, vertexConsumers);
 		BleachHack.eventBus.post(event);
 
 		if (!event.isCancelled()) {
-			dispatcher.render(event.getEntity(), x, y, z, yaw, tickDelta, event.getMatrix(), event.getVertex(), light);
+			try {
+				dispatcher.render(event.getEntity(), x, y, z, yaw, tickDelta, event.getMatrix(), SODIUM_INSTALLED ? vertexConsumers : event.getVertex(), light);
+			} catch (Exception e) {
+				BleachLogger.error("Disabling Entity Rendering Mixin, another mod conflicting?");
+				e.printStackTrace();
+				SODIUM_INSTALLED = true;
+			}
 		}
 	}
 

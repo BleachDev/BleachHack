@@ -8,6 +8,7 @@
  */
 package org.bleachhack.module.mods;
 
+import net.minecraft.entity.mob.MobEntity;
 import org.bleachhack.event.events.EventLightTex;
 import org.bleachhack.event.events.EventRenderBlock;
 import org.bleachhack.event.events.EventRenderFluid;

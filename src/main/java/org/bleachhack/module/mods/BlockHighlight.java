@@ -11,6 +11,7 @@ import org.bleachhack.module.ModuleCategory;
 import org.bleachhack.setting.module.SettingColor;
 import org.bleachhack.setting.module.SettingMode;
 import org.bleachhack.setting.module.SettingSlider;
+import org.bleachhack.util.BleachLogger;
 import org.bleachhack.util.render.Renderer;
 import org.bleachhack.util.render.color.QuadColor;
 import org.bleachhack.util.shader.BleachCoreShaders;
@@ -92,15 +93,22 @@ public class BlockHighlight extends Module {
 
 			BlockEntity be = mc.world.getBlockEntity(pos);
 			BlockEntityRenderer<BlockEntity> renderer = be != null ? mc.getBlockEntityRenderDispatcher().get(be) : null;
-			if (renderer != null) {
-				renderer.render(be, mc.getTickDelta(), matrices,
-						colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
-						LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
-			} else {
-				mc.getBlockRenderManager().getModelRenderer().renderFlat(
-						mc.world, mc.getBlockRenderManager().getModel(state), state, pos, matrices,
-						colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
-						false, Random.create(0), 0L, OverlayTexture.DEFAULT_UV);
+			try {
+				if (renderer != null) {
+					renderer.render(be, mc.getTickDelta(), matrices,
+							colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()),
+							LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+				} else {
+					mc.getBlockRenderManager().getModelRenderer().renderFlat(
+							mc.world, mc.getBlockRenderManager().getModel(state), state, pos, matrices,
+							colorVertexer.createSingleProvider(mc.getBufferBuilders().getEntityVertexConsumers(), color[0], color[1], color[2], getSetting(1).asSlider().getValueInt()).getBuffer(RenderLayers.getMovingBlockLayer(state)),
+							false, Random.create(0), 0L, OverlayTexture.DEFAULT_UV);
+				}
+			} catch (Exception e) {
+				BleachLogger.error("Disabling BlockHighlight, another mod conflicting with shader mode?");
+				e.printStackTrace();
+				setEnabled(false);
+				return;
 			}
 
 			colorVertexer.draw();
