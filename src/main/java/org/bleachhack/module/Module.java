@@ -33,7 +33,7 @@ public class Module {
 
 	private ModuleCategory category;
 	private String desc;
-	private List<ModuleSetting<?>> settings;
+	private List<ModuleSetting<?>> settings = new ArrayList();
 
 	public Module(String name, int key, ModuleCategory category, String desc, ModuleSetting<?>... settings) {
 		this(name, key, category, false, desc, settings);
