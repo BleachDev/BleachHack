@@ -49,9 +49,7 @@ public class Module {
 		this.settings.add(this.key);
 
 		defaultEnabled = enabled;
-		if (enabled) {
-			setEnabled(true);
-		}
+		setEnabled(enabled);
 	}
 
 	public void onEnable(boolean inWorld) {
